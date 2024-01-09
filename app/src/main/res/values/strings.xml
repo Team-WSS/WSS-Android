@@ -18,4 +18,14 @@
     <string name="post_read_status_reading">시작 날짜</string>
     <string name="post_read_status_stop">종료 날짜</string>
 
+
+    <!-- fragment_library -->
+    <string name="library_title">내 서재</string>
+    <string name="library_tb_item_full">전체</string>
+    <string name="library_tb_item_read">읽음</string>
+    <string name="library_tb_item_reading">읽는 중</string>
+    <string name="library_tb_item_give_up">하차</string>
+    <string name="library_tb_item_wish">읽고싶음</string>
+    <string name="library_empty_comment">서재가 아직 비어있네요!</string>
+    <string name="library_novel_post">웹소설 등록하기</string>
 </resources>
