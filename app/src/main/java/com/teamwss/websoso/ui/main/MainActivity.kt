@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding.bnvMain.setOnItemSelectedListener { item ->
             val selectedFragment = when (item.itemId) {
                 R.id.menu_home -> HomeFragment.newInstance()
-                R.id.menu_library -> LibraryFragment.newInstance()
+                R.id.menu_library -> LibraryFragment.newInstance
                 R.id.menu_record -> RecordFragment.newInstance()
                 R.id.menu_my_page -> MyPageFragment.newInstance()
                 else -> null
