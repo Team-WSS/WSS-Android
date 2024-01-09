@@ -18,4 +18,8 @@
     <string name="post_read_status_reading">시작 날짜</string>
     <string name="post_read_status_stop">종료 날짜</string>
 
+    <!-- SearchActivity -->
+    <string name="search_result_null">검색결과가 없어요ㅠ</string>
+    <string name="search_title">검색</string>
+
 </resources>
