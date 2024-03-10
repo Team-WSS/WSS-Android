@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.teamwss.websoso"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.teamwss.websoso"
         minSdk = 30
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
