@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Websoso"
 include(":app")
- 
+include(":Domain")
