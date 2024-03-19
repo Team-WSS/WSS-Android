@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">웹소소</string>
+
+    <!-- 에러 메시지 -->
+    <string name="base_fragment_null_error">bindingException: binding is null in BindingFragment</string>
+
+    <!-- 메인 뷰 -->
+    <string name="main_ic_home">홈</string>
+    <string name="main_ic_explore">탐색</string>
+    <string name="main_ic_feed">피드</string>
+    <string name="main_ic_my_page">my</string>
+
 </resources>
