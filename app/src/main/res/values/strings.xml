@@ -10,4 +10,7 @@
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">my</string>
 
+    <!-- 피드 뷰 -->
+    <string name="feed_score_count">%.1f (%d)</string>
+
 </resources>

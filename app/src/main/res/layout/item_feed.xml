@@ -9,6 +9,10 @@
             name="onClick"
             type="com.teamwss.websoso.ui.feed.FeedItemClickListener" />
 
+        <variable
+            name="feed"
+            type="com.teamwss.websoso.domain.model.Feed" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="28dp"
+            android:onClick="@{() -> onClick.onProfileClick(feed.user.id)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_feed_indicator">
 
@@ -35,6 +40,7 @@
                 android:id="@+id/iv_feed_profile"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
+                loadImageUrl="@{feed.user.profileImage}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +65,9 @@
             android:id="@+id/iv_feed_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="12dp"
             android:layout_marginEnd="20dp"
+            android:onClick="@{() -> onClick.onMoreButtonClick()}"
             android:src="@drawable/ic_more"
             app:layout_constraintBottom_toBottomOf="@+id/cl_feed_profile"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,6 +78,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:onClick="@{() -> onClick.onContentClick(feed.id)}"
             app:layout_constraintEnd_toEndOf="@+id/iv_feed_more"
             app:layout_constraintStart_toStartOf="@+id/cl_feed_profile"
             app:layout_constraintTop_toBottomOf="@+id/cl_feed_profile">
@@ -82,6 +91,7 @@
                 android:ellipsize="end"
                 android:gravity="top"
                 android:maxLines="5"
+                android:text="@{feed.content}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +103,7 @@
                 android:id="@+id/tv_feed_genre"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@{feed.formattedGenre}"
                 android:layout_marginTop="20dp"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
@@ -107,6 +118,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:onClick="@{() -> onClick.onNovelInfoClick(feed.novelInfo.id)}"
             android:background="@drawable/btn_feed_novel_info"
             app:layout_constraintEnd_toEndOf="@+id/cl_feed_content"
             app:layout_constraintStart_toStartOf="@+id/cl_feed_content"
@@ -130,6 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:maxLines="1"
+                android:text="@{feed.novelInfo.name}"
                 android:textAppearance="@style/title3"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_feed_link"
@@ -154,6 +167,7 @@
                 android:layout_marginEnd="16dp"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/black"
+                android:text="@{@string/feed_score_count(feed.novelInfo.score, feed.novelInfo.count)}"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_feed_novel_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_feed_novel_name"
@@ -166,6 +180,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:layout_marginBottom="28dp"
+            android:onClick="@{() -> onClick.onThumbUpButtonClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/cl_feed_novel_info"
             app:layout_constraintTop_toBottomOf="@+id/cl_feed_novel_info">
@@ -189,6 +204,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
                 android:maxLines="1"
+                android:text="@{String.valueOf(feed.likeCount)}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_feed_thumb_up"
@@ -203,6 +219,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:onClick="@{() -> onClick.onCommentButtonClick()}"
             app:layout_constraintBottom_toBottomOf="@+id/cl_feed_thumb_up"
             app:layout_constraintStart_toEndOf="@+id/cl_feed_thumb_up"
             app:layout_constraintTop_toTopOf="@+id/cl_feed_thumb_up">
@@ -225,6 +242,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
+                android:text="@{String.valueOf(feed.commentCount)}"
                 android:maxLines="1"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
