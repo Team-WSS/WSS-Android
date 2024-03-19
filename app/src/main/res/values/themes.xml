@@ -8,4 +8,8 @@
 
     <style name="Theme.Websoso" parent="Base.Theme.Websoso" />
 
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">14dp</item>
+    </style>
 </resources>
