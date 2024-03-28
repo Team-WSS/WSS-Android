@@ -6,9 +6,9 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.fragment.app.viewModels
-import com.created.team201.presentation.common.BindingFragment
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentFeedBinding
+import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
