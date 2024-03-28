@@ -15,5 +15,6 @@
     <string name="feed_popup_user_block">해당유저차단</string>
     <string name="feed_popup_spoiler">스포일러 신고</string>
     <string name="feed_popup_report">부적절한 표현 신고</string>
+    <string name="feed_title">소소 피드</string>
 
 </resources>
