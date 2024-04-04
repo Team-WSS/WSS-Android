@@ -46,7 +46,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private inline fun <reified T : Fragment> replaceFragment() {
         supportFragmentManager.commit {
-            replace<T>(R.id.bnv_main)
+            replace<T>(R.id.fcv_main)
             setReorderingAllowed(true)
         }
     }
