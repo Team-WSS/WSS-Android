@@ -9,20 +9,20 @@ import com.teamwss.websoso.ui.common.base.BindingFragment
 
 
 class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
-    private lateinit var sosoAdapter: SosoAdapter
+    private lateinit var sosoPickAdapter: SosoPickAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initSosoAdapter()
+        initSosoPickAdapter()
     }
 
-    private fun initSosoAdapter() {
-        sosoAdapter = SosoAdapter()
+    private fun initSosoPickAdapter() {
+        sosoPickAdapter = SosoPickAdapter()
         binding.rvExploreSosoPick.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = sosoAdapter
+            adapter = sosoPickAdapter
         }
     }
 }
