@@ -211,11 +211,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:clipToPadding="false"
             android:orientation="horizontal"
+            android:paddingStart="20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_explore_soso_pick_description"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_pick_description"
+            tools:ignore="RtlSymmetry"
             tools:listitem="@layout/item_soso_pick" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
