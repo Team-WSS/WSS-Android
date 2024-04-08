@@ -31,7 +31,7 @@ data class SosoPickData(
                 "https://i.namu.wiki/i/ezN7KZavE1NFMwAPhFb4v5udleicF_g_2Ucy-VxV-YUZ1A6g-linrMRsIjxesirjM_K7yNU8Qj0TQTIK5wSIqTHi7GATqraCywfeT2eXqqVfOAYPz8kHIHO4M7jNegBEAXic5QDeLwLdpPvgO5CpvA.webp"
             ),
             SosoPickData(
-                "역대급 영지 설계사",
+                "역대급 영지 설계사입니다 주인공 얼굴 진짜 대박",
                 "https://i.namu.wiki/i/Lv-o0hZWotFaoKB9mFhWcgxPFSVTo_Jd4hj980K_DCBFP4VMdPj-NH3E9tF9MRKDT3_xeUFcJd0CgnQx7gGNc-pc6wHy3qdWf43PkRrLbzglKcw1n4hxt_KtkNo_VqOsTtIiVEY8EG4QqSgmyKtGRA.webp"
             )
         )

@@ -23,6 +23,11 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = sosoPickAdapter
+            addItemDecoration(SosoPickItemDecoration(SOSO_PICK_ITEM_RIGHT_OFFSET))
         }
+    }
+
+    companion object {
+        private const val SOSO_PICK_ITEM_RIGHT_OFFSET: Int = 8
     }
 }
