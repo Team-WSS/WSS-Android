@@ -10,4 +10,8 @@
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">my</string>
 
+    <!-- 마이페이지 -->
+    <string name="my_page_library">내 서재</string>
+    <string name="my_page_feed">내 피드</string>
+
 </resources>
