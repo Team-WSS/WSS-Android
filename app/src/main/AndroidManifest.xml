@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.teamwss.websoso.ui.novel.NovelActivity"
+            android:name="com.teamwss.websoso.ui.novelDetail.NovelDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
