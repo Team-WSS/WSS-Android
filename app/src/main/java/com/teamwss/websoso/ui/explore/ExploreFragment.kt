@@ -24,6 +24,7 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = sosoPickAdapter
             addItemDecoration(SosoPickItemDecoration(SOSO_PICK_ITEM_RIGHT_OFFSET))
+            setHasFixedSize(true)
         }
     }
 
