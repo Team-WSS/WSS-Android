@@ -269,10 +269,7 @@
                 android:id="@+id/vp_novel_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                app:layout_constrainedHeight="true" />
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.appcompat.widget.Toolbar
