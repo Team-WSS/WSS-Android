@@ -236,6 +236,7 @@
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
                 <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_novel_detail"
                     android:layout_width="match_parent"
                     android:layout_height="54dp"
                     app:layout_scrollFlags="scroll|enterAlways"
@@ -265,11 +266,13 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_novel_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                app:layout_constrainedHeight="true" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.appcompat.widget.Toolbar
