@@ -35,16 +35,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_feed_title" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_feed"
+        <HorizontalScrollView
+            android:id="@+id/hsv_feed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_feed_title">
 
-        </com.google.android.material.chip.ChipGroup>
+            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+                android:id="@+id/wcg_feed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:singleSelection="true">
+
+            </com.teamwss.websoso.ui.common.customView.WebsosoChipGroup>
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_feed"
@@ -55,7 +64,7 @@
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cg_feed"
+            app:layout_constraintTop_toBottomOf="@+id/hsv_feed"
             tools:listitem="@layout/item_feed" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
