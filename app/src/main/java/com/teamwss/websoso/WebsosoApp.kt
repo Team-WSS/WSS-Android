@@ -3,6 +3,7 @@ package com.teamwss.websoso
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.teamwss.websoso.data.repository.FakeFeedRepository
+import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 
 class WebsosoApp : Application() {
@@ -12,7 +13,9 @@ class WebsosoApp : Application() {
     }
 
     companion object {
-        
+
+        fun getUserRepository(): FakeUserRepository = FakeUserRepository()
+
         fun getFeedsUseCase(): GetFeedsUseCase = GetFeedsUseCase(FakeFeedRepository())
     }
 }
