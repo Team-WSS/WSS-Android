@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.feed.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,6 @@ class FeedViewHolder(
     }
 
     fun bind(feed: Feed) {
-        Log.d("123123", feed.toString())
         binding.feed = feed
     }
 
