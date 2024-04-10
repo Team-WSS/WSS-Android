@@ -246,14 +246,16 @@
                     app:tabTextColor="@color/gray_200_AEADB3">
 
                     <com.google.android.material.tabs.TabItem
+                        android:id="@+id/ti_novel_detail_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="정보" />
+                        android:text="@string/tab_novel_detail_info" />
 
                     <com.google.android.material.tabs.TabItem
+                        android:id="@+id/ti_novel_detail_feed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="피드" />
+                        android:text="@string/tab_novel_detail_feed" />
                 </com.google.android.material.tabs.TabLayout>
 
                 <View

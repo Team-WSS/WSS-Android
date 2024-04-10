@@ -13,5 +13,7 @@
     <!-- 작품 상세 -->
     <string name="tv_novel_detail_review">리뷰 남기기</string>
     <string name="tv_novel_detail_interest">관심 있어요</string>
+    <string name="ti_novel_detail_info">정보</string>
+    <string name="ti_novel_detail_feed">피드</string>
 
 </resources>
