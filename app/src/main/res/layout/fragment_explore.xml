@@ -7,218 +7,223 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".ui.explore.ExploreFragment">
-
-        <TextView
-            android:id="@+id/tv_explore_title"
-            style="@style/headline1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="64dp"
-            android:text="@string/explore_title"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_explore_normal_search"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_gray50_radius_14dp"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_explore_title">
+            android:background="@color/white"
+            tools:context=".ui.explore.ExploreFragment">
 
             <TextView
-                android:id="@+id/tv_explore_normal_hint"
-                style="@style/label1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/explore_normal_search_hint"
-                android:textColor="@color/gray_200_AEADB3"
-                app:layout_constraintBottom_toBottomOf="@id/cl_explore_normal_search"
-                app:layout_constraintStart_toStartOf="@id/cl_explore_normal_search"
-                app:layout_constraintTop_toTopOf="@id/cl_explore_normal_search" />
-
-            <ImageView
-                android:id="@+id/iv_explore_normal_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_explore_search"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_explore_detail_search"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_primary20_radius_14dp"
-            app:layout_constraintEnd_toEndOf="@id/cl_explore_normal_search"
-            app:layout_constraintStart_toStartOf="@id/cl_explore_normal_search"
-            app:layout_constraintTop_toBottomOf="@id/cl_explore_normal_search">
-
-            <TextView
-                android:id="@+id/tv_explore_detail_search_title"
-                style="@style/title1"
+                android:id="@+id/tv_explore_title"
+                style="@style/headline1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/explore_detail_search_title"
+                android:layout_marginTop="64dp"
+                android:text="@string/explore_title"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_explore_normal_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_gray50_radius_14dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_explore_title">
+
+                <TextView
+                    android:id="@+id/tv_explore_normal_hint"
+                    style="@style/label1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/explore_normal_search_hint"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintBottom_toBottomOf="@id/cl_explore_normal_search"
+                    app:layout_constraintStart_toStartOf="@id/cl_explore_normal_search"
+                    app:layout_constraintTop_toTopOf="@id/cl_explore_normal_search" />
+
+                <ImageView
+                    android:id="@+id/iv_explore_normal_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_explore_search"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_explore_detail_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_primary20_radius_14dp"
+                app:layout_constraintEnd_toEndOf="@id/cl_explore_normal_search"
+                app:layout_constraintStart_toStartOf="@id/cl_explore_normal_search"
+                app:layout_constraintTop_toBottomOf="@id/cl_explore_normal_search">
+
+                <TextView
+                    android:id="@+id/tv_explore_detail_search_title"
+                    style="@style/title1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/explore_detail_search_title"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_explore_detail_search_description"
+                    style="@style/label1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/explore_detail_search_description"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintStart_toStartOf="@id/tv_explore_detail_search_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_title" />
+
+                <ImageView
+                    android:id="@+id/iv_explore_genre_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_explore_genre_first"
+                    app:layout_constraintEnd_toStartOf="@id/iv_explore_genre_second"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_description" />
+
+                <ImageView
+                    android:id="@+id/iv_explore_genre_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_explore_genre_second"
+                    app:layout_constraintEnd_toStartOf="@id/iv_explore_genre_third"
+                    app:layout_constraintStart_toEndOf="@id/iv_explore_genre_first"
+                    app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_description"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <ImageView
+                    android:id="@+id/iv_explore_genre_third"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_explore_genre_third"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_explore_genre_first"
+                    app:layout_constraintEnd_toStartOf="@id/iv_explore_genre_fourth"
+                    app:layout_constraintStart_toEndOf="@id/iv_explore_genre_second"
+                    app:layout_constraintTop_toTopOf="@id/iv_explore_genre_first" />
+
+                <ImageView
+                    android:id="@+id/iv_explore_genre_fourth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_explore_genre_fourth"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_explore_genre_second"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_explore_genre_fifth"
+                    app:layout_constraintStart_toEndOf="@id/iv_explore_genre_third"
+                    app:layout_constraintTop_toTopOf="@id/iv_explore_genre_second" />
+
+                <ImageView
+                    android:id="@+id/iv_explore_genre_fifth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_explore_genre_fifth"
+                    app:flow_horizontalBias="0"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_explore_genre_third"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_explore_genre_fourth"
+                    app:layout_constraintTop_toTopOf="@id/iv_explore_genre_third" />
+
+                <TextView
+                    android:id="@+id/tv_explore_detail_search_button"
+                    style="@style/body2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_white_radius_10dp"
+                    android:elevation="2dp"
+                    android:gravity="center"
+                    android:paddingVertical="16dp"
+                    android:text="@string/explore_detail_search_button"
+                    android:textColor="@color/primary_100_5446F8"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_explore_genre_third" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
-                android:id="@+id/tv_explore_detail_search_description"
+                android:id="@+id/tv_explore_soso_title"
+                style="@style/title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/explore_soso"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/cl_explore_detail_search"
+                app:layout_constraintTop_toBottomOf="@id/cl_explore_detail_search" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_explore_soso_pick"
+                app:layout_constraintBottom_toBottomOf="@id/tv_explore_soso_title"
+                app:layout_constraintStart_toEndOf="@id/tv_explore_soso_title"
+                app:layout_constraintTop_toTopOf="@id/tv_explore_soso_title" />
+
+            <TextView
+                android:id="@+id/tv_explore_soso_pick_description"
                 style="@style/label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/explore_detail_search_description"
+                android:text="@string/explore_sosopick_description"
                 android:textColor="@color/gray_200_AEADB3"
-                app:layout_constraintStart_toStartOf="@id/tv_explore_detail_search_title"
-                app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_title" />
+                app:layout_constraintStart_toStartOf="@id/tv_explore_soso_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_title" />
 
-            <ImageView
-                android:id="@+id/iv_explore_genre_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_explore_genre_first"
-                app:layout_constraintEnd_toStartOf="@id/iv_explore_genre_second"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_description" />
-
-            <ImageView
-                android:id="@+id/iv_explore_genre_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_explore_genre_second"
-                app:layout_constraintEnd_toStartOf="@id/iv_explore_genre_third"
-                app:layout_constraintStart_toEndOf="@id/iv_explore_genre_first"
-                app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_description"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <ImageView
-                android:id="@+id/iv_explore_genre_third"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_explore_genre_third"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_explore_genre_first"
-                app:layout_constraintEnd_toStartOf="@id/iv_explore_genre_fourth"
-                app:layout_constraintStart_toEndOf="@id/iv_explore_genre_second"
-                app:layout_constraintTop_toTopOf="@id/iv_explore_genre_first" />
-
-            <ImageView
-                android:id="@+id/iv_explore_genre_fourth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_explore_genre_fourth"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_explore_genre_second"
-                app:layout_constraintEnd_toStartOf="@+id/iv_explore_genre_fifth"
-                app:layout_constraintStart_toEndOf="@id/iv_explore_genre_third"
-                app:layout_constraintTop_toTopOf="@id/iv_explore_genre_second" />
-
-            <ImageView
-                android:id="@+id/iv_explore_genre_fifth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_explore_genre_fifth"
-                app:flow_horizontalBias="0"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_explore_genre_third"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_explore_genre_fourth"
-                app:layout_constraintTop_toTopOf="@id/iv_explore_genre_third" />
-
-            <TextView
-                android:id="@+id/tv_explore_detail_search_button"
-                style="@style/body2"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_explore_soso_pick"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_white_radius_10dp"
-                android:elevation="2dp"
-                android:gravity="center"
-                android:paddingVertical="16dp"
-                android:text="@string/explore_detail_search_button"
-                android:textColor="@color/primary_100_5446F8"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="20dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="40dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_explore_genre_third" />
+                app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_pick_description"
+                tools:listitem="@layout/item_soso_pick" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tv_explore_soso_title"
-            style="@style/title1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/explore_soso"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@id/cl_explore_detail_search"
-            app:layout_constraintTop_toBottomOf="@id/cl_explore_detail_search" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_explore_soso_pick"
-            app:layout_constraintBottom_toBottomOf="@id/tv_explore_soso_title"
-            app:layout_constraintStart_toEndOf="@id/tv_explore_soso_title"
-            app:layout_constraintTop_toTopOf="@id/tv_explore_soso_title" />
-
-        <TextView
-            android:id="@+id/tv_explore_soso_pick_description"
-            style="@style/label1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/explore_sosopick_description"
-            android:textColor="@color/gray_200_AEADB3"
-            app:layout_constraintStart_toStartOf="@id/tv_explore_soso_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_title" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_explore_soso_pick"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_pick_description"
-            tools:ignore="RtlSymmetry"
-            tools:listitem="@layout/item_soso_pick" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
