@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
+import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
 
 class MyPageFragment : Fragment() {
@@ -31,7 +32,10 @@ class MyPageFragment : Fragment() {
         binding.vpMyPage.adapter = pagerAdapter
 
         TabLayoutMediator(binding.tbMyPage, binding.vpMyPage) { tab, position ->
-            tab.text = "Tab ${position + 1}"
+            when (position) {
+                0 -> tab.text = getString(R.string.my_page_library)
+                1 -> tab.text = getString(R.string.my_page_feed)
+            }
         }.attach()
     }
 
