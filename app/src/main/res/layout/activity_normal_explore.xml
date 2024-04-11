@@ -41,7 +41,7 @@
                 android:id="@+id/et_normal_explore_search_content"
                 style="@style/label1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:autofillHints="@null"
                 android:background="@null"
                 android:cursorVisible="true"
@@ -84,39 +84,100 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/tv_normal_explore_novel_count_title"
-            style="@style/title2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/normal_explore_novel_count_title"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_search_bar" />
-
-        <TextView
-            android:id="@+id/tv_normal_explore_novel_count"
-            style="@style/body3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textColor="@color/gray_100_CBCBD1"
-            app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_novel_count_title"
-            app:layout_constraintStart_toEndOf="@id/tv_normal_explore_novel_count_title"
-            app:layout_constraintTop_toTopOf="@id/tv_normal_explore_novel_count_title"
-            tools:hint="8" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_normal_explore_result"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_normal_explore_result_exist"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_novel_count_title"
-            tools:listitem="@layout/item_normal_explore_result" />
+            app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_search_bar">
+
+            <TextView
+                android:id="@+id/tv_normal_explore_novel_count_title"
+                style="@style/title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/normal_explore_novel_count_title"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_normal_explore_novel_count"
+                style="@style/body3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/gray_100_CBCBD1"
+                app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_novel_count_title"
+                app:layout_constraintStart_toEndOf="@id/tv_normal_explore_novel_count_title"
+                app:layout_constraintTop_toTopOf="@id/tv_normal_explore_novel_count_title"
+                tools:hint="8" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_normal_explore_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_novel_count_title"
+                tools:listitem="@layout/item_normal_explore_result" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_normal_explore_result_not_exist"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_search_bar">
+
+            <ImageView
+                android:id="@+id/iv_normal_explore_not_exist_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="180dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_explore_not_exist_result"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_normal_explore_not_exist_result"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/normal_explore_not_exist_result"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_normal_explore_not_exist_result" />
+
+            <TextView
+                android:id="@+id/tv_normal_explore_add_novel_inquire_button"
+                style="@style/title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:background="@drawable/bg_explore_primary50_radius_14dp"
+                android:gravity="center"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="20dp"
+                android:text="@string/normal_explore_add_novel_inquire"
+                android:textColor="@color/primary_100_5446F8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_not_exist_result" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
