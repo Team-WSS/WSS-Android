@@ -12,6 +12,6 @@ class SosoPickViewHolder(
 
     fun onBind(sosoPickData: SosoPickData) {
         binding.tvExploreSosoPickNovelTitle.text = sosoPickData.title
-        binding.ivExploreSosoPickNovelThumbnail.load(sosoPickData.image)
+        binding.ivExploreSosoPickNovelCover.load(sosoPickData.image)
     }
 }

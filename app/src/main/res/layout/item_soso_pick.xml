@@ -12,11 +12,11 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_explore_soso_pick_novel_thumbnail"
+            android:id="@+id/iv_explore_soso_pick_novel_cover"
             android:layout_width="120dp"
             android:layout_height="180dp"
             android:contentDescription="@null"
-            android:src="@drawable/img_explore_test_thumbnail"
+            android:src="@drawable/img_explore_test_cover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
             android:textColorHint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_explore_soso_pick_novel_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/iv_explore_soso_pick_novel_cover"
             tools:hint="네가 죽어야 내가 살아 왜냐면 나는 악독한 악역 영애니까" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
