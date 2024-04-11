@@ -11,7 +11,7 @@
 
         <variable
             name="feed"
-            type="com.teamwss.websoso.domain.model.Feed" />
+            type="com.teamwss.websoso.ui.feed.model.FeedModel" />
 
     </data>
 
@@ -29,15 +29,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/iv_feed_profile"
+                cornerRadius="@{12f}"
                 loadImageUrl="@{feed.user.profileImage}"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/circleImageView"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
@@ -52,7 +52,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_feed_profile"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="세훈군 - 3분" />
+                tools:text="세훈군" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
@@ -165,7 +165,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="123"
+            android:text="@{feed.category}"
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@+id/cl_feed_novel_info"
@@ -178,7 +178,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="28dp"
-            android:onClick="@{() -> onClick.onThumbUpButtonClick()}"
+            android:onClick="@{(cl_feed_thumb_up) -> onClick.onThumbUpButtonClick(cl_feed_thumb_up)}"
             app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
             app:layout_constraintStart_toStartOf="@+id/tv_feed_genre"
             app:layout_constraintTop_toBottomOf="@+id/tv_feed_genre">
