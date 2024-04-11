@@ -18,8 +18,8 @@ class NovelDetailActivity: BindingActivity<ActivityNovelDetailBinding>(R.layout.
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this)
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
             tab.text = when (position) {
-                NovelDetailPagerAdapter.INFO_FRAGMENT_PAGE -> getString(R.string.ti_novel_detail_info)
-                NovelDetailPagerAdapter.FEED_FRAGMENT_PAGE -> getString(R.string.ti_novel_detail_feed)
+                NovelDetailPagerAdapter.INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
+                NovelDetailPagerAdapter.FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
                 else -> throw IllegalArgumentException("Invalid position")
             }
         }.attach()
