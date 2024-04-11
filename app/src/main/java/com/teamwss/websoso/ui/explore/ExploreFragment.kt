@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
-
+import com.teamwss.websoso.ui.explore.adapter.SosoPickAdapter
 
 class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
     private lateinit var sosoPickAdapter: SosoPickAdapter

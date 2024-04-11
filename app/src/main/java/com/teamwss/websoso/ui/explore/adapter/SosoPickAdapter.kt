@@ -1,12 +1,13 @@
-package com.teamwss.websoso.ui.explore
+package com.teamwss.websoso.ui.explore.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemSosoPickBinding
+import com.teamwss.websoso.ui.explore.model.SosoPickData
 
 class SosoPickAdapter : RecyclerView.Adapter<SosoPickViewHolder>() {
-    val sosoPickData: List<SosoPickData> = SosoPickData.sosoMockData
+    private val sosoPickData: List<SosoPickData> = SosoPickData.sosoMockData
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SosoPickViewHolder {
         val binding =
