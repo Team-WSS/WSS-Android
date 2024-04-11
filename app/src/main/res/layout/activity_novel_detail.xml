@@ -268,7 +268,6 @@
                     app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
             </com.google.android.material.appbar.AppBarLayout>
 
-
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_novel_detail"
                 android:layout_width="match_parent"
