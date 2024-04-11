@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_normal_explore_result_cover"
+            android:layout_width="78dp"
+            android:layout_height="104dp"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_normal_explore_result_title"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/img_normal_explore_test_cover" />
+
+        <TextView
+            android:id="@+id/tv_normal_explore_result_title"
+            style="@style/title3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_normal_explore_result_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_normal_explore_result_cover"
+            app:layout_constraintTop_toTopOf="@id/iv_normal_explore_result_cover"
+            tools:hint="주인공의 남동생을 지키는 방법 1 2 3 원투쓰리포 파이브 씩스" />
+
+        <ImageView
+            android:id="@+id/iv_normal_explore_result_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_normal_explore_rating"
+            app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_result_rating"
+            app:layout_constraintStart_toStartOf="@id/tv_normal_explore_result_title"
+            app:layout_constraintTop_toTopOf="@id/tv_normal_explore_result_rating" />
+
+        <TextView
+            android:id="@+id/tv_normal_explore_result_rating"
+            style="@style/body3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="4dp"
+            android:maxLines="1"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toTopOf="@id/tv_normal_explore_result_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_normal_explore_result_rating"
+            tools:hint="4.5 (25)" />
+
+        <TextView
+            android:id="@+id/tv_normal_explore_result_author"
+            style="@style/body3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/tv_normal_explore_result_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_result_title"
+            tools:hint="김명지손명지 박명지 이명지, 안녕하세요, 작가 손입니다. 반갑스빈다." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
