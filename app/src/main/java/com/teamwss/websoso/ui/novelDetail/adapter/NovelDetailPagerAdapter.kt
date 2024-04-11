@@ -3,8 +3,8 @@ package com.teamwss.websoso.ui.novelDetail.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.teamwss.websoso.ui.novelDetail.fragment.NovelFeedFragment
-import com.teamwss.websoso.ui.novelDetail.fragment.NovelInfoFragment
+import com.teamwss.websoso.ui.novelDetail.NovelFeedFragment
+import com.teamwss.websoso.ui.novelDetail.NovelInfoFragment
 
 class NovelDetailPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     private val fragments = arrayOf(NovelInfoFragment(), NovelFeedFragment())
