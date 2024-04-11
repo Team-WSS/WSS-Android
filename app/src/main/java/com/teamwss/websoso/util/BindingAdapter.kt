@@ -4,7 +4,6 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import coil.transform.Transformation
 import com.teamwss.websoso.R
 
 object BindingAdapter {
@@ -12,26 +11,16 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("loadImageUrl")
     fun loadImage(view: ImageView, imageUrl: String?) {
-        loadImageWithTransformation(view, imageUrl, null)
+        view.load(imageUrl)
     }
 
     @JvmStatic
-    @BindingAdapter("loadImageUrl", "cornerRadius")
-    fun loadRoundedCornerImage(view: ImageView, imageUrl: String?, cornerRadius: Float?) {
-        val transformation = cornerRadius?.let { RoundedCornersTransformation(it) }
-        loadImageWithTransformation(view, imageUrl, transformation)
-    }
-
-    private fun loadImageWithTransformation(
-        view: ImageView,
-        imageUrl: String?,
-        transformation: Transformation?,
-        placeholder: Int = R.drawable.img_loading_thumbnail
-    ) {
-        view.load(imageUrl ?: placeholder) {
+    @BindingAdapter(value = ["loadImageUrl", "cornerRadius"], requireAll = true)
+    fun loadRoundedCornerImage(view: ImageView, imageUrl: String?, cornerRadius: Float) {
+        view.load(imageUrl) {
             crossfade(true)
-            transformation?.let { transformations(it) }
-            listener(onError = { _, _ -> view.load(placeholder) })
+            transformations(RoundedCornersTransformation(cornerRadius))
+            error(R.drawable.img_loading_thumbnail)
         }
     }
 }
