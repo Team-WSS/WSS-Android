@@ -40,7 +40,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/ic_novel_genre_test" />
+                            tools:src="@drawable/ic_novel_detail_genre_test" />
 
                         <TextView
                             android:id="@+id/tv_novel_detail_title"
@@ -77,7 +77,7 @@
                             <ImageView
                                 android:layout_width="12dp"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_novel_interest" />
+                                android:src="@drawable/ic_novel_detail_interest" />
 
                             <TextView
                                 android:id="@+id/tv_novel_detail_interest_count"
@@ -92,7 +92,7 @@
                                 android:layout_width="12dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:src="@drawable/ic_novel_rating" />
+                                android:src="@drawable/ic_novel_detail_rating" />
 
                             <TextView
                                 android:id="@+id/tv_novel_detail_rating"
@@ -107,7 +107,7 @@
                                 android:layout_width="12dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                android:src="@drawable/ic_novel_feed" />
+                                android:src="@drawable/ic_novel_detail_feed" />
 
                             <TextView
                                 android:id="@+id/tv_novel_detail_feed_count"
@@ -138,7 +138,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="144dp"
-                            android:src="@drawable/img_novel_cover_foreground"
+                            android:src="@drawable/img_novel_detail_cover_foreground"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@id/iv_novel_detail_cover" />
@@ -149,7 +149,7 @@
                             android:layout_height="68dp"
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="88dp"
-                            android:background="@drawable/bg_white_radius_15dp"
+                            android:background="@drawable/bg_novel_detail_white_radius_15dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@id/iv_novel_detail_cover_foreground" />
@@ -176,7 +176,7 @@
                             android:layout_height="42dp"
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="12dp"
-                            android:background="@drawable/bg_white_radius_10dp"
+                            android:background="@drawable/bg_novel_detail_white_radius_10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view_novel_detail_rating">
@@ -191,7 +191,7 @@
                                 <ImageView
                                     android:layout_width="16dp"
                                     android:layout_height="14dp"
-                                    android:src="@drawable/ic_novel_interest" />
+                                    android:src="@drawable/ic_novel_detail_interest" />
 
                                 <TextView
                                     android:id="@+id/tv_novel_detail_interest"
@@ -219,7 +219,7 @@
                                 <ImageView
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:src="@drawable/ic_novel_review" />
+                                    android:src="@drawable/ic_novel_detail_review" />
 
                                 <TextView
                                     android:id="@+id/tv_novel_detail_review"
@@ -297,7 +297,7 @@
                     android:layout_marginStart="6dp"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="14dp"
-                    android:src="@drawable/ic_novel_navigate_back"
+                    android:src="@drawable/ic_novel_detail_navigate_back"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -308,7 +308,7 @@
                     android:layout_height="38dp"
                     android:layout_marginEnd="12dp"
                     android:padding="10dp"
-                    android:src="@drawable/ic_novel_menu"
+                    android:src="@drawable/ic_novel_detail_menu"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
