@@ -13,6 +13,7 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
+import com.teamwss.websoso.ui.feed.model.FeedsModel
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
@@ -36,8 +37,9 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             // navigateToNovelDetail(id)
         }
 
-        override fun onThumbUpButtonClick() {
-            // feedViewModel.updateThumbUp()
+        override fun onThumbUpButtonClick(view: View) {
+            view.isSelected = !view.isSelected
+            feedViewModel.updateLikeCount()
         }
 
         override fun onCommentButtonClick() {
@@ -70,16 +72,29 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         super.onViewCreated(view, savedInstanceState)
 
         setupBinding()
-        initView()
+        observeUiState()
+
+    }
+
+    private fun observeUiState() {
+        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            if (uiState.loading) loading()
+            if (uiState.error) throw IllegalStateException()
+            if (!uiState.loading) initView(uiState.feeds)
+        }
+    }
+
+    private fun loading() {
+
     }
 
     private fun setupBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    private fun initView() {
+    private fun initView(feeds: FeedsModel) {
         setupCategory()
-        setupFeeds()
+        setupFeeds(feeds)
     }
 
     private fun setupCategory() {
@@ -106,19 +121,13 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    private fun setupFeeds() {
+    private fun setupFeeds(feeds: FeedsModel) {
         setupAdapter()
-        observeFeeds()
+        feedAdapter.submitList(feeds.feeds)
     }
 
     private fun setupAdapter() {
         binding.rvFeed.adapter = feedAdapter
         binding.rvFeed.setHasFixedSize(true)
-    }
-
-    private fun observeFeeds() {
-        feedViewModel.uiState.observe(viewLifecycleOwner) {
-            feedAdapter.submitList(it.feeds.feeds)
-        }
     }
 }

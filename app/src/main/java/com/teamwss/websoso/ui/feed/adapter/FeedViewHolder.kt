@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemFeedBinding
-import com.teamwss.websoso.domain.model.Feed
 import com.teamwss.websoso.ui.feed.FeedItemClickListener
+import com.teamwss.websoso.ui.feed.model.FeedModel
 
 class FeedViewHolder(
     private val binding: ItemFeedBinding,
@@ -16,7 +16,7 @@ class FeedViewHolder(
         binding.onClick = onClick
     }
 
-    fun bind(feed: Feed) {
+    fun bind(feed: FeedModel) {
         binding.feed = feed
     }
 

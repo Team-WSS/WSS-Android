@@ -2,13 +2,13 @@ package com.teamwss.websoso.ui.feed.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.domain.model.Feed
 import com.teamwss.websoso.ui.common.base.BaseDiffUtil
 import com.teamwss.websoso.ui.feed.FeedItemClickListener
+import com.teamwss.websoso.ui.feed.model.FeedModel
 
 class FeedAdapter(
     private val onClick: FeedItemClickListener
-) : ListAdapter<Feed, FeedViewHolder>(diffCallBack) {
+) : ListAdapter<FeedModel, FeedViewHolder>(diffCallBack) {
 
     init {
         setHasStableIds(true)
@@ -24,6 +24,6 @@ class FeedAdapter(
     }
 
     companion object {
-        private val diffCallBack = object : BaseDiffUtil<Feed>() {}
+        private val diffCallBack = object : BaseDiffUtil<FeedModel>() {}
     }
 }
