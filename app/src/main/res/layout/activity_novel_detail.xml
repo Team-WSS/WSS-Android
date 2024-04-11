@@ -26,7 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_50_F4F5F8"
-                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -262,16 +262,19 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/gray_70_DFDFE3" />
+                    android:background="@color/gray_70_DFDFE3"
+                    android:minHeight="-54dp"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                    app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
             </com.google.android.material.appbar.AppBarLayout>
 
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vp_novel_detail"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_novel_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                app:layout_scrollFlags="scroll|enterAlways" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.appcompat.widget.Toolbar
