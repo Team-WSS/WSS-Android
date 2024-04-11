@@ -12,15 +12,15 @@ class NovelDetailPagerAdapter(fragmentActivity: FragmentActivity): FragmentState
 
     override fun createFragment(position: Int):Fragment {
         return when (position) {
-            INFO_FRAGMENT -> NovelInfoFragment()
-            FEED_FRAGMENT -> NovelFeedFragment()
+            INFO_FRAGMENT_PAGE -> NovelInfoFragment()
+            FEED_FRAGMENT_PAGE -> NovelFeedFragment()
             else -> {NovelInfoFragment()}
         }
     }
 
     companion object {
-        const val INFO_FRAGMENT = 0
-        const val FEED_FRAGMENT = 1
+        const val INFO_FRAGMENT_PAGE = 0
+        const val FEED_FRAGMENT_PAGE = 1
         const val NOVEL_DETAIL_TAB_COUNT = 2
     }
 }

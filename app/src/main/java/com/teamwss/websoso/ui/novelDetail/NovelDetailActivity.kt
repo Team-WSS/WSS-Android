@@ -11,11 +11,15 @@ class NovelDetailActivity: BindingActivity<ActivityNovelDetailBinding>(R.layout.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupTabLayout()
+    }
+
+    private fun setupTabLayout() {
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this)
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
             tab.text = when (position) {
-                0 -> getString(R.string.ti_novel_detail_info)
-                1 -> getString(R.string.ti_novel_detail_feed)
+                NovelDetailPagerAdapter.INFO_FRAGMENT_PAGE -> getString(R.string.ti_novel_detail_info)
+                NovelDetailPagerAdapter.FEED_FRAGMENT_PAGE -> getString(R.string.ti_novel_detail_feed)
                 else -> throw IllegalArgumentException("Invalid position")
             }
         }.attach()
