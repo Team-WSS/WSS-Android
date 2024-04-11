@@ -14,6 +14,12 @@ class WebsosoChipGroup(
     var isSingleSelectionMode: Boolean = false
         private set
 
+    /*
+    Adds a child view. If no layout parameters are already set on the child, the default parameters for this ViewGroup are set on the child.
+    Note: do not invoke this method from draw(Canvas), onDraw(Canvas), dispatchDraw(Canvas) or any related method.
+    Params:
+    chip – the websosoChip to add
+    */
     fun addChip(chip: WebsosoChip) {
         addView(chip)
     }
