@@ -6,6 +6,9 @@
 
     <data>
 
+        <variable
+            name="normalExploreViewModel"
+            type="com.teamwss.websoso.ui.explore.normalExplore.NormalExploreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,6 +52,7 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
+                android:text="@={normalExploreViewModel.searchContent}"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_normal_explore_cancel_button"
@@ -63,7 +67,6 @@
                 android:contentDescription="@null"
                 android:padding="8dp"
                 android:src="@drawable/btn_explore_cancel"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_normal_explore_search_button"
                 app:layout_constraintHorizontal_bias="1"
