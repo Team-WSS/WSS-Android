@@ -198,7 +198,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="@string/tv_novel_detail_interest"
+                                    android:text="@string/novel_detail_interest"
                                     android:textAppearance="@style/body3"
                                     android:textColor="@color/gray_300_52515F" />
                             </LinearLayout>
@@ -226,7 +226,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="@string/tv_novel_detail_review"
+                                    android:text="@string/novel_detail_review"
                                     android:textAppearance="@style/body3"
                                     android:textColor="@color/gray_300_52515F" />
                             </LinearLayout>
@@ -250,13 +250,13 @@
                         android:id="@+id/ti_novel_detail_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/ti_novel_detail_info" />
+                        android:text="@string/novel_detail_info" />
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/ti_novel_detail_feed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/ti_novel_detail_feed" />
+                        android:text="@string/novel_detail_feed" />
                 </com.google.android.material.tabs.TabLayout>
 
                 <View
