@@ -12,11 +12,15 @@ class NovelDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupViewPager()
         setupTabLayout()
     }
 
-    private fun setupTabLayout() {
+    private fun setupViewPager() {
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this)
+    }
+
+    private fun setupTabLayout() {
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
             tab.text = when (position) {
                 INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
