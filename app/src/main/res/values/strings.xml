@@ -10,4 +10,10 @@
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">my</string>
 
+    <!-- 작품 상세 -->
+    <string name="novel_detail_review">리뷰 남기기</string>
+    <string name="novel_detail_interest">관심 있어요</string>
+    <string name="novel_detail_info">정보</string>
+    <string name="novel_detail_feed">피드</string>
+
 </resources>
