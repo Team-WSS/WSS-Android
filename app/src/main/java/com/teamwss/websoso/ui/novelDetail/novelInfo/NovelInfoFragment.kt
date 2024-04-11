@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelDetail
+package com.teamwss.websoso.ui.novelDetail.novelInfo
 
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
