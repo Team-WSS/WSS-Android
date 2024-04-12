@@ -7,8 +7,7 @@ import com.teamwss.websoso.ui.explore.model.SosoPickData
 
 class SosoPickViewHolder(
     private val binding: ItemSosoPickBinding
-) :
-    RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(sosoPickData: SosoPickData) {
         binding.tvExploreSosoPickNovelTitle.text = sosoPickData.title

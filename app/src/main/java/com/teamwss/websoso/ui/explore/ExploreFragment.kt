@@ -9,7 +9,7 @@ import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.explore.adapter.SosoPickAdapter
 
 class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
-    private lateinit var sosoPickAdapter: SosoPickAdapter
+    private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -18,12 +18,11 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
     }
 
     private fun initSosoPickAdapter() {
-        sosoPickAdapter = SosoPickAdapter()
         binding.rvExploreSosoPick.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = sosoPickAdapter
-            addItemDecoration(SosoPickItemDecoration(SOSO_PICK_ITEM_RIGHT_OFFSET))
+            addItemDecoration(ItemIntervalDecoration(rightOffsetDp = SOSO_PICK_ITEM_RIGHT_OFFSET))
             setHasFixedSize(true)
         }
     }

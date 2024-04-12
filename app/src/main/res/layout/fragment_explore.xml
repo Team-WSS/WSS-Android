@@ -19,12 +19,12 @@
 
             <TextView
                 android:id="@+id/tv_explore_title"
-                style="@style/headline1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="64dp"
                 android:text="@string/explore_title"
+                android:textAppearance="@style/headline1"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -44,10 +44,10 @@
 
                 <TextView
                     android:id="@+id/tv_explore_normal_hint"
-                    style="@style/label1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/explore_normal_search_hint"
+                    android:textAppearance="@style/label1"
                     android:textColor="@color/gray_200_AEADB3"
                     app:layout_constraintBottom_toBottomOf="@id/cl_explore_normal_search"
                     app:layout_constraintStart_toStartOf="@id/cl_explore_normal_search"
@@ -78,23 +78,23 @@
 
                 <TextView
                     android:id="@+id/tv_explore_detail_search_title"
-                    style="@style/title1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="24dp"
                     android:text="@string/explore_detail_search_title"
+                    android:textAppearance="@style/title1"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_explore_detail_search_description"
-                    style="@style/label1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="@string/explore_detail_search_description"
+                    android:textAppearance="@style/label1"
                     android:textColor="@color/gray_200_AEADB3"
                     app:layout_constraintStart_toStartOf="@id/tv_explore_detail_search_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_title" />
@@ -107,7 +107,6 @@
                     android:contentDescription="@null"
                     android:src="@drawable/ic_explore_genre_first"
                     app:layout_constraintEnd_toStartOf="@id/iv_explore_genre_second"
-                    app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_description" />
@@ -160,7 +159,6 @@
 
                 <TextView
                     android:id="@+id/tv_explore_detail_search_button"
-                    style="@style/body2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
@@ -170,6 +168,7 @@
                     android:gravity="center"
                     android:paddingVertical="16dp"
                     android:text="@string/explore_detail_search_button"
+                    android:textAppearance="@style/body2"
                     android:textColor="@color/primary_100_6A5DFD"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -179,11 +178,11 @@
 
             <TextView
                 android:id="@+id/tv_explore_soso_title"
-                style="@style/title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/explore_soso"
+                android:textAppearance="@style/title1"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/cl_explore_detail_search"
                 app:layout_constraintTop_toBottomOf="@id/cl_explore_detail_search" />
@@ -200,11 +199,11 @@
 
             <TextView
                 android:id="@+id/tv_explore_soso_pick_description"
-                style="@style/label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@string/explore_sosopick_description"
+                android:textAppearance="@style/label1"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintStart_toStartOf="@id/tv_explore_soso_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_title" />
