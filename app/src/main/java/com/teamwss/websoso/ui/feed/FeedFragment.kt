@@ -16,7 +16,6 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
-import com.teamwss.websoso.ui.feed.model.FeedModel
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
@@ -88,6 +87,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
         setupAdapter()
         setupPopupBinding()
+        setupCategory()
         observeUiState()
     }
 
@@ -101,29 +101,15 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         popupBinding.viewModel = feedViewModel
     }
 
-    private fun observeUiState() {
-        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            if (uiState.loading) loading()
-            if (uiState.error) throw IllegalStateException()
-            if (!uiState.loading) initView(uiState.feeds)
-        }
-    }
-
-    private fun loading() {
-
-    }
-
-    private fun initView(feeds: List<FeedModel>) {
-        setupCategory()
-        setupFeeds(feeds)
-    }
-
     private fun setupCategory() {
         when (feedViewModel.gender) {
             "MALE" -> getString(R.string.feed_category_male).toWrappedCategories()
             "FEMALE" -> getString(R.string.feed_category_female).toWrappedCategories()
             else -> throw IllegalStateException()
-        }.apply { setUpChips() }
+        }.apply {
+            setUpChips()
+            binding.wcgFeed.getChildAt(0).performClick()
+        }
     }
 
     private fun List<Category>.setUpChips() {
@@ -142,8 +128,16 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    private fun setupFeeds(feeds: List<FeedModel>) {
-        feedAdapter.submitList(feeds)
+    private fun observeUiState() {
+        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            if (uiState.loading) loading()
+            if (uiState.error) throw IllegalStateException() // 에러 헨들링 필요
+            if (!uiState.loading) feedAdapter.submitList(uiState.feeds)
+        }
+    }
+
+    private fun loading() {
+        // 로딩 뷰
     }
 
     override fun onStop() {

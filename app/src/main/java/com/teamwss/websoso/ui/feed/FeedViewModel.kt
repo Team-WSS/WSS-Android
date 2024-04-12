@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.feed
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +25,8 @@ class FeedViewModel(
     private val _uiState: MutableLiveData<FeedUiState> = MutableLiveData(FeedUiState())
     val uiState: LiveData<FeedUiState> get() = _uiState
 
-    init {
+    fun fetchFeedsByCategory(category: Category) {
+        Log.d("123123", category.title)
         viewModelScope.launch {
             runCatching {
                 getFeedsUseCase()
@@ -53,10 +55,6 @@ class FeedViewModel(
         }
 
         _uiState.value = uiState.copy(feeds = updatedFeeds)
-    }
-
-    fun fetchFeedsByCategory(category: Category) {
-        // 소소피드 단건 조회 API
     }
 
     fun saveLikeCount() {
