@@ -51,7 +51,6 @@ class FeedViewModel(
                 isThumbUpSelected = !isSelected
             ) ?: feed
         }
-
         _uiState.value = uiState.copy(feeds = updatedFeeds)
     }
 
