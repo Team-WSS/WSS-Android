@@ -76,7 +76,7 @@ dependencies {
     // viewModel
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
-    // Coil
-    // 추후 머지 시 삭제 예정
+    // coil
     implementation("io.coil-kt:coil:2.6.0")
+
 }
