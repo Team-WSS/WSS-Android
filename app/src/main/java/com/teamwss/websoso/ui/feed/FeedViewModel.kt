@@ -31,7 +31,8 @@ class FeedViewModel(
             }.onSuccess { feeds ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    feeds = feeds.toPresentation()
+                    category = feeds.category,
+                    feeds = feeds.feeds.map { it.toPresentation() }
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
@@ -45,8 +46,21 @@ class FeedViewModel(
 
     }
 
-    fun updateLikeCount(){
+    fun updateLikeCount(isSelected: Boolean, selectedFeedId: Int) {
+        val uiState = uiState.value ?: throw IllegalArgumentException()
+        val count = if (isSelected) -1 else 1
+        val updatedFeeds = uiState.feeds.map { feed ->
+            feed.takeIf { feed.id == selectedFeedId }?.copy(
+                likeCount = (feed.likeCount.toInt() + count).toString(),
+                isThumbUpSelected = !isSelected
+            ) ?: feed
+        }
 
+        _uiState.value = uiState.copy(feeds = updatedFeeds)
+    }
+
+    fun putLikeCount() {
+        // 좋아요
     }
 
     companion object {

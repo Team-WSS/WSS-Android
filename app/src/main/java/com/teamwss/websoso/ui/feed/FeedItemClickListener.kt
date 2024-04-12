@@ -12,7 +12,7 @@ interface FeedItemClickListener {
 
     fun onNovelInfoClick(id: Int)
 
-    fun onThumbUpButtonClick()
+    fun onThumbUpButtonClick(view: View, id: Int)
 
     fun onCommentButtonClick()
 }

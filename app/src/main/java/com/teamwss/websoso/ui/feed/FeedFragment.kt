@@ -13,7 +13,7 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
-import com.teamwss.websoso.ui.feed.model.FeedsModel
+import com.teamwss.websoso.ui.feed.model.FeedModel
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
@@ -37,9 +37,8 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             // navigateToNovelDetail(id)
         }
 
-        override fun onThumbUpButtonClick(view: View) {
-            view.isSelected = !view.isSelected
-            feedViewModel.updateLikeCount()
+        override fun onThumbUpButtonClick(view: View, id: Int) {
+            feedViewModel.updateLikeCount(view.isSelected, id)
         }
 
         override fun onCommentButtonClick() {
@@ -71,9 +70,18 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupAdapter()
         setupBinding()
         observeUiState()
+    }
 
+    private fun setupAdapter() {
+        binding.rvFeed.adapter = feedAdapter
+        binding.rvFeed.setHasFixedSize(true)
+    }
+
+    private fun setupBinding() {
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun observeUiState() {
@@ -88,11 +96,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     }
 
-    private fun setupBinding() {
-        binding.lifecycleOwner = viewLifecycleOwner
-    }
-
-    private fun initView(feeds: FeedsModel) {
+    private fun initView(feeds: List<FeedModel>) {
         setupCategory()
         setupFeeds(feeds)
     }
@@ -121,13 +125,12 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    private fun setupFeeds(feeds: FeedsModel) {
-        setupAdapter()
-        feedAdapter.submitList(feeds.feeds)
+    private fun setupFeeds(feeds: List<FeedModel>) {
+        feedAdapter.submitList(feeds)
     }
 
-    private fun setupAdapter() {
-        binding.rvFeed.adapter = feedAdapter
-        binding.rvFeed.setHasFixedSize(true)
+    override fun onStop() {
+        super.onStop()
+        feedViewModel.putLikeCount()
     }
 }
