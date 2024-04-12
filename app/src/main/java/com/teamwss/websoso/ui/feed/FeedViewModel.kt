@@ -42,10 +42,6 @@ class FeedViewModel(
         }
     }
 
-    fun updateFeedsByCategory(category: Category) {
-
-    }
-
     fun updateLikeCount(isSelected: Boolean, selectedFeedId: Int) {
         val uiState = uiState.value ?: throw IllegalArgumentException()
         val count = if (isSelected) -1 else 1
@@ -59,8 +55,24 @@ class FeedViewModel(
         _uiState.value = uiState.copy(feeds = updatedFeeds)
     }
 
-    fun putLikeCount() {
-        // 좋아요
+    fun fetchFeedsByCategory(category: Category) {
+        // 소소피드 단건 조회 API
+    }
+
+    fun saveLikeCount() {
+        // 좋아요 API
+    }
+
+    fun saveBlockedUser(userId: Int) {
+        // 유저 차단 API
+    }
+
+    fun saveReportedSpoilingFeed(feedId: Int) {
+        // 스포일러 신고 API - 소소피드
+    }
+
+    fun saveReportedImpertinenceFeed(feedId: Int) {
+        // 부적절한 표현 신고 API - 소소피드
     }
 
     companion object {
@@ -74,5 +86,3 @@ class FeedViewModel(
         }
     }
 }
-
-

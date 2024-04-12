@@ -2,12 +2,15 @@ package com.teamwss.websoso.ui.feed
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentFeedBinding
+import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
@@ -17,16 +20,28 @@ import com.teamwss.websoso.ui.feed.model.FeedModel
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
+    private var _popupBinding: MenuFeedPopupBinding? = null
+    private val popupBinding get() = _popupBinding ?: error("error: binding is null")
     private val feedViewModel: FeedViewModel by viewModels { FeedViewModel.Factory }
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _popupBinding = MenuFeedPopupBinding.inflate(inflater, container, false)
+
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
         override fun onProfileClick(id: Int) {
             // ProfileActivity.from(context, id)
         }
 
-        override fun onMoreButtonClick(view: View) {
-            showMenu(view)
+        override fun onMoreButtonClick(view: View, feedId: Int, userId: Int) {
+            showMenu(view, feedId, userId)
         }
 
         override fun onContentClick(id: Int) {
@@ -47,16 +62,17 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     @SuppressLint("InflateParams")
-    private fun showMenu(view: View) {
-        val popupView = layoutInflater.inflate(R.layout.menu_feed_popup, null)
-        val popupWindow = PopupWindow(
-            popupView,
+    private fun showMenu(view: View, feedId: Int, userId: Int) {
+        PopupWindow(
+            popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             true
-        )
-
-        popupWindow.showAsDropDown(view)
+        ).apply {
+            popupBinding.feedId = feedId
+            popupBinding.userId = userId
+            showAsDropDown(view)
+        }
     }
 
     private fun navigateToFeedDetail(id: Int) {
@@ -71,7 +87,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         super.onViewCreated(view, savedInstanceState)
 
         setupAdapter()
-        setupBinding()
+        setupPopupBinding()
         observeUiState()
     }
 
@@ -80,8 +96,9 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         binding.rvFeed.setHasFixedSize(true)
     }
 
-    private fun setupBinding() {
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun setupPopupBinding() {
+        popupBinding.lifecycleOwner = viewLifecycleOwner
+        popupBinding.viewModel = feedViewModel
     }
 
     private fun observeUiState() {
@@ -120,7 +137,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick { feedViewModel.updateFeedsByCategory(category) }
+                setOnWebsosoChipClick { feedViewModel.fetchFeedsByCategory(category) }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
@@ -131,6 +148,11 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     override fun onStop() {
         super.onStop()
-        feedViewModel.putLikeCount()
+        feedViewModel.saveLikeCount()
+    }
+
+    override fun onDestroyView() {
+        _popupBinding = null
+        super.onDestroyView()
     }
 }

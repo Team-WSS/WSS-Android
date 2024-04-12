@@ -1,52 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_feed_popup">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tv_feed_popup_user_block"
+    <data>
+
+        <variable
+            name="feedId"
+            type="Integer" />
+
+        <variable
+            name="userId"
+            type="Integer" />
+
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.feed.FeedViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingHorizontal="48dp"
-        android:paddingVertical="16dp"
-        android:text="@string/feed_popup_user_block"
-        android:textAppearance="@style/body2"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_spoiler"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@drawable/bg_feed_popup">
 
-    <TextView
-        android:id="@+id/tv_feed_popup_spoiler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingHorizontal="48dp"
-        android:paddingVertical="16dp"
-        android:text="@string/feed_popup_spoiler"
-        android:textAppearance="@style/body2"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_report"
-        app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_user_block"
-        app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_user_block"
-        app:layout_constraintTop_toBottomOf="@+id/tv_feed_popup_user_block" />
+        <TextView
+            android:id="@+id/tv_feed_popup_user_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="@{() -> viewModel.saveBlockedUser(userId)}"
+            android:paddingHorizontal="48dp"
+            android:paddingVertical="16dp"
+            android:text="@string/feed_popup_user_block"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_spoiler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_feed_popup_report"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="16dp"
-        android:text="@string/feed_popup_report"
-        android:textAppearance="@style/body2"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_spoiler"
-        app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_spoiler"
-        app:layout_constraintTop_toBottomOf="@+id/tv_feed_popup_spoiler" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_feed_popup_spoiler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="@{() -> viewModel.saveReportedSpoilingFeed(feedId)}"
+            android:paddingHorizontal="48dp"
+            android:paddingVertical="16dp"
+            android:text="@string/feed_popup_spoiler"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_report"
+            app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_user_block"
+            app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_user_block"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_popup_user_block" />
+
+        <TextView
+            android:id="@+id/tv_feed_popup_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="@{() -> viewModel.saveReportedImpertinenceFeed(feedId)}"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="16dp"
+            android:text="@string/feed_popup_report"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_spoiler"
+            app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_spoiler"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_popup_spoiler" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
