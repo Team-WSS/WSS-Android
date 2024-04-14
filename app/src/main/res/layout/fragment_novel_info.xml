@@ -9,15 +9,14 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
-        android:overScrollMode="never"
-        android:layout_height="wrap_content">
+        android:overScrollMode="never">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray_50_F4F5F8"
-            android:paddingBottom="8dp">
+            android:background="@color/gray_50_F4F5F8">
 
             <LinearLayout
                 android:id="@+id/ll_novel_intro"
@@ -105,6 +104,55 @@
 
                 </LinearLayout>
             </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_novel_info_none"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="44dp"
+                android:paddingBottom="70dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_novel_platforms">
+
+                <TextView
+                    android:id="@+id/tv_novel_info_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/novel_info_platforms_title"
+                    android:textAppearance="@style/title1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_novel_info_none"
+                    android:layout_width="0dp"
+                    android:layout_height="160dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/img_novel_info_none"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_info_title" />
+
+                <TextView
+                    android:id="@+id/tv_novel_info_none_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="평가가 아직 없어요\n최초로 남겨보세요!"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_novel_info_none" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

@@ -37,36 +37,55 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_novel_detail_header"
                         android:layout_width="match_parent"
-                        android:layout_height="568dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="68dp"
                         android:background="@color/gray_50_F4F5F8">
 
                         <ImageView
-                            android:id="@+id/iv_novel_detail_genre"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_novel_detail_cover"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginHorizontal="108dp"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintDimensionRatio="144:200"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/ic_novel_detail_genre_test" />
+                            tools:src="@color/black" />
+
+                        <ImageView
+                            android:id="@+id/iv_novel_detail_cover_genre"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
+                            tools:src="@drawable/ic_novel_detail_cover_genre_romance_fantasy" />
 
                         <TextView
                             android:id="@+id/tv_novel_detail_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="24dp"
+                            android:layout_marginTop="20dp"
                             android:textAppearance="@style/headline1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/iv_novel_detail_genre"
+                            app:layout_constraintTop_toBottomOf="@id/iv_novel_detail_cover"
                             tools:text="당신의 이해를 돕기 위하여" />
 
                         <TextView
                             android:id="@+id/tv_novel_detail_character_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             android:textAppearance="@style/body2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +96,7 @@
                             android:id="@+id/ll_novel_detail_numeric_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="6dp"
                             android:gravity="center_vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -129,39 +148,16 @@
 
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/iv_novel_detail_cover"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginHorizontal="108dp"
-                            android:layout_marginTop="20dp"
-                            android:scaleType="fitCenter"
-                            app:layout_constraintDimensionRatio="144:200"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_numeric_info"
-                            tools:src="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/iv_novel_detail_cover_foreground"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="144dp"
-                            android:src="@drawable/img_novel_detail_cover_foreground"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/iv_novel_detail_cover" />
-
                         <View
                             android:id="@+id/view_novel_detail_rating"
                             android:layout_width="0dp"
                             android:layout_height="68dp"
                             android:layout_marginHorizontal="20dp"
-                            android:layout_marginTop="88dp"
+                            android:layout_marginTop="24dp"
                             android:background="@drawable/bg_novel_detail_white_radius_15dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/iv_novel_detail_cover_foreground" />
+                            app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_numeric_info" />
 
                         <RatingBar
                             android:id="@+id/rbPostRating"
@@ -184,8 +180,10 @@
                             android:layout_width="0dp"
                             android:layout_height="42dp"
                             android:layout_marginHorizontal="20dp"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="16dp"
                             android:background="@drawable/bg_novel_detail_white_radius_10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/view_novel_detail_rating">
