@@ -43,13 +43,17 @@ class NovelDetailActivity :
     private fun showMenuSpinner() {
         novelDetailViewModel.getMenuItems()
         initMenuItems()
-        spinnerPopupWindow = createMenuPopupWindow(setupMenuListView(menuItems))
+        initPopupWindow()
         showPopupWindowAtBottomOfMenuIcon()
     }
 
     private fun initMenuItems() {
         menuItems.clear()
         novelDetailViewModel.menuItems.value?.let { items -> menuItems.addAll(items.map { getString(it) }) }
+    }
+
+    private fun initPopupWindow() {
+        spinnerPopupWindow = createMenuPopupWindow(setupMenuListView(menuItems))
     }
 
     private fun setupMenuListView(items: List<String>): ListView {

@@ -9,5 +9,14 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     override fun onResume() {
         super.onResume()
         view?.requestLayout()
+        scrollToTop()
+    }
+
+    private fun scrollToTop() {
+        binding.nsvNovelInfo.smoothScrollTo(0, 0, SCROLL_BACK_DURATION)
+    }
+
+    companion object {
+        const val SCROLL_BACK_DURATION = 1700
     }
 }
