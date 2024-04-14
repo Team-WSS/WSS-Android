@@ -78,5 +78,6 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil:2.6.0")
+    implementation("jp.wasabeef.transformers:coil:1.0.6")
 
 }
