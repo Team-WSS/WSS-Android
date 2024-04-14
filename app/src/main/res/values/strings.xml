@@ -23,5 +23,9 @@
     <string name="novel_info_platforms_title">작품 보러가기</string>
     <string name="novel_info_more">…더보기</string>
     <string name="novel_info_title">작품 소개</string>
+    <string name="novel_detail_remove_evaluate_warning_title">평가를 모두 삭제할까요?</string>
+    <string name="novel_detail_remove_evaluate_warning_body">별점, 관심, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
+    <string name="novel_detail_remove_reject">아니오</string>
+    <string name="novel_detail_remove_accept">네</string>
 
 </resources>
