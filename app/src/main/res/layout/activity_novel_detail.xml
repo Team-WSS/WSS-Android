@@ -10,7 +10,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/cl_novel_detail"
             android:layout_width="0dp"
@@ -27,10 +26,11 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/ctl_novel_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_50_F4F5F8"
-                    app:contentScrim="@color/transparent"
+                    app:contentScrim="@color/white"
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -66,8 +66,8 @@
                             android:id="@+id/iv_novel_detail_cover_genre"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
+                            app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
                             tools:src="@drawable/ic_novel_detail_cover_genre_romance_fantasy" />
 
                         <TextView
@@ -238,7 +238,6 @@
                                     android:textColor="@color/gray_300_52515F" />
                             </LinearLayout>
                         </LinearLayout>
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.appcompat.widget.Toolbar
@@ -334,5 +333,4 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
