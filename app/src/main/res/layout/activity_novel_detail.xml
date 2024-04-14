@@ -12,25 +12,34 @@
         android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_50_F4F5F8"
-            android:paddingTop="68dp">
+            android:id="@+id/cl_novel_detail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/abl_novel_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/gray_50_F4F5F8">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_50_F4F5F8"
+                    app:contentScrim="@color/transparent"
+                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_novel_detail_header"
                         android:layout_width="match_parent"
-                        android:layout_height="568dp">
+                        android:layout_height="568dp"
+                        android:layout_marginTop="68dp"
+                        android:background="@color/gray_50_F4F5F8">
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_genre"
@@ -233,6 +242,54 @@
                         </LinearLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/tb_novel_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="68dp"
+                        android:elevation="0dp"
+                        app:contentInsetStart="0dp"
+                        app:layout_collapseMode="pin">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ll_novel_appbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="24dp"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:id="@+id/iv_novel_navigate_back"
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                android:layout_marginStart="6dp"
+                                android:paddingHorizontal="16dp"
+                                android:paddingVertical="14dp"
+                                android:src="@drawable/ic_novel_detail_navigate_back"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/iv_novel_appbar_menu"
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:layout_marginEnd="12dp"
+                                android:padding="10dp"
+                                android:src="@drawable/ic_novel_detail_menu"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Spinner
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clipChildren="false"
+                                app:layout_constraintEnd_toEndOf="@id/iv_novel_appbar_menu"
+                                app:layout_constraintTop_toBottomOf="@id/iv_novel_appbar_menu" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.appcompat.widget.Toolbar>
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
                 <com.google.android.material.tabs.TabLayout
@@ -266,63 +323,18 @@
                     android:minHeight="-54dp"
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                     app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_novel_detail"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                app:layout_scrollFlags="scroll|enterAlways" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_novel_detail"
-            android:layout_width="match_parent"
-            android:layout_height="68dp"
-            app:contentInsetStart="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ll_novel_appbar"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginTop="24dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/iv_novel_navigate_back"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="6dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="14dp"
-                    android:src="@drawable/ic_novel_detail_navigate_back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_novel_appbar_menu"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="12dp"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_novel_detail_menu"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="@id/iv_novel_appbar_menu"
-                    app:layout_constraintTop_toBottomOf="@id/iv_novel_appbar_menu" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.appcompat.widget.Toolbar>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

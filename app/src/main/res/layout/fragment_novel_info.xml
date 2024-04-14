@@ -7,9 +7,11 @@
 
     </data>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -18,7 +20,7 @@
             android:paddingBottom="8dp">
 
             <LinearLayout
-                android:id="@+id/ll_novel_info"
+                android:id="@+id/ll_novel_intro"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -30,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/tv_novel_info_title"
+                    android:id="@+id/tv_novel_intro_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="46dp"
@@ -38,7 +40,7 @@
                     android:textAppearance="@style/title1" />
 
                 <TextView
-                    android:id="@+id/tv_novel_info_body"
+                    android:id="@+id/tv_novel_intro_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -48,14 +50,13 @@
                     android:textColor="@color/gray_300_52515F" />
 
                 <TextView
-                    android:id="@+id/tv_novel_info_more"
+                    android:id="@+id/tv_novel_intro_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="@string/novel_info_more"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
-                    android:visibility="gone"
                     tools:visibility="visible" />
             </LinearLayout>
 
@@ -69,7 +70,7 @@
                 android:paddingHorizontal="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_novel_info">
+                app:layout_constraintTop_toBottomOf="@id/ll_novel_intro">
 
                 <TextView
                     android:id="@+id/tv_novel_info_platforms_title"
@@ -92,21 +93,18 @@
                         android:layout_height="48dp"
                         android:layout_marginHorizontal="8dp"
                         android:src="@drawable/btn_novel_info_naver"
-                        android:visibility="gone"
                         tools:visibility="visible" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <ImageView
                         android:id="@+id/iv_novel_info_kakao"
                         android:layout_width="46dp"
                         android:layout_height="48dp"
                         android:layout_marginHorizontal="8dp"
                         android:src="@drawable/btn_novel_info_kakao"
-                        android:visibility="gone"
                         tools:visibility="visible" />
 
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>
