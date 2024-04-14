@@ -5,16 +5,46 @@
 
     <data>
 
+        <variable
+            name="novelDetailViewModel"
+            type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="644dp"
+            android:scaleType="centerCrop"
+            app:blurRadius="@{40}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadImageUrl="@{novelDetailViewModel.imgUrl}" />
+
+        <View
+            android:id="@+id/view_novel_detail_cover_background"
+            android:layout_width="0dp"
+            android:layout_height="248dp"
+            android:background="@drawable/bg_novel_detail_cover_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="396dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_cover_background" />
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/cl_novel_detail"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,13 +53,13 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/abl_novel_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/transparent">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/ctl_novel_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/gray_50_F4F5F8"
                     app:contentScrim="@color/white"
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -38,48 +68,41 @@
                         android:id="@+id/cl_novel_detail_header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="68dp"
-                        android:background="@color/gray_50_F4F5F8">
-
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:scaleType="centerCrop"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginTop="68dp">
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
+                            android:layout_height="217dp"
                             android:layout_marginHorizontal="108dp"
                             android:scaleType="fitCenter"
+                            app:cornerRadius="@{30f}"
                             app:layout_constraintDimensionRatio="144:200"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@color/black" />
+                            app:loadImageUrl="@{novelDetailViewModel.imgUrl}" />
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover_genre"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:src="@drawable/ic_novel_detail_cover_genre_romance_fantasy"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
-                            app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
-                            tools:src="@drawable/ic_novel_detail_cover_genre_romance_fantasy" />
+                            app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover" />
 
                         <TextView
                             android:id="@+id/tv_novel_detail_title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="335dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
+                            android:maxLines="4"
+                            android:text="철혈검가 사냥개의 회귀"
+                            android:textAlignment="center"
                             android:textAppearance="@style/headline1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/iv_novel_detail_cover"
-                            tools:text="당신의 이해를 돕기 위하여" />
+                            app:layout_constraintTop_toBottomOf="@id/iv_novel_detail_cover" />
 
                         <TextView
                             android:id="@+id/tv_novel_detail_character_info"
@@ -160,7 +183,7 @@
                             app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_numeric_info" />
 
                         <RatingBar
-                            android:id="@+id/rbPostRating"
+                            android:id="@+id/rb_novel_detail_rating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -256,7 +279,7 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:id="@+id/iv_novel_navigate_back"
+                                android:id="@+id/iv_novel_detail_navigate_back"
                                 android:layout_width="44dp"
                                 android:layout_height="44dp"
                                 android:layout_marginStart="6dp"
@@ -268,7 +291,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <ImageView
-                                android:id="@+id/iv_novel_appbar_menu"
+                                android:id="@+id/iv_novel_detail_menu"
                                 android:layout_width="38dp"
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="12dp"
@@ -279,11 +302,12 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <Spinner
+                                android:id="@+id/sp_novel_detail"
+                                android:visibility="invisible"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:clipChildren="false"
-                                app:layout_constraintEnd_toEndOf="@id/iv_novel_appbar_menu"
-                                app:layout_constraintTop_toBottomOf="@id/iv_novel_appbar_menu" />
+                                app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_menu"
+                                app:layout_constraintTop_toBottomOf="@id/iv_novel_detail_menu" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.appcompat.widget.Toolbar>

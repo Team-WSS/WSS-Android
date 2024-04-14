@@ -28,7 +28,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter(value = ["loadImageUrl", "blurRadius"], requireAll = true)
     fun loadBlurredImage(view: ImageView, imageUrl: String?, blurRadius: Int) {
-        view.load(imageUrl){
+        view.load(imageUrl) {
             crossfade(true)
             transformations(BlurTransformation(view.context, blurRadius))
             error(R.drawable.img_loading_thumbnail)
