@@ -1,4 +1,7 @@
 package com.teamwss.websoso.ui.novelDetail.novelInfo
 
-class NovelInfoViewModel {
+import androidx.lifecycle.ViewModel
+
+class NovelInfoViewModel : ViewModel() {
+
 }
