@@ -50,7 +50,7 @@
                     android:textColor="@color/gray_300_52515F" />
 
                 <TextView
-                    android:id="@+id/tv_novel_intro_more"
+                    android:id="@+id/tv_novel_info_intro_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -62,7 +62,7 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/view_novel_detail_info_divider"
+                android:id="@+id/view_novel_info_intro_divider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="30dp"
@@ -80,10 +80,10 @@
                 android:text="@string/novel_info_platforms_title"
                 android:textAppearance="@style/title1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_novel_detail_info_divider" />
+                app:layout_constraintTop_toBottomOf="@id/view_novel_info_intro_divider" />
 
             <LinearLayout
-                android:id="@+id/ll_novel_platforms"
+                android:id="@+id/ll_novel_info_platforms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -111,14 +111,14 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/view_novel_detail_platforms_divider"
+                android:id="@+id/view_novel_info_platforms_divider"
                 android:layout_width="0dp"
                 android:layout_height="6dp"
                 android:layout_marginTop="30dp"
                 android:background="@color/gray_50_F4F5F8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_novel_platforms" />
+                app:layout_constraintTop_toBottomOf="@id/ll_novel_info_platforms" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_novel_info_exist"
@@ -126,12 +126,225 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/white"
-                android:paddingHorizontal="20dp"
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_novel_detail_platforms_divider">
+                app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
+
+                <TextView
+                    android:id="@+id/tv_novel_info_reviews_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="독자들의 감상평"
+                    android:textAppearance="@style/title1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view_novel_info_reviews_background"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_novel_info_gray_50_radius_12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_info_reviews_title" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/body2"
+                    app:layout_constraintBottom_toBottomOf="@id/view_novel_info_reviews_background"
+                    app:layout_constraintEnd_toEndOf="@id/view_novel_info_reviews_background"
+                    app:layout_constraintStart_toStartOf="@id/view_novel_info_reviews_background"
+                    app:layout_constraintTop_toTopOf="@id/view_novel_info_reviews_background"
+                    tools:text="캐릭터, 관계, 소재가 매력적인 작품이에요" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_novel_info_reviews"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_novel_info_reviews_background"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_novel_info_reviews" />
+
+                <View
+                    android:id="@+id/view_novel_info_reviews_divider"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="40dp"
+                    android:background="@color/gray_50_F4F5F8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rv_novel_info_reviews" />
+
+                <TextView
+                    android:id="@+id/tv_novel_info_read_status_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:textAppearance="@style/title1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_novel_info_reviews_divider"
+                    tools:text="130명이 작품을\n같이 보고 있어요" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_info_read_status_title">
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_info_read_status_watching"
+                        android:layout_width="50dp"
+                        android:layout_height="158dp"
+                        android:layout_marginHorizontal="32dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_novel_info_read_status_watching_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/body3"
+                            tools:text="130"
+                            tools:textColor="@color/primary_200_240991" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cv_novel_info_read_status_watching"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="@color/gray_50_F4F5F8"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp">
+
+                            <View
+                                android:id="@+id/view_novel_info_read_status_watching"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="bottom"
+                                tools:background="@color/primary_100_6A5DFD"
+                                tools:layout_height="100dp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/tv_novel_info_read_status_watching"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/pretendard_semibold"
+                            android:text="보는 중"
+                            android:textAppearance="@style/body2"
+                            tools:textColor="@color/primary_200_240991" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_info_read_status_watched"
+                        android:layout_width="50dp"
+                        android:layout_height="158dp"
+                        android:layout_marginHorizontal="32dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_novel_info_read_status_watched_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/body3"
+                            tools:text="10"
+                            tools:textColor="@color/gray_200_AEADB3" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cv_novel_info_read_status_watched"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="@color/gray_50_F4F5F8"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp">
+
+                            <View
+                                android:id="@+id/view_novel_info_read_status_watched"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="bottom"
+                                tools:background="@color/gray_70_DFDFE3"
+                                tools:layout_height="8dp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/tv_novel_info_read_status_watched"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="봤어요"
+                            android:textAppearance="@style/body2"
+                            tools:textColor="@color/gray_200_AEADB3" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_info_read_status_quit"
+                        android:layout_width="50dp"
+                        android:layout_height="158dp"
+                        android:layout_marginHorizontal="32dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_novel_info_read_status_quit_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/body3"
+                            tools:text="100"
+                            tools:textColor="@color/gray_200_AEADB3" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cv_novel_info_read_status_quit"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="10dp"
+                            android:backgroundTint="@color/gray_50_F4F5F8"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="0dp">
+
+                            <View
+                                android:id="@+id/view_novel_info_read_status_quit"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="bottom"
+                                tools:background="@color/gray_70_DFDFE3"
+                                tools:layout_height="77dp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/tv_novel_info_read_status_quit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="하차"
+                            android:textAppearance="@style/body2"
+                            tools:textColor="@color/gray_200_AEADB3" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -145,9 +358,10 @@
                 android:paddingHorizontal="20dp"
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_novel_detail_platforms_divider">
+                app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
 
                 <TextView
                     android:id="@+id/tv_novel_info_title"
