@@ -124,7 +124,6 @@
                 android:id="@+id/cl_novel_info_exist"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:background="@color/white"
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
@@ -345,15 +344,12 @@
 
                     </LinearLayout>
                 </LinearLayout>
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_novel_info_none"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:background="@color/white"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="44dp"
