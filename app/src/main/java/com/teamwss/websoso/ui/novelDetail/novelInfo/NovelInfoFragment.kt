@@ -14,12 +14,6 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         setupViewMoreListener()
     }
 
-    override fun onResume() {
-        super.onResume()
-        view?.requestLayout()
-        scrollToTop()
-    }
-
     private fun setupViewMoreListener() {
         val targetText = binding.tvNovelInfoIntroBody
         val viewMore = binding.tvNovelInfoIntroMore
@@ -37,6 +31,12 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view?.requestLayout()
+        scrollToTop()
     }
 
     private fun scrollToTop() {
