@@ -57,9 +57,7 @@ class NovelDetailActivity :
     }
 
     private fun setupToolbarButton() {
-        val appBarLayout = binding.ablNovelDetail
-
-        appBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
+        binding.ablNovelDetail.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             updateImageViewColor(appBarLayout, verticalOffset)
         }
     }
@@ -78,7 +76,8 @@ class NovelDetailActivity :
         val colorWhenScrollAtTop = ContextCompat.getColor(this, R.color.gray_200_AEADB3)
         val colorWhenScrollAtBottom = ContextCompat.getColor(this, R.color.white)
 
-        val currentColor = if (adjustedOffset == 1f) colorWhenScrollAtTop else colorWhenScrollAtBottom
+        val currentColor =
+            if (adjustedOffset == 1f) colorWhenScrollAtTop else colorWhenScrollAtBottom
 
         listOf(binding.ivNovelDetailNavigateBack, binding.ivNovelDetailMenu).forEach { imageView ->
             imageView.drawable.also { drawable ->
