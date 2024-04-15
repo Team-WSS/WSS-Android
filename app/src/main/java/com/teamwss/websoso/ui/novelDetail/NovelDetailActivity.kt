@@ -10,6 +10,9 @@ import android.widget.ListView
 import android.widget.PopupWindow
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
@@ -31,6 +34,7 @@ class NovelDetailActivity :
         setupViewModel()
         setupViewPager()
         setupTabLayout()
+        setupToolbarButton()
 
         observeMenuItems()
     }
@@ -51,6 +55,39 @@ class NovelDetailActivity :
                 else -> throw IllegalArgumentException()
             }
         }.attach()
+    }
+
+    private fun setupToolbarButton() {
+        val appBarLayout = binding.ablNovelDetail
+
+        appBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
+            updateImageViewColor(appBarLayout, verticalOffset)
+        }
+    }
+
+    private fun updateImageViewColor(
+        appBarLayout: AppBarLayout, verticalOffset: Int
+    ) {
+        val totalScrollRange = appBarLayout.totalScrollRange.toFloat()
+        val offsetForColorChange =
+            TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
+        val scrollRangeForColorChange = totalScrollRange - offsetForColorChange
+
+        val alpha = kotlin.math.abs(verticalOffset) / scrollRangeForColorChange
+        val adjustedAlpha = kotlin.math.min(1f, alpha)
+
+        val colorWhenScrollAtTop = ContextCompat.getColor(this, R.color.gray_200_AEADB3)
+        val colorWhenScrollAtBottom = ContextCompat.getColor(this, R.color.white)
+
+        val color = if (adjustedAlpha == 1f) colorWhenScrollAtTop else colorWhenScrollAtBottom
+
+        listOf(binding.ivNovelDetailNavigateBack, binding.ivNovelDetailMenu).forEach { imageView ->
+            imageView.drawable.also { drawable ->
+                DrawableCompat.setTint(
+                    DrawableCompat.wrap(drawable).mutate(), color
+                )
+            }
+        }
     }
 
     private fun observeMenuItems() {
@@ -136,11 +173,13 @@ class NovelDetailActivity :
     }
 
     companion object {
-        const val INFO_FRAGMENT_PAGE = 0
-        const val FEED_FRAGMENT_PAGE = 1
+        private const val INFO_FRAGMENT_PAGE = 0
+        private const val FEED_FRAGMENT_PAGE = 1
 
-        const val POPUP_WIDTH = 120
-        const val POPUP_MARGIN_END = -6
-        const val POPUP_MARGIN_TOP = 4
+        private const val TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET = 124
+
+        private const val POPUP_WIDTH = 120
+        private const val POPUP_MARGIN_END = -6
+        private const val POPUP_MARGIN_TOP = 4
     }
 }
