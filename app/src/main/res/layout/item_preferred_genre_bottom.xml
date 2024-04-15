@@ -6,6 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="preferredGenreBottom"
+            type="com.teamwss.websoso.ui.myPage.mylibrary.MyLibraryViewModel" />
 
     </data>
 
