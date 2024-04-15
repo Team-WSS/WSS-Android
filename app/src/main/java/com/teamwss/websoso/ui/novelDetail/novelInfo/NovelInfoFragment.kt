@@ -35,7 +35,6 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
 
     override fun onResume() {
         super.onResume()
-        view?.requestLayout()
         scrollToTop()
     }
 
