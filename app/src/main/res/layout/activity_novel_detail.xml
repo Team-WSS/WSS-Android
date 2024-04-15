@@ -22,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageUrl="@{novelDetailViewModel.imgUrl}" />
+            app:loadImageUrl="@{novelDetailViewModel.profileImgUrl}" />
 
         <View
             android:id="@+id/view_novel_detail_cover_background"
@@ -81,15 +81,16 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:loadImageUrl="@{novelDetailViewModel.imgUrl}" />
+                            app:loadImageUrl="@{novelDetailViewModel.profileImgUrl}" />
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover_genre"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:scaleType="fitXY"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
                             app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
-                            tools:src="@drawable/ic_novel_detail_cover_genre_romance_fantasy" />
+                            app:loadImageUrl="@{novelDetailViewModel.genreImgUrl}" />
 
                         <TextView
                             android:id="@+id/tv_novel_detail_title"

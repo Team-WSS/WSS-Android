@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.R
 
 class NovelDetailViewModel : ViewModel() {
-    val imgUrl = "https://img.ridicdn.net/cover/2749028536/xxlarge?dpi=xxhdpi.jpg" // 테스트용 URL
+    // 테스트용 URL
+    val profileImgUrl = "https://img.ridicdn.net/cover/2749028536/xxlarge?dpi=xxhdpi.jpg"
+    val genreImgUrl = "https://github.com/Team-WSS/WSS-Android/assets/127238018/b060e980-2be2-4f5c-9f85-f3bc2fcb9686"
+
     private val _novelDetailSpinnerMenuItems = MutableLiveData<MutableList<Int>>()
     val novelDetailSpinnerMenuItems: MutableLiveData<MutableList<Int>> get() = _novelDetailSpinnerMenuItems
 
