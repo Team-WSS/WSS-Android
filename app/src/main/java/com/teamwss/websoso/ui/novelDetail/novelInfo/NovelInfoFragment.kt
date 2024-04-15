@@ -48,7 +48,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     companion object {
-        const val PRIMATE_SCROLL_POSITION = 0
-        const val SCROLL_TO_TOP_DURATION = 1700
+        private const val PRIMATE_SCROLL_POSITION = 0
+        private const val SCROLL_TO_TOP_DURATION = 1700
     }
 }
