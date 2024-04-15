@@ -40,10 +40,11 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun scrollToTop() {
-        binding.nsvNovelInfo.smoothScrollTo(0, 0, SCROLL_TO_TOP_DURATION)
+        binding.nsvNovelInfo.smoothScrollTo(PRIMATE_SCROLL_POSITION, PRIMATE_SCROLL_POSITION, SCROLL_TO_TOP_DURATION)
     }
 
     companion object {
+        const val PRIMATE_SCROLL_POSITION = 0
         const val SCROLL_TO_TOP_DURATION = 1700
     }
 }
