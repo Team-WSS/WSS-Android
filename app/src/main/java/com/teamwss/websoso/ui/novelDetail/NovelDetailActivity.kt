@@ -2,7 +2,6 @@ package com.teamwss.websoso.ui.novelDetail
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.AdapterView
@@ -23,37 +22,61 @@ class NovelDetailActivity :
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
 
     private var spinnerPopupWindow: PopupWindow? = null
-    private val menuItems: MutableList<String> = mutableListOf()
+    private val novelDetailSpinnerMenuItems: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupMenuClickListener()
         setupViewModel()
         setupViewPager()
         setupTabLayout()
+
+        observeMenuItems()
     }
 
-    private fun setupMenuClickListener() {
-        binding.ivNovelDetailMenu.setOnClickListener {
+    private fun setupViewModel() {
+        binding.novelDetailViewModel = novelDetailViewModel
+    }
+
+    private fun setupViewPager() {
+        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this)
+    }
+
+    private fun setupTabLayout() {
+        TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
+            tab.text = when (position) {
+                INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
+                FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
+                else -> throw IllegalArgumentException()
+            }
+        }.attach()
+    }
+
+    private fun observeMenuItems() {
+        novelDetailViewModel.novelDetailSpinnerMenuItems.observe(this) {
             showMenuSpinner()
         }
     }
 
     private fun showMenuSpinner() {
-        novelDetailViewModel.getMenuItems()
         initMenuItems()
         initPopupWindow()
         showPopupWindowAtBottomOfMenuIcon()
     }
 
     private fun initMenuItems() {
-        menuItems.clear()
-        novelDetailViewModel.menuItems.value?.let { items -> menuItems.addAll(items.map { getString(it) }) }
+        novelDetailSpinnerMenuItems.clear()
+        novelDetailViewModel.novelDetailSpinnerMenuItems.value?.let { items ->
+            novelDetailSpinnerMenuItems.addAll(items.map {
+                getString(
+                    it
+                )
+            })
+        }
     }
 
     private fun initPopupWindow() {
-        spinnerPopupWindow = createMenuPopupWindow(setupMenuListView(menuItems))
+        spinnerPopupWindow = createMenuPopupWindow(setupMenuListView(novelDetailSpinnerMenuItems))
     }
 
     private fun setupMenuListView(items: List<String>): ListView {
@@ -61,7 +84,7 @@ class NovelDetailActivity :
             adapter =
                 ArrayAdapter(this@NovelDetailActivity, R.layout.item_custom_popup_drop_down, items)
             onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                when (menuItems[position]) {
+                when (novelDetailSpinnerMenuItems[position]) {
                     getString(R.string.novel_detail_report_error) -> {
                         Snackbar.make(binding.root, "오류 제보", Snackbar.LENGTH_SHORT).show()
                     }
@@ -107,24 +130,6 @@ class NovelDetailActivity :
     }
 
     private val Int.toDp: Int get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
-
-    private fun setupViewModel() {
-        binding.novelDetailViewModel = novelDetailViewModel
-    }
-
-    private fun setupViewPager() {
-        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this)
-    }
-
-    private fun setupTabLayout() {
-        TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
-            tab.text = when (position) {
-                INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
-                FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
-                else -> throw IllegalArgumentException()
-            }
-        }.attach()
-    }
 
     override fun onPause() {
         super.onPause()
