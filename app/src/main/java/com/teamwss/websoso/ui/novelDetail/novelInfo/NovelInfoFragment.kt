@@ -24,20 +24,16 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     private fun setupViewMoreListener(contentTextView: TextView, viewMoreTextView: TextView) {
         contentTextView.post {
             val lineCount = contentTextView.layout.lineCount
-            Log.e("NovelInfoFragmentTest", "linCount $lineCount")
-            Log.e(
-                "NovelInfoFragmentTest",
-                "ellipsize ${contentTextView.layout.getEllipsisCount(lineCount - 1)}"
-            )
-            if (lineCount >= 3) {
-                if (contentTextView.layout.getEllipsisCount(lineCount - 1) > 0) {
-                    viewMoreTextView.visibility = View.VISIBLE
-                    contentTextView.ellipsize = null
+            if (lineCount < 3) {
+                return@post
+            }
+            if (contentTextView.layout.getEllipsisCount(lineCount - 1) > 0) {
+                viewMoreTextView.visibility = View.VISIBLE
+                contentTextView.ellipsize = null
 
-                    binding.llNovelInfoIntro.setOnClickListener {
-                        contentTextView.maxLines = Int.MAX_VALUE
-                        viewMoreTextView.visibility = View.GONE
-                    }
+                binding.llNovelInfoIntro.setOnClickListener {
+                    contentTextView.maxLines = Int.MAX_VALUE
+                    viewMoreTextView.visibility = View.GONE
                 }
             }
         }
