@@ -12,7 +12,6 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
@@ -73,18 +72,18 @@ class NovelDetailActivity :
             TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
         val scrollRangeForColorChange = totalScrollRange - offsetForColorChange
 
-        val alpha = kotlin.math.abs(verticalOffset) / scrollRangeForColorChange
-        val adjustedAlpha = kotlin.math.min(1f, alpha)
+        val currentOffset = kotlin.math.abs(verticalOffset) / scrollRangeForColorChange
+        val adjustedOffset = kotlin.math.min(1f, currentOffset)
 
         val colorWhenScrollAtTop = ContextCompat.getColor(this, R.color.gray_200_AEADB3)
         val colorWhenScrollAtBottom = ContextCompat.getColor(this, R.color.white)
 
-        val color = if (adjustedAlpha == 1f) colorWhenScrollAtTop else colorWhenScrollAtBottom
+        val currentColor = if (adjustedOffset == 1f) colorWhenScrollAtTop else colorWhenScrollAtBottom
 
         listOf(binding.ivNovelDetailNavigateBack, binding.ivNovelDetailMenu).forEach { imageView ->
             imageView.drawable.also { drawable ->
                 DrawableCompat.setTint(
-                    DrawableCompat.wrap(drawable).mutate(), color
+                    DrawableCompat.wrap(drawable).mutate(), currentColor
                 )
             }
         }
