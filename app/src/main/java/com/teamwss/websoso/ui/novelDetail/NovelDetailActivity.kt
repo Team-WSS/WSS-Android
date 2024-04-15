@@ -125,6 +125,11 @@ class NovelDetailActivity :
 
     private val Int.toDp: Int get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
+    override fun onPause() {
+        _spinnerPopupWindow = null
+        super.onPause()
+    }
+
     override fun onDestroy() {
         _spinnerPopupWindow = null
         super.onDestroy()
