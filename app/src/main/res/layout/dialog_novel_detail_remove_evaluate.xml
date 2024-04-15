@@ -42,46 +42,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_novel_detail_remove_evaluate_warning_title" />
 
-    <View
-        android:id="@+id/view_novel_detail_remove_reject"
+    <TextView
+        android:id="@+id/tv_novel_detail_remove_reject"
         android:layout_width="116dp"
         android:layout_height="40dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/bg_novel_info_gray_50_radius_8dp"
+        android:gravity="center"
+        android:text="@string/novel_detail_remove_reject"
+        android:textAlignment="center"
+        android:textAppearance="@style/body2"
+        android:textColor="@color/gray_300_52515F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_novel_detail_remove_evaluate_warning_body" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/novel_detail_remove_reject"
-        android:textAppearance="@style/body2"
-        android:textColor="@color/gray_300_52515F"
-        app:layout_constraintBottom_toBottomOf="@id/view_novel_detail_remove_reject"
-        app:layout_constraintEnd_toEndOf="@id/view_novel_detail_remove_reject"
-        app:layout_constraintStart_toStartOf="@id/view_novel_detail_remove_reject"
-        app:layout_constraintTop_toTopOf="@id/view_novel_detail_remove_reject" />
-
-    <View
-        android:id="@+id/view_novel_detail_remove_accept"
+        android:id="@+id/tv_novel_detail_remove_accept"
         android:layout_width="116dp"
         android:layout_height="40dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/bg_novel_info_primary_100_radius_8dp"
+        android:gravity="center"
+        android:text="@string/novel_detail_remove_accept"
+        android:textAlignment="center"
+        android:textAppearance="@style/body2"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_novel_detail_remove_evaluate_warning_body" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/novel_detail_remove_accept"
-        android:textAppearance="@style/body2"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/view_novel_detail_remove_accept"
-        app:layout_constraintEnd_toEndOf="@id/view_novel_detail_remove_accept"
-        app:layout_constraintStart_toStartOf="@id/view_novel_detail_remove_accept"
-        app:layout_constraintTop_toTopOf="@id/view_novel_detail_remove_accept" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
