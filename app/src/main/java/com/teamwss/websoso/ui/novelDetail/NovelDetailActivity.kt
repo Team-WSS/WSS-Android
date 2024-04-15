@@ -21,7 +21,8 @@ class NovelDetailActivity :
     BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
 
-    private var spinnerPopupWindow: PopupWindow? = null
+    private var _spinnerPopupWindow: PopupWindow? = null
+    private val spinnerPopupWindow get() = _spinnerPopupWindow ?: error("")
     private val novelDetailSpinnerMenuItems: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +77,7 @@ class NovelDetailActivity :
     }
 
     private fun initPopupWindow() {
-        spinnerPopupWindow = createMenuPopupWindow(setupMenuListView(novelDetailSpinnerMenuItems))
+        _spinnerPopupWindow = createMenuPopupWindow(setupMenuListView(novelDetailSpinnerMenuItems))
     }
 
     private fun setupMenuListView(items: List<String>): ListView {
@@ -99,21 +100,15 @@ class NovelDetailActivity :
 
     private fun createMenuPopupWindow(listView: ListView): PopupWindow {
         return PopupWindow(
-            listView,
-            POPUP_WIDTH.toDp,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            listView, POPUP_WIDTH.toDp, WindowManager.LayoutParams.WRAP_CONTENT, true
         ).apply {
             setPopupWindowProperties()
         }
     }
 
     private fun showPopupWindowAtBottomOfMenuIcon() {
-        spinnerPopupWindow?.showAsDropDown(
-            binding.ivNovelDetailMenu,
-            POPUP_MARGIN_END.toDp,
-            POPUP_MARGIN_TOP.toDp,
-            Gravity.END
+        spinnerPopupWindow.showAsDropDown(
+            binding.ivNovelDetailMenu, POPUP_MARGIN_END.toDp, POPUP_MARGIN_TOP.toDp, Gravity.END
         )
     }
 
@@ -123,26 +118,16 @@ class NovelDetailActivity :
         isFocusable = true
         setBackgroundDrawable(
             ContextCompat.getDrawable(
-                this@NovelDetailActivity,
-                R.drawable.bg_novel_detail_white_radius_12dp
+                this@NovelDetailActivity, R.drawable.bg_novel_detail_white_radius_12dp
             )
         )
     }
 
     private val Int.toDp: Int get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-    override fun onPause() {
-        super.onPause()
-        if (spinnerPopupWindow?.isShowing == true) {
-            spinnerPopupWindow?.dismiss()
-        }
-    }
-
     override fun onDestroy() {
+        _spinnerPopupWindow = null
         super.onDestroy()
-        if (spinnerPopupWindow?.isShowing == true) {
-            spinnerPopupWindow?.dismiss()
-        }
     }
 
     companion object {
