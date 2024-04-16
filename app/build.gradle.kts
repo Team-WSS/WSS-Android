@@ -79,4 +79,6 @@ dependencies {
     // coil
     implementation("io.coil-kt:coil:2.6.0")
 
+    // Pager Dots Indicator
+    implementation("com.tbuonomo:dotsind리icator:5.0")
 }
