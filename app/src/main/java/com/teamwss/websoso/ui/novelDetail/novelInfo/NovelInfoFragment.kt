@@ -3,33 +3,31 @@ package com.teamwss.websoso.ui.novelDetail.novelInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 
 class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
+    private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViewMoreListener()
+        setupViewModel()
+        initViewMoreTextVisibility()
     }
 
-    private fun setupViewMoreListener() {
-        val targetText = binding.tvNovelInfoIntroBody
-        val viewMore = binding.tvNovelInfoIntroMore
+    private fun setupViewModel() {
+        binding.novelInfoViewModel = novelInfoViewModel
+        binding.lifecycleOwner = this
+    }
 
-        targetText.post {
-            val lineCount = targetText.layout.lineCount
-            if (lineCount < 3) return@post
-            if (targetText.layout.getEllipsisCount(lineCount - 1) > 0) {
-                viewMore.visibility = View.VISIBLE
-                targetText.ellipsize = null
-
-                binding.llNovelInfoIntro.setOnClickListener {
-                    targetText.maxLines = Int.MAX_VALUE
-                    viewMore.visibility = View.GONE
-                }
-            }
+    private fun initViewMoreTextVisibility() {
+        val bodyTextView = binding.tvNovelInfoIntroBody
+        bodyTextView.post {
+            val lineCount = bodyTextView.layout.lineCount
+            val ellipsisCount = bodyTextView.layout.getEllipsisCount(lineCount - 1)
+            novelInfoViewModel.initViewMoreTextView(lineCount, ellipsisCount)
         }
     }
 

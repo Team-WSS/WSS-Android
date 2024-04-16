@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="novelInfoViewModel"
+            type="com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -35,6 +38,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:onClick="@{() -> novelInfoViewModel.onViewMoreClicked()}"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,11 +49,12 @@
                     android:id="@+id/tv_novel_info_intro_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="3"
                     android:ellipsize="end"
+                    android:maxLines="@{novelInfoViewModel.bodyMaxLines}"
                     android:text="@string/novel_info_body"
                     android:textAppearance="@style/body2"
-                    android:textColor="@color/gray_300_52515F" />
+                    android:textColor="@color/gray_300_52515F"
+                    tools:maxLines="3" />
 
                 <TextView
                     android:id="@+id/tv_novel_info_intro_more"
@@ -60,6 +65,7 @@
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
                     android:visibility="gone"
+                    app:isVisible="@{novelInfoViewModel.viewMoreTextVisibility}"
                     tools:visibility="visible" />
 
             </LinearLayout>

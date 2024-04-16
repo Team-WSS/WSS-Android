@@ -42,6 +42,7 @@ class NovelDetailActivity :
 
     private fun setupViewModel() {
         binding.novelDetailViewModel = novelDetailViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupViewPager() {
