@@ -18,6 +18,8 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
+import java.lang.Float.min
+import kotlin.math.abs
 
 class NovelDetailActivity :
     BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
@@ -70,8 +72,8 @@ class NovelDetailActivity :
             TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
         val scrollRangeForColorChange = totalScrollRange - offsetForColorChange
 
-        val currentOffset = kotlin.math.abs(verticalOffset) / scrollRangeForColorChange
-        val adjustedOffset = kotlin.math.min(1f, currentOffset)
+        val currentOffset = abs(verticalOffset) / scrollRangeForColorChange
+        val adjustedOffset = min(1f, currentOffset)
 
         val colorWhenScrollAtTop = ContextCompat.getColor(this, R.color.gray_200_AEADB3)
         val colorWhenScrollAtBottom = ContextCompat.getColor(this, R.color.white)
