@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="novelInfoClickListener"
+            type="com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoClickListener" />
+
+        <variable
             name="novelInfoViewModel"
             type="com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoViewModel" />
     </data>
@@ -38,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:onClick="@{() -> novelInfoViewModel.onViewMoreClicked()}"
+                android:onClick="@{() -> novelInfoClickListener.onNovelInfoViewMoreClick()}"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,10 +65,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/novel_info_more"
+                    android:text="@{novelInfoViewModel.isViewMoreEnabled() ? @string/novel_info_view_more : @string/novel_info_view_less}"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
                     app:isVisible="@{novelInfoViewModel.viewMoreTextVisibility}"
+                    tools:text="@string/novel_info_view_more"
                     tools:visibility="visible" />
 
             </LinearLayout>

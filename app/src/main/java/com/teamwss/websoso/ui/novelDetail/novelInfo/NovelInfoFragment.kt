@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.ui.novelDetail.NovelDetailClickListener
 
 class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
@@ -14,12 +15,23 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
+        setupOnClickNovelInfoItem()
         initViewMoreTextVisibility()
     }
 
     private fun setupViewModel() {
         binding.novelInfoViewModel = novelInfoViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun setupOnClickNovelInfoItem() {
+        binding.novelInfoClickListener = setupOnClickNovelInfoClickListener()
+    }
+
+    private fun setupOnClickNovelInfoClickListener() = object : NovelInfoClickListener {
+        override fun onNovelInfoViewMoreClick() {
+            novelInfoViewModel.onViewMoreClicked()
+        }
     }
 
     private fun initViewMoreTextVisibility() {

@@ -16,6 +16,7 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
+import com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoClickListener
 import java.lang.Float.min
 import kotlin.math.abs
 
