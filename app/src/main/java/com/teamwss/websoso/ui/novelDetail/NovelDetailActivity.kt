@@ -98,11 +98,11 @@ class NovelDetailActivity :
             tempForReportError: Int,
             userNovelId: Int
         ) {
-            showPopupWindow(view, tempForReportError, userNovelId)
+            showPopupWindow(tempForReportError, userNovelId)
         }
     }
 
-    private fun showPopupWindow(view: View, tempForReportError: Int, userNovelId: Int) {
+    private fun showPopupWindow(tempForReportError: Int, userNovelId: Int) {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
