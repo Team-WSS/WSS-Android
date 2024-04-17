@@ -121,7 +121,7 @@ class NovelDetailActivity :
         }
     }
 
-    private val Float.toPx get() = this * resources.displayMetrics.density
+    private val Float.toPx: Float get() = this * Resources.getSystem().displayMetrics.density + 0.5f
 
     private val Int.toDp: Int get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
