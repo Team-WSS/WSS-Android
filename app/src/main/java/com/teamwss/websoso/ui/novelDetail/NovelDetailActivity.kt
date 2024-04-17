@@ -71,16 +71,16 @@ class NovelDetailActivity :
         val totalScrollRange = appBarLayout.totalScrollRange.toFloat()
         val offsetForColorChange =
             TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
-        val scrollRangeForColorChange = totalScrollRange - offsetForColorChange
+        val scrollPointForColorChange = totalScrollRange - offsetForColorChange
 
-        val currentOffset = abs(verticalOffset) / scrollRangeForColorChange
-        val adjustedOffset = min(1f, currentOffset)
+        val currentOffset = abs(verticalOffset) / scrollPointForColorChange
+        val adjustedOffset = min(MAX_SCROLL_OFFSET, currentOffset)
 
         val colorWhenScrollAtTop = ContextCompat.getColor(this, R.color.gray_200_AEADB3)
         val colorWhenScrollAtBottom = ContextCompat.getColor(this, R.color.white)
 
         val currentColor =
-            if (adjustedOffset == 1f) colorWhenScrollAtTop else colorWhenScrollAtBottom
+            if (adjustedOffset == MAX_SCROLL_OFFSET) colorWhenScrollAtTop else colorWhenScrollAtBottom
 
         listOf(binding.ivNovelDetailNavigateBack, binding.ivNovelDetailMenu).forEach { imageView ->
             imageView.drawable.also { drawable ->
@@ -178,6 +178,7 @@ class NovelDetailActivity :
         private const val FEED_FRAGMENT_PAGE = 1
 
         private const val TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET = 124
+        private const val MAX_SCROLL_OFFSET = 1f
 
         private const val POPUP_WIDTH = 120
         private const val POPUP_MARGIN_END = -6
