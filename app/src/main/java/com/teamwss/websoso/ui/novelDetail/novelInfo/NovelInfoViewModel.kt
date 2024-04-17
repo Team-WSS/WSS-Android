@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class NovelInfoViewModel : ViewModel() {
-    private val _viewMoreTextVisibility = MutableLiveData<Boolean>()
+    private val _viewMoreTextVisibility = MutableLiveData<Boolean>(false)
     val viewMoreTextVisibility: MutableLiveData<Boolean> get() = _viewMoreTextVisibility
     private val _bodyMaxLines = MutableLiveData<Int>(DEFAULT_MAX_LINES)
     val bodyMaxLines: MutableLiveData<Int> get() = _bodyMaxLines

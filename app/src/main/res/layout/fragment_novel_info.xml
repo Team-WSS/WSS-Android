@@ -64,7 +64,6 @@
                     android:text="@string/novel_info_more"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
-                    android:visibility="gone"
                     app:isVisible="@{novelInfoViewModel.viewMoreTextVisibility}"
                     tools:visibility="visible" />
 

@@ -1,5 +1,6 @@
 package com.teamwss.websoso.util
 
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import coil.load
@@ -33,5 +34,11 @@ object BindingAdapter {
             transformations(BlurTransformation(view.context, blurRadius))
             error(R.drawable.img_loading_thumbnail)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("isVisible")
+    fun setVisibility(view: View, isVisible: Boolean) {
+        view.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 }
