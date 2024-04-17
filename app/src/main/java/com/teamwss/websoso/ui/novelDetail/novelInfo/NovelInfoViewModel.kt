@@ -21,7 +21,7 @@ class NovelInfoViewModel : ViewModel() {
         _bodyMaxLines.value = DEFAULT_MAX_LINES
     }
 
-    fun initViewMoreTextView(lineCount: Int, ellipsisCount: Int) {
+    fun initViewMoreTextVisibility(lineCount: Int, ellipsisCount: Int) {
         _viewMoreTextVisibility.value = lineCount >= DEFAULT_MAX_LINES && ellipsisCount > 0
     }
 

@@ -2,12 +2,10 @@ package com.teamwss.websoso.ui.novelDetail.novelInfo
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.novelDetail.NovelDetailClickListener
 
 class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
@@ -39,7 +37,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         bodyTextView.post {
             val lineCount = bodyTextView.layout.lineCount
             val ellipsisCount = bodyTextView.layout.getEllipsisCount(lineCount - 1)
-            novelInfoViewModel.initViewMoreTextView(lineCount, ellipsisCount)
+            novelInfoViewModel.initViewMoreTextVisibility(lineCount, ellipsisCount)
         }
     }
 
