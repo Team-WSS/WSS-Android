@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="novelDetailClickListener"
+            type="com.teamwss.websoso.ui.novelDetail.NovelDetailClickListener" />
+
+        <variable
             name="novelDetailViewModel"
             type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
     </data>
@@ -22,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageUrl="@{novelDetailViewModel.profileImgUrl}" />
+            app:loadImageUrl="@{novelDetailViewModel.coverImgUrl}" />
 
         <View
             android:id="@+id/view_novel_detail_cover_background"
@@ -81,7 +85,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:loadImageUrl="@{novelDetailViewModel.profileImgUrl}" />
+                            app:loadImageUrl="@{novelDetailViewModel.coverImgUrl}" />
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover_genre"
@@ -296,7 +300,7 @@
                                 android:layout_width="38dp"
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="12dp"
-                                android:onClick="@{() -> novelDetailViewModel.onClickNovelDetailMenu()}"
+                                android:onClick="@{(iv_novel_detail_menu) -> novelDetailClickListener.onNovelDetailPopupClick(iv_novel_detail_menu, novelDetailViewModel.tempForReportError, novelDetailViewModel.userNovelId)}"
                                 android:padding="10dp"
                                 android:src="@drawable/ic_novel_detail_menu"
                                 app:layout_constraintBottom_toBottomOf="parent"

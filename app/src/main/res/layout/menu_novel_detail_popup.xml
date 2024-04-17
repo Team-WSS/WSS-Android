@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="tempForReportError"
+            type="Integer" />
+        <!--        오류 제보 관련 Id가 들어와야 할 것 같은데~~ 아직 어케될지는 모름-->
+
+        <variable
+            name="userNovelId"
+            type="Integer" />
+
+        <variable
+            name="novelDetailViewModel"
+            type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_detail_white_radius_14dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tv_feed_popup_user_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_novel_detail_white_radius_top_14dp"
+            android:gravity="center"
+            android:onClick="@{() -> null}"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="14dp"
+            android:text="@string/novel_detail_report_error"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_spoiler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tv_feed_popup_spoiler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_novel_detail_white_radius_bottom_14dp"
+            android:gravity="center"
+            android:onClick="@{() -> null}"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="14dp"
+            android:text="@string/novel_detail_remove_evaluate"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:isVisible="@{userNovelId != null}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_user_block"
+            app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_user_block"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_popup_user_block" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
