@@ -16,7 +16,6 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
-import com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoClickListener
 import java.lang.Float.min
 import kotlin.math.abs
 
@@ -115,16 +114,16 @@ class NovelDetailActivity :
             this.elevation = 14f.toPx
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.toDp,
-                POPUP_MARGIN_TOP.toDp,
+                POPUP_MARGIN_END.toPx,
+                POPUP_MARGIN_TOP.toPx,
                 Gravity.END
             )
         }
     }
 
-    private val Float.toPx: Float get() = this * Resources.getSystem().displayMetrics.density + 0.5f
+    private val Float.toPx: Float get() = this * Resources.getSystem().displayMetrics.density
 
-    private val Int.toDp: Int get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+    private val Int.toPx: Int get() = this * Resources.getSystem().displayMetrics.density.toInt()
 
     private fun initPopupBinding() {
         _popupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
@@ -139,7 +138,7 @@ class NovelDetailActivity :
         private const val TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET = 124
         private const val MAX_SCROLL_OFFSET = 1f
 
-        private const val POPUP_MARGIN_END = -128
+        private const val POPUP_MARGIN_END = -180
         private const val POPUP_MARGIN_TOP = 4
     }
 }
