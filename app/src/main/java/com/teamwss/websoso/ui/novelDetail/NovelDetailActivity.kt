@@ -30,7 +30,7 @@ class NovelDetailActivity :
         super.onCreate(savedInstanceState)
 
         setupViewModel()
-        initPopupBinding()
+        setupPopupBinding()
         setupViewPager()
         setupTabLayout()
         setupToolbarButton()
@@ -125,7 +125,7 @@ class NovelDetailActivity :
 
     private val Int.toPx: Int get() = this * Resources.getSystem().displayMetrics.density.toInt()
 
-    private fun initPopupBinding() {
+    private fun setupPopupBinding() {
         _popupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
         popupBinding.lifecycleOwner = this
         popupBinding.novelDetailViewModel = novelDetailViewModel
