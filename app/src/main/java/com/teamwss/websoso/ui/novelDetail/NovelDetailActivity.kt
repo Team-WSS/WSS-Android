@@ -16,8 +16,8 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
-import java.lang.Float.min
 import kotlin.math.abs
+import kotlin.math.min
 
 class NovelDetailActivity :
     BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
