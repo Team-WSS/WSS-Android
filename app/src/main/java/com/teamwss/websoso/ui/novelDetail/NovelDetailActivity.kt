@@ -33,7 +33,7 @@ class NovelDetailActivity :
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
-        setupToolbarButton()
+        setupAppBarOnOffListener()
         setupOnClickNovelDetailItem()
     }
 
@@ -56,7 +56,7 @@ class NovelDetailActivity :
         }.attach()
     }
 
-    private fun setupToolbarButton() {
+    private fun setupAppBarOnOffListener() {
         binding.ablNovelDetail.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             updateImageViewColor(appBarLayout, verticalOffset)
         }
