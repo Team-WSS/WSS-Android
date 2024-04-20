@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:onClick="@{() -> novelInfoClickListener.onNovelInfoViewMoreClick()}"
+                android:onClick="@{() -> novelInfoViewModel.onViewMoreClicked()}"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 app:layout_constraintEnd_toEndOf="parent"

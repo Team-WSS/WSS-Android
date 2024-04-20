@@ -14,7 +14,6 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupLifecycleOwner()
-        setupOnClickNovelInfoItem()
         setupViewMoreTextVisibility()
     }
 
@@ -24,16 +23,6 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
 
     private fun setupLifecycleOwner() {
         binding.lifecycleOwner = this
-    }
-
-    private fun setupOnClickNovelInfoItem() {
-        binding.novelInfoClickListener = setupOnClickNovelInfoClickListener()
-    }
-
-    private fun setupOnClickNovelInfoClickListener() = object : NovelInfoClickListener {
-        override fun onNovelInfoViewMoreClick() {
-            novelInfoViewModel.onViewMoreClicked()
-        }
     }
 
     private fun setupViewMoreTextVisibility() {
