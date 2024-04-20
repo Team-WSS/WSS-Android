@@ -30,7 +30,7 @@ class NovelDetailActivity :
         super.onCreate(savedInstanceState)
 
         bindViewModel()
-        setupLifeCycle()
+        setupLifeCycleOwner()
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
@@ -42,7 +42,7 @@ class NovelDetailActivity :
         binding.novelDetailViewModel = novelDetailViewModel
     }
 
-    private fun setupLifeCycle() {
+    private fun setupLifeCycleOwner() {
         binding.lifecycleOwner = this
     }
 
