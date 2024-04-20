@@ -16,4 +16,7 @@
     <string name="novel_detail_info">정보</string>
     <string name="novel_detail_feed">피드</string>
 
+    <!-- 로그인 -->
+    <string name="login_tv_browse_without_signup"><u>회원가입 없이 둘러보기</u></string>
+
 </resources>
