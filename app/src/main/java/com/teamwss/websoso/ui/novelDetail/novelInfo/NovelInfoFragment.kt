@@ -12,16 +12,12 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindViewModel()
-        setupLifecycleOwner()
+        setupDataBinding()
         setupViewMoreTextVisibility()
     }
 
-    private fun bindViewModel() {
+    private fun setupDataBinding() {
         binding.novelInfoViewModel = novelInfoViewModel
-    }
-
-    private fun setupLifecycleOwner() {
         binding.lifecycleOwner = this
     }
 

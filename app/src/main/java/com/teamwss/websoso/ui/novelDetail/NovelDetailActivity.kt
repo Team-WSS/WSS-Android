@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.novelDetail
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.activity.viewModels
@@ -24,20 +23,22 @@ class NovelDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bindViewModel()
-        setupLifeCycleOwner()
+        setupDataBinding()
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
-        setupOnClickNovelDetailItem()
     }
 
-    private fun bindViewModel() {
+    private fun setupDataBinding() {
         binding.novelDetailViewModel = novelDetailViewModel
+        binding.novelDetailActivity = this
+        binding.lifecycleOwner = this
     }
 
-    private fun setupLifeCycleOwner() {
-        binding.lifecycleOwner = this
+    private fun setupPopupBinding() {
+        _popupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
+        popupBinding.novelDetailViewModel = novelDetailViewModel
+        popupBinding.lifecycleOwner = this
     }
 
     private fun setupViewPager() {
@@ -54,28 +55,13 @@ class NovelDetailActivity :
         }.attach()
     }
 
-    private fun setupOnClickNovelDetailItem() {
-        binding.novelDetailClickListener = setupNovelDetailClickListener()
-    }
-
-    private fun setupNovelDetailClickListener() = object : NovelDetailClickListener {
-        override fun onNovelDetailPopupClick(
-            view: View,
-            tempForReportError: Int,
-            userNovelId: Int
-        ) {
-            showPopupWindow(tempForReportError, userNovelId)
-        }
-    }
-
-    private fun showPopupWindow(tempForReportError: Int, userNovelId: Int) {
+    fun showPopupWindow(userNovelId: Int) {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             true
         ).apply {
-            popupBinding.tempForReportError = tempForReportError
             popupBinding.userNovelId = userNovelId
             this.elevation = 14f.toPx
             showAsDropDown(
@@ -90,12 +76,6 @@ class NovelDetailActivity :
     private val Float.toPx: Float get() = this * Resources.getSystem().displayMetrics.density
 
     private val Int.toPx: Int get() = this * Resources.getSystem().displayMetrics.density.toInt()
-
-    private fun setupPopupBinding() {
-        _popupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
-        popupBinding.lifecycleOwner = this
-        popupBinding.novelDetailViewModel = novelDetailViewModel
-    }
 
     companion object {
         private const val INFO_FRAGMENT_PAGE = 0

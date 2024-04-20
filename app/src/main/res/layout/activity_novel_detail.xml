@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
-            name="novelDetailClickListener"
-            type="com.teamwss.websoso.ui.novelDetail.NovelDetailClickListener" />
+            name="novelDetailActivity"
+            type="com.teamwss.websoso.ui.novelDetail.NovelDetailActivity" />
 
         <variable
             name="novelDetailViewModel"
@@ -300,7 +299,7 @@
                                 android:layout_width="38dp"
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="12dp"
-                                android:onClick="@{(iv_novel_detail_menu) -> novelDetailClickListener.onNovelDetailPopupClick(iv_novel_detail_menu, novelDetailViewModel.tempForReportError, novelDetailViewModel.userNovelId)}"
+                                android:onClick="@{() -> novelDetailActivity.showPopupWindow(novelDetailViewModel.userNovelId)}"
                                 android:padding="10dp"
                                 android:src="@drawable/ic_novel_detail_menu"
                                 app:layout_constraintBottom_toBottomOf="parent"

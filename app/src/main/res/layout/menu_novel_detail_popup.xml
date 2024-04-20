@@ -5,11 +5,6 @@
     <data>
 
         <variable
-            name="tempForReportError"
-            type="Integer" />
-        <!--        오류 제보 관련 Id가 들어와야 할 것 같은데~~ 아직 어케될지는 모름-->
-
-        <variable
             name="userNovelId"
             type="Integer" />
 
@@ -23,11 +18,11 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_novel_detail_white_radius_14dp">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/btn_novel_detail_popup_report_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_novel_detail_white_radius_top_14dp"
+            android:background="@drawable/bg_novel_detail_white_radius_14dp"
             android:gravity="center"
             android:onClick="@{() -> null}"
             android:paddingHorizontal="32dp"
@@ -40,11 +35,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/btn_novel_detail_popup_remove_evaluation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_novel_detail_white_radius_bottom_14dp"
+            android:background="@drawable/bg_novel_detail_white_radius_14dp"
             android:gravity="center"
             android:onClick="@{() -> null}"
             android:paddingHorizontal="32dp"
@@ -52,7 +47,7 @@
             android:text="@string/novel_detail_remove_evaluate"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:isVisible="@{userNovelId != null}"
+            app:isVisible="@{userNovelId != novelDetailViewModel.NULL_USER_NOVEL_ID}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/btn_novel_detail_popup_report_error"
             app:layout_constraintStart_toStartOf="@+id/btn_novel_detail_popup_report_error"
