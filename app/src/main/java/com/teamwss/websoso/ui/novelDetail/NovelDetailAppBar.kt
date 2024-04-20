@@ -2,7 +2,6 @@ package com.teamwss.websoso.ui.novelDetail
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
