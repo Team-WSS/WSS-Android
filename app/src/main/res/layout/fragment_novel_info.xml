@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="novelInfoClickListener"
-            type="com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoClickListener" />
-
-        <variable
             name="novelInfoViewModel"
             type="com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoViewModel" />
     </data>
