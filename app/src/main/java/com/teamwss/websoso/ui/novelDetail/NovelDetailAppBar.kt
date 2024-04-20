@@ -69,7 +69,6 @@ class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(c
 
     private fun updateImageViewsColor(color: Int) {
         listOf(navigateBackBtn, showMenuBtn).forEach { imageView ->
-            Log.e("HiTestMan", imageView.toString())
             imageView?.drawable?.let { drawable ->
                 DrawableCompat.setTint(DrawableCompat.wrap(drawable).mutate(), color)
             }
