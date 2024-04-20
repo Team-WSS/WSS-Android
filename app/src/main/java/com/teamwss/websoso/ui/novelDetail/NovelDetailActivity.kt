@@ -29,7 +29,8 @@ class NovelDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupViewModel()
+        bindViewModel()
+        setupLifeCycle()
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
@@ -37,8 +38,11 @@ class NovelDetailActivity :
         setupOnClickNovelDetailItem()
     }
 
-    private fun setupViewModel() {
+    private fun bindViewModel() {
         binding.novelDetailViewModel = novelDetailViewModel
+    }
+
+    private fun setupLifeCycle() {
         binding.lifecycleOwner = this
     }
 
@@ -64,16 +68,21 @@ class NovelDetailActivity :
 
     private fun updateImageViewColorByOffset(appBarLayout: AppBarLayout, verticalOffset: Int) {
         val totalScrollRange = appBarLayout.totalScrollRange.toFloat()
-        val offsetForColorChange = TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
+        val offsetForColorChange =
+            TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
         val scrollPointForColorChange = totalScrollRange - offsetForColorChange
 
-        val currentOffsetRatio = calculateCurrentOffsetRatio(verticalOffset, scrollPointForColorChange)
+        val currentOffsetRatio =
+            calculateCurrentOffsetRatio(verticalOffset, scrollPointForColorChange)
         val currentColor = calculateColorBasedOnScrollPosition(currentOffsetRatio)
 
         updateImageViewsColor(currentColor)
     }
 
-    private fun calculateCurrentOffsetRatio(verticalOffset: Int, scrollPointForColorChange: Float): Float {
+    private fun calculateCurrentOffsetRatio(
+        verticalOffset: Int,
+        scrollPointForColorChange: Float
+    ): Float {
         val currentOffset = abs(verticalOffset) / scrollPointForColorChange
         return min(MAX_SCROLL_OFFSET, currentOffset)
     }
