@@ -58,32 +58,37 @@ class NovelDetailActivity :
 
     private fun setupAppBarOnOffListener() {
         binding.ablNovelDetail.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            updateImageViewColor(appBarLayout, verticalOffset)
+            updateImageViewColorByOffset(appBarLayout, verticalOffset)
         }
     }
 
-    private fun updateImageViewColor(
-        appBarLayout: AppBarLayout, verticalOffset: Int
-    ) {
+    private fun updateImageViewColorByOffset(appBarLayout: AppBarLayout, verticalOffset: Int) {
         val totalScrollRange = appBarLayout.totalScrollRange.toFloat()
-        val offsetForColorChange =
-            TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
+        val offsetForColorChange = TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
         val scrollPointForColorChange = totalScrollRange - offsetForColorChange
 
-        val currentOffset = abs(verticalOffset) / scrollPointForColorChange
-        val adjustedOffset = min(MAX_SCROLL_OFFSET, currentOffset)
+        val currentOffsetRatio = calculateCurrentOffsetRatio(verticalOffset, scrollPointForColorChange)
+        val currentColor = calculateColorBasedOnScrollPosition(currentOffsetRatio)
 
+        updateImageViewsColor(currentColor)
+    }
+
+    private fun calculateCurrentOffsetRatio(verticalOffset: Int, scrollPointForColorChange: Float): Float {
+        val currentOffset = abs(verticalOffset) / scrollPointForColorChange
+        return min(MAX_SCROLL_OFFSET, currentOffset)
+    }
+
+    private fun calculateColorBasedOnScrollPosition(offsetRatio: Float): Int {
         val colorWhenScrollAtTop = ContextCompat.getColor(this, R.color.gray_200_AEADB3)
         val colorWhenScrollAtBottom = ContextCompat.getColor(this, R.color.white)
 
-        val currentColor =
-            if (adjustedOffset == MAX_SCROLL_OFFSET) colorWhenScrollAtTop else colorWhenScrollAtBottom
+        return if (offsetRatio == MAX_SCROLL_OFFSET) colorWhenScrollAtTop else colorWhenScrollAtBottom
+    }
 
+    private fun updateImageViewsColor(color: Int) {
         listOf(binding.ivNovelDetailNavigateBack, binding.ivNovelDetailMenu).forEach { imageView ->
-            imageView.drawable.also { drawable ->
-                DrawableCompat.setTint(
-                    DrawableCompat.wrap(drawable).mutate(), currentColor
-                )
+            imageView.drawable?.let { drawable ->
+                DrawableCompat.setTint(DrawableCompat.wrap(drawable).mutate(), color)
             }
         }
     }
