@@ -78,5 +78,4 @@ class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(c
         private const val TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET = 124
         private const val MAX_SCROLL_OFFSET = 1f
     }
-
 }
