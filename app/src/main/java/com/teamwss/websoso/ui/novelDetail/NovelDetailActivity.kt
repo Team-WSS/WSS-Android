@@ -7,17 +7,12 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
-import kotlin.math.abs
-import kotlin.math.min
 
 class NovelDetailActivity :
     BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
@@ -34,7 +29,6 @@ class NovelDetailActivity :
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
-        setupAppBarOnOffListener()
         setupOnClickNovelDetailItem()
     }
 
@@ -58,48 +52,6 @@ class NovelDetailActivity :
                 else -> throw IllegalArgumentException()
             }
         }.attach()
-    }
-
-    private fun setupAppBarOnOffListener() {
-        binding.ablNovelDetail.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            updateImageViewColorByOffset(appBarLayout, verticalOffset)
-        }
-    }
-
-    private fun updateImageViewColorByOffset(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        val totalScrollRange = appBarLayout.totalScrollRange.toFloat()
-        val offsetForColorChange =
-            TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET * resources.displayMetrics.density
-        val scrollPointForColorChange = totalScrollRange - offsetForColorChange
-
-        val currentOffsetRatio =
-            calculateCurrentOffsetRatio(verticalOffset, scrollPointForColorChange)
-        val currentColor = calculateColorBasedOnScrollPosition(currentOffsetRatio)
-
-        updateImageViewsColor(currentColor)
-    }
-
-    private fun calculateCurrentOffsetRatio(
-        verticalOffset: Int,
-        scrollPointForColorChange: Float
-    ): Float {
-        val currentOffset = abs(verticalOffset) / scrollPointForColorChange
-        return min(MAX_SCROLL_OFFSET, currentOffset)
-    }
-
-    private fun calculateColorBasedOnScrollPosition(offsetRatio: Float): Int {
-        val colorWhenScrollAtTop = ContextCompat.getColor(this, R.color.gray_200_AEADB3)
-        val colorWhenScrollAtBottom = ContextCompat.getColor(this, R.color.white)
-
-        return if (offsetRatio == MAX_SCROLL_OFFSET) colorWhenScrollAtTop else colorWhenScrollAtBottom
-    }
-
-    private fun updateImageViewsColor(color: Int) {
-        listOf(binding.ivNovelDetailNavigateBack, binding.ivNovelDetailMenu).forEach { imageView ->
-            imageView.drawable?.let { drawable ->
-                DrawableCompat.setTint(DrawableCompat.wrap(drawable).mutate(), color)
-            }
-        }
     }
 
     private fun setupOnClickNovelDetailItem() {
@@ -148,9 +100,6 @@ class NovelDetailActivity :
     companion object {
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
-
-        private const val TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET = 124
-        private const val MAX_SCROLL_OFFSET = 1f
 
         private const val POPUP_MARGIN_END = -180
         private const val POPUP_MARGIN_TOP = 4

@@ -54,7 +54,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.AppBarLayout
+            <com.teamwss.websoso.ui.novelDetail.NovelDetailAppBar
                 android:id="@+id/abl_novel_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -343,7 +343,7 @@
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                     app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
 
-            </com.google.android.material.appbar.AppBarLayout>
+            </com.teamwss.websoso.ui.novelDetail.NovelDetailAppBar>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_novel_detail"
