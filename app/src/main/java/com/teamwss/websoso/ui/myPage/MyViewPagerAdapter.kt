@@ -7,7 +7,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.teamwss.websoso.ui.myPage.myfeed.MyFeedFragment
 import com.teamwss.websoso.ui.myPage.mylibrary.MyLibraryFragment
 
-class MyViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+class MyViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fragmentManager, lifecycle) {
 
     private val fragments = listOf(MyLibraryFragment(), MyFeedFragment())
 
