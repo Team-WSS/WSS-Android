@@ -70,7 +70,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         ).apply {
             popupBinding.feedId = feedId
             popupBinding.userId = userId
-            elevation = 12f
             showAsDropDown(view)
         }
     }
@@ -131,11 +130,9 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     private fun observeUiState() {
         feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> feedAdapter.submitList(uiState.feeds)
-            }
+            if (uiState.loading) loading()
+            if (uiState.error) throw IllegalStateException() // 에러 헨들링 필요
+            if (!uiState.loading) feedAdapter.submitList(uiState.feeds)
         }
     }
 
