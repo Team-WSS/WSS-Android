@@ -6,11 +6,11 @@
 
         <variable
             name="feedId"
-            type="Integer" />
+            type="Long" />
 
         <variable
             name="userId"
-            type="Integer" />
+            type="Long" />
 
         <variable
             name="viewModel"

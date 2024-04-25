@@ -4,15 +4,15 @@ import android.view.View
 
 interface FeedItemClickListener {
 
-    fun onProfileClick(id: Int)
+    fun onProfileClick(id: Long)
 
-    fun onMoreButtonClick(view: View, feedId: Int, userId: Int)
+    fun onMoreButtonClick(view: View, feedId: Long, userId: Long)
 
-    fun onContentClick(id: Int)
+    fun onContentClick(id: Long)
 
-    fun onNovelInfoClick(id: Int)
+    fun onNovelInfoClick(id: Long)
 
-    fun onThumbUpButtonClick(view: View, id: Int)
+    fun onLikeButtonClick(view: View, id: Long)
 
-    fun onCommentButtonClick()
+    fun onCommentButtonClick(feedId: Long)
 }

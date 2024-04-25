@@ -18,7 +18,7 @@ class FeedViewHolder(
 
     fun bind(feed: FeedModel) {
         binding.feed = feed
-        binding.clFeedThumbUp.isSelected = feed.isThumbUpSelected
+        binding.clFeedLike.isSelected = feed.isLiked
     }
 
     companion object {

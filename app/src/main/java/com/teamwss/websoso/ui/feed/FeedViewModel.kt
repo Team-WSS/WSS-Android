@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.feed
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.teamwss.websoso.WebsosoApp
-import com.teamwss.websoso.data.repository.FakeUserRepository
+import com.teamwss.websoso.domain.usecase.GetCategoryByUserGenderUseCase
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.FeedUiState
@@ -17,22 +18,38 @@ import kotlinx.coroutines.launch
 
 class FeedViewModel(
     private val getFeedsUseCase: GetFeedsUseCase,
-    fakeUserRepository: FakeUserRepository,
+    getCategoryByUserGenderUseCase: GetCategoryByUserGenderUseCase,
 ) : ViewModel() {
-    val gender: String = fakeUserRepository.gender
-
     private val _uiState: MutableLiveData<FeedUiState> = MutableLiveData(FeedUiState())
     val uiState: LiveData<FeedUiState> get() = _uiState
 
-    fun fetchFeedsByCategory(category: Category) {
+    init {
         viewModelScope.launch {
             runCatching {
                 getFeedsUseCase()
             }.onSuccess { feeds ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    category = feeds.category,
-                    feeds = feeds.feeds.map { it.toPresentation() }
+                    categories = getCategoryByUserGenderUseCase(),
+                    feeds = feeds.map { it.toPresentation() },
+                )
+            }.onFailure {
+                Log.d("123123", it.toString())
+                _uiState.value = uiState.value?.copy(
+                    loading = false, error = true,
+                )
+            }
+        }
+    }
+
+    fun fetchFeedsByCategory(category: Category) {
+        viewModelScope.launch {
+            runCatching {
+                getFeedsUseCase(category.title)
+            }.onSuccess { feeds ->
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    feeds = feeds.map { it.toPresentation() },
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
@@ -42,13 +59,13 @@ class FeedViewModel(
         }
     }
 
-    fun updateLikeCount(isSelected: Boolean, selectedFeedId: Int) {
+    fun updateLikeCount(isSelected: Boolean, selectedFeedId: Long) {
         val uiState = uiState.value ?: throw IllegalArgumentException()
         val count = if (isSelected) -1 else 1
         val updatedFeeds = uiState.feeds.map { feed ->
             feed.takeIf { feed.id == selectedFeedId }?.copy(
-                likeCount = (feed.likeCount.toInt() + count).toString(),
-                isThumbUpSelected = !isSelected
+                likeCount = feed.likeCount + count,
+                isLiked = !isSelected
             ) ?: feed
         }
         _uiState.value = uiState.copy(feeds = updatedFeeds)
@@ -58,15 +75,15 @@ class FeedViewModel(
         // 좋아요 API
     }
 
-    fun saveBlockedUser(userId: Int) {
+    fun saveBlockedUser(userId: Long) {
         // 유저 차단 API
     }
 
-    fun saveReportedSpoilingFeed(feedId: Int) {
+    fun saveReportedSpoilingFeed(feedId: Long) {
         // 스포일러 신고 API - 소소피드
     }
 
-    fun saveReportedImpertinenceFeed(feedId: Int) {
+    fun saveReportedImpertinenceFeed(feedId: Long) {
         // 부적절한 표현 신고 API - 소소피드
     }
 
@@ -75,7 +92,7 @@ class FeedViewModel(
             initializer {
                 FeedViewModel(
                     getFeedsUseCase = WebsosoApp.getFeedsUseCase(),
-                    fakeUserRepository = WebsosoApp.getUserRepository()
+                    getCategoryByUserGenderUseCase = WebsosoApp.getCategoryByUserGenderUseCase()
                 )
             }
         }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentFeedBinding
@@ -16,6 +17,7 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
+import com.teamwss.websoso.ui.feed.model.FeedModel
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
@@ -35,33 +37,33 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(id: Int) {
+        override fun onProfileClick(id: Long) {
             // ProfileActivity.from(context, id)
         }
 
-        override fun onMoreButtonClick(view: View, feedId: Int, userId: Int) {
+        override fun onMoreButtonClick(view: View, feedId: Long, userId: Long) {
             showMenu(view, feedId, userId)
         }
 
-        override fun onContentClick(id: Int) {
+        override fun onContentClick(id: Long) {
             navigateToFeedDetail(id)
         }
 
-        override fun onNovelInfoClick(id: Int) {
+        override fun onNovelInfoClick(id: Long) {
             // navigateToNovelDetail(id)
         }
 
-        override fun onThumbUpButtonClick(view: View, id: Int) {
+        override fun onLikeButtonClick(view: View, id: Long) {
             feedViewModel.updateLikeCount(view.isSelected, id)
         }
 
-        override fun onCommentButtonClick() {
-            navigateToFeedDetail(id)
+        override fun onCommentButtonClick(feedId: Long) {
+            navigateToFeedDetail(feedId)
         }
     }
 
     @SuppressLint("InflateParams")
-    private fun showMenu(view: View, feedId: Int, userId: Int) {
+    private fun showMenu(view: View, feedId: Long, userId: Long) {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -75,7 +77,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    private fun navigateToFeedDetail(id: Int) {
+    private fun navigateToFeedDetail(id: Long) {
         startActivity(
             FeedDetailActivity.from(
                 id, requireContext()
@@ -88,7 +90,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
         setupAdapter()
         bindViewModel()
-        setupCategory()
         observeUiState()
     }
 
@@ -102,15 +103,19 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         popupBinding.viewModel = feedViewModel
     }
 
-    private fun setupCategory() {
-        when (feedViewModel.gender) {
-            "MALE" -> getString(R.string.feed_category_male).toWrappedCategories()
-            "FEMALE" -> getString(R.string.feed_category_female).toWrappedCategories()
-            else -> throw IllegalStateException()
-        }.apply {
-            setUpChips()
-            binding.wcgFeed.getChildAt(0).performClick()
+    private fun observeUiState() {
+        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.loading -> loading()
+                uiState.error -> throw IllegalStateException()
+                !uiState.loading -> setupView(uiState.feeds, uiState.categories)
+            }
         }
+    }
+
+    private fun setupView(feeds: List<FeedModel>, categories: String) {
+        categories.toWrappedCategories().setUpChips()
+        feedAdapter.submitList(feeds)
     }
 
     private fun List<Category>.setUpChips() {
@@ -125,16 +130,9 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
                 setOnWebsosoChipClick { feedViewModel.fetchFeedsByCategory(category) }
-            }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
-        }
-    }
-
-    private fun observeUiState() {
-        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> feedAdapter.submitList(uiState.feeds)
+            }.also { websosoChip ->
+                binding.wcgFeed.addChip(websosoChip)
+                binding.wcgFeed.children.first().isSelected = true
             }
         }
     }

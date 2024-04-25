@@ -9,22 +9,22 @@ object FeedMapper {
         user = FeedModel.UserModel(
             id = user.id,
             nickname = user.nickname,
-            profileImage = user.profileImage,
+            avatarImage = user.avatarImage,
         ),
         createdDate = createdDate,
         id = id,
         content = content,
         relevantCategories = relevantCategories,
         likeCount = likeCount,
-        likeUsers = likeUsers,
         commentCount = commentCount,
         isModified = isModified,
         isSpoiled = isSpoiled,
+        isLiked = isLiked,
         novel = FeedModel.NovelModel(
             id = novel.id,
             title = novel.title,
             rating = novel.rating,
-            ratingCount = novel.ratingCount
-        )
+            ratingCount = novel.ratingCount,
+        ),
     )
 }
