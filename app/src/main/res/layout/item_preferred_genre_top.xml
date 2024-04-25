@@ -26,7 +26,7 @@
             tools:src="@drawable/ic_mypage" />
 
         <TextView
-            android:id="@+id/tv_preferred_genre_top_title"
+            android:id="@+id/tv_preferred_genre_top_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -48,7 +48,7 @@
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_preferred_genre_top_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_preferred_genre_top_name"
             tools:text="0편" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
