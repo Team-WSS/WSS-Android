@@ -3,26 +3,27 @@ package com.teamwss.websoso.domain.model
 data class Feed(
     val user: User,
     val createdDate: String,
-    val id: Int,
+    val id: Long,
     val content: String,
     val relevantCategories: List<String>,
-    val likeCount: String,
-    val likeUsers: List<Int>,
-    val commentCount: String,
+    val likeCount: Int,
+    val isLiked: Boolean,
+    val commentCount: Int,
     val isModified: Boolean,
     val isSpoiled: Boolean,
+    val isMyFeed: Boolean,
     val novel: Novel,
 ) {
     data class User(
-        val id: Int,
+        val id: Long,
         val nickname: String,
-        val profileImage: String,
+        val avatarImage: String,
     )
 
     data class Novel(
-        val id: Int,
+        val id: Long,
         val title: String,
-        val rating: Double,
+        val rating: Float,
         val ratingCount: Int,
     )
 }
