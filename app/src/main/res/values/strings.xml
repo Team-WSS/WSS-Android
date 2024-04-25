@@ -16,4 +16,13 @@
     <string name="novel_detail_info">정보</string>
     <string name="novel_detail_feed">피드</string>
 
+    <!-- 피드 뷰 -->
+    <string name="feed_score_count">%.1f (%d)</string>
+    <string name="feed_popup_user_block">해당유저차단</string>
+    <string name="feed_popup_spoiler">스포일러 신고</string>
+    <string name="feed_popup_report">부적절한 표현 신고</string>
+    <string name="feed_title">소소 피드</string>
+    <string name="feed_category_male">전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타</string>
+    <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
+
 </resources>
