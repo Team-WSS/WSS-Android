@@ -7,7 +7,7 @@ import com.teamwss.websoso.ui.feed.FeedItemClickListener
 import com.teamwss.websoso.ui.feed.model.FeedModel
 
 class FeedAdapter(
-    private val feedItemClickListener: FeedItemClickListener
+    private val onClick: FeedItemClickListener
 ) : ListAdapter<FeedModel, FeedViewHolder>(diffCallBack) {
 
     init {
@@ -17,7 +17,7 @@ class FeedAdapter(
     override fun getItemId(position: Int): Long = getItem(position).id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder =
-        FeedViewHolder.from(parent, feedItemClickListener)
+        FeedViewHolder.from(parent, onClick)
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
         holder.bind(getItem(position))

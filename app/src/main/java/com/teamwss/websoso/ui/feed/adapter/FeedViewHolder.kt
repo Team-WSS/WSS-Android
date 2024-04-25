@@ -9,11 +9,11 @@ import com.teamwss.websoso.ui.feed.model.FeedModel
 
 class FeedViewHolder(
     private val binding: ItemFeedBinding,
-    feedItemClickListener: FeedItemClickListener,
+    onClick: FeedItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.onClick = feedItemClickListener
+        binding.onClick = onClick
     }
 
     fun bind(feed: FeedModel) {
@@ -22,7 +22,6 @@ class FeedViewHolder(
     }
 
     companion object {
-
         fun from(parent: ViewGroup, onClick: FeedItemClickListener): FeedViewHolder =
             FeedViewHolder(
                 ItemFeedBinding.inflate(
