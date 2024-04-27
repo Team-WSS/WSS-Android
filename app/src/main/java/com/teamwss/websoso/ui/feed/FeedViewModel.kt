@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.feed
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.domain.usecase.GetCategoryByUserGenderUseCase
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
+import com.teamwss.websoso.domain.model.FeedType.MainFeed
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.mapper.FeedMapper.toPresentation
@@ -26,7 +26,7 @@ class FeedViewModel(
     init {
         viewModelScope.launch {
             runCatching {
-                getFeedsUseCase()
+                getFeedsUseCase(feedType = MainFeed)
             }.onSuccess { feeds ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
@@ -34,7 +34,6 @@ class FeedViewModel(
                     feeds = feeds.map { it.toPresentation() },
                 )
             }.onFailure {
-                Log.d("123123", it.toString())
                 _uiState.value = uiState.value?.copy(
                     loading = false, error = true,
                 )
@@ -45,7 +44,7 @@ class FeedViewModel(
     fun fetchFeedsByCategory(category: Category) {
         viewModelScope.launch {
             runCatching {
-                getFeedsUseCase(category.title)
+                getFeedsUseCase(category = category.title, feedType = MainFeed)
             }.onSuccess { feeds ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
