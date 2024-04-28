@@ -9,7 +9,7 @@ data class FeedModel(
     val likeCount: Int,
     val commentCount: Int,
     val isModified: Boolean,
-    val isSpoiled: Boolean,
+    val isSpoiler: Boolean,
     val isLiked: Boolean,
     val novel: NovelModel,
     val categories: String = relevantCategories.joinToString(prefix = "", postfix = ""),
@@ -22,8 +22,8 @@ data class FeedModel(
     )
 
     data class NovelModel(
-        val id: Long,
-        val title: String,
+        val id: Long?,
+        val title: String?,
         val rating: Float,
         val ratingCount: Int,
     )

@@ -18,7 +18,7 @@ object FeedMapper {
         likeCount = likeCount,
         commentCount = commentCount,
         isModified = isModified,
-        isSpoiled = isSpoiled,
+        isSpoiler = isSpoiler,
         isLiked = isLiked,
         novel = FeedModel.NovelModel(
             id = novel.id,

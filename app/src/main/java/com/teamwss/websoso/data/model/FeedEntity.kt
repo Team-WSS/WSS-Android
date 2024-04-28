@@ -10,7 +10,7 @@ data class FeedEntity(
     val isLiked: Boolean,
     val commentCount: Int,
     val isModified: Boolean,
-    val isSpoiled: Boolean,
+    val isSpoiler: Boolean,
     val isMyFeed: Boolean,
     val novel: NovelEntity,
 ) {
@@ -22,8 +22,8 @@ data class FeedEntity(
     )
 
     data class NovelEntity(
-        val id: Long,
-        val title: String,
+        val id: Long?,
+        val title: String?,
         val rating: Float,
         val ratingCount: Int,
     )

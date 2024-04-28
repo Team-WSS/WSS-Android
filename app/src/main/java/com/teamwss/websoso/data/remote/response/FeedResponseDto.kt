@@ -21,14 +21,14 @@ data class FeedResponseDto(
     val isModified: Boolean,
     @SerialName("isMyFeed")
     val isMyFeed: Boolean,
-    @SerialName("isSpolier")
-    val isSpoiled: Boolean,
+    @SerialName("isSpoiler")
+    val isSpoiler: Boolean,
     @SerialName("likeCount")
     val likeCount: Int,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("novelId")
-    val novelId: Long,
+    val novelId: Long?,
     @SerialName("novelRating")
     val novelRating: Float,
     @SerialName("novelRatingCount")
@@ -36,7 +36,7 @@ data class FeedResponseDto(
     @SerialName("relevantCategories")
     val relevantCategories: List<String>,
     @SerialName("title")
-    val title: String,
+    val title: String?,
     @SerialName("userId")
     val userId: Long,
 )

@@ -19,7 +19,7 @@ object FeedMapper {
         isLiked = isLiked,
         commentCount = commentCount,
         isModified = isModified,
-        isSpoiled = isSpoiled,
+        isSpoiler = isSpoiler,
         isMyFeed = isMyFeed,
         novel = Feed.Novel(
             id = novel.id,
