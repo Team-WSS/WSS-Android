@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
@@ -28,5 +30,13 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun setupDotsIndicator() {
         binding.dotsIndicatorLogin.attachTo(binding.vpLogin)
+    }
+
+    companion object{
+
+        fun from(context: Context): Intent {
+            return Intent(context, LoginActivity::class.java).apply {
+            }
+        }
     }
 }
