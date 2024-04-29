@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.feed.FeedItemClickListener" />
+
+        <variable
+            name="feed"
+            type="com.teamwss.websoso.ui.feed.model.FeedModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_feed_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:onClick="@{() -> onClick.onProfileClick(feed.user.id)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_feed_profile"
+                cornerRadius="@{12f}"
+                loadImageUrl="@{feed.user.profileImage}"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_feed_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:maxLines="1"
+                android:text="@{feed.user.nickname}"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_feed_profile"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="세훈군" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/iv_feed_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:onClick="@{(iv_feed_more) -> onClick.onMoreButtonClick(iv_feed_more, feed.id, feed.user.id)}"
+            android:padding="12dp"
+            android:src="@drawable/ic_more"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_feed_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cl_feed_profile" />
+
+        <TextView
+            android:id="@+id/tv_feed_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:breakStrategy="simple"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:maxLines="5"
+            android:onClick="@{() -> onClick.onContentClick(feed.id)}"
+            android:text="@{feed.content}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/iv_feed_more"
+            app:layout_constraintStart_toStartOf="@+id/cl_feed_profile"
+            app:layout_constraintTop_toBottomOf="@+id/cl_feed_profile"
+            tools:text="최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요 애매한 건 빼고 주로 무협 중에서도 회귀물로 골라봤어요 왜냐면 내가 회귀물을 좋아하기 때문에 최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요최근 잼께 봤던 무협 소설 목록 진짜들을 가 회귀물을 좋아하기 때문에 최근 잼께 봤습니다 몇글자 까지 될지 모르겠네요" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_feed_novel_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_feed_novel_info"
+            android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
+            app:layout_constraintEnd_toEndOf="@+id/tv_feed_content"
+            app:layout_constraintStart_toStartOf="@+id/tv_feed_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_content">
+
+            <ImageView
+                android:id="@+id/iv_feed_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_link"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_feed_novel_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="24dp"
+                android:ellipsize="end"
+                android:ems="13"
+                android:maxLines="1"
+                android:text="@{feed.novel.title}"
+                android:textAppearance="@style/title3"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_feed_link"
+                app:layout_constraintEnd_toStartOf="@+id/iv_feed_star"
+                app:layout_constraintStart_toEndOf="@+id/iv_feed_link"
+                app:layout_constraintTop_toTopOf="@+id/iv_feed_link"
+                tools:text="화산귀한화산귀한화산귀한화산귀한" />
+
+            <ImageView
+                android:id="@+id/iv_feed_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_star"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_feed_score"
+                app:layout_constraintEnd_toStartOf="@+id/tv_feed_score"
+                app:layout_constraintTop_toTopOf="@+id/tv_feed_score" />
+
+            <TextView
+                android:id="@+id/tv_feed_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@{@string/feed_score_count(feed.novel.rating, feed.novel.ratingCount)}"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_feed_novel_name"
+                app:layout_constraintEnd_toStartOf="@+id/iv_feed_navigate_right"
+                app:layout_constraintTop_toTopOf="@+id/tv_feed_novel_name"
+                tools:text="4.0 (523)" />
+
+            <ImageView
+                android:id="@+id/iv_feed_navigate_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_navigate_right"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_feed_score"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_feed_score" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_feed_genre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@{feed.categories}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@+id/cl_feed_novel_info"
+            app:layout_constraintTop_toBottomOf="@+id/cl_feed_novel_info"
+            tools:text="로판" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_feed_thumb_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="28dp"
+            android:onClick="@{(cl_feed_thumb_up) -> onClick.onThumbUpButtonClick(cl_feed_thumb_up, feed.id)}"
+            app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
+            app:layout_constraintStart_toStartOf="@+id/tv_feed_genre"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_genre">
+
+            <ImageView
+                android:id="@+id/iv_feed_thumb_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/btn_feed_thumb_up"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_feed_thumb_up_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:maxLines="1"
+                android:text="@{String.valueOf(feed.likeCount)}"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_feed_thumb_up"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_feed_thumb_up"
+                app:layout_constraintTop_toTopOf="@+id/iv_feed_thumb_up"
+                tools:text="32" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_feed_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:onClick="@{() -> onClick.onCommentButtonClick()}"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_feed_thumb_up"
+            app:layout_constraintStart_toEndOf="@+id/cl_feed_thumb_up"
+            app:layout_constraintTop_toTopOf="@+id/cl_feed_thumb_up">
+
+            <ImageView
+                android:id="@+id/iv_feed_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_comment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_feed_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:maxLines="1"
+                android:text="@{String.valueOf(feed.commentCount)}"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_feed_comment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_feed_comment"
+                app:layout_constraintTop_toTopOf="@+id/iv_feed_comment"
+                tools:text="32" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_feed_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/bg_feed_indicator"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
