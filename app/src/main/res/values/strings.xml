@@ -25,4 +25,7 @@
     <string name="feed_category_male">전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타</string>
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
 
+    <!-- 로그인 뷰 -->
+    <string name="login_browse_without_signup"><u>회원가입 없이 둘러보기</u></string>
+
 </resources>
