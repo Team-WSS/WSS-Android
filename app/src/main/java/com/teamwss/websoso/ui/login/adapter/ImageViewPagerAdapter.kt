@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.login
+package com.teamwss.websoso.ui.login.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

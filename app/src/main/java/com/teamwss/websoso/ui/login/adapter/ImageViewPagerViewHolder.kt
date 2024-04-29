@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.login
+package com.teamwss.websoso.ui.login.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemLoginImageBinding

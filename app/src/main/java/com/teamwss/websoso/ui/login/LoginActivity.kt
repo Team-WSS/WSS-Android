@@ -2,10 +2,10 @@ package com.teamwss.websoso.ui.login
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.viewpager2.widget.ViewPager2
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.login.adapter.ImageViewPagerAdapter
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
 
