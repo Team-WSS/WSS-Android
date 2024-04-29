@@ -16,6 +16,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.feedDetail.FeedDetailActivity"
             android:exported="false" />
         <activity
@@ -30,10 +36,6 @@
         </activity>
         <activity
             android:name=".ui.novelDetail.NovelDetailActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
