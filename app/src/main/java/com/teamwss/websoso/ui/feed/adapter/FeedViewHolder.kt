@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.feed.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,7 @@ class FeedViewHolder(
 
     companion object {
 
-        fun from(parent: ViewGroup, onClick: FeedItemClickListener): FeedViewHolder =
+        fun of(parent: ViewGroup, onClick: FeedItemClickListener): FeedViewHolder =
             FeedViewHolder(
                 ItemFeedBinding.inflate(
                     LayoutInflater.from(parent.context),
