@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
-import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentFeedBinding
@@ -16,8 +15,8 @@ import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.model.Category
-import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
 import com.teamwss.websoso.ui.feed.model.FeedModel
+import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
@@ -79,9 +78,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     private fun navigateToFeedDetail(id: Long) {
         startActivity(
-            FeedDetailActivity.from(
-                id, requireContext()
-            )
+            FeedDetailActivity.from(id, requireContext())
         )
     }
 
@@ -89,33 +86,9 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         super.onViewCreated(view, savedInstanceState)
 
         setupAdapter()
+        feedViewModel.category.setUpChips()
         bindViewModel()
         observeUiState()
-    }
-
-    private fun setupAdapter() {
-        binding.rvFeed.adapter = feedAdapter
-        binding.rvFeed.setHasFixedSize(true)
-    }
-
-    private fun bindViewModel() {
-        popupBinding.lifecycleOwner = viewLifecycleOwner
-        popupBinding.viewModel = feedViewModel
-    }
-
-    private fun observeUiState() {
-        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> setupView(uiState.feeds, uiState.categories)
-            }
-        }
-    }
-
-    private fun setupView(feeds: List<FeedModel>, categories: String) {
-        categories.toWrappedCategories().setUpChips()
-        feedAdapter.submitList(feeds)
     }
 
     private fun List<Category>.setUpChips() {
@@ -129,12 +102,42 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick { feedViewModel.fetchFeedsByCategory(category) }
+                setOnWebsosoChipClick { feedViewModel.updateFeeds(category) }
             }.also { websosoChip ->
                 binding.wcgFeed.addChip(websosoChip)
-                binding.wcgFeed.children.first().isSelected = true
             }
         }
+    }
+
+    private fun setupAdapter() {
+        binding.rvFeed.apply {
+            adapter = feedAdapter
+            addOnScrollListener(
+                FeedScrollListener.from(this, feedViewModel::updateFeeds)
+            )
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun bindViewModel() {
+        popupBinding.lifecycleOwner = viewLifecycleOwner
+        popupBinding.viewModel = feedViewModel
+    }
+
+    private fun observeUiState() {
+        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.loading -> loading()
+                uiState.error -> throw IllegalStateException()
+                !uiState.loading -> updateView(uiState.feeds, uiState.categories)
+            }
+        }
+    }
+
+    private fun updateView(feeds: List<FeedModel>, categories: List<FeedUiState.CategoryUiState>) {
+        // binding.wcgFeed.submitList(categories) 구현 예정
+        // 값 2번씩 호출됨
+        feedAdapter.submitList(feeds)
     }
 
     private fun loading() {
