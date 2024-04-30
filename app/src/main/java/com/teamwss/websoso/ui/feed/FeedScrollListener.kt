@@ -11,13 +11,16 @@ class FeedScrollListener private constructor(
         super.onScrollStateChanged(recyclerView, newState)
         if (!recyclerview.canScrollVertically(DIRECTION_BOTTOM)
             && newState == RecyclerView.SCROLL_STATE_IDLE
-        ) event
+        ) {
+            event()
+        } // 디바운스 필요
+        // onScroll이랑 무슨 차이인지 찾아보기
     }
 
     companion object {
         private const val DIRECTION_BOTTOM = 1
 
-        fun from(
+        fun of(
             recyclerview: RecyclerView,
             event: () -> Unit,
         ): FeedScrollListener = FeedScrollListener(recyclerview, event)

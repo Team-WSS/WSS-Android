@@ -28,11 +28,11 @@ class FeedViewModel(
     val uiState: LiveData<FeedUiState> get() = _uiState
 
     init {
-        updateFeeds()
+        updateFeedsByCategory()
     }
 
-    fun updateFeeds(category: Category) {
-        // 세터 2번 호출 수정, non-nullable 수정
+    fun updateFeedsByCategory(category: Category) {
+        // non-nullable 수정
         _uiState.value = uiState.value?.copy(
             categories = uiState.value?.categories?.map { categoryUiState ->
                 categoryUiState.takeIf { categoryUiState.category == category }?.copy(
@@ -40,10 +40,10 @@ class FeedViewModel(
                 ) ?: categoryUiState.copy(isSelected = false)
             } ?: uiState.value!!.categories
         )
-        updateFeeds()
+        updateFeedsByCategory()
     }
 
-    fun updateFeeds() {
+    fun updateFeedsByCategory() {
         val category: Category = uiState.value!!.categories.find { it.isSelected }!!.category
         // response category 대조 로직 추가 예정
         viewModelScope.launch {

@@ -77,16 +77,14 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun navigateToFeedDetail(id: Long) {
-        startActivity(
-            FeedDetailActivity.from(id, requireContext())
-        )
+        startActivity(FeedDetailActivity.from(id, requireContext()))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupAdapter()
         feedViewModel.category.setUpChips()
+        setupAdapter()
         bindViewModel()
         observeUiState()
     }
@@ -102,7 +100,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick { feedViewModel.updateFeeds(category) }
+                setOnWebsosoChipClick { feedViewModel.updateFeedsByCategory(category) }
             }.also { websosoChip ->
                 binding.wcgFeed.addChip(websosoChip)
             }
@@ -112,9 +110,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun setupAdapter() {
         binding.rvFeed.apply {
             adapter = feedAdapter
-            addOnScrollListener(
-                FeedScrollListener.from(this, feedViewModel::updateFeeds)
-            )
+            addOnScrollListener(FeedScrollListener.of(this, feedViewModel::updateFeedsByCategory))
             setHasFixedSize(true)
         }
     }
@@ -136,7 +132,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     private fun updateView(feeds: List<FeedModel>, categories: List<FeedUiState.CategoryUiState>) {
         // binding.wcgFeed.submitList(categories) 구현 예정
-        // 값 2번씩 호출됨
         feedAdapter.submitList(feeds)
     }
 
