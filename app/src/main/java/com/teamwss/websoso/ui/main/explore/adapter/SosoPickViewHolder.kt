@@ -1,9 +1,9 @@
-package com.teamwss.websoso.ui.explore.adapter
+package com.teamwss.websoso.ui.main.explore.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.teamwss.websoso.databinding.ItemSosoPickBinding
-import com.teamwss.websoso.ui.explore.model.SosoPickData
+import com.teamwss.websoso.ui.main.explore.model.SosoPickData
 
 class SosoPickViewHolder(
     private val binding: ItemSosoPickBinding

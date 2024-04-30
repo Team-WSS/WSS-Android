@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.explore.model
+package com.teamwss.websoso.ui.main.explore.model
 
 data class SosoPickData(
     val title: String,

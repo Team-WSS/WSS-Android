@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            tools:context=".ui.explore.ExploreFragment">
+            tools:context=".ui.main.explore.ExploreFragment">
 
             <TextView
                 android:id="@+id/tv_explore_title"

@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.explore
+package com.teamwss.websoso.ui.main.explore
 
 import android.os.Bundle
 import android.view.View
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.explore.adapter.SosoPickAdapter
+import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
 
 class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter() }

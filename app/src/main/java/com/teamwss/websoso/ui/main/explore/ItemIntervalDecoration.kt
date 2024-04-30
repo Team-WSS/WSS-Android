@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.explore
+package com.teamwss.websoso.ui.main.explore
 
 import android.graphics.Rect
 import android.view.View
