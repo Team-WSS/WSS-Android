@@ -9,7 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -215,8 +216,9 @@
                 android:layout_marginTop="20dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
+                android:overScrollMode="never"
                 android:paddingStart="20dp"
-                android:paddingEnd="40dp"
+                android:paddingEnd="34dp"
                 android:paddingBottom="40dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
