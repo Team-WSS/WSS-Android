@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.main.explore
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -34,7 +33,6 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
         // TODO 작품 정보 뷰로 이동
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun observeUiState() {
         exploreViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
