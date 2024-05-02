@@ -14,6 +14,7 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
+import com.teamwss.websoso.ui.feed.adapter.FeedItemType.*
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.FeedModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
@@ -110,7 +111,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun setupAdapter() {
         binding.rvFeed.apply {
             adapter = feedAdapter
-            addOnScrollListener(FeedScrollListener.of(this, feedViewModel::updateFeedsByCategory))
+            addOnScrollListener(FeedScrollListener.from(feedViewModel::updateFeedsByCategory))
             setHasFixedSize(true)
         }
     }
@@ -130,13 +131,13 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    private fun updateView(feeds: List<FeedModel>, categories: List<FeedUiState.CategoryUiState>) {
-        // binding.wcgFeed.submitList(categories) 구현 예정
-        feedAdapter.submitList(feeds)
-    }
-
     private fun loading() {
         // 로딩 뷰
+    }
+
+    private fun updateView(feeds: List<FeedModel>, categories: List<FeedUiState.CategoryUiState>) {
+        // binding.wcgFeed.submitList(categories) 구현 예정
+        feedAdapter.submitList(feeds.map { Feed(it) } + Loading)
     }
 
     override fun onStop() {
