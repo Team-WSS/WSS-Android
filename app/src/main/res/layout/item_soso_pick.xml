@@ -8,11 +8,16 @@
         <variable
             name="sosoPick"
             type="com.teamwss.websoso.ui.main.explore.model.SosoPickModel" />
+
+        <variable
+            name="sosoPickItemClickListener"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> sosoPickItemClickListener.invoke(sosoPick.novelId)}">
 
         <ImageView
             android:id="@+id/iv_explore_soso_pick_novel_cover"

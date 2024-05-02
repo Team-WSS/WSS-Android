@@ -14,7 +14,7 @@ import com.teamwss.websoso.ui.mapper.SosoPickMapper.toPresentation
 import kotlinx.coroutines.launch
 
 class ExploreViewModel(
-    private val fakeSosoPickRepository: FakeSosoPickRepository
+    private val fakeSosoPickRepository: FakeSosoPickRepository,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<SosoPickUiState> = MutableLiveData(SosoPickUiState())
     val uiState: LiveData<SosoPickUiState> get() = _uiState

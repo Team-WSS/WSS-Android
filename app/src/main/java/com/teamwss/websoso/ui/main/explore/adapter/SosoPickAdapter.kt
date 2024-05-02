@@ -8,7 +8,7 @@ import com.teamwss.websoso.databinding.ItemSosoPickBinding
 import com.teamwss.websoso.ui.main.explore.model.SosoPickModel
 
 class SosoPickAdapter(
-    private val sosoPickItemClickListener: (Long) -> Unit,
+    private val sosoPickItemClickListener: (novelID: Long) -> Unit,
 ) : ListAdapter<SosoPickModel, SosoPickViewHolder>(SosoPickDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SosoPickViewHolder {
@@ -23,8 +23,9 @@ class SosoPickAdapter(
 }
 
 class SosoPickDiffCallback : DiffUtil.ItemCallback<SosoPickModel>() {
+
     override fun areItemsTheSame(oldItem: SosoPickModel, newItem: SosoPickModel): Boolean {
-        return oldItem == newItem
+        return oldItem.novelId == newItem.novelId
     }
 
     override fun areContentsTheSame(oldItem: SosoPickModel, newItem: SosoPickModel): Boolean {

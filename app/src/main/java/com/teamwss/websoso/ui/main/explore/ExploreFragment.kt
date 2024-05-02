@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.main.explore
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
@@ -21,12 +20,8 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
     }
 
     private fun initSosoPickAdapter() {
-        binding.rvExploreSosoPick.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = sosoPickAdapter
-            setHasFixedSize(true)
-        }
+        binding.rvExploreSosoPick.adapter = sosoPickAdapter
+        binding.rvExploreSosoPick.setHasFixedSize(true)
     }
 
     private fun navigateToNovelDetail(novelId: Long) {

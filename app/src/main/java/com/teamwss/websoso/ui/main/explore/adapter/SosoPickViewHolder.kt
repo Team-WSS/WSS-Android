@@ -6,13 +6,14 @@ import com.teamwss.websoso.ui.main.explore.model.SosoPickModel
 
 class SosoPickViewHolder(
     private val binding: ItemSosoPickBinding,
-    private val sosoPickItemClickListener: (Long) -> Unit,
+    sosoPickItemClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.sosoPickItemClickListener = sosoPickItemClickListener
+    }
 
     fun onBind(sosoPick: SosoPickModel) {
         binding.sosoPick = sosoPick
-        binding.root.setOnClickListener {
-            sosoPickItemClickListener(sosoPick.novelId)
-        }
     }
 }
