@@ -10,7 +10,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.data.repository.FakeSosoPickRepository
 import com.teamwss.websoso.ui.main.explore.model.SosoPickUiState
-import com.teamwss.websoso.ui.mapper.SosoPickMapper.toPresentation
 import kotlinx.coroutines.launch
 
 class ExploreViewModel(
@@ -30,7 +29,7 @@ class ExploreViewModel(
             }.onSuccess { sosoPicks ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    sosoPicks = sosoPicks.sosoPicks.map { it.toPresentation() }
+                    sosoPicks = sosoPicks.novels
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(

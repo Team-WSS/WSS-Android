@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.teamwss.websoso.data.model.SosoPickEntity
 import com.teamwss.websoso.databinding.ItemSosoPickBinding
-import com.teamwss.websoso.ui.main.explore.model.SosoPickModel
 
 class SosoPickAdapter(
-    private val sosoPickItemClickListener: (novelID: Long) -> Unit,
-) : ListAdapter<SosoPickModel, SosoPickViewHolder>(SosoPickDiffCallback()) {
+    private val sosoPickItemClickListener: (novelId: Long) -> Unit,
+) : ListAdapter<SosoPickEntity.NovelEntity, SosoPickViewHolder>(SosoPickDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SosoPickViewHolder {
         val binding =
@@ -22,13 +22,17 @@ class SosoPickAdapter(
     }
 }
 
-class SosoPickDiffCallback : DiffUtil.ItemCallback<SosoPickModel>() {
+class SosoPickDiffCallback : DiffUtil.ItemCallback<SosoPickEntity.NovelEntity>() {
 
-    override fun areItemsTheSame(oldItem: SosoPickModel, newItem: SosoPickModel): Boolean {
+    override fun areItemsTheSame(
+        oldItem: SosoPickEntity.NovelEntity, newItem: SosoPickEntity.NovelEntity
+    ): Boolean {
         return oldItem.novelId == newItem.novelId
     }
 
-    override fun areContentsTheSame(oldItem: SosoPickModel, newItem: SosoPickModel): Boolean {
+    override fun areContentsTheSame(
+        oldItem: SosoPickEntity.NovelEntity, newItem: SosoPickEntity.NovelEntity
+    ): Boolean {
         return oldItem == newItem
     }
 }
