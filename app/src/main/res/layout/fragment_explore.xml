@@ -5,9 +5,6 @@
 
     <data>
 
-        <variable
-            name="clickListener"
-            type="com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter" />
     </data>
 
     <ScrollView
