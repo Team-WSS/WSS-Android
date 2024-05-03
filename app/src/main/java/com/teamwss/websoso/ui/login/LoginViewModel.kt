@@ -11,6 +11,6 @@ class LoginViewModel : ViewModel() {
 
     init {
         _images.value =
-            listOf(R.drawable.img_login_test, R.drawable.img_login_test, R.drawable.img_login_test)
+            listOf(R.drawable.img_login_1, R.drawable.img_login_2, R.drawable.img_login_3)
     }
 }
