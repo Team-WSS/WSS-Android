@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_50_F4F5F8"
+        tools:context=".ui.login.LoginActivity">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_login"
+            android:layout_width="0dp"
+            android:layout_height="514dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            android:id="@+id/dotsIndicator_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            app:dotsColor="@color/gray_100_CBCBD1"
+            app:dotsCornerRadius="8dp"
+            app:dotsSize="7dp"
+            app:dotsSpacing="5dp"
+            app:dotsWidthFactor="2.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vp_login"
+            app:progressMode="false"
+            app:selectedDotColor="@color/primary_100_6A5DFD" />
+
+        <ImageView
+            android:id="@+id/iv_login_kakao"
+            android:layout_width="52dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="42dp"
+            android:src="@drawable/ic_login_kakao"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dotsIndicator_login" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="10dp"
+            android:text="@string/login_browse_without_signup"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_login_kakao" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
