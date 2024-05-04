@@ -14,15 +14,15 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
-import com.teamwss.websoso.ui.feed.adapter.FeedItemType.*
+import com.teamwss.websoso.ui.feed.adapter.FeedType.*
 import com.teamwss.websoso.ui.feed.model.Category
-import com.teamwss.websoso.ui.feed.model.FeedModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
-    private val popupBinding get() = _popupBinding ?: error("error: binding is null")
+    private val popupBinding: MenuFeedPopupBinding
+        get() = _popupBinding ?: error("error: binding is null")
     private val feedViewModel: FeedViewModel by viewModels { FeedViewModel.Factory }
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
 
@@ -126,7 +126,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             when {
                 uiState.loading -> loading()
                 uiState.error -> throw IllegalStateException()
-                !uiState.loading -> updateView(uiState.feeds, uiState.categories)
+                !uiState.loading -> updateView(uiState)
             }
         }
     }
@@ -135,9 +135,10 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         // 로딩 뷰
     }
 
-    private fun updateView(feeds: List<FeedModel>, categories: List<FeedUiState.CategoryUiState>) {
+    private fun updateView(uiState: FeedUiState) {
         // binding.wcgFeed.submitList(categories) 구현 예정
-        feedAdapter.submitList(feeds.map { Feed(it) } + Loading)
+        val feeds = uiState.feeds.map { Feed(it) } + if (uiState.isLoadable) Loading else return
+        feedAdapter.submitList(feeds)
     }
 
     override fun onStop() {

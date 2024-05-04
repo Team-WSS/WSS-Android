@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class FeedsResponseDto(
     @SerialName("category")
     val category: String,
+    @SerialName("isLoadable")
+    val isLoadable: Boolean,
     @SerialName("feedsResponseDto")
     val feedsResponseDto: List<FeedResponseDto>,
 )

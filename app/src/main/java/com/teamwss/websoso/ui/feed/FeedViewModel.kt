@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.teamwss.websoso.WebsosoApp
-import com.teamwss.websoso.domain.model.FeedType.MainFeed
 import com.teamwss.websoso.domain.usecase.GetCategoryByUserGenderUseCase
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
@@ -48,11 +47,12 @@ class FeedViewModel(
         // response category 대조 로직 추가 예정
         viewModelScope.launch {
             runCatching {
-                getFeedsUseCase(category = category.title, feedType = MainFeed)
+                getFeedsUseCase(category = category.title)
             }.onSuccess { feeds ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    feeds = feeds.map { it.toPresentation() },
+                    isLoadable = feeds.isLoadable,
+                    feeds = feeds.feeds.map { it.toPresentation() },
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(

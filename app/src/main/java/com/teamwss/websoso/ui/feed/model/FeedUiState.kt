@@ -4,6 +4,7 @@ data class FeedUiState(
     val loading: Boolean = true,
     val error: Boolean = false,
     val categories: List<CategoryUiState>,
+    val isLoadable: Boolean = true,
     val feeds: List<FeedModel> = emptyList(),
 ) {
 
