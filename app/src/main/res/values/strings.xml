@@ -9,9 +9,37 @@
     <string name="main_ic_explore">탐색</string>
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">my</string>
-
+    
     <!--일반 검색 뷰-->
     <string name="normal_explore_novel_count_title">작품</string>
     <string name="normal_explore_not_exist_result">해당 검색어를 가진 작품은\n아직 등록되지 않았어요...</string>
     <string name="normal_explore_add_novel_inquire">작품 추가 문의하기</string>
+
+    <!-- 탐색 뷰-->
+    <string name="explore_title">탐색하기</string>
+    <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
+    <string name="explore_detail_search_title">이제 뭐 읽을지 고민될 땐?</string>
+    <string name="explore_detail_search_description">장르, 연재상태, 별점, 키워드로 작품 찾기</string>
+    <string name="explore_detail_search_button">내 취향에 맞는 작품 탐색하기</string>
+    <string name="explore_soso">소소</string>
+    <string name="explore_sosopick_description">다른 사람들이 최근에 읽고 있는 작품이에요</string>
+
+    <!-- 작품 상세 -->
+    <string name="novel_detail_review">리뷰 남기기</string>
+    <string name="novel_detail_interest">관심 있어요</string>
+    <string name="novel_detail_info">정보</string>
+    <string name="novel_detail_feed">피드</string>
+
+    <!-- 피드 뷰 -->
+    <string name="feed_score_count">%.1f (%d)</string>
+    <string name="feed_popup_user_block">해당유저차단</string>
+    <string name="feed_popup_spoiler">스포일러 신고</string>
+    <string name="feed_popup_report">부적절한 표현 신고</string>
+    <string name="feed_title">소소 피드</string>
+    <string name="feed_category_male">전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타</string>
+    <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
+
+    <!-- 로그인 뷰 -->
+    <string name="login_browse_without_signup"><u>회원가입 없이 둘러보기</u></string>
+
 </resources>
