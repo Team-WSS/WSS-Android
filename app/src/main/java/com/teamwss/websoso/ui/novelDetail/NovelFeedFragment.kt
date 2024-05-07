@@ -5,9 +5,4 @@ import com.teamwss.websoso.databinding.FragmentNovelFeedBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 
 class NovelFeedFragment : BindingFragment<FragmentNovelFeedBinding>(R.layout.fragment_novel_feed) {
-
-    override fun onResume() {
-        super.onResume()
-        view?.requestLayout()
-    }
 }
