@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="novelDetailActivity"
-            type="com.teamwss.websoso.ui.novelDetail.NovelDetailActivity" />
+            name="showPopupWindow"
+            type="kotlin.jvm.functions.Function1" />
 
         <variable
             name="novelDetailViewModel"
@@ -299,7 +299,7 @@
                                 android:layout_width="38dp"
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="12dp"
-                                android:onClick="@{() -> novelDetailActivity.showPopupWindow(novelDetailViewModel.userNovelId)}"
+                                android:onClick="@{() -> showPopupWindow.invoke(novelDetailViewModel.userNovelId)}"
                                 android:padding="10dp"
                                 android:src="@drawable/ic_novel_detail_menu"
                                 app:layout_constraintBottom_toBottomOf="parent"

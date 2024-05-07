@@ -31,7 +31,7 @@ class NovelDetailActivity :
 
     private fun setupDataBinding() {
         binding.novelDetailViewModel = novelDetailViewModel
-        binding.novelDetailActivity = this
+        binding.showPopupWindow = ::showPopupWindow
         binding.lifecycleOwner = this
     }
 
@@ -55,7 +55,7 @@ class NovelDetailActivity :
         }.attach()
     }
 
-    fun showPopupWindow(userNovelId: Int) {
+    private fun showPopupWindow(userNovelId: Int) {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
