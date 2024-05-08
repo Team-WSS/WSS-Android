@@ -10,11 +10,11 @@ class SingleEventHandler {
 
     fun handle(
         timeMillis: Long = 500L,
-        block: () -> Unit,
+        event: () -> Unit,
     ) {
         if (::lastEventTime.isInitialized.not() ||
             (lastEventTime + timeMillis.milliseconds).hasPassedNow()
-        ) block()
+        ) event()
 
         lastEventTime = currentTime
     }

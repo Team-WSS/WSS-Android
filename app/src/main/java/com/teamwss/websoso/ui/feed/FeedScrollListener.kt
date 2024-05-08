@@ -17,7 +17,7 @@ class FeedScrollListener private constructor(
             recyclerView.adapter?.itemCount ?: throw IllegalArgumentException()
 
         if (visibleLastItemPosition in totalItemCount - 2..totalItemCount)
-            singleEventHandler.handle(block = event)
+            singleEventHandler.handle(event = event)
     }
 
     companion object {
