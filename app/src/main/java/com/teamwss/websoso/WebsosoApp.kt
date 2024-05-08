@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.teamwss.websoso.data.FakeApi
 import com.teamwss.websoso.data.repository.DefaultFeedRepository
+import com.teamwss.websoso.data.repository.FakeSosoPickRepository
 import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.domain.usecase.GetCategoryByUserGenderUseCase
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
@@ -22,5 +23,7 @@ class WebsosoApp : Application() {
 
         fun getCategoryByUserGenderUseCase(): GetCategoryByUserGenderUseCase =
             GetCategoryByUserGenderUseCase(getUserRepository())
+
+        fun getSosoPickRepository(): FakeSosoPickRepository = FakeSosoPickRepository()
     }
 }
