@@ -2,11 +2,12 @@ package com.teamwss.websoso.ui.feed
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.teamwss.websoso.util.SingleEventHandler
 
 class FeedScrollListener private constructor(
     private val event: () -> Unit,
 ) : RecyclerView.OnScrollListener() {
-    private var label: Int = 0
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler() }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
@@ -15,17 +16,11 @@ class FeedScrollListener private constructor(
         val totalItemCount: Int =
             recyclerView.adapter?.itemCount ?: throw IllegalArgumentException()
 
-        if (visibleLastItemPosition in totalItemCount - 2..totalItemCount) {
-            when (label) {
-                0 -> return
-                1 -> event()
-            }
-        }
+        if (visibleLastItemPosition in totalItemCount - 2..totalItemCount)
+            singleEventHandler.handle(block = event)
     }
 
     companion object {
-        private const val READY = 0
-        private const val PROGRESS = 1
 
         fun from(event: () -> Unit): FeedScrollListener = FeedScrollListener(event)
     }
