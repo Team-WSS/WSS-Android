@@ -50,4 +50,8 @@
     <!-- 로그인 뷰 -->
     <string name="login_browse_without_signup"><u>회원가입 없이 둘러보기</u></string>
 
+    <!-- 온보딩 뷰 -->
+    <string name="on_boarding_skip">건너뛰기</string>
+    <string name="on_boarding_first_input_nickname">닉네임을 입력하세요</string>
+
 </resources>
