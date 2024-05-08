@@ -10,12 +10,12 @@ interface FeedApi {
 
     @GET("feeds")
     suspend fun getFeeds(
-        @Body feedsRequestDto: FeedsRequestDto
+        @Body feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto
 
     @GET("feeds?")
     suspend fun getFeedsByCategory(
         @Query("category") category: String,
-        @Body feedsRequestDto: FeedsRequestDto
+        @Body feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto
 }

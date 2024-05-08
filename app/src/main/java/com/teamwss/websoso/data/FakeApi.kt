@@ -28,7 +28,7 @@ object FakeApi {
                 novelRating = 3.7f,
                 novelRatingCount = 10 + (it + 1),
                 relevantCategories = listOf("로코", "로맨스"),
-                title = "눈물의 여왕${(it+1)}",
+                title = "눈물의 여왕${(it + 1)}",
                 userId = (it + 1).toLong()
             )
         }
