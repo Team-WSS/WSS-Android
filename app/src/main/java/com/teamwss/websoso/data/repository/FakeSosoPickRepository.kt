@@ -2,6 +2,7 @@ package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.model.SosoPickEntity
 
+// TODO API 붙일 때 FakeSosoPickRepository 제거
 class FakeSosoPickRepository {
 
     val dummyData: SosoPickEntity = SosoPickEntity(
