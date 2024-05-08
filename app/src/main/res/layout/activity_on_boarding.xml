@@ -5,12 +5,65 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.onBoarding.OnBoardingViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.onBoarding.OnBoardingActivity">
+
+        <ImageView
+            android:id="@+id/iv_on_boarding_navigate_back_left"
+            isVisible="@{viewModel.isBackButtonVisible}"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginBottom="3dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_on_boarding_navigate_back_left"
+            app:layout_constraintBottom_toTopOf="@id/pb_on_boarding"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/body2"
+            isVisible="@{viewModel.isSkipTextVisible}"
+            android:layout_width="70dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="12dp"
+            android:gravity="center"
+            android:text="@string/on_boarding_skip"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintBottom_toBottomOf="@id/iv_on_boarding_navigate_back_left"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_on_boarding_navigate_back_left" />
+
+        <ProgressBar
+            android:id="@+id/pb_on_boarding"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:progress="33"
+            android:progressBackgroundTint="@color/gray_100_CBCBD1"
+            android:progressTint="@color/primary_100_6A5DFD"
+            app:layout_constraintBottom_toTopOf="@id/vp_on_boarding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_on_boarding"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="96dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
