@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.explore.normalExplore
+package com.teamwss.websoso.ui.normalExplore
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

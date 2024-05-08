@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.explore.normalExplore
+package com.teamwss.websoso.ui.normalExplore
 
 import android.os.Bundle
 import android.view.WindowManager

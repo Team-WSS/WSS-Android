@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp">
 
+
         <ImageView
             android:id="@+id/iv_normal_explore_result_cover"
             android:layout_width="78dp"
@@ -27,12 +28,12 @@
 
         <TextView
             android:id="@+id/tv_normal_explore_result_title"
-            style="@style/title3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAppearance="@style/title3"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/iv_normal_explore_result_cover"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,22 +42,49 @@
             tools:hint="주인공의 남동생을 지키는 방법 1 2 3 원투쓰리포 파이브 씩스" />
 
         <ImageView
-            android:id="@+id/iv_normal_explore_result_rating"
+            android:id="@+id/iv_normal_explore_result_interested"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_normal_explore_rating"
-            app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_result_rating"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_normal_explore_interested"
+            app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_result_interested"
             app:layout_constraintStart_toStartOf="@id/tv_normal_explore_result_title"
-            app:layout_constraintTop_toTopOf="@id/tv_normal_explore_result_rating" />
+            app:layout_constraintTop_toTopOf="@id/tv_normal_explore_result_interested" />
 
         <TextView
-            android:id="@+id/tv_normal_explore_result_rating"
-            style="@style/body3"
+            android:id="@+id/tv_normal_explore_result_interested"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="4dp"
             android:maxLines="1"
+            android:text="@style/body3"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toTopOf="@id/tv_normal_explore_result_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_normal_explore_result_interested"
+            tools:hint="235,025" />
+
+        <ImageView
+            android:id="@+id/iv_normal_explore_result_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_normal_explore_rating"
+            app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_result_rating"
+            app:layout_constraintStart_toEndOf="@id/tv_normal_explore_result_interested"
+            app:layout_constraintTop_toTopOf="@id/tv_normal_explore_result_rating" />
+
+        <TextView
+            android:id="@+id/tv_normal_explore_result_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="4dp"
+            android:maxLines="1"
+            android:text="@style/body3"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toTopOf="@id/tv_normal_explore_result_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,14 +94,13 @@
 
         <TextView
             android:id="@+id/tv_normal_explore_result_author"
-            style="@style/body3"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAppearance="@style/body3"
             android:textColor="@color/gray_200_AEADB3"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/tv_normal_explore_result_title"

@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.explore.normalExplore.NormalExploreActivity">
+    tools:context=".ui.normalExplore.NormalExploreActivity">
 
     <data>
 
         <variable
             name="normalExploreViewModel"
-            type="com.teamwss.websoso.ui.explore.normalExplore.NormalExploreViewModel" />
+            type="com.teamwss.websoso.ui.normalExplore.NormalExploreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +43,6 @@
 
             <EditText
                 android:id="@+id/et_normal_explore_search_content"
-                style="@style/label1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:autofillHints="@null"
@@ -54,6 +53,7 @@
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:text="@={normalExploreViewModel.searchContent}"
+                android:textAppearance="@style/label1"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_normal_explore_cancel_button"
@@ -99,22 +99,22 @@
 
             <TextView
                 android:id="@+id/tv_normal_explore_novel_count_title"
-                style="@style/title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
                 android:text="@string/normal_explore_novel_count_title"
+                android:textAppearance="@style/title2"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_normal_explore_novel_count"
-                style="@style/body3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:textAppearance="@style/body3"
                 android:textColor="@color/gray_100_CBCBD1"
                 app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_novel_count_title"
                 app:layout_constraintStart_toEndOf="@id/tv_normal_explore_novel_count_title"
@@ -158,12 +158,12 @@
 
             <TextView
                 android:id="@+id/tv_normal_explore_not_exist_result"
-                style="@style/body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="@string/normal_explore_not_exist_result"
+                android:textAppearance="@style/body1"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -171,7 +171,6 @@
 
             <TextView
                 android:id="@+id/tv_normal_explore_add_novel_inquire_button"
-                style="@style/title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
@@ -180,6 +179,7 @@
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="20dp"
                 android:text="@string/normal_explore_add_novel_inquire"
+                android:textAppearance="@style/title2"
                 android:textColor="@color/primary_100_6A5DFD"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
