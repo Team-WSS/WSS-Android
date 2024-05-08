@@ -10,11 +10,33 @@
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">my</string>
 
+    <!-- 탐색 뷰-->
+    <string name="explore_title">탐색하기</string>
+    <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
+    <string name="explore_detail_search_title">이제 뭐 읽을지 고민될 땐?</string>
+    <string name="explore_detail_search_description">장르, 연재상태, 별점, 키워드로 작품 찾기</string>
+    <string name="explore_detail_search_button">내 취향에 맞는 작품 탐색하기</string>
+    <string name="explore_soso">소소</string>
+    <string name="explore_sosopick_description">다른 사람들이 최근에 읽고 있는 작품이에요</string>
+
     <!-- 작품 상세 -->
     <string name="novel_detail_review">리뷰 남기기</string>
     <string name="novel_detail_interest">관심 있어요</string>
     <string name="novel_detail_info">정보</string>
     <string name="novel_detail_feed">피드</string>
+    <string name="novel_detail_report_error">오류 제보</string>
+    <string name="novel_detail_remove_evaluate">평가 삭제</string>
+
+    <!-- 작품 소개 -->
+    <string name="novel_info_body">왕실에는 막대한 빚이 있었고, 그들은 빚을 갚기 위해\n왕녀인 바이올렛을 막대한 돈을 지녔지만 공작의 사생아인\n윈터에게 시집보낸다.\n\n\'태어나서 이렇게 멋있는 남자는 처음 봐…….\'\n\n다행히 바이올렛은 정략 결혼 상대에게 첫 눈에 반하지만\n두 사람의 결혼 생활은 처음부터 어긋나고.\n\n"쉬운 일이었으면 당신에게 말하러 오지도 않았어요. 이번\n한 번만 같이……."\n"당신이 여기서 고집부리며 내 시간을 허비하는 사이에 얼\n마나 많은 돈이 움직였는지 알아?"\n\n그로부터 3년. 바이올렛은 저 바쁜 남자가\n제 장례식이라고 와 줄지에 대해조차 확신할 수 없다.\n그렇게 그녀가 이혼을 결심했을 때,\n\n"뭐가 어떻게 된 거야……."\n\n바이올렛이 멍한 얼굴로 침실에 있는 전신 거울에 제 모습\n을 비춰 보았다.\n거울 속 사내는 분명 남편인 윈터 블루밍이었다.\n그런데 어째서 자신과 남편의 몸이 뒤바뀌게 된 것일까?\n\n"이제 진짜로 미쳐 버렸나 봐."</string>
+    <string name="novel_info_platforms_title">작품 보러가기</string>
+    <string name="novel_info_view_more">…더보기</string>
+    <string name="novel_info_view_less">접기</string>
+    <string name="novel_info_title">작품 소개</string>
+    <string name="novel_detail_remove_evaluate_warning_title">평가를 모두 삭제할까요?</string>
+    <string name="novel_detail_remove_evaluate_warning_body">별점, 관심, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
+    <string name="novel_detail_remove_reject">아니오</string>
+    <string name="novel_detail_remove_accept">네</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>
@@ -25,7 +47,7 @@
     <string name="feed_category_male">전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타</string>
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
 
-    <!-- 온보딩 뷰 -->
-    <string name="on_boarding_skip">건너뛰기</string>
+    <!-- 로그인 뷰 -->
+    <string name="login_browse_without_signup"><u>회원가입 없이 둘러보기</u></string>
 
 </resources>
