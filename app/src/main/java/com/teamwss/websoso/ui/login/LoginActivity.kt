@@ -32,7 +32,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         binding.dotsIndicatorLogin.attachTo(binding.vpLogin)
     }
 
-    companion object{
+    companion object {
 
         fun from(context: Context): Intent {
             return Intent(context, LoginActivity::class.java).apply {

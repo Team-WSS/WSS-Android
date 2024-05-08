@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.ui.feed.FeedItemClickListener
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
+import com.teamwss.websoso.ui.feed.adapter.FeedType.ItemType.FEED
+import com.teamwss.websoso.ui.feed.adapter.FeedType.ItemType.LOADING
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
-import com.teamwss.websoso.ui.feed.adapter.FeedType.ItemType.*
 
 class FeedAdapter(
     private val feedItemClickListener: FeedItemClickListener,

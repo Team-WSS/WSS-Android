@@ -20,7 +20,7 @@ class GetFeedsUseCase(
         return defaultFeedRepository.fetchFeeds(
             category = selectedCategory,
             lastFeedId = lastFeedId,
-            size = if (lastFeedId == DEFAULT_ID) 20 else 10,
+            size = if (lastFeedId == DEFAULT_ID) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
         ).toDomain()
             .also {
                 lastFeedId = it.feeds.last().id
@@ -45,5 +45,7 @@ class GetFeedsUseCase(
         private const val NOTHING: String = ""
         private const val DEFAULT_CATEGORY: String = "전체"
         private const val DEFAULT_ID: Long = 0
+        private const val INITIAL_REQUEST_SIZE = 20
+        private const val ADDITIONAL_REQUEST_SIZE = 10
     }
 }

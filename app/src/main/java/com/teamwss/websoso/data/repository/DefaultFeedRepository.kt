@@ -13,12 +13,12 @@ class DefaultFeedRepository(
     val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
 
     suspend fun fetchFeeds(category: String?, lastFeedId: Long, size: Int): FeedsEntity {
-        val params = FeedsRequestDto(lastFeedId = lastFeedId, size = size)
+        val requestBody = FeedsRequestDto(lastFeedId = lastFeedId, size = size)
         val result = when (category == null) {
-            true -> fakeApi.getFeeds(feedsRequestDto = params)
+            true -> fakeApi.getFeeds(feedsRequestDto = requestBody)
             false -> fakeApi.getFeedsByCategory(
                 category = category,
-                feedsRequestDto = params
+                feedsRequestDto = requestBody,
             )
         }
 

@@ -102,9 +102,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
                 setOnWebsosoChipClick { feedViewModel.updateFeedsByCategory(category) }
-            }.also { websosoChip ->
-                binding.wcgFeed.addChip(websosoChip)
-            }
+            }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
 
