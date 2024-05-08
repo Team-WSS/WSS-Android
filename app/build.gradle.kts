@@ -77,6 +77,7 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil:2.6.0")
+    implementation("jp.wasabeef.transformers:coil:1.0.6")
 
     // Pager Dots Indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
