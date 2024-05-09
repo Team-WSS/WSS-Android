@@ -3,9 +3,9 @@ package com.teamwss.websoso.data.model
 data class NormalExploreEntity(
     val resultCount: Long,
     val isLoadable: Boolean,
-    val novels: List<Novel>,
+    val novels: List<NovelEntity>,
 ) {
-    data class Novel(
+    data class NovelEntity(
         val id: Long,
         val title: String,
         val author: String,

@@ -7,7 +7,7 @@ class FakeNovelRepository {
         resultCount = 8,
         isLoadable = false,
         novels = List(9) {
-            NormalExploreEntity.Novel(
+            NormalExploreEntity.NovelEntity(
                 id = (it + 1).toLong(),
                 title = "악역의 엔딩은 죽음뿐이다 두두둥둥",
                 author = "손명지${it + 1}",

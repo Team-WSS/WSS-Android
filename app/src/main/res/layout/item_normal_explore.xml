@@ -5,6 +5,13 @@
 
     <data>
 
+        <variable
+            name="novel"
+            type="com.teamwss.websoso.data.model.NormalExploreEntity.NovelEntity" />
+
+        <variable
+            name="novelItemClickListener"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
