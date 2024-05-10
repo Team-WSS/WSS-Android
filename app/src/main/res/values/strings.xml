@@ -53,5 +53,7 @@
     <!-- 온보딩 뷰 -->
     <string name="on_boarding_skip">건너뛰기</string>
     <string name="on_boarding_first_input_nickname">닉네임을 입력하세요</string>
+    <string name="on_boarding_first_duplicate_check">중복확인</string>
+    <string name="on_boarding_first_next_button">다음으로</string>
 
 </resources>
