@@ -8,7 +8,9 @@ import com.teamwss.websoso.domain.model.Feeds
 object FeedMapper {
 
     fun FeedsEntity.toDomain(): Feeds = Feeds(
-        category = category, isLoadable = isLoadable, feeds = feeds.map { it.toDomain() }
+        category = category,
+        isLoadable = isLoadable,
+        feeds = feeds.map { it.toDomain() },
     )
 
     fun FeedEntity.toDomain(): Feed = Feed(
@@ -32,6 +34,6 @@ object FeedMapper {
             title = novel.title,
             rating = novel.rating,
             ratingCount = novel.ratingCount,
-        )
+        ),
     )
 }

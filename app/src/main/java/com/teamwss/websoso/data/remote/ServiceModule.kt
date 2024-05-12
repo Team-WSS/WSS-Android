@@ -1,6 +1,5 @@
 package com.teamwss.websoso.data.remote
 
-
 import com.teamwss.websoso.data.NetworkModule
 import com.teamwss.websoso.data.remote.api.FeedApi
 

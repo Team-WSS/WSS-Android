@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.util.SingleEventHandler
 
 class FeedScrollListener private constructor(
-    private val event: () -> Unit,
+    private val loadAdditionalFeeds: () -> Unit,
 ) : RecyclerView.OnScrollListener() {
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler() }
 
@@ -17,7 +17,7 @@ class FeedScrollListener private constructor(
             recyclerView.adapter?.itemCount ?: throw IllegalArgumentException()
 
         if (visibleLastItemPosition in totalItemCount - 2..totalItemCount)
-            singleEventHandler.handle(event = event)
+            singleEventHandler.handle(event = loadAdditionalFeeds)
     }
 
     companion object {

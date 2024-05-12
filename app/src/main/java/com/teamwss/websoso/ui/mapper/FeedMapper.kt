@@ -11,7 +11,7 @@ object FeedMapper {
         return map {
             CategoryUiState(
                 category = it,
-                isSelected = it == Category.ALL
+                isSelected = it == Category.ALL,
             )
         }
     }

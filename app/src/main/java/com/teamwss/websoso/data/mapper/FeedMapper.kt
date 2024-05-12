@@ -10,7 +10,7 @@ object FeedMapper {
     fun FeedsResponseDto.toData(cachedFeeds: List<FeedEntity>): FeedsEntity = FeedsEntity(
         category = category,
         isLoadable = isLoadable,
-        feeds = cachedFeeds + feedsResponseDto.map { it.toData() }
+        feeds = cachedFeeds + feedsResponseDto.map { it.toData() },
     )
 
     fun FeedResponseDto.toData(): FeedEntity = FeedEntity(
@@ -34,6 +34,6 @@ object FeedMapper {
             title = title,
             rating = novelRating,
             ratingCount = novelRatingCount,
-        )
+        ),
     )
 }
