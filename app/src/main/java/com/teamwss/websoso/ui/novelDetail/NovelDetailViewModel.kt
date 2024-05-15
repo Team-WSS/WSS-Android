@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 
-@HiltViewModel
 class NovelDetailViewModel : ViewModel() {
     // 테스트용 변수
     val coverImgUrl =

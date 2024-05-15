@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetail) }
-    private val exploreViewModel: ExploreViewModel by viewModels { ExploreViewModel.Factory }
+    private val exploreViewModel: ExploreViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding get() = _popupBinding ?: error("error: binding is null")
-    private val feedViewModel: FeedViewModel by viewModels { FeedViewModel.Factory }
+    private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
 
     override fun onCreateView(
