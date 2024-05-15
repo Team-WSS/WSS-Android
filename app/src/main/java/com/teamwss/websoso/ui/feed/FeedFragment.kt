@@ -17,7 +17,9 @@ import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding get() = _popupBinding ?: error("error: binding is null")

@@ -13,8 +13,10 @@ import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.mapper.FeedMapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class FeedViewModel(
     private val getFeedsUseCase: GetFeedsUseCase,
     fakeUserRepository: FakeUserRepository,

@@ -6,7 +6,9 @@ import com.teamwss.websoso.data.repository.FakeFeedRepository
 import com.teamwss.websoso.data.repository.FakeSosoPickRepository
 import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class WebsosoApp : Application() {
     override fun onCreate() {
         super.onCreate()

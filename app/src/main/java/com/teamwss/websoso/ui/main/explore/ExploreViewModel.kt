@@ -10,8 +10,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.data.repository.FakeSosoPickRepository
 import com.teamwss.websoso.ui.main.explore.model.SosoPickUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class ExploreViewModel(
     private val fakeSosoPickRepository: FakeSosoPickRepository,
 ) : ViewModel() {
