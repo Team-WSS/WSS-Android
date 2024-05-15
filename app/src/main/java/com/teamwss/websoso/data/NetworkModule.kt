@@ -17,7 +17,7 @@ object NetworkModule {
         ignoreUnknownKeys = true
     }
 
-    private fun getLogOkHttpClient(): Interceptor {
+    private fun provideLogOkHttpClient(): Interceptor {
         val loggingInterceptor = HttpLoggingInterceptor { message ->
             Log.d("Retrofit2", "CONNECTION INFO -> $message")
         }
@@ -26,7 +26,7 @@ object NetworkModule {
     }
 
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(getLogOkHttpClient())
+        .addInterceptor(provideLogOkHttpClient())
         .build()
 
     val retrofit: Retrofit = Retrofit.Builder()
@@ -35,5 +35,5 @@ object NetworkModule {
         .addConverterFactory(json.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
 
-    inline fun <reified T> create(): T = retrofit.create<T>(T::class.java)
+    inline fun <reified T> create(): T = retrofit.create(T::class.java)
 }
