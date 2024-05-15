@@ -11,6 +11,7 @@ object FakeApi {
         category = "all",
         isLoadable = true,
         feedsResponseDto = List(40) {
+            // 픽스쳐 라이브러리 적용
             FeedResponseDto(
                 avatarImage = "https://page-images.kakaoentcdn.com/download/resource?kid=LWSLy/hzN2my4ybO/6AFasaBRdiBRR4RRswKqU1&filename=o1",
                 commentCount = (it + 1),
