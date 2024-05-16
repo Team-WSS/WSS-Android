@@ -48,6 +48,9 @@ class OnBoardingFirstFragment :
                 ivOnBoardingFirstNicknameInputClear.setImageDrawable(
                     ContextCompat.getDrawable(requireContext(), res.clearIconRes)
                 )
+                tvOnBoardingFirstMessage.setTextColor(
+                    ContextCompat.getColor(requireContext(), res.messageColorRes)
+                )
             }
         }
     }

@@ -95,7 +95,7 @@
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/tv_on_boarding_first_error_message"
+            android:id="@+id/tv_on_boarding_first_message"
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
