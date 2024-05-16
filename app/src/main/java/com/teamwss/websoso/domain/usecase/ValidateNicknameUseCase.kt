@@ -1,5 +1,7 @@
 package com.teamwss.websoso.domain.usecase
 
+import com.teamwss.websoso.domain.model.ValidationResult
+
 class ValidateNicknameUseCase {
 
     fun getMaxNicknameLength(): Int {
@@ -21,8 +23,6 @@ class ValidateNicknameUseCase {
 
         return ValidationResult(true, "")
     }
-
-    data class ValidationResult(val isSuccess: Boolean, val message: String)
 
     companion object {
         private const val MAX_NICKNAME_LENGTH = 10
