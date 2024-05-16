@@ -2,6 +2,10 @@ package com.teamwss.websoso.domain.usecase
 
 class ValidateNicknameUseCase {
 
+    fun getMaxNicknameLength(): Int {
+        return MAX_NICKNAME_LENGTH
+    }
+
     operator fun invoke(nickname: String): ValidationResult {
         if (nickname.trim() != nickname) {
             return ValidationResult(false, MESSAGES.START_OR_END_WITH_SPACE)
@@ -21,7 +25,8 @@ class ValidateNicknameUseCase {
     data class ValidationResult(val isSuccess: Boolean, val message: String)
 
     companion object {
-        private val REGEX_NICKNAME = "^[\\w가-힣-]{2,10}$".toRegex()
+        private const val MAX_NICKNAME_LENGTH = 10
+        private val REGEX_NICKNAME = "^[\\w가-힣-]{2,$MAX_NICKNAME_LENGTH}$".toRegex()
         private val FORBIDDEN_WORDS = listOf("금지어1", "금지어2")
 
         private object MESSAGES {

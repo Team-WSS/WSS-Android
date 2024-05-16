@@ -40,23 +40,46 @@ class OnBoardingViewModel(
         )
     val onBoardingFirstUiState: LiveData<OnBoardingFirstUiState> = _onBoardingFirstUiState
 
-    val inputNickname: MutableLiveData<String> = MutableLiveData<String>()
+    val currentNicknameInput: MutableLiveData<String> = MutableLiveData<String>()
+
+    val maxNicknameLength: MutableLiveData<Int> = MutableLiveData<Int>()
+
+    init {
+        currentNicknameInput.value = ""
+        maxNicknameLength.value = validateNicknameUseCase.getMaxNicknameLength()
+    }
 
     private fun calculateProgressPercent(page: OnBoardingPage): Int {
         return ((page.ordinal + 1) * 100) / OnBoardingPage.values().size
     }
 
-    fun updateCurrentPage(page: OnBoardingPage) {
+    private fun updateCurrentPage(page: OnBoardingPage) {
         if (_currentPage.value != page) {
             _currentPage.value = page
-            _progressBarPercent.value = calculateProgressPercent(page)
-            _isBackButtonVisible.value = page != OnBoardingPage.FIRST
-            _isSkipTextVisible.value = page == OnBoardingPage.THIRD
+            updateUIBasedOnPage(page)
         }
     }
 
+    private fun updateUIBasedOnPage(page: OnBoardingPage) {
+        updateProgressBarPercent(page)
+        updateBackButtonVisibility(page)
+        updateSkipTextVisibility(page)
+    }
+
+    private fun updateProgressBarPercent(page: OnBoardingPage) {
+        _progressBarPercent.value = ((page.ordinal + 1) * 100) / OnBoardingPage.values().size
+    }
+
+    private fun updateBackButtonVisibility(page: OnBoardingPage) {
+        _isBackButtonVisible.value = page != OnBoardingPage.FIRST
+    }
+
+    private fun updateSkipTextVisibility(page: OnBoardingPage) {
+        _isSkipTextVisible.value = page == OnBoardingPage.THIRD
+    }
+
     fun validateNickname() {
-        val currentInput: String = inputNickname.value.orEmpty()
+        val currentInput: String = currentNicknameInput.value.orEmpty()
         if (currentInput.isEmpty()) {
             updateOnBoardingFirstUiState(NicknameInputType.INITIAL, "")
         } else {
@@ -71,7 +94,7 @@ class OnBoardingViewModel(
     }
 
     fun checkDuplicationNickname() {
-        // TODO: 중복 확인 로직 구현
+        // TODO: 중복 확인 서버통신 구현 필요, 현재는 바로 중복확인 완료로 처리
         updateOnBoardingFirstUiState(NicknameInputType.COMPLETE, "")
     }
 
@@ -85,7 +108,7 @@ class OnBoardingViewModel(
     }
 
     fun clearInputNickname() {
-        inputNickname.value = ""
+        currentNicknameInput.value = ""
     }
 
     fun goToNextPage() {

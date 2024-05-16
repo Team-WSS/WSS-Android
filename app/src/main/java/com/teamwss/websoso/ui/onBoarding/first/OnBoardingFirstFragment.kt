@@ -29,7 +29,7 @@ class OnBoardingFirstFragment :
     }
 
     private fun observeInputNicknameChanges() {
-        viewModel.inputNickname.observe(viewLifecycleOwner) {
+        viewModel.currentNicknameInput.observe(viewLifecycleOwner) {
             viewModel.validateNickname()
         }
     }
