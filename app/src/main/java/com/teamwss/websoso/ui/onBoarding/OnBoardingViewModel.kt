@@ -94,8 +94,8 @@ class OnBoardingViewModel(
     }
 
     fun checkDuplicationNickname() {
-        // TODO: 중복 확인 서버통신 구현 필요, 현재는 바로 중복확인 완료로 처리
-        updateOnBoardingFirstUiState(NicknameInputType.COMPLETE, "")
+        // TODO: 중복 확인 서버통신 구현 필요, 현재는 바로 중복확인 완료로 처리, message는 임시로 사용
+        updateOnBoardingFirstUiState(NicknameInputType.COMPLETE, "사용 가능한 닉네임 입니다")
     }
 
     private fun updateOnBoardingFirstUiState(type: NicknameInputType, message: String) {
