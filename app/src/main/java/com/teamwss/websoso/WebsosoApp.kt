@@ -6,6 +6,7 @@ import com.teamwss.websoso.data.repository.FakeFeedRepository
 import com.teamwss.websoso.data.repository.FakeSosoPickRepository
 import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
+import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 
 class WebsosoApp : Application() {
     override fun onCreate() {
@@ -20,5 +21,7 @@ class WebsosoApp : Application() {
         fun getFeedsUseCase(): GetFeedsUseCase = GetFeedsUseCase(FakeFeedRepository())
 
         fun getSosoPickRepository(): FakeSosoPickRepository = FakeSosoPickRepository()
+
+        fun getValidateNicknameUseCase(): ValidateNicknameUseCase = ValidateNicknameUseCase()
     }
 }
