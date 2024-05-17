@@ -58,7 +58,7 @@ class OnBoardingActivity :
     }
 
     companion object {
-        const val ANIMATION_PROPERTY_NAME = "progress"
-        const val ANIMATION_DURATION_TIME = 200L
+        private const val ANIMATION_PROPERTY_NAME = "progress"
+        private const val ANIMATION_DURATION_TIME = 200L
     }
 }
