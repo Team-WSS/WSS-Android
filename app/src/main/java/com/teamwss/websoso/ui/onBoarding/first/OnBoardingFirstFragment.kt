@@ -2,14 +2,13 @@ package com.teamwss.websoso.ui.onBoarding.first
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentOnBoardingFirstBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.onBoarding.OnBoardingViewModel
 import com.teamwss.websoso.ui.onBoarding.first.model.NicknameInputType
-import com.teamwss.websoso.ui.onBoarding.first.model.onBoardingFirstUiResourcesMap
+import com.teamwss.websoso.ui.onBoarding.first.model.onBoardingFirstUiModelMap
 
 class OnBoardingFirstFragment :
     BindingFragment<FragmentOnBoardingFirstBinding>(R.layout.fragment_on_boarding_first) {
@@ -41,15 +40,15 @@ class OnBoardingFirstFragment :
     }
 
     private fun updateUI(type: NicknameInputType) {
-        onBoardingFirstUiResourcesMap[type]?.let { res ->
+        onBoardingFirstUiModelMap[type]?.let { res ->
             with(binding) {
                 clOnBoardingFirstNicknameInput.background =
-                    ContextCompat.getDrawable(requireContext(), res.editTextBackgroundRes)
+                    requireContext().getDrawable(res.editTextBackgroundRes)
                 ivOnBoardingFirstNicknameInputClear.setImageDrawable(
-                    ContextCompat.getDrawable(requireContext(), res.clearIconRes)
+                    requireContext().getDrawable(res.clearIconRes)
                 )
                 tvOnBoardingFirstMessage.setTextColor(
-                    ContextCompat.getColor(requireContext(), res.messageColorRes)
+                    requireContext().getColor(res.messageColorRes)
                 )
             }
         }
