@@ -13,7 +13,7 @@ import com.teamwss.websoso.ui.onBoarding.first.model.OnBoardingFirstUiState
 import com.teamwss.websoso.ui.onBoarding.model.OnBoardingPage
 
 class OnBoardingViewModel(
-    private val validateNicknameUseCase: ValidateNicknameUseCase
+    private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
     private val _currentPage: MutableLiveData<OnBoardingPage> =
         MutableLiveData<OnBoardingPage>(OnBoardingPage.FIRST)
@@ -42,11 +42,9 @@ class OnBoardingViewModel(
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData<String>()
 
-    val maxNicknameLength: MutableLiveData<Int> = MutableLiveData<Int>()
 
     init {
         currentNicknameInput.value = ""
-        maxNicknameLength.value = validateNicknameUseCase.getMaxNicknameLength()
     }
 
     private fun calculateProgressPercent(page: OnBoardingPage): Int {
@@ -83,12 +81,11 @@ class OnBoardingViewModel(
         if (currentInput.isEmpty()) {
             updateOnBoardingFirstUiState(NicknameInputType.INITIAL, "")
         } else {
-            val result: ValidateNicknameUseCase.ValidationResult =
-                validateNicknameUseCase(currentInput)
-            if (result.isSuccess) {
-                updateOnBoardingFirstUiState(NicknameInputType.TYPING, result.message)
+            val (isSuccess, message) = validateNicknameUseCase(currentInput)
+            if (isSuccess) {
+                updateOnBoardingFirstUiState(NicknameInputType.TYPING, message)
             } else {
-                updateOnBoardingFirstUiState(NicknameInputType.ERROR, result.message)
+                updateOnBoardingFirstUiState(NicknameInputType.ERROR, message)
             }
         }
     }
@@ -133,7 +130,7 @@ class OnBoardingViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 OnBoardingViewModel(
-                    validateNicknameUseCase = WebsosoApp.getValidateNicknameUseCase()
+                    validateNicknameUseCase = WebsosoApp.getValidateNicknameUseCase(),
                 )
             }
         }
