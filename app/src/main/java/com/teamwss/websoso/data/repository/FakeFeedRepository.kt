@@ -2,8 +2,9 @@ package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
+import javax.inject.Inject
 
-class FakeFeedRepository {
+class FakeFeedRepository @Inject constructor() {
 
     val dummyData: FeedsEntity = FeedsEntity(
         "Default", listOf(
