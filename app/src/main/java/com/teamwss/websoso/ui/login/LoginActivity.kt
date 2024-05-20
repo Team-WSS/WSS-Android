@@ -8,7 +8,9 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.login.adapter.ImageViewPagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
 
     private val viewModel: LoginViewModel by viewModels()
