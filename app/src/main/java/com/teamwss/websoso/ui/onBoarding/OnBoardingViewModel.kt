@@ -15,64 +15,34 @@ import com.teamwss.websoso.ui.onBoarding.model.OnBoardingPage
 class OnBoardingViewModel(
     private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
-    private val _currentPage: MutableLiveData<OnBoardingPage> =
-        MutableLiveData<OnBoardingPage>(OnBoardingPage.FIRST)
+    private val _currentPage: MutableLiveData<OnBoardingPage> = MutableLiveData(OnBoardingPage.FIRST)
     val currentPage: LiveData<OnBoardingPage> = _currentPage
 
-    private val _progressBarPercent: MutableLiveData<Int> =
-        MutableLiveData<Int>(calculateProgressPercent(OnBoardingPage.FIRST))
+    private val _progressBarPercent: MutableLiveData<Int> = MutableLiveData(OnBoardingPage.FIRST.progressPercent)
     val progressBarPercent: LiveData<Int> = _progressBarPercent
 
-    private val _isBackButtonVisible: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    private val _isBackButtonVisible: MutableLiveData<Boolean> = MutableLiveData(OnBoardingPage.FIRST.isBackButtonVisible)
     val isBackButtonVisible: LiveData<Boolean> = _isBackButtonVisible
 
-    private val _isSkipTextVisible: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    private val _isSkipTextVisible: MutableLiveData<Boolean> = MutableLiveData(OnBoardingPage.FIRST.isSkipTextVisible)
     val isSkipTextVisible: LiveData<Boolean> = _isSkipTextVisible
 
-    private val _onBoardingFirstUiState: MutableLiveData<OnBoardingFirstUiState> =
-        MutableLiveData<OnBoardingFirstUiState>(
-            OnBoardingFirstUiState(
-                nicknameInputType = NicknameInputType.INITIAL,
-                nicknameValidationMessage = "",
-                isDuplicationCheckButtonEnable = false,
-                isNextButtonEnable = false
-            )
+    private val _onBoardingFirstUiState: MutableLiveData<OnBoardingFirstUiState> = MutableLiveData(
+        OnBoardingFirstUiState(
+            nicknameInputType = NicknameInputType.INITIAL,
+            nicknameValidationMessage = "",
+            isDuplicationCheckButtonEnable = false,
+            isNextButtonEnable = false
         )
+    )
     val onBoardingFirstUiState: LiveData<OnBoardingFirstUiState> = _onBoardingFirstUiState
 
-    val currentNicknameInput: MutableLiveData<String> = MutableLiveData<String>()
-
-    init {
-        currentNicknameInput.value = ""
-    }
-
-    private fun calculateProgressPercent(page: OnBoardingPage): Int {
-        return ((page.ordinal + 1) * 100) / OnBoardingPage.values().size
-    }
-
-    private fun updateCurrentPage(page: OnBoardingPage) {
-        if (_currentPage.value != page) {
-            _currentPage.value = page
-            updateUIBasedOnPage(page)
-        }
-    }
+    val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
 
     private fun updateUIBasedOnPage(page: OnBoardingPage) {
-        updateProgressBarPercent(page)
-        updateBackButtonVisibility(page)
-        updateSkipTextVisibility(page)
-    }
-
-    private fun updateProgressBarPercent(page: OnBoardingPage) {
-        _progressBarPercent.value = ((page.ordinal + 1) * 100) / OnBoardingPage.values().size
-    }
-
-    private fun updateBackButtonVisibility(page: OnBoardingPage) {
-        _isBackButtonVisible.value = page != OnBoardingPage.FIRST
-    }
-
-    private fun updateSkipTextVisibility(page: OnBoardingPage) {
-        _isSkipTextVisible.value = page == OnBoardingPage.THIRD
+        _progressBarPercent.value = page.progressPercent
+        _isBackButtonVisible.value = page.isBackButtonVisible
+        _isSkipTextVisible.value = page.isSkipTextVisible
     }
 
     fun validateNickname() {
@@ -90,7 +60,6 @@ class OnBoardingViewModel(
     }
 
     fun checkDuplicationNickname() {
-        // TODO: 중복 확인 서버통신 구현 필요, 현재는 바로 중복확인 완료로 처리, message는 임시로 사용
         updateOnBoardingFirstUiState(NicknameInputType.COMPLETE, "사용 가능한 닉네임 입니다")
     }
 
@@ -108,20 +77,16 @@ class OnBoardingViewModel(
     }
 
     fun goToNextPage() {
-        _currentPage.value?.let {
-            val nextPage = it.ordinal + 1
-            if (nextPage < OnBoardingPage.values().size) {
-                updateCurrentPage(OnBoardingPage.values()[nextPage])
-            }
+        _currentPage.value?.nextPage()?.let { nextPage ->
+            _currentPage.value = nextPage
+            updateUIBasedOnPage(nextPage)
         }
     }
 
     fun goToPreviousPage() {
-        _currentPage.value?.let {
-            val previousPage = it.ordinal - 1
-            if (previousPage >= 0) {
-                updateCurrentPage(OnBoardingPage.values()[previousPage])
-            }
+        _currentPage.value?.previousPage()?.let { previousPage ->
+            _currentPage.value = previousPage
+            updateUIBasedOnPage(previousPage)
         }
     }
 
