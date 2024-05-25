@@ -4,5 +4,5 @@ enum class NicknameInputType {
     INITIAL,
     TYPING,
     ERROR,
-    COMPLETE
+    COMPLETE,
 }
