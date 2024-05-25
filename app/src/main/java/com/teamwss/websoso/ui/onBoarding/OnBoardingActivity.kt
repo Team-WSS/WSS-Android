@@ -29,7 +29,6 @@ class OnBoardingActivity :
         binding.vpOnBoarding.adapter = OnBoardingPagerAdapter(this)
     }
 
-
     private fun observeCurrentPageChanges() {
         viewModel.currentPage.observe(this) { page ->
             if (binding.vpOnBoarding.currentItem != page.ordinal) {
@@ -43,7 +42,6 @@ class OnBoardingActivity :
             animateProgressBar(percent)
         }
     }
-
 
     private fun animateProgressBar(targetProgress: Int) {
         ObjectAnimator.ofInt(

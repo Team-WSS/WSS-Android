@@ -42,7 +42,6 @@ class OnBoardingViewModel(
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData<String>()
 
-
     init {
         currentNicknameInput.value = ""
     }
