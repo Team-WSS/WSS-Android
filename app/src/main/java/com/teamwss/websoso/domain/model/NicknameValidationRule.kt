@@ -10,6 +10,7 @@ enum class NicknameValidationRule(val errorMessage: String, val validator: (Stri
     });
 
     companion object {
+
         fun validate(nickname: String): ValidationResult {
             return values().firstOrNull { !it.validator(nickname) }?.let {
                 ValidationResult(false, it.errorMessage)
