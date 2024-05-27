@@ -37,7 +37,7 @@ class OnboardingViewModel(
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
 
-    private fun updateUIBasedOnPage(page: OnboardingPage) {
+    private fun updateUIByPage(page: OnboardingPage) {
         _progressBarPercent.value = page.progressPercent
         _isBackButtonVisible.value = page.isBackButtonVisible
         _isSkipTextVisible.value = page.isSkipTextVisible
@@ -76,14 +76,14 @@ class OnboardingViewModel(
     fun goToNextPage() {
         _currentPage.value?.nextPage()?.let { nextPage ->
             _currentPage.value = nextPage
-            updateUIBasedOnPage(nextPage)
+            updateUIByPage(nextPage)
         }
     }
 
     fun goToPreviousPage() {
         _currentPage.value?.previousPage()?.let { previousPage ->
             _currentPage.value = previousPage
-            updateUIBasedOnPage(previousPage)
+            updateUIByPage(previousPage)
         }
     }
 
