@@ -15,26 +15,24 @@ import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 class OnboardingViewModel(
     private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
-    private val _currentPage: MutableLiveData<OnboardingPage> = MutableLiveData(OnboardingPage.FIRST)
+    private val _currentPage: MutableLiveData<OnboardingPage> =
+        MutableLiveData(OnboardingPage.FIRST)
     val currentPage: LiveData<OnboardingPage> = _currentPage
 
-    private val _progressBarPercent: MutableLiveData<Int> = MutableLiveData(OnboardingPage.FIRST.progressPercent)
+    private val _progressBarPercent: MutableLiveData<Int> =
+        MutableLiveData(OnboardingPage.FIRST.progressPercent)
     val progressBarPercent: LiveData<Int> = _progressBarPercent
 
-    private val _isBackButtonVisible: MutableLiveData<Boolean> = MutableLiveData(OnboardingPage.FIRST.isBackButtonVisible)
+    private val _isBackButtonVisible: MutableLiveData<Boolean> =
+        MutableLiveData(OnboardingPage.FIRST.isBackButtonVisible)
     val isBackButtonVisible: LiveData<Boolean> = _isBackButtonVisible
 
-    private val _isSkipTextVisible: MutableLiveData<Boolean> = MutableLiveData(OnboardingPage.FIRST.isSkipTextVisible)
+    private val _isSkipTextVisible: MutableLiveData<Boolean> =
+        MutableLiveData(OnboardingPage.FIRST.isSkipTextVisible)
     val isSkipTextVisible: LiveData<Boolean> = _isSkipTextVisible
 
-    private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> = MutableLiveData(
-        OnboardingFirstUiState(
-            nicknameInputType = NicknameInputType.INITIAL,
-            nicknameValidationMessage = "",
-            isDuplicationCheckButtonEnable = false,
-            isNextButtonEnable = false
-        )
-    )
+    private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> =
+        MutableLiveData(OnboardingFirstUiState())
     val onBoardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
