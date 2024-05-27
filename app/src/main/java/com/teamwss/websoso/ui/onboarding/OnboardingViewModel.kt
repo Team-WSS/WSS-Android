@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.onBoarding
+package com.teamwss.websoso.ui.onboarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,38 +8,38 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
-import com.teamwss.websoso.ui.onBoarding.first.model.NicknameInputType
-import com.teamwss.websoso.ui.onBoarding.first.model.OnBoardingFirstUiState
-import com.teamwss.websoso.ui.onBoarding.model.OnBoardingPage
+import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
+import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
+import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 
-class OnBoardingViewModel(
+class OnboardingViewModel(
     private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
-    private val _currentPage: MutableLiveData<OnBoardingPage> = MutableLiveData(OnBoardingPage.FIRST)
-    val currentPage: LiveData<OnBoardingPage> = _currentPage
+    private val _currentPage: MutableLiveData<OnboardingPage> = MutableLiveData(OnboardingPage.FIRST)
+    val currentPage: LiveData<OnboardingPage> = _currentPage
 
-    private val _progressBarPercent: MutableLiveData<Int> = MutableLiveData(OnBoardingPage.FIRST.progressPercent)
+    private val _progressBarPercent: MutableLiveData<Int> = MutableLiveData(OnboardingPage.FIRST.progressPercent)
     val progressBarPercent: LiveData<Int> = _progressBarPercent
 
-    private val _isBackButtonVisible: MutableLiveData<Boolean> = MutableLiveData(OnBoardingPage.FIRST.isBackButtonVisible)
+    private val _isBackButtonVisible: MutableLiveData<Boolean> = MutableLiveData(OnboardingPage.FIRST.isBackButtonVisible)
     val isBackButtonVisible: LiveData<Boolean> = _isBackButtonVisible
 
-    private val _isSkipTextVisible: MutableLiveData<Boolean> = MutableLiveData(OnBoardingPage.FIRST.isSkipTextVisible)
+    private val _isSkipTextVisible: MutableLiveData<Boolean> = MutableLiveData(OnboardingPage.FIRST.isSkipTextVisible)
     val isSkipTextVisible: LiveData<Boolean> = _isSkipTextVisible
 
-    private val _onBoardingFirstUiState: MutableLiveData<OnBoardingFirstUiState> = MutableLiveData(
-        OnBoardingFirstUiState(
+    private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> = MutableLiveData(
+        OnboardingFirstUiState(
             nicknameInputType = NicknameInputType.INITIAL,
             nicknameValidationMessage = "",
             isDuplicationCheckButtonEnable = false,
             isNextButtonEnable = false
         )
     )
-    val onBoardingFirstUiState: LiveData<OnBoardingFirstUiState> = _onBoardingFirstUiState
+    val onBoardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
 
-    private fun updateUIBasedOnPage(page: OnBoardingPage) {
+    private fun updateUIBasedOnPage(page: OnboardingPage) {
         _progressBarPercent.value = page.progressPercent
         _isBackButtonVisible.value = page.isBackButtonVisible
         _isSkipTextVisible.value = page.isSkipTextVisible
@@ -63,7 +63,7 @@ class OnBoardingViewModel(
     }
 
     private fun updateOnBoardingFirstUiState(type: NicknameInputType, message: String) {
-        _onBoardingFirstUiState.value = _onBoardingFirstUiState.value?.copy(
+        _onboardingFirstUiState.value = _onboardingFirstUiState.value?.copy(
             nicknameInputType = type,
             nicknameValidationMessage = message,
             isDuplicationCheckButtonEnable = type == NicknameInputType.TYPING,
@@ -92,7 +92,7 @@ class OnBoardingViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                OnBoardingViewModel(
+                OnboardingViewModel(
                     validateNicknameUseCase = WebsosoApp.getValidateNicknameUseCase(),
                 )
             }

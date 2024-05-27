@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.onBoarding.first.model
+package com.teamwss.websoso.ui.onboarding.first.model
 
 enum class NicknameInputType {
     INITIAL,

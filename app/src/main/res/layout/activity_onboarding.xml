@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.teamwss.websoso.ui.onBoarding.OnBoardingViewModel" />
+            type="com.teamwss.websoso.ui.onboarding.OnboardingViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.onBoarding.OnBoardingActivity">
+        tools:context=".ui.onboarding.OnboardingActivity">
 
         <ImageView
             android:id="@+id/iv_on_boarding_navigate_back_left"
@@ -26,19 +26,19 @@
             android:layout_marginBottom="3dp"
             android:onClick="@{() -> viewModel.goToPreviousPage()}"
             android:padding="10dp"
-            android:src="@drawable/ic_on_boarding_navigate_back_left"
+            android:src="@drawable/ic_onboarding_navigate_back_left"
             app:layout_constraintBottom_toTopOf="@id/pb_on_boarding"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:textAppearance="@style/body2"
             isVisible="@{viewModel.isSkipTextVisible}"
             android:layout_width="70dp"
             android:layout_height="44dp"
             android:layout_marginEnd="12dp"
             android:gravity="center"
-            android:text="@string/on_boarding_skip"
+            android:text="@string/onboarding_skip"
+            android:textAppearance="@style/body2"
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintBottom_toBottomOf="@id/iv_on_boarding_navigate_back_left"
             app:layout_constraintEnd_toEndOf="parent"

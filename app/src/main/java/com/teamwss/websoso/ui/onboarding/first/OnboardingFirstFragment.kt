@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.onBoarding.first
+package com.teamwss.websoso.ui.onboarding.first
 
 import android.os.Bundle
 import android.view.View
@@ -6,13 +6,13 @@ import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentOnBoardingFirstBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.onBoarding.OnBoardingViewModel
-import com.teamwss.websoso.ui.onBoarding.first.model.NicknameInputType
-import com.teamwss.websoso.ui.onBoarding.first.model.onBoardingFirstUiModelMap
+import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
+import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
+import com.teamwss.websoso.ui.onboarding.first.model.onboardingFirstUiModelMap
 
-class OnBoardingFirstFragment :
-    BindingFragment<FragmentOnBoardingFirstBinding>(R.layout.fragment_on_boarding_first) {
-    private val viewModel by activityViewModels<OnBoardingViewModel>()
+class OnboardingFirstFragment :
+    BindingFragment<FragmentOnBoardingFirstBinding>(R.layout.fragment_onboarding_first) {
+    private val viewModel by activityViewModels<OnboardingViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,7 +40,7 @@ class OnBoardingFirstFragment :
     }
 
     private fun updateUI(type: NicknameInputType) {
-        onBoardingFirstUiModelMap[type]?.let { res ->
+        onboardingFirstUiModelMap[type]?.let { res ->
             with(binding) {
                 clOnBoardingFirstNicknameInput.background =
                     requireContext().getDrawable(res.editTextBackgroundRes)

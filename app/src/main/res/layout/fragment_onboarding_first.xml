@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.teamwss.websoso.ui.onBoarding.OnBoardingViewModel" />
+            type="com.teamwss.websoso.ui.onboarding.OnboardingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="42dp"
-            android:text="@string/on_boarding_first_input_nickname"
+            android:text="@string/onboarding_first_input_nickname"
             android:textColor="@color/black"
             android:textFontWeight="700"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_on_boarding_gray50_radius_12dp"
+            android:background="@drawable/bg_onboarding_gray50_radius_12dp"
             app:layout_constraintEnd_toStartOf="@id/btn_on_boarding_first_nickname_duplicate_check"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_first_input_nickname_hint">
@@ -70,7 +70,7 @@
                 android:layout_height="0dp"
                 android:onClick="@{() -> viewModel.clearInputNickname()}"
                 android:padding="10dp"
-                android:src="@drawable/ic_on_boarding_first_input_clear_default"
+                android:src="@drawable/ic_onboarding_first_input_clear_default"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -83,12 +83,12 @@
             style="@style/body2"
             android:layout_width="88dp"
             android:layout_height="0dp"
-            android:background="@drawable/selc_on_boarding_first_duplication_check_button_background"
+            android:background="@drawable/selc_onboarding_first_duplication_check_button_background"
             android:elevation="0dp"
             android:enabled="@{viewModel.onBoardingFirstUiState.isDuplicationCheckButtonEnable}"
             android:onClick="@{() -> viewModel.checkDuplicationNickname()}"
-            android:text="@string/on_boarding_first_duplicate_check"
-            android:textColor="@drawable/selc_on_boarding_first_duplication_check_button_text_color"
+            android:text="@string/onboarding_first_duplicate_check"
+            android:textColor="@drawable/selc_onboarding_first_duplication_check_button_text_color"
             app:layout_constraintBottom_toBottomOf="@id/cl_on_boarding_first_nickname_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/cl_on_boarding_first_nickname_input"
@@ -112,10 +112,10 @@
             android:layout_width="0dp"
             android:layout_height="53dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/selc_on_boarding_first_next_button_background"
+            android:background="@drawable/selc_onboarding_first_next_button_background"
             android:enabled="@{viewModel.onBoardingFirstUiState.isNextButtonEnable}"
             android:onClick="@{() -> viewModel.goToNextPage()}"
-            android:text="@string/on_boarding_first_next_button"
+            android:text="@string/onboarding_first_next_button"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

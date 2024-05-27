@@ -1,15 +1,15 @@
-package com.teamwss.websoso.ui.onBoarding
+package com.teamwss.websoso.ui.onboarding
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityOnBoardingBinding
+import com.teamwss.websoso.databinding.ActivityOnboardingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 
-class OnBoardingActivity :
-    BindingActivity<ActivityOnBoardingBinding>(R.layout.activity_on_boarding) {
-    private val viewModel: OnBoardingViewModel by viewModels { OnBoardingViewModel.Factory }
+class OnboardingActivity :
+    BindingActivity<ActivityOnboardingBinding>(R.layout.activity_onboarding) {
+    private val viewModel: OnboardingViewModel by viewModels { OnboardingViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,7 @@ class OnBoardingActivity :
     }
 
     private fun setupViewPager() {
-        binding.vpOnBoarding.adapter = OnBoardingPagerAdapter(this)
+        binding.vpOnBoarding.adapter = OnboardingPagerAdapter(this)
     }
 
     private fun observeCurrentPageChanges() {

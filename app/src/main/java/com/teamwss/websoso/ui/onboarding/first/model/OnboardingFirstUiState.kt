@@ -1,6 +1,6 @@
-package com.teamwss.websoso.ui.onBoarding.first.model
+package com.teamwss.websoso.ui.onboarding.first.model
 
-data class OnBoardingFirstUiState(
+data class OnboardingFirstUiState(
     val nicknameInputType: NicknameInputType = NicknameInputType.INITIAL,
     val nicknameValidationMessage: String = "",
     val isNextButtonEnable: Boolean = false,

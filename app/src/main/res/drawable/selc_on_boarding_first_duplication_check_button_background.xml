@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/bg_on_boarding_white_radius_12dp_border_primary100_1dp" android:state_enabled="true" />
-    <item android:drawable="@drawable/bg_on_boarding_gray50_radius_12dp" android:state_enabled="false" />
-</selector>
