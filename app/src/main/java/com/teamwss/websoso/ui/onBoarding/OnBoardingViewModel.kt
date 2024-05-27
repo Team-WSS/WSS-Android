@@ -49,13 +49,12 @@ class OnBoardingViewModel(
         val currentInput: String = currentNicknameInput.value.orEmpty()
         if (currentInput.isEmpty()) {
             updateOnBoardingFirstUiState(NicknameInputType.INITIAL, "")
-        } else {
-            val (isSuccess, message) = validateNicknameUseCase(currentInput)
-            if (isSuccess) {
-                updateOnBoardingFirstUiState(NicknameInputType.TYPING, message)
-            } else {
-                updateOnBoardingFirstUiState(NicknameInputType.ERROR, message)
-            }
+            return
+        }
+        val (isSuccess, message) = validateNicknameUseCase(currentInput)
+        when (isSuccess) {
+            true -> updateOnBoardingFirstUiState(NicknameInputType.TYPING, message)
+            false -> updateOnBoardingFirstUiState(NicknameInputType.ERROR, message)
         }
     }
 
