@@ -52,5 +52,6 @@
 
     <!-- 작품 평가 -->
     <string name="novel_rating_enroll">등록</string>
+    <string name="novel_rating_add_date"><u>본 날짜 추가</u></string>
 
 </resources>
