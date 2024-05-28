@@ -3,16 +3,15 @@ package com.teamwss.websoso.ui.onboarding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class OnboardingViewModel(
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
     private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
     private val _currentPage: MutableLiveData<OnboardingPage> =
@@ -84,16 +83,6 @@ class OnboardingViewModel(
         _currentPage.value?.previousPage()?.let { previousPage ->
             _currentPage.value = previousPage
             updateUIByPage(previousPage)
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                OnboardingViewModel(
-                    validateNicknameUseCase = WebsosoApp.getValidateNicknameUseCase(),
-                )
-            }
         }
     }
 }

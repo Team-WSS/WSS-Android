@@ -9,7 +9,9 @@ import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.onboardingFirstUiModelMap
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingFirstFragment :
     BindingFragment<FragmentOnboardingFirstBinding>(R.layout.fragment_onboarding_first) {
     private val viewModel by activityViewModels<OnboardingViewModel>()

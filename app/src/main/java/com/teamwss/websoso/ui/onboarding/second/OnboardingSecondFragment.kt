@@ -5,7 +5,9 @@ import android.view.View
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentOnboardingSecondBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingSecondFragment :
     BindingFragment<FragmentOnboardingSecondBinding>(R.layout.fragment_onboarding_second) {
 
