@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="showPopupWindow"
             type="kotlin.jvm.functions.Function1" />
@@ -194,13 +195,13 @@
                             android:numStars="5"
                             android:progressBackgroundTint="@color/gray_70_DFDFE3"
                             android:progressTint="@color/secondary_100_FF675D"
+                            android:rating="5"
                             android:secondaryProgressTint="@color/secondary_100_FF675D"
                             android:stepSize="0.5"
                             app:layout_constraintBottom_toBottomOf="@id/view_novel_detail_rating"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/view_novel_detail_rating"
-                            tools:rating="2.5" />
+                            app:layout_constraintTop_toTopOf="@id/view_novel_detail_rating" />
 
                         <LinearLayout
                             android:id="@+id/ll_novel_detail_interest_and_review"
