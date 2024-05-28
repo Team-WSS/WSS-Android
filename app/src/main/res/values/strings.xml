@@ -53,5 +53,11 @@
     <!-- 작품 평가 -->
     <string name="novel_rating_enroll">등록</string>
     <string name="novel_rating_add_date"><u>본 날짜 추가</u></string>
+    
+    <!-- 작품 평가 날짜 선택 -->
+    <string name="rating_date_start_date">시작 날짜</string>
+    <string name="rating_date_end_date">종료 날짜</string>
+    <string name="rating_date_complete">완료</string>
+    <string name="rating_date_remove">본 날짜 없애기</string>
 
 </resources>
