@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityOnboardingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,8 +34,9 @@ class OnboardingActivity :
 
     private fun observeCurrentPageChanges() {
         viewModel.currentPage.observe(this) { page ->
-            if (binding.vpOnBoarding.currentItem != page.ordinal) {
-                binding.vpOnBoarding.setCurrentItem(page.ordinal, true)
+            val pageIndex = OnboardingPage.pages.indexOf(page)
+            if (binding.vpOnBoarding.currentItem != pageIndex) {
+                binding.vpOnBoarding.setCurrentItem(pageIndex, true)
             }
         }
     }

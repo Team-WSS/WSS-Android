@@ -7,6 +7,7 @@ import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
+import com.teamwss.websoso.ui.onboarding.model.OnboardingPageManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,33 +15,18 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
-    private val _currentPage: MutableLiveData<OnboardingPage> =
-        MutableLiveData(OnboardingPage.FIRST)
-    val currentPage: LiveData<OnboardingPage> = _currentPage
+    private val pageManager = OnboardingPageManager()
 
-    private val _progressBarPercent: MutableLiveData<Int> =
-        MutableLiveData(OnboardingPage.FIRST.progressPercent)
-    val progressBarPercent: LiveData<Int> = _progressBarPercent
-
-    private val _isBackButtonVisible: MutableLiveData<Boolean> =
-        MutableLiveData(OnboardingPage.FIRST.isBackButtonVisible)
-    val isBackButtonVisible: LiveData<Boolean> = _isBackButtonVisible
-
-    private val _isSkipTextVisible: MutableLiveData<Boolean> =
-        MutableLiveData(OnboardingPage.FIRST.isSkipTextVisible)
-    val isSkipTextVisible: LiveData<Boolean> = _isSkipTextVisible
+    val currentPage: LiveData<OnboardingPage> = pageManager.currentPage
+    val progressBarPercent: LiveData<Int> = pageManager.progressBarPercent
+    val isBackButtonVisible: LiveData<Boolean> = pageManager.isBackButtonVisible
+    val isSkipTextVisible: LiveData<Boolean> = pageManager.isSkipTextVisible
 
     private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> =
         MutableLiveData(OnboardingFirstUiState())
     val onBoardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
-
-    private fun updateUIByPage(page: OnboardingPage) {
-        _progressBarPercent.value = page.progressPercent
-        _isBackButtonVisible.value = page.isBackButtonVisible
-        _isSkipTextVisible.value = page.isSkipTextVisible
-    }
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
@@ -73,16 +59,10 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun goToNextPage() {
-        _currentPage.value?.nextPage()?.let { nextPage ->
-            _currentPage.value = nextPage
-            updateUIByPage(nextPage)
-        }
+        pageManager.updateNextPage()
     }
 
     fun goToPreviousPage() {
-        _currentPage.value?.previousPage()?.let { previousPage ->
-            _currentPage.value = previousPage
-            updateUIByPage(previousPage)
-        }
+        pageManager.updatePreviousPage()
     }
 }
