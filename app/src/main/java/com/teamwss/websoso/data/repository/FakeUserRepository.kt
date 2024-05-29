@@ -1,5 +1,7 @@
 package com.teamwss.websoso.data.repository
 
-class FakeUserRepository {
+import javax.inject.Inject
+
+class FakeUserRepository @Inject constructor() {
     val gender: String = "MALE"
 }

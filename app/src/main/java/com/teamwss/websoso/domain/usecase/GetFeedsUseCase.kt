@@ -3,8 +3,9 @@ package com.teamwss.websoso.domain.usecase
 import com.teamwss.websoso.data.repository.DefaultFeedRepository
 import com.teamwss.websoso.domain.mapper.FeedMapper.toDomain
 import com.teamwss.websoso.domain.model.Feeds
+import javax.inject.Inject
 
-class GetFeedsUseCase(
+class GetFeedsUseCase @Inject constructor(
     private val defaultFeedRepository: DefaultFeedRepository,
 ) {
     private var lastFeedId: Long = DEFAULT_ID

@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.novelDetail
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 class NovelDetailViewModel : ViewModel() {
     // 테스트용 변수

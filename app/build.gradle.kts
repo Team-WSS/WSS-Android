@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -81,4 +82,8 @@ dependencies {
 
     // Pager Dots Indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
 }

@@ -14,9 +14,12 @@ import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.mapper.FeedMapper.toPresentation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FeedViewModel(
+@HiltViewModel
+class FeedViewModel @Inject constructor(
     private val getFeedsUseCase: GetFeedsUseCase,
     getCategoryByUserGenderUseCase: GetCategoryByUserGenderUseCase,
 ) : ViewModel() {
@@ -88,16 +91,5 @@ class FeedViewModel(
 
     fun saveReportedImpertinenceFeed(feedId: Long) {
         // 부적절한 표현 신고 API - 소소피드
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                FeedViewModel(
-                    getFeedsUseCase = WebsosoApp.getFeedsUseCase(),
-                    getCategoryByUserGenderUseCase = WebsosoApp.getCategoryByUserGenderUseCase()
-                )
-            }
-        }
     }
 }
