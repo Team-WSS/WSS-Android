@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import androidx.activity.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
@@ -76,8 +77,15 @@ class NovelRatingActivity :
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick {  }
+                setOnWebsosoChipClick { handleCharmPointChipClick(this) }
             }.also { websosoChip -> binding.wcgNovelRatingCharmPoints.addChip(websosoChip) }
+        }
+    }
+
+    private fun handleCharmPointChipClick(websosoChip: WebsosoChip) {
+        if (binding.wcgNovelRatingCharmPoints.getSelectedChipCount() > 3) {
+            websosoChip.isSelected = false
+            Snackbar.make(binding.root, "최대 3개 커스텀 스낵바 추가 예정", Snackbar.LENGTH_SHORT).show()
         }
     }
 

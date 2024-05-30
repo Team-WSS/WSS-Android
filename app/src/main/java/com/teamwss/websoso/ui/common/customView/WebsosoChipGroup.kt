@@ -32,6 +32,16 @@ class WebsosoChipGroup(
         previousChip?.isSelected = false
     }
 
+    fun getSelectedChipCount(): Int {
+        var count = 0
+        for (i in 0 until childCount) {
+            if (getChildAt(i).isSelected) {
+                count++
+            }
+        }
+        return count
+    }
+
     override fun setSingleSelection(isSingleSelection: Boolean) {
         this.isSingleSelectionMode = isSingleSelection
     }
