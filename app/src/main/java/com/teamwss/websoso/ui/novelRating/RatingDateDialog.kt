@@ -50,8 +50,6 @@ class RatingDateDialog : BottomSheetDialogFragment() {
     private fun setupDialogBehavior() {
         val bottomSheet =
             dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-        val backgroundView =
-            dialog?.window?.decorView?.findViewById<View>(com.google.android.material.R.id.touch_outside)
 
         bottomSheet.let {
             val behavior = BottomSheetBehavior.from(it)
