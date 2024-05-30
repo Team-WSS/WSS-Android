@@ -27,45 +27,37 @@ class NovelRatingActivity :
 
     private fun observeDisplayDate() {
         viewModel.uiState.observe(this) {
-            val startDate: Triple<Int, Int, Int>? = it.novelRatingModel.currentStartDate
-            val endDate: Triple<Int, Int, Int>? = it.novelRatingModel.currentEndDate
+            val (startDate, endDate) = with(it.novelRatingModel) { currentStartDate to currentEndDate }
 
             val text = when {
-                startDate == null && endDate == null -> {
-                    getString(R.string.rating_add_date)
-                }
-
-                startDate != null && endDate != null -> {
-                    getString(
-                        R.string.rating_display_date_with_tilde,
-                        startDate.first, startDate.second, startDate.third,
-                        endDate.first, endDate.second, endDate.third
-                    )
-                }
-
-                startDate != null -> {
-                    getString(
-                        R.string.rating_display_date,
-                        startDate.first, startDate.second, startDate.third
-                    )
-                }
-
-                endDate != null -> {
-                    getString(
-                        R.string.rating_display_date,
-                        endDate.first, endDate.second, endDate.third
-                    )
-                }
-
+                startDate == null && endDate == null -> getString(R.string.rating_add_date)
+                startDate != null && endDate != null -> formatRangeDate(startDate, endDate)
+                startDate != null -> formatSingleDate(startDate)
+                endDate != null -> formatSingleDate(endDate)
                 else -> ""
-            }
+            }.toUnderlinedSpan()
 
-            val spannableString = SpannableString(text).apply {
-                setSpan(UnderlineSpan(), 0, text.length, 0)
-            }
-            binding.tvNovelRatingDisplayDate.text = spannableString
+            binding.tvNovelRatingDisplayDate.text = text
         }
     }
+
+    private fun formatRangeDate(startDate: Triple<Int, Int, Int>, endDate: Triple<Int, Int, Int>): String =
+        getString(
+            R.string.rating_display_date_with_tilde,
+            startDate.first, startDate.second, startDate.third,
+            endDate.first, endDate.second, endDate.third
+        )
+
+    private fun formatSingleDate(date: Triple<Int, Int, Int>): String =
+        getString(
+            R.string.rating_display_date,
+            date.first, date.second, date.third
+        )
+
+    private fun String.toUnderlinedSpan(): SpannableString =
+        SpannableString(this).apply {
+            setSpan(UnderlineSpan(), 0, this.length, 0)
+        }
 
     fun showDatePickerBottomSheet() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")

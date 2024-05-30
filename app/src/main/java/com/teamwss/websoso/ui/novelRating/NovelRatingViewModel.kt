@@ -34,14 +34,13 @@ class NovelRatingViewModel : ViewModel() {
                 endDate = "2024-05-11"
             )
         )
-        updateIsEditingStartDate()
+        updateIsEditingStartDate(ReadStatus.WATCHING)
         updatePastDate()
         updateDayMaxValue()
     }
 
-    private fun updateIsEditingStartDate() {
-        val uiState = uiState.value ?: return
-        when (uiState.novelRatingModel.uiReadStatus) {
+    private fun updateIsEditingStartDate(readStatus: ReadStatus) {
+        when (readStatus) {
             ReadStatus.WATCHING -> _isEditingStartDate.value = true
             ReadStatus.WATCHED -> _isEditingStartDate.value = true
             ReadStatus.QUIT -> _isEditingStartDate.value = false
@@ -52,13 +51,11 @@ class NovelRatingViewModel : ViewModel() {
         val uiState = uiState.value ?: return
         pastStartDate = uiState.novelRatingModel.currentStartDate
         pastEndDate = uiState.novelRatingModel.currentEndDate
-        _uiState.value = uiState
     }
 
     fun updateReadStatus(readStatus: ReadStatus) {
         val uiState = uiState.value ?: return
         if (uiState.novelRatingModel.uiReadStatus == readStatus) return
-
         when (readStatus) {
             ReadStatus.WATCHING -> handleWatchingState(uiState)
             ReadStatus.WATCHED -> handleWatchedState(uiState)
@@ -67,11 +64,12 @@ class NovelRatingViewModel : ViewModel() {
 
         uiState.novelRatingModel.uiReadStatus = readStatus
         _uiState.value = uiState
-        updateIsEditingStartDate()
+        updateIsEditingStartDate(readStatus)
     }
 
     private fun handleWatchingState(uiState: NovelRatingUiState) {
         with(uiState.novelRatingModel) {
+            if (currentStartDate == null && currentEndDate == null) return
             currentStartDate = when (pastStartDate == null) {
                 true -> LocalDate.now().toFormattedDate()
                 false -> pastStartDate
@@ -83,6 +81,7 @@ class NovelRatingViewModel : ViewModel() {
 
     private fun handleWatchedState(uiState: NovelRatingUiState) {
         with(uiState.novelRatingModel) {
+            if (currentStartDate == null && currentEndDate == null) return
             currentStartDate = when (pastStartDate == null) {
                 true -> LocalDate.now().toFormattedDate()
                 false -> pastStartDate
@@ -97,6 +96,7 @@ class NovelRatingViewModel : ViewModel() {
 
     private fun handleQuitState(uiState: NovelRatingUiState) {
         with(uiState.novelRatingModel) {
+            if (currentStartDate == null && currentEndDate == null) return
             currentEndDate = when (pastEndDate == null) {
                 true -> LocalDate.now().toFormattedDate()
                 false -> pastEndDate
@@ -126,21 +126,21 @@ class NovelRatingViewModel : ViewModel() {
         updateDateValidity()
     }
 
-    private fun updateDayMaxValue() {
-        _maxDayValue.value = when (isEditingStartDate.value) {
-            true -> Month.getDays(
-                uiState.value?.novelRatingModel?.currentStartDate?.first ?: LocalDate.now().year,
-                uiState.value?.novelRatingModel?.currentStartDate?.second
-                    ?: LocalDate.now().monthValue
-            )
+    fun updateDayMaxValue() {
+        with(uiState.value?.novelRatingModel ?: return) {
+            _maxDayValue.value = when (isEditingStartDate.value) {
+                true -> Month.getDays(
+                    currentStartDate?.first ?: LocalDate.now().year, currentStartDate?.second
+                        ?: LocalDate.now().monthValue
+                )
 
-            false -> Month.getDays(
-                uiState.value?.novelRatingModel?.currentEndDate?.first ?: LocalDate.now().year,
-                uiState.value?.novelRatingModel?.currentEndDate?.second
-                    ?: LocalDate.now().monthValue
-            )
+                false -> Month.getDays(
+                    currentEndDate?.first ?: LocalDate.now().year, currentEndDate?.second
+                        ?: LocalDate.now().monthValue
+                )
 
-            else -> 31
+                else -> 31
+            }
         }
     }
 
@@ -173,9 +173,9 @@ class NovelRatingViewModel : ViewModel() {
 
     private fun Triple<Int, Int, Int>?.toLocalDate(): LocalDate {
         if (this == null) return LocalDate.now()
-        return when (this.third > Month.getDays(this.first, this.second)) {
-            true -> LocalDate.of(this.first, this.second, Month.getDays(this.first, this.second))
-            false -> return LocalDate.of(this.first, this.second, this.third)
+        return when (this.third <= Month.getDays(this.first, this.second)) {
+            true -> return LocalDate.of(this.first, this.second, this.third)
+            false -> LocalDate.of(this.first, this.second, Month.getDays(this.first, this.second))
         }
     }
 
@@ -219,5 +219,25 @@ class NovelRatingViewModel : ViewModel() {
             uiState.novelRatingModel.currentEndDate = pastEndDate
         }
         _uiState.value = uiState
+    }
+
+    fun createNotNullDate() {
+        val novelRatingModel = uiState.value?.novelRatingModel ?: return
+        val nowDateFormatted = LocalDate.now().toFormattedDate()
+
+        with(novelRatingModel) {
+            when (uiReadStatus) {
+                ReadStatus.WATCHING -> currentStartDate = currentStartDate ?: nowDateFormatted
+
+                ReadStatus.WATCHED -> {
+                    currentStartDate = currentStartDate ?: nowDateFormatted
+                    currentEndDate = currentEndDate ?: nowDateFormatted
+                }
+
+                ReadStatus.QUIT -> currentEndDate = currentEndDate ?: nowDateFormatted
+            }
+        }
+        updatePastDate()
+        _uiState.value = uiState.value
     }
 }

@@ -35,7 +35,8 @@ class RatingDateDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupDataBinding()
         setupDialogBehavior()
-        setupDefaultNumberPickerRange()
+        initNullDate()
+        initNumberPickerRange()
         observeDayRange()
         setupValueChangeListener()
     }
@@ -63,7 +64,12 @@ class RatingDateDialog : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setupDefaultNumberPickerRange() {
+    private fun initNullDate() {
+        viewModel.createNotNullDate()
+    }
+
+    private fun initNumberPickerRange() {
+        viewModel.updateDayMaxValue()
         setupNumberPicker(binding.npRatingDateYear, 1, 9999, "%04d")
         setupNumberPicker(binding.npRatingDateMonth, 1, 12, "%02d")
         setupNumberPicker(binding.npRatingDateDay, 1, viewModel.maxDayValue.value ?: 31, "%02d")
