@@ -10,11 +10,11 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.DialogRatingDateBinding
+import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 
-class RatingDateDialog : BottomSheetDialogFragment() {
-    private var _binding: DialogRatingDateBinding? = null
-    private val binding: DialogRatingDateBinding get() = requireNotNull(_binding)
+class NovelRatingDateDialog : BottomSheetDialogFragment() {
+    private var _binding: DialogNovelRatingDateBinding? = null
+    private val binding: DialogNovelRatingDateBinding get() = requireNotNull(_binding)
     private val viewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,7 @@ class RatingDateDialog : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DialogRatingDateBinding.inflate(inflater, container, false)
+        _binding = DialogNovelRatingDateBinding.inflate(inflater, container, false)
         return binding.root
     }
 

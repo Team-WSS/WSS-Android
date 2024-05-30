@@ -92,7 +92,7 @@ class NovelRatingActivity :
     fun showDatePickerBottomSheet() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")
         if (existingDialog == null) {
-            RatingDateDialog().show(supportFragmentManager, "RatingDateDialog")
+            NovelRatingDateDialog().show(supportFragmentManager, "RatingDateDialog")
         }
     }
 

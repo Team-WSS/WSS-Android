@@ -11,7 +11,7 @@
 
         <variable
             name="dialog"
-            type="com.teamwss.websoso.ui.novelRating.RatingDateDialog" />
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingDateDialog" />
 
         <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
     </data>
