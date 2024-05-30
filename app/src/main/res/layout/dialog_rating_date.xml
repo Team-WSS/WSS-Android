@@ -5,6 +5,15 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
+
+        <variable
+            name="dialog"
+            type="com.teamwss.websoso.ui.novelRating.RatingDateDialog" />
+
+        <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,18 +30,20 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="26dp"
             android:layout_marginBottom="26dp"
+            android:text="@{viewModel.isEditingStartDate() ? @string/rating_date_start_date : @string/rating_date_end_date}"
             android:textAppearance="@style/title1"
             android:textColor="@color/gray_300_52515F"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus != ReadStatus.WATCHED}"
             app:layout_constraintBottom_toTopOf="@id/cl_rating_date_number_picker"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="시작 날짜"
-            tools:visibility="gone" />
+            tools:text="시작 날짜" />
 
         <ImageView
             android:id="@+id/iv_rating_date_cancel"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:onClick="@{() -> dialog.cancelDateEdit()}"
             android:padding="22dp"
             android:src="@drawable/ic_rating_date_cancel"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,6 +56,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="18dp"
             android:background="@drawable/shape_rating_date_btn_deselected"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
             app:layout_constraintBottom_toTopOf="@id/cl_rating_date_number_picker"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,12 +70,16 @@
             android:background="@drawable/selector_rating_date_btn"
             android:clickable="true"
             android:focusable="true"
+            android:focusedByDefault="true"
             android:gravity="center"
+            android:onClick="@{() -> viewModel.toggleEditingStartDate(true)}"
             android:orientation="vertical"
             android:paddingVertical="10dp"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
             app:layout_constraintEnd_toStartOf="@id/ll_rating_date_read_date_end"
             app:layout_constraintStart_toStartOf="@id/view_rating_date_toggle"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:selected="@{viewModel.isEditingStartDate}">
 
             <TextView
                 android:id="@+id/tv_rating_date_read_date_start_title"
@@ -74,7 +90,8 @@
                 android:text="@string/rating_date_start_date"
                 android:textAlignment="center"
                 android:textAppearance="@style/title2"
-                android:textColor="@drawable/selector_rating_date_text" />
+                android:textColor="@drawable/selector_rating_date_text"
+                app:selected="@{viewModel.isEditingStartDate}" />
 
             <TextView
                 android:id="@+id/tv_rating_date_read_date_start"
@@ -83,10 +100,12 @@
                 android:layout_marginHorizontal="56dp"
                 android:layout_marginTop="2dp"
                 android:maxLines="1"
-                android:text="2023-12-28"
+                android:text="@{@string/rating_current_date(viewModel.uiState.novelRatingModel.currentStartDate.first, viewModel.uiState.novelRatingModel.currentStartDate.second, viewModel.uiState.novelRatingModel.currentStartDate.third)}"
                 android:textAlignment="center"
                 android:textAppearance="@style/label1"
-                android:textColor="@drawable/selector_rating_date_text" />
+                android:textColor="@drawable/selector_rating_date_text"
+                app:selected="@{viewModel.isEditingStartDate}"
+                tools:text="2024-03-04" />
         </LinearLayout>
 
         <LinearLayout
@@ -94,14 +113,15 @@
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:background="@drawable/selector_rating_date_btn"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
+            android:onClick="@{() -> viewModel.toggleEditingStartDate(false)}"
             android:orientation="vertical"
             android:paddingVertical="10dp"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
             app:layout_constraintEnd_toEndOf="@id/view_rating_date_toggle"
             app:layout_constraintStart_toEndOf="@id/ll_rating_date_read_date_start"
-            app:layout_constraintTop_toTopOf="@id/ll_rating_date_read_date_start">
+            app:layout_constraintTop_toTopOf="@id/ll_rating_date_read_date_start"
+            app:selected="@{!viewModel.isEditingStartDate}">
 
             <TextView
                 android:id="@+id/tv_rating_date_read_date_end_title"
@@ -112,7 +132,8 @@
                 android:text="@string/rating_date_end_date"
                 android:textAlignment="center"
                 android:textAppearance="@style/title2"
-                android:textColor="@drawable/selector_rating_date_text" />
+                android:textColor="@drawable/selector_rating_date_text"
+                app:selected="@{!viewModel.isEditingStartDate}" />
 
             <TextView
                 android:id="@+id/tv_rating_date_read_date_end"
@@ -121,10 +142,12 @@
                 android:layout_marginHorizontal="56dp"
                 android:layout_marginTop="2dp"
                 android:maxLines="1"
-                android:text="2023-12-28"
+                android:text="@{@string/rating_current_date(viewModel.uiState.novelRatingModel.currentEndDate.first, viewModel.uiState.novelRatingModel.currentEndDate.second, viewModel.uiState.novelRatingModel.currentEndDate.third)}"
                 android:textAlignment="center"
                 android:textAppearance="@style/label1"
-                android:textColor="@drawable/selector_rating_date_text" />
+                android:textColor="@drawable/selector_rating_date_text"
+                app:selected="@{!viewModel.isEditingStartDate}"
+                tools:text="2024-05-11" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -162,6 +185,7 @@
                 android:layout_height="112dp"
                 android:layout_marginStart="14dp"
                 android:selectionDividerHeight="0dp"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.currentStartDate.first : viewModel.uiState.novelRatingModel.currentEndDate.first}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -181,6 +205,7 @@
                 android:layout_height="112dp"
                 android:layout_marginEnd="-52dp"
                 android:selectionDividerHeight="0dp"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.currentStartDate.second : viewModel.uiState.novelRatingModel.currentEndDate.second}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -202,6 +227,7 @@
                 android:layout_height="112dp"
                 android:layout_marginEnd="-8dp"
                 android:selectionDividerHeight="0dp"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.currentStartDate.third : viewModel.uiState.novelRatingModel.currentEndDate.third}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -214,6 +240,7 @@
             android:layout_marginTop="34dp"
             android:background="@drawable/bg_rating_date_primary_100_radius_12dp"
             android:gravity="center"
+            android:onClick="@{() -> dialog.saveDateEdit()}"
             android:text="@string/rating_date_complete"
             android:textAppearance="@style/title1"
             android:textColor="@color/white"
@@ -222,11 +249,13 @@
             app:layout_constraintTop_toBottomOf="@id/cl_rating_date_number_picker" />
 
         <TextView
+            android:id="@+id/tv_rating_date_clear"
             android:layout_width="134dp"
             android:layout_height="54dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:gravity="center"
+            android:onClick="@{() -> dialog.clearCurrentDate()}"
             android:text="@string/rating_date_remove"
             android:textAppearance="@style/body1"
             android:textColor="@color/primary_100_6A5DFD"

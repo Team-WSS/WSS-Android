@@ -5,6 +5,15 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
+
+        <variable
+            name="activity"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingActivity" />
+
+        <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +27,6 @@
             android:layout_marginTop="48dp"
             android:gravity="center"
             android:paddingHorizontal="10dp"
-            app:checkedButton="@id/btn_novel_rating_watching"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_novel_rating"
@@ -31,8 +39,10 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/transparent"
+                android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHING}"
+                android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHING)}"
                 android:paddingTop="10dp"
-                android:text="보는 중"
+                android:text="@string/rating_read_status_watching"
                 android:textAppearance="@style/body5"
                 android:textColor="@drawable/selector_novel_detail_rating_read_status"
                 app:icon="@drawable/ic_novel_rating_watching"
@@ -45,8 +55,10 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/transparent"
+                android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
+                android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHED)}"
                 android:paddingTop="10dp"
-                android:text="봤어요"
+                android:text="@string/rating_read_status_watched"
                 android:textAppearance="@style/body5"
                 android:textColor="@drawable/selector_novel_detail_rating_read_status"
                 app:icon="@drawable/ic_novel_rating_watched"
@@ -59,8 +71,10 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/transparent"
+                android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.QUIT}"
+                android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.QUIT)}"
                 android:paddingTop="10dp"
-                android:text="하차"
+                android:text="@string/rating_read_status_quit"
                 android:textAppearance="@style/body5"
                 android:textColor="@drawable/selector_novel_detail_rating_read_status"
                 app:icon="@drawable/ic_novel_rating_quit"
@@ -69,17 +83,18 @@
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <TextView
-            android:id="@+id/tv_novel_rating_add_date"
-            android:layout_width="64dp"
-            android:layout_height="44dp"
+            android:id="@+id/tv_novel_rating_display_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:gravity="center"
-            android:text="@string/novel_rating_add_date"
+            android:onClick="@{() -> activity.showDatePickerBottomSheet()}"
             android:textAppearance="@style/label1"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tg_novel_rating_read_status" />
+            app:layout_constraintTop_toBottomOf="@id/tg_novel_rating_read_status"
+            tools:text="@string/rating_add_date" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_novel_rating_add_date"
@@ -89,7 +104,7 @@
             app:dividerColor="@color/gray_50_F4F5F8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_add_date" />
+            app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_display_date" />
 
         <RatingBar
             android:id="@+id/rb_novel_rating"
@@ -227,6 +242,7 @@
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:layout_marginStart="6dp"
+                    android:onClick="@{() -> activity.navigateToNovelDetail()}"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="14dp"
                     android:src="@drawable/ic_novel_detail_navigate_back"
@@ -253,7 +269,7 @@
                     android:layout_marginEnd="6dp"
                     android:height="44dp"
                     android:gravity="center"
-                    android:text="@string/novel_rating_enroll"
+                    android:text="@string/rating_enroll"
                     android:textAlignment="center"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/primary_100_6A5DFD"

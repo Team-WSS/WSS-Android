@@ -33,28 +33,54 @@ class RatingDateDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupDataBinding()
         setupDialogBehavior()
-        setupDateRange()
-        setupCancelClickListener()
+        setupDefaultNumberPickerRange()
+        observeDayRange()
+        setupValueChangeListener()
+    }
+
+    private fun setupDataBinding() {
+        binding.viewModel = viewModel
+        binding.dialog = this
+        binding.lifecycleOwner = this
     }
 
     private fun setupDialogBehavior() {
         val bottomSheet =
             dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+        val backgroundView =
+            dialog?.window?.decorView?.findViewById<View>(com.google.android.material.R.id.touch_outside)
+
         bottomSheet.let {
             val behavior = BottomSheetBehavior.from(it)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
             behavior.skipCollapsed = true
+
+            backgroundView?.setOnClickListener {
+                cancelDateEdit()
+            }
         }
     }
 
-    private fun setupDateRange() {
+    private fun setupDefaultNumberPickerRange() {
         setupNumberPicker(binding.npRatingDateYear, 1, 9999, "%04d")
         setupNumberPicker(binding.npRatingDateMonth, 1, 12, "%02d")
-        setupNumberPicker(binding.npRatingDateDay, 1, 31, "%02d")
+        setupNumberPicker(binding.npRatingDateDay, 1, viewModel.maxDayValue.value ?: 31, "%02d")
     }
 
-    private fun setupNumberPicker(numberPicker: NumberPicker, minValue: Int, maxValue: Int, format: String) {
+    private fun observeDayRange() {
+        viewModel.maxDayValue.observe(viewLifecycleOwner) { maxDayValue ->
+            setupNumberPicker(binding.npRatingDateDay, 1, maxDayValue, "%02d")
+        }
+    }
+
+    private fun setupNumberPicker(
+        numberPicker: NumberPicker,
+        minValue: Int,
+        maxValue: Int,
+        format: String
+    ) {
         with(numberPicker) {
             wrapSelectorWheel = false
             this.minValue = minValue
@@ -63,11 +89,49 @@ class RatingDateDialog : BottomSheetDialogFragment() {
         }
     }
 
-
-    private fun setupCancelClickListener() {
-        binding.ivRatingDateCancel.setOnClickListener {
-            dismiss()
+    private fun setupValueChangeListener() {
+        binding.npRatingDateYear.setOnValueChangedListener { _, _, _ ->
+            viewModel.updateCurrentDate(
+                Triple(
+                    binding.npRatingDateYear.value,
+                    binding.npRatingDateMonth.value,
+                    binding.npRatingDateDay.value
+                )
+            )
         }
+        binding.npRatingDateMonth.setOnValueChangedListener { _, _, _ ->
+            viewModel.updateCurrentDate(
+                Triple(
+                    binding.npRatingDateYear.value,
+                    binding.npRatingDateMonth.value,
+                    binding.npRatingDateDay.value
+                )
+            )
+        }
+        binding.npRatingDateDay.setOnValueChangedListener { _, _, _ ->
+            viewModel.updateCurrentDate(
+                Triple(
+                    binding.npRatingDateYear.value,
+                    binding.npRatingDateMonth.value,
+                    binding.npRatingDateDay.value
+                )
+            )
+        }
+    }
+
+    fun saveDateEdit() {
+        viewModel.updatePastDate()
+        dismiss()
+    }
+
+    fun clearCurrentDate() {
+        viewModel.clearCurrentDate()
+        dismiss()
+    }
+
+    fun cancelDateEdit() {
+        viewModel.cancelDateEdit()
+        dismiss()
     }
 
     override fun onDestroyView() {

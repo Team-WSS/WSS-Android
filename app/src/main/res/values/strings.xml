@@ -48,16 +48,22 @@
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
 
     <!-- 로그인 뷰 -->
-    <string name="login_browse_without_signup"><u>회원가입 없이 둘러보기</u></string>
+    <string name="login_browse_without_signup">회원가입 없이 둘러보기</string>
 
     <!-- 작품 평가 -->
-    <string name="novel_rating_enroll">등록</string>
-    <string name="novel_rating_add_date"><u>본 날짜 추가</u></string>
-    
+    <string name="rating_enroll">등록</string>
+    <string name="rating_add_date">본 날짜 추가</string>
+    <string name="rating_display_date">%d년 %d월 %d일</string>
+    <string name="rating_display_date_with_tilde">%d년 %d월 %d일 ~ %d년 %d월 %d일</string>
+    <string name="rating_read_status_watching">보는 중</string>
+    <string name="rating_read_status_watched">봤어요</string>
+    <string name="rating_read_status_quit">하차</string>
+
     <!-- 작품 평가 날짜 선택 -->
     <string name="rating_date_start_date">시작 날짜</string>
     <string name="rating_date_end_date">종료 날짜</string>
     <string name="rating_date_complete">완료</string>
     <string name="rating_date_remove">본 날짜 없애기</string>
+    <string name="rating_current_date">%04d-%02d-%02d</string>
 
 </resources>
