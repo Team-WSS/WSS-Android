@@ -7,7 +7,6 @@ import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
-import com.teamwss.websoso.ui.onboarding.model.OnboardingPageManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,12 +14,17 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
-    private val pageManager = OnboardingPageManager()
+    private val _currentPage = MutableLiveData(OnboardingPage.FIRST)
+    val currentPage: LiveData<OnboardingPage> = _currentPage
 
-    val currentPage: LiveData<OnboardingPage> = pageManager.currentPage
-    val progressBarPercent: LiveData<Int> = pageManager.progressBarPercent
-    val isBackButtonVisible: LiveData<Boolean> = pageManager.isBackButtonVisible
-    val isSkipTextVisible: LiveData<Boolean> = pageManager.isSkipTextVisible
+    private val _progressBarPercent = MutableLiveData(OnboardingPage.FIRST.progressPercent)
+    val progressBarPercent: LiveData<Int> = _progressBarPercent
+
+    private val _isBackButtonVisible = MutableLiveData(OnboardingPage.FIRST.isBackButtonVisible)
+    val isBackButtonVisible: LiveData<Boolean> = _isBackButtonVisible
+
+    private val _isSkipTextVisible = MutableLiveData(OnboardingPage.FIRST.isSkipTextVisible)
+    val isSkipTextVisible: LiveData<Boolean> = _isSkipTextVisible
 
     private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> =
         MutableLiveData(OnboardingFirstUiState())
@@ -59,10 +63,28 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun goToNextPage() {
-        pageManager.updateNextPage()
+        _currentPage.value?.let { currentPage ->
+            val nextPage = currentPage.nextPage()
+            if (nextPage != currentPage) {
+                _currentPage.value = nextPage
+                updateUIByPage(nextPage)
+            }
+        }
     }
 
     fun goToPreviousPage() {
-        pageManager.updatePreviousPage()
+        _currentPage.value?.let { currentPage ->
+            val previousPage = currentPage.previousPage()
+            if (previousPage != currentPage) {
+                _currentPage.value = previousPage
+                updateUIByPage(previousPage)
+            }
+        }
+    }
+
+    private fun updateUIByPage(page: OnboardingPage) {
+        _progressBarPercent.value = page.progressPercent
+        _isBackButtonVisible.value = page.isBackButtonVisible
+        _isSkipTextVisible.value = page.isSkipTextVisible
     }
 }
