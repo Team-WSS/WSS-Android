@@ -57,10 +57,6 @@ class RatingDateDialog : BottomSheetDialogFragment() {
             val behavior = BottomSheetBehavior.from(it)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
             behavior.skipCollapsed = true
-
-            backgroundView?.setOnClickListener {
-                cancelDateEdit()
-            }
         }
     }
 
@@ -128,6 +124,7 @@ class RatingDateDialog : BottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
+        cancelDateEdit()
         _binding = null
         super.onDestroyView()
     }
