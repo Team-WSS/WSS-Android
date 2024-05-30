@@ -7,6 +7,8 @@ import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 
 class NovelRatingActivity :
     BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
@@ -15,8 +17,9 @@ class NovelRatingActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataBinding()
-        viewModel.getUserNovelInfo()
+        viewModel.getUserNovelInfo() // 테스트용 함수~ 지울예정
         observeDisplayDate()
+        setupCharmPointChips()
     }
 
     private fun setupDataBinding() {
@@ -41,7 +44,10 @@ class NovelRatingActivity :
         }
     }
 
-    private fun formatRangeDate(startDate: Triple<Int, Int, Int>, endDate: Triple<Int, Int, Int>): String =
+    private fun formatRangeDate(
+        startDate: Triple<Int, Int, Int>,
+        endDate: Triple<Int, Int, Int>
+    ): String =
         getString(
             R.string.rating_display_date_with_tilde,
             startDate.first, startDate.second, startDate.third,
@@ -58,6 +64,22 @@ class NovelRatingActivity :
         SpannableString(this).apply {
             setSpan(UnderlineSpan(), 0, this.length, 0)
         }
+
+    private fun setupCharmPointChips() {
+        getString(R.string.rating_charm_point).toWrappedCharmPoint().forEach { charmPoint ->
+            WebsosoChip(this@NovelRatingActivity).apply {
+                setWebsosoChipText(charmPoint.title)
+                setWebsosoChipTextAppearance(R.style.body2)
+                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                setWebsosoChipPaddingVertical(20f)
+                setWebsosoChipPaddingHorizontal(12f)
+                setWebsosoChipRadius(30f)
+                setOnWebsosoChipClick {  }
+            }.also { websosoChip -> binding.wcgNovelRatingCharmPoints.addChip(websosoChip) }
+        }
+    }
 
     fun showDatePickerBottomSheet() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")

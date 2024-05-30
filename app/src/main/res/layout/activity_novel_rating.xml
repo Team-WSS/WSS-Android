@@ -44,10 +44,10 @@
                 android:paddingTop="10dp"
                 android:text="@string/rating_read_status_watching"
                 android:textAppearance="@style/body5"
-                android:textColor="@drawable/selector_novel_detail_rating_read_status"
+                android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                 app:icon="@drawable/ic_novel_rating_watching"
                 app:iconGravity="top"
-                app:iconTint="@drawable/selector_novel_detail_rating_read_status" />
+                app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_novel_rating_watched"
@@ -60,10 +60,10 @@
                 android:paddingTop="10dp"
                 android:text="@string/rating_read_status_watched"
                 android:textAppearance="@style/body5"
-                android:textColor="@drawable/selector_novel_detail_rating_read_status"
+                android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                 app:icon="@drawable/ic_novel_rating_watched"
                 app:iconGravity="top"
-                app:iconTint="@drawable/selector_novel_detail_rating_read_status" />
+                app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_novel_rating_quit"
@@ -76,10 +76,10 @@
                 android:paddingTop="10dp"
                 android:text="@string/rating_read_status_quit"
                 android:textAppearance="@style/body5"
-                android:textColor="@drawable/selector_novel_detail_rating_read_status"
+                android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                 app:icon="@drawable/ic_novel_rating_quit"
                 app:iconGravity="top"
-                app:iconTint="@drawable/selector_novel_detail_rating_read_status" />
+                app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <TextView
@@ -145,7 +145,7 @@
 
         <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
             android:id="@+id/wcg_novel_rating_charm_points"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="14dp"
@@ -153,7 +153,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_charm_point"
-            app:singleLine="true"
             app:singleSelection="false">
 
         </com.teamwss.websoso.ui.common.customView.WebsosoChipGroup>

@@ -58,6 +58,7 @@
     <string name="rating_read_status_watching">보는 중</string>
     <string name="rating_read_status_watched">봤어요</string>
     <string name="rating_read_status_quit">하차</string>
+    <string name="rating_charm_point">세계관,소재,캐릭터,관계,분위기</string>
 
     <!-- 작품 평가 날짜 선택 -->
     <string name="rating_date_start_date">시작 날짜</string>
