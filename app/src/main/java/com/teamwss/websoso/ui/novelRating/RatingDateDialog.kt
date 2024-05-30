@@ -90,7 +90,7 @@ class RatingDateDialog : BottomSheetDialogFragment() {
     }
 
     private fun setupValueChangeListener() {
-        binding.npRatingDateYear.setOnValueChangedListener { _, _, _ ->
+        val updateCurrentDate = {
             viewModel.updateCurrentDate(
                 Triple(
                     binding.npRatingDateYear.value,
@@ -99,23 +99,10 @@ class RatingDateDialog : BottomSheetDialogFragment() {
                 )
             )
         }
-        binding.npRatingDateMonth.setOnValueChangedListener { _, _, _ ->
-            viewModel.updateCurrentDate(
-                Triple(
-                    binding.npRatingDateYear.value,
-                    binding.npRatingDateMonth.value,
-                    binding.npRatingDateDay.value
-                )
-            )
-        }
-        binding.npRatingDateDay.setOnValueChangedListener { _, _, _ ->
-            viewModel.updateCurrentDate(
-                Triple(
-                    binding.npRatingDateYear.value,
-                    binding.npRatingDateMonth.value,
-                    binding.npRatingDateDay.value
-                )
-            )
+        with(binding) {
+            npRatingDateYear.setOnValueChangedListener { _, _, _ -> updateCurrentDate() }
+            npRatingDateMonth.setOnValueChangedListener { _, _, _ -> updateCurrentDate() }
+            npRatingDateDay.setOnValueChangedListener { _, _, _ -> updateCurrentDate() }
         }
     }
 
