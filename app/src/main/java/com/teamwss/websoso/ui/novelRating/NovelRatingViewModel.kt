@@ -130,12 +130,16 @@ class NovelRatingViewModel : ViewModel() {
         _maxDayValue.value = when (isEditingStartDate.value) {
             true -> Month.getDays(
                 uiState.value?.novelRatingModel?.currentStartDate?.first ?: LocalDate.now().year,
-                uiState.value?.novelRatingModel?.currentStartDate?.second ?: LocalDate.now().monthValue
+                uiState.value?.novelRatingModel?.currentStartDate?.second
+                    ?: LocalDate.now().monthValue
             )
+
             false -> Month.getDays(
                 uiState.value?.novelRatingModel?.currentEndDate?.first ?: LocalDate.now().year,
-                uiState.value?.novelRatingModel?.currentEndDate?.second ?: LocalDate.now().monthValue
+                uiState.value?.novelRatingModel?.currentEndDate?.second
+                    ?: LocalDate.now().monthValue
             )
+
             else -> 31
         }
     }
@@ -153,11 +157,8 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun updateDateValidity() {
-        val uiState = uiState.value ?: return
         checkValidityIsAfterToday()
-
-        if (uiState.novelRatingModel.uiReadStatus != ReadStatus.WATCHED) return
-        checkValidityIsStartAfterEnd()
+        if (uiState.value?.novelRatingModel?.uiReadStatus == ReadStatus.WATCHED) checkValidityIsStartAfterEnd()
     }
 
     private fun checkValidityIsAfterToday() {
