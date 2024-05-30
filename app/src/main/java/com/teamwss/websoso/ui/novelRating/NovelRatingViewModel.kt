@@ -130,13 +130,13 @@ class NovelRatingViewModel : ViewModel() {
         with(uiState.value?.novelRatingModel ?: return) {
             _maxDayValue.value = when (isEditingStartDate.value) {
                 true -> Month.getDays(
-                    currentStartDate?.first ?: LocalDate.now().year, currentStartDate?.second
-                        ?: LocalDate.now().monthValue
+                    currentStartDate?.first ?: LocalDate.now().year,
+                    currentStartDate?.second ?: LocalDate.now().monthValue
                 )
 
                 false -> Month.getDays(
-                    currentEndDate?.first ?: LocalDate.now().year, currentEndDate?.second
-                        ?: LocalDate.now().monthValue
+                    currentEndDate?.first ?: LocalDate.now().year,
+                    currentEndDate?.second ?: LocalDate.now().monthValue
                 )
 
                 else -> 31
