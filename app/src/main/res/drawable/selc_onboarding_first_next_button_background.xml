@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_onboarding_primary100_radius_14dp" android:state_enabled="true" />
+    <item android:drawable="@drawable/bg_onboarding_gray70_radius_14dp" android:state_enabled="false" />
+</selector>
