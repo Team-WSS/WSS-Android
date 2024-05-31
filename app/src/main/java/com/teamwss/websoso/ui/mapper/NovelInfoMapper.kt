@@ -1,9 +1,9 @@
-package com.teamwss.websoso.data.mapper
+package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 
-object NovelRatingMapper {
+object NovelInfoMapper {
     fun NovelInfoResponseDto.toPresentation(): NovelRatingModel {
         return NovelRatingModel(
             userNovelId = userNovelId,
