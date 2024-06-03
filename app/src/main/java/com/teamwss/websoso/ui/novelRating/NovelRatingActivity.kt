@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import androidx.activity.viewModels
+import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.novelRating.dialog.NovelRatingKeywordDialog
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 
 class NovelRatingActivity :
@@ -18,7 +20,7 @@ class NovelRatingActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataBinding()
-        viewModel.getUserNovelInfo() // 테스트용 함수~ 지울예정
+        viewModel.getDummy()
         observeDisplayDate()
         setupCharmPointChips()
     }
@@ -31,7 +33,7 @@ class NovelRatingActivity :
 
     private fun observeDisplayDate() {
         viewModel.uiState.observe(this) {
-            val (startDate, endDate) = with(it.novelRatingModel) { currentStartDate to currentEndDate }
+            val (startDate, endDate) = with(it.novelRatingModel.ratingDateModel) { currentStartDate to currentEndDate }
 
             val text = when {
                 startDate == null && endDate == null -> getString(R.string.rating_add_date)
@@ -76,14 +78,18 @@ class NovelRatingActivity :
                 setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(30f)
+                setWebsosoChipRadius(40f)
                 setOnWebsosoChipClick { handleCharmPointChipClick(this) }
             }.also { websosoChip -> binding.wcgNovelRatingCharmPoints.addChip(websosoChip) }
         }
     }
 
     private fun handleCharmPointChipClick(websosoChip: WebsosoChip) {
-        if (binding.wcgNovelRatingCharmPoints.getSelectedChipCount() > 3) {
+        var count = 0
+        binding.wcgNovelRatingCharmPoints.forEach {
+            if (it.isSelected) count++
+        }
+        if (count > 3) {
             websosoChip.isSelected = false
             Snackbar.make(binding.root, "최대 3개 커스텀 스낵바 추가 예정", Snackbar.LENGTH_SHORT).show()
         }
@@ -93,6 +99,13 @@ class NovelRatingActivity :
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")
         if (existingDialog == null) {
             NovelRatingDateDialog().show(supportFragmentManager, "RatingDateDialog")
+        }
+    }
+
+    fun showRatingKeywordBottomSheet() {
+        val existingDialog = supportFragmentManager.findFragmentByTag("RatingKeywordDialog")
+        if (existingDialog == null) {
+            NovelRatingKeywordDialog().show(supportFragmentManager, "RatingKeywordDialog")
         }
     }
 

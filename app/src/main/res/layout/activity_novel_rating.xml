@@ -153,9 +153,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_charm_point"
-            app:singleSelection="false">
-
-        </com.teamwss.websoso.ui.common.customView.WebsosoChipGroup>
+            app:singleSelection="false" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_novel_rating_charm_point"
@@ -187,6 +185,7 @@
             android:layout_marginTop="14dp"
             android:background="@drawable/bg_novel_rating_gray_50_radius_14dp"
             android:gravity="center"
+            android:onClick="@{() -> activity.showRatingKeywordBottomSheet()}"
             android:text="이 작품에 대해 소개해주세요!"
             android:textAppearance="@style/label1"
             android:textColor="@color/gray_200_AEADB3"
@@ -214,9 +213,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_keyword_button"
-            app:singleSelection="false">
-
-        </com.teamwss.websoso.ui.common.customView.WebsosoChipGroup>
+            app:singleSelection="false" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_novel_rating"

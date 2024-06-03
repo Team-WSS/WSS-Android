@@ -3,10 +3,11 @@ package com.teamwss.websoso.ui.novelRating
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.teamwss.websoso.ui.novelRating.model.DatePickerType
+import com.teamwss.websoso.ui.novelRating.model.KeywordModel
 import com.teamwss.websoso.ui.novelRating.model.Month
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
-import com.teamwss.websoso.ui.novelRating.model.DatePickerType
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import java.time.LocalDate
 
@@ -20,11 +21,8 @@ class NovelRatingViewModel : ViewModel() {
     private val _isEditingStartDate = MutableLiveData<Boolean>()
     val isEditingStartDate: LiveData<Boolean> get() = _isEditingStartDate
 
-    private var pastStartDate: Triple<Int, Int, Int>? = null
-    private var pastEndDate: Triple<Int, Int, Int>? = null
-
-    // 테스트용 함수
-    fun getUserNovelInfo() {
+    // 네트워크 함수 (추가 예정)
+    fun getDummy() {
         _uiState.value = NovelRatingUiState(
             novelRatingModel = NovelRatingModel(
                 userNovelId = 1,
@@ -33,13 +31,60 @@ class NovelRatingViewModel : ViewModel() {
                 readStatus = "WATCHED",
                 startDate = "2023-02-28",
                 endDate = "2024-05-11"
-            )
+            ),
+            keywordModel = KeywordModel(
+                categories = listOf(
+                    KeywordModel.Category(
+                        categoryName = "세계관",
+                        keywords = listOf(
+                            KeywordModel.Category.Keyword(keywordId = 1, keywordName = "이세계"),
+                            KeywordModel.Category.Keyword(keywordId = 2, keywordName = "현대"),
+                            KeywordModel.Category.Keyword(keywordId = 3, keywordName = "서양풍/중세시대"),
+                            KeywordModel.Category.Keyword(keywordId = 4, keywordName = "SF"),
+                            KeywordModel.Category.Keyword(keywordId = 5, keywordName = "동양풍/사극"),
+                            KeywordModel.Category.Keyword(keywordId = 6, keywordName = "학원/아카데미"),
+                            KeywordModel.Category.Keyword(keywordId = 7, keywordName = "실존역사"),
+                            KeywordModel.Category.Keyword(keywordId = 16, keywordName = "전투"),
+                            KeywordModel.Category.Keyword(keywordId = 17, keywordName = "로맨스"),
+                            KeywordModel.Category.Keyword(keywordId = 18, keywordName = "판타지"),
+                            KeywordModel.Category.Keyword(keywordId = 19, keywordName = "드라마"),
+                            KeywordModel.Category.Keyword(keywordId = 20, keywordName = "스릴러"),
+                        )
+                    ),
+                    KeywordModel.Category(
+                        categoryName = "소재",
+                        keywords = listOf(
+                            KeywordModel.Category.Keyword(keywordId = 8, keywordName = "웹툰화"),
+                            KeywordModel.Category.Keyword(keywordId = 9, keywordName = "드라마화")
+                        )
+                    ),
+                    KeywordModel.Category(
+                        categoryName = "캐릭터",
+                        keywords = listOf(
+                            KeywordModel.Category.Keyword(keywordId = 10, keywordName = "영웅"),
+                            KeywordModel.Category.Keyword(keywordId = 11, keywordName = "악당/빌런")
+                        )
+                    ),
+                    KeywordModel.Category(
+                        categoryName = "관계",
+                        keywords = listOf(
+                            KeywordModel.Category.Keyword(keywordId = 12, keywordName = "친구"),
+                            KeywordModel.Category.Keyword(keywordId = 13, keywordName = "동료")
+                        )
+                    ),
+                    KeywordModel.Category(
+                        categoryName = "분위기",
+                        keywords = listOf(
+                            KeywordModel.Category.Keyword(keywordId = 14, keywordName = "뻔한"),
+                            KeywordModel.Category.Keyword(keywordId = 15, keywordName = "반전있는")
+                        )
+                    )
+                )
+            ),
         )
-        updateIsEditingStartDate(ReadStatus.WATCHING)
-        updatePastDate()
-        updateDayMaxValue()
     }
 
+    // 날짜 관련 함수
     private fun updateIsEditingStartDate(readStatus: ReadStatus) {
         when (readStatus) {
             ReadStatus.WATCHING -> _isEditingStartDate.value = true
@@ -50,8 +95,10 @@ class NovelRatingViewModel : ViewModel() {
 
     fun updatePastDate() {
         val uiState = uiState.value ?: return
-        pastStartDate = uiState.novelRatingModel.currentStartDate
-        pastEndDate = uiState.novelRatingModel.currentEndDate
+        val ratingDateModel = uiState.novelRatingModel.ratingDateModel
+        ratingDateModel.pastStartDate = ratingDateModel.currentStartDate
+        ratingDateModel.pastEndDate = ratingDateModel.currentEndDate
+        _uiState.value = uiState
     }
 
     fun updateReadStatus(readStatus: ReadStatus) {
@@ -69,39 +116,39 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun handleWatchingState(uiState: NovelRatingUiState) {
-        val novelRatingModel = uiState.novelRatingModel
-        if (novelRatingModel.currentStartDate == null && novelRatingModel.currentEndDate == null) return
-        novelRatingModel.currentStartDate = when (pastStartDate == null) {
+        val ratingDateModel = uiState.novelRatingModel.ratingDateModel
+        if (ratingDateModel.currentStartDate == null && ratingDateModel.currentEndDate == null) return
+        ratingDateModel.currentStartDate = when (ratingDateModel.pastStartDate == null) {
             true -> LocalDate.now().toFormattedDate()
-            false -> pastStartDate
+            false -> ratingDateModel.pastStartDate
         }
-        pastEndDate = novelRatingModel.currentEndDate
-        novelRatingModel.currentEndDate = null
+        ratingDateModel.pastEndDate = ratingDateModel.currentEndDate
+        ratingDateModel.currentEndDate = null
     }
 
     private fun handleWatchedState(uiState: NovelRatingUiState) {
-        val novelRatingModel = uiState.novelRatingModel
-        if (novelRatingModel.currentStartDate == null && novelRatingModel.currentEndDate == null) return
-        novelRatingModel.currentStartDate = when (pastStartDate == null) {
+        val ratingDateModel = uiState.novelRatingModel.ratingDateModel
+        if (ratingDateModel.currentStartDate == null && ratingDateModel.currentEndDate == null) return
+        ratingDateModel.currentStartDate = when (ratingDateModel.pastStartDate == null) {
             true -> LocalDate.now().toFormattedDate()
-            false -> pastStartDate
+            false -> ratingDateModel.pastStartDate
         }
-        novelRatingModel.currentEndDate = when (pastEndDate == null) {
+        ratingDateModel.currentEndDate = when (ratingDateModel.pastEndDate == null) {
             true -> LocalDate.now().toFormattedDate()
-            false -> pastEndDate
+            false -> ratingDateModel.pastEndDate
         }
         checkValidityIsStartAfterEnd()
     }
 
     private fun handleQuitState(uiState: NovelRatingUiState) {
-        val novelRatingModel = uiState.novelRatingModel
-        if (novelRatingModel.currentStartDate == null && novelRatingModel.currentEndDate == null) return
-        novelRatingModel.currentEndDate = when (pastEndDate == null) {
+        val ratingDateModel = uiState.novelRatingModel.ratingDateModel
+        if (ratingDateModel.currentStartDate == null && ratingDateModel.currentEndDate == null) return
+        ratingDateModel.currentEndDate = when (ratingDateModel.pastEndDate == null) {
             true -> LocalDate.now().toFormattedDate()
-            false -> pastEndDate
+            false -> ratingDateModel.pastEndDate
         }
-        pastStartDate = novelRatingModel.currentStartDate
-        novelRatingModel.currentStartDate = null
+        ratingDateModel.pastStartDate = ratingDateModel.currentStartDate
+        ratingDateModel.currentStartDate = null
     }
 
     private fun LocalDate.toFormattedDate(): Triple<Int, Int, Int> {
@@ -110,7 +157,7 @@ class NovelRatingViewModel : ViewModel() {
 
     private fun updateStartDate(date: Triple<Int, Int, Int>) {
         val uiState = uiState.value ?: return
-        uiState.novelRatingModel.currentStartDate = date
+        uiState.novelRatingModel.ratingDateModel.currentStartDate = date
         _uiState.value = uiState
         updateDayMaxValue()
         updateDateValidity()
@@ -118,23 +165,23 @@ class NovelRatingViewModel : ViewModel() {
 
     private fun updateEndDate(date: Triple<Int, Int, Int>) {
         val uiState = uiState.value ?: return
-        uiState.novelRatingModel.currentEndDate = date
+        uiState.novelRatingModel.ratingDateModel.currentEndDate = date
         _uiState.value = uiState
         updateDayMaxValue()
         updateDateValidity()
     }
 
     fun updateDayMaxValue() {
-        val novelRatingModel = uiState.value?.novelRatingModel ?: return
+        val ratingDateModel = uiState.value?.novelRatingModel?.ratingDateModel ?: return
         _maxDayValue.value = when (isEditingStartDate.value) {
             true -> Month.getDays(
-                novelRatingModel.currentStartDate?.first ?: LocalDate.now().year,
-                novelRatingModel.currentStartDate?.second ?: LocalDate.now().monthValue
+                ratingDateModel.currentStartDate?.first ?: LocalDate.now().year,
+                ratingDateModel.currentStartDate?.second ?: LocalDate.now().monthValue
             )
 
             false -> Month.getDays(
-                novelRatingModel.currentEndDate?.first ?: LocalDate.now().year,
-                novelRatingModel.currentEndDate?.second ?: LocalDate.now().monthValue
+                ratingDateModel.currentEndDate?.first ?: LocalDate.now().year,
+                ratingDateModel.currentEndDate?.second ?: LocalDate.now().monthValue
             )
 
             else -> 31
@@ -159,8 +206,10 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun checkValidityIsAfterToday() {
-        val startLocalDate = uiState.value?.novelRatingModel?.currentStartDate.toLocalDate()
-        val endLocalDate = uiState.value?.novelRatingModel?.currentEndDate.toLocalDate()
+        val startLocalDate =
+            uiState.value?.novelRatingModel?.ratingDateModel?.currentStartDate.toLocalDate()
+        val endLocalDate =
+            uiState.value?.novelRatingModel?.ratingDateModel?.currentEndDate.toLocalDate()
 
         updateDateIfAfterToday(startLocalDate, isEditingStartDate = true)
         updateDateIfAfterToday(endLocalDate, isEditingStartDate = false)
@@ -186,7 +235,7 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun updateDateToToday(isEditingStartDate: Boolean, datePickerType: DatePickerType) {
-        val novelRatingModel = uiState.value?.novelRatingModel ?: return
+        val ratingDateModel = uiState.value?.novelRatingModel?.ratingDateModel ?: return
         val today = LocalDate.now()
 
         val (year, month, day) = when (datePickerType) {
@@ -197,13 +246,13 @@ class NovelRatingViewModel : ViewModel() {
 
         val newDate = Triple(
             year
-                ?: (if (isEditingStartDate) novelRatingModel.currentStartDate else novelRatingModel.currentEndDate)?.first
+                ?: (if (isEditingStartDate) ratingDateModel.currentStartDate else ratingDateModel.currentEndDate)?.first
                 ?: today.year,
             month
-                ?: (if (isEditingStartDate) novelRatingModel.currentStartDate else novelRatingModel.currentEndDate)?.second
+                ?: (if (isEditingStartDate) ratingDateModel.currentStartDate else ratingDateModel.currentEndDate)?.second
                 ?: today.monthValue,
             day
-                ?: (if (isEditingStartDate) novelRatingModel.currentStartDate else novelRatingModel.currentEndDate)?.third
+                ?: (if (isEditingStartDate) ratingDateModel.currentStartDate else ratingDateModel.currentEndDate)?.third
                 ?: today.dayOfMonth
         )
 
@@ -223,9 +272,9 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun checkValidityIsStartAfterEnd() {
-        val uiState = uiState.value ?: return
-        val startLocalDate = uiState.novelRatingModel.currentStartDate.toLocalDate()
-        val endLocalDate = uiState.novelRatingModel.currentEndDate.toLocalDate()
+        val ratingDateModel = uiState.value?.novelRatingModel?.ratingDateModel ?: return
+        val startLocalDate = ratingDateModel.currentStartDate.toLocalDate()
+        val endLocalDate = ratingDateModel.currentEndDate.toLocalDate()
         if (!startLocalDate.isAfter(endLocalDate)) return
 
         when {
@@ -240,71 +289,158 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun resetWatchedReadDate(datePickerType: DatePickerType) {
+        val ratingDateModel = uiState.value?.novelRatingModel?.ratingDateModel ?: return
         val today = LocalDate.now()
         val validDate = when (datePickerType) {
             DatePickerType.YEAR -> Triple(
-                uiState.value?.novelRatingModel?.currentEndDate?.first ?: today.year,
-                uiState.value?.novelRatingModel?.currentStartDate?.second ?: today.monthValue,
-                uiState.value?.novelRatingModel?.currentStartDate?.third ?: today.dayOfMonth
+                ratingDateModel.currentEndDate?.first ?: today.year,
+                ratingDateModel.currentStartDate?.second ?: today.monthValue,
+                ratingDateModel.currentStartDate?.third ?: today.dayOfMonth
             )
 
             DatePickerType.MONTH -> Triple(
-                uiState.value?.novelRatingModel?.currentStartDate?.first ?: today.year,
-                uiState.value?.novelRatingModel?.currentEndDate?.second ?: today.monthValue,
-                uiState.value?.novelRatingModel?.currentStartDate?.third ?: today.dayOfMonth
+                ratingDateModel.currentStartDate?.first ?: today.year,
+                ratingDateModel.currentEndDate?.second ?: today.monthValue,
+                ratingDateModel.currentStartDate?.third ?: today.dayOfMonth
             )
 
             DatePickerType.DAY -> Triple(
-                uiState.value?.novelRatingModel?.currentStartDate?.first ?: today.year,
-                uiState.value?.novelRatingModel?.currentStartDate?.second ?: today.monthValue,
-                uiState.value?.novelRatingModel?.currentEndDate?.third ?: today.dayOfMonth
+                ratingDateModel.currentStartDate?.first ?: today.year,
+                ratingDateModel.currentStartDate?.second ?: today.monthValue,
+                ratingDateModel.currentEndDate?.third ?: today.dayOfMonth
             )
         }
 
         when (isEditingStartDate.value) {
             true -> updateStartDate(validDate)
-            false -> updateStartDate(uiState.value?.novelRatingModel?.currentEndDate ?: return)
+            false -> updateStartDate(
+                uiState.value?.novelRatingModel?.ratingDateModel?.currentEndDate ?: return
+            )
+
             else -> {}
         }
     }
 
     fun clearCurrentDate() {
         val uiState = uiState.value ?: return
-        uiState.novelRatingModel.currentStartDate = null
-        uiState.novelRatingModel.currentEndDate = null
+        val ratingDateModel = uiState.novelRatingModel.ratingDateModel
+        ratingDateModel.currentStartDate = null
+        ratingDateModel.currentEndDate = null
         _uiState.value = uiState
     }
 
     fun cancelDateEdit() {
         val uiState = uiState.value ?: return
-        if (uiState.novelRatingModel.currentStartDate != null) {
-            uiState.novelRatingModel.currentStartDate = pastStartDate
+        val ratingDateModel = uiState.novelRatingModel.ratingDateModel
+        if (ratingDateModel.currentStartDate != null) {
+            ratingDateModel.currentStartDate = ratingDateModel.pastStartDate
         }
-        if (uiState.novelRatingModel.currentEndDate != null) {
-            uiState.novelRatingModel.currentEndDate = pastEndDate
+        if (ratingDateModel.currentEndDate != null) {
+            ratingDateModel.currentEndDate = ratingDateModel.pastEndDate
         }
         _uiState.value = uiState
     }
 
     fun createNotNullDate() {
         val novelRatingModel = uiState.value?.novelRatingModel ?: return
+        val ratingDateModel = novelRatingModel.ratingDateModel
         val nowDateFormatted = LocalDate.now().toFormattedDate()
 
         when (novelRatingModel.uiReadStatus) {
-            ReadStatus.WATCHING -> novelRatingModel.currentStartDate =
-                novelRatingModel.currentStartDate ?: nowDateFormatted
+            ReadStatus.WATCHING -> ratingDateModel.currentStartDate =
+                ratingDateModel.currentStartDate ?: nowDateFormatted
 
             ReadStatus.WATCHED -> {
-                novelRatingModel.currentStartDate =
-                    novelRatingModel.currentStartDate ?: nowDateFormatted
-                novelRatingModel.currentEndDate =
-                    novelRatingModel.currentEndDate ?: nowDateFormatted
+                ratingDateModel.currentStartDate =
+                    ratingDateModel.currentStartDate ?: nowDateFormatted
+                ratingDateModel.currentEndDate =
+                    ratingDateModel.currentEndDate ?: nowDateFormatted
             }
 
-            ReadStatus.QUIT -> novelRatingModel.currentEndDate =
-                novelRatingModel.currentEndDate ?: nowDateFormatted
+            ReadStatus.QUIT -> ratingDateModel.currentEndDate =
+                ratingDateModel.currentEndDate ?: nowDateFormatted
         }
         updatePastDate()
         _uiState.value = uiState.value
+    }
+
+    // 키워드 관련 함수
+    fun updateSelectedKeywords(keyword: KeywordModel.Category.Keyword, isSelected: Boolean) {
+        val uiState = uiState.value ?: return
+        val updatedCategories = uiState.keywordModel.categories.map { category ->
+            updateCategoryKeywords(category, keyword, isSelected)
+        }
+        val updatedKeywordModel = uiState.keywordModel.copy(categories = updatedCategories)
+        _uiState.value = uiState.copy(keywordModel = updatedKeywordModel)
+
+        val formattedSelectedKeywords = uiState.keywordModel.currentSelectedKeywords.toMutableList()
+        when (isSelected) {
+            true -> formattedSelectedKeywords.add(keyword)
+            false -> formattedSelectedKeywords.remove(keyword)
+        }
+        uiState.keywordModel.currentSelectedKeywords = formattedSelectedKeywords.toList()
+        _uiState.value = uiState
+    }
+
+    private fun updateCategoryKeywords(
+        category: KeywordModel.Category,
+        keywordToUpdate: KeywordModel.Category.Keyword,
+        isSelected: Boolean
+    ): KeywordModel.Category {
+        val updatedKeywords = category.keywords.map { keywordInCategory ->
+            when (keywordInCategory.keywordId == keywordToUpdate.keywordId) {
+                true -> keywordInCategory.copy(isSelected = isSelected)
+                false -> keywordInCategory
+            }
+        }
+        return category.copy(keywords = updatedKeywords)
+    }
+
+    fun getPastSelectedKeywords() {
+        val uiState = uiState.value ?: return
+        uiState.keywordModel.currentSelectedKeywords = uiState.keywordModel.pastSelectedKeywords
+        _uiState.value = uiState
+    }
+
+    fun saveSelectedKeywords() {
+        val uiState = uiState.value ?: return
+        _uiState.value = uiState.copy(
+            keywordModel = uiState.keywordModel.copy(
+                pastSelectedKeywords = uiState.keywordModel.currentSelectedKeywords
+            )
+        )
+    }
+
+    fun clearKeywordEdit() {
+        val uiState = uiState.value ?: return
+        val updatedCategories = uiState.keywordModel.categories.map { category ->
+            val updatedKeywords = category.keywords.map { keyword ->
+                keyword.copy(isSelected = false)
+            }
+            category.copy(keywords = updatedKeywords)
+        }
+        val updatedKeywordModel = uiState.keywordModel.copy(
+            categories = updatedCategories,
+            pastSelectedKeywords = emptyList(),
+            currentSelectedKeywords = emptyList()
+        )
+        _uiState.value = uiState.copy(keywordModel = updatedKeywordModel)
+    }
+
+    fun cancelKeywordEdit() {
+        val uiState = uiState.value ?: return
+        val updatedCategories = uiState.keywordModel.categories.map { category ->
+            val updatedKeywords = category.keywords.map { keyword ->
+                val pastSelectedKeywords = uiState.keywordModel.pastSelectedKeywords
+                val isSelected = pastSelectedKeywords.any { it.keywordId == keyword.keywordId }
+                keyword.copy(isSelected = isSelected)
+            }
+            category.copy(keywords = updatedKeywords)
+        }
+        val updatedKeywordModel = uiState.keywordModel.copy(
+            categories = updatedCategories,
+            currentSelectedKeywords = uiState.keywordModel.pastSelectedKeywords
+        )
+        _uiState.value = uiState.copy(keywordModel = updatedKeywordModel)
     }
 }

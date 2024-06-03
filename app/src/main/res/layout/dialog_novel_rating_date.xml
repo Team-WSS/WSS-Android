@@ -100,7 +100,7 @@
                 android:layout_marginHorizontal="56dp"
                 android:layout_marginTop="2dp"
                 android:maxLines="1"
-                android:text="@{@string/rating_current_date(viewModel.uiState.novelRatingModel.currentStartDate.first, viewModel.uiState.novelRatingModel.currentStartDate.second, viewModel.uiState.novelRatingModel.currentStartDate.third)}"
+                android:text="@{@string/rating_current_date(viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.first, viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.second, viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.third)}"
                 android:textAlignment="center"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/bg_rating_date_text_selector"
@@ -142,7 +142,7 @@
                 android:layout_marginHorizontal="56dp"
                 android:layout_marginTop="2dp"
                 android:maxLines="1"
-                android:text="@{@string/rating_current_date(viewModel.uiState.novelRatingModel.currentEndDate.first, viewModel.uiState.novelRatingModel.currentEndDate.second, viewModel.uiState.novelRatingModel.currentEndDate.third)}"
+                android:text="@{@string/rating_current_date(viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.first, viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.second, viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.third)}"
                 android:textAlignment="center"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/bg_rating_date_text_selector"
@@ -185,7 +185,7 @@
                 android:layout_height="112dp"
                 android:layout_marginStart="14dp"
                 android:selectionDividerHeight="0dp"
-                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.currentStartDate.first : viewModel.uiState.novelRatingModel.currentEndDate.first}"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.first : viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.first}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -205,7 +205,7 @@
                 android:layout_height="112dp"
                 android:layout_marginEnd="-52dp"
                 android:selectionDividerHeight="0dp"
-                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.currentStartDate.second : viewModel.uiState.novelRatingModel.currentEndDate.second}"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.second : viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.second}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -227,7 +227,7 @@
                 android:layout_height="112dp"
                 android:layout_marginEnd="-8dp"
                 android:selectionDividerHeight="0dp"
-                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.currentStartDate.third : viewModel.uiState.novelRatingModel.currentEndDate.third}"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.third : viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.third}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
