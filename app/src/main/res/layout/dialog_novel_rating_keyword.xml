@@ -40,7 +40,7 @@
             android:layout_height="64dp"
             android:onClick="@{() -> dialog.cancelKeywordEdit()}"
             android:padding="22dp"
-            android:src="@drawable/ic_rating_date_cancel"
+            android:src="@drawable/ic_novel_rating_date_cancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

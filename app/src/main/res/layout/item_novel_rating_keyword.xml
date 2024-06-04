@@ -29,7 +29,7 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/bg_rating_date_primary_100_radius_12dp"
+                android:src="@drawable/bg_novel_rating_date_primary_100_radius_12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
