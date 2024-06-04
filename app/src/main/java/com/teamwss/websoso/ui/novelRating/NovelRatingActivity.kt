@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import androidx.activity.viewModels
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
@@ -21,7 +22,7 @@ class NovelRatingActivity :
         super.onCreate(savedInstanceState)
         setupDataBinding()
         viewModel.getDummy()
-        observeDisplayDate()
+        observeUiState()
         setupCharmPointChips()
     }
 
@@ -31,7 +32,7 @@ class NovelRatingActivity :
         binding.lifecycleOwner = this
     }
 
-    private fun observeDisplayDate() {
+    private fun observeUiState() {
         viewModel.uiState.observe(this) {
             val (startDate, endDate) = with(it.novelRatingModel.ratingDateModel) { currentStartDate to currentEndDate }
 
@@ -44,6 +45,34 @@ class NovelRatingActivity :
             }.toUnderlinedSpan()
 
             binding.tvNovelRatingDisplayDate.text = text
+
+            binding.wcgNovelRatingKeywords.removeAllViews()
+            it.keywordModel.pastSelectedKeywords.forEach { keyword ->
+                WebsosoChip(binding.root.context).apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                    setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
+                    setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    setOnWebsosoChipClick {
+                    }
+                    setOnCloseIconClickListener {
+                        viewModel.updatePastSelectedKeywords(keyword)
+                    }
+                    closeIcon = ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_novel_rating_keword_remove,
+                        null
+                    )
+                    closeIconSize = 20f
+                    closeIconEndPadding = 18f
+                    isCloseIconVisible = true
+                    setCloseIconTintResource(R.color.primary_100_6A5DFD)
+                }.also { websosoChip -> binding.wcgNovelRatingKeywords.addChip(websosoChip) }
+            }
         }
     }
 

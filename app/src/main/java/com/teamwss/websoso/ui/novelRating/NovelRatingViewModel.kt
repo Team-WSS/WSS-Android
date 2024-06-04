@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelRating
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -365,41 +366,73 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     // 키워드 관련 함수
-    fun updateSelectedKeywords(keyword: KeywordModel.Category.Keyword, isSelected: Boolean) {
+    fun updateCurrentSelectedKeywords(keyword: KeywordModel.Category.Keyword, isSelected: Boolean) {
         val uiState = uiState.value ?: return
         val updatedCategories = uiState.keywordModel.categories.map { category ->
-            updateCategoryKeywords(category, keyword, isSelected)
-        }
-        val updatedKeywordModel = uiState.keywordModel.copy(categories = updatedCategories)
-        _uiState.value = uiState.copy(keywordModel = updatedKeywordModel)
-
-        val formattedSelectedKeywords = uiState.keywordModel.currentSelectedKeywords.toMutableList()
-        when (isSelected) {
-            true -> formattedSelectedKeywords.add(keyword)
-            false -> formattedSelectedKeywords.remove(keyword)
-        }
-        uiState.keywordModel.currentSelectedKeywords = formattedSelectedKeywords.toList()
-        _uiState.value = uiState
-    }
-
-    private fun updateCategoryKeywords(
-        category: KeywordModel.Category,
-        keywordToUpdate: KeywordModel.Category.Keyword,
-        isSelected: Boolean
-    ): KeywordModel.Category {
-        val updatedKeywords = category.keywords.map { keywordInCategory ->
-            when (keywordInCategory.keywordId == keywordToUpdate.keywordId) {
-                true -> keywordInCategory.copy(isSelected = isSelected)
-                false -> keywordInCategory
+            val updatedKeywords = category.keywords.map { keywordInCategory ->
+                when (keywordInCategory.keywordId == keyword.keywordId) {
+                    true -> keywordInCategory.copy(isSelected = isSelected)
+                    false -> keywordInCategory
+                }
             }
+            category.copy(keywords = updatedKeywords)
         }
-        return category.copy(keywords = updatedKeywords)
+        val currentSelectedKeywords = uiState.keywordModel.currentSelectedKeywords.toMutableList()
+        when (isSelected) {
+            true -> currentSelectedKeywords.add(keyword)
+            false -> currentSelectedKeywords.removeIf { it.keywordId == keyword.keywordId }
+        }
+
+        val updatedKeywordModel = uiState.keywordModel.copy(
+            categories = updatedCategories,
+            currentSelectedKeywords = currentSelectedKeywords.toList()
+        )
+        _uiState.value = uiState.copy(keywordModel = updatedKeywordModel)
     }
 
-    fun getPastSelectedKeywords() {
+    fun updatePastSelectedKeywords(keyword: KeywordModel.Category.Keyword) {
+        val uiState = uiState.value ?: return
+        val formattedCategories = uiState.keywordModel.categories.toMutableList()
+        uiState.keywordModel.categories.map { category ->
+            val updatedKeywords = category.keywords.map { keywordInCategory ->
+                when (keywordInCategory.keywordId == keyword.keywordId) {
+                    true -> keywordInCategory.copy(isSelected = false)
+                    false -> keywordInCategory
+                }
+            }
+            formattedCategories.add(category.copy(keywords = updatedKeywords))
+        }
+
+        val formattedSelectedKeywords =
+            uiState.keywordModel.pastSelectedKeywords.toMutableList().apply {
+                remove(keyword)
+            }
+        val updatedKeywordModel = uiState.keywordModel.copy(
+            categories = formattedCategories.toList(),
+            pastSelectedKeywords = formattedSelectedKeywords.toList()
+        )
+        _uiState.value = uiState.copy(keywordModel = updatedKeywordModel)
+    }
+
+    fun initCurrentSelectedKeywords() {
         val uiState = uiState.value ?: return
         uiState.keywordModel.currentSelectedKeywords = uiState.keywordModel.pastSelectedKeywords
-        _uiState.value = uiState
+        _uiState.value = uiState.copy(keywordModel = uiState.keywordModel)
+
+        val updatedCategories = uiState.keywordModel.categories.map { category ->
+            val updatedKeywords = category.keywords.map { keyword ->
+                val pastSelectedKeywords = uiState.keywordModel.pastSelectedKeywords
+                val isSelected = pastSelectedKeywords.any { it.keywordId == keyword.keywordId }
+                keyword.copy(isSelected = isSelected)
+            }
+            category.copy(keywords = updatedKeywords)
+        }
+        val updatedKeywordModel = uiState.keywordModel.copy(
+            categories = updatedCategories,
+            currentSelectedKeywords = uiState.keywordModel.pastSelectedKeywords
+        )
+
+        _uiState.value = uiState.copy(keywordModel = updatedKeywordModel)
     }
 
     fun saveSelectedKeywords() {

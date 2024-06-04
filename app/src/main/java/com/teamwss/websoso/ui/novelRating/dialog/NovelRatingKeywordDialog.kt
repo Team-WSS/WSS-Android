@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.novelRating.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.NovelRatingViewModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
 class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
     private var _binding: DialogNovelRatingKeywordBinding? = null
@@ -41,7 +43,7 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
         setupDialogBehavior()
         setupRecyclerView()
         observeUiState()
-        viewModel.getPastSelectedKeywords()
+        viewModel.initCurrentSelectedKeywords()
     }
 
     private fun setupDataBinding() {
@@ -64,7 +66,7 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
     private fun setupRecyclerView() {
         novelRatingKeywordAdapter = NovelRatingKeywordAdapter(
             onKeywordClick = { keyword, isSelected ->
-                viewModel.updateSelectedKeywords(keyword, isSelected)
+                viewModel.updateCurrentSelectedKeywords(keyword, isSelected)
             }
         )
         binding.rvRatingKeywordList.apply {
@@ -75,35 +77,40 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
 
     private fun observeUiState() {
         viewModel.uiState.observe(viewLifecycleOwner) {
+            setupCurrentSelectedChips(it)
             novelRatingKeywordAdapter.submitList(it.keywordModel.categories)
+        }
+    }
+
+    private fun setupCurrentSelectedChips(it: NovelRatingUiState) {
+        if (it.keywordModel.currentSelectedKeywords.isNotEmpty()) {
             binding.wcgNovelRatingKeywordSelectedKeyword.removeAllViews()
-            it.keywordModel.currentSelectedKeywords.forEach { keyword ->
-                WebsosoChip(binding.root.context).apply {
-                    setWebsosoChipText(keyword.keywordName)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                    setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-                    setWebsosoChipBackgroundColor(R.color.white)
-                    setWebsosoChipPaddingVertical(20f)
-                    setWebsosoChipPaddingHorizontal(12f)
-                    setWebsosoChipRadius(40f)
-                    setOnWebsosoChipClick {
-                    }
-                    setOnCloseIconClickListener {
-                        viewModel.updateSelectedKeywords(keyword, false)
-                    }
-                    closeIcon = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_novel_rating_keword_remove,
-                        null
-                    )
-                    closeIconSize = 20f
-                    closeIconEndPadding = 18f
-                    isCloseIconVisible = true
-                    setCloseIconTintResource(R.color.primary_100_6A5DFD)
-                }.also { websosoChip ->
-                    binding.wcgNovelRatingKeywordSelectedKeyword.addChip(websosoChip)
+        }
+        Log.e("setupCurrentSelectedChips", it.keywordModel.currentSelectedKeywords.toString())
+        it.keywordModel.currentSelectedKeywords.forEach { keyword ->
+            WebsosoChip(binding.root.context).apply {
+                setWebsosoChipText(keyword.keywordName)
+                setWebsosoChipTextAppearance(R.style.body2)
+                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipBackgroundColor(R.color.white)
+                setWebsosoChipPaddingVertical(20f)
+                setWebsosoChipPaddingHorizontal(12f)
+                setWebsosoChipRadius(40f)
+                setOnCloseIconClickListener {
+                    viewModel.updateCurrentSelectedKeywords(keyword, isSelected = false)
                 }
+                closeIcon = ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.ic_novel_rating_keword_remove,
+                    null
+                )
+                closeIconSize = 20f
+                closeIconEndPadding = 18f
+                isCloseIconVisible = true
+                setCloseIconTintResource(R.color.primary_100_6A5DFD)
+            }.also { websosoChip ->
+                binding.wcgNovelRatingKeywordSelectedKeyword.addChip(websosoChip)
             }
         }
     }

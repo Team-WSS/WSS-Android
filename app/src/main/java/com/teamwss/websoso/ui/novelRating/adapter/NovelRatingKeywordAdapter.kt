@@ -43,11 +43,11 @@ class NovelRatingKeywordAdapter(private val onKeywordClick: (Category.Keyword, B
                     val layoutParams =
                         wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
 
-                    if (ivNovelRatingKeywordToggle.isSelected) {
-                        layoutParams.matchConstraintMaxHeight =
+                    when (ivNovelRatingKeywordToggle.isSelected) {
+                        true -> layoutParams.matchConstraintMaxHeight =
                             ConstraintLayout.LayoutParams.WRAP_CONTENT
-                    } else {
-                        layoutParams.matchConstraintMaxHeight = 78.toDp()
+
+                        false -> layoutParams.matchConstraintMaxHeight = 76.toDp()
                     }
                     wcgNovelRatingKeyword.layoutParams = layoutParams
                 }
@@ -81,11 +81,11 @@ class NovelRatingKeywordAdapter(private val onKeywordClick: (Category.Keyword, B
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<Category>() {
             override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
-                return oldItem.keywords == newItem.keywords
+                return oldItem.categoryName == newItem.categoryName
             }
 
             override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
-                return oldItem == newItem
+                return oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
             }
         }
     }
