@@ -1,7 +1,6 @@
 package com.teamwss.websoso.ui.novelRating.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,12 +81,11 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setupCurrentSelectedChips(it: NovelRatingUiState) {
-        if (it.keywordModel.currentSelectedKeywords.isNotEmpty()) {
-            binding.wcgNovelRatingKeywordSelectedKeyword.removeAllViews()
-        }
-        Log.e("setupCurrentSelectedChips", it.keywordModel.currentSelectedKeywords.toString())
-        it.keywordModel.currentSelectedKeywords.forEach { keyword ->
+    private fun setupCurrentSelectedChips(uiState: NovelRatingUiState) {
+        val currentSelectedKeywords = uiState.keywordModel.currentSelectedKeywords
+        val keywordChipGroup = binding.wcgNovelRatingKeywordSelectedKeyword
+        keywordChipGroup.removeAllViews()
+        currentSelectedKeywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {
                 setWebsosoChipText(keyword.keywordName)
                 setWebsosoChipTextAppearance(R.style.body2)
@@ -109,9 +107,7 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
                 closeIconEndPadding = 18f
                 isCloseIconVisible = true
                 setCloseIconTintResource(R.color.primary_100_6A5DFD)
-            }.also { websosoChip ->
-                binding.wcgNovelRatingKeywordSelectedKeyword.addChip(websosoChip)
-            }
+            }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
         }
     }
 

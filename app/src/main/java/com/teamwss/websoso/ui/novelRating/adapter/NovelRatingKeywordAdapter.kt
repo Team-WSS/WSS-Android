@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.novelRating.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,35 +23,42 @@ class NovelRatingKeywordAdapter(private val onKeywordClick: (Category.Keyword, B
         fun bind(item: Category) {
             binding.apply {
                 tvRatingKeyword.text = item.categoryName
-                wcgNovelRatingKeyword.removeAllViews()
-                item.keywords.forEach { keyword ->
-                    WebsosoChip(binding.root.context).apply {
-                        setWebsosoChipText(keyword.keywordName)
-                        setWebsosoChipTextAppearance(R.style.body2)
-                        setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                        setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                        setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                        setWebsosoChipPaddingVertical(20f)
-                        setWebsosoChipPaddingHorizontal(12f)
-                        setWebsosoChipRadius(40f)
-                        setOnWebsosoChipClick { onKeywordClick(keyword, this.isSelected) }
-                        isSelected = keyword.isSelected
-                    }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
+                setupWebsosoChips(item)
+                setupExpandToggleBtn()
+            }
+        }
+
+        private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(item: Category) {
+            wcgNovelRatingKeyword.removeAllViews()
+            item.keywords.forEach { keyword ->
+                WebsosoChip(binding.root.context).apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    setOnWebsosoChipClick { onKeywordClick(keyword, this.isSelected) }
+                    isSelected = keyword.isSelected
+                }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
+            }
+        }
+
+        private fun ItemNovelRatingKeywordBinding.setupExpandToggleBtn() {
+            ivNovelRatingKeywordToggle.setOnClickListener {
+                ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
+                val layoutParams =
+                    wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
+
+                when (ivNovelRatingKeywordToggle.isSelected) {
+                    true -> layoutParams.matchConstraintMaxHeight =
+                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+
+                    false -> layoutParams.matchConstraintMaxHeight = 76.toDp()
                 }
-
-                ivNovelRatingKeywordToggle.setOnClickListener {
-                    ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
-                    val layoutParams =
-                        wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
-
-                    when (ivNovelRatingKeywordToggle.isSelected) {
-                        true -> layoutParams.matchConstraintMaxHeight =
-                            ConstraintLayout.LayoutParams.WRAP_CONTENT
-
-                        false -> layoutParams.matchConstraintMaxHeight = 76.toDp()
-                    }
-                    wcgNovelRatingKeyword.layoutParams = layoutParams
-                }
+                wcgNovelRatingKeyword.layoutParams = layoutParams
             }
         }
 

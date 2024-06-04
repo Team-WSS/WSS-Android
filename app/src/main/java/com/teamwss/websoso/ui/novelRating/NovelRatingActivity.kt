@@ -13,6 +13,7 @@ import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.dialog.NovelRatingKeywordDialog
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
 class NovelRatingActivity :
     BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
@@ -33,50 +34,29 @@ class NovelRatingActivity :
     }
 
     private fun observeUiState() {
-        viewModel.uiState.observe(this) {
-            val (startDate, endDate) = with(it.novelRatingModel.ratingDateModel) { currentStartDate to currentEndDate }
-
-            val text = when {
-                startDate == null && endDate == null -> getString(R.string.rating_add_date)
-                startDate != null && endDate != null -> formatRangeDate(startDate, endDate)
-                startDate != null -> formatSingleDate(startDate)
-                endDate != null -> formatSingleDate(endDate)
-                else -> ""
-            }.toUnderlinedSpan()
-
-            binding.tvNovelRatingDisplayDate.text = text
-
-            binding.wcgNovelRatingKeywords.removeAllViews()
-            it.keywordModel.pastSelectedKeywords.forEach { keyword ->
-                WebsosoChip(binding.root.context).apply {
-                    setWebsosoChipText(keyword.keywordName)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                    setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-                    setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
-                    setWebsosoChipPaddingVertical(20f)
-                    setWebsosoChipPaddingHorizontal(12f)
-                    setWebsosoChipRadius(40f)
-                    setOnWebsosoChipClick {
-                    }
-                    setOnCloseIconClickListener {
-                        viewModel.updatePastSelectedKeywords(keyword)
-                    }
-                    closeIcon = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_novel_rating_keword_remove,
-                        null
-                    )
-                    closeIconSize = 20f
-                    closeIconEndPadding = 18f
-                    isCloseIconVisible = true
-                    setCloseIconTintResource(R.color.primary_100_6A5DFD)
-                }.also { websosoChip -> binding.wcgNovelRatingKeywords.addChip(websosoChip) }
-            }
+        viewModel.uiState.observe(this) { uiState ->
+            updateSelectedDateDisplay(uiState)
+            updateKeywordChips(uiState)
         }
     }
 
-    private fun formatRangeDate(
+    private fun updateSelectedDateDisplay(it: NovelRatingUiState) {
+        val (startDate, endDate) = with(it.novelRatingModel.ratingDateModel) { currentStartDate to currentEndDate }
+
+        val underLinedText = SpannableString(
+            when {
+                startDate == null && endDate == null -> getString(R.string.rating_add_date)
+                startDate != null && endDate != null -> formatRangeDateText(startDate, endDate)
+                startDate != null -> formatSingleDateText(startDate)
+                endDate != null -> formatSingleDateText(endDate)
+                else -> ""
+            }
+        ).apply { setSpan(UnderlineSpan(), 0, this.length, 0) }
+
+        binding.tvNovelRatingDisplayDate.text = underLinedText
+    }
+
+    private fun formatRangeDateText(
         startDate: Triple<Int, Int, Int>,
         endDate: Triple<Int, Int, Int>
     ): String =
@@ -86,16 +66,43 @@ class NovelRatingActivity :
             endDate.first, endDate.second, endDate.third
         )
 
-    private fun formatSingleDate(date: Triple<Int, Int, Int>): String =
+    private fun formatSingleDateText(date: Triple<Int, Int, Int>): String =
         getString(
             R.string.rating_display_date,
             date.first, date.second, date.third
         )
 
-    private fun String.toUnderlinedSpan(): SpannableString =
-        SpannableString(this).apply {
-            setSpan(UnderlineSpan(), 0, this.length, 0)
+    private fun updateKeywordChips(uiState: NovelRatingUiState) {
+        val pastSelectedKeywords = uiState.keywordModel.pastSelectedKeywords
+        val keywordChipGroup = binding.wcgNovelRatingKeywords
+        keywordChipGroup.removeAllViews()
+        pastSelectedKeywords.forEach { keyword ->
+            WebsosoChip(binding.root.context).apply {
+                setWebsosoChipText(keyword.keywordName)
+                setWebsosoChipTextAppearance(R.style.body2)
+                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
+                setWebsosoChipPaddingVertical(20f)
+                setWebsosoChipPaddingHorizontal(12f)
+                setWebsosoChipRadius(40f)
+                setOnWebsosoChipClick {
+                }
+                setOnCloseIconClickListener {
+                    viewModel.updatePastSelectedKeywords(keyword)
+                }
+                closeIcon = ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.ic_novel_rating_keword_remove,
+                    null
+                )
+                closeIconSize = 20f
+                closeIconEndPadding = 18f
+                isCloseIconVisible = true
+                setCloseIconTintResource(R.color.primary_100_6A5DFD)
+            }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
         }
+    }
 
     private fun setupCharmPointChips() {
         getString(R.string.rating_charm_point).toWrappedCharmPoint().forEach { charmPoint ->
