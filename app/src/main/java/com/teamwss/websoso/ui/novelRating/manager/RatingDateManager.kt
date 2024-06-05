@@ -14,41 +14,47 @@ class RatingDateManager {
         readStatus: ReadStatus
     ): NovelRatingModel {
         val ratingDateModel = novelRatingModel.ratingDateModel
-        if (ratingDateModel.currentStartDate == null && ratingDateModel.currentEndDate == null) return novelRatingModel.copy(
-            uiReadStatus = readStatus
-        )
-        when (readStatus) {
-            ReadStatus.WATCHING -> {
-                ratingDateModel.currentStartDate = when (ratingDateModel.pastStartDate == null) {
-                    true -> today.toFormattedDate()
-                    false -> ratingDateModel.pastStartDate
-                }
-                ratingDateModel.pastEndDate = ratingDateModel.currentEndDate
-                ratingDateModel.currentEndDate = null
-            }
-
-            ReadStatus.WATCHED -> {
-                ratingDateModel.currentStartDate = when (ratingDateModel.pastStartDate == null) {
-                    true -> today.toFormattedDate()
-                    false -> ratingDateModel.pastStartDate
-                }
-                ratingDateModel.currentEndDate = when (ratingDateModel.pastEndDate == null) {
-                    true -> today.toFormattedDate()
-                    false -> ratingDateModel.pastEndDate
-                }
-                checkIsStartAfterEnd(ratingDateModel, readStatus, isEditingStartDate = false)
-            }
-
-            ReadStatus.QUIT -> {
-                ratingDateModel.currentEndDate = when (ratingDateModel.pastEndDate == null) {
-                    true -> today.toFormattedDate()
-                    false -> ratingDateModel.pastEndDate
-                }
-                ratingDateModel.pastStartDate = ratingDateModel.currentStartDate
-                ratingDateModel.currentStartDate = null
-            }
+        if (ratingDateModel.currentStartDate == null && ratingDateModel.currentEndDate == null || novelRatingModel.uiReadStatus == readStatus) {
+            return novelRatingModel.copy(uiReadStatus = readStatus)
         }
+
+        when (readStatus) {
+            ReadStatus.WATCHING -> handleWatchingStatus(ratingDateModel)
+            ReadStatus.WATCHED -> handleWatchedStatus(ratingDateModel)
+            ReadStatus.QUIT -> handleQuitStatus(ratingDateModel)
+        }
+
         return novelRatingModel.copy(ratingDateModel = ratingDateModel, uiReadStatus = readStatus)
+    }
+
+    private fun handleWatchingStatus(ratingDateModel: RatingDateModel) {
+        ratingDateModel.currentStartDate = when (ratingDateModel.pastStartDate == null) {
+            true -> today.toFormattedDate()
+            false -> ratingDateModel.pastStartDate
+        }
+        ratingDateModel.pastEndDate = ratingDateModel.currentEndDate
+        ratingDateModel.currentEndDate = null
+    }
+
+    private fun handleWatchedStatus(ratingDateModel: RatingDateModel) {
+        ratingDateModel.currentStartDate = when (ratingDateModel.pastStartDate == null) {
+            true -> today.toFormattedDate()
+            false -> ratingDateModel.pastStartDate
+        }
+        ratingDateModel.currentEndDate = when (ratingDateModel.pastEndDate == null) {
+            true -> today.toFormattedDate()
+            false -> ratingDateModel.pastEndDate
+        }
+        checkIsStartAfterEnd(ratingDateModel, ReadStatus.WATCHED, isEditingStartDate = false)
+    }
+
+    private fun handleQuitStatus(ratingDateModel: RatingDateModel) {
+        ratingDateModel.currentEndDate = when (ratingDateModel.pastEndDate == null) {
+            true -> today.toFormattedDate()
+            false -> ratingDateModel.pastEndDate
+        }
+        ratingDateModel.pastStartDate = ratingDateModel.currentStartDate
+        ratingDateModel.currentStartDate = null
     }
 
     fun updateIsEditingStartDate(readStatus: ReadStatus): Boolean {
@@ -123,8 +129,18 @@ class RatingDateManager {
     private fun Triple<Int, Int, Int>.updateNotAfter(other: Triple<Int, Int, Int>): Triple<Int, Int, Int> {
         return when {
             this.first > other.first -> Triple(other.first, this.second, this.third)
-            this.first == other.first && this.second > other.second -> Triple(this.first, other.second, this.third)
-            this.first == other.first && this.second == other.second && this.third > other.third -> Triple(this.first, this.second, other.third)
+            this.first == other.first && this.second > other.second -> Triple(
+                this.first,
+                other.second,
+                this.third
+            )
+
+            this.first == other.first && this.second == other.second && this.third > other.third -> Triple(
+                this.first,
+                this.second,
+                other.third
+            )
+
             else -> this
         }
     }
