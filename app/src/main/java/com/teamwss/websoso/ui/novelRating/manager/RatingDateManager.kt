@@ -97,10 +97,7 @@ class RatingDateManager {
             isEditingStartDate
         )
 
-        return when (isEditingStartDate) {
-            true -> updatedDateModel
-            false -> updatedDateModel
-        }
+        return updatedDateModel
     }
 
     private fun checkIsTodayAfterToday(
