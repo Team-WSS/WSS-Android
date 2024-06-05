@@ -42,7 +42,7 @@
                 android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHING}"
                 android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHING)}"
                 android:paddingTop="10dp"
-                android:text="@string/rating_read_status_watching"
+                android:text="@string/novel_rating_read_status_watching"
                 android:textAppearance="@style/body5"
                 android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                 app:icon="@drawable/ic_novel_rating_watching"
@@ -58,7 +58,7 @@
                 android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
                 android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHED)}"
                 android:paddingTop="10dp"
-                android:text="@string/rating_read_status_watched"
+                android:text="@string/novel_rating_read_status_watched"
                 android:textAppearance="@style/body5"
                 android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                 app:icon="@drawable/ic_novel_rating_watched"
@@ -74,7 +74,7 @@
                 android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.QUIT}"
                 android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.QUIT)}"
                 android:paddingTop="10dp"
-                android:text="@string/rating_read_status_quit"
+                android:text="@string/novel_rating_read_status_quit"
                 android:textAppearance="@style/body5"
                 android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                 app:icon="@drawable/ic_novel_rating_quit"
@@ -94,7 +94,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tg_novel_rating_read_status"
-            tools:text="@string/rating_add_date" />
+            tools:text="@string/novel_rating_add_date" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider_novel_rating_add_date"
@@ -268,7 +268,7 @@
                     android:layout_marginEnd="6dp"
                     android:height="44dp"
                     android:gravity="center"
-                    android:text="@string/rating_enroll"
+                    android:text="@string/novel_rating_enroll"
                     android:textAlignment="center"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/primary_100_6A5DFD"

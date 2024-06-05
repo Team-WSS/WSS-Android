@@ -45,7 +45,7 @@ class NovelRatingActivity :
 
         val underLinedText = SpannableString(
             when {
-                startDate == null && endDate == null -> getString(R.string.rating_add_date)
+                startDate == null && endDate == null -> getString(R.string.novel_rating_add_date)
                 startDate != null && endDate != null -> formatRangeDateText(startDate, endDate)
                 startDate != null -> formatSingleDateText(startDate)
                 endDate != null -> formatSingleDateText(endDate)
@@ -61,14 +61,14 @@ class NovelRatingActivity :
         endDate: Triple<Int, Int, Int>
     ): String =
         getString(
-            R.string.rating_display_date_with_tilde,
+            R.string.novel_rating_display_date_with_tilde,
             startDate.first, startDate.second, startDate.third,
             endDate.first, endDate.second, endDate.third
         )
 
     private fun formatSingleDateText(date: Triple<Int, Int, Int>): String =
         getString(
-            R.string.rating_display_date,
+            R.string.novel_rating_display_date,
             date.first, date.second, date.third
         )
 
@@ -105,7 +105,7 @@ class NovelRatingActivity :
     }
 
     private fun setupCharmPointChips() {
-        getString(R.string.rating_charm_point).toWrappedCharmPoint().forEach { charmPoint ->
+        getString(R.string.novel_rating_charm_point).toWrappedCharmPoint().forEach { charmPoint ->
             WebsosoChip(this@NovelRatingActivity).apply {
                 setWebsosoChipText(charmPoint.title)
                 setWebsosoChipTextAppearance(R.style.body2)

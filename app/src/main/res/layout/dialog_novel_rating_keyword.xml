@@ -28,7 +28,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="26dp"
             android:layout_marginBottom="26dp"
-            android:text="키워드 등록"
+            android:text="@string/novel_rating_keyword_title"
             android:textAppearance="@style/title1"
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,10 +51,10 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="26dp"
             android:background="@drawable/bg_novel_rating_keyword_search_selector"
+            android:focusedByDefault="false"
             android:paddingStart="0dp"
             android:paddingEnd="36dp"
             android:textAppearance="@style/label1"
-            android:focusedByDefault="false"
             android:textColor="@color/gray_200_AEADB3"
             app:closeIcon="@drawable/ic_novel_rating_search_cancel"
             app:iconifiedByDefault="false"
@@ -62,7 +62,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_rating_keyword_title"
             app:queryBackground="@null"
-            app:queryHint="키워드를 검색하세요"
+            app:queryHint="@string/novel_rating_keyword_search_hint"
             app:searchIcon="@null" />
 
         <ImageView
@@ -140,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="초기화"
+                android:text="@string/novel_rating_keyword_clear"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/gray_300_52515F" />
         </LinearLayout>
@@ -152,7 +152,8 @@
             android:background="@color/primary_100_6A5DFD"
             android:gravity="center"
             android:onClick="@{() -> dialog.saveKeywordEdit()}"
-            android:text="0개 등록"
+            android:text="@{@string/novel_rating_keyword_enroll(viewModel.uiState.keywordModel.currentSelectedKeywords.size)}"
+            tools:text="0개 선택"
             android:textAppearance="@style/title2"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
