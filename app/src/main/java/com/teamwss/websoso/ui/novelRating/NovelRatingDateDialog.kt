@@ -121,7 +121,7 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
-        cancelDateEdit()
+        viewModel.cancelDateEdit()
         _binding = null
         super.onDestroyView()
     }

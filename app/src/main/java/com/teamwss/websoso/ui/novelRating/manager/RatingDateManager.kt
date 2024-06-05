@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelRating.manager
 
+import android.util.Log
 import com.teamwss.websoso.ui.novelRating.model.Month
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
@@ -63,12 +64,6 @@ class RatingDateManager {
             ReadStatus.WATCHED -> true
             ReadStatus.QUIT -> false
         }
-    }
-
-    private fun updatePastDate(ratingDateModel: RatingDateModel): RatingDateModel {
-        ratingDateModel.pastStartDate = ratingDateModel.currentStartDate
-        ratingDateModel.pastEndDate = ratingDateModel.currentEndDate
-        return ratingDateModel
     }
 
     fun updateDayMaxValue(ratingDateModel: RatingDateModel, isEditingStartDate: Boolean): Int {
@@ -184,7 +179,12 @@ class RatingDateManager {
     fun clearCurrentDate(
         ratingDateModel: RatingDateModel
     ): RatingDateModel {
-        return ratingDateModel.copy(currentStartDate = null, currentEndDate = null)
+        return ratingDateModel.copy(
+            currentStartDate = null,
+            currentEndDate = null,
+            pastStartDate = null,
+            pastEndDate = null
+        )
     }
 
     fun cancelDateEdit(
@@ -192,9 +192,11 @@ class RatingDateManager {
     ): RatingDateModel {
         if (ratingDateModel.currentStartDate != null) {
             ratingDateModel.currentStartDate = ratingDateModel.pastStartDate
+            Log.e("1231231", "currentStartDate: ${ratingDateModel.currentStartDate} pastStartDate: ${ratingDateModel.pastStartDate}")
         }
         if (ratingDateModel.currentEndDate != null) {
             ratingDateModel.currentEndDate = ratingDateModel.pastEndDate
+            Log.e("1231232", "currentEndDate: ${ratingDateModel.currentEndDate} pastEndDate: ${ratingDateModel.pastEndDate}")
         }
         return ratingDateModel
     }
@@ -221,6 +223,6 @@ class RatingDateManager {
                     ratingDateModel.currentEndDate ?: today.toFormattedDate()
             }
         }
-        return updatePastDate(ratingDateModel)
+        return ratingDateModel
     }
 }
