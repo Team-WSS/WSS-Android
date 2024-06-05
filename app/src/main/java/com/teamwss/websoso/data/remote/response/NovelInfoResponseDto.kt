@@ -37,5 +37,5 @@ data class NovelInfoResponseDto(
     @SerialName("endDate")
     val endDate: String?,
     @SerialName("isUserNovelInterest")
-    val isUserNovelInterest: Boolean
+    val isUserNovelInterest: Boolean,
 )
