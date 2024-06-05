@@ -89,7 +89,7 @@ class RatingDateManager {
             true -> novelRatingModel.ratingDateModel.copy(currentStartDate = date)
             false -> novelRatingModel.ratingDateModel.copy(currentEndDate = date)
         }
-        if (updatedDateModel.currentStartDate == null || updatedDateModel.currentEndDate == null) return updatedDateModel
+        if (updatedDateModel.currentStartDate == null && updatedDateModel.currentEndDate == null) return updatedDateModel
 
         updatedDateModel = checkIsTodayAfterToday(updatedDateModel, isEditingStartDate)
         updatedDateModel = checkIsStartAfterEnd(
