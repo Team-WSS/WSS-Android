@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelRating
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -65,7 +66,6 @@ class NovelRatingViewModel : ViewModel() {
                 _uiState.value =
                     uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
             }
-        _uiState.value = uiState
     }
 
     fun cancelDateEdit() {
@@ -75,7 +75,6 @@ class NovelRatingViewModel : ViewModel() {
                 _uiState.value =
                     uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
             }
-        _uiState.value = uiState
     }
 
     fun createNotNullDate() {
