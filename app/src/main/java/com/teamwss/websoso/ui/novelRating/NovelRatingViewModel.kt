@@ -21,7 +21,6 @@ class NovelRatingViewModel : ViewModel() {
     private val _isEditingStartDate = MutableLiveData<Boolean>()
     val isEditingStartDate: LiveData<Boolean> get() = _isEditingStartDate
 
-    // 네트워크 함수 (추가 예정)
     fun getDummy() {
         _uiState.value = NovelRatingUiState(
             novelRatingModel = NovelRatingModel(
@@ -95,8 +94,6 @@ class NovelRatingViewModel : ViewModel() {
         )
     }
 
-    // 날짜 관련 함수
-
     fun updatePastDate() {
         val uiState = uiState.value ?: return
         val ratingDateModel = uiState.novelRatingModel.ratingDateModel
@@ -163,7 +160,6 @@ class NovelRatingViewModel : ViewModel() {
             }
     }
 
-    // 키워드 관련 함수
     fun updateCurrentSelectedKeywords(keyword: KeywordModel.Category.Keyword, isSelected: Boolean) {
         val uiState = uiState.value ?: return
 
