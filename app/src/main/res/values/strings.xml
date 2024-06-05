@@ -51,20 +51,26 @@
     <string name="login_browse_without_signup">회원가입 없이 둘러보기</string>
 
     <!-- 작품 평가 -->
-    <string name="rating_enroll">등록</string>
-    <string name="rating_add_date">본 날짜 추가</string>
-    <string name="rating_display_date">%d년 %d월 %d일</string>
-    <string name="rating_display_date_with_tilde">%d년 %d월 %d일 ~ %d년 %d월 %d일</string>
-    <string name="rating_read_status_watching">보는 중</string>
-    <string name="rating_read_status_watched">봤어요</string>
-    <string name="rating_read_status_quit">하차</string>
-    <string name="rating_charm_point">세계관,소재,캐릭터,관계,분위기</string>
+    <string name="novel_rating_enroll">등록</string>
+    <string name="novel_rating_add_date">본 날짜 추가</string>
+    <string name="novel_rating_display_date">%d년 %d월 %d일</string>
+    <string name="novel_rating_display_date_with_tilde">%d년 %d월 %d일 ~ %d년 %d월 %d일</string>
+    <string name="novel_rating_read_status_watching">보는 중</string>
+    <string name="novel_rating_read_status_watched">봤어요</string>
+    <string name="novel_rating_read_status_quit">하차</string>
+    <string name="novel_rating_charm_point">세계관,소재,캐릭터,관계,분위기</string>
 
     <!-- 작품 평가 날짜 선택 -->
-    <string name="rating_date_start_date">시작 날짜</string>
-    <string name="rating_date_end_date">종료 날짜</string>
-    <string name="rating_date_complete">완료</string>
-    <string name="rating_date_remove">본 날짜 없애기</string>
-    <string name="rating_current_date">%04d-%02d-%02d</string>
+    <string name="novel_rating_date_start_date">시작 날짜</string>
+    <string name="novel_rating_date_end_date">종료 날짜</string>
+    <string name="novel_rating_date_complete">완료</string>
+    <string name="novel_rating_date_remove">본 날짜 없애기</string>
+    <string name="novel_rating_current_date">%04d-%02d-%02d</string>
+
+    <!-- 작품 평가 키워드 -->
+    <string name="novel_rating_keyword_title">키워드 등록</string>
+    <string name="novel_rating_keyword_search_hint">키워드를 검색하세요</string>
+    <string name="novel_rating_keyword_clear">초기화</string>
+    <string name="novel_rating_keyword_enroll">%d개 선택</string>
 
 </resources>
