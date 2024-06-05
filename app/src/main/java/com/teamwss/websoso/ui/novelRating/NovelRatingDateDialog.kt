@@ -63,7 +63,6 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     }
 
     private fun initNumberPickerRange() {
-        viewModel.updateDayMaxValue()
         setupNumberPicker(binding.npRatingDateYear, 1, 9999, "%04d")
         setupNumberPicker(binding.npRatingDateMonth, 1, 12, "%02d")
         setupNumberPicker(binding.npRatingDateDay, 1, viewModel.maxDayValue.value ?: 31, "%02d")
