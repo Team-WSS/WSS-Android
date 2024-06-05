@@ -5,7 +5,7 @@ import com.teamwss.websoso.ui.novelRating.model.KeywordModel
 
 object NovelRatingKeywordMapper {
 
-    fun NovelRatingKeywordResponseDto.toPresentation(): KeywordModel {
+    fun NovelRatingKeywordResponseDto.toUi(): KeywordModel {
         return KeywordModel(
             categories = categories.map { category ->
                 KeywordModel.Category(
