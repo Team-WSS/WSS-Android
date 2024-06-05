@@ -56,7 +56,7 @@ class NovelRatingKeywordAdapter(private val onKeywordClick: (Category.Keyword, B
                     true -> layoutParams.matchConstraintMaxHeight =
                         ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                    false -> layoutParams.matchConstraintMaxHeight = 76.toDp()
+                    false -> layoutParams.matchConstraintMaxHeight = 78.toDp()
                 }
                 wcgNovelRatingKeyword.layoutParams = layoutParams
             }
