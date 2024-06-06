@@ -1,16 +1,13 @@
 package com.teamwss.websoso.ui.novelRating
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.KeywordModel
-import com.teamwss.websoso.ui.novelRating.model.Month
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
-import java.time.LocalDate
 
 class NovelRatingViewModel : ViewModel() {
     private val _maxDayValue = MutableLiveData<Int>()

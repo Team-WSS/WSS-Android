@@ -192,11 +192,9 @@ class RatingDateManager {
     ): RatingDateModel {
         if (ratingDateModel.currentStartDate != null) {
             ratingDateModel.currentStartDate = ratingDateModel.pastStartDate
-            Log.e("1231231", "currentStartDate: ${ratingDateModel.currentStartDate} pastStartDate: ${ratingDateModel.pastStartDate}")
         }
         if (ratingDateModel.currentEndDate != null) {
             ratingDateModel.currentEndDate = ratingDateModel.pastEndDate
-            Log.e("1231232", "currentEndDate: ${ratingDateModel.currentEndDate} pastEndDate: ${ratingDateModel.pastEndDate}")
         }
         return ratingDateModel
     }
