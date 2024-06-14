@@ -39,6 +39,12 @@
 
     <style name="body3">
         <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14dp</item>
+        <item name="lineHeight">14dp</item>
+    </style>
+
+    <style name="body5">
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">12dp</item>
         <item name="lineHeight">17dp</item>
     </style>
