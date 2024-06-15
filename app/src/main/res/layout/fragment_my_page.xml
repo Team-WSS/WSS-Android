@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="myPageProfile"
-            type="com.teamwss.websoso.data.model.MyPageProfileData"/>
+            name="viewModel"
+            type="com.teamwss.websoso.ui.myPage.MyPageViewModel"/>
 
     </data>
 
@@ -36,9 +36,10 @@
 
             <ImageView
                 android:id="@+id/iv_user_character"
-                imageUrl="@{myPageProfile.avatarImage}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="94dp"
+                android:layout_height="94dp"
+                app:loadImageUrlCircular="@{viewModel.myPageProfile.avatarImage}"
+                android:scaleType="centerCrop"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@{myPageProfile.nickname}"
+                android:text="@{viewModel.myPageProfile.nickname}"
                 android:textAppearance="@style/headline1"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +84,7 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@{myPageProfile.intro}"
+                android:text="@{viewModel.myPageProfile.intro}"
                 android:gravity="center"
                 android:maxLines="2"
                 android:ellipsize="end"
