@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
@@ -12,6 +13,7 @@ import com.teamwss.websoso.databinding.FragmentMyPageBinding
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: MyPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,6 +21,7 @@ class MyPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
         return binding.root
     }
 
