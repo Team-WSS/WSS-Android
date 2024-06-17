@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.main.explore.normalExplore.model
+package com.teamwss.websoso.ui.normalExplore.model
 
 import com.teamwss.websoso.data.model.NormalExploreEntity
 

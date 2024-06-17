@@ -7,7 +7,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
-import com.teamwss.websoso.ui.main.explore.normalExplore.NormalExploreActivity
+import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

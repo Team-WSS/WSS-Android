@@ -1,11 +1,11 @@
-package com.teamwss.websoso.ui.main.explore.normalExplore
+package com.teamwss.websoso.ui.normalExplore
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeNovelRepository
-import com.teamwss.websoso.ui.main.explore.normalExplore.model.NormalExploreUiState
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

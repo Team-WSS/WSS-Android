@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.main.explore.normalExplore.adapter
+package com.teamwss.websoso.ui.normalExplore.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

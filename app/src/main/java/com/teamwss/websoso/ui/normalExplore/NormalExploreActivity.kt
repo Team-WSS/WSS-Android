@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.main.explore.normalExplore
+package com.teamwss.websoso.ui.normalExplore
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
-import com.teamwss.websoso.ui.main.explore.normalExplore.adapter.NormalExploreAdapter
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

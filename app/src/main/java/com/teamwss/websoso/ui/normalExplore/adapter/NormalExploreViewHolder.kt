@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.main.explore.normalExplore.adapter
+package com.teamwss.websoso.ui.normalExplore.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.data.model.NormalExploreEntity

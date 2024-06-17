@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.main.explore.normalExplore.NormalExploreActivity">
+    tools:context=".ui.normalExplore.NormalExploreActivity">
 
     <data>
 
         <variable
             name="normalExploreViewModel"
-            type="com.teamwss.websoso.ui.main.explore.normalExplore.NormalExploreViewModel" />
+            type="com.teamwss.websoso.ui.normalExplore.NormalExploreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
