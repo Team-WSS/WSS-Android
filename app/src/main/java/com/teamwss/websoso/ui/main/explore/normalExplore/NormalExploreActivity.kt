@@ -7,11 +7,13 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.main.explore.normalExplore.adapter.NormalExploreAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NormalExploreActivity :
     BindingActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
-    private val normalExploreViewModel: NormalExploreViewModel by viewModels { NormalExploreViewModel.Factory }
+    private val normalExploreViewModel: NormalExploreViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

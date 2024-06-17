@@ -3,19 +3,19 @@ package com.teamwss.websoso.ui.main.explore.normalExplore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.data.repository.FakeNovelRepository
 import com.teamwss.websoso.ui.main.explore.normalExplore.model.NormalExploreUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NormalExploreViewModel(
-    private val novelRepository: FakeNovelRepository
+@HiltViewModel
+class NormalExploreViewModel @Inject constructor(
+    private val novelRepository: FakeNovelRepository,
 ) : ViewModel() {
-    private val _uiState: MutableLiveData<NormalExploreUiState> = MutableLiveData(NormalExploreUiState())
+    private val _uiState: MutableLiveData<NormalExploreUiState> =
+        MutableLiveData(NormalExploreUiState())
     val uiState: LiveData<NormalExploreUiState> get() = _uiState
 
     private val _searchContent: MutableLiveData<String> = MutableLiveData()
@@ -33,16 +33,6 @@ class NormalExploreViewModel(
                 )
             }.onFailure {
 
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                NormalExploreViewModel(
-                    novelRepository = WebsosoApp.getNovelRepository()
-                )
             }
         }
     }

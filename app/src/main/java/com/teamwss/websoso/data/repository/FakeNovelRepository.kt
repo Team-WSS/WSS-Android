@@ -1,8 +1,9 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.model.NormalExploreEntity
+import javax.inject.Inject
 
-class FakeNovelRepository {
+class FakeNovelRepository @Inject constructor() {
     val normalExploreResultDummyData: NormalExploreEntity = NormalExploreEntity(
         resultCount = 8,
         isLoadable = false,
