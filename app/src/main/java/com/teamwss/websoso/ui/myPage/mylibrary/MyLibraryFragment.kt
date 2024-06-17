@@ -38,22 +38,8 @@ class MyLibraryFragment : Fragment() {
     }
 
     private fun initializeViews() {
-        initializeGenrePathToggle()
         initializeAttractivePoints()
-    }
-
-    private fun observeViewModel() {
-        libraryViewModel.genres.observe(viewLifecycleOwner, Observer { genres ->
-            genres?.let { updateGenreBottomList(it) }
-        })
-
-        libraryViewModel.isGenreListVisible.observe(viewLifecycleOwner, Observer { isVisible ->
-            isVisible?.let { updateGenreBottomVisibility(it) }
-        })
-
-        libraryViewModel.attractivePoints.observe(viewLifecycleOwner, Observer { attractivePoints ->
-            attractivePoints?.let { updateAttractivePoints(it) }
-        })
+        initializeGenrePathToggle()
     }
 
     private fun initializeAttractivePoints() {
@@ -80,32 +66,31 @@ class MyLibraryFragment : Fragment() {
         return chip
     }
 
+    private fun initializeGenrePathToggle() {
+        binding.ivPreferredGenrePath.setOnClickListener {
+            libraryViewModel.toggleGenreListVisibility()
+        }
+    }
+
+    private fun observeViewModel() {
+        libraryViewModel.genres.observe(viewLifecycleOwner, Observer { genres ->
+            genres?.let { updateGenreBottomList(it) }
+        })
+
+        libraryViewModel.isGenreListVisible.observe(viewLifecycleOwner, Observer { isVisible ->
+            isVisible?.let { updateGenreBottomVisibility(it) }
+        })
+
+        libraryViewModel.attractivePoints.observe(viewLifecycleOwner, Observer { attractivePoints ->
+            attractivePoints?.let { updateAttractivePoints(it) }
+        })
+    }
+
     private fun updateGenreBottomList(genres: List<GenrePreferredEntity>) {
         val adapter =
             RestPreferredGenreAdapter(requireContext(), R.layout.item_rest_preferred_genre, genres)
         binding.listRestPreferredGenre.adapter = adapter
         adjustListViewHeight(binding.listRestPreferredGenre)
-    }
-
-    private fun updateGenreBottomVisibility(isVisible: Boolean) {
-        binding.listRestPreferredGenre.visibility = if (isVisible) View.VISIBLE else View.GONE
-        binding.ivPreferredGenrePath.setImageResource(
-            if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
-        )
-    }
-
-    private fun updateAttractivePoints(attractivePoints: List<AttractivePointData>) {
-        binding.cgAttractivePoints.removeAllViews()
-        attractivePoints.forEach { data ->
-            val attractiveChip = createChip(data)
-            binding.cgAttractivePoints.addView(attractiveChip)
-        }
-    }
-
-    private fun initializeGenrePathToggle() {
-        binding.ivPreferredGenrePath.setOnClickListener {
-            libraryViewModel.toggleGenreListVisibility()
-        }
     }
 
     private fun adjustListViewHeight(listView: ListView) {
@@ -127,9 +112,23 @@ class MyLibraryFragment : Fragment() {
         listView.requestLayout()
     }
 
+    private fun updateGenreBottomVisibility(isVisible: Boolean) {
+        binding.listRestPreferredGenre.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.ivPreferredGenrePath.setImageResource(
+            if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
+        )
+    }
+
+    private fun updateAttractivePoints(attractivePoints: List<AttractivePointData>) {
+        binding.cgAttractivePoints.removeAllViews()
+        attractivePoints.forEach { data ->
+            val attractiveChip = createChip(data)
+            binding.cgAttractivePoints.addView(attractiveChip)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }
