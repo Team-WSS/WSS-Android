@@ -29,7 +29,7 @@
             android:name=".ui.login.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.onBoarding.OnBoardingActivity"
+            android:name=".ui.onboarding.OnboardingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
