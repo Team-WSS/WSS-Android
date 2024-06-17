@@ -39,7 +39,7 @@ class MyLibraryFragment : Fragment() {
 
     private fun initializeViews() {
         initializeAttractivePoints()
-        initializeGenrePathToggle()
+        onGenrePathToggled()
     }
 
     private fun initializeAttractivePoints() {
@@ -68,7 +68,7 @@ class MyLibraryFragment : Fragment() {
         return chip
     }
 
-    private fun initializeGenrePathToggle() {
+    private fun onGenrePathToggled() {
         binding.ivPreferredGenrePath.setOnClickListener {
             libraryViewModel.toggleGenreListVisibility()
         }
