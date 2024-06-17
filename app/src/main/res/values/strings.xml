@@ -56,4 +56,18 @@
     <string name="onboarding_first_duplicate_check">중복확인</string>
     <string name="onboarding_first_next_button">다음으로</string>
 
+    <!-- 마이페이지 뷰 -->
+    <string name="my_page_library">내 서재</string>
+    <string name="my_page_feed">내 피드</string>
+
+    <!-- 내 서재 뷰 -->
+    <string name="my_library_genre_count">%d편</string>
+    <string name="my_library_storage">보관함</string>
+    <string name="my_library_interesting">관심</string>
+    <string name="my_library_watching">보는중</string>
+    <string name="my_library_watched">봤어요</string>
+    <string name="my_library_quitting">하차</string>
+    <string name="my_library_genre_preference">장르 취향</string>
+    <string name="my_library_preferred_novel">작품 취향</string>
+
 </resources>
