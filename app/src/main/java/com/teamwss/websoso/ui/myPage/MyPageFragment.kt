@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
+import com.teamwss.websoso.ui.common.base.BindingFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-class MyPageFragment : Fragment() {
+@AndroidEntryPoint
+class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private var _binding: FragmentMyPageBinding? = null
-    private val binding get() = _binding!!
+    private val myPageBinding get() = _binding ?: error("error: binding is null")
     private val viewModel: MyPageViewModel by viewModels()
 
     override fun onCreateView(

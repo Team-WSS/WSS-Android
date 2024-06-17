@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="genreBottom"
-            type="com.teamwss.websoso.data.model.GenrePreferredData.GenreBottom" />
+            name="restPreferredGenre"
+            type="com.teamwss.websoso.data.model.GenrePreferredEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,7 @@
             android:id="@+id/iv_preferred_genre"
             android:layout_width="24dp"
             android:layout_height="28dp"
-            android:src="@{genreBottom.genreIcon}"
+            android:src="@{restPreferredGenre.genreIcon}"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            android:text="@{genreBottom.genreName}"
+            android:text="@{restPreferredGenre.genreName}"
             android:textAppearance="@style/body3"
             app:layout_constraintBottom_toBottomOf="@id/iv_preferred_genre"
             app:layout_constraintStart_toEndOf="@id/iv_preferred_genre"
@@ -37,7 +37,7 @@
             android:id="@+id/tv_preferred_genre_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{String.format(@string/my_library_genre_count, genreBottom.genreCount)}'
+            android:text='@{String.format(@string/my_library_genre_count, restPreferredGenre.genreCount)}'
             android:textAppearance="@style/body3"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -5,20 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.AttractivePointData
-import com.teamwss.websoso.data.model.GenrePreferredData
+import com.teamwss.websoso.data.model.GenrePreferredEntity
 
 class MyLibraryViewModel : ViewModel() {
-    private val _genres = MutableLiveData<List<GenrePreferredData.GenreBottom>>().apply {
+    private val _genres = MutableLiveData<List<GenrePreferredEntity>>().apply {
         value = listOf(
-            GenrePreferredData.GenreBottom(R.drawable.ic_novel_detail_genre_test, "로판", 3),
-            GenrePreferredData.GenreBottom(R.drawable.ic_novel_detail_genre_test, "로맨스", 3),
-            GenrePreferredData.GenreBottom(R.drawable.ic_novel_detail_genre_test, "무협", 3),
-            GenrePreferredData.GenreBottom(R.drawable.ic_novel_detail_genre_test, "판타지", 3),
-            GenrePreferredData.GenreBottom(R.drawable.ic_novel_detail_genre_test, "코믹", 3),
-            GenrePreferredData.GenreBottom(R.drawable.ic_novel_detail_genre_test, "무협", 3)
+            GenrePreferredEntity(R.drawable.ic_novel_detail_genre_test, "로판", 3),
+            GenrePreferredEntity(R.drawable.ic_novel_detail_genre_test, "로맨스", 3),
+            GenrePreferredEntity(R.drawable.ic_novel_detail_genre_test, "무협", 3),
+            GenrePreferredEntity(R.drawable.ic_novel_detail_genre_test, "판타지", 3),
+            GenrePreferredEntity(R.drawable.ic_novel_detail_genre_test, "코믹", 3),
+            GenrePreferredEntity(R.drawable.ic_novel_detail_genre_test, "무협", 3)
         )
     }
-    val genres: LiveData<List<GenrePreferredData.GenreBottom>> = _genres
+    val genres: LiveData<List<GenrePreferredEntity>> = _genres
 
     private val _isGenreListVisible = MutableLiveData<Boolean>().apply { value = false }
     val isGenreListVisible: LiveData<Boolean> = _isGenreListVisible

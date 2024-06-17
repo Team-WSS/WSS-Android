@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.AttractivePointData
-import com.teamwss.websoso.data.model.GenrePreferredData
+import com.teamwss.websoso.data.model.GenrePreferredEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 
@@ -80,15 +80,15 @@ class MyLibraryFragment : Fragment() {
         return chip
     }
 
-    private fun updateGenreBottomList(genres: List<GenrePreferredData.GenreBottom>) {
+    private fun updateGenreBottomList(genres: List<GenrePreferredEntity>) {
         val adapter =
-            GenreBottomAdapter(requireContext(), R.layout.item_preferred_genre_bottom, genres)
-        binding.listPreferredGenreBottom.adapter = adapter
-        adjustListViewHeight(binding.listPreferredGenreBottom)
+            RestPreferredGenreAdapter(requireContext(), R.layout.item_rest_preferred_genre, genres)
+        binding.listRestPreferredGenre.adapter = adapter
+        adjustListViewHeight(binding.listRestPreferredGenre)
     }
 
     private fun updateGenreBottomVisibility(isVisible: Boolean) {
-        binding.listPreferredGenreBottom.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.listRestPreferredGenre.visibility = if (isVisible) View.VISIBLE else View.GONE
         binding.ivPreferredGenrePath.setImageResource(
             if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
         )
