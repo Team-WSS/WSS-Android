@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.main.explore.normalExplore
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -61,5 +63,12 @@ class NormalExploreActivity :
 
     private fun loading() {
         // TODO 로딩 뷰
+    }
+
+    companion object {
+
+        fun from(
+            context: Context,
+        ): Intent = Intent(context, NormalExploreActivity::class.java)
     }
 }
