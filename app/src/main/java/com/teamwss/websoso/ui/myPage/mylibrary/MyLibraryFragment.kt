@@ -8,7 +8,6 @@ import android.widget.ListView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.AttractivePointData
@@ -43,7 +42,9 @@ class MyLibraryFragment : Fragment() {
     }
 
     private fun initializeAttractivePoints() {
-        libraryViewModel.attractivePoints.value?.let { attractivePoints ->
+        libraryViewModel.attractivePoints.observe(viewLifecycleOwner) { attractivePoints ->
+            binding.cgAttractivePoints.removeAllViews()
+
             for (data in attractivePoints) {
                 val chip = createChip(data)
                 binding.cgAttractivePoints.addView(chip)
@@ -73,17 +74,17 @@ class MyLibraryFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        libraryViewModel.genres.observe(viewLifecycleOwner, Observer { genres ->
-            genres?.let { updateGenreBottomList(it) }
-        })
+        libraryViewModel.genres.observe(viewLifecycleOwner) { genres ->
+            updateGenreBottomList(genres)
+        }
 
-        libraryViewModel.isGenreListVisible.observe(viewLifecycleOwner, Observer { isVisible ->
-            isVisible?.let { updateGenreBottomVisibility(it) }
-        })
+        libraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
+            updateGenreBottomVisibility(isVisible)
+        }
 
-        libraryViewModel.attractivePoints.observe(viewLifecycleOwner, Observer { attractivePoints ->
-            attractivePoints?.let { updateAttractivePoints(it) }
-        })
+        libraryViewModel.attractivePoints.observe(viewLifecycleOwner) { attractivePoints ->
+            updateAttractivePoints(attractivePoints)
+        }
     }
 
     private fun updateGenreBottomList(genres: List<GenrePreferredEntity>) {
