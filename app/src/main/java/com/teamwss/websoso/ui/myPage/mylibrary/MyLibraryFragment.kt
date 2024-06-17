@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
@@ -79,7 +80,7 @@ class MyLibraryFragment : Fragment() {
         }
 
         libraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
-            updateGenreBottomVisibility(isVisible)
+            updateRestPreferredGenreVisibility(isVisible)
         }
 
         libraryViewModel.attractivePoints.observe(viewLifecycleOwner) { attractivePoints ->
@@ -113,8 +114,8 @@ class MyLibraryFragment : Fragment() {
         listView.requestLayout()
     }
 
-    private fun updateGenreBottomVisibility(isVisible: Boolean) {
-        binding.listRestPreferredGenre.visibility = if (isVisible) View.VISIBLE else View.GONE
+    private fun updateRestPreferredGenreVisibility(isVisible: Boolean) {
+        binding.listRestPreferredGenre.isVisible = isVisible
         binding.ivPreferredGenrePath.setImageResource(
             if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
         )
