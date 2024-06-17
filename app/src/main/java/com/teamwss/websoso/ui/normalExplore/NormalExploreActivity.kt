@@ -19,30 +19,51 @@ class NormalExploreActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_normal_explore)
 
+        bindViewModel()
         setupUI()
-        observeUiState()
+        setObserveUiState()
+    }
+
+    private fun bindViewModel() {
+        binding.normalExploreViewModel = normalExploreViewModel
+        binding.onClick = onClickNormalExploreButton()
+        binding.lifecycleOwner = this
+    }
+
+    private fun onClickNormalExploreButton() = object : NormalExploreClickListener {
+
+        override fun onClickBackButton() {
+            finish()
+        }
+
+        override fun onClickSearchButton() {
+            normalExploreViewModel.fetchNormalExploreResult()
+        }
+
+        override fun onClickSearchWordCancelButton() {
+            binding.etNormalExploreSearchContent.text.clear()
+        }
     }
 
     private fun setupUI() {
-        setTranslucentOnStatusBar()
-        setFocusSearchBar()
-        initNormalExploreAdapter()
+        setupTranslucentOnStatusBar()
+        setupFocusSearchBar()
+        setupNormalExploreAdapter()
     }
 
-    private fun setTranslucentOnStatusBar() {
+    private fun setupTranslucentOnStatusBar() {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
     }
 
-    private fun setFocusSearchBar() {
+    private fun setupFocusSearchBar() {
         binding.etNormalExploreSearchContent.requestFocus()
     }
 
-    private fun initNormalExploreAdapter() {
+    private fun setupNormalExploreAdapter() {
         binding.rvNormalExploreResult.adapter = normalExploreAdapter
         binding.rvNormalExploreResult.setHasFixedSize(true)
     }
@@ -51,7 +72,7 @@ class NormalExploreActivity :
         // TODO 작품 정보 뷰로 이동
     }
 
-    private fun observeUiState() {
+    private fun setObserveUiState() {
         normalExploreViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> loading()

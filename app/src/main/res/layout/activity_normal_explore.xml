@@ -7,6 +7,10 @@
     <data>
 
         <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.normalExplore.NormalExploreClickListener" />
+
+        <variable
             name="normalExploreViewModel"
             type="com.teamwss.websoso.ui.normalExplore.NormalExploreViewModel" />
     </data>
@@ -22,7 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="54dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@null"
+            android:onClick="@{() -> onClick.onClickBackButton()}"
             android:padding="12dp"
             android:src="@drawable/btn_explore_back"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +58,7 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
-                android:text="@={normalExploreViewModel.searchContent}"
+                android:text="@={normalExploreViewModel.searchWord}"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -66,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
+                android:onClick="@{() -> onClick.onClickSearchWordCancelButton()}"
                 android:padding="8dp"
                 android:src="@drawable/btn_explore_cancel"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -81,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="4dp"
                 android:contentDescription="@null"
+                android:onClick="@{() -> onClick.onClickSearchButton()}"
                 android:padding="4dp"
                 android:src="@drawable/btn_explore_search"
                 app:layout_constraintBottom_toBottomOf="parent"

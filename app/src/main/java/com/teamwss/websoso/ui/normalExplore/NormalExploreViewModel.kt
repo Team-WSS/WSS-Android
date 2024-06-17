@@ -18,8 +18,8 @@ class NormalExploreViewModel @Inject constructor(
         MutableLiveData(NormalExploreUiState())
     val uiState: LiveData<NormalExploreUiState> get() = _uiState
 
-    private val _searchContent: MutableLiveData<String> = MutableLiveData()
-    val searchContent: MutableLiveData<String> get() = _searchContent
+    private val _searchWord: MutableLiveData<String> = MutableLiveData()
+    val searchWord: MutableLiveData<String> get() = _searchWord
 
     fun fetchNormalExploreResult() {
         viewModelScope.launch {
@@ -32,7 +32,10 @@ class NormalExploreViewModel @Inject constructor(
                     novels = results.novels,
                 )
             }.onFailure {
-
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = true,
+                )
             }
         }
     }
