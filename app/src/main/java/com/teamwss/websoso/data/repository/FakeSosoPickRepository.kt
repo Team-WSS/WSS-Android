@@ -1,9 +1,10 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.model.SosoPickEntity
+import javax.inject.Inject
 
 // TODO API 붙일 때 FakeSosoPickRepository 제거
-class FakeSosoPickRepository {
+class FakeSosoPickRepository @Inject constructor() {
 
     val dummyData: SosoPickEntity = SosoPickEntity(
         listOf(

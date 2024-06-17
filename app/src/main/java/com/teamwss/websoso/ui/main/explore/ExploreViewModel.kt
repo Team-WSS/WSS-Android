@@ -10,9 +10,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.data.repository.FakeSosoPickRepository
 import com.teamwss.websoso.ui.main.explore.model.SosoPickUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ExploreViewModel(
+@HiltViewModel
+class ExploreViewModel @Inject constructor(
     private val fakeSosoPickRepository: FakeSosoPickRepository,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<SosoPickUiState> = MutableLiveData(SosoPickUiState())
@@ -35,16 +38,6 @@ class ExploreViewModel(
                 _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true,
-                )
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                ExploreViewModel(
-                    fakeSosoPickRepository = WebsosoApp.getSosoPickRepository()
                 )
             }
         }

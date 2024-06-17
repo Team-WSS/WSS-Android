@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.onboarding.OnboardingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/tv_on_boarding_first_input_nickname"
+            style="@style/headline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:text="@string/onboarding_first_input_nickname"
+            android:textColor="@color/black"
+            android:textFontWeight="700"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_on_boarding_first_input_nickname_hint"
+            style="@style/body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="10자 이내의 닉네임을 입력해주세요"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@id/tv_on_boarding_first_input_nickname"
+            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_first_input_nickname" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_on_boarding_first_nickname_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_onboarding_gray50_radius_12dp"
+            app:layout_constraintEnd_toStartOf="@id/btn_on_boarding_first_nickname_duplicate_check"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_first_input_nickname_hint">
+
+            <EditText
+                android:id="@+id/et_on_boarding_first_nickname"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="12dp"
+                android:background="@color/transparent"
+                android:hint="닉네임"
+                android:maxLength="10"
+                android:text="@={viewModel.currentNicknameInput}"
+                android:textColorHint="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_on_boarding_first_nickname_input_clear"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_on_boarding_first_nickname_input_clear"
+                android:layout_width="44dp"
+                android:layout_height="0dp"
+                android:onClick="@{() -> viewModel.clearInputNickname()}"
+                android:padding="10dp"
+                android:src="@drawable/ic_onboarding_first_input_clear_default"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_on_boarding_first_nickname_duplicate_check"
+            style="@style/body2"
+            android:layout_width="88dp"
+            android:layout_height="0dp"
+            android:background="@drawable/selc_onboarding_first_duplication_check_button_background"
+            android:elevation="0dp"
+            android:enabled="@{viewModel.onBoardingFirstUiState.isDuplicationCheckButtonEnable}"
+            android:onClick="@{() -> viewModel.checkDuplicationNickname()}"
+            android:text="@string/onboarding_first_duplicate_check"
+            android:textColor="@drawable/selc_onboarding_first_duplication_check_button_text_color"
+            app:layout_constraintBottom_toBottomOf="@id/cl_on_boarding_first_nickname_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cl_on_boarding_first_nickname_input"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/tv_on_boarding_first_message"
+            style="@style/body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@{viewModel.onBoardingFirstUiState.nicknameValidationMessage}"
+            android:textColor="@color/secondary_100_FF675D"
+            app:layout_constraintStart_toStartOf="@id/cl_on_boarding_first_nickname_input"
+            app:layout_constraintTop_toBottomOf="@id/cl_on_boarding_first_nickname_input"
+            tools:text="에러메세지입니다" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_on_boarding_first_next"
+            style="@style/title1"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selc_onboarding_first_next_button_background"
+            android:enabled="@{viewModel.onBoardingFirstUiState.isNextButtonEnable}"
+            android:onClick="@{() -> viewModel.goToNextPage()}"
+            android:text="@string/onboarding_first_next_button"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
