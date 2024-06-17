@@ -64,5 +64,11 @@
     <string name="my_library_genre_preference">장르 취향</string>
     <string name="my_library_preferred_novel">작품 취향</string>
 
+    <!-- 온보딩 뷰 -->
+    <string name="onboarding_skip">건너뛰기</string>
+    <string name="onboarding_first_input_nickname">닉네임을 입력하세요</string>
+    <string name="onboarding_first_duplicate_check">중복확인</string>
+    <string name="onboarding_first_next_button">다음으로</string>
+
 
 </resources>
