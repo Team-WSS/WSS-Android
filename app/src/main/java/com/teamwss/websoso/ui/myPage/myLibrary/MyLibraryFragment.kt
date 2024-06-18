@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.myPage.mylibrary
+package com.teamwss.websoso.ui.myPage.myLibrary
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,11 +44,11 @@ class MyLibraryFragment : Fragment() {
 
     private fun initializeAttractivePoints() {
         libraryViewModel.attractivePoints.observe(viewLifecycleOwner) { attractivePoints ->
-            binding.cgAttractivePoints.removeAllViews()
+            binding.cgMyLibraryAttractivePoints.removeAllViews()
 
             for (data in attractivePoints) {
                 val chip = createChip(data)
-                binding.cgAttractivePoints.addView(chip)
+                binding.cgMyLibraryAttractivePoints.addView(chip)
             }
         }
     }
@@ -69,7 +69,7 @@ class MyLibraryFragment : Fragment() {
     }
 
     private fun onGenrePathToggled() {
-        binding.ivPreferredGenrePath.setOnClickListener {
+        binding.ivMyLibraryPreferredGenrePath.setOnClickListener {
             libraryViewModel.toggleGenreListVisibility()
         }
     }
@@ -91,8 +91,8 @@ class MyLibraryFragment : Fragment() {
     private fun updateGenreBottomList(genres: List<GenrePreferredEntity>) {
         val adapter =
             RestPreferredGenreAdapter(requireContext(), R.layout.item_rest_preferred_genre, genres)
-        binding.listRestPreferredGenre.adapter = adapter
-        adjustListViewHeight(binding.listRestPreferredGenre)
+        binding.listMyLibraryRestPreferredGenre.adapter = adapter
+        adjustListViewHeight(binding.listMyLibraryRestPreferredGenre)
     }
 
     private fun adjustListViewHeight(listView: ListView) {
@@ -115,17 +115,17 @@ class MyLibraryFragment : Fragment() {
     }
 
     private fun updateRestPreferredGenreVisibility(isVisible: Boolean) {
-        binding.listRestPreferredGenre.isVisible = isVisible
-        binding.ivPreferredGenrePath.setImageResource(
+        binding.listMyLibraryRestPreferredGenre.isVisible = isVisible
+        binding.ivMyLibraryPreferredGenrePath.setImageResource(
             if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
         )
     }
 
     private fun updateAttractivePoints(attractivePoints: List<AttractivePointData>) {
-        binding.cgAttractivePoints.removeAllViews()
+        binding.cgMyLibraryAttractivePoints.removeAllViews()
         attractivePoints.forEach { data ->
             val attractiveChip = createChip(data)
-            binding.cgAttractivePoints.addView(attractiveChip)
+            binding.cgMyLibraryAttractivePoints.addView(attractiveChip)
         }
     }
 

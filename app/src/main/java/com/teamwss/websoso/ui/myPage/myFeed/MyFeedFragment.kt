@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.myPage.myfeed
+package com.teamwss.websoso.ui.myPage.myFeed
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.teamwss.websoso.databinding.FragmentMyFeedBinding
-import com.teamwss.websoso.databinding.FragmentMyPageBinding
 
 
 class MyFeedFragment : Fragment() {
