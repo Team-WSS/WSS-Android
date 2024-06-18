@@ -28,7 +28,7 @@ class RestPreferredGenreAdapter(
             binding = view.tag as ItemRestPreferredGenreBinding
         }
 
-        val genre = getItem(position)
+        val genre: GenrePreferredEntity? = getItem(position)
         if (genre != null) {
             binding.restPreferredGenre = genre
             binding.executePendingBindings()
