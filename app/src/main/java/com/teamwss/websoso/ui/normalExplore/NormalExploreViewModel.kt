@@ -21,6 +21,9 @@ class NormalExploreViewModel @Inject constructor(
     private val _searchWord: MutableLiveData<String> = MutableLiveData()
     val searchWord: MutableLiveData<String> get() = _searchWord
 
+    private val _isSearchCancelButtonVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isSearchCancelButtonVisibility: LiveData<Boolean> get() = _isSearchCancelButtonVisibility
+
     fun fetchNormalExploreResult() {
         viewModelScope.launch {
             runCatching {
@@ -38,5 +41,9 @@ class NormalExploreViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun validateSearchWordClearButton() {
+        _isSearchCancelButtonVisibility.value = _searchWord.value.isNullOrEmpty().not()
     }
 }

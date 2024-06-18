@@ -23,6 +23,7 @@ class NormalExploreActivity :
         bindViewModel()
         setupUI()
         setObserveUiState()
+        setObserveSearchWord()
     }
 
     private fun bindViewModel() {
@@ -79,6 +80,12 @@ class NormalExploreActivity :
                 uiState.error -> throw IllegalStateException()
                 !uiState.loading -> normalExploreAdapter.submitList(uiState.novels)
             }
+        }
+    }
+
+    private fun setObserveSearchWord() {
+        normalExploreViewModel.searchWord.observe(this) {
+            normalExploreViewModel.validateSearchWordClearButton()
         }
     }
 
