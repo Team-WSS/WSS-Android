@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/iv_go_to_settings"
+                android:id="@+id/iv_my_page_go_to_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -35,7 +35,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_user_character"
+                android:id="@+id/iv_my_page_user_character"
                 android:layout_width="94dp"
                 android:layout_height="94dp"
                 app:loadImageUrlCircular="@{viewModel.myPageProfile.avatarImage}"
@@ -43,31 +43,31 @@
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_go_to_settings"
+                app:layout_constraintTop_toBottomOf="@id/iv_my_page_go_to_settings"
                 tools:src="@drawable/img_user_pofile" />
 
             <ImageView
-                android:id="@+id/iv_user_character_change_circle"
+                android:id="@+id/iv_my_page_user_character_change_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:src="@drawable/ic_pencil_circle_fill"
-                app:layout_constraintBottom_toBottomOf="@id/iv_user_character"
+                app:layout_constraintBottom_toBottomOf="@id/iv_my_page_user_character"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_user_character_change_pencil"
+                android:id="@+id/iv_my_page_user_character_change_pencil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_pencil"
-                app:layout_constraintBottom_toBottomOf="@id/iv_user_character_change_circle"
-                app:layout_constraintEnd_toEndOf="@id/iv_user_character_change_circle"
-                app:layout_constraintStart_toStartOf="@id/iv_user_character_change_circle"
-                app:layout_constraintTop_toTopOf="@id/iv_user_character_change_circle" />
+                app:layout_constraintBottom_toBottomOf="@id/iv_my_page_user_character_change_circle"
+                app:layout_constraintEnd_toEndOf="@id/iv_my_page_user_character_change_circle"
+                app:layout_constraintStart_toStartOf="@id/iv_my_page_user_character_change_circle"
+                app:layout_constraintTop_toTopOf="@id/iv_my_page_user_character_change_circle" />
 
             <TextView
-                android:id="@+id/tv_user_name"
+                android:id="@+id/tv_my_page_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -76,11 +76,11 @@
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_user_character"
+                app:layout_constraintTop_toBottomOf="@id/iv_my_page_user_character"
                 tools:text="밝보"/>
 
             <TextView
-                android:id="@+id/tv_user_introduction"
+                android:id="@+id/tv_my_page_user_introduction"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -92,13 +92,13 @@
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_user_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_name"
                 tools:text="안녕 나는 사실 연진이야"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tb_my_page_"
+            android:id="@+id/tb_my_page"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -127,7 +127,7 @@
             android:id="@+id/vp_my_page"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/tb_my_page_"
+            app:layout_constraintTop_toBottomOf="@id/tb_my_page"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

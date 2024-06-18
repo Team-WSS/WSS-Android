@@ -21,7 +21,7 @@
             tools:context=".ui.my-page.feed.MyFeedFragemnt">
 
             <TextView
-                android:id="@+id/tv_storage_title"
+                android:id="@+id/tv_my_library_storage_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -33,10 +33,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:id="@+id/linear_my_page_storage"
+                android:id="@+id/linear_my_library_storage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_gray50_radius_14"
+                android:background="@drawable/bg_my_library_gray50_radius_14dp"
                 android:orientation="horizontal"
                 android:paddingTop="16dp"
                 android:paddingBottom="20dp"
@@ -44,16 +44,16 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_storage_title">
+                app:layout_constraintTop_toBottomOf="@id/tv_my_library_storage_title">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_storage_interesting"
+                    android:id="@+id/cl_my_library_storage_interesting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/tv_storage_interesting_count"
+                        android:id="@+id/tv_my_library_storage_interesting_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{novelStorage.interestingNovel}"
@@ -65,7 +65,7 @@
                         tools:text="0" />
 
                     <TextView
-                        android:id="@+id/tv_storage_interesting"
+                        android:id="@+id/tv_my_library_storage_interesting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -74,18 +74,18 @@
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_storage_interesting_count" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_my_library_storage_interesting_count" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_storage_watching"
+                    android:id="@+id/cl_my_library_storage_watching"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/tv_storage_watching_count"
+                        android:id="@+id/tv_my_library_storage_watching_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{novelStorage.watchingNovel}"
@@ -97,7 +97,7 @@
                         tools:text="0" />
 
                     <TextView
-                        android:id="@+id/tv_storage_watching"
+                        android:id="@+id/tv_my_library_storage_watching"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -106,18 +106,18 @@
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_storage_watching_count" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_my_library_storage_watching_count" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_storage_watched"
+                    android:id="@+id/cl_my_library_storage_watched"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/tv_storage_watched_count"
+                        android:id="@+id/tv_my_library_storage_watched_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{novelStorage.watchedNovel}"
@@ -129,7 +129,7 @@
                         tools:text="0" />
 
                     <TextView
-                        android:id="@+id/tv_storage_watched"
+                        android:id="@+id/tv_my_library_storage_watched"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -138,18 +138,18 @@
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_storage_watched_count" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_my_library_storage_watched_count" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_storage_quitting"
+                    android:id="@+id/cl_my_library_storage_quitting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/tv_storage_quitting_count"
+                        android:id="@+id/tv_my_library_storage_quitting_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{novelStorage.quitNovel}"
@@ -161,7 +161,7 @@
                         tools:text="0" />
 
                     <TextView
-                        android:id="@+id/tv_storage_quitting"
+                        android:id="@+id/tv_my_library_storage_quitting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -170,7 +170,7 @@
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_storage_quitting_count" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_my_library_storage_quitting_count" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -182,16 +182,16 @@
                 android:layout_height="3dp"
                 android:layout_marginTop="32dp"
                 android:background="@color/gray_50_F4F5F8"
-                app:layout_constraintTop_toBottomOf="@id/linear_my_page_storage" />
+                app:layout_constraintTop_toBottomOf="@id/linear_my_library_storage" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_preferred_genre"
+                android:id="@+id/cl_my_library_preferred_genre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/view_between_storage_and_preference">
 
                 <TextView
-                    android:id="@+id/tv_preferred_genre_title"
+                    android:id="@+id/tv_my_library_preferred_genre_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/my_library_genre_preference"
@@ -203,21 +203,21 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <LinearLayout
-                    android:id="@+id/linear_best_preferred_genre"
+                    android:id="@+id/linear_my_library_best_preferred_genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_preferred_genre_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_library_preferred_genre_title"
                     android:orientation="horizontal">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_preferred_genre_first"
+                        android:id="@+id/cl_my_library_preferred_genre_first"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <ImageView
-                            android:id="@+id/iv_preferred_genre_first"
+                            android:id="@+id/iv_my_library_preferred_genre_first"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_novel_detail_genre_test"
@@ -226,38 +226,38 @@
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                         <TextView
-                            android:id="@+id/tv_preferred_genre_first"
+                            android:id="@+id/tv_my_library_preferred_genre_first"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="로판"
                             android:textAppearance="@style/title3"
                             android:layout_marginTop="12dp"
-                            app:layout_constraintTop_toBottomOf="@id/iv_preferred_genre_first"
+                            app:layout_constraintTop_toBottomOf="@id/iv_my_library_preferred_genre_first"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                         <TextView
-                            android:id="@+id/tv_preferred_genre_first_count"
+                            android:id="@+id/tv_my_library_preferred_genre_first_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5편"
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             android:layout_marginTop="2dp"
-                            app:layout_constraintTop_toBottomOf="@id/tv_preferred_genre_first"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_library_preferred_genre_first"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_preferred_genre_second"
+                        android:id="@+id/cl_my_library_preferred_genre_second"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <ImageView
-                            android:id="@+id/iv_preferred_genre_second"
+                            android:id="@+id/iv_my_library_preferred_genre_second"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_novel_detail_genre_test"
@@ -266,38 +266,38 @@
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                         <TextView
-                            android:id="@+id/tv_preferred_genre_second"
+                            android:id="@+id/tv_my_library_preferred_genre_second"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="로판"
                             android:textAppearance="@style/title3"
                             android:layout_marginTop="12dp"
-                            app:layout_constraintTop_toBottomOf="@id/iv_preferred_genre_second"
+                            app:layout_constraintTop_toBottomOf="@id/iv_my_library_preferred_genre_second"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                         <TextView
-                            android:id="@+id/tv_preferred_genre_second_count"
+                            android:id="@+id/tv_my_library_preferred_genre_second_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5편"
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             android:layout_marginTop="2dp"
-                            app:layout_constraintTop_toBottomOf="@id/tv_preferred_genre_second"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_library_preferred_genre_second"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_preferred_genre_third"
+                        android:id="@+id/cl_my_library_preferred_genre_third"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
                         <ImageView
-                            android:id="@+id/iv_preferred_genre_third"
+                            android:id="@+id/iv_my_library_preferred_genre_third"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_novel_detail_genre_test"
@@ -306,25 +306,25 @@
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                         <TextView
-                            android:id="@+id/tv_preferred_genre_third"
+                            android:id="@+id/tv_my_library_preferred_genre_third"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="로판"
                             android:textAppearance="@style/title3"
                             android:layout_marginTop="12dp"
-                            app:layout_constraintTop_toBottomOf="@id/iv_preferred_genre_third"
+                            app:layout_constraintTop_toBottomOf="@id/iv_my_library_preferred_genre_third"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"/>
 
                         <TextView
-                            android:id="@+id/tv_preferred_genre_third_count"
+                            android:id="@+id/tv_my_library_preferred_genre_third_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5편"
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             android:layout_marginTop="2dp"
-                            app:layout_constraintTop_toBottomOf="@id/tv_preferred_genre_third"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_library_preferred_genre_third"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -333,23 +333,23 @@
                 </LinearLayout>
 
                 <ListView
-                    android:id="@+id/list_rest_preferred_genre"
+                    android:id="@+id/list_my_library_rest_preferred_genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:divider="@null"
                     android:layout_marginTop="32dp"
                     android:layout_marginHorizontal="40dp"
-                    app:layout_constraintTop_toBottomOf="@id/linear_best_preferred_genre"/>
+                    app:layout_constraintTop_toBottomOf="@id/linear_my_library_best_preferred_genre"/>
 
                 <ImageView
-                    android:id="@+id/iv_preferred_genre_path"
+                    android:id="@+id/iv_my_library_preferred_genre_path"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_lower_path"
                     android:layout_marginTop="24dp"
                     android:padding="8dp"
-                    app:layout_constraintTop_toBottomOf="@id/list_rest_preferred_genre"
+                    app:layout_constraintTop_toBottomOf="@id/list_my_library_rest_preferred_genre"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -361,16 +361,16 @@
                 android:layout_height="3dp"
                 android:background="@color/gray_50_F4F5F8"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/cl_preferred_genre"/>
+                app:layout_constraintTop_toBottomOf="@id/cl_my_library_preferred_genre"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_preferred_novel"
+                android:id="@+id/cl_my_library_preferred_novel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/view_between_genre_and_novel">
 
                 <TextView
-                    android:id="@+id/tv_preferred_novel_title"
+                    android:id="@+id/tv_my_library_preferred_novel_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/my_library_preferred_novel"
@@ -382,19 +382,19 @@
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_attractive_points"
+                    android:id="@+id/cl_my_library_attractive_points"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:background="@drawable/bg_my_library_gray50_radius_12dp"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="12dp"
                     android:paddingVertical="20dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_preferred_novel_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_library_preferred_novel_title"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <TextView
-                        android:id="@+id/tv_attractive_points"
+                        android:id="@+id/tv_my_library_attractive_points"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/gray_300_52515F"
@@ -408,12 +408,12 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
-                    android:id="@+id/cg_attractive_points"
+                    android:id="@+id/cg_my_library_attractive_points"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginHorizontal="20dp"
-                    app:layout_constraintTop_toBottomOf="@id/cl_attractive_points">
+                    app:layout_constraintTop_toBottomOf="@id/cl_my_library_attractive_points">
 
                 </com.teamwss.websoso.ui.common.customView.WebsosoChipGroup>
 
