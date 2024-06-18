@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.AttractivePointData
-import com.teamwss.websoso.data.model.GenrePreferredEntity
+import com.teamwss.websoso.data.model.PreferredGenreEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 
@@ -88,7 +88,7 @@ class MyLibraryFragment : Fragment() {
         }
     }
 
-    private fun updateGenreBottomList(genres: List<GenrePreferredEntity>) {
+    private fun updateGenreBottomList(genres: List<PreferredGenreEntity>) {
         val adapter =
             RestPreferredGenreAdapter(requireContext(), R.layout.item_rest_preferred_genre, genres)
         binding.listMyLibraryRestPreferredGenre.adapter = adapter

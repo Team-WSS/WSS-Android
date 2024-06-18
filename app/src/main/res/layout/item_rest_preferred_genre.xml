@@ -5,7 +5,7 @@
     <data>
         <variable
             name="restPreferredGenre"
-            type="com.teamwss.websoso.data.model.GenrePreferredEntity" />
+            type="com.teamwss.websoso.data.model.PreferredGenreEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

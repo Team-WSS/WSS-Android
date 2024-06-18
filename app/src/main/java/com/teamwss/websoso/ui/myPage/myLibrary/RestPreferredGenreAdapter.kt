@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.teamwss.websoso.data.model.GenrePreferredEntity
+import com.teamwss.websoso.data.model.PreferredGenreEntity
 import com.teamwss.websoso.databinding.ItemRestPreferredGenreBinding
 
 class RestPreferredGenreAdapter(
-    context: Context,
-    resource: Int,
-    items: List<GenrePreferredEntity>
-) : ArrayAdapter<GenrePreferredEntity>(context, resource, items) {
+    context: Context, resource: Int, items: List<PreferredGenreEntity>
+) : ArrayAdapter<PreferredGenreEntity>(context, resource, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val binding: ItemRestPreferredGenreBinding
@@ -28,7 +26,7 @@ class RestPreferredGenreAdapter(
             binding = view.tag as ItemRestPreferredGenreBinding
         }
 
-        val genre: GenrePreferredEntity? = getItem(position)
+        val genre: PreferredGenreEntity? = getItem(position)
         if (genre != null) {
             binding.restPreferredGenre = genre
             binding.executePendingBindings()
