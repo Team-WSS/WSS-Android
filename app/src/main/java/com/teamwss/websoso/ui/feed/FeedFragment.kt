@@ -14,7 +14,8 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
-import com.teamwss.websoso.ui.feed.adapter.FeedType.*
+import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
+import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity

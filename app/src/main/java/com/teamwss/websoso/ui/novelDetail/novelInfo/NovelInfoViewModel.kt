@@ -2,7 +2,6 @@ package com.teamwss.websoso.ui.novelDetail.novelInfo
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 class NovelInfoViewModel : ViewModel() {
     private val _viewMoreTextVisibility = MutableLiveData<Boolean>(false)
