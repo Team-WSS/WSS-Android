@@ -4,30 +4,31 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.chip.Chip
 
 class WebsosoChip(
     context: Context,
     attrs: AttributeSet? = null,
 ) : Chip(context, attrs) {
-
     init {
         setLayoutParams()
         rippleColor = null
     }
 
     private fun setLayoutParams() {
-        layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-        )
+        layoutParams =
+            ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            )
     }
 
     /*
     Sets this chip's text.
     Params:
     name - The String of this chip's text.
-    */
+     */
     fun setWebsosoChipText(name: String) {
         text = name
     }
@@ -36,7 +37,7 @@ class WebsosoChip(
     Sets this chip's text appearance using a resource id.
     Params:
     style - The resource id of this chip's text style.
-    */
+     */
     fun setWebsosoChipTextAppearance(style: Int) {
         setTextAppearance(style)
     }
@@ -45,10 +46,10 @@ class WebsosoChip(
     Sets this chip's text color using a resource id.
     Params:
     color - The resource id of this chip's text color.
-    */
+     */
     fun setWebsosoChipTextColor(color: Int) {
         setTextColor(
-            context.getColorStateList(color)
+            context.getColorStateList(color),
         )
     }
 
@@ -56,7 +57,7 @@ class WebsosoChip(
     Sets this chip's background color using a resource id.
     Params:
     color - The resource id of this chip's background color.
-    */
+     */
     fun setWebsosoChipBackgroundColor(color: Int) {
         chipBackgroundColor = context.getColorStateList(color)
     }
@@ -66,7 +67,7 @@ class WebsosoChip(
     It has a default value of stroke's width set 1f.
     Params:
     color - The resource id of this chip's stroke color.
-    */
+     */
     fun setWebsosoChipStrokeColor(color: Int) {
         chipStrokeWidth = 1f
         chipStrokeColor = context.getColorStateList(color)
@@ -76,11 +77,12 @@ class WebsosoChip(
     Sets this chip's radius size.
     Params:
     radius - The value of this chip's radius size.
-    */
+     */
     fun setWebsosoChipRadius(radius: Float) {
-        shapeAppearanceModel = shapeAppearanceModel.toBuilder()
-            .setAllCornerSizes(radius)
-            .build()
+        shapeAppearanceModel =
+            shapeAppearanceModel.toBuilder()
+                .setAllCornerSizes(radius)
+                .build()
     }
 
     /*
@@ -89,7 +91,7 @@ class WebsosoChip(
     and adding the height of the text inside the chip.
     Params:
     padding - The value of this chip's vertical padding.
-    */
+     */
     fun setWebsosoChipPaddingVertical(padding: Float) {
         chipMinHeight = (padding * 2) + textSize
     }
@@ -98,7 +100,7 @@ class WebsosoChip(
     Sets this chip's horizontal padding size.
     Params:
     padding - The value of this chip's vertical padding.
-    */
+     */
     fun setWebsosoChipPaddingHorizontal(padding: Float) {
         chipStartPadding = padding
         chipEndPadding = padding
@@ -112,7 +114,7 @@ class WebsosoChip(
     Default - If the chip is clicked, it toggles its selected state and executes the event passed as a params.
     Params:
     event - The trigger an action declared externally.
-    */
+     */
     fun setOnWebsosoChipClick(event: () -> Unit) {
         setOnClickListener {
             if ((parent as WebsosoChipGroup).isSingleSelectionMode) {
@@ -125,7 +127,28 @@ class WebsosoChip(
         }
     }
 
-    private fun eventOnSingleSelectionMode(currentChip: View, event: () -> Unit) {
+    /*
+    Sets the visibility of the close icon on this chip.
+    Params:
+    isVisible - Boolean indicating whether the close icon should be visible or not.
+     */
+    fun setWebsosoChipCloseIconVisibility(isVisible: Boolean) {
+        isCloseIconVisible = isVisible
+    }
+
+    /*
+    Sets the drawable for the close icon on this chip using a resource id.
+    Params:
+    drawable - The resource id of the drawable to be used for the close icon.
+     */
+    fun setWebsosoChipCloseIconDrawable(drawable: Int) {
+        closeIcon = ResourcesCompat.getDrawable(resources, drawable, null)
+    }
+
+    private fun eventOnSingleSelectionMode(
+        currentChip: View,
+        event: () -> Unit,
+    ) {
         val websosoChipGroup: WebsosoChipGroup = parent as? WebsosoChipGroup ?: return
 
         with(websosoChipGroup) {
