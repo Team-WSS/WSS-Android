@@ -11,12 +11,13 @@ import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.model.KeywordModel.Category
 
-class NovelRatingKeywordAdapter(private val onKeywordClick: (Category.Keyword, Boolean) -> (Unit)) :
+class NovelRatingKeywordAdapter(
+    private val onKeywordClick: (keyword: Category.Keyword, isClicked: Boolean) -> (Unit),
+) :
     ListAdapter<Category, NovelRatingKeywordAdapter.NovelRatingKeywordViewHolder>(diffUtil) {
-
     class NovelRatingKeywordViewHolder(
         private val binding: ItemNovelRatingKeywordBinding,
-        private val onKeywordClick: (Category.Keyword, Boolean) -> Unit
+        private val onKeywordClick: (keyword: Category.Keyword, isClicked: Boolean) -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Category) {
@@ -52,8 +53,9 @@ class NovelRatingKeywordAdapter(private val onKeywordClick: (Category.Keyword, B
                     wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
 
                 when (ivNovelRatingKeywordToggle.isSelected) {
-                    true -> layoutParams.matchConstraintMaxHeight =
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    true ->
+                        layoutParams.matchConstraintMaxHeight =
+                            ConstraintLayout.LayoutParams.WRAP_CONTENT
 
                     false -> layoutParams.matchConstraintMaxHeight = 78.toDp()
                 }
@@ -69,31 +71,41 @@ class NovelRatingKeywordAdapter(private val onKeywordClick: (Category.Keyword, B
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): NovelRatingKeywordViewHolder {
         val binding =
             ItemNovelRatingKeywordBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
+                false,
             )
         return NovelRatingKeywordViewHolder(binding, onKeywordClick)
     }
 
-    override fun onBindViewHolder(holder: NovelRatingKeywordViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: NovelRatingKeywordViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
         holder.bind(item)
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<Category>() {
-            override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
-                return oldItem.categoryName == newItem.categoryName
-            }
+        val diffUtil =
+            object : DiffUtil.ItemCallback<Category>() {
+                override fun areItemsTheSame(
+                    oldItem: Category,
+                    newItem: Category,
+                ): Boolean {
+                    return oldItem.categoryName == newItem.categoryName
+                }
 
-            override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
-                return oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
+                override fun areContentsTheSame(
+                    oldItem: Category,
+                    newItem: Category,
+                ): Boolean {
+                    return oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
+                }
             }
-        }
     }
 }
