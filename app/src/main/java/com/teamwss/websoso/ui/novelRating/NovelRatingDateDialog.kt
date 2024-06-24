@@ -62,9 +62,9 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     }
 
     private fun initNumberPickerRange() {
-        setupNumberPicker(binding.npRatingDateYear, 1, 9999, "%04d")
-        setupNumberPicker(binding.npRatingDateMonth, 1, 12, "%02d")
-        setupNumberPicker(binding.npRatingDateDay, 1, viewModel.maxDayValue.value ?: 31, "%02d")
+        setupNumberPicker(binding.npRatingDateYear, 1, MAX_YEAR_VALUE, "%04d")
+        setupNumberPicker(binding.npRatingDateMonth, 1, MAX_MONTH_VALUE, "%02d")
+        setupNumberPicker(binding.npRatingDateDay, 1, viewModel.maxDayValue.value ?: MAX_DAY_VALUE, "%02d")
     }
 
     private fun observeDayRange() {
@@ -123,5 +123,11 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
         viewModel.cancelDateEdit()
         _binding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val MAX_YEAR_VALUE = 9999
+        private const val MAX_MONTH_VALUE = 12
+        private const val MAX_DAY_VALUE = 31
     }
 }
