@@ -6,19 +6,21 @@ import com.teamwss.websoso.ui.novelRating.model.KeywordModel
 object NovelRatingKeywordMapper {
     fun NovelRatingKeywordResponseDto.toUi(): KeywordModel {
         return KeywordModel(
-            categories =
-                categories.map { category ->
-                    KeywordModel.Category(
-                        categoryName = category.categoryName,
-                        keywords =
-                            category.keywords.map { keyword ->
-                                KeywordModel.Category.Keyword(
-                                    keywordId = keyword.keywordId,
-                                    keywordName = keyword.keywordName,
-                                )
-                            },
-                    )
-                },
+            categories = categories.map { it.toUi() },
+        )
+    }
+
+    fun NovelRatingKeywordResponseDto.Category.toUi(): KeywordModel.Category {
+        return KeywordModel.Category(
+            categoryName = categoryName,
+            keywords = keywords.map { it.toUi() },
+        )
+    }
+
+    fun NovelRatingKeywordResponseDto.Category.Keyword.toUi(): KeywordModel.Category.Keyword {
+        return KeywordModel.Category.Keyword(
+            keywordId = keywordId,
+            keywordName = keywordName,
         )
     }
 }
