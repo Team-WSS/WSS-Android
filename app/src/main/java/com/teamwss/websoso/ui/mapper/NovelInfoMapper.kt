@@ -11,7 +11,7 @@ object NovelInfoMapper {
             userNovelRating = userNovelRating,
             readStatus = readStatus,
             startDate = startDate,
-            endDate = endDate
+            endDate = endDate,
         )
     }
 }
