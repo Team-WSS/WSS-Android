@@ -104,17 +104,17 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
         }
     }
 
-    fun saveDateEdit() {
+    private fun saveDateEdit() {
         viewModel.updatePreviousDate()
         dismiss()
     }
 
-    fun clearCurrentDate() {
+    private fun clearCurrentDate() {
         viewModel.clearCurrentDate()
         dismiss()
     }
 
-    fun cancelDateEdit() {
+    private fun cancelDateEdit() {
         viewModel.cancelDateEdit()
         dismiss()
     }
