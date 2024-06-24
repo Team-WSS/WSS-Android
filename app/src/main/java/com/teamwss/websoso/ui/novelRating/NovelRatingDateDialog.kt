@@ -25,13 +25,16 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = DialogNovelRatingDateBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupDataBinding()
         setupDialogBehavior()
@@ -78,7 +81,7 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
         numberPicker: NumberPicker,
         minValue: Int,
         maxValue: Int,
-        format: String
+        format: String,
     ) {
         with(numberPicker) {
             wrapSelectorWheel = false
@@ -94,8 +97,8 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
                 Triple(
                     binding.npRatingDateYear.value,
                     binding.npRatingDateMonth.value,
-                    binding.npRatingDateDay.value
-                )
+                    binding.npRatingDateDay.value,
+                ),
             )
         }
         with(binding) {
@@ -106,7 +109,7 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     }
 
     fun saveDateEdit() {
-        viewModel.updatePastDate()
+        viewModel.updatePreviousDate()
         dismiss()
     }
 

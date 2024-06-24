@@ -8,12 +8,13 @@ data class NovelRatingModel(
     val startDate: String?,
     val endDate: String?,
     var uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus),
-    val ratingDateModel: RatingDateModel = RatingDateModel(
-        currentStartDate = startDate.toFormattedDate(),
-        currentEndDate = endDate.toFormattedDate(),
-        pastStartDate = startDate.toFormattedDate(),
-        pastEndDate = endDate.toFormattedDate()
-    ),
+    val ratingDateModel: RatingDateModel =
+        RatingDateModel(
+            currentStartDate = startDate.toFormattedDate(),
+            currentEndDate = endDate.toFormattedDate(),
+            previousStartDate = startDate.toFormattedDate(),
+            previousEndDate = endDate.toFormattedDate(),
+        ),
 ) {
     companion object {
         fun String?.toFormattedDate(): Triple<Int, Int, Int>? {
@@ -26,13 +27,13 @@ data class NovelRatingModel(
 data class RatingDateModel(
     var currentStartDate: Triple<Int, Int, Int>? = null,
     var currentEndDate: Triple<Int, Int, Int>? = null,
-    var pastStartDate: Triple<Int, Int, Int>? = null,
-    var pastEndDate: Triple<Int, Int, Int>? = null,
+    var previousStartDate: Triple<Int, Int, Int>? = null,
+    var previousEndDate: Triple<Int, Int, Int>? = null,
 )
 
 data class KeywordModel(
     val categories: List<Category>,
-    var pastSelectedKeywords: List<Category.Keyword> = categories.flatMap { it.keywords.filter { keyword -> keyword.isSelected } },
+    var previousSelectedKeywords: List<Category.Keyword> = categories.flatMap { it.keywords.filter { keyword -> keyword.isSelected } },
     var currentSelectedKeywords: List<Category.Keyword> = emptyList(),
 ) {
     data class Category(
