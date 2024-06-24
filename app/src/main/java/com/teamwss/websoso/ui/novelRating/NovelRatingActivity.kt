@@ -29,8 +29,10 @@ class NovelRatingActivity :
 
     private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.activity = this
         binding.lifecycleOwner = this
+        binding.showRatingKeywordBottomSheet = ::showRatingKeywordBottomSheet
+        binding.showDatePickerBottomSheet = ::showDatePickerBottomSheet
+        binding.navigateToNovelDetail = ::navigateToNovelDetail
     }
 
     private fun observeUiState() {
@@ -43,33 +45,40 @@ class NovelRatingActivity :
     private fun updateSelectedDateDisplay(it: NovelRatingUiState) {
         val (startDate, endDate) = with(it.novelRatingModel.ratingDateModel) { currentStartDate to currentEndDate }
 
-        val underLinedText = SpannableString(
-            when {
-                startDate == null && endDate == null -> getString(R.string.novel_rating_add_date)
-                startDate != null && endDate != null -> formatRangeDateText(startDate, endDate)
-                startDate != null -> formatSingleDateText(startDate)
-                endDate != null -> formatSingleDateText(endDate)
-                else -> ""
-            }
-        ).apply { setSpan(UnderlineSpan(), 0, this.length, 0) }
+        val underLinedText =
+            SpannableString(
+                when {
+                    startDate == null && endDate == null -> getString(R.string.novel_rating_add_date)
+                    startDate != null && endDate != null -> formatRangeDateText(startDate, endDate)
+                    startDate != null -> formatSingleDateText(startDate)
+                    endDate != null -> formatSingleDateText(endDate)
+                    else -> ""
+                },
+            ).apply { setSpan(UnderlineSpan(), 0, this.length, 0) }
 
         binding.tvNovelRatingDisplayDate.text = underLinedText
     }
 
     private fun formatRangeDateText(
         startDate: Triple<Int, Int, Int>,
-        endDate: Triple<Int, Int, Int>
+        endDate: Triple<Int, Int, Int>,
     ): String =
         getString(
             R.string.novel_rating_display_date_with_tilde,
-            startDate.first, startDate.second, startDate.third,
-            endDate.first, endDate.second, endDate.third
+            startDate.first,
+            startDate.second,
+            startDate.third,
+            endDate.first,
+            endDate.second,
+            endDate.third,
         )
 
     private fun formatSingleDateText(date: Triple<Int, Int, Int>): String =
         getString(
             R.string.novel_rating_display_date,
-            date.first, date.second, date.third
+            date.first,
+            date.second,
+            date.third,
         )
 
     private fun updateKeywordChips(uiState: NovelRatingUiState) {
@@ -91,11 +100,12 @@ class NovelRatingActivity :
                 setOnCloseIconClickListener {
                     viewModel.updatePastSelectedKeywords(keyword)
                 }
-                closeIcon = ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.ic_novel_rating_keword_remove,
-                    null
-                )
+                closeIcon =
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_novel_rating_keword_remove,
+                        null,
+                    )
                 closeIconSize = 20f
                 closeIconEndPadding = 18f
                 isCloseIconVisible = true
@@ -131,21 +141,21 @@ class NovelRatingActivity :
         }
     }
 
-    fun showDatePickerBottomSheet() {
+    private fun showDatePickerBottomSheet() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")
         if (existingDialog == null) {
             NovelRatingDateDialog().show(supportFragmentManager, "RatingDateDialog")
         }
     }
 
-    fun showRatingKeywordBottomSheet() {
+    private fun showRatingKeywordBottomSheet() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingKeywordDialog")
         if (existingDialog == null) {
             NovelRatingKeywordDialog().show(supportFragmentManager, "RatingKeywordDialog")
         }
     }
 
-    fun navigateToNovelDetail() {
+    private fun navigateToNovelDetail() {
         finish()
     }
 }
