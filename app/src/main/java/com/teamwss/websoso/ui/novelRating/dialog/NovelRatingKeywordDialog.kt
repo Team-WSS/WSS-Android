@@ -116,12 +116,12 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
     }
 
     fun clearSelectedKeywords() {
-        viewModel.clearKeywordEdit()
+        viewModel.clearEditingKeyword()
         dismiss()
     }
 
     fun cancelKeywordEdit() {
-        viewModel.cancelKeywordEdit()
+        viewModel.cancelEditingKeyword()
         dismiss()
     }
 

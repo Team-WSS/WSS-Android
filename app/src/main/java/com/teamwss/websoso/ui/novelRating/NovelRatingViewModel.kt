@@ -192,7 +192,7 @@ class NovelRatingViewModel : ViewModel() {
             )
     }
 
-    fun clearKeywordEdit() {
+    fun clearEditingKeyword() {
         val uiState = uiState.value ?: return
 
         val updatedCategories =
@@ -215,7 +215,7 @@ class NovelRatingViewModel : ViewModel() {
             )
     }
 
-    fun cancelKeywordEdit() {
+    fun cancelEditingKeyword() {
         val uiState = uiState.value ?: return
 
         val updatedCategories =
