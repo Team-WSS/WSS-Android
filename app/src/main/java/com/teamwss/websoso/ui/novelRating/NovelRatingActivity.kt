@@ -42,8 +42,11 @@ class NovelRatingActivity :
         }
     }
 
-    private fun updateSelectedDateDisplay(it: NovelRatingUiState) {
-        val (startDate, endDate) = with(it.novelRatingModel.ratingDateModel) { currentStartDate to currentEndDate }
+    private fun updateSelectedDateDisplay(novelRatingUiState: NovelRatingUiState) {
+        val (startDate: Triple<Int, Int, Int>?, endDate: Triple<Int, Int, Int>?) =
+            with(
+                novelRatingUiState.novelRatingModel.ratingDateModel,
+            ) { currentStartDate to currentEndDate }
 
         val underLinedText =
             SpannableString(
