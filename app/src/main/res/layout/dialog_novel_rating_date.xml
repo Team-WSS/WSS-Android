@@ -10,8 +10,16 @@
             type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
 
         <variable
-            name="dialog"
-            type="com.teamwss.websoso.ui.novelRating.NovelRatingDateDialog" />
+            name="cancelDateEdit"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="saveDateEdit"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="clearCurrentDate"
+            type="kotlin.jvm.functions.Function0" />
 
         <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
     </data>
@@ -43,7 +51,7 @@
             android:id="@+id/iv_rating_date_cancel"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:onClick="@{() -> dialog.cancelDateEdit()}"
+            android:onClick="@{() -> cancelDateEdit}"
             android:padding="22dp"
             android:src="@drawable/ic_novel_rating_date_cancel"
             app:layout_constraintEnd_toEndOf="parent"
@@ -240,7 +248,7 @@
             android:layout_marginTop="34dp"
             android:background="@drawable/bg_novel_rating_date_primary_100_radius_12dp"
             android:gravity="center"
-            android:onClick="@{() -> dialog.saveDateEdit()}"
+            android:onClick="@{() -> saveDateEdit}"
             android:text="@string/novel_rating_date_complete"
             android:textAppearance="@style/title1"
             android:textColor="@color/white"
@@ -255,7 +263,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:gravity="center"
-            android:onClick="@{() -> dialog.clearCurrentDate()}"
+            android:onClick="@{() -> clearCurrentDate}"
             android:text="@string/novel_rating_date_remove"
             android:textAppearance="@style/body1"
             android:textColor="@color/primary_100_6A5DFD"

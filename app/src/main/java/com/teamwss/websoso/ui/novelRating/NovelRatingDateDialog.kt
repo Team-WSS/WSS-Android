@@ -46,8 +46,10 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
 
     private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.dialog = this
         binding.lifecycleOwner = this
+        binding.cancelDateEdit = ::cancelDateEdit
+        binding.saveDateEdit = ::saveDateEdit
+        binding.clearCurrentDate = ::clearCurrentDate
     }
 
     private fun setupDialogBehavior() {
