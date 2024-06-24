@@ -37,12 +37,12 @@ class NovelRatingActivity :
 
     private fun observeUiState() {
         viewModel.uiState.observe(this) { uiState ->
-            updateSelectedDateDisplay(uiState)
+            updateSelectedDate(uiState)
             updateKeywordChips(uiState)
         }
     }
 
-    private fun updateSelectedDateDisplay(novelRatingUiState: NovelRatingUiState) {
+    private fun updateSelectedDate(novelRatingUiState: NovelRatingUiState) {
         val (startDate: Triple<Int, Int, Int>?, endDate: Triple<Int, Int, Int>?) =
             with(
                 novelRatingUiState.novelRatingModel.ratingDateModel,
