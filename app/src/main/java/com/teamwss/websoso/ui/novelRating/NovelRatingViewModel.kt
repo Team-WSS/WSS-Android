@@ -77,9 +77,9 @@ class NovelRatingViewModel : ViewModel() {
             }
     }
 
-    fun createNotNullDate() {
+    fun getNotNullDate() {
         val uiState = uiState.value ?: return
-        ratingDateManager.createNotNullDate(uiState.novelRatingModel)
+        ratingDateManager.getNotNullDate(uiState.novelRatingModel)
             .let { updatedModel ->
                 _uiState.value =
                     uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))

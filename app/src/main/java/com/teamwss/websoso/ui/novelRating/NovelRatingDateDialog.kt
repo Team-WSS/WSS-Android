@@ -58,7 +58,7 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     }
 
     private fun initNullDate() {
-        viewModel.createNotNullDate()
+        viewModel.getNotNullDate()
     }
 
     private fun initNumberPickerRange() {

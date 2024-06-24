@@ -211,7 +211,7 @@ class RatingDateManager {
         return ratingDateModel
     }
 
-    fun createNotNullDate(novelRatingModel: NovelRatingModel): RatingDateModel {
+    fun getNotNullDate(novelRatingModel: NovelRatingModel): RatingDateModel {
         val ratingDateModel = novelRatingModel.ratingDateModel
         when (novelRatingModel.uiReadStatus) {
             ReadStatus.WATCHING -> {
