@@ -4,7 +4,7 @@ import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 
 object NovelInfoMapper {
-    fun NovelInfoResponseDto.toPresentation(): NovelRatingModel {
+    fun NovelInfoResponseDto.toUi(): NovelRatingModel {
         return NovelRatingModel(
             userNovelId = userNovelId,
             novelTitle = novelTitle,
