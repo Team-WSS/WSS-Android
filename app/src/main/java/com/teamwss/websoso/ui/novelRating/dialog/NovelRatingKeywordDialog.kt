@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
@@ -30,13 +30,16 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = DialogNovelRatingKeywordBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupDataBinding()
         setupDialogBehavior()
@@ -52,22 +55,17 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
     }
 
     private fun setupDialogBehavior() {
-        val bottomSheet =
-            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-
-        bottomSheet.let {
-            val behavior = BottomSheetBehavior.from(it)
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            behavior.skipCollapsed = true
-        }
+        (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        (dialog as BottomSheetDialog).behavior.skipCollapsed = true
     }
 
     private fun setupRecyclerView() {
-        novelRatingKeywordAdapter = NovelRatingKeywordAdapter(
-            onKeywordClick = { keyword, isSelected ->
-                viewModel.updateCurrentSelectedKeywords(keyword, isSelected)
-            }
-        )
+        novelRatingKeywordAdapter =
+            NovelRatingKeywordAdapter(
+                onKeywordClick = { keyword, isSelected ->
+                    viewModel.updateCurrentSelectedKeywords(keyword, isSelected)
+                },
+            )
         binding.rvRatingKeywordList.apply {
             adapter = novelRatingKeywordAdapter
             itemAnimator = null
@@ -98,11 +96,12 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
                 setOnCloseIconClickListener {
                     viewModel.updateCurrentSelectedKeywords(keyword, isSelected = false)
                 }
-                closeIcon = ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.ic_novel_rating_keword_remove,
-                    null
-                )
+                closeIcon =
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_novel_rating_keword_remove,
+                        null,
+                    )
                 closeIconSize = 20f
                 closeIconEndPadding = 18f
                 isCloseIconVisible = true

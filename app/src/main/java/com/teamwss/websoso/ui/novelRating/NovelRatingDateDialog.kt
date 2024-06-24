@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.NumberPicker
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
@@ -53,14 +53,8 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     }
 
     private fun setupDialogBehavior() {
-        val bottomSheet =
-            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-
-        bottomSheet.let {
-            val behavior = BottomSheetBehavior.from(it)
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            behavior.skipCollapsed = true
-        }
+        (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        (dialog as BottomSheetDialog).behavior.skipCollapsed = true
     }
 
     private fun initNullDate() {
