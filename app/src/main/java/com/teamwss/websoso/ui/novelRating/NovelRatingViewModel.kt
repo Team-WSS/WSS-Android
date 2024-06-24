@@ -19,6 +19,8 @@ class NovelRatingViewModel : ViewModel() {
     private val _isEditingStartDate = MutableLiveData<Boolean>()
     val isEditingStartDate: LiveData<Boolean> get() = _isEditingStartDate
 
+    private val ratingDateManager = RatingDateManager()
+
     fun updatePreviousDate() {
         val uiState = uiState.value ?: return
         val ratingDateModel = uiState.novelRatingModel.ratingDateModel
@@ -28,10 +30,10 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     fun updateReadStatus(readStatus: ReadStatus) {
-        RatingDateManager().updateReadStatus(uiState.value?.novelRatingModel ?: return, readStatus)
+        ratingDateManager.updateReadStatus(uiState.value?.novelRatingModel ?: return, readStatus)
             .let { updatedModel ->
                 _uiState.value = uiState.value?.copy(novelRatingModel = updatedModel)
-                _isEditingStartDate.value = RatingDateManager().updateIsEditingStartDate(readStatus)
+                _isEditingStartDate.value = ratingDateManager.updateIsEditingStartDate(readStatus)
             }
     }
 
@@ -41,7 +43,7 @@ class NovelRatingViewModel : ViewModel() {
 
     fun updateCurrentDate(date: Triple<Int, Int, Int>) {
         val uiState = uiState.value ?: return
-        RatingDateManager().updateCurrentDate(
+        ratingDateManager.updateCurrentDate(
             uiState.novelRatingModel,
             date,
             isEditingStartDate.value!!,
@@ -50,7 +52,7 @@ class NovelRatingViewModel : ViewModel() {
                 _uiState.value =
                     uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
                 _maxDayValue.value =
-                    RatingDateManager().updateDayMaxValue(
+                    ratingDateManager.updateDayMaxValue(
                         uiState.novelRatingModel.ratingDateModel,
                         isEditingStartDate.value!!,
                     )
@@ -59,7 +61,7 @@ class NovelRatingViewModel : ViewModel() {
 
     fun clearCurrentDate() {
         val uiState = uiState.value ?: return
-        RatingDateManager().clearCurrentDate(uiState.novelRatingModel.ratingDateModel)
+        ratingDateManager.clearCurrentDate(uiState.novelRatingModel.ratingDateModel)
             .let { updatedModel ->
                 _uiState.value =
                     uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
@@ -68,7 +70,7 @@ class NovelRatingViewModel : ViewModel() {
 
     fun cancelDateEdit() {
         val uiState = uiState.value ?: return
-        RatingDateManager().cancelDateEdit(uiState.novelRatingModel.ratingDateModel)
+        ratingDateManager.cancelDateEdit(uiState.novelRatingModel.ratingDateModel)
             .let { updatedModel ->
                 _uiState.value =
                     uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
@@ -77,7 +79,7 @@ class NovelRatingViewModel : ViewModel() {
 
     fun createNotNullDate() {
         val uiState = uiState.value ?: return
-        RatingDateManager().createNotNullDate(uiState.novelRatingModel)
+        ratingDateManager.createNotNullDate(uiState.novelRatingModel)
             .let { updatedModel ->
                 _uiState.value =
                     uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
@@ -311,9 +313,9 @@ class NovelRatingViewModel : ViewModel() {
     private fun dummyInit() {
         val uiState = uiState.value ?: return
         _isEditingStartDate.value =
-            RatingDateManager().updateIsEditingStartDate(uiState.novelRatingModel.uiReadStatus)
+            ratingDateManager.updateIsEditingStartDate(uiState.novelRatingModel.uiReadStatus)
         _maxDayValue.value =
-            RatingDateManager().updateDayMaxValue(
+            ratingDateManager.updateDayMaxValue(
                 uiState.novelRatingModel.ratingDateModel,
                 isEditingStartDate.value!!,
             )
