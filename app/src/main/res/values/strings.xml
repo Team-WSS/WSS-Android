@@ -59,7 +59,7 @@
     <string name="novel_rating_read_status_watching">보는 중</string>
     <string name="novel_rating_read_status_watched">봤어요</string>
     <string name="novel_rating_read_status_quit">하차</string>
-    <string name="novel_rating_charm_point">세계관,소재,캐릭터,관계,분위기</string>
+    <string name="novel_rating_charm_points">세계관,소재,캐릭터,관계,분위기</string>
 
     <!-- 작품 평가 날짜 선택 -->
     <string name="novel_rating_date_start_date">시작 날짜</string>
@@ -73,5 +73,8 @@
     <string name="novel_rating_keyword_search_hint">키워드를 검색하세요</string>
     <string name="novel_rating_keyword_clear">초기화</string>
     <string name="novel_rating_keyword_enroll">%d개 선택</string>
+    <string name="novel_rating_charm_point_title">매력포인트</string>
+    <string name="novel_rating_keyword">키워드</string>
+    <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
 
 </resources>

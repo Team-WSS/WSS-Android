@@ -118,7 +118,7 @@ class NovelRatingActivity :
     }
 
     private fun setupCharmPointChips() {
-        getString(R.string.novel_rating_charm_point).toWrappedCharmPoint().forEach { charmPoint ->
+        getString(R.string.novel_rating_charm_points).toWrappedCharmPoint().forEach { charmPoint ->
             WebsosoChip(this@NovelRatingActivity).apply {
                 setWebsosoChipText(charmPoint.title)
                 setWebsosoChipTextAppearance(R.style.body2)
