@@ -24,6 +24,9 @@ class NormalExploreViewModel @Inject constructor(
     private val _isSearchCancelButtonVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSearchCancelButtonVisibility: LiveData<Boolean> get() = _isSearchCancelButtonVisibility
 
+    private val _isNovelResultCountBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isNovelResultCountBoxVisibility: LiveData<Boolean> get() = _isNovelResultCountBoxVisibility
+
     fun fetchNormalExploreResult() {
         viewModelScope.launch {
             runCatching {
@@ -34,6 +37,7 @@ class NormalExploreViewModel @Inject constructor(
                     novelCount = results.resultCount,
                     novels = results.novels,
                 )
+                _isNovelResultCountBoxVisibility.value = true
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,

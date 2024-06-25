@@ -19,9 +19,10 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp">
 
-
         <ImageView
             android:id="@+id/iv_normal_explore_result_cover"
+            cornerRadius="@{20f}"
+            loadImageUrl="@{novel.image}"
             android:layout_width="78dp"
             android:layout_height="104dp"
             android:contentDescription="@null"
@@ -40,6 +41,7 @@
             android:layout_marginStart="16dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{novel.title}"
             android:textAppearance="@style/title3"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/iv_normal_explore_result_cover"
@@ -65,7 +67,8 @@
             android:layout_marginStart="4dp"
             android:layout_marginBottom="4dp"
             android:maxLines="1"
-            android:text="@style/body3"
+            android:text="@{String.valueOf(novel.interestedCount)}"
+            android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toTopOf="@id/tv_normal_explore_result_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +94,8 @@
             android:layout_marginStart="4dp"
             android:layout_marginBottom="4dp"
             android:maxLines="1"
-            android:text="@style/body3"
+            android:text='@{String.format("%.1f", novel.rating) + " (" + novel.ratingCount + ")"}'
+            android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toTopOf="@id/tv_normal_explore_result_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +110,8 @@
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/body3"
+            android:text="@{novel.author}"
+            android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"

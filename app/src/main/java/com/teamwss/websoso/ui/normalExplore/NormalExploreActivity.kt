@@ -9,6 +9,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -78,19 +79,24 @@ class NormalExploreActivity :
             when {
                 uiState.loading -> loading()
                 uiState.error -> throw IllegalStateException()
-                !uiState.loading -> normalExploreAdapter.submitList(uiState.novels)
+                !uiState.loading -> updateResultView(uiState)
             }
         }
+    }
+
+    private fun loading() {
+        // TODO 로딩 뷰
+    }
+
+    private fun updateResultView(uiState: NormalExploreUiState) {
+        normalExploreAdapter.updateResultNovels(uiState.novels)
+        binding.tvNormalExploreNovelCount.text = uiState.novelCount.toString()
     }
 
     private fun setObserveSearchWord() {
         normalExploreViewModel.searchWord.observe(this) {
             normalExploreViewModel.validateSearchWordClearButton()
         }
-    }
-
-    private fun loading() {
-        // TODO 로딩 뷰
     }
 
     companion object {
