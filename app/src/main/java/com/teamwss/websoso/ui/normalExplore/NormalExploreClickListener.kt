@@ -2,9 +2,9 @@ package com.teamwss.websoso.ui.normalExplore
 
 interface NormalExploreClickListener {
 
-    fun onClickBackButton()
+    fun onBackButtonClick()
 
-    fun onClickSearchButton()
+    fun onSearchButtonClick()
 
-    fun onClickSearchWordCancelButton()
+    fun onSearchCancelButtonClick()
 }

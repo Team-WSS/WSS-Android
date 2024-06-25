@@ -35,15 +35,15 @@ class NormalExploreActivity :
 
     private fun onClickNormalExploreButton() = object : NormalExploreClickListener {
 
-        override fun onClickBackButton() {
+        override fun onBackButtonClick() {
             finish()
         }
 
-        override fun onClickSearchButton() {
+        override fun onSearchButtonClick() {
             normalExploreViewModel.fetchNormalExploreResult()
         }
 
-        override fun onClickSearchWordCancelButton() {
+        override fun onSearchCancelButtonClick() {
             binding.etNormalExploreSearchContent.text.clear()
         }
     }
