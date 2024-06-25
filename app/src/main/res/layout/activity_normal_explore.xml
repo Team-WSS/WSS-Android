@@ -100,8 +100,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_normal_explore_result_exist"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_search_bar">
@@ -135,11 +136,14 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_normal_explore_result"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="8dp"
+                android:clipToPadding="false"
                 android:overScrollMode="never"
+                android:paddingBottom="40dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_novel_count_title"
