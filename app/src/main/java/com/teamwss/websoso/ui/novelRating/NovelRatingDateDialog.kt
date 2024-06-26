@@ -19,7 +19,8 @@ class NovelRatingDateDialog :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupDataBinding()
+        binding.onClick = onNovelRatingButtonClick()
+        bindViewModel()
         setupDialogBehavior()
         initNullDate()
         initNumberPickerRange()
@@ -27,9 +28,8 @@ class NovelRatingDateDialog :
         setupValueChangeListener()
     }
 
-    private fun setupDataBinding() {
+    private fun bindViewModel() {
         binding.viewModel = viewModel
-        binding.onClick = onNovelRatingButtonClick()
         binding.lifecycleOwner = viewLifecycleOwner
     }
 

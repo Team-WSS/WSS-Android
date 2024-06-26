@@ -23,16 +23,16 @@ class NovelRatingKeywordDialog :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupDataBinding()
+        binding.onClick = onNovelRatingButtonClick()
+        bindViewModel()
         setupDialogBehavior()
         setupRecyclerView()
         observeUiState()
         viewModel.initCurrentSelectedKeywords()
     }
 
-    private fun setupDataBinding() {
+    private fun bindViewModel() {
         binding.viewModel = viewModel
-        binding.onClick = onNovelRatingButtonClick()
         binding.lifecycleOwner = viewLifecycleOwner
     }
 

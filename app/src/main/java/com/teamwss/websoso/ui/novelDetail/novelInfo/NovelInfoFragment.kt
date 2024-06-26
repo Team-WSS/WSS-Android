@@ -12,13 +12,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
-        setupDataBinding()
+        bindViewModel()
         setupViewMoreTextVisibility()
     }
 
-    private fun setupDataBinding() {
+    private fun bindViewModel() {
         binding.novelInfoViewModel = novelInfoViewModel
         binding.lifecycleOwner = this
     }
@@ -41,7 +44,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         binding.nsvNovelInfo.smoothScrollTo(
             PRIMATE_SCROLL_POSITION,
             PRIMATE_SCROLL_POSITION,
-            SCROLL_TO_TOP_DURATION
+            SCROLL_TO_TOP_DURATION,
         )
     }
 
