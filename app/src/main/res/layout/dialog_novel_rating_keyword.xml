@@ -15,7 +15,6 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/WebsosoBottomSheetTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_novel_rating_white_radius_top_12dp"
