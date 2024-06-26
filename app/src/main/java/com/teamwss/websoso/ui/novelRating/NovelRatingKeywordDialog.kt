@@ -2,7 +2,6 @@ package com.teamwss.websoso.ui.novelRating
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -102,15 +101,10 @@ class NovelRatingKeywordDialog :
                 setOnCloseIconClickListener {
                     viewModel.updateCurrentSelectedKeywords(keyword, isSelected = false)
                 }
-                closeIcon =
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_novel_rating_keword_remove,
-                        null,
-                    )
-                closeIconSize = 20f
-                closeIconEndPadding = 18f
-                isCloseIconVisible = true
+                setWebsosoChipCloseIconVisibility(true)
+                setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                setWebsosoChipCloseIconSize(20f)
+                setWebsosoChipCloseIconEndPadding(18f)
                 setCloseIconTintResource(R.color.primary_100_6A5DFD)
             }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
         }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import androidx.activity.viewModels
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
@@ -89,15 +88,10 @@ class NovelRatingActivity :
                 setOnCloseIconClickListener {
                     viewModel.updatePreviousSelectedKeywords(keyword)
                 }
-                closeIcon =
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_novel_rating_keword_remove,
-                        null,
-                    )
-                closeIconSize = 20f
-                closeIconEndPadding = 18f
-                isCloseIconVisible = true
+                setWebsosoChipCloseIconVisibility(true)
+                setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                setWebsosoChipCloseIconSize(20f)
+                setWebsosoChipCloseIconEndPadding(18f)
                 setCloseIconTintResource(R.color.primary_100_6A5DFD)
             }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
         }
