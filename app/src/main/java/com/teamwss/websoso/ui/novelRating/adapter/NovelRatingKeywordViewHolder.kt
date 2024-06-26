@@ -15,17 +15,17 @@ class NovelRatingKeywordViewHolder(
     ) -> Unit,
 ) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: RatingKeywordModel.CategoryModel) {
+    fun bind(category: RatingKeywordModel.CategoryModel) {
         binding.apply {
-            tvRatingKeyword.text = item.categoryName
-            setupWebsosoChips(item)
+            tvRatingKeyword.text = category.categoryName
+            setupWebsosoChips(category)
             setupExpandToggleBtn()
         }
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(item: RatingKeywordModel.CategoryModel) {
+    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: RatingKeywordModel.CategoryModel) {
         wcgNovelRatingKeyword.removeAllViews()
-        item.keywords.forEach { keyword ->
+        category.keywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {
                 setWebsosoChipText(keyword.keywordName)
                 setWebsosoChipTextAppearance(R.style.body2)
