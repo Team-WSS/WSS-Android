@@ -55,5 +55,7 @@
     <string name="onboarding_first_input_nickname">닉네임을 입력하세요</string>
     <string name="onboarding_first_duplicate_check">중복확인</string>
     <string name="onboarding_first_next_button">다음으로</string>
+    <string name="detail_explore_info">정보</string>
+    <string name="detail_explore_keyword">키워드</string>
 
 </resources>
