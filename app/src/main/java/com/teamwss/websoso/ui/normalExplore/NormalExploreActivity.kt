@@ -21,7 +21,6 @@ class NormalExploreActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.onClick = onNormalExploreButtonClick()
         bindViewModel()
         setupUI()
         setupUiStateObserver()
@@ -31,6 +30,13 @@ class NormalExploreActivity :
     private fun bindViewModel() {
         binding.normalExploreViewModel = normalExploreViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun setupUI() {
+        binding.etNormalExploreSearchContent.requestFocus()
+        binding.onClick = onNormalExploreButtonClick()
+        binding.rvNormalExploreResult.adapter = normalExploreAdapter
+        setupTranslucentOnStatusBar()
     }
 
     private fun onNormalExploreButtonClick() = object : NormalExploreClickListener {
@@ -48,22 +54,11 @@ class NormalExploreActivity :
         }
     }
 
-    private fun setupUI() {
-        binding.etNormalExploreSearchContent.requestFocus()
-        setupTranslucentOnStatusBar()
-        setupNormalExploreAdapter()
-    }
-
     private fun setupTranslucentOnStatusBar() {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
-    }
-
-    private fun setupNormalExploreAdapter() {
-        binding.rvNormalExploreResult.adapter = normalExploreAdapter
-        binding.rvNormalExploreResult.setHasFixedSize(false)
     }
 
     private fun navigateToNovelDetail(
