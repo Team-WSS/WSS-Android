@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_detail_explore_info_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/detail_explore_info"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/primary_100_6A5DFD"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view_detail_explore_selected_info"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/primary_100_6A5DFD"
+            app:layout_constraintEnd_toEndOf="@id/tv_detail_explore_info_button"
+            app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_button"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_button" />
+
+        <TextView
+            android:id="@+id/tv_detail_explore_keyword_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/detail_explore_keyword"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/primary_100_6A5DFD"
+            app:layout_constraintBottom_toBottomOf="@id/tv_detail_explore_info_button"
+            app:layout_constraintStart_toEndOf="@id/tv_detail_explore_info_button"
+            app:layout_constraintTop_toTopOf="@id/tv_detail_explore_info_button" />
+
+        <ImageView
+            android:id="@+id/iv_detail_explore_exit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:padding="20dp"
+            android:src="@drawable/btn_detail_explore_modal_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_detail_explore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:minHeight="540dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_detail_explore_selected_info" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
