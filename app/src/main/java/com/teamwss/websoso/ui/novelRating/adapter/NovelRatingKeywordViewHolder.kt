@@ -9,7 +9,10 @@ import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemNovelRatingKeywordBinding,
-    private val onKeywordClick: (keyword: RatingKeywordModel.CategoryModel.KeywordModel, isClicked: Boolean) -> Unit,
+    private val onKeywordClick: (
+        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
+        isClicked: Boolean,
+    ) -> Unit,
 ) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: RatingKeywordModel.CategoryModel) {
