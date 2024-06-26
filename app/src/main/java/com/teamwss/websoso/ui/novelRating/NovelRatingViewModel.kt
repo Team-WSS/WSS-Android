@@ -7,6 +7,7 @@ import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.KeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
+import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
 class NovelRatingViewModel : ViewModel() {
@@ -23,7 +24,7 @@ class NovelRatingViewModel : ViewModel() {
 
     fun updatePreviousDate() {
         val uiState = uiState.value ?: return
-        val ratingDateModel = uiState.novelRatingModel.ratingDateModel
+        val ratingDateModel: RatingDateModel = uiState.novelRatingModel.ratingDateModel
         ratingDateModel.previousStartDate = ratingDateModel.currentStartDate
         ratingDateModel.previousEndDate = ratingDateModel.currentEndDate
         _uiState.value = uiState
@@ -260,10 +261,19 @@ class NovelRatingViewModel : ViewModel() {
                                         listOf(
                                             KeywordModel.Category.Keyword(keywordId = 1, keywordName = "이세계"),
                                             KeywordModel.Category.Keyword(keywordId = 2, keywordName = "현대"),
-                                            KeywordModel.Category.Keyword(keywordId = 3, keywordName = "서양풍/중세시대"),
+                                            KeywordModel.Category.Keyword(
+                                                keywordId = 3,
+                                                keywordName = "서양풍/중세시대",
+                                            ),
                                             KeywordModel.Category.Keyword(keywordId = 4, keywordName = "SF"),
-                                            KeywordModel.Category.Keyword(keywordId = 5, keywordName = "동양풍/사극"),
-                                            KeywordModel.Category.Keyword(keywordId = 6, keywordName = "학원/아카데미"),
+                                            KeywordModel.Category.Keyword(
+                                                keywordId = 5,
+                                                keywordName = "동양풍/사극",
+                                            ),
+                                            KeywordModel.Category.Keyword(
+                                                keywordId = 6,
+                                                keywordName = "학원/아카데미",
+                                            ),
                                             KeywordModel.Category.Keyword(keywordId = 7, keywordName = "실존역사"),
                                             KeywordModel.Category.Keyword(keywordId = 16, keywordName = "전투"),
                                             KeywordModel.Category.Keyword(keywordId = 17, keywordName = "로맨스"),
@@ -285,7 +295,10 @@ class NovelRatingViewModel : ViewModel() {
                                     keywords =
                                         listOf(
                                             KeywordModel.Category.Keyword(keywordId = 10, keywordName = "영웅"),
-                                            KeywordModel.Category.Keyword(keywordId = 11, keywordName = "악당/빌런"),
+                                            KeywordModel.Category.Keyword(
+                                                keywordId = 11,
+                                                keywordName = "악당/빌런",
+                                            ),
                                         ),
                                 ),
                                 KeywordModel.Category(
