@@ -1,41 +1,24 @@
 package com.teamwss.websoso.ui.novelRating.dialog
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
+import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.NovelRatingClickListener
 import com.teamwss.websoso.ui.novelRating.NovelRatingViewModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
-class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
-    private var _binding: DialogNovelRatingKeywordBinding? = null
-    private val binding: DialogNovelRatingKeywordBinding get() = requireNotNull(_binding)
+class NovelRatingKeywordDialog :
+    BindingBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
     private val viewModel: NovelRatingViewModel by activityViewModels()
     private lateinit var novelRatingKeywordAdapter: NovelRatingKeywordAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.WebsosoBottomSheetTheme)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = DialogNovelRatingKeywordBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(
         view: View,
@@ -137,7 +120,6 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
 
     override fun onDestroyView() {
         viewModel.cancelEditingKeyword()
-        _binding = null
         super.onDestroyView()
     }
 }
