@@ -50,7 +50,7 @@ class NormalExploreActivity :
         }
 
         override fun onSearchCancelButtonClick() {
-            normalExploreViewModel.clearSearchWord()
+            normalExploreViewModel.updateSearchWordEmpty()
         }
     }
 

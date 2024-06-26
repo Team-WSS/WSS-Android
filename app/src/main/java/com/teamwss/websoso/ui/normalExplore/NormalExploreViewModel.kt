@@ -50,7 +50,7 @@ class NormalExploreViewModel @Inject constructor(
         _isSearchCancelButtonVisibility.value = _searchWord.value.isNullOrEmpty().not()
     }
 
-    fun clearSearchWord() {
+    fun updateSearchWordEmpty() {
         _searchWord.value = ""
     }
 }
