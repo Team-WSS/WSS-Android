@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.chip.Chip
 
 class WebsosoChip(
@@ -142,7 +142,7 @@ class WebsosoChip(
     drawable - The resource id of the drawable to be used for the close icon.
      */
     fun setWebsosoChipCloseIconDrawable(drawable: Int) {
-        closeIcon = ResourcesCompat.getDrawable(resources, drawable, null)
+        closeIcon = AppCompatResources.getDrawable(context, drawable)
     }
 
     private fun eventOnSingleSelectionMode(
