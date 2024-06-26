@@ -51,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_status"
-            app:singleSelection="false" />
+            app:singleSelection="true" />
 
         <TextView
             android:id="@+id/tv_detail_explore_info_rating"
@@ -74,7 +74,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_rating"
-            app:singleSelection="false" />
+            app:singleSelection="true" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_detail_explore_info_reset_button"
