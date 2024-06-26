@@ -80,7 +80,7 @@ class NovelRatingViewModel : ViewModel() {
         }
     }
 
-    fun getNotNullDate() {
+    fun updateNotNullDate() {
         _uiState.value?.let { uiState ->
             val updatedModel = ratingDateManager.getNotNullDate(uiState.novelRatingModel)
             _uiState.value =

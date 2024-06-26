@@ -63,7 +63,7 @@ class NovelRatingDateDialog :
     }
 
     private fun initNullDate() {
-        viewModel.getNotNullDate()
+        viewModel.updateNotNullDate()
     }
 
     private fun initNumberPickerRange() {
