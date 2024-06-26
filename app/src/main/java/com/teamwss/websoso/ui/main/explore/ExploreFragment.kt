@@ -7,6 +7,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
+import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +19,8 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
         super.onViewCreated(view, savedInstanceState)
 
         initSosoPickAdapter()
-        observeUiState()
+        onClickNovelSearchButton()
+        setupObserveUiState()
     }
 
     private fun initSosoPickAdapter() {
@@ -30,7 +32,14 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
         // TODO 작품 정보 뷰로 이동
     }
 
-    private fun observeUiState() {
+    private fun onClickNovelSearchButton() {
+        binding.clExploreNormalSearch.setOnClickListener {
+            val intent = NormalExploreActivity.from(requireContext())
+            startActivity(intent)
+        }
+    }
+
+    private fun setupObserveUiState() {
         exploreViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.loading -> loading()
