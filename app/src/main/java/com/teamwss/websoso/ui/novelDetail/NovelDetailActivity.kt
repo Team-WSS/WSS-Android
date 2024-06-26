@@ -25,15 +25,15 @@ class NovelDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupDataBinding()
+        binding.showPopupWindow = ::showPopupWindow
+        bindViewModel()
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
     }
 
-    private fun setupDataBinding() {
+    private fun bindViewModel() {
         binding.novelDetailViewModel = novelDetailViewModel
-        binding.showPopupWindow = ::showPopupWindow
         binding.lifecycleOwner = this
     }
 
@@ -49,11 +49,12 @@ class NovelDetailActivity :
 
     private fun setupTabLayout() {
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
-            tab.text = when (position) {
-                INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
-                FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
-                else -> throw IllegalArgumentException()
-            }
+            tab.text =
+                when (position) {
+                    INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
+                    FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
+                    else -> throw IllegalArgumentException()
+                }
         }.attach()
     }
 
@@ -62,7 +63,7 @@ class NovelDetailActivity :
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             popupBinding.userNovelId = userNovelId
             this.elevation = 14f.toPx
@@ -70,7 +71,7 @@ class NovelDetailActivity :
                 binding.ivNovelDetailMenu,
                 POPUP_MARGIN_END.toPx,
                 POPUP_MARGIN_TOP.toPx,
-                Gravity.END
+                Gravity.END,
             )
         }
     }
