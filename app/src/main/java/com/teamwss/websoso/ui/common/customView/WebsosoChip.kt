@@ -145,10 +145,20 @@ class WebsosoChip(
         closeIcon = AppCompatResources.getDrawable(context, drawable)
     }
 
+    /*
+    Sets the size of the close icon on this chip.
+    Params:
+    size - The value of the close icon size in pixels.
+     */
     fun setWebsosoChipCloseIconSize(size: Float) {
         closeIconSize = size
     }
 
+    /*
+    Sets the end padding of the close icon on this chip.
+    Params:
+    padding - The value of the close icon end padding in pixels.
+     */
     fun setWebsosoChipCloseIconEndPadding(padding: Float) {
         closeIconEndPadding = padding
     }
