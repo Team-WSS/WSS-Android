@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
-import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
@@ -24,9 +23,10 @@ class NovelRatingViewModel : ViewModel() {
 
     fun updatePreviousDate() {
         _uiState.value?.let { uiState ->
-            val ratingDateModel: RatingDateModel = uiState.novelRatingModel.ratingDateModel
-            ratingDateModel.previousStartDate = ratingDateModel.currentStartDate
-            ratingDateModel.previousEndDate = ratingDateModel.currentEndDate
+            uiState.novelRatingModel.ratingDateModel.run {
+                previousStartDate = currentStartDate
+                previousEndDate = currentEndDate
+            }
             _uiState.value = uiState
         }
     }
@@ -168,7 +168,10 @@ class NovelRatingViewModel : ViewModel() {
                     val updatedKeywords =
                         category.keywords.map { keyword ->
                             keyword.copy(
-                                isSelected = uiState.ratingKeywordModel.previousSelectedKeywords.any { it.keywordId == keyword.keywordId },
+                                isSelected =
+                                    uiState.ratingKeywordModel.previousSelectedKeywords.any {
+                                        it.keywordId == keyword.keywordId
+                                    },
                             )
                         }
                     category.copy(keywords = updatedKeywords)
@@ -225,7 +228,10 @@ class NovelRatingViewModel : ViewModel() {
                     val updatedKeywords =
                         category.keywords.map { keyword ->
                             keyword.copy(
-                                isSelected = uiState.ratingKeywordModel.previousSelectedKeywords.any { it.keywordId == keyword.keywordId },
+                                isSelected =
+                                    uiState.ratingKeywordModel.previousSelectedKeywords.any {
+                                        it.keywordId == keyword.keywordId
+                                    },
                             )
                         }
                     category.copy(keywords = updatedKeywords)
