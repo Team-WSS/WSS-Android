@@ -67,34 +67,29 @@ class NovelRatingDateDialog :
     }
 
     private fun initNumberPickerRange() {
-        setupNumberPicker(binding.npRatingDateYear, 1, MAX_YEAR_VALUE, "%04d")
-        setupNumberPicker(binding.npRatingDateMonth, 1, MAX_MONTH_VALUE, "%02d")
-        setupNumberPicker(
-            binding.npRatingDateDay,
-            1,
-            viewModel.maxDayValue.value ?: MAX_DAY_VALUE,
-            "%02d",
-        )
+        with(binding) {
+            npRatingDateYear.formatNumberPicker(MAX_YEAR_VALUE, "%04d")
+            npRatingDateMonth.formatNumberPicker(MAX_MONTH_VALUE, "%02d")
+            npRatingDateDay.formatNumberPicker(
+                viewModel?.maxDayValue?.value ?: MAX_DAY_VALUE,
+                "%02d",
+            )
+        }
     }
 
     private fun observeDayRange() {
         viewModel.maxDayValue.observe(viewLifecycleOwner) { maxDayValue ->
-            setupNumberPicker(binding.npRatingDateDay, 1, maxDayValue, "%02d")
+            binding.npRatingDateDay.formatNumberPicker(maxDayValue, "%02d")
         }
     }
 
-    private fun setupNumberPicker(
-        numberPicker: NumberPicker,
-        minValue: Int,
+    private fun NumberPicker.formatNumberPicker(
         maxValue: Int,
         format: String,
     ) {
-        with(numberPicker) {
-            wrapSelectorWheel = false
-            this.minValue = minValue
-            this.maxValue = maxValue
-            setFormatter { String.format(format, it) }
-        }
+        wrapSelectorWheel = false
+        this.maxValue = maxValue
+        setFormatter { String.format(format, it) }
     }
 
     private fun setupValueChangeListener() {
