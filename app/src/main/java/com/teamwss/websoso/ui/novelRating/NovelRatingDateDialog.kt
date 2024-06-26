@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelRating.dialog
+package com.teamwss.websoso.ui.novelRating
 
 import android.os.Bundle
 import android.view.View
@@ -9,8 +9,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
-import com.teamwss.websoso.ui.novelRating.NovelRatingClickListener
-import com.teamwss.websoso.ui.novelRating.NovelRatingViewModel
 
 class NovelRatingDateDialog :
     BindingBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {

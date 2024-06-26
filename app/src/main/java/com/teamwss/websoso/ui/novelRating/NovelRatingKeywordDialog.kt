@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelRating.dialog
+package com.teamwss.websoso.ui.novelRating
 
 import android.os.Bundle
 import android.view.View
@@ -10,8 +10,6 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.novelRating.NovelRatingClickListener
-import com.teamwss.websoso.ui.novelRating.NovelRatingViewModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
