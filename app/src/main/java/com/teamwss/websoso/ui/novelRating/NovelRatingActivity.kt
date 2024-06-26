@@ -14,7 +14,8 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.dialog.NovelRatingDateDialog
 import com.teamwss.websoso.ui.novelRating.dialog.NovelRatingKeywordDialog
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
+import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
+import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
 
 class NovelRatingActivity :
     BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
@@ -57,58 +58,30 @@ class NovelRatingActivity :
 
     private fun observeUiState() {
         viewModel.uiState.observe(this) { uiState ->
-            updateSelectedDate(uiState)
-            updateKeywordChips(uiState)
+            updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
+            updateKeywordChips(uiState.ratingKeywordModel.previousSelectedKeywords)
         }
     }
 
-    private fun updateSelectedDate(novelRatingUiState: NovelRatingUiState) {
-        val (startDate: Triple<Int, Int, Int>?, endDate: Triple<Int, Int, Int>?) =
-            with(
-                novelRatingUiState.novelRatingModel.ratingDateModel,
-            ) { currentStartDate to currentEndDate }
+    private fun updateSelectedDate(ratingDateModel: RatingDateModel) {
+        val (resId, params) =
+            ratingDateModel.formatDisplayDate(
+                ratingDateModel.currentStartDate,
+                ratingDateModel.currentEndDate,
+            )
 
-        val underLinedText =
-            SpannableString(
-                when {
-                    startDate == null && endDate == null -> getString(R.string.novel_rating_add_date)
-                    startDate != null && endDate != null -> formatRangeDateText(startDate, endDate)
-                    startDate != null -> formatSingleDateText(startDate)
-                    endDate != null -> formatSingleDateText(endDate)
-                    else -> ""
-                },
-            ).apply { setSpan(UnderlineSpan(), 0, this.length, 0) }
+        val underlinedText =
+            SpannableString(getString(resId, *params)).apply {
+                setSpan(UnderlineSpan(), 0, this.length, 0)
+            }
 
-        binding.tvNovelRatingDisplayDate.text = underLinedText
+        binding.tvNovelRatingDisplayDate.text = underlinedText
     }
 
-    private fun formatRangeDateText(
-        startDate: Triple<Int, Int, Int>,
-        endDate: Triple<Int, Int, Int>,
-    ): String =
-        getString(
-            R.string.novel_rating_display_date_with_tilde,
-            startDate.first,
-            startDate.second,
-            startDate.third,
-            endDate.first,
-            endDate.second,
-            endDate.third,
-        )
-
-    private fun formatSingleDateText(date: Triple<Int, Int, Int>): String =
-        getString(
-            R.string.novel_rating_display_date,
-            date.first,
-            date.second,
-            date.third,
-        )
-
-    private fun updateKeywordChips(uiState: NovelRatingUiState) {
-        val pastSelectedKeywords = uiState.ratingKeywordModel.previousSelectedKeywords
+    private fun updateKeywordChips(previousSelectedKeywords: List<RatingKeywordModel.CategoryModel.KeywordModel>) {
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
-        pastSelectedKeywords.forEach { keyword ->
+        previousSelectedKeywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {
                 setWebsosoChipText(keyword.keywordName)
                 setWebsosoChipTextAppearance(R.style.body2)

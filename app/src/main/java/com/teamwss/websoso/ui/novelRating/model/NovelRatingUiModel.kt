@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.novelRating.model
 
+import com.teamwss.websoso.R
+
 data class NovelRatingModel(
     val userNovelId: Long,
     val novelTitle: String,
@@ -29,14 +31,42 @@ data class RatingDateModel(
     var currentEndDate: Triple<Int, Int, Int>? = null,
     var previousStartDate: Triple<Int, Int, Int>? = null,
     var previousEndDate: Triple<Int, Int, Int>? = null,
-)
+) {
+    fun formatDisplayDate(
+        currentStartDate: Triple<Int, Int, Int>?,
+        currentEndDate: Triple<Int, Int, Int>?,
+    ): Pair<Int, Array<Int>> {
+        return when {
+            currentStartDate == null && currentEndDate == null -> R.string.novel_rating_add_date to arrayOf()
+            currentStartDate != null && currentEndDate != null ->
+                R.string.novel_rating_display_date_with_tilde to
+                    arrayOf(
+                        currentStartDate.first, currentStartDate.second, currentStartDate.third,
+                        currentEndDate.first, currentEndDate.second, currentEndDate.third,
+                    )
+
+            currentStartDate != null ->
+                R.string.novel_rating_display_date to
+                    arrayOf(
+                        currentStartDate.first, currentStartDate.second, currentStartDate.third,
+                    )
+
+            currentEndDate != null ->
+                R.string.novel_rating_display_date to
+                    arrayOf(
+                        currentEndDate.first, currentEndDate.second, currentEndDate.third,
+                    )
+
+            else -> R.string.novel_rating_add_date to arrayOf()
+        }
+    }
+}
 
 data class RatingKeywordModel(
     val categories: List<CategoryModel>,
     var previousSelectedKeywords: List<CategoryModel.KeywordModel> =
         categories.flatMap {
-            it.keywords.filter {
-                    keyword ->
+            it.keywords.filter { keyword ->
                 keyword.isSelected
             }
         },
