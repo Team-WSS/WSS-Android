@@ -88,6 +88,7 @@ class NovelRatingDateDialog :
         format: String,
     ) {
         wrapSelectorWheel = false
+        this.minValue = 1
         this.maxValue = maxValue
         setFormatter { String.format(format, it) }
     }
