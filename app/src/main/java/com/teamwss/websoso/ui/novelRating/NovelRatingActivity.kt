@@ -11,6 +11,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.novelRating.dialog.NovelRatingDateDialog
 import com.teamwss.websoso.ui.novelRating.dialog.NovelRatingKeywordDialog
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
