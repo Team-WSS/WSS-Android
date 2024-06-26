@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,12 +19,32 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     ) {
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
+        setupObserver()
         setupViewMoreTextVisibility()
+        novelInfoViewModel.getDummyNovelInfo()
     }
 
     private fun bindViewModel() {
         binding.novelInfoViewModel = novelInfoViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun setupObserver() {
+        novelInfoViewModel.dummyNovelInfo.observe(viewLifecycleOwner) { novelInfo ->
+            novelInfo.keywords.forEach { keyword ->
+                WebsosoChip(requireContext()).apply {
+                    setWebsosoChipText(keyword.keywordName + " " + keyword.keywordCount)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                    setWebsosoChipStrokeColor(R.color.transparent)
+                    setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    isEnabled = false
+                }.also { websosoChip -> binding.wcgNovelInfoKeyword.addChip(websosoChip) }
+            }
+        }
     }
 
     private fun setupViewMoreTextVisibility() {
