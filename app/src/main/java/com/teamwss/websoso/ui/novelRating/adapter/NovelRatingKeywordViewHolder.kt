@@ -5,14 +5,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.novelRating.model.KeywordModel
+import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemNovelRatingKeywordBinding,
-    private val onKeywordClick: (keyword: KeywordModel.Category.Keyword, isClicked: Boolean) -> Unit,
+    private val onKeywordClick: (keyword: RatingKeywordModel.CategoryModel.KeywordModel, isClicked: Boolean) -> Unit,
 ) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: KeywordModel.Category) {
+    fun bind(item: RatingKeywordModel.CategoryModel) {
         binding.apply {
             tvRatingKeyword.text = item.categoryName
             setupWebsosoChips(item)
@@ -20,7 +20,7 @@ class NovelRatingKeywordViewHolder(
         }
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(item: KeywordModel.Category) {
+    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(item: RatingKeywordModel.CategoryModel) {
         wcgNovelRatingKeyword.removeAllViews()
         item.keywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {

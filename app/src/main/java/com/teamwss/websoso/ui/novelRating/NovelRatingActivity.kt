@@ -85,7 +85,7 @@ class NovelRatingActivity :
         )
 
     private fun updateKeywordChips(uiState: NovelRatingUiState) {
-        val pastSelectedKeywords = uiState.keywordModel.previousSelectedKeywords
+        val pastSelectedKeywords = uiState.ratingKeywordModel.previousSelectedKeywords
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
         pastSelectedKeywords.forEach { keyword ->

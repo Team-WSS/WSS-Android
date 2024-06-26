@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.novelRating.model.KeywordModel.Category
+import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel.CategoryModel
 
 class NovelRatingKeywordAdapter(
-    private val onKeywordClick: (keyword: Category.Keyword, isClicked: Boolean) -> (Unit),
+    private val onKeywordClick: (keyword: CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
 ) :
-    ListAdapter<Category, NovelRatingKeywordViewHolder>(diffUtil) {
+    ListAdapter<CategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -34,17 +34,17 @@ class NovelRatingKeywordAdapter(
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<Category>() {
+            object : DiffUtil.ItemCallback<CategoryModel>() {
                 override fun areItemsTheSame(
-                    oldItem: Category,
-                    newItem: Category,
+                    oldItem: CategoryModel,
+                    newItem: CategoryModel,
                 ): Boolean {
                     return oldItem.categoryName == newItem.categoryName
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: Category,
-                    newItem: Category,
+                    oldItem: CategoryModel,
+                    newItem: CategoryModel,
                 ): Boolean {
                     return oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
                 }

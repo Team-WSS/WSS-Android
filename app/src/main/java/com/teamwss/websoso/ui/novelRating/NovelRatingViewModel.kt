@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
-import com.teamwss.websoso.ui.novelRating.model.KeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
+import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
 class NovelRatingViewModel : ViewModel() {
@@ -88,41 +88,41 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     fun updateCurrentSelectedKeywords(
-        keyword: KeywordModel.Category.Keyword,
+        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
         isSelected: Boolean,
     ) {
         val uiState = uiState.value ?: return
 
         val updatedCategories =
-            updateCategories(uiState.keywordModel.categories, keyword, isSelected)
+            updateCategories(uiState.ratingKeywordModel.categories, keyword, isSelected)
         val currentSelectedKeywords =
             updateSelectedKeywords(
-                uiState.keywordModel.currentSelectedKeywords,
+                uiState.ratingKeywordModel.currentSelectedKeywords,
                 keyword,
                 isSelected,
             )
 
         _uiState.value =
             uiState.copy(
-                keywordModel =
-                    uiState.keywordModel.copy(
+                ratingKeywordModel =
+                    uiState.ratingKeywordModel.copy(
                         categories = updatedCategories,
                         currentSelectedKeywords = currentSelectedKeywords,
                     ),
             )
     }
 
-    fun updatePreviousSelectedKeywords(keyword: KeywordModel.Category.Keyword) {
+    fun updatePreviousSelectedKeywords(keyword: RatingKeywordModel.CategoryModel.KeywordModel) {
         val uiState = uiState.value ?: return
 
-        val updatedCategories = updateCategories(uiState.keywordModel.categories, keyword, false)
+        val updatedCategories = updateCategories(uiState.ratingKeywordModel.categories, keyword, false)
         val previousSelectedKeywords =
-            uiState.keywordModel.previousSelectedKeywords.filterNot { it.keywordId == keyword.keywordId }
+            uiState.ratingKeywordModel.previousSelectedKeywords.filterNot { it.keywordId == keyword.keywordId }
 
         _uiState.value =
             uiState.copy(
-                keywordModel =
-                    uiState.keywordModel.copy(
+                ratingKeywordModel =
+                    uiState.ratingKeywordModel.copy(
                         categories = updatedCategories,
                         previousSelectedKeywords = previousSelectedKeywords,
                     ),
@@ -130,10 +130,10 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun updateCategories(
-        categories: List<KeywordModel.Category>,
-        keyword: KeywordModel.Category.Keyword,
+        categories: List<RatingKeywordModel.CategoryModel>,
+        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
         isSelected: Boolean,
-    ): List<KeywordModel.Category> {
+    ): List<RatingKeywordModel.CategoryModel> {
         return categories.map { category ->
             val updatedKeywords =
                 category.keywords.map { keywordInCategory ->
@@ -147,10 +147,10 @@ class NovelRatingViewModel : ViewModel() {
     }
 
     private fun updateSelectedKeywords(
-        currentSelectedKeywords: List<KeywordModel.Category.Keyword>,
-        keyword: KeywordModel.Category.Keyword,
+        currentSelectedKeywords: List<RatingKeywordModel.CategoryModel.KeywordModel>,
+        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
         isSelected: Boolean,
-    ): List<KeywordModel.Category.Keyword> {
+    ): List<RatingKeywordModel.CategoryModel.KeywordModel> {
         return currentSelectedKeywords.toMutableList().apply {
             when (isSelected) {
                 true -> add(keyword)
@@ -163,20 +163,22 @@ class NovelRatingViewModel : ViewModel() {
         val uiState = uiState.value ?: return
 
         val updatedCategories =
-            uiState.keywordModel.categories.map { category ->
+            uiState.ratingKeywordModel.categories.map { category ->
                 val updatedKeywords =
                     category.keywords.map { keyword ->
-                        keyword.copy(isSelected = uiState.keywordModel.previousSelectedKeywords.any { it.keywordId == keyword.keywordId })
+                        keyword.copy(
+                            isSelected = uiState.ratingKeywordModel.previousSelectedKeywords.any { it.keywordId == keyword.keywordId },
+                        )
                     }
                 category.copy(keywords = updatedKeywords)
             }
 
         _uiState.value =
             uiState.copy(
-                keywordModel =
-                    uiState.keywordModel.copy(
+                ratingKeywordModel =
+                    uiState.ratingKeywordModel.copy(
                         categories = updatedCategories,
-                        currentSelectedKeywords = uiState.keywordModel.previousSelectedKeywords,
+                        currentSelectedKeywords = uiState.ratingKeywordModel.previousSelectedKeywords,
                     ),
             )
     }
@@ -186,9 +188,9 @@ class NovelRatingViewModel : ViewModel() {
 
         _uiState.value =
             uiState.copy(
-                keywordModel =
-                    uiState.keywordModel.copy(
-                        previousSelectedKeywords = uiState.keywordModel.currentSelectedKeywords,
+                ratingKeywordModel =
+                    uiState.ratingKeywordModel.copy(
+                        previousSelectedKeywords = uiState.ratingKeywordModel.currentSelectedKeywords,
                     ),
             )
     }
@@ -197,7 +199,7 @@ class NovelRatingViewModel : ViewModel() {
         val uiState = uiState.value ?: return
 
         val updatedCategories =
-            uiState.keywordModel.categories.map { category ->
+            uiState.ratingKeywordModel.categories.map { category ->
                 val updatedKeywords =
                     category.keywords.map { keyword ->
                         keyword.copy(isSelected = false)
@@ -207,8 +209,8 @@ class NovelRatingViewModel : ViewModel() {
 
         _uiState.value =
             uiState.copy(
-                keywordModel =
-                    uiState.keywordModel.copy(
+                ratingKeywordModel =
+                    uiState.ratingKeywordModel.copy(
                         categories = updatedCategories,
                         previousSelectedKeywords = emptyList(),
                         currentSelectedKeywords = emptyList(),
@@ -220,20 +222,22 @@ class NovelRatingViewModel : ViewModel() {
         val uiState = uiState.value ?: return
 
         val updatedCategories =
-            uiState.keywordModel.categories.map { category ->
+            uiState.ratingKeywordModel.categories.map { category ->
                 val updatedKeywords =
                     category.keywords.map { keyword ->
-                        keyword.copy(isSelected = uiState.keywordModel.previousSelectedKeywords.any { it.keywordId == keyword.keywordId })
+                        keyword.copy(
+                            isSelected = uiState.ratingKeywordModel.previousSelectedKeywords.any { it.keywordId == keyword.keywordId },
+                        )
                     }
                 category.copy(keywords = updatedKeywords)
             }
 
         _uiState.value =
             uiState.copy(
-                keywordModel =
-                    uiState.keywordModel.copy(
+                ratingKeywordModel =
+                    uiState.ratingKeywordModel.copy(
                         categories = updatedCategories,
-                        currentSelectedKeywords = uiState.keywordModel.previousSelectedKeywords,
+                        currentSelectedKeywords = uiState.ratingKeywordModel.previousSelectedKeywords,
                     ),
             )
     }
@@ -251,70 +255,70 @@ class NovelRatingViewModel : ViewModel() {
                         startDate = "2023-02-28",
                         endDate = "2024-05-11",
                     ),
-                keywordModel =
-                    KeywordModel(
+                ratingKeywordModel =
+                    RatingKeywordModel(
                         categories =
                             listOf(
-                                KeywordModel.Category(
+                                RatingKeywordModel.CategoryModel(
                                     categoryName = "세계관",
                                     keywords =
                                         listOf(
-                                            KeywordModel.Category.Keyword(keywordId = 1, keywordName = "이세계"),
-                                            KeywordModel.Category.Keyword(keywordId = 2, keywordName = "현대"),
-                                            KeywordModel.Category.Keyword(
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 1, keywordName = "이세계"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 2, keywordName = "현대"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(
                                                 keywordId = 3,
                                                 keywordName = "서양풍/중세시대",
                                             ),
-                                            KeywordModel.Category.Keyword(keywordId = 4, keywordName = "SF"),
-                                            KeywordModel.Category.Keyword(
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 4, keywordName = "SF"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(
                                                 keywordId = 5,
                                                 keywordName = "동양풍/사극",
                                             ),
-                                            KeywordModel.Category.Keyword(
+                                            RatingKeywordModel.CategoryModel.KeywordModel(
                                                 keywordId = 6,
                                                 keywordName = "학원/아카데미",
                                             ),
-                                            KeywordModel.Category.Keyword(keywordId = 7, keywordName = "실존역사"),
-                                            KeywordModel.Category.Keyword(keywordId = 16, keywordName = "전투"),
-                                            KeywordModel.Category.Keyword(keywordId = 17, keywordName = "로맨스"),
-                                            KeywordModel.Category.Keyword(keywordId = 18, keywordName = "판타지"),
-                                            KeywordModel.Category.Keyword(keywordId = 19, keywordName = "드라마"),
-                                            KeywordModel.Category.Keyword(keywordId = 20, keywordName = "스릴러"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 7, keywordName = "실존역사"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 16, keywordName = "전투"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 17, keywordName = "로맨스"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 18, keywordName = "판타지"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 19, keywordName = "드라마"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 20, keywordName = "스릴러"),
                                         ),
                                 ),
-                                KeywordModel.Category(
+                                RatingKeywordModel.CategoryModel(
                                     categoryName = "소재",
                                     keywords =
                                         listOf(
-                                            KeywordModel.Category.Keyword(keywordId = 8, keywordName = "웹툰화"),
-                                            KeywordModel.Category.Keyword(keywordId = 9, keywordName = "드라마화"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 8, keywordName = "웹툰화"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 9, keywordName = "드라마화"),
                                         ),
                                 ),
-                                KeywordModel.Category(
+                                RatingKeywordModel.CategoryModel(
                                     categoryName = "캐릭터",
                                     keywords =
                                         listOf(
-                                            KeywordModel.Category.Keyword(keywordId = 10, keywordName = "영웅"),
-                                            KeywordModel.Category.Keyword(
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 10, keywordName = "영웅"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(
                                                 keywordId = 11,
                                                 keywordName = "악당/빌런",
                                             ),
                                         ),
                                 ),
-                                KeywordModel.Category(
+                                RatingKeywordModel.CategoryModel(
                                     categoryName = "관계",
                                     keywords =
                                         listOf(
-                                            KeywordModel.Category.Keyword(keywordId = 12, keywordName = "친구"),
-                                            KeywordModel.Category.Keyword(keywordId = 13, keywordName = "동료"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 12, keywordName = "친구"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 13, keywordName = "동료"),
                                         ),
                                 ),
-                                KeywordModel.Category(
+                                RatingKeywordModel.CategoryModel(
                                     categoryName = "분위기",
                                     keywords =
                                         listOf(
-                                            KeywordModel.Category.Keyword(keywordId = 14, keywordName = "뻔한"),
-                                            KeywordModel.Category.Keyword(keywordId = 15, keywordName = "반전있는"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 14, keywordName = "뻔한"),
+                                            RatingKeywordModel.CategoryModel.KeywordModel(keywordId = 15, keywordName = "반전있는"),
                                         ),
                                 ),
                             ),

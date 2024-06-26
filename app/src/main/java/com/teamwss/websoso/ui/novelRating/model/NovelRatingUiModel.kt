@@ -31,16 +31,22 @@ data class RatingDateModel(
     var previousEndDate: Triple<Int, Int, Int>? = null,
 )
 
-data class KeywordModel(
-    val categories: List<Category>,
-    var previousSelectedKeywords: List<Category.Keyword> = categories.flatMap { it.keywords.filter { keyword -> keyword.isSelected } },
-    var currentSelectedKeywords: List<Category.Keyword> = emptyList(),
+data class RatingKeywordModel(
+    val categories: List<CategoryModel>,
+    var previousSelectedKeywords: List<CategoryModel.KeywordModel> =
+        categories.flatMap {
+            it.keywords.filter {
+                    keyword ->
+                keyword.isSelected
+            }
+        },
+    var currentSelectedKeywords: List<CategoryModel.KeywordModel> = emptyList(),
 ) {
-    data class Category(
+    data class CategoryModel(
         val categoryName: String,
-        val keywords: List<Keyword>,
+        val keywords: List<KeywordModel>,
     ) {
-        data class Keyword(
+        data class KeywordModel(
             val keywordId: Long,
             val keywordName: String,
             val isSelected: Boolean = false,
