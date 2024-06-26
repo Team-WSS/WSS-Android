@@ -34,7 +34,6 @@ class NormalExploreViewModel @Inject constructor(
             }.onSuccess { results ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    novelCount = results.resultCount,
                     novels = results.novels,
                 )
                 _isNovelResultCountBoxVisibility.value = true

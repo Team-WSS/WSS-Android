@@ -86,11 +86,9 @@ class NormalExploreActivity :
         // TODO 로딩 뷰
     }
 
-    private fun updateResultView(
-        uiState: NormalExploreUiState,
-    ) {
+    private fun updateResultView(uiState: NormalExploreUiState) {
         normalExploreAdapter.updateResultNovels(uiState.novels)
-        binding.tvNormalExploreNovelCount.text = uiState.novelCount.toString()
+        binding.tvNormalExploreNovelCount.text = uiState.novels.count().toString()
     }
 
     private fun setupSearchWordObserver() {

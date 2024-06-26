@@ -13,9 +13,7 @@ class NormalExploreViewHolder(
         binding.onClick = novelItemClickListener
     }
 
-    fun onBind(
-        normalExploreResult: NormalExploreEntity.NovelEntity,
-    ) {
+    fun onBind(normalExploreResult: NormalExploreEntity.NovelEntity) {
         binding.novel = normalExploreResult
     }
 }
