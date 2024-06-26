@@ -32,10 +32,8 @@ data class RatingDateModel(
     var previousStartDate: Triple<Int, Int, Int>? = null,
     var previousEndDate: Triple<Int, Int, Int>? = null,
 ) {
-    fun formatDisplayDate(
-        currentStartDate: Triple<Int, Int, Int>?,
-        currentEndDate: Triple<Int, Int, Int>?,
-    ): Pair<Int, Array<Int>> {
+    fun formatDisplayDate(ratingDateModel: RatingDateModel): Pair<Int, Array<Int>> {
+        val (currentStartDate, currentEndDate) = ratingDateModel
         return when {
             currentStartDate == null && currentEndDate == null -> R.string.novel_rating_add_date to arrayOf()
             currentStartDate != null && currentEndDate != null ->

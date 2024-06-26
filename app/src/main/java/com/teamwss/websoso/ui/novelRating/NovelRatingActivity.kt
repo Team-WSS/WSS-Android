@@ -21,16 +21,16 @@ class NovelRatingActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupDataBinding()
+        binding.onClick = onNovelRatingButtonClick()
         viewModel.getDummy()
+        bindViewModel()
         observeUiState()
         setupCharmPointChips()
     }
 
-    private fun setupDataBinding() {
+    private fun bindViewModel() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        binding.onClick = onNovelRatingButtonClick()
     }
 
     private fun onNovelRatingButtonClick() =
@@ -63,10 +63,7 @@ class NovelRatingActivity :
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {
         val (resId, params) =
-            ratingDateModel.formatDisplayDate(
-                ratingDateModel.currentStartDate,
-                ratingDateModel.currentEndDate,
-            )
+            ratingDateModel.formatDisplayDate(ratingDateModel)
 
         val underlinedText =
             SpannableString(getString(resId, *params)).apply {
