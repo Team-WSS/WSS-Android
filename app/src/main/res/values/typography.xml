@@ -2,13 +2,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="SpUsage">
 
     <style name="headline1">
-        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">20dp</item>
         <item name="lineHeight">28dp</item>
     </style>
 
     <style name="title1">
-        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">18dp</item>
         <item name="lineHeight">25dp</item>
     </style>
@@ -39,6 +39,30 @@
 
     <style name="body3">
         <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14dp</item>
+        <item name="lineHeight">21dp</item>
+    </style>
+
+    <style name="body4">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">13dp</item>
+        <item name="lineHeight">19dp</item>
+    </style>
+
+    <style name="body4_2">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">13dp</item>
+        <item name="lineHeight">19dp</item>
+    </style>
+
+    <style name="body5">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">12dp</item>
+        <item name="lineHeight">17dp</item>
+    </style>
+
+    <style name="body5_2">
+        <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">12dp</item>
         <item name="lineHeight">17dp</item>
     </style>
@@ -72,5 +96,4 @@
         <item name="android:textSize">10dp</item>
         <item name="lineHeight">10dp</item>
     </style>
-
 </resources>

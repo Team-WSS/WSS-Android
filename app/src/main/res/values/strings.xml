@@ -77,4 +77,10 @@
     <string name="novel_rating_keyword">키워드</string>
     <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
 
+    <!-- 온보딩 뷰 -->
+    <string name="onboarding_skip">건너뛰기</string>
+    <string name="onboarding_first_input_nickname">닉네임을 입력하세요</string>
+    <string name="onboarding_first_duplicate_check">중복확인</string>
+    <string name="onboarding_first_next_button">다음으로</string>
+
 </resources>
