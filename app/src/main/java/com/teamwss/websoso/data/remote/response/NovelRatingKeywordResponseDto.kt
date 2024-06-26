@@ -1,23 +1,22 @@
 package com.teamwss.websoso.data.remote.response
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class NovelRatingKeywordResponseDto(
     @SerialName("categories")
-    val categories: List<Category>,
+    val categories: List<CategoryResponseDto>,
 ) {
     @Serializable
-    data class Category(
+    data class CategoryResponseDto(
         @SerialName("categoryName")
         val categoryName: String,
         @SerialName("keywords")
-        val keywords: List<Keyword>,
+        val keywords: List<KeywordResponseDto>,
     ) {
         @Serializable
-        data class Keyword(
+        data class KeywordResponseDto(
             @SerialName("keywordId")
             val keywordId: Long,
             @SerialName("keywordName")

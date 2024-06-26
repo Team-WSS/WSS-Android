@@ -9,14 +9,14 @@ fun NovelRatingKeywordResponseDto.toUi(): KeywordModel {
     )
 }
 
-fun NovelRatingKeywordResponseDto.Category.toUi(): KeywordModel.Category {
+fun NovelRatingKeywordResponseDto.CategoryResponseDto.toUi(): KeywordModel.Category {
     return KeywordModel.Category(
         categoryName = categoryName,
         keywords = keywords.map { it.toUi() },
     )
 }
 
-fun NovelRatingKeywordResponseDto.Category.Keyword.toUi(): KeywordModel.Category.Keyword {
+fun NovelRatingKeywordResponseDto.CategoryResponseDto.KeywordResponseDto.toUi(): KeywordModel.Category.Keyword {
     return KeywordModel.Category.Keyword(
         keywordId = keywordId,
         keywordName = keywordName,
