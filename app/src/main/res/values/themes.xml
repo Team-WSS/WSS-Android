@@ -13,4 +13,11 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
+    <style name="WebsosoBottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:colorBackground">@color/transparent</item>
+    </style>
+
 </resources>
