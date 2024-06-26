@@ -1,12 +1,12 @@
 package com.teamwss.websoso.ui.novelDetail
 
 import androidx.lifecycle.ViewModel
-import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
+import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 
 class NovelDetailViewModel : ViewModel() {
     // 테스트용 변수
-    val dummyNovelInfo =
-        NovelInfoResponseDto(
+    val dummyNovelDetail =
+        NovelDetailResponseDto(
             userNovelId = 1,
             novelTitle = "철혈검가 사냥개의 회귀",
             novelImage = "https://github.com/Team-WSS/WSS-Android/assets/127238018/9904c8f8-623e-4a24-90f9-08f0144f5a1f",
