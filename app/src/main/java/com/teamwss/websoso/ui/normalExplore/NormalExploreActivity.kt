@@ -21,36 +21,36 @@ class NormalExploreActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.onClick = onNormalExploreButtonClick()
         bindViewModel()
         setupUI()
-        setObserveUiState()
-        setObserveSearchWord()
+        setupUiStateObserver()
+        setupSearchWordObserver()
     }
 
     private fun bindViewModel() {
         binding.normalExploreViewModel = normalExploreViewModel
-        binding.onClick = onClickNormalExploreButton()
         binding.lifecycleOwner = this
     }
 
-    private fun onClickNormalExploreButton() = object : NormalExploreClickListener {
+    private fun onNormalExploreButtonClick() = object : NormalExploreClickListener {
 
         override fun onBackButtonClick() {
             finish()
         }
 
         override fun onSearchButtonClick() {
-            normalExploreViewModel.fetchNormalExploreResult()
+            normalExploreViewModel.updateSearchResult()
         }
 
         override fun onSearchCancelButtonClick() {
-            binding.etNormalExploreSearchContent.text.clear()
+            normalExploreViewModel.clearSearchWord()
         }
     }
 
     private fun setupUI() {
+        binding.etNormalExploreSearchContent.requestFocus()
         setupTranslucentOnStatusBar()
-        setupFocusSearchBar()
         setupNormalExploreAdapter()
     }
 
@@ -61,20 +61,18 @@ class NormalExploreActivity :
         )
     }
 
-    private fun setupFocusSearchBar() {
-        binding.etNormalExploreSearchContent.requestFocus()
-    }
-
     private fun setupNormalExploreAdapter() {
         binding.rvNormalExploreResult.adapter = normalExploreAdapter
-        binding.rvNormalExploreResult.setHasFixedSize(true)
+        binding.rvNormalExploreResult.setHasFixedSize(false)
     }
 
-    private fun navigateToNovelDetail(novelId: Long) {
+    private fun navigateToNovelDetail(
+        novelId: Long,
+    ) {
         // TODO 작품 정보 뷰로 이동
     }
 
-    private fun setObserveUiState() {
+    private fun setupUiStateObserver() {
         normalExploreViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> loading()
@@ -88,12 +86,14 @@ class NormalExploreActivity :
         // TODO 로딩 뷰
     }
 
-    private fun updateResultView(uiState: NormalExploreUiState) {
+    private fun updateResultView(
+        uiState: NormalExploreUiState,
+    ) {
         normalExploreAdapter.updateResultNovels(uiState.novels)
         binding.tvNormalExploreNovelCount.text = uiState.novelCount.toString()
     }
 
-    private fun setObserveSearchWord() {
+    private fun setupSearchWordObserver() {
         normalExploreViewModel.searchWord.observe(this) {
             normalExploreViewModel.validateSearchWordClearButton()
         }

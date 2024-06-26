@@ -10,10 +10,12 @@ class NormalExploreViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.novelItemClickListener = novelItemClickListener
+        binding.onClick = novelItemClickListener
     }
 
-    fun onBind(normalExploreResult: NormalExploreEntity.NovelEntity) {
+    fun onBind(
+        normalExploreResult: NormalExploreEntity.NovelEntity,
+    ) {
         binding.novel = normalExploreResult
     }
 }

@@ -10,7 +10,7 @@
             type="com.teamwss.websoso.data.model.NormalExploreEntity.NovelEntity" />
 
         <variable
-            name="novelItemClickListener"
+            name="onClick"
             type="kotlin.jvm.functions.Function1" />
     </data>
 
@@ -94,7 +94,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginBottom="4dp"
             android:maxLines="1"
-            android:text='@{String.format("%.1f", novel.rating) + " (" + novel.ratingCount + ")"}'
+            android:text="@{@string/normal_explore_novel_rating(novel.rating, novel.ratingCount)}"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toTopOf="@id/tv_normal_explore_result_title"

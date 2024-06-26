@@ -10,8 +10,9 @@
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">my</string>
     
-    <!--일반 검색 뷰-->
+    <!--일반 탐색 뷰-->
     <string name="normal_explore_novel_count_title">작품</string>
+    <string name="normal_explore_novel_rating">%.1f (%d)</string>
     <string name="normal_explore_not_exist_result">해당 검색어를 가진 작품은\n아직 등록되지 않았어요...</string>
     <string name="normal_explore_add_novel_inquire">작품 추가 문의하기</string>
 
