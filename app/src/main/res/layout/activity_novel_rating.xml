@@ -10,16 +10,8 @@
             type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
 
         <variable
-            name="showDatePickerBottomSheet"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="showRatingKeywordBottomSheet"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="navigateToNovelDetail"
-            type="kotlin.jvm.functions.Function0" />
+            name="onClick"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingClickListener" />
 
         <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
     </data>
@@ -96,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:gravity="center"
-            android:onClick="@{() -> showDatePickerBottomSheet.invoke()}"
+            android:onClick="@{() -> onClick.onDateEditClick()}"
             android:textAppearance="@style/label1"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -193,7 +185,7 @@
             android:layout_marginTop="14dp"
             android:background="@drawable/bg_novel_rating_gray_50_radius_14dp"
             android:gravity="center"
-            android:onClick="@{() -> showRatingKeywordBottomSheet.invoke()}"
+            android:onClick="@{() -> onClick.onKeywordEditClick()}"
             android:text="@string/novel_rating_keyword_button"
             android:textAppearance="@style/label1"
             android:textColor="@color/gray_200_AEADB3"
@@ -215,12 +207,12 @@
             android:id="@+id/wcg_novel_rating_keywords"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="22dp"
+            android:gravity="center"
             android:paddingHorizontal="24dp"
             app:chipSpacing="8dp"
-            android:layout_gravity="center"
-            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_keyword_button"
@@ -249,7 +241,7 @@
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:layout_marginStart="6dp"
-                    android:onClick="@{() -> navigateToNovelDetail.invoke()}"
+                    android:onClick="@{() -> onClick.onNavigateBackClick()}"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="14dp"
                     android:src="@drawable/ic_novel_detail_navigate_back"

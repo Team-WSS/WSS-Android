@@ -46,11 +46,33 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
 
     private fun setupDataBinding() {
         binding.viewModel = viewModel
+        binding.onClick = onNovelRatingButtonClick()
         binding.lifecycleOwner = this
-        binding.cancelDateEdit = ::cancelDateEdit
-        binding.saveDateEdit = ::saveDateEdit
-        binding.clearCurrentDate = ::clearCurrentDate
     }
+
+    private fun onNovelRatingButtonClick() =
+        object : NovelRatingClickListener {
+            override fun onDateEditClick() {}
+
+            override fun onKeywordEditClick() {}
+
+            override fun onNavigateBackClick() {}
+
+            override fun onSaveClick() {
+                viewModel.updatePreviousDate()
+                dismiss()
+            }
+
+            override fun onCancelClick() {
+                viewModel.cancelDateEdit()
+                dismiss()
+            }
+
+            override fun onClearClick() {
+                viewModel.clearCurrentDate()
+                dismiss()
+            }
+        }
 
     private fun setupDialogBehavior() {
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -64,7 +86,12 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
     private fun initNumberPickerRange() {
         setupNumberPicker(binding.npRatingDateYear, 1, MAX_YEAR_VALUE, "%04d")
         setupNumberPicker(binding.npRatingDateMonth, 1, MAX_MONTH_VALUE, "%02d")
-        setupNumberPicker(binding.npRatingDateDay, 1, viewModel.maxDayValue.value ?: MAX_DAY_VALUE, "%02d")
+        setupNumberPicker(
+            binding.npRatingDateDay,
+            1,
+            viewModel.maxDayValue.value ?: MAX_DAY_VALUE,
+            "%02d",
+        )
     }
 
     private fun observeDayRange() {
@@ -102,21 +129,6 @@ class NovelRatingDateDialog : BottomSheetDialogFragment() {
             npRatingDateMonth.setOnValueChangedListener { _, _, _ -> updateCurrentDate() }
             npRatingDateDay.setOnValueChangedListener { _, _, _ -> updateCurrentDate() }
         }
-    }
-
-    private fun saveDateEdit() {
-        viewModel.updatePreviousDate()
-        dismiss()
-    }
-
-    private fun clearCurrentDate() {
-        viewModel.clearCurrentDate()
-        dismiss()
-    }
-
-    private fun cancelDateEdit() {
-        viewModel.cancelDateEdit()
-        dismiss()
     }
 
     override fun onDestroyView() {

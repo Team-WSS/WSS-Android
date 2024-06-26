@@ -30,10 +30,29 @@ class NovelRatingActivity :
     private fun setupDataBinding() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        binding.showRatingKeywordBottomSheet = ::showRatingKeywordBottomSheet
-        binding.showDatePickerBottomSheet = ::showDatePickerBottomSheet
-        binding.navigateToNovelDetail = ::navigateToNovelDetail
+        binding.onClick = onNovelRatingButtonClick()
     }
+
+    private fun onNovelRatingButtonClick() =
+        object : NovelRatingClickListener {
+            override fun onDateEditClick() {
+                showDatePickerBottomSheet()
+            }
+
+            override fun onKeywordEditClick() {
+                showRatingKeywordBottomSheet()
+            }
+
+            override fun onNavigateBackClick() {
+                finish()
+            }
+
+            override fun onSaveClick() {}
+
+            override fun onCancelClick() {}
+
+            override fun onClearClick() {}
+        }
 
     private fun observeUiState() {
         viewModel.uiState.observe(this) { uiState ->
@@ -154,9 +173,5 @@ class NovelRatingActivity :
         if (existingDialog == null) {
             NovelRatingKeywordDialog().show(supportFragmentManager, "RatingKeywordDialog")
         }
-    }
-
-    private fun navigateToNovelDetail() {
-        finish()
     }
 }

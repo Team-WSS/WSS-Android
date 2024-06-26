@@ -10,8 +10,8 @@
             type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
 
         <variable
-            name="dialog"
-            type="com.teamwss.websoso.ui.novelRating.dialog.NovelRatingKeywordDialog" />
+            name="onClick"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,7 +38,7 @@
             android:id="@+id/iv_rating_keyword_cancel"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:onClick="@{() -> dialog.cancelKeywordEdit()}"
+            android:onClick="@{() -> onClick.onCancelClick()}"
             android:padding="22dp"
             android:src="@drawable/ic_novel_rating_date_cancel"
             app:layout_constraintEnd_toEndOf="parent"
@@ -126,7 +126,7 @@
             android:layout_width="126dp"
             android:layout_height="62dp"
             android:gravity="center"
-            android:onClick="@{() -> dialog.clearSelectedKeywords()}"
+            android:onClick="@{() -> onClick.onClearClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -151,14 +151,14 @@
             android:layout_height="62dp"
             android:background="@color/primary_100_6A5DFD"
             android:gravity="center"
-            android:onClick="@{() -> dialog.saveKeywordEdit()}"
+            android:onClick="@{() -> onClick.onSaveClick()}"
             android:text="@{@string/novel_rating_keyword_enroll(viewModel.uiState.ratingKeywordModel.currentSelectedKeywords.size)}"
-            tools:text="0개 선택"
             android:textAppearance="@style/title2"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ll_rating_keyword_reset" />
+            app:layout_constraintStart_toEndOf="@id/ll_rating_keyword_reset"
+            tools:text="0개 선택" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

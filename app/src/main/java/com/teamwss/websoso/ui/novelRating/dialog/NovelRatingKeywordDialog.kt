@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.novelRating.NovelRatingClickListener
 import com.teamwss.websoso.ui.novelRating.NovelRatingViewModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
@@ -50,9 +51,33 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
 
     private fun setupDataBinding() {
         binding.viewModel = viewModel
-        binding.dialog = this
+        binding.onClick = onNovelRatingButtonClick()
         binding.lifecycleOwner = this
     }
+
+    private fun onNovelRatingButtonClick() =
+        object : NovelRatingClickListener {
+            override fun onDateEditClick() {}
+
+            override fun onKeywordEditClick() {}
+
+            override fun onNavigateBackClick() {}
+
+            override fun onSaveClick() {
+                viewModel.saveSelectedKeywords()
+                dismiss()
+            }
+
+            override fun onCancelClick() {
+                viewModel.cancelEditingKeyword()
+                dismiss()
+            }
+
+            override fun onClearClick() {
+                viewModel.clearEditingKeyword()
+                dismiss()
+            }
+        }
 
     private fun setupDialogBehavior() {
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -110,23 +135,8 @@ class NovelRatingKeywordDialog : BottomSheetDialogFragment() {
         }
     }
 
-    fun saveKeywordEdit() {
-        viewModel.saveSelectedKeywords()
-        dismiss()
-    }
-
-    fun clearSelectedKeywords() {
-        viewModel.clearEditingKeyword()
-        dismiss()
-    }
-
-    fun cancelKeywordEdit() {
-        viewModel.cancelEditingKeyword()
-        dismiss()
-    }
-
     override fun onDestroyView() {
-        cancelKeywordEdit()
+        viewModel.cancelEditingKeyword()
         _binding = null
         super.onDestroyView()
     }
