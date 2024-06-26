@@ -35,7 +35,7 @@ class NovelRatingKeywordDialog :
     private fun setupDataBinding() {
         binding.viewModel = viewModel
         binding.onClick = onNovelRatingButtonClick()
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun onNovelRatingButtonClick() =
