@@ -145,6 +145,14 @@ class WebsosoChip(
         closeIcon = AppCompatResources.getDrawable(context, drawable)
     }
 
+    fun setWebsosoChipCloseIconSize(size: Float) {
+        closeIconSize = size
+    }
+
+    fun setWebsosoChipCloseIconEndPadding(padding: Float) {
+        closeIconEndPadding = padding
+    }
+
     private fun eventOnSingleSelectionMode(
         currentChip: View,
         event: () -> Unit,
