@@ -47,7 +47,7 @@
             android:text="@string/novel_detail_remove_evaluate"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:isVisible="@{userNovelId != novelDetailViewModel.DEFAULT_USER_NOVEL_ID}"
+            app:isVisible="@{userNovelId != 0}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/btn_novel_detail_popup_report_error"
             app:layout_constraintStart_toStartOf="@+id/btn_novel_detail_popup_report_error"
