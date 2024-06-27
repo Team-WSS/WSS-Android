@@ -90,5 +90,5 @@
 ## 👨‍👩‍👧‍👦 Contributers
 |<img src="https://avatars.githubusercontent.com/u/52442547?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/114990782?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/127238018?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/144861180?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/81347125?v=4" width="125" />|
 |:---------:|:---------:|:---------:|:---------:|:---------:|
-|[👑서재원](https://github.com/librarywon)|[손명지](https://github.com/m6z1)|[최준서](https://github.com/junseo511)|[이연진](https://github.com/yeonjeen)|[김세훈](https://github.com/s9hn)|
+|👑서재원 ([Harry](https://github.com/librarywon))|손명지 ([MoongChi](https://github.com/m6z1))|최준서 ([SimSaSukGo](https://github.com/junseo511))|이연진 ([Sally](https://github.com/yeonjeen))|김세훈 ([SanGun](https://github.com/s9hn))|
 </br>
