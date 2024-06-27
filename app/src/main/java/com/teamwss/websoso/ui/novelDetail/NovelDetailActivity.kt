@@ -82,7 +82,6 @@ class NovelDetailActivity :
             WindowManager.LayoutParams.WRAP_CONTENT,
             true,
         ).apply {
-            popupBinding.userNovelId = userNovelId
             this.elevation = 14f.toPx
             showAsDropDown(
                 binding.ivNovelDetailMenu,
