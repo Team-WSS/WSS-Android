@@ -12,27 +12,24 @@ data class NovelDetailModel(
         val endDate: String?,
         val isUserNovelInterest: Boolean,
         val userNovelRating: Float,
+        val hasUserNovelInfo: Boolean = userNovelId != null,
     )
 
     data class NovelModel(
         val novelTitle: String,
         val novelImage: String,
         val novelGenres: List<String>,
+        val formattedNovelGenres: String = novelGenres.joinToString(" ・ "),
         val novelGenreImage: String,
         val isNovelCompleted: Boolean,
         val author: String,
-    ) {
-        val formattedNovelGenres: String
-            get() = novelGenres.joinToString(" ・ ")
-    }
+    )
 
     data class UserRatingModel(
         val interestCount: Int,
         val novelRating: Float,
         val novelRatingCount: Int,
+        val formattedNovelRating: String = "$novelRating ($novelRatingCount)",
         val feedCount: Int,
-    ) {
-        val formattedNovelRating: String
-            get() = "$novelRating ($novelRatingCount)"
-    }
+    )
 }
