@@ -30,6 +30,7 @@ class NovelDetailActivity :
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
+        novelDetailViewModel.fetchNovelDetail(1)
     }
 
     private fun bindViewModel() {
