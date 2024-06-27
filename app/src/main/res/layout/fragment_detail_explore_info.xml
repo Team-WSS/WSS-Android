@@ -42,16 +42,32 @@
             app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_genre"
             app:layout_constraintTop_toBottomOf="@id/wcg_detail_explore_info_genre" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
-            android:id="@+id/wcg_detail_explore_info_status"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/ll_detail_explore_info_status"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="8dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_status"
-            app:singleSelection="true" />
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_status">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_detail_explore_info_status_ing"
+                style="@style/DetailExploreInfo.Chip.Choice"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:text="@string/detail_explore_info_status_ing" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_detail_explore_info_status_finish"
+                style="@style/DetailExploreInfo.Chip.Choice"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:text="@string/detail_explore_info_status_finish" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_detail_explore_info_rating"
@@ -63,18 +79,58 @@
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_genre"
-            app:layout_constraintTop_toBottomOf="@id/wcg_detail_explore_info_status" />
+            app:layout_constraintTop_toBottomOf="@id/ll_detail_explore_info_status" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
-            android:id="@+id/wcg_detail_explore_info_rating"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/ll_detail_explore_info_rating"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="8dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_rating"
-            app:singleSelection="true" />
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_rating">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_detail_explore_info_rating_3_5"
+                    style="@style/DetailExploreInfo.Chip.Choice"
+                    android:layout_weight="1"
+                    android:text="@string/detail_explore_info_rating_3_5" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_detail_explore_info_rating_4_0"
+                    style="@style/DetailExploreInfo.Chip.Choice"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/detail_explore_info_rating_4_0" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_detail_explore_info_rating_4_5"
+                    style="@style/DetailExploreInfo.Chip.Choice"
+                    android:layout_weight="1"
+                    android:text="@string/detail_explore_info_rating_4_5" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_detail_explore_info_rating_4_8"
+                    style="@style/DetailExploreInfo.Chip.Choice"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="@string/detail_explore_info_rating_4_8" />
+            </LinearLayout>
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_detail_explore_info_reset_button"
@@ -85,7 +141,7 @@
             android:paddingVertical="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wcg_detail_explore_info_rating">
+            app:layout_constraintTop_toBottomOf="@id/ll_detail_explore_info_rating">
 
             <ImageView
                 android:id="@+id/iv_detail_explore_info_reset"

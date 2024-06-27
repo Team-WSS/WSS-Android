@@ -15,6 +15,8 @@ class DetailExploreInfoFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setupGenreChips()
+        setupStatusChipsSingleSelection()
+        setupRatingChipsSingleSelection()
     }
 
     private fun setupGenreChips() {
@@ -31,6 +33,38 @@ class DetailExploreInfoFragment :
                 setWebsosoChipRadius(45f)
                 setOnWebsosoChipClick { } // TODO 추후 추가 예정
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
+        }
+    }
+
+    private fun setupStatusChipsSingleSelection() {
+        val statusChips = listOf(
+            binding.chipDetailExploreInfoStatusIng,
+            binding.chipDetailExploreInfoStatusFinish,
+        )
+
+        statusChips.forEach { chip ->
+            chip.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    statusChips.filter { it != chip }.forEach { it.isChecked = false }
+                }
+            }
+        }
+    }
+
+    private fun setupRatingChipsSingleSelection() {
+        val ratingChips = listOf(
+            binding.chipDetailExploreInfoRating35,
+            binding.chipDetailExploreInfoRating40,
+            binding.chipDetailExploreInfoRating45,
+            binding.chipDetailExploreInfoRating48,
+        )
+
+        ratingChips.forEach { chip ->
+            chip.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    ratingChips.filter { it != chip }.forEach { it.isChecked = false }
+                }
+            }
         }
     }
 }
