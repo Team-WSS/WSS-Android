@@ -6,7 +6,7 @@ import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import javax.inject.Inject
 
 class FakeNovelDetailRepository @Inject constructor() {
-    suspend fun getNovelDetail(novelId: Long): NovelDetailEntity {
+    suspend fun fetchNovelDetail(novelId: Long): NovelDetailEntity {
         return dummyNovelDetail.toData()
     }
 

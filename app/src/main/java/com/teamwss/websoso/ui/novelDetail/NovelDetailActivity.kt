@@ -31,7 +31,7 @@ class NovelDetailActivity :
         setupTabLayout()
         setupObserver()
         binding.showPopupWindow = ::showPopupWindow
-        novelDetailViewModel.fetchNovelDetail(1)
+        novelDetailViewModel.updateNovelDetail(1)
     }
 
     private fun bindViewModel() {
@@ -65,8 +65,10 @@ class NovelDetailActivity :
             when {
                 uiState.loading -> {
                 }
+
                 uiState.error -> {
                 }
+
                 else -> {
                 }
             }

@@ -19,7 +19,7 @@ class NovelDetailViewModel @Inject constructor(
         MutableLiveData(NovelDetailUiState())
     val uiState: LiveData<NovelDetailUiState> get() = _uiState
 
-    fun fetchNovelDetail(novelId: Long) {
+    fun updateNovelDetail(novelId: Long) {
         viewModelScope.launch {
             runCatching {
                 getNovelDetailUseCase(novelId)
