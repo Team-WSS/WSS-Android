@@ -6,4 +6,4 @@ fun Float.floatToDp(): Float = this / Resources.getSystem().displayMetrics.densi
 
 fun Float.floatToPx(): Float = this * Resources.getSystem().displayMetrics.density
 
-fun Int.intToPx(): Int = this * Resources.getSystem().displayMetrics.density.toInt()
+fun Int.intToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
