@@ -55,8 +55,12 @@
 </br>
 
 ## 🥕 Extensions
-- BindingActivity, BindingBottomSheetDialog, BindingFragment
-- WebsosoChip, WebsosoChipGroup
+- BindingActivity
+- BindingBottomSheetDialog
+- BindingFragment
+- BindingAdapter
+- WebsosoChip
+- WebsosoChipGroup
 
 </br>
 
