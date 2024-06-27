@@ -12,7 +12,6 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
-import com.teamwss.websoso.ui.novelDetail.model.NovelDetailUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,18 +60,11 @@ class NovelDetailActivity :
     }
 
     private fun setupObserver() {
-        novelDetailViewModel.uiState.observe(this) { uiState ->
-            when (uiState) {
-                is NovelDetailUiState.Loading -> {
-                    // TODO: Show loading
-                }
-
-                is NovelDetailUiState.Success -> {}
-
-                is NovelDetailUiState.Error -> {
-                    // TODO: Show error message
-                }
-            }
+        novelDetailViewModel.loading.observe(this) {
+            // TODO: Show loading
+        }
+        novelDetailViewModel.error.observe(this) {
+            // TODO: Show error
         }
     }
 

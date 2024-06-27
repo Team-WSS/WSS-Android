@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeNovelDetailRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
-import com.teamwss.websoso.ui.novelDetail.model.NovelDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,24 +15,22 @@ import javax.inject.Inject
 class NovelDetailViewModel @Inject constructor(
     private val fakeNovelDetailRepository: FakeNovelDetailRepository,
 ) : ViewModel() {
-    private val _uiState: MutableLiveData<NovelDetailUiState> =
-        MutableLiveData(NovelDetailUiState.Loading)
-    val uiState: LiveData<NovelDetailUiState> get() = _uiState
-    val novelDetail: NovelDetailModel?
-        get() = (_uiState.value as? NovelDetailUiState.Success)?.novelDetail
-
-    init {
-        _uiState.value = NovelDetailUiState.Loading
-    }
+    private val _novelDetail = MutableLiveData<NovelDetailModel>()
+    val novelDetail: LiveData<NovelDetailModel> get() = _novelDetail
+    private val _loading = MutableLiveData<Boolean>(false)
+    val loading: LiveData<Boolean> get() = _loading
+    private val _error = MutableLiveData<Boolean>(false)
+    val error: LiveData<Boolean> get() = _error
 
     fun updateNovelDetail(novelId: Long) {
         viewModelScope.launch {
             runCatching {
                 fakeNovelDetailRepository.fetchNovelDetail(novelId)
             }.onSuccess { novelDetail ->
-                _uiState.value = NovelDetailUiState.Success(novelDetail.toUi())
+                _loading.value = false
+                _novelDetail.value = novelDetail.toUi()
             }.onFailure {
-                _uiState.value = NovelDetailUiState.Error
+                _error.value = true
             }
         }
     }
