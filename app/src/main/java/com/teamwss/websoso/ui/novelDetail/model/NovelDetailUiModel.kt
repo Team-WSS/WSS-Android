@@ -22,7 +22,7 @@ data class NovelDetailModel(
         val isNovelCompleted: Boolean,
         val author: String,
     ) {
-        val uiNovelGenres: String
+        val formattedNovelGenres: String
             get() = novelGenres.joinToString(" ・ ")
     }
 
@@ -32,7 +32,7 @@ data class NovelDetailModel(
         val novelRatingCount: Int,
         val feedCount: Int,
     ) {
-        val uiNovelRating: String
+        val formattedNovelRating: String
             get() = "$novelRating ($novelRatingCount)"
     }
 }
