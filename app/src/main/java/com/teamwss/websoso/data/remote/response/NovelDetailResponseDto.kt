@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NovelDetailResponseDto(
     @SerialName("userNovelId")
-    val userNovelId: Long,
+    val userNovelId: Long?,
     @SerialName("novelId")
     val novelTitle: String,
     @SerialName("novelImage")
@@ -22,19 +22,19 @@ data class NovelDetailResponseDto(
     @SerialName("interestCount")
     val interestCount: Int,
     @SerialName("novelRating")
-    val novelRating: Float,
+    val novelRating: Float = 0f,
     @SerialName("novelRatingCount")
-    val novelRatingCount: Int,
+    val novelRatingCount: Int = 0,
     @SerialName("feedCount")
     val feedCount: Int,
     @SerialName("userNovelRating")
-    val userNovelRating: Float,
+    val userNovelRating: Float = 0f,
     @SerialName("readStatus")
-    val readStatus: String,
+    val readStatus: String?,
     @SerialName("startDate")
     val startDate: String?,
     @SerialName("endDate")
     val endDate: String?,
     @SerialName("isUserNovelInterest")
-    val isUserNovelInterest: Boolean,
+    val isUserNovelInterest: Boolean = false,
 )
