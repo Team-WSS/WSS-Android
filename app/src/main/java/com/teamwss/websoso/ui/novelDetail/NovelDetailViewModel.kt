@@ -29,7 +29,7 @@ class NovelDetailViewModel @Inject constructor(
                 fakeNovelDetailRepository.fetchNovelDetail(novelId)
             }.onSuccess { novelDetail ->
                 _uiState.value = NovelDetailUiState.Success(novelDetail.toUi()).apply {
-                    _novelDetail.value = novelDetail.toUi()
+                    _novelDetail.value = this.novelDetail
                 }
             }.onFailure {
                 _uiState.value = NovelDetailUiState.Error
