@@ -60,7 +60,7 @@ class NovelInfoViewModel : ViewModel() {
         _bodyMaxLines.value = DEFAULT_MAX_LINES
     }
 
-    fun initExpandTextToggleVisibility(
+    fun updateExpandTextToggleVisibility(
         lineCount: Int,
         ellipsisCount: Int,
     ) {
