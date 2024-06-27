@@ -65,7 +65,7 @@
 </br>
 
 ## 🏭 Tech Stacks
-- Google recommended architecture
+- Google Recommended Architecture
 - MVVM pattern
 - Static Factory Method pattern
 - Hilt
