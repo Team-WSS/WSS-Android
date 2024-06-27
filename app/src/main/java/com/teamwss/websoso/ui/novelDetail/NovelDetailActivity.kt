@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.novelDetail
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
@@ -12,6 +11,8 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
+import com.teamwss.websoso.util.floatToPx
+import com.teamwss.websoso.util.intToPx
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,19 +67,15 @@ class NovelDetailActivity :
             true,
         ).apply {
             popupBinding.userNovelId = userNovelId
-            this.elevation = 14f.toPx
+            this.elevation = 14f.floatToPx()
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.toPx,
-                POPUP_MARGIN_TOP.toPx,
+                POPUP_MARGIN_END.intToPx(),
+                POPUP_MARGIN_TOP.intToPx(),
                 Gravity.END,
             )
         }
     }
-
-    private val Float.toPx: Float get() = this * Resources.getSystem().displayMetrics.density
-
-    private val Int.toPx: Int get() = this * Resources.getSystem().displayMetrics.density.toInt()
 
     companion object {
         private const val INFO_FRAGMENT_PAGE = 0
