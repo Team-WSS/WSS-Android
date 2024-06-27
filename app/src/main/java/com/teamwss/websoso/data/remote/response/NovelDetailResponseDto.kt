@@ -22,13 +22,13 @@ data class NovelDetailResponseDto(
     @SerialName("interestCount")
     val interestCount: Int,
     @SerialName("novelRating")
-    val novelRating: Float = 0f,
+    val novelRating: Float,
     @SerialName("novelRatingCount")
-    val novelRatingCount: Int = 0,
+    val novelRatingCount: Int,
     @SerialName("feedCount")
     val feedCount: Int,
     @SerialName("userNovelRating")
-    val userNovelRating: Float = 0f,
+    val userNovelRating: Float,
     @SerialName("readStatus")
     val readStatus: String?,
     @SerialName("startDate")
@@ -36,5 +36,5 @@ data class NovelDetailResponseDto(
     @SerialName("endDate")
     val endDate: String?,
     @SerialName("isUserNovelInterest")
-    val isUserNovelInterest: Boolean = false,
+    val isUserNovelInterest: Boolean,
 )
