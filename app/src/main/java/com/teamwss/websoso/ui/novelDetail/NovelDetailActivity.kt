@@ -25,11 +25,12 @@ class NovelDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.showPopupWindow = ::showPopupWindow
         bindViewModel()
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
+        setupObserver()
+        binding.showPopupWindow = ::showPopupWindow
         novelDetailViewModel.fetchNovelDetail(1)
     }
 
@@ -57,6 +58,19 @@ class NovelDetailActivity :
                     else -> throw IllegalArgumentException()
                 }
         }.attach()
+    }
+
+    private fun setupObserver() {
+        novelDetailViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.loading -> {
+                }
+                uiState.error -> {
+                }
+                else -> {
+                }
+            }
+        }
     }
 
     private fun showPopupWindow(userNovelId: Int) {
