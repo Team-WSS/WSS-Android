@@ -19,18 +19,19 @@ class NovelDetailViewModel @Inject constructor(
     private val _uiState: MutableLiveData<NovelDetailUiState> =
         MutableLiveData(NovelDetailUiState.Loading)
     val uiState: LiveData<NovelDetailUiState> get() = _uiState
-    private val _novelDetail: MutableLiveData<NovelDetailModel> =
-        MutableLiveData<NovelDetailModel>()
-    val novelDetail: LiveData<NovelDetailModel> get() = _novelDetail
+    val novelDetail: NovelDetailModel?
+        get() = (_uiState.value as? NovelDetailUiState.Success)?.novelDetail
+
+    init {
+        _uiState.value = NovelDetailUiState.Loading
+    }
 
     fun updateNovelDetail(novelId: Long) {
         viewModelScope.launch {
             runCatching {
                 fakeNovelDetailRepository.fetchNovelDetail(novelId)
             }.onSuccess { novelDetail ->
-                _uiState.value = NovelDetailUiState.Success(novelDetail.toUi()).apply {
-                    _novelDetail.value = this.novelDetail
-                }
+                _uiState.value = NovelDetailUiState.Success(novelDetail.toUi())
             }.onFailure {
                 _uiState.value = NovelDetailUiState.Error
             }
