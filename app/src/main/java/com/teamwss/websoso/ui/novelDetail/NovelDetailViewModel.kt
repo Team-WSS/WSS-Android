@@ -16,7 +16,7 @@ class NovelDetailViewModel @Inject constructor(
     private val fakeNovelDetailRepository: FakeNovelDetailRepository,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<NovelDetailUiState> =
-        MutableLiveData(NovelDetailUiState())
+        MutableLiveData(NovelDetailUiState.Loading)
     val uiState: LiveData<NovelDetailUiState> get() = _uiState
 
     fun updateNovelDetail(novelId: Long) {
@@ -24,13 +24,9 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 fakeNovelDetailRepository.fetchNovelDetail(novelId)
             }.onSuccess { novelDetail ->
-                _uiState.value =
-                    NovelDetailUiState(
-                        loading = false,
-                        novelDetail = novelDetail.toUi(),
-                    )
+                _uiState.value = NovelDetailUiState.Success(novelDetail.toUi())
             }.onFailure {
-                _uiState.value = NovelDetailUiState(loading = false, error = true)
+                _uiState.value = NovelDetailUiState.Error
             }
         }
     }
