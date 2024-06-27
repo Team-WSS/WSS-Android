@@ -61,10 +61,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@{novelInfoViewModel.isViewMoreEnabled() ? @string/novel_info_view_more : @string/novel_info_view_less}"
+                    android:text="@{novelInfoViewModel.isExpandTextToggleEnabled() ? @string/novel_info_view_more : @string/novel_info_view_less}"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
-                    app:isVisible="@{novelInfoViewModel.viewMoreTextVisibility}"
+                    app:isVisible="@{novelInfoViewModel.expandTextToggleVisibility}"
                     tools:text="@string/novel_info_view_more"
                     tools:visibility="visible" />
 

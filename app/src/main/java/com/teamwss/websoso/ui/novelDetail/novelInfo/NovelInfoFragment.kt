@@ -52,7 +52,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         bodyTextView.post {
             val lineCount = bodyTextView.layout.lineCount
             val ellipsisCount = bodyTextView.layout.getEllipsisCount(lineCount - 1)
-            novelInfoViewModel.initViewMoreTextVisibility(lineCount, ellipsisCount)
+            novelInfoViewModel.initExpandTextToggleVisibility(lineCount, ellipsisCount)
         }
     }
 

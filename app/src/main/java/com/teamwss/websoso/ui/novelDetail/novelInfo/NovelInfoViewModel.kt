@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 
 class NovelInfoViewModel : ViewModel() {
-    private val _viewMoreTextVisibility: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
-    val viewMoreTextVisibility: LiveData<Boolean> get() = _viewMoreTextVisibility
-    private val _isViewMoreEnabled: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
-    val isViewMoreEnabled: LiveData<Boolean> get() = _isViewMoreEnabled
+    private val _expandTextToggleVisibility: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    val expandTextToggleVisibility: LiveData<Boolean> get() = _expandTextToggleVisibility
+    private val _isExpandTextToggleEnabled: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
+    val isExpandTextToggleEnabled: LiveData<Boolean> get() = _isExpandTextToggleEnabled
     private val _bodyMaxLines: MutableLiveData<Int> = MutableLiveData<Int>(DEFAULT_MAX_LINES)
     val bodyMaxLines: LiveData<Int> get() = _bodyMaxLines
     private val _dummyNovelInfo: MutableLiveData<NovelInfoResponseDto> =
@@ -51,20 +51,20 @@ class NovelInfoViewModel : ViewModel() {
     }
 
     fun onViewMoreClicked() {
-        if (_isViewMoreEnabled.value == true) {
-            _isViewMoreEnabled.value = false
+        if (_isExpandTextToggleEnabled.value == true) {
+            _isExpandTextToggleEnabled.value = false
             _bodyMaxLines.value = Int.MAX_VALUE
             return
         }
-        _isViewMoreEnabled.value = true
+        _isExpandTextToggleEnabled.value = true
         _bodyMaxLines.value = DEFAULT_MAX_LINES
     }
 
-    fun initViewMoreTextVisibility(
+    fun initExpandTextToggleVisibility(
         lineCount: Int,
         ellipsisCount: Int,
     ) {
-        _viewMoreTextVisibility.value = lineCount >= DEFAULT_MAX_LINES && ellipsisCount > 0
+        _expandTextToggleVisibility.value = lineCount >= DEFAULT_MAX_LINES && ellipsisCount > 0
     }
 
     companion object {
