@@ -1,19 +1,19 @@
 package com.teamwss.websoso.ui.novelDetail.novelInfo
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 
 class NovelInfoViewModel : ViewModel() {
     private val _viewMoreTextVisibility = MutableLiveData<Boolean>(false)
-    val viewMoreTextVisibility: MutableLiveData<Boolean> get() = _viewMoreTextVisibility
+    val viewMoreTextVisibility: LiveData<Boolean> get() = _viewMoreTextVisibility
     private val _isViewMoreEnabled = MutableLiveData<Boolean>(true)
-    val isViewMoreEnabled: MutableLiveData<Boolean> get() = _isViewMoreEnabled
+    val isViewMoreEnabled: LiveData<Boolean> get() = _isViewMoreEnabled
     private val _bodyMaxLines = MutableLiveData<Int>(DEFAULT_MAX_LINES)
-    val bodyMaxLines: MutableLiveData<Int> get() = _bodyMaxLines
-
-    val dummyNovelInfo: MutableLiveData<NovelInfoResponseDto> get() = _dummyNovelInfo
+    val bodyMaxLines: LiveData<Int> get() = _bodyMaxLines
     private val _dummyNovelInfo = MutableLiveData<NovelInfoResponseDto>()
+    val dummyNovelInfo: LiveData<NovelInfoResponseDto> get() = _dummyNovelInfo
 
     fun getDummyNovelInfo() {
         _dummyNovelInfo.value =
