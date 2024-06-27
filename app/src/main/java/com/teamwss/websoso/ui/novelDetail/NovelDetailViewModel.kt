@@ -12,28 +12,26 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NovelDetailViewModel
-    @Inject
-    constructor(
-        private val getNovelDetailUseCase: GetNovelDetailUseCase,
-    ) : ViewModel() {
-        private val _uiState: MutableLiveData<NovelDetailUiState> =
-            MutableLiveData(NovelDetailUiState())
-        val uiState: LiveData<NovelDetailUiState> get() = _uiState
+class NovelDetailViewModel @Inject constructor(
+    private val getNovelDetailUseCase: GetNovelDetailUseCase,
+) : ViewModel() {
+    private val _uiState: MutableLiveData<NovelDetailUiState> =
+        MutableLiveData(NovelDetailUiState())
+    val uiState: LiveData<NovelDetailUiState> get() = _uiState
 
-        fun fetchNovelDetail(novelId: Long) {
-            viewModelScope.launch {
-                runCatching {
-                    getNovelDetailUseCase(novelId)
-                }.onSuccess { novelDetail ->
-                    _uiState.value =
-                        NovelDetailUiState(
-                            loading = false,
-                            novelDetail = novelDetail.toUi(),
-                        )
-                }.onFailure {
-                    _uiState.value = NovelDetailUiState(loading = false, error = true)
-                }
+    fun fetchNovelDetail(novelId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                getNovelDetailUseCase(novelId)
+            }.onSuccess { novelDetail ->
+                _uiState.value =
+                    NovelDetailUiState(
+                        loading = false,
+                        novelDetail = novelDetail.toUi(),
+                    )
+            }.onFailure {
+                _uiState.value = NovelDetailUiState(loading = false, error = true)
             }
         }
     }
+}
