@@ -12,6 +12,7 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
+import com.teamwss.websoso.ui.novelDetail.model.NovelDetailUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,25 +52,25 @@ class NovelDetailActivity :
 
     private fun setupTabLayout() {
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
-            tab.text =
-                when (position) {
-                    INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
-                    FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
-                    else -> throw IllegalArgumentException()
-                }
+            tab.text = when (position) {
+                INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
+                FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
+                else -> throw IllegalArgumentException()
+            }
         }.attach()
     }
 
     private fun setupObserver() {
         novelDetailViewModel.uiState.observe(this) { uiState ->
-            when {
-                uiState.loading -> {
+            when (uiState) {
+                is NovelDetailUiState.Loading -> {
+                    // TODO: Show loading
                 }
 
-                uiState.error -> {
-                }
+                is NovelDetailUiState.Success -> {}
 
-                else -> {
+                is NovelDetailUiState.Error -> {
+                    // TODO: Show error message
                 }
             }
         }
