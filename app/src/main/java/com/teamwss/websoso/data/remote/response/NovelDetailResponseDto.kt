@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NovelDetailResponseDto(
     @SerialName("userNovelId")
-    val userNovelId: Long,
+    val userNovelId: Long?,
     @SerialName("novelId")
     val novelTitle: String,
     @SerialName("novelImage")
@@ -30,7 +30,7 @@ data class NovelDetailResponseDto(
     @SerialName("userNovelRating")
     val userNovelRating: Float,
     @SerialName("readStatus")
-    val readStatus: String,
+    val readStatus: String?,
     @SerialName("startDate")
     val startDate: String?,
     @SerialName("endDate")
