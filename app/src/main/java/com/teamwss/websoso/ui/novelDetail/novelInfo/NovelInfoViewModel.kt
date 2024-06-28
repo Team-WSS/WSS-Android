@@ -74,6 +74,6 @@ class NovelInfoViewModel : ViewModel() {
     }
 
     companion object {
-        const val DEFAULT_MAX_LINES = 3
+        private const val DEFAULT_MAX_LINES = 3
     }
 }
