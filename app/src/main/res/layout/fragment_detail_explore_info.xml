@@ -54,19 +54,19 @@
             app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_status">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_detail_explore_info_status_ing"
+                android:id="@+id/chip_detail_explore_info_status_in_series"
                 style="@style/DetailExploreInfo.Chip.Choice"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:text="@string/detail_explore_info_status_ing" />
+                android:text="@string/detail_explore_info_status_in_series" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_detail_explore_info_status_finish"
+                android:id="@+id/chip_detail_explore_info_status_complete"
                 style="@style/DetailExploreInfo.Chip.Choice"
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:text="@string/detail_explore_info_status_finish" />
+                android:text="@string/detail_explore_info_status_complete" />
         </LinearLayout>
 
         <TextView

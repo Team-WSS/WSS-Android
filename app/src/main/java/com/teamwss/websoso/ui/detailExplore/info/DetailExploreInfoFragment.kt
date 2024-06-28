@@ -38,8 +38,8 @@ class DetailExploreInfoFragment :
 
     private fun setupStatusChipsSingleSelection() {
         val statusChips = listOf(
-            binding.chipDetailExploreInfoStatusIng,
-            binding.chipDetailExploreInfoStatusFinish,
+            binding.chipDetailExploreInfoStatusInSeries,
+            binding.chipDetailExploreInfoStatusComplete,
         )
 
         statusChips.forEach { chip ->

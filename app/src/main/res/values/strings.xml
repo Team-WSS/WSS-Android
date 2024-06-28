@@ -35,8 +35,8 @@
     <string name="detail_explore_info_genre">장르</string>
     <string name="detail_explore_info_status">연재상태</string>
     <string name="detail_explore_info_rating">별점</string>
-    <string name="detail_explore_info_status_ing">연재중</string>
-    <string name="detail_explore_info_status_finish">완결</string>
+    <string name="detail_explore_info_status_in_series">연재중</string>
+    <string name="detail_explore_info_status_complete">완결</string>
     <string name="detail_explore_info_rating_3_5">3.5이상</string>
     <string name="detail_explore_info_rating_4_0">4.0이상</string>
     <string name="detail_explore_info_rating_4_5">4.5이상</string>
