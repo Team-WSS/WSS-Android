@@ -38,7 +38,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:onClick="@{() -> novelInfoViewModel.onViewMoreClicked()}"
+                android:onClick="@{() -> novelInfoViewModel.updateExpandTextToggle()}"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,10 +61,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@{novelInfoViewModel.isViewMoreEnabled() ? @string/novel_info_view_more : @string/novel_info_view_less}"
+                    android:text="@{novelInfoViewModel.isExpandTextToggleEnabled() ? @string/novel_info_view_more : @string/novel_info_view_less}"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
-                    app:isVisible="@{novelInfoViewModel.viewMoreTextVisibility}"
+                    app:isVisible="@{novelInfoViewModel.expandTextToggleVisibility}"
                     tools:text="@string/novel_info_view_more"
                     tools:visibility="visible" />
 
@@ -171,18 +171,23 @@
                     app:layout_constraintTop_toTopOf="@id/view_novel_info_reviews_background"
                     tools:text="캐릭터, 관계, 소재가 매력적인 작품이에요" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_novel_info_reviews"
+                <HorizontalScrollView
+                    android:id="@+id/hsv_novel_info_keyword"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp"
+                    android:scrollbars="none"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view_novel_info_reviews_background"
-                    tools:itemCount="1"
-                    tools:listitem="@layout/item_novel_info_reviews" />
+                    app:layout_constraintTop_toBottomOf="@id/view_novel_info_reviews_background">
+
+                    <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+                        android:id="@+id/wcg_novel_info_keyword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipSpacing="6dp"
+                        app:singleSelection="false" />
+                </HorizontalScrollView>
 
                 <View
                     android:id="@+id/view_novel_info_reviews_divider"
@@ -192,7 +197,7 @@
                     android:background="@color/gray_50_F4F5F8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rv_novel_info_reviews" />
+                    app:layout_constraintTop_toBottomOf="@id/hsv_novel_info_keyword" />
 
                 <TextView
                     android:id="@+id/tv_novel_info_read_status_title"
