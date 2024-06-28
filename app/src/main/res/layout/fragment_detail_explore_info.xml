@@ -55,14 +55,18 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_detail_explore_info_status_in_series"
-                style="@style/DetailExploreInfo.Chip.Choice"
+                style="@style/HarryMoongChi.Chip.Choice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checkable="true"
                 android:text="@string/detail_explore_info_status_in_series" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_detail_explore_info_status_complete"
-                style="@style/DetailExploreInfo.Chip.Choice"
+                style="@style/HarryMoongChi.Chip.Choice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:checkable="true"
@@ -100,13 +104,17 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_detail_explore_info_rating_3_5"
-                    style="@style/DetailExploreInfo.Chip.Choice"
+                    style="@style/HarryMoongChi.Chip.Choice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/detail_explore_info_rating_3_5" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_detail_explore_info_rating_4_0"
-                    style="@style/DetailExploreInfo.Chip.Choice"
+                    style="@style/HarryMoongChi.Chip.Choice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
                     android:text="@string/detail_explore_info_rating_4_0" />
@@ -119,13 +127,17 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_detail_explore_info_rating_4_5"
-                    style="@style/DetailExploreInfo.Chip.Choice"
+                    style="@style/HarryMoongChi.Chip.Choice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/detail_explore_info_rating_4_5" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_detail_explore_info_rating_4_8"
-                    style="@style/DetailExploreInfo.Chip.Choice"
+                    style="@style/HarryMoongChi.Chip.Choice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
                     android:text="@string/detail_explore_info_rating_4_8" />

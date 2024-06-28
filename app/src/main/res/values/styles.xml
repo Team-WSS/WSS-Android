@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="DetailExploreInfo.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+    <!-- custom view로 구현 예정으로, 추후 삭제 예정 스타일 -->
+    <style name="HarryMoongChi.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="android:checkable">true</item>
         <item name="android:checked">false</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingVertical">12dp</item>
         <item name="android:textAppearance">@style/body2</item>
         <item name="chipBackgroundColor">@color/bg_detail_explore_chip_background_selector</item>
@@ -15,6 +14,6 @@
         <item name="rippleColor">@null</item>
         <item name="chipMinTouchTargetSize">0dp</item>
         <item name="android:textColor">@color/bg_detail_explore_chip_text_selector</item>
-        <item name="chipCornerRadius">10dp</item>
+        <item name="chipCornerRadius">8dp</item>
     </style>
 </resources>
