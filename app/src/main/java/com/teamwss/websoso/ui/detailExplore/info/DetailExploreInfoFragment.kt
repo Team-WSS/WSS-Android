@@ -15,6 +15,7 @@ class DetailExploreInfoFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setupGenreChips()
+        setupRatingChipsText()
         setupStatusChipsSingleSelection()
         setupRatingChipsSingleSelection()
     }
@@ -36,6 +37,21 @@ class DetailExploreInfoFragment :
         }
     }
 
+    private fun setupRatingChipsText() {
+        val ratings = listOf(3.5f, 4.0f, 4.5f, 4.8f)
+
+        with(binding) {
+            chipDetailExploreInfoRatingLowest.text =
+                requireContext().getString(R.string.detail_explore_info_rating_lowest, ratings[0])
+            chipDetailExploreInfoRatingLower.text =
+                requireContext().getString(R.string.detail_explore_info_rating_lower, ratings[1])
+            chipDetailExploreInfoRatingHigher.text =
+                requireContext().getString(R.string.detail_explore_info_rating_higher, ratings[2])
+            chipDetailExploreInfoRatingHighest.text =
+                requireContext().getString(R.string.detail_explore_info_rating_highest, ratings[3])
+        }
+    }
+
     private fun setupStatusChipsSingleSelection() {
         val statusChips = listOf(
             binding.chipDetailExploreInfoStatusInSeries,
@@ -53,10 +69,10 @@ class DetailExploreInfoFragment :
 
     private fun setupRatingChipsSingleSelection() {
         val ratingChips = listOf(
-            binding.chipDetailExploreInfoRating35,
-            binding.chipDetailExploreInfoRating40,
-            binding.chipDetailExploreInfoRating45,
-            binding.chipDetailExploreInfoRating48,
+            binding.chipDetailExploreInfoRatingLowest,
+            binding.chipDetailExploreInfoRatingLower,
+            binding.chipDetailExploreInfoRatingHigher,
+            binding.chipDetailExploreInfoRatingHighest,
         )
 
         ratingChips.forEach { chip ->

@@ -37,10 +37,10 @@
     <string name="detail_explore_info_rating">별점</string>
     <string name="detail_explore_info_status_in_series">연재중</string>
     <string name="detail_explore_info_status_complete">완결</string>
-    <string name="detail_explore_info_rating_3_5">3.5이상</string>
-    <string name="detail_explore_info_rating_4_0">4.0이상</string>
-    <string name="detail_explore_info_rating_4_5">4.5이상</string>
-    <string name="detail_explore_info_rating_4_8">4.8이상</string>
+    <string name="detail_explore_info_rating_lowest">%.1f이상</string>
+    <string name="detail_explore_info_rating_lower">%.1f이상</string>
+    <string name="detail_explore_info_rating_higher">%.1f이상</string>
+    <string name="detail_explore_info_rating_highest">%.1f이상</string>
 
     <!-- 작품 상세 -->
     <string name="novel_detail_review">리뷰 남기기</string>

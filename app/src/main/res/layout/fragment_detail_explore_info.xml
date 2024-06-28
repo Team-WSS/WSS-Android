@@ -103,21 +103,21 @@
                 android:paddingBottom="12dp">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_detail_explore_info_rating_3_5"
+                    android:id="@+id/chip_detail_explore_info_rating_lowest"
                     style="@style/HarryMoongChi.Chip.Choice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_3_5" />
+                    android:text="@string/detail_explore_info_rating_lowest" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_detail_explore_info_rating_4_0"
+                    android:id="@+id/chip_detail_explore_info_rating_lower"
                     style="@style/HarryMoongChi.Chip.Choice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_4_0" />
+                    android:text="@string/detail_explore_info_rating_lower" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,21 +126,21 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_detail_explore_info_rating_4_5"
+                    android:id="@+id/chip_detail_explore_info_rating_higher"
                     style="@style/HarryMoongChi.Chip.Choice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_4_5" />
+                    android:text="@string/detail_explore_info_rating_higher" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_detail_explore_info_rating_4_8"
+                    android:id="@+id/chip_detail_explore_info_rating_highest"
                     style="@style/HarryMoongChi.Chip.Choice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_4_8" />
+                    android:text="@string/detail_explore_info_rating_highest" />
             </LinearLayout>
         </LinearLayout>
 
