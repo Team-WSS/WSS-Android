@@ -21,7 +21,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupObserver()
-        setupViewMoreTextVisibility()
+        setupExpandTextToggleVisibility()
         novelInfoViewModel.getDummyNovelInfo()
     }
 
@@ -52,7 +52,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         }
     }
 
-    private fun setupViewMoreTextVisibility() {
+    private fun setupExpandTextToggleVisibility() {
         val bodyTextView = binding.tvNovelInfoIntroBody
         bodyTextView.post {
             val lineCount = bodyTextView.layout.lineCount
