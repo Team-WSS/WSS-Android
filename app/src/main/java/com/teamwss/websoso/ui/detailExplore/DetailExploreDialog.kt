@@ -21,10 +21,12 @@ class DetailExploreDialog :
     }
 
     private fun setupBottomSheet() {
-        (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        (dialog as BottomSheetDialog).behavior.isDraggable = false
-        (dialog as BottomSheetDialog).behavior.isHideable = false
-        (dialog as BottomSheetDialog).setCancelable(false)
+        (dialog as BottomSheetDialog).apply {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.isDraggable = false
+            behavior.isHideable = false
+            setCancelable(false)
+        }
     }
 
     private fun setupFragmentContainer() {
