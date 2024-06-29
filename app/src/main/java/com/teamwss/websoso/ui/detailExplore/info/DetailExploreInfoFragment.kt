@@ -21,7 +21,7 @@ class DetailExploreInfoFragment :
     }
 
     private fun setupGenreChips() {
-        val genres = Genre.values().toList()
+        val genres = Genre.entries
         genres.forEach { genre ->
             WebsosoChip(requireContext()).apply {
                 setWebsosoChipText(genre.title)
