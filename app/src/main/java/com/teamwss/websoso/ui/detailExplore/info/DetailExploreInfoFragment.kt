@@ -2,22 +2,31 @@ package com.teamwss.websoso.ui.detailExplore.info
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailExploreInfoFragment :
     BindingFragment<FragmentDetailExploreInfoBinding>(R.layout.fragment_detail_explore_info) {
+    private val detailExploreInfoViewModel: DetailExploreInfoViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bindViewModel()
         setupGenreChips()
-        setupRatingChipsText()
         setupStatusChipsSingleSelection()
         setupRatingChipsSingleSelection()
+    }
+
+    private fun bindViewModel() {
+        binding.detailExploreInfoviewModel = detailExploreInfoViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupGenreChips() {
@@ -34,21 +43,6 @@ class DetailExploreInfoFragment :
                 setWebsosoChipRadius(45f)
                 setOnWebsosoChipClick { } // TODO 추후 추가 예정
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
-        }
-    }
-
-    private fun setupRatingChipsText() {
-        val ratings = listOf(3.5f, 4.0f, 4.5f, 4.8f)
-
-        with(binding) {
-            chipDetailExploreInfoRatingLowest.text =
-                requireContext().getString(R.string.detail_explore_info_rating_lowest, ratings[0])
-            chipDetailExploreInfoRatingLower.text =
-                requireContext().getString(R.string.detail_explore_info_rating_lower, ratings[1])
-            chipDetailExploreInfoRatingHigher.text =
-                requireContext().getString(R.string.detail_explore_info_rating_higher, ratings[2])
-            chipDetailExploreInfoRatingHighest.text =
-                requireContext().getString(R.string.detail_explore_info_rating_highest, ratings[3])
         }
     }
 

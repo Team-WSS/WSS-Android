@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="detailExploreInfoviewModel"
+            type="com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,7 +115,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_lowest" />
+                    android:text="@{String.format(@string/detail_explore_info_rating_lowest, detailExploreInfoviewModel.ratings[0])}" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_detail_explore_info_rating_lower"
@@ -117,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_lower" />
+                    android:text="@{String.format(@string/detail_explore_info_rating_lower, detailExploreInfoviewModel.ratings[1])}" />
             </LinearLayout>
 
             <LinearLayout
@@ -131,7 +138,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_higher" />
+                    android:text="@{String.format(@string/detail_explore_info_rating_higher, detailExploreInfoviewModel.ratings[2])}" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_detail_explore_info_rating_highest"
@@ -140,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:text="@string/detail_explore_info_rating_highest" />
+                    android:text="@{String.format(@string/detail_explore_info_rating_highest, detailExploreInfoviewModel.ratings[3])}" />
             </LinearLayout>
         </LinearLayout>
 
