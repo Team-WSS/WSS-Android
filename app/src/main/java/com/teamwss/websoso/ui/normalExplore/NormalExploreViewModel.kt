@@ -59,7 +59,7 @@ class NormalExploreViewModel @Inject constructor(
     }
 
     private fun handleSearchError() {
-        _uiState.value = _uiState.value?.copy(
+        _uiState.value = uiState.value?.copy(
             loading = false,
             error = true,
         )
