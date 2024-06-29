@@ -8,7 +8,9 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailExploreDialog :
     BindingBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
 
