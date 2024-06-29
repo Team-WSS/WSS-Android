@@ -19,4 +19,10 @@ class FakeNovelRepository @Inject constructor() {
             )
         }
     )
+
+    val normalExploreEmptyDummyData = NormalExploreEntity(
+        resultCount = 0,
+        isLoadable = false,
+        novels = emptyList()
+    )
 }
