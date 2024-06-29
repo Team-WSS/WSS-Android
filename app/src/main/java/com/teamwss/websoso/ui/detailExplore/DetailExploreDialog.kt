@@ -16,7 +16,7 @@ class DetailExploreDialog :
         super.onViewCreated(view, savedInstanceState)
 
         setupBottomSheet()
-        setupFragmentContainer()
+        replaceDetailExploreFragment()
         onBottomSheetExitButtonClick()
     }
 
@@ -29,7 +29,7 @@ class DetailExploreDialog :
         }
     }
 
-    private fun setupFragmentContainer() {
+    private fun replaceDetailExploreFragment() {
         // TODO 정보/키워드 탭에 따른 fragment 수정
         childFragmentManager.beginTransaction()
             .replace(R.id.fcv_detail_explore, DetailExploreInfoFragment())
@@ -39,6 +39,13 @@ class DetailExploreDialog :
     private fun onBottomSheetExitButtonClick() {
         binding.ivDetailExploreExitButton.setOnClickListener {
             dismiss()
+        }
+    }
+
+    companion object {
+
+        fun newInstance(): DetailExploreDialog {
+            return DetailExploreDialog()
         }
     }
 }

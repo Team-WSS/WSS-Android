@@ -43,7 +43,7 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
 
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
-            val detailExploreBottomSheet = DetailExploreDialog()
+            val detailExploreBottomSheet = DetailExploreDialog.newInstance()
             detailExploreBottomSheet.show(this@ExploreFragment.childFragmentManager, tag)
         }
     }
