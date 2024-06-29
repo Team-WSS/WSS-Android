@@ -28,11 +28,19 @@
     <!-- 상세 탐색 뷰 -->
     <string name="detail_explore_info">정보</string>
     <string name="detail_explore_keyword">키워드</string>
+    <string name="detail_explore_reset">초기화</string>
+    <string name="detail_explore_search_novel">작품 찾기</string>
+
+    <!-- 상세 탐색 뷰(정보) -->
     <string name="detail_explore_info_genre">장르</string>
     <string name="detail_explore_info_status">연재상태</string>
     <string name="detail_explore_info_rating">별점</string>
-    <string name="detail_explore_reset">초기화</string>
-    <string name="detail_explore_search_novel">작품 찾기</string>
+    <string name="detail_explore_info_status_in_series">연재중</string>
+    <string name="detail_explore_info_status_complete">완결</string>
+    <string name="detail_explore_info_rating_lowest">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_highest">%1$.1f이상</string>
 
     <!-- 작품 상세 -->
     <string name="novel_detail_review">리뷰 남기기</string>
