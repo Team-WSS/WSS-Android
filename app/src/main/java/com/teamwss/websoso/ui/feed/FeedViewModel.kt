@@ -25,37 +25,22 @@ class FeedViewModel @Inject constructor(
         MutableLiveData(FeedUiState(categories = category.toPresentation()))
     val uiState: LiveData<FeedUiState> get() = _uiState
 
-    init {
-        updateFeedsByCategory()
-    }
-
-    fun updateFeedsByCategory(category: Category) {
-        // non-nullable 수정
-        _uiState.value = uiState.value?.copy(
-            categories = uiState.value?.categories?.map { categoryUiState ->
-                categoryUiState.takeIf { categoryUiState.category == category }?.copy(
-                    isSelected = true,
-                ) ?: categoryUiState.copy(isSelected = false)
-            } ?: uiState.value!!.categories
-        )
-        updateFeedsByCategory()
-    }
-
-    fun updateFeedsByCategory() {
-        val category: Category = uiState.value!!.categories.find { it.isSelected }!!.category
-        // response category 대조 로직 추가 예정
+    fun updateFeeds() {
         viewModelScope.launch {
             runCatching {
-                getFeedsUseCase(category = category.title)
+                getFeedsUseCase("전체")
             }.onSuccess { feeds ->
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    isLoadable = feeds.isLoadable,
-                    feeds = feeds.feeds.map { it.toPresentation() },
-                )
+                _uiState.value = uiState.value?.let { feedUiState ->
+                    feedUiState.copy(
+                        loading = false,
+                        isLoadable = feeds.isLoadable,
+                        feeds = feeds.feeds.map { it.toPresentation() },
+                    )
+                }
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
-                    loading = false, error = true,
+                    loading = false,
+                    error = true,
                 )
             }
         }

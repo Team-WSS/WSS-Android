@@ -32,7 +32,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _popupBinding = MenuFeedPopupBinding.inflate(inflater, container, false)
 
@@ -87,6 +87,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        feedViewModel.updateFeeds()
         feedViewModel.category.setUpChips()
         setupAdapter()
         bindViewModel()
@@ -104,7 +105,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick { feedViewModel.updateFeedsByCategory(category) }
+                setOnWebsosoChipClick { feedViewModel::updateFeeds }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
@@ -112,7 +113,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun setupAdapter() {
         binding.rvFeed.apply {
             adapter = feedAdapter
-            addOnScrollListener(FeedScrollListener.from(feedViewModel::updateFeedsByCategory))
+            addOnScrollListener(FeedScrollListener.from(feedViewModel::updateFeeds))
             setHasFixedSize(true)
         }
     }
