@@ -4,7 +4,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
-class SingleEventHandler {
+class SingleEventHandler private constructor() {
     private val currentTime: TimeMark get() = TimeSource.Monotonic.markNow()
     private lateinit var lastEventTime: TimeMark
 
@@ -17,5 +17,10 @@ class SingleEventHandler {
         ) event()
 
         lastEventTime = currentTime
+    }
+
+    companion object {
+
+        fun from(): SingleEventHandler = SingleEventHandler()
     }
 }

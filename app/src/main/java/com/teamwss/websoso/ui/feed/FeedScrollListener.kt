@@ -7,7 +7,7 @@ import com.teamwss.websoso.util.SingleEventHandler
 class FeedScrollListener private constructor(
     private val loadAdditionalFeeds: () -> Unit,
 ) : RecyclerView.OnScrollListener() {
-    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler() }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
