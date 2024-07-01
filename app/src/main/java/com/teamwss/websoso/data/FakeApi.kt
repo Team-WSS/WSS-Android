@@ -36,20 +36,8 @@ object FakeApi {
     )
 
     suspend fun getFeeds(
-        feedsRequestDto: FeedsRequestDto
-    ): FeedsResponseDto {
-        delay(500)
-        val from = feedsRequestDto.lastFeedId.toInt()
-        val to = (feedsRequestDto.lastFeedId + feedsRequestDto.size).toInt()
-
-        return Fixture.copy(
-            feedsResponseDto = Fixture.feedsResponseDto.subList(from, to)
-        )
-    }
-
-    suspend fun getFeedsByCategory(
-        category: String,
-        feedsRequestDto: FeedsRequestDto
+        category: String?,
+        feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto {
         delay(500)
         val from = feedsRequestDto.lastFeedId.toInt()

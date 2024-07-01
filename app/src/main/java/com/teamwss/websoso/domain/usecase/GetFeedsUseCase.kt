@@ -8,44 +8,28 @@ import javax.inject.Inject
 class GetFeedsUseCase @Inject constructor(
     private val defaultFeedRepository: DefaultFeedRepository,
 ) {
-    private var lastFeedId: Long = DEFAULT_ID
-    private var selectedCategory: String? = NOTHING
+    private var lastFeedId: Long = INITIAL_ID
+    private var previousCategory: String = ""
 
-    suspend operator fun invoke(
-        category: String = DEFAULT_CATEGORY,
-    ): Feeds {
-        checkCategory(
-            if (category == DEFAULT_CATEGORY) null else category
-        )
+    suspend operator fun invoke(selectedCategory: String): Feeds {
+        if (defaultFeedRepository.cachedFeeds.isNotEmpty() && previousCategory != selectedCategory) {
+            defaultFeedRepository.clearCachedFeeds()
+            lastFeedId = INITIAL_ID
+        }
 
         return defaultFeedRepository.fetchFeeds(
             category = selectedCategory,
             lastFeedId = lastFeedId,
-            size = if (lastFeedId == DEFAULT_ID) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
+            size = if (lastFeedId == INITIAL_ID) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
         ).toDomain()
             .also {
                 lastFeedId = it.feeds.last().id
+                previousCategory = selectedCategory
             }
     }
 
-    private fun checkCategory(category: String?) {
-        if (selectedCategory != category) {
-            selectedCategory = category
-            clearFeedInfo()
-        }
-    }
-
-    private fun clearFeedInfo() {
-        if (defaultFeedRepository.cachedFeeds.isNotEmpty()) {
-            defaultFeedRepository.clearCachedFeeds()
-            lastFeedId = DEFAULT_ID
-        }
-    }
-
     companion object {
-        private const val NOTHING: String = ""
-        private const val DEFAULT_CATEGORY: String = "전체"
-        private const val DEFAULT_ID: Long = 0
+        private const val INITIAL_ID: Long = 0
         private const val INITIAL_REQUEST_SIZE = 20
         private const val ADDITIONAL_REQUEST_SIZE = 10
     }
