@@ -139,8 +139,11 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     private fun updateView(uiState: FeedUiState) {
         // binding.wcgFeed.submitList(categories) 구현 예정
-        val feeds = uiState.feeds.map { Feed(it) } + if (uiState.isLoadable) Loading else return
-        feedAdapter.submitList(feeds)
+        val feeds = uiState.feeds.map { Feed(it) }
+        when (uiState.isLoadable) {
+            true -> feedAdapter.submitList(feeds + Loading)
+            false -> feedAdapter.submitList(feeds)
+        }
     }
 
     override fun onStop() {

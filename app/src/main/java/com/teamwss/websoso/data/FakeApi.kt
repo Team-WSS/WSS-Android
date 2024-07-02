@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data
 
+import android.util.Log
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import com.teamwss.websoso.data.remote.response.FeedResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
@@ -10,7 +11,7 @@ object FakeApi {
     val Fixture = FeedsResponseDto(
         category = "all",
         isLoadable = true,
-        feedsResponseDto = List(40) {
+        feedsResponseDto = List(43) {
             // 픽스쳐 라이브러리 적용
             FeedResponseDto(
                 avatarImage = "https://page-images.kakaoentcdn.com/download/resource?kid=LWSLy/hzN2my4ybO/6AFasaBRdiBRR4RRswKqU1&filename=o1",
@@ -41,9 +42,17 @@ object FakeApi {
     ): FeedsResponseDto {
         delay(500)
         val from = feedsRequestDto.lastFeedId.toInt()
-        val to = (feedsRequestDto.lastFeedId + feedsRequestDto.size).toInt()
+        val to = when (feedsRequestDto.lastFeedId + 10 > Fixture.feedsResponseDto.size) {
+            true -> Fixture.feedsResponseDto.size
+            false -> (feedsRequestDto.lastFeedId + feedsRequestDto.size).toInt()
+        }
 
-        return Fixture.copy(
+        return if (to >= Fixture.feedsResponseDto.size) {
+            Fixture.copy(
+                isLoadable = false,
+                feedsResponseDto = Fixture.feedsResponseDto.subList(from, to)
+            )
+        } else Fixture.copy(
             feedsResponseDto = Fixture.feedsResponseDto.subList(from, to)
         )
     }
