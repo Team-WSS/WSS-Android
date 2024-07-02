@@ -1,6 +1,5 @@
 package com.teamwss.websoso.data
 
-import android.util.Log
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import com.teamwss.websoso.data.remote.response.FeedResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto

@@ -13,4 +13,16 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
+    <style name="DateNumberPicker">
+        <item name="android:textAppearance">@style/body2</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="WebsosoBottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:colorBackground">@color/transparent</item>
+    </style>
+
 </resources>

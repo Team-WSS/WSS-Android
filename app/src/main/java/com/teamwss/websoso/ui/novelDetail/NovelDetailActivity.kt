@@ -25,15 +25,17 @@ class NovelDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupDataBinding()
+        bindViewModel()
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
+        setupObserver()
+        binding.showPopupWindow = ::showPopupWindow
+        novelDetailViewModel.updateNovelDetail(1)
     }
 
-    private fun setupDataBinding() {
+    private fun bindViewModel() {
         binding.novelDetailViewModel = novelDetailViewModel
-        binding.showPopupWindow = ::showPopupWindow
         binding.lifecycleOwner = this
     }
 
@@ -57,20 +59,28 @@ class NovelDetailActivity :
         }.attach()
     }
 
+    private fun setupObserver() {
+        novelDetailViewModel.loading.observe(this) {
+            // TODO: Show loading
+        }
+        novelDetailViewModel.error.observe(this) {
+            // TODO: Show error
+        }
+    }
+
     private fun showPopupWindow(userNovelId: Int) {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
-            popupBinding.userNovelId = userNovelId
             this.elevation = 14f.toPx
             showAsDropDown(
                 binding.ivNovelDetailMenu,
                 POPUP_MARGIN_END.toPx,
                 POPUP_MARGIN_TOP.toPx,
-                Gravity.END
+                Gravity.END,
             )
         }
     }
