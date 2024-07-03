@@ -4,17 +4,15 @@ data class NovelInfoUiState(
     val novelInfoModel: NovelInfoUiModel = NovelInfoUiModel(
         "",
         emptyList(),
-        0,
-        0,
-        0,
+        UnifiedReviewCountModel(
+            ReviewCountModel(ReadStatus.WATCHING, 0),
+            ReviewCountModel(ReadStatus.WATCHED, 0),
+            ReviewCountModel(ReadStatus.QUIT, 0),
+        ),
     ),
     val keywords: List<KeywordModel> = emptyList(),
-    val platforms: List<PlatformModel> = emptyList(),
-    val expandTextModel: ExpandTextUiModel = ExpandTextUiModel(
-        expandTextToggleVisibility = false,
-        isExpandTextToggleSelected = false,
-        bodyMaxLines = ExpandTextUiModel.DEFAULT_BODY_MAX_LINES,
-    ),
+    val platforms: PlatformsModel = PlatformsModel(null, null),
+    val expandTextModel: ExpandTextUiModel = ExpandTextUiModel(),
     val loading: Boolean = true,
     val error: Boolean = false,
 )

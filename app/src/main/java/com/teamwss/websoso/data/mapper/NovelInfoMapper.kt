@@ -20,8 +20,10 @@ fun NovelInfoResponseDto.toData(): NovelInfoEntity {
                 keywordCount = it.keywordCount,
             )
         },
-        watchingCount = watchingCount,
-        watchedCount = watchedCount,
-        quitCount = quitCount,
+        reviewCount = NovelInfoEntity.ReviewCountEntity(
+            watchingCount = watchingCount,
+            watchedCount = watchedCount,
+            quitCount = quitCount,
+        ),
     )
 }

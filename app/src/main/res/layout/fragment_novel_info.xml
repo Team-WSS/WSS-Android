@@ -47,10 +47,10 @@
                 <TextView
                     android:id="@+id/tv_novel_info_description_body"
                     android:layout_width="wrap_content"
-                    android:paddingHorizontal="20dp"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="@{novelInfoViewModel.uiState.expandTextModel.bodyMaxLines}"
+                    android:paddingHorizontal="20dp"
                     android:text="@{novelInfoViewModel.uiState.novelInfoModel.novelDescription}"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_300_52515F"
@@ -107,6 +107,7 @@
                     android:layout_marginHorizontal="8dp"
                     android:src="@drawable/btn_novel_info_naver"
                     android:visibility="gone"
+                    app:isVisible="@{novelInfoViewModel.uiState.platforms.naverModel.isVisible}"
                     tools:visibility="visible" />
 
                 <ImageView
@@ -116,6 +117,7 @@
                     android:layout_marginHorizontal="8dp"
                     android:src="@drawable/btn_novel_info_kakao"
                     android:visibility="gone"
+                    app:isVisible="@{novelInfoViewModel.uiState.platforms.kakaoModel.isVisible}"
                     tools:visibility="visible" />
 
             </LinearLayout>
@@ -282,9 +284,9 @@
                             android:id="@+id/tv_novel_info_read_status_watched_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.watchedCount)}"
                             android:textAppearance="@style/body3"
                             tools:text="10"
-                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.watchedCount)}"
                             tools:textColor="@color/gray_200_AEADB3" />
 
                         <androidx.cardview.widget.CardView
@@ -328,9 +330,9 @@
                             android:id="@+id/tv_novel_info_read_status_quit_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.quitCount)}"
                             android:textAppearance="@style/body3"
                             tools:text="100"
-                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.quitCount)}"
                             tools:textColor="@color/gray_200_AEADB3" />
 
                         <androidx.cardview.widget.CardView

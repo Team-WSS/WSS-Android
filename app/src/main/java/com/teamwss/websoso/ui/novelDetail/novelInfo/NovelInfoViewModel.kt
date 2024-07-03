@@ -8,6 +8,7 @@ import com.teamwss.websoso.data.repository.FakeNovelInfoRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
 import com.teamwss.websoso.ui.novelDetail.novelInfo.model.NovelInfoUiState
+import com.teamwss.websoso.ui.novelDetail.novelInfo.model.PlatformsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,8 +28,8 @@ class NovelInfoViewModel @Inject constructor(
             }.onSuccess { novelInfo ->
                 _uiState.value = _uiState.value?.copy(
                     novelInfoModel = novelInfo.toUi(),
+                    platforms = PlatformsModel.formatPlatforms(novelInfo.platforms),
                     keywords = novelInfo.keywords.map { it.toUi() },
-                    platforms = novelInfo.platforms.map { it.toUi() },
                     loading = false,
                 )
             }.onFailure {

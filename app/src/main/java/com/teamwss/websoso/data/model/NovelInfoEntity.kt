@@ -5,9 +5,7 @@ data class NovelInfoEntity(
     val platforms: List<PlatformEntity>,
     val attractivePoints: List<String>,
     val keywords: List<KeywordEntity>,
-    val watchingCount: Int,
-    val watchedCount: Int,
-    val quitCount: Int,
+    val reviewCount: ReviewCountEntity,
 ) {
     data class PlatformEntity(
         val platformName: String,
@@ -18,5 +16,11 @@ data class NovelInfoEntity(
     data class KeywordEntity(
         val keywordName: String,
         val keywordCount: Int,
+    )
+
+    data class ReviewCountEntity(
+        val watchingCount: Int,
+        val watchedCount: Int,
+        val quitCount: Int,
     )
 }
