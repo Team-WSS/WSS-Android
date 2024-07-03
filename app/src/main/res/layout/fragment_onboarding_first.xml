@@ -112,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="53dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/selc_onboarding_first_next_button_background"
+            android:background="@drawable/selc_onboarding_next_button_background"
             android:enabled="@{viewModel.onBoardingFirstUiState.isNextButtonEnable}"
             android:onClick="@{() -> viewModel.goToNextPage()}"
             android:text="@string/onboarding_first_next_button"
