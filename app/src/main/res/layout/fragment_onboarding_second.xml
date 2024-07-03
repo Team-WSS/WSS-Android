@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="42dp"
-            android:text="성별, 출생년도를 선택하세요"
+            android:text="@string/onboarding_second_select_gender_and_birth_year"
             android:textAppearance="@style/headline1"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="*외부에 공개되지 않는 정보예요"
+            android:text="@string/onboarding_second_secret_information"
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@id/tv_on_boarding_second_input_gender_and_birth_year"
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="성별"
+            android:text="@string/onboarding_second_gender"
             android:textAppearance="@style/body2"
             app:layout_constraintStart_toStartOf="@id/tv_on_boarding_second_input_gender_and_birth_year"
             app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_second_secret_information" />
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:text="남성" />
+                android:text="@string/onboarding_second_man" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_on_boarding_second_gender_woman"
@@ -68,7 +68,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:text="여성" />
+                android:text="@string/onboarding_second_woman" />
         </LinearLayout>
 
         <TextView
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="출생연도"
+            android:text="@string/onboarding_second_birth_year"
             android:textAppearance="@style/body2"
             app:layout_constraintStart_toStartOf="@id/tv_on_boarding_second_input_gender_and_birth_year"
             app:layout_constraintTop_toBottomOf="@id/ll_on_boarding_second_gender_choice" />
@@ -96,7 +96,7 @@
                 android:id="@+id/tv_on_boarding_second_birth_year_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="생년월일을 입력해주세요"
+                android:text="@string/onboarding_second_input_birth_year"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -119,7 +119,7 @@
             android:layout_height="54dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/selc_onboarding_next_button_background"
-            android:text="다음으로"
+            android:text="@string/onboarding_second_next"
             android:textAppearance="@style/title1"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
