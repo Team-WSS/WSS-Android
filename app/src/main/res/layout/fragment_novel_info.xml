@@ -7,7 +7,7 @@
 
         <variable
             name="novelInfoViewModel"
-            type="com.teamwss.websoso.ui.novelDetail.novelInfo.NovelInfoViewModel" />
+            type="com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView

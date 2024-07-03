@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelDetail.novelInfo
+package com.teamwss.websoso.ui.novelInfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeNovelInfoRepository
 import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.novelDetail.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
-import com.teamwss.websoso.ui.novelDetail.novelInfo.model.NovelInfoUiState
-import com.teamwss.websoso.ui.novelDetail.novelInfo.model.PlatformsModel
+import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
+import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiState
+import com.teamwss.websoso.ui.novelInfo.model.PlatformsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

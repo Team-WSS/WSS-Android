@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelDetail.novelInfo.model
+package com.teamwss.websoso.ui.novelInfo.model
 
 data class NovelInfoUiState(
     val novelInfoModel: NovelInfoUiModel = NovelInfoUiModel(

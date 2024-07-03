@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelDetail.novelInfo
+package com.teamwss.websoso.ui.novelInfo
 
 import android.os.Bundle
 import android.view.View
@@ -7,8 +7,8 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.novelDetail.novelInfo.model.ExpandTextUiModel
-import com.teamwss.websoso.ui.novelDetail.novelInfo.model.KeywordModel
+import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
+import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

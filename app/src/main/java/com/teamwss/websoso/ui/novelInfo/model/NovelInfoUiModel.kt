@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelDetail.novelInfo.model
+package com.teamwss.websoso.ui.novelInfo.model
 
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.ui.mapper.toUi
