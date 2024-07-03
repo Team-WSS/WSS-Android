@@ -52,7 +52,7 @@
 
         <NumberPicker
             android:id="@+id/np_onboarding_second_bottom_sheet_birth_year"
-            style="@style/DateNumberPicker"
+            style="@style/NumberPicker"
             android:layout_width="90dp"
             android:layout_height="112dp"
             android:divider="@android:color/transparent"
