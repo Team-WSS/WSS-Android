@@ -231,13 +231,14 @@
                         android:layout_height="158dp"
                         android:layout_marginHorizontal="32dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.watchingCount.isVisible}">
 
                         <TextView
                             android:id="@+id/tv_novel_info_read_status_watching_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.watchingCount)}"
+                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.watchingCount.count)}"
                             android:textAppearance="@style/body3"
                             tools:text="130"
                             tools:textColor="@color/primary_200_240991" />
@@ -278,13 +279,14 @@
                         android:layout_height="158dp"
                         android:layout_marginHorizontal="32dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.watchedCount.isVisible}">
 
                         <TextView
                             android:id="@+id/tv_novel_info_read_status_watched_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.watchedCount)}"
+                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.watchedCount.count)}"
                             android:textAppearance="@style/body3"
                             tools:text="10"
                             tools:textColor="@color/gray_200_AEADB3" />
@@ -324,13 +326,14 @@
                         android:layout_height="158dp"
                         android:layout_marginHorizontal="32dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.quitCount.isVisible}">
 
                         <TextView
                             android:id="@+id/tv_novel_info_read_status_quit_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.quitCount)}"
+                            android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.quitCount.count)}"
                             android:textAppearance="@style/body3"
                             tools:text="100"
                             tools:textColor="@color/gray_200_AEADB3" />
