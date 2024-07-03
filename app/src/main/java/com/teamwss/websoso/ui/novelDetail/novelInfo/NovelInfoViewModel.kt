@@ -3,66 +3,58 @@ package com.teamwss.websoso.ui.novelDetail.novelInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
+import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.repository.FakeNovelInfoRepository
+import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.novelDetail.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
+import com.teamwss.websoso.ui.novelDetail.novelInfo.model.NovelInfoUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NovelInfoViewModel : ViewModel() {
-    private val _expandTextToggleVisibility: MutableLiveData<Boolean> =
-        MutableLiveData<Boolean>(false)
-    val expandTextToggleVisibility: LiveData<Boolean> get() = _expandTextToggleVisibility
-    private val _isExpandTextToggleEnabled: MutableLiveData<Boolean> =
-        MutableLiveData<Boolean>(true)
-    val isExpandTextToggleEnabled: LiveData<Boolean> get() = _isExpandTextToggleEnabled
-    private val _bodyMaxLines: MutableLiveData<Int> = MutableLiveData<Int>(DEFAULT_MAX_LINES)
-    val bodyMaxLines: LiveData<Int> get() = _bodyMaxLines
-    private val _dummyNovelInfo: MutableLiveData<NovelInfoResponseDto> =
-        MutableLiveData<NovelInfoResponseDto>()
-    val dummyNovelInfo: LiveData<NovelInfoResponseDto> get() = _dummyNovelInfo
+@HiltViewModel
+class NovelInfoViewModel @Inject constructor(
+    private val novelInfoRepository: FakeNovelInfoRepository,
+) : ViewModel() {
 
-    fun getDummyNovelInfo() {
-        _dummyNovelInfo.value =
-            NovelInfoResponseDto(
-                novelDescription = "설명 어쩌구",
-                platforms =
-                listOf(
-                    NovelInfoResponseDto.PlatformResponseDto(
-                        platformName = "네이버시리즈",
-                        platformImage = "https://ssl.pstatic.net/static/nstore/ogtag_series_v2.png",
-                        platformUrl = "https://www.naver.com",
-                    ),
-                ),
-                attractivePoints = listOf("소재", "관계", "분위기"),
-                keywords =
-                listOf(
-                    NovelInfoResponseDto.KeywordResponseDto(
-                        keywordName = "서양풍/중세시대",
-                        keywordCount = 5,
-                    ),
-                    NovelInfoResponseDto.KeywordResponseDto(
-                        keywordName = "웹툰화",
-                        keywordCount = 4,
-                    ),
-                    NovelInfoResponseDto.KeywordResponseDto(
-                        keywordName = "동양풍/사극",
-                        keywordCount = 4,
-                    ),
-                ),
-                watchingCount = 36,
-                watchedCount = 5,
-                quitCount = 2,
-            )
+    private val _uiState: MutableLiveData<NovelInfoUiState> = MutableLiveData(NovelInfoUiState())
+    val uiState: LiveData<NovelInfoUiState> get() = _uiState
+
+    fun updateNovelInfo(novelId: Long) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                novelInfoRepository.fetchNovelInfo(novelId)
+            }.onSuccess { novelInfo ->
+                _uiState.value = _uiState.value?.copy(
+                    novelInfoModel = novelInfo.toUi(),
+                    keywords = novelInfo.keywords.map { it.toUi() },
+                    platforms = novelInfo.platforms.map { it.toUi() },
+                    loading = false,
+                )
+            }.onFailure {
+                _uiState.value = _uiState.value?.copy(
+                    loading = false,
+                    error = true,
+                )
+            }
+        }
     }
 
     fun updateExpandTextToggle() {
-        when (_isExpandTextToggleEnabled.value == true) {
-            true -> {
-                _isExpandTextToggleEnabled.value = false
-                _bodyMaxLines.value = Int.MAX_VALUE
-            }
+        _uiState.value?.let {
+            val expandTextUiModel = it.expandTextModel
+            when (!expandTextUiModel.isExpandTextToggleSelected) {
+                true -> {
+                    expandTextUiModel.isExpandTextToggleSelected = true
+                    expandTextUiModel.bodyMaxLines = Int.MAX_VALUE
+                }
 
-            false -> {
-                _isExpandTextToggleEnabled.value = true
-                _bodyMaxLines.value = DEFAULT_MAX_LINES
+                false -> {
+                    expandTextUiModel.isExpandTextToggleSelected = false
+                    expandTextUiModel.bodyMaxLines = DEFAULT_BODY_MAX_LINES
+                }
             }
+            _uiState.value = it.copy(expandTextModel = expandTextUiModel)
         }
     }
 
@@ -70,10 +62,12 @@ class NovelInfoViewModel : ViewModel() {
         lineCount: Int,
         ellipsisCount: Int,
     ) {
-        _expandTextToggleVisibility.value = lineCount >= DEFAULT_MAX_LINES && ellipsisCount > 0
-    }
-
-    companion object {
-        private const val DEFAULT_MAX_LINES = 3
+        _uiState.value?.let {
+            val expandTextUiModel = it.expandTextModel
+            expandTextUiModel.expandTextToggleVisibility =
+                lineCount >= DEFAULT_BODY_MAX_LINES && ellipsisCount > 0
+            expandTextUiModel.isExpandTextToggleSelected = false
+            _uiState.value = it.copy(expandTextModel = expandTextUiModel)
+        }
     }
 }
