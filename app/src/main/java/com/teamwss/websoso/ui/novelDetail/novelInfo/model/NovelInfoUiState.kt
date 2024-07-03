@@ -2,9 +2,9 @@ package com.teamwss.websoso.ui.novelDetail.novelInfo.model
 
 data class NovelInfoUiState(
     val novelInfoModel: NovelInfoUiModel = NovelInfoUiModel(
-        "",
-        emptyList(),
-        UnifiedReviewCountModel(
+        novelDescription = "",
+        attractivePoints = emptyList(),
+        unifiedReviewCount = UnifiedReviewCountModel(
             ReviewCountModel(ReadStatus.WATCHING, 0),
             ReviewCountModel(ReadStatus.WATCHED, 0),
             ReviewCountModel(ReadStatus.QUIT, 0),
