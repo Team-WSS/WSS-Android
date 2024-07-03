@@ -23,7 +23,7 @@ class NovelInfoViewModel @Inject constructor(
 
     fun updateNovelInfo(novelId: Long) {
         viewModelScope.launch {
-            kotlin.runCatching {
+            runCatching {
                 novelInfoRepository.fetchNovelInfo(novelId)
             }.onSuccess { novelInfo ->
                 _uiState.value = _uiState.value?.copy(
