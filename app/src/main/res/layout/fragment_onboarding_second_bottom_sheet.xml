@@ -16,12 +16,12 @@
             android:layout_marginStart="20dp"
             android:text="@string/onboarding_second_bottom_sheet_birth_year"
             android:textAppearance="@style/title1"
-            app:layout_constraintBottom_toBottomOf="@id/iv_on_boarding_second_bottom_sheet_cancel"
+            app:layout_constraintBottom_toBottomOf="@id/iv_onboarding_second_bottom_sheet_cancel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_on_boarding_second_bottom_sheet_cancel" />
+            app:layout_constraintTop_toTopOf="@id/iv_onboarding_second_bottom_sheet_cancel" />
 
         <ImageView
-            android:id="@+id/iv_on_boarding_second_bottom_sheet_cancel"
+            android:id="@+id/iv_onboarding_second_bottom_sheet_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -59,7 +59,7 @@
             android:selectionDividerHeight="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_on_boarding_second_bottom_sheet_cancel" />
+            app:layout_constraintTop_toBottomOf="@id/iv_onboarding_second_bottom_sheet_cancel" />
 
         <Button
             android:id="@+id/btn_onboarding_second_bottom_sheet_complete"
