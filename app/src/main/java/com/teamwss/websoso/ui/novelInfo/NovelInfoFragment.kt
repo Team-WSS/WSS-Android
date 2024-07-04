@@ -41,7 +41,13 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     private fun setupKeywordChip(keywords: List<KeywordModel>) {
         keywords.forEach { keyword ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(keyword.keywordName + " " + keyword.keywordCount)
+                setWebsosoChipText(
+                    getString(
+                        R.string.novel_info_keyword_chip_text,
+                        keyword.keywordName,
+                        keyword.keywordCount
+                    )
+                )
                 setWebsosoChipTextAppearance(R.style.body2)
                 setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
                 setWebsosoChipStrokeColor(R.color.transparent)
