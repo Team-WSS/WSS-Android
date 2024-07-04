@@ -93,9 +93,9 @@ class NovelRatingViewModel @Inject constructor(
                     uiState.value?.let { uiState ->
                         uiState.copy(
                             keywords =
-                                uiState.keywords.copy(
-                                    previousSelectedKeywords = keywords,
-                                ),
+                            uiState.keywords.copy(
+                                previousSelectedKeywords = keywords,
+                            ),
                             loading = false,
                         )
                     }
@@ -227,10 +227,10 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value =
                 uiState.copy(
                     keywords =
-                        uiState.keywords.copy(
-                            categories = updatedCategories,
-                            currentSelectedKeywords = currentSelectedKeywords,
-                        ),
+                    uiState.keywords.copy(
+                        categories = updatedCategories,
+                        currentSelectedKeywords = currentSelectedKeywords,
+                    ),
                 )
         }
     }
@@ -244,10 +244,10 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value =
                 uiState.copy(
                     keywords =
-                        uiState.keywords.copy(
-                            categories = updatedCategories,
-                            previousSelectedKeywords = previousSelectedKeywords,
-                        ),
+                    uiState.keywords.copy(
+                        categories = updatedCategories,
+                        previousSelectedKeywords = previousSelectedKeywords,
+                    ),
                 )
         }
     }
@@ -288,9 +288,9 @@ class NovelRatingViewModel @Inject constructor(
                         category.keywords.map { keyword ->
                             keyword.copy(
                                 isSelected =
-                                    uiState.keywords.previousSelectedKeywords.any {
-                                        it.keywordId == keyword.keywordId
-                                    },
+                                uiState.keywords.previousSelectedKeywords.any {
+                                    it.keywordId == keyword.keywordId
+                                },
                             )
                         }
                     category.copy(keywords = updatedKeywords)
@@ -299,10 +299,10 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value =
                 uiState.copy(
                     keywords =
-                        uiState.keywords.copy(
-                            categories = updatedCategories,
-                            currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
-                        ),
+                    uiState.keywords.copy(
+                        categories = updatedCategories,
+                        currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
+                    ),
                 )
         }
     }
@@ -312,9 +312,9 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value =
                 uiState.copy(
                     keywords =
-                        uiState.keywords.copy(
-                            previousSelectedKeywords = uiState.keywords.currentSelectedKeywords,
-                        ),
+                    uiState.keywords.copy(
+                        previousSelectedKeywords = uiState.keywords.currentSelectedKeywords,
+                    ),
                 )
         }
     }
@@ -333,11 +333,11 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value =
                 uiState.copy(
                     keywords =
-                        uiState.keywords.copy(
-                            categories = updatedCategories,
-                            previousSelectedKeywords = emptyList(),
-                            currentSelectedKeywords = emptyList(),
-                        ),
+                    uiState.keywords.copy(
+                        categories = updatedCategories,
+                        previousSelectedKeywords = emptyList(),
+                        currentSelectedKeywords = emptyList(),
+                    ),
                 )
         }
     }
@@ -350,9 +350,9 @@ class NovelRatingViewModel @Inject constructor(
                         category.keywords.map { keyword ->
                             keyword.copy(
                                 isSelected =
-                                    uiState.keywords.previousSelectedKeywords.any {
-                                        it.keywordId == keyword.keywordId
-                                    },
+                                uiState.keywords.previousSelectedKeywords.any {
+                                    it.keywordId == keyword.keywordId
+                                },
                             )
                         }
                     category.copy(keywords = updatedKeywords)
@@ -361,10 +361,10 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value =
                 uiState.copy(
                     keywords =
-                        uiState.keywords.copy(
-                            categories = updatedCategories,
-                            currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
-                        ),
+                    uiState.keywords.copy(
+                        categories = updatedCategories,
+                        currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
+                    ),
                 )
         }
     }
