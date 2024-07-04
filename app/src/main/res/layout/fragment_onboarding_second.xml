@@ -1,12 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/tv_onboarding_second_input_gender_and_birth_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:text="@string/onboarding_second_select_gender_and_birth_year"
+            android:textAppearance="@style/headline1"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_onboarding_second_secret_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/onboarding_second_secret_information"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@id/tv_onboarding_second_input_gender_and_birth_year"
+            app:layout_constraintTop_toBottomOf="@id/tv_onboarding_second_input_gender_and_birth_year" />
+
+        <TextView
+            android:id="@+id/tv_onboarding_second_user_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/onboarding_second_gender"
+            android:textAppearance="@style/body2"
+            app:layout_constraintStart_toStartOf="@id/tv_onboarding_second_input_gender_and_birth_year"
+            app:layout_constraintTop_toBottomOf="@id/tv_onboarding_second_secret_information" />
+
+        <LinearLayout
+            android:id="@+id/ll_on_boarding_second_gender_choice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_onboarding_second_user_gender">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_onboarding_second_gender_man"
+                style="@style/HarryMoongChi.Chip.Choice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:text="@string/onboarding_second_man" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_onboarding_second_gender_woman"
+                style="@style/HarryMoongChi.Chip.Choice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:text="@string/onboarding_second_woman" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_onboarding_second_birth_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/onboarding_second_birth_year"
+            android:textAppearance="@style/body2"
+            app:layout_constraintStart_toStartOf="@id/tv_onboarding_second_input_gender_and_birth_year"
+            app:layout_constraintTop_toBottomOf="@id/ll_on_boarding_second_gender_choice" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_on_boarding_second_birth_year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_onboarding_second_gray_50_radius_8dp"
+            android:padding="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_onboarding_second_birth_year">
+
+            <TextView
+                android:id="@+id/tv_onboarding_second_birth_year_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onboarding_second_input_birth_year"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_onboarding_dropdown"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selector_onboarding_next_button_background"
+            android:text="@string/onboarding_second_next"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

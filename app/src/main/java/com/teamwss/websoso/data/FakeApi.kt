@@ -49,10 +49,10 @@ object FakeApi {
         return if (to >= Fixture.feedsResponseDto.size) {
             Fixture.copy(
                 isLoadable = false,
-                feedsResponseDto = Fixture.feedsResponseDto.subList(from, to)
+                feedsResponseDto = Fixture.feedsResponseDto.subList(from, to),
             )
         } else Fixture.copy(
-            feedsResponseDto = Fixture.feedsResponseDto.subList(from, to)
+            feedsResponseDto = Fixture.feedsResponseDto.subList(from, to),
         )
     }
 }

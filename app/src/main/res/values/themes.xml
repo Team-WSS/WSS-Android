@@ -13,7 +13,7 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
-    <style name="DateNumberPicker">
+    <style name="NumberPicker">
         <item name="android:textAppearance">@style/body2</item>
         <item name="android:textColor">@color/black</item>
     </style>
