@@ -16,12 +16,10 @@ enum class Category(val title: String) {
 
     companion object {
 
-        fun String.toWrappedCategories(): List<Category> {
-            return split(",").map { categoryName ->
-                values().find { category ->
-                    categoryName == category.title
-                } ?: throw IllegalArgumentException()
+        fun String.toWrappedCategories(): List<Category> =
+            split(",").map {
+                values().find { category -> it == category.title }
+                    ?: throw IllegalArgumentException()
             }
-        }
     }
 }

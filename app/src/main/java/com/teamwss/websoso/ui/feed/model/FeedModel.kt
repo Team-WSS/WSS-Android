@@ -1,26 +1,27 @@
-package com.teamwss.websoso.domain.model
+package com.teamwss.websoso.ui.feed.model
 
-data class Feed(
-    val user: User,
+data class FeedModel(
+    val user: UserModel,
     val createdDate: String,
     val id: Long,
     val content: String,
     val relevantCategories: List<String>,
     val likeCount: Int,
-    val isLiked: Boolean,
     val commentCount: Int,
     val isModified: Boolean,
     val isSpoiler: Boolean,
-    val isMyFeed: Boolean,
-    val novel: Novel,
+    val isLiked: Boolean,
+    val novel: NovelModel,
+    val categories: String = relevantCategories.joinToString(prefix = "", postfix = ""),
 ) {
-    data class User(
+
+    data class UserModel(
         val id: Long,
         val nickname: String,
         val avatarImage: String,
     )
 
-    data class Novel(
+    data class NovelModel(
         val id: Long?,
         val title: String?,
         val rating: Float,

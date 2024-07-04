@@ -14,22 +14,25 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
+import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
+import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
 import com.teamwss.websoso.ui.feed.model.Category
-import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
+import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
-    private val popupBinding get() = _popupBinding ?: error("error: binding is null")
+    private val popupBinding: MenuFeedPopupBinding
+        get() = _popupBinding ?: error("error: binding is null")
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _popupBinding = MenuFeedPopupBinding.inflate(inflater, container, false)
 
@@ -37,33 +40,33 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(id: Int) {
+        override fun onProfileClick(id: Long) {
             // ProfileActivity.from(context, id)
         }
 
-        override fun onMoreButtonClick(view: View, feedId: Int, userId: Int) {
+        override fun onMoreButtonClick(view: View, feedId: Long, userId: Long) {
             showMenu(view, feedId, userId)
         }
 
-        override fun onContentClick(id: Int) {
+        override fun onContentClick(id: Long) {
             navigateToFeedDetail(id)
         }
 
-        override fun onNovelInfoClick(id: Int) {
+        override fun onNovelInfoClick(id: Long) {
             // navigateToNovelDetail(id)
         }
 
-        override fun onThumbUpButtonClick(view: View, id: Int) {
+        override fun onLikeButtonClick(view: View, id: Long) {
             feedViewModel.updateLikeCount(view.isSelected, id)
         }
 
-        override fun onCommentButtonClick() {
-            navigateToFeedDetail(id)
+        override fun onCommentButtonClick(feedId: Long) {
+            navigateToFeedDetail(feedId)
         }
     }
 
     @SuppressLint("InflateParams")
-    private fun showMenu(view: View, feedId: Int, userId: Int) {
+    private fun showMenu(view: View, feedId: Long, userId: Long) {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -77,42 +80,18 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    private fun navigateToFeedDetail(id: Int) {
-        startActivity(
-            FeedDetailActivity.from(
-                id, requireContext()
-            )
-        )
+    private fun navigateToFeedDetail(id: Long) {
+        startActivity(FeedDetailActivity.from(id, requireContext()))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        feedViewModel.updateFeeds()
+        feedViewModel.category.setUpChips()
         setupAdapter()
         bindViewModel()
-        setupCategory()
         observeUiState()
-    }
-
-    private fun setupAdapter() {
-        binding.rvFeed.adapter = feedAdapter
-        binding.rvFeed.setHasFixedSize(true)
-    }
-
-    private fun bindViewModel() {
-        popupBinding.lifecycleOwner = viewLifecycleOwner
-        popupBinding.viewModel = feedViewModel
-    }
-
-    private fun setupCategory() {
-        when (feedViewModel.gender) {
-            "MALE" -> getString(R.string.feed_category_male).toWrappedCategories()
-            "FEMALE" -> getString(R.string.feed_category_female).toWrappedCategories()
-            else -> throw IllegalStateException()
-        }.apply {
-            setUpChips()
-            binding.wcgFeed.getChildAt(0).performClick()
-        }
     }
 
     private fun List<Category>.setUpChips() {
@@ -126,9 +105,22 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick { feedViewModel.fetchFeedsByCategory(category) }
+                setOnWebsosoChipClick { feedViewModel::updateFeeds }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
+    }
+
+    private fun setupAdapter() {
+        binding.rvFeed.apply {
+            adapter = feedAdapter
+            addOnScrollListener(FeedScrollListener.from(feedViewModel::updateFeeds))
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun bindViewModel() {
+        popupBinding.lifecycleOwner = viewLifecycleOwner
+        popupBinding.viewModel = feedViewModel
     }
 
     private fun observeUiState() {
@@ -136,13 +128,22 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             when {
                 uiState.loading -> loading()
                 uiState.error -> throw IllegalStateException()
-                !uiState.loading -> feedAdapter.submitList(uiState.feeds)
+                !uiState.loading -> updateView(uiState)
             }
         }
     }
 
     private fun loading() {
         // 로딩 뷰
+    }
+
+    private fun updateView(uiState: FeedUiState) {
+        // binding.wcgFeed.submitList(categories) 구현 예정
+        val feeds = uiState.feeds.map { Feed(it) }
+        when (uiState.isLoadable) {
+            true -> feedAdapter.submitList(feeds + Loading)
+            false -> feedAdapter.submitList(feeds)
+        }
     }
 
     override fun onStop() {

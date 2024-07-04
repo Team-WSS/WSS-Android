@@ -3,26 +3,28 @@ package com.teamwss.websoso.data.model
 data class FeedEntity(
     val user: UserEntity,
     val createdDate: String,
-    val id: Int,
+    val id: Long,
     val content: String,
     val relevantCategories: List<String>,
-    val likeCount: String,
-    val likeUsers: List<Int>,
-    val commentCount: String,
+    val likeCount: Int,
+    val isLiked: Boolean,
+    val commentCount: Int,
     val isModified: Boolean,
-    val isSpoiled: Boolean,
+    val isSpoiler: Boolean,
+    val isMyFeed: Boolean,
     val novel: NovelEntity,
 ) {
+
     data class UserEntity(
-        val id: Int,
+        val id: Long,
         val nickname: String,
-        val profileImage: String,
+        val avatarImage: String,
     )
 
     data class NovelEntity(
-        val id: Int,
-        val title: String,
-        val rating: Double,
+        val id: Long?,
+        val title: String?,
+        val rating: Float,
         val ratingCount: Int,
     )
 }
