@@ -58,12 +58,17 @@ class NovelRatingViewModel @Inject constructor(
     }
 
     fun updatePreviousDate() {
-        uiState.value?.let { uiState ->
-            uiState.novelRatingModel.ratingDateModel.run {
-                previousStartDate = currentStartDate
-                previousEndDate = currentEndDate
-            }
-            _uiState.value = uiState
+        _uiState.value?.let { currentState ->
+            val updatedRatingDateModel = currentState.novelRatingModel.ratingDateModel.copy(
+                previousStartDate = currentState.novelRatingModel.ratingDateModel.currentStartDate,
+                previousEndDate = currentState.novelRatingModel.ratingDateModel.currentEndDate
+            )
+
+            val updatedNovelRatingModel = currentState.novelRatingModel.copy(
+                ratingDateModel = updatedRatingDateModel
+            )
+
+            _uiState.value = currentState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
 

@@ -10,7 +10,7 @@ data class NovelRatingModel(
     val userNovelRating: Float,
     val attractivePoints: List<String>,
     val userKeywords: List<NovelRatingKeywordModel>,
-    var uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus),
+    val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus),
     val ratingDateModel: RatingDateModel =
         RatingDateModel(
             currentStartDate = startDate.toFormattedDate(),
@@ -28,10 +28,10 @@ data class NovelRatingModel(
 }
 
 data class RatingDateModel(
-    var currentStartDate: Triple<Int, Int, Int>? = null,
-    var currentEndDate: Triple<Int, Int, Int>? = null,
-    var previousStartDate: Triple<Int, Int, Int>? = null,
-    var previousEndDate: Triple<Int, Int, Int>? = null,
+    val currentStartDate: Triple<Int, Int, Int>? = null,
+    val currentEndDate: Triple<Int, Int, Int>? = null,
+    val previousStartDate: Triple<Int, Int, Int>? = null,
+    val previousEndDate: Triple<Int, Int, Int>? = null,
 ) {
     fun formatDisplayDate(ratingDateModel: RatingDateModel): Pair<Int, Array<Int>> {
         val (currentStartDate, currentEndDate) = ratingDateModel
@@ -63,13 +63,13 @@ data class RatingDateModel(
 
 data class NovelRatingKeywordsModel(
     val categories: List<NovelRatingCategoryModel>,
-    var previousSelectedKeywords: List<NovelRatingKeywordModel> =
+    val previousSelectedKeywords: List<NovelRatingKeywordModel> =
         categories.flatMap {
             it.keywords.filter { keyword ->
                 keyword.isSelected
             }
         },
-    var currentSelectedKeywords: List<NovelRatingKeywordModel> = emptyList(),
+    val currentSelectedKeywords: List<NovelRatingKeywordModel> = emptyList(),
 )
 
 data class NovelRatingCategoryModel(
