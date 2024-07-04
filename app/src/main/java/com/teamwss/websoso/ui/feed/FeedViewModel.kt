@@ -9,7 +9,7 @@ import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
 import com.teamwss.websoso.ui.feed.model.FeedUiState
-import com.teamwss.websoso.ui.mapper.FeedMapper.toPresentation
+import com.teamwss.websoso.ui.mapper.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
