@@ -4,10 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NovelRatingCategoryResponseDto(
+data class NovelRatingKeywordCategoryResponseDto(
     @SerialName("categoryName")
     val categoryName: String,
     @SerialName("keywords")
     val keywords: List<NovelRatingKeywordResponseDto>,
-) {
-}
+)
