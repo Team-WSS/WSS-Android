@@ -16,7 +16,7 @@
     <string name="normal_explore_not_exist_result">해당 검색어를 가진 작품은\n아직 등록되지 않았어요...</string>
     <string name="normal_explore_add_novel_inquire">작품 추가 문의하기</string>
 
-    <!-- 탐색 뷰-->
+    <!-- 탐색 뷰 -->
     <string name="explore_title">탐색하기</string>
     <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
     <string name="explore_detail_search_title">이제 뭐 읽을지 고민될 땐?</string>
@@ -24,6 +24,23 @@
     <string name="explore_detail_search_button">내 취향에 맞는 작품 탐색하기</string>
     <string name="explore_soso">소소</string>
     <string name="explore_sosopick_description">다른 사람들이 최근에 읽고 있는 작품이에요</string>
+
+    <!-- 상세 탐색 뷰 -->
+    <string name="detail_explore_info">정보</string>
+    <string name="detail_explore_keyword">키워드</string>
+    <string name="detail_explore_reset">초기화</string>
+    <string name="detail_explore_search_novel">작품 찾기</string>
+
+    <!-- 상세 탐색 뷰(정보) -->
+    <string name="detail_explore_info_genre">장르</string>
+    <string name="detail_explore_info_status">연재상태</string>
+    <string name="detail_explore_info_rating">별점</string>
+    <string name="detail_explore_info_status_in_series">연재중</string>
+    <string name="detail_explore_info_status_complete">완결</string>
+    <string name="detail_explore_info_rating_lowest">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_highest">%1$.1f이상</string>
 
     <!-- 작품 상세 -->
     <string name="novel_detail_review">리뷰 남기기</string>
@@ -88,15 +105,4 @@
     <string name="onboarding_first_input_nickname">닉네임을 입력하세요</string>
     <string name="onboarding_first_duplicate_check">중복확인</string>
     <string name="onboarding_first_next_button">다음으로</string>
-    <string name="onboarding_second_select_gender_and_birth_year">성별, 출생년도를 선택하세요</string>
-    <string name="onboarding_second_secret_information">*외부에 공개되지 않는 정보예요</string>
-    <string name="onboarding_second_gender">성별</string>
-    <string name="onboarding_second_man">남성</string>
-    <string name="onboarding_second_woman">여성</string>
-    <string name="onboarding_second_birth_year">출생연도</string>
-    <string name="onboarding_second_input_birth_year">생년월일을 입력해주세요</string>
-    <string name="onboarding_second_next">다음으로</string>
-    <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
-    <string name="onboarding_second_bottom_sheet_complete">완료</string>
-
 </resources>
