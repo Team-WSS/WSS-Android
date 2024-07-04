@@ -10,7 +10,7 @@ data class NovelRatingUiState(
         attractivePoints = emptyList(),
         userKeywords = emptyList(),
     ),
-    val novelRatingKeywordsModel: NovelRatingKeywordsModel = NovelRatingKeywordsModel(emptyList()),
+    val keywords: NovelRatingKeywordsModel = NovelRatingKeywordsModel(emptyList()),
     val maxDayValue: Int = 0,
     val isEditingStartDate: Boolean = true,
     val loading: Boolean = true,

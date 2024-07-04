@@ -141,18 +141,18 @@ class NovelRatingViewModel @Inject constructor(
     ) {
         uiState.value?.let { uiState ->
             val updatedCategories =
-                updateCategories(uiState.novelRatingKeywordsModel.categories, keyword, isSelected)
+                updateCategories(uiState.keywords.categories, keyword, isSelected)
             val currentSelectedKeywords =
                 updateSelectedKeywords(
-                    uiState.novelRatingKeywordsModel.currentSelectedKeywords,
+                    uiState.keywords.currentSelectedKeywords,
                     keyword,
                     isSelected,
                 )
 
             _uiState.value =
                 uiState.copy(
-                    novelRatingKeywordsModel =
-                    uiState.novelRatingKeywordsModel.copy(
+                    keywords =
+                    uiState.keywords.copy(
                         categories = updatedCategories,
                         currentSelectedKeywords = currentSelectedKeywords,
                     ),
@@ -163,14 +163,14 @@ class NovelRatingViewModel @Inject constructor(
     fun updatePreviousSelectedKeywords(keyword: NovelRatingKeywordModel) {
         uiState.value?.let { uiState ->
             val updatedCategories =
-                updateCategories(uiState.novelRatingKeywordsModel.categories, keyword, false)
+                updateCategories(uiState.keywords.categories, keyword, false)
             val previousSelectedKeywords =
-                uiState.novelRatingKeywordsModel.previousSelectedKeywords.filterNot { it.keywordId == keyword.keywordId }
+                uiState.keywords.previousSelectedKeywords.filterNot { it.keywordId == keyword.keywordId }
 
             _uiState.value =
                 uiState.copy(
-                    novelRatingKeywordsModel =
-                    uiState.novelRatingKeywordsModel.copy(
+                    keywords =
+                    uiState.keywords.copy(
                         categories = updatedCategories,
                         previousSelectedKeywords = previousSelectedKeywords,
                     ),
@@ -211,12 +211,12 @@ class NovelRatingViewModel @Inject constructor(
     fun initCurrentSelectedKeywords() {
         uiState.value?.let { uiState ->
             val updatedCategories =
-                uiState.novelRatingKeywordsModel.categories.map { category ->
+                uiState.keywords.categories.map { category ->
                     val updatedKeywords =
                         category.keywords.map { keyword ->
                             keyword.copy(
                                 isSelected =
-                                uiState.novelRatingKeywordsModel.previousSelectedKeywords.any {
+                                uiState.keywords.previousSelectedKeywords.any {
                                     it.keywordId == keyword.keywordId
                                 },
                             )
@@ -226,10 +226,10 @@ class NovelRatingViewModel @Inject constructor(
 
             _uiState.value =
                 uiState.copy(
-                    novelRatingKeywordsModel =
-                    uiState.novelRatingKeywordsModel.copy(
+                    keywords =
+                    uiState.keywords.copy(
                         categories = updatedCategories,
-                        currentSelectedKeywords = uiState.novelRatingKeywordsModel.previousSelectedKeywords,
+                        currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
                     ),
                 )
         }
@@ -239,9 +239,9 @@ class NovelRatingViewModel @Inject constructor(
         uiState.value?.let { uiState ->
             _uiState.value =
                 uiState.copy(
-                    novelRatingKeywordsModel =
-                    uiState.novelRatingKeywordsModel.copy(
-                        previousSelectedKeywords = uiState.novelRatingKeywordsModel.currentSelectedKeywords,
+                    keywords =
+                    uiState.keywords.copy(
+                        previousSelectedKeywords = uiState.keywords.currentSelectedKeywords,
                     ),
                 )
         }
@@ -250,7 +250,7 @@ class NovelRatingViewModel @Inject constructor(
     fun clearEditingKeyword() {
         uiState.value?.let { uiState ->
             val updatedCategories =
-                uiState.novelRatingKeywordsModel.categories.map { category ->
+                uiState.keywords.categories.map { category ->
                     val updatedKeywords =
                         category.keywords.map { keyword -> keyword.copy(isSelected = false) }
                     category.copy(keywords = updatedKeywords)
@@ -258,8 +258,8 @@ class NovelRatingViewModel @Inject constructor(
 
             _uiState.value =
                 uiState.copy(
-                    novelRatingKeywordsModel =
-                    uiState.novelRatingKeywordsModel.copy(
+                    keywords =
+                    uiState.keywords.copy(
                         categories = updatedCategories,
                         previousSelectedKeywords = emptyList(),
                         currentSelectedKeywords = emptyList(),
@@ -271,12 +271,12 @@ class NovelRatingViewModel @Inject constructor(
     fun cancelEditingKeyword() {
         uiState.value?.let { uiState ->
             val updatedCategories =
-                uiState.novelRatingKeywordsModel.categories.map { category ->
+                uiState.keywords.categories.map { category ->
                     val updatedKeywords =
                         category.keywords.map { keyword ->
                             keyword.copy(
                                 isSelected =
-                                uiState.novelRatingKeywordsModel.previousSelectedKeywords.any {
+                                uiState.keywords.previousSelectedKeywords.any {
                                     it.keywordId == keyword.keywordId
                                 },
                             )
@@ -286,10 +286,10 @@ class NovelRatingViewModel @Inject constructor(
 
             _uiState.value =
                 uiState.copy(
-                    novelRatingKeywordsModel =
-                    uiState.novelRatingKeywordsModel.copy(
+                    keywords =
+                    uiState.keywords.copy(
                         categories = updatedCategories,
-                        currentSelectedKeywords = uiState.novelRatingKeywordsModel.previousSelectedKeywords,
+                        currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
                     ),
                 )
         }
