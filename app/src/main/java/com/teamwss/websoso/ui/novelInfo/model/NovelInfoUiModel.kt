@@ -10,8 +10,8 @@ data class NovelInfoUiModel(
 )
 
 data class PlatformsModel(
-    var naverModel: PlatformModel?,
-    var kakaoModel: PlatformModel?,
+    val naverModel: PlatformModel?,
+    val kakaoModel: PlatformModel?,
 ) {
     companion object {
         fun formatPlatforms(platforms: List<NovelInfoEntity.PlatformEntity>): PlatformsModel =
@@ -47,9 +47,9 @@ data class ReviewCountModel(
 )
 
 data class ExpandTextUiModel(
-    var expandTextToggleVisibility: Boolean = false,
-    var isExpandTextToggleSelected: Boolean = false,
-    var bodyMaxLines: Int = DEFAULT_BODY_MAX_LINES,
+    val expandTextToggleVisibility: Boolean = false,
+    val isExpandTextToggleSelected: Boolean = false,
+    val bodyMaxLines: Int = DEFAULT_BODY_MAX_LINES,
 ) {
     companion object {
         const val DEFAULT_BODY_MAX_LINES: Int = 3

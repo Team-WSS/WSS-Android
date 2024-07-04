@@ -42,20 +42,20 @@ class NovelInfoViewModel @Inject constructor(
     }
 
     fun updateExpandTextToggle() {
-        _uiState.value?.let {
-            val expandTextUiModel = it.expandTextModel
-            when (!expandTextUiModel.isExpandTextToggleSelected) {
-                true -> {
-                    expandTextUiModel.isExpandTextToggleSelected = true
-                    expandTextUiModel.bodyMaxLines = Int.MAX_VALUE
-                }
+        _uiState.value?.let { currentState ->
+            val expandTextUiModel = currentState.expandTextModel
+            val updatedExpandTextUiModel = when (!expandTextUiModel.isExpandTextToggleSelected) {
+                true -> expandTextUiModel.copy(
+                    isExpandTextToggleSelected = true,
+                    bodyMaxLines = Int.MAX_VALUE
+                )
 
-                false -> {
-                    expandTextUiModel.isExpandTextToggleSelected = false
-                    expandTextUiModel.bodyMaxLines = DEFAULT_BODY_MAX_LINES
-                }
+                false -> expandTextUiModel.copy(
+                    isExpandTextToggleSelected = false,
+                    bodyMaxLines = DEFAULT_BODY_MAX_LINES
+                )
             }
-            _uiState.value = it.copy(expandTextModel = expandTextUiModel)
+            _uiState.value = currentState.copy(expandTextModel = updatedExpandTextUiModel)
         }
     }
 
@@ -63,12 +63,13 @@ class NovelInfoViewModel @Inject constructor(
         lineCount: Int,
         ellipsisCount: Int,
     ) {
-        uiState.value?.let {
-            val expandTextUiModel = it.expandTextModel
-            expandTextUiModel.expandTextToggleVisibility =
-                lineCount >= DEFAULT_BODY_MAX_LINES && ellipsisCount > 0
-            expandTextUiModel.isExpandTextToggleSelected = false
-            _uiState.value = it.copy(expandTextModel = expandTextUiModel)
+        _uiState.value?.let { currentState ->
+            val expandTextUiModel = currentState.expandTextModel
+            val updatedExpandTextUiModel = expandTextUiModel.copy(
+                expandTextToggleVisibility = lineCount >= DEFAULT_BODY_MAX_LINES && ellipsisCount > 0,
+                isExpandTextToggleSelected = false
+            )
+            _uiState.value = currentState.copy(expandTextModel = updatedExpandTextUiModel)
         }
     }
 }
