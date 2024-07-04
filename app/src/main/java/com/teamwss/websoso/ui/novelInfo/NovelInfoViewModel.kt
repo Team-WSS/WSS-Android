@@ -63,7 +63,7 @@ class NovelInfoViewModel @Inject constructor(
         lineCount: Int,
         ellipsisCount: Int,
     ) {
-        _uiState.value?.let {
+        uiState.value?.let {
             val expandTextUiModel = it.expandTextModel
             expandTextUiModel.expandTextToggleVisibility =
                 lineCount >= DEFAULT_BODY_MAX_LINES && ellipsisCount > 0
