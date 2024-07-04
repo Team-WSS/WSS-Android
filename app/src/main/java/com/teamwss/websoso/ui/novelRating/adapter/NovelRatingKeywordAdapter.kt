@@ -5,13 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingCategoryModel
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 
 class NovelRatingKeywordAdapter(
     private val onKeywordClick: (keyword: NovelRatingKeywordModel, isClicked: Boolean) -> (Unit),
-) :
-    ListAdapter<NovelRatingCategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
+) : ListAdapter<NovelRatingKeywordCategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -35,20 +34,16 @@ class NovelRatingKeywordAdapter(
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<NovelRatingCategoryModel>() {
+            object : DiffUtil.ItemCallback<NovelRatingKeywordCategoryModel>() {
                 override fun areItemsTheSame(
-                    oldItem: NovelRatingCategoryModel,
-                    newItem: NovelRatingCategoryModel,
-                ): Boolean {
-                    return oldItem.categoryName == newItem.categoryName
-                }
+                    oldItem: NovelRatingKeywordCategoryModel,
+                    newItem: NovelRatingKeywordCategoryModel,
+                ): Boolean = oldItem.categoryName == newItem.categoryName
 
                 override fun areContentsTheSame(
-                    oldItem: NovelRatingCategoryModel,
-                    newItem: NovelRatingCategoryModel,
-                ): Boolean {
-                    return oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
-                }
+                    oldItem: NovelRatingKeywordCategoryModel,
+                    newItem: NovelRatingKeywordCategoryModel,
+                ): Boolean = oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
             }
     }
 }

@@ -10,8 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 
-class NovelRatingDateDialog :
-    BindingBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
+class NovelRatingDateDialog : BindingBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
     private val viewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onViewCreated(
