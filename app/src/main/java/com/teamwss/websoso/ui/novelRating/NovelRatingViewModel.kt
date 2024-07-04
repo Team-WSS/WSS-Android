@@ -292,7 +292,7 @@ class NovelRatingViewModel @Inject constructor(
                         uiState.keywords.copy(
                             categories = updatedCategories,
                             currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
-                    ),
+                        ),
                 )
         }
     }
@@ -305,7 +305,7 @@ class NovelRatingViewModel @Inject constructor(
                         uiState.keywords.copy(
                             previousSelectedKeywords = uiState.keywords.currentSelectedKeywords,
                     ),
-                )
+                        )
         }
     }
 
@@ -314,7 +314,9 @@ class NovelRatingViewModel @Inject constructor(
             val updatedCategories =
                 uiState.keywords.categories.map { category ->
                     val updatedKeywords =
-                        category.keywords.map { keyword -> keyword.copy(isSelected = false) }
+                        category.keywords.map { keyword ->
+                            keyword.copy(isSelected = false)
+                        }
                     category.copy(keywords = updatedKeywords)
                 }
 
@@ -325,7 +327,7 @@ class NovelRatingViewModel @Inject constructor(
                             categories = updatedCategories,
                             previousSelectedKeywords = emptyList(),
                             currentSelectedKeywords = emptyList(),
-                    ),
+                        ),
                 )
         }
     }
@@ -340,7 +342,7 @@ class NovelRatingViewModel @Inject constructor(
                                 isSelected =
                                     uiState.keywords.previousSelectedKeywords.any {
                                         it.keywordId == keyword.keywordId
-                                },
+                                    },
                             )
                         }
                     category.copy(keywords = updatedKeywords)
@@ -352,8 +354,8 @@ class NovelRatingViewModel @Inject constructor(
                         uiState.keywords.copy(
                             categories = updatedCategories,
                             currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
-                    ),
-                )
+                ),
+                    )
         }
     }
 }
