@@ -10,6 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
@@ -58,7 +59,8 @@ class NovelRatingActivity :
     private fun observeUiState() {
         viewModel.uiState.observe(this) { uiState ->
             updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-            updateKeywordChips(uiState.novelRatingKeywordsModel.previousSelectedKeywords)
+            updateCharmPointChips(uiState.novelRatingModel.attractivePoints)
+            updateKeywordChips(uiState.keywords.previousSelectedKeywords)
         }
     }
 
@@ -71,6 +73,15 @@ class NovelRatingActivity :
             }
 
         binding.tvNovelRatingDisplayDate.text = underlinedText
+    }
+
+    private fun updateCharmPointChips(previousSelectedCharmPoints: List<String>) {
+        binding.wcgNovelRatingCharmPoints.forEach { view ->
+            val chip = view as WebsosoChip
+            chip.isSelected = previousSelectedCharmPoints.contains(
+                CharmPoint.values().find { it.title == chip.text }!!.value
+            )
+        }
     }
 
     private fun updateKeywordChips(previousSelectedKeywords: List<NovelRatingKeywordModel>) {
