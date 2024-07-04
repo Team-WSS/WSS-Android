@@ -11,13 +11,12 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
-import com.teamwss.websoso.util.floatToPx
-import com.teamwss.websoso.util.intToPx
+import com.teamwss.websoso.util.toPxFloat
+import com.teamwss.websoso.util.toPxInt
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelDetailActivity :
-    BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
+class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
 
     private var _popupBinding: MenuNovelDetailPopupBinding? = null
@@ -67,11 +66,11 @@ class NovelDetailActivity :
             true,
         ).apply {
             popupBinding.userNovelId = userNovelId
-            this.elevation = 14f.floatToPx()
+            this.elevation = 14f.toPxFloat()
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.intToPx(),
-                POPUP_MARGIN_TOP.intToPx(),
+                POPUP_MARGIN_END.toPxInt(),
+                POPUP_MARGIN_TOP.toPxInt(),
                 Gravity.END,
             )
         }
