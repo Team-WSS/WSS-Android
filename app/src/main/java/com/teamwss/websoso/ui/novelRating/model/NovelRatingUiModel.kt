@@ -3,12 +3,13 @@ package com.teamwss.websoso.ui.novelRating.model
 import com.teamwss.websoso.R
 
 data class NovelRatingModel(
-    val userNovelId: Long,
     val novelTitle: String,
-    val userNovelRating: Float,
     val readStatus: String,
     val startDate: String?,
     val endDate: String?,
+    val userNovelRating: Float,
+    val attractivePoints: List<String>,
+    val userKeywords: List<NovelRatingKeywordModel>,
     var uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus),
     val ratingDateModel: RatingDateModel =
         RatingDateModel(
@@ -38,46 +39,46 @@ data class RatingDateModel(
             currentStartDate == null && currentEndDate == null -> R.string.novel_rating_add_date to arrayOf()
             currentStartDate != null && currentEndDate != null ->
                 R.string.novel_rating_display_date_with_tilde to
-                    arrayOf(
-                        currentStartDate.first, currentStartDate.second, currentStartDate.third,
-                        currentEndDate.first, currentEndDate.second, currentEndDate.third,
-                    )
+                        arrayOf(
+                            currentStartDate.first, currentStartDate.second, currentStartDate.third,
+                            currentEndDate.first, currentEndDate.second, currentEndDate.third,
+                        )
 
             currentStartDate != null ->
                 R.string.novel_rating_display_date to
-                    arrayOf(
-                        currentStartDate.first, currentStartDate.second, currentStartDate.third,
-                    )
+                        arrayOf(
+                            currentStartDate.first, currentStartDate.second, currentStartDate.third,
+                        )
 
             currentEndDate != null ->
                 R.string.novel_rating_display_date to
-                    arrayOf(
-                        currentEndDate.first, currentEndDate.second, currentEndDate.third,
-                    )
+                        arrayOf(
+                            currentEndDate.first, currentEndDate.second, currentEndDate.third,
+                        )
 
             else -> R.string.novel_rating_add_date to arrayOf()
         }
     }
 }
 
-data class RatingKeywordModel(
-    val categories: List<CategoryModel>,
-    var previousSelectedKeywords: List<CategoryModel.KeywordModel> =
+data class NovelRatingKeywordsModel(
+    val categories: List<NovelRatingCategoryModel>,
+    var previousSelectedKeywords: List<NovelRatingKeywordModel> =
         categories.flatMap {
             it.keywords.filter { keyword ->
                 keyword.isSelected
             }
         },
-    var currentSelectedKeywords: List<CategoryModel.KeywordModel> = emptyList(),
-) {
-    data class CategoryModel(
-        val categoryName: String,
-        val keywords: List<KeywordModel>,
-    ) {
-        data class KeywordModel(
-            val keywordId: Long,
-            val keywordName: String,
-            val isSelected: Boolean = false,
-        )
-    }
-}
+    var currentSelectedKeywords: List<NovelRatingKeywordModel> = emptyList(),
+)
+
+data class NovelRatingCategoryModel(
+    val categoryName: String,
+    val keywords: List<NovelRatingKeywordModel>,
+)
+
+data class NovelRatingKeywordModel(
+    val keywordId: Int,
+    val keywordName: String,
+    val isSelected: Boolean = false,
+)

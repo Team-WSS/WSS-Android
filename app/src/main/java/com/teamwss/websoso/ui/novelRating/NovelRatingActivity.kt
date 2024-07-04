@@ -11,9 +11,11 @@ import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
-import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NovelRatingActivity :
     BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
     private val viewModel: NovelRatingViewModel by viewModels()
@@ -21,7 +23,7 @@ class NovelRatingActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.onClick = onNovelRatingButtonClick()
-        viewModel.getDummy()
+        viewModel.updateNovelRating(1)
         bindViewModel()
         observeUiState()
         setupCharmPointChips()
@@ -56,13 +58,12 @@ class NovelRatingActivity :
     private fun observeUiState() {
         viewModel.uiState.observe(this) { uiState ->
             updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-            updateKeywordChips(uiState.ratingKeywordModel.previousSelectedKeywords)
+            updateKeywordChips(uiState.novelRatingKeywordsModel.previousSelectedKeywords)
         }
     }
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {
-        val (resId, params) =
-            ratingDateModel.formatDisplayDate(ratingDateModel)
+        val (resId, params) = ratingDateModel.formatDisplayDate(ratingDateModel)
 
         val underlinedText =
             SpannableString(getString(resId, *params)).apply {
@@ -72,7 +73,7 @@ class NovelRatingActivity :
         binding.tvNovelRatingDisplayDate.text = underlinedText
     }
 
-    private fun updateKeywordChips(previousSelectedKeywords: List<RatingKeywordModel.CategoryModel.KeywordModel>) {
+    private fun updateKeywordChips(previousSelectedKeywords: List<NovelRatingKeywordModel>) {
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
         previousSelectedKeywords.forEach { keyword ->

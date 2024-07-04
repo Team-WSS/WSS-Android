@@ -80,12 +80,12 @@ class NovelRatingKeywordDialog :
     private fun observeUiState() {
         viewModel.uiState.observe(viewLifecycleOwner) {
             setupCurrentSelectedChips(it)
-            novelRatingKeywordAdapter.submitList(it.ratingKeywordModel.categories)
+            novelRatingKeywordAdapter.submitList(it.novelRatingKeywordsModel.categories)
         }
     }
 
     private fun setupCurrentSelectedChips(uiState: NovelRatingUiState) {
-        val currentSelectedKeywords = uiState.ratingKeywordModel.currentSelectedKeywords
+        val currentSelectedKeywords = uiState.novelRatingKeywordsModel.currentSelectedKeywords
         val keywordChipGroup = binding.wcgNovelRatingKeywordSelectedKeyword
         keywordChipGroup.removeAllViews()
         currentSelectedKeywords.forEach { keyword ->

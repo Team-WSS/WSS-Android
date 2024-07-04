@@ -21,16 +21,25 @@ class NovelRatingDateDialog :
         super.onViewCreated(view, savedInstanceState)
         binding.onClick = onNovelRatingButtonClick()
         bindViewModel()
+        setupObserver()
         setupDialogBehavior()
         initNullDate()
         initNumberPickerRange()
-        observeDayRange()
         setupValueChangeListener()
     }
 
     private fun bindViewModel() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    private fun setupObserver() {
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            binding.npRatingDateDay.formatNumberPicker(
+                uiState.maxDayValue,
+                "%02d",
+            )
+        }
     }
 
     private fun onNovelRatingButtonClick() =
@@ -71,15 +80,9 @@ class NovelRatingDateDialog :
             npRatingDateYear.formatNumberPicker(MAX_YEAR_VALUE, "%04d")
             npRatingDateMonth.formatNumberPicker(MAX_MONTH_VALUE, "%02d")
             npRatingDateDay.formatNumberPicker(
-                viewModel?.maxDayValue?.value ?: MAX_DAY_VALUE,
+                viewModel?.uiState?.value?.maxDayValue ?: MAX_DAY_VALUE,
                 "%02d",
             )
-        }
-    }
-
-    private fun observeDayRange() {
-        viewModel.maxDayValue.observe(viewLifecycleOwner) { maxDayValue ->
-            binding.npRatingDateDay.formatNumberPicker(maxDayValue, "%02d")
         }
     }
 
