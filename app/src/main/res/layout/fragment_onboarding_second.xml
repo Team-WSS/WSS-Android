@@ -55,6 +55,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_onboarding_second_gender_man"
+                style="@style/HarryMoongChi.Chip.Choice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -63,6 +64,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_onboarding_second_gender_woman"
+                style="@style/HarryMoongChi.Chip.Choice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
