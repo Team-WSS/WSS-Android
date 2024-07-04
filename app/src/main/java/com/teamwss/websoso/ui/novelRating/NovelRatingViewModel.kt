@@ -8,6 +8,7 @@ import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.repository.FakeNovelRatingRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
+import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel
@@ -199,6 +200,13 @@ class NovelRatingViewModel @Inject constructor(
         }
     }
 
+    fun updateCharmPoints(charmPoint: CharmPoint) {
+        uiState.value?.let { uiState ->
+            val updatedModel = uiState.novelRatingModel.copy(charmPoints = listOf(charmPoint))
+            _uiState.value = uiState.copy(novelRatingModel = updatedModel)
+        }
+    }
+
     fun updateCurrentSelectedKeywords(
         keyword: NovelRatingKeywordModel,
         isSelected: Boolean,
@@ -237,7 +245,7 @@ class NovelRatingViewModel @Inject constructor(
                         uiState.keywords.copy(
                             categories = updatedCategories,
                             previousSelectedKeywords = previousSelectedKeywords,
-                    ),
+                        ),
                 )
         }
     }
@@ -304,8 +312,8 @@ class NovelRatingViewModel @Inject constructor(
                     keywords =
                         uiState.keywords.copy(
                             previousSelectedKeywords = uiState.keywords.currentSelectedKeywords,
-                    ),
-                        )
+                        ),
+                )
         }
     }
 
@@ -354,8 +362,8 @@ class NovelRatingViewModel @Inject constructor(
                         uiState.keywords.copy(
                             categories = updatedCategories,
                             currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
-                ),
-                    )
+                        ),
+                )
         }
     }
 }

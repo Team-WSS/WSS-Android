@@ -6,6 +6,7 @@ import com.teamwss.websoso.data.model.NovelRatingKeywordEntity
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel.Companion.toCharmPoint
 
 fun NovelRatingEntity.toUi(): NovelRatingModel =
     NovelRatingModel(
@@ -14,7 +15,7 @@ fun NovelRatingEntity.toUi(): NovelRatingModel =
         startDate = startDate,
         endDate = endDate,
         userNovelRating = userNovelRating,
-        attractivePoints = attractivePoints,
+        charmPoints = charmPoints.map { it.toCharmPoint() },
         userKeywords = userKeywords.map { it.toUi() },
     )
 

@@ -8,7 +8,7 @@ data class NovelRatingModel(
     val startDate: String?,
     val endDate: String?,
     val userNovelRating: Float,
-    val attractivePoints: List<String>,
+    val charmPoints: List<CharmPoint>,
     val userKeywords: List<NovelRatingKeywordModel>,
     val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus),
     val ratingDateModel: RatingDateModel =
@@ -24,6 +24,8 @@ data class NovelRatingModel(
             val date = this?.split("-") ?: return null
             return Triple(date[0].toInt(), date[1].toInt(), date[2].toInt())
         }
+
+        fun String.toCharmPoint(): CharmPoint = CharmPoint.entries.find { it.value == this } ?: CharmPoint.WORLDVIEW
     }
 }
 

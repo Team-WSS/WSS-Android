@@ -8,7 +8,7 @@ data class NovelRatingUiState(
             startDate = null,
             endDate = null,
             userNovelRating = 0.0f,
-            attractivePoints = emptyList(),
+            charmPoints = emptyList(),
             userKeywords = emptyList(),
         ),
     val keywords: NovelRatingKeywordsModel = NovelRatingKeywordsModel(emptyList()),

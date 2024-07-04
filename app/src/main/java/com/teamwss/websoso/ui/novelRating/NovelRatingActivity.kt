@@ -17,8 +17,7 @@ import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelRatingActivity :
-    BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
+class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
     private val viewModel: NovelRatingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +58,7 @@ class NovelRatingActivity :
     private fun observeUiState() {
         viewModel.uiState.observe(this) { uiState ->
             updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-            updateCharmPointChips(uiState.novelRatingModel.attractivePoints)
+            updateCharmPointChips(uiState.novelRatingModel.charmPoints)
             updateKeywordChips(uiState.keywords.previousSelectedKeywords)
         }
     }
@@ -75,12 +74,13 @@ class NovelRatingActivity :
         binding.tvNovelRatingDisplayDate.text = underlinedText
     }
 
-    private fun updateCharmPointChips(previousSelectedCharmPoints: List<String>) {
+    private fun updateCharmPointChips(previousSelectedCharmPoints: List<CharmPoint>) {
         binding.wcgNovelRatingCharmPoints.forEach { view ->
             val chip = view as WebsosoChip
-            chip.isSelected = previousSelectedCharmPoints.contains(
-                CharmPoint.values().find { it.title == chip.text }!!.value
-            )
+            chip.isSelected =
+                previousSelectedCharmPoints.contains(
+                    CharmPoint.entries.find { it.title == chip.text.toString() },
+                )
         }
     }
 
@@ -88,40 +88,42 @@ class NovelRatingActivity :
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
         previousSelectedKeywords.forEach { keyword ->
-            WebsosoChip(binding.root.context).apply {
-                setWebsosoChipText(keyword.keywordName)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
-                setOnCloseIconClickListener {
-                    viewModel.updatePreviousSelectedKeywords(keyword)
-                }
-                setWebsosoChipCloseIconVisibility(true)
-                setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
-                setWebsosoChipCloseIconSize(20f)
-                setWebsosoChipCloseIconEndPadding(18f)
-                setCloseIconTintResource(R.color.primary_100_6A5DFD)
-            }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
+            WebsosoChip(binding.root.context)
+                .apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                    setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
+                    setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    setOnCloseIconClickListener {
+                        viewModel.updatePreviousSelectedKeywords(keyword)
+                    }
+                    setWebsosoChipCloseIconVisibility(true)
+                    setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                    setWebsosoChipCloseIconSize(20f)
+                    setWebsosoChipCloseIconEndPadding(18f)
+                    setCloseIconTintResource(R.color.primary_100_6A5DFD)
+                }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
         }
     }
 
     private fun setupCharmPointChips() {
         getString(R.string.novel_rating_charm_points).toWrappedCharmPoint().forEach { charmPoint ->
-            WebsosoChip(this@NovelRatingActivity).apply {
-                setWebsosoChipText(charmPoint.title)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
-                setOnWebsosoChipClick { handleCharmPointChipClick(this) }
-            }.also { websosoChip -> binding.wcgNovelRatingCharmPoints.addChip(websosoChip) }
+            WebsosoChip(this@NovelRatingActivity)
+                .apply {
+                    setWebsosoChipText(charmPoint.title)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    setOnWebsosoChipClick { handleCharmPointChipClick(this) }
+                }.also { websosoChip -> binding.wcgNovelRatingCharmPoints.addChip(websosoChip) }
         }
     }
 

@@ -15,7 +15,7 @@ fun NovelRatingResponseDto.toData(): NovelRatingEntity =
         startDate = startDate,
         endDate = endDate,
         userNovelRating = userNovelRating,
-        attractivePoints = attractivePoints,
+        charmPoints = attractivePoints,
         userKeywords =
             keywords.map { keyword ->
                 NovelRatingKeywordEntity(

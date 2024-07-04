@@ -6,6 +6,6 @@ data class NovelRatingEntity(
     val startDate: String,
     val endDate: String,
     val userNovelRating: Float,
-    val attractivePoints: List<String>,
+    val charmPoints: List<String>,
     val userKeywords: List<NovelRatingKeywordEntity>,
 )
