@@ -126,10 +126,7 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value =
                 uiState.copy(
                     novelRatingModel = updatedModel,
-                    isEditingStartDate =
-                        ratingDateManager.updateIsEditingStartDate(
-                            readStatus,
-                        ),
+                    isEditingStartDate = ratingDateManager.updateIsEditingStartDate(readStatus),
                 )
         }
     }
@@ -202,8 +199,14 @@ class NovelRatingViewModel @Inject constructor(
 
     fun updateCharmPoints(charmPoint: CharmPoint) {
         uiState.value?.let { uiState ->
-            val updatedModel = uiState.novelRatingModel.copy(charmPoints = listOf(charmPoint))
-            _uiState.value = uiState.copy(novelRatingModel = updatedModel)
+            val charmPoints = uiState.novelRatingModel.charmPoints.toMutableList()
+            when (charmPoints.contains(charmPoint)) {
+                true -> charmPoints.remove(charmPoint)
+                false -> charmPoints.add(charmPoint)
+            }
+            val updatedNovelRatingModel =
+                uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
+            _uiState.value = uiState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
 
@@ -234,8 +237,7 @@ class NovelRatingViewModel @Inject constructor(
 
     fun updatePreviousSelectedKeywords(keyword: NovelRatingKeywordModel) {
         uiState.value?.let { uiState ->
-            val updatedCategories =
-                updateCategories(uiState.keywords.categories, keyword, false)
+            val updatedCategories = updateCategories(uiState.keywords.categories, keyword, false)
             val previousSelectedKeywords =
                 uiState.keywords.previousSelectedKeywords.filterNot { it.keywordId == keyword.keywordId }
 
@@ -276,7 +278,7 @@ class NovelRatingViewModel @Inject constructor(
                 true -> add(keyword)
                 false -> removeIf { it.keywordId == keyword.keywordId }
             }
-        }
+        }.toList()
 
     fun initCurrentSelectedKeywords() {
         uiState.value?.let { uiState ->

@@ -5,7 +5,6 @@ import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import androidx.activity.viewModels
 import androidx.core.view.forEach
-import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
@@ -19,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
     private val viewModel: NovelRatingViewModel by viewModels()
+    private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +79,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
             val chip = view as WebsosoChip
             chip.isSelected =
                 previousSelectedCharmPoints.contains(
-                    CharmPoint.entries.find { it.title == chip.text.toString() },
+                    charmPoints.find { charmPoint -> charmPoint.title == chip.text.toString() },
                 )
         }
     }
@@ -122,20 +122,13 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
                     setWebsosoChipPaddingVertical(20f)
                     setWebsosoChipPaddingHorizontal(12f)
                     setWebsosoChipRadius(40f)
-                    setOnWebsosoChipClick { handleCharmPointChipClick(this) }
+                    setOnWebsosoChipClick { handleCharmPointClick(charmPoint) }
                 }.also { websosoChip -> binding.wcgNovelRatingCharmPoints.addChip(websosoChip) }
         }
     }
 
-    private fun handleCharmPointChipClick(websosoChip: WebsosoChip) {
-        var count = 0
-        binding.wcgNovelRatingCharmPoints.forEach {
-            if (it.isSelected) count++
-        }
-        if (count > 3) {
-            websosoChip.isSelected = false
-            Snackbar.make(binding.root, "최대 3개 커스텀 스낵바 추가 예정", Snackbar.LENGTH_SHORT).show()
-        }
+    private fun handleCharmPointClick(charmPoint: CharmPoint) {
+        viewModel.updateCharmPoints(charmPoints.find { it == charmPoint } ?: return)
     }
 
     private fun showDatePickerBottomSheet() {
