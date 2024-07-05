@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.model.NormalExploreEntity
 import com.teamwss.websoso.data.repository.FakeNovelRepository
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,33 +35,29 @@ class NormalExploreViewModel @Inject constructor(
             runCatching {
                 novelRepository.normalExploreEmptyDummyData
             }.onSuccess { results ->
-                handleSearchSuccess(results)
+                when (results.novels.isNotEmpty()) {
+                    true -> {
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                            novels = results.novels,
+                        )
+                        _isNovelResultCountBoxVisibility.value = true
+                    }
+
+                    false -> {
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                        )
+                        _isNovelResultEmptyBoxVisibility.value = true
+                    }
+                }
             }.onFailure {
-                handleSearchError()
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = true,
+                )
             }
         }
-    }
-
-    private fun handleSearchSuccess(results: NormalExploreEntity) {
-        _uiState.value = uiState.value?.copy(
-            loading = false,
-        )
-
-        if (results.novels.isNotEmpty()) {
-            _uiState.value = uiState.value?.copy(
-                novels = results.novels,
-            )
-            _isNovelResultCountBoxVisibility.value = true
-        } else {
-            _isNovelResultEmptyBoxVisibility.value = true
-        }
-    }
-
-    private fun handleSearchError() {
-        _uiState.value = uiState.value?.copy(
-            loading = false,
-            error = true,
-        )
     }
 
     fun validateSearchWordClearButton() {
