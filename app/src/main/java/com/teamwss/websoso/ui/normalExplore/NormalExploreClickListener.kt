@@ -7,4 +7,6 @@ interface NormalExploreClickListener {
     fun onSearchButtonClick()
 
     fun onSearchCancelButtonClick()
+
+    fun onNovelInquireButtonClick()
 }
