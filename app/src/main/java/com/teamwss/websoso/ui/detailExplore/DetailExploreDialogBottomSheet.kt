@@ -11,14 +11,14 @@ import com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreDialog :
+class DetailExploreDialogBottomSheet :
     BindingBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupBottomSheet()
-        replaceDetailExploreFragment()
+        showContentByTab()
         onBottomSheetExitButtonClick()
     }
 
@@ -31,7 +31,7 @@ class DetailExploreDialog :
         }
     }
 
-    private fun replaceDetailExploreFragment() {
+    private fun showContentByTab() {
         // TODO 정보/키워드 탭에 따른 fragment 수정
         childFragmentManager.beginTransaction()
             .replace(R.id.fcv_detail_explore, DetailExploreInfoFragment())
@@ -46,8 +46,8 @@ class DetailExploreDialog :
 
     companion object {
 
-        fun newInstance(): DetailExploreDialog {
-            return DetailExploreDialog()
+        fun newInstance(): DetailExploreDialogBottomSheet {
+            return DetailExploreDialogBottomSheet()
         }
     }
 }
