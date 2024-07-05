@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -7,7 +9,57 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/tv_onboarding_third_select_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="42dp"
+            android:text="평소 즐겨보는 장르를 선택해주세요"
+            android:textAppearance="@style/headline1"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_onboarding_third_recommendation_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="선호 장르를 기반으로 웹소설을 추천해 드려요"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@id/tv_onboarding_third_select_genre"
+            app:layout_constraintTop_toBottomOf="@id/tv_onboarding_third_select_genre" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_onboarding_third"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginBottom="50dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/btn_onboarding_third_complete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_onboarding_third_recommendation_genre"
+            tools:itemCount="9"
+            tools:listitem="@layout/item_onboarding_genre" />
+
+        <Button
+            android:id="@+id/btn_onboarding_third_complete"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/selector_onboarding_next_button_background"
+            android:text="완료"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
