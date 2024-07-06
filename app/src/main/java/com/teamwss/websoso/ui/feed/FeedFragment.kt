@@ -105,7 +105,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick { feedViewModel::updateFeeds }
+                setOnWebsosoChipClick { feedViewModel::updateSelectedCategory }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
@@ -139,6 +139,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     private fun updateView(uiState: FeedUiState) {
         // binding.wcgFeed.submitList(categories) 구현 예정
+        // 커스텀 칩 구현
         val feeds = uiState.feeds.map { Feed(it) }
         when (uiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)

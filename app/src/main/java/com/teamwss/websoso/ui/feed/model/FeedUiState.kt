@@ -9,7 +9,7 @@ data class FeedUiState(
 ) {
 
     data class CategoryUiState(
-        val category: Category,
-        val isSelected: Boolean,
+        val category: Category = Category.ALL,
+        val isSelected: Boolean = true,
     )
 }

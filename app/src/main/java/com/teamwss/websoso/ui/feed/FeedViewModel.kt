@@ -9,6 +9,7 @@ import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.Category.Companion.toWrappedCategories
 import com.teamwss.websoso.ui.feed.model.FeedUiState
+import com.teamwss.websoso.ui.feed.model.FeedUiState.CategoryUiState
 import com.teamwss.websoso.ui.mapper.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,11 +26,28 @@ class FeedViewModel @Inject constructor(
         MutableLiveData(FeedUiState(categories = category.toPresentation()))
     val uiState: LiveData<FeedUiState> get() = _uiState
 
+    fun updateSelectedCategory(category: Category) {
+        uiState.value?.let { uiState ->
+            val categoriesUiState: List<CategoryUiState> =
+                uiState.categories.map { categoryUiState ->
+                    categoryUiState.copy(isSelected = categoryUiState.category == category)
+                }
+
+            _uiState.value = uiState.copy(categories = categoriesUiState)
+        }
+    }
+
     fun updateFeeds() {
         viewModelScope.launch {
+            val selectedCategory: Category = uiState.value?.let { feedUiState ->
+                feedUiState.categories.find { it.isSelected }
+            }?.category ?: throw IllegalStateException()
+
             runCatching {
-                getFeedsUseCase("전체")
+                getFeedsUseCase(selectedCategory.title)
             }.onSuccess { feeds ->
+                if (feeds.category != selectedCategory.title) throw IllegalStateException()
+                // Return result state of error in domain layer later
                 _uiState.value = uiState.value?.let { feedUiState ->
                     feedUiState.copy(
                         loading = false,
