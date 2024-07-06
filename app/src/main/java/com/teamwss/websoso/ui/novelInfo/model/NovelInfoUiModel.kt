@@ -7,6 +7,7 @@ data class NovelInfoUiModel(
     val novelDescription: String = "",
     val attractivePoints: List<String> = emptyList(),
     val unifiedReviewCount: UnifiedReviewCountModel = UnifiedReviewCountModel(),
+    val isUserReviewExist: Boolean = (unifiedReviewCount.watchingCount.count + unifiedReviewCount.watchedCount.count + unifiedReviewCount.quitCount.count) > 0,
 )
 
 data class PlatformsModel(

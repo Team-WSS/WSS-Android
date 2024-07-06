@@ -146,6 +146,7 @@
                 android:background="@color/white"
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
+                app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.userReviewExist}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
@@ -385,6 +386,7 @@
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
                 android:visibility="gone"
+                app:isVisible="@{!novelInfoViewModel.uiState.novelInfoModel.userReviewExist}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
@@ -413,7 +415,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="평가가 아직 없어요\n최초로 남겨보세요!"
+                    android:text="@string/novel_info_review_none"
                     android:textAlignment="center"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
