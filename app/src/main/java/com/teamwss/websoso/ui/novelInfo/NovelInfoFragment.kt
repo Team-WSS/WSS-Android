@@ -1,13 +1,14 @@
-package com.teamwss.websoso.ui.novelDetail.novelInfo
+package com.teamwss.websoso.ui.novelInfo
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
+import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,8 +22,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupObserver()
-        setupExpandTextToggleVisibility()
-        novelInfoViewModel.getDummyNovelInfo()
+        novelInfoViewModel.updateNovelInfo(1)
     }
 
     private fun bindViewModel() {
@@ -31,15 +31,23 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun setupObserver() {
-        novelInfoViewModel.dummyNovelInfo.observe(viewLifecycleOwner) { novelInfo ->
-            setupKeywordChip(novelInfo)
+        novelInfoViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            setupKeywordChip(uiState.keywords)
+            updateExpandTextToggle(uiState.expandTextModel)
+            updateExpandTextToggleVisibility(uiState.expandTextModel)
         }
     }
 
-    private fun setupKeywordChip(novelInfo: NovelInfoResponseDto) {
-        novelInfo.keywords.forEach { keyword ->
+    private fun setupKeywordChip(keywords: List<KeywordModel>) {
+        keywords.forEach { keyword ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(keyword.keywordName + " " + keyword.keywordCount)
+                setWebsosoChipText(
+                    getString(
+                        R.string.novel_info_keyword_chip_text,
+                        keyword.keywordName,
+                        keyword.keywordCount
+                    )
+                )
                 setWebsosoChipTextAppearance(R.style.body2)
                 setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
                 setWebsosoChipStrokeColor(R.color.transparent)
@@ -52,8 +60,13 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         }
     }
 
-    private fun setupExpandTextToggleVisibility() {
-        val bodyTextView = binding.tvNovelInfoIntroBody
+    private fun updateExpandTextToggle(expandTextModel: ExpandTextUiModel) {
+        binding.ivNovelInfoDescriptionToggle.isSelected = expandTextModel.isExpandTextToggleSelected
+    }
+
+    private fun updateExpandTextToggleVisibility(expandTextModel: ExpandTextUiModel) {
+        if (expandTextModel.expandTextToggleVisibility) return
+        val bodyTextView = binding.tvNovelInfoDescriptionBody
         bodyTextView.post {
             val lineCount = bodyTextView.layout.lineCount
             val ellipsisCount = bodyTextView.layout.getEllipsisCount(lineCount - 1)

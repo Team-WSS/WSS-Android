@@ -61,6 +61,7 @@
     <string name="novel_info_view_less">접기</string>
     <string name="novel_info_title">작품 소개</string>
     <string name="novel_info_rating_title">독자들의 평가</string>
+    <string name="novel_info_keyword_chip_text">%s %d</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>
