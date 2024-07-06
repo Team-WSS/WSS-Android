@@ -13,11 +13,13 @@ data class PlatformsModel(
     val naverModel: PlatformModel? = null,
     val kakaoModel: PlatformModel? = null,
 ) {
-    fun formatPlatforms(platforms: List<NovelInfoEntity.PlatformEntity>): PlatformsModel =
-        PlatformsModel(
-            naverModel = platforms.find { it.platformName == "네이버시리즈" }?.toUi(),
-            kakaoModel = platforms.find { it.platformName == "카카오페이지" }?.toUi(),
-        )
+    companion object {
+        fun formatPlatforms(platforms: List<NovelInfoEntity.PlatformEntity>): PlatformsModel =
+            PlatformsModel(
+                naverModel = platforms.find { it.platformName == "네이버시리즈" }?.toUi(),
+                kakaoModel = platforms.find { it.platformName == "카카오페이지" }?.toUi(),
+            )
+    }
 }
 
 data class PlatformModel(

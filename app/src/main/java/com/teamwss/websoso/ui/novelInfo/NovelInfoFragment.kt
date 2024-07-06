@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.novelInfo
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -26,8 +28,14 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun bindViewModel() {
+        binding.navigateToReadNovel = ::navigateToReadNovel
         binding.novelInfoViewModel = novelInfoViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun navigateToReadNovel(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 
     private fun setupObserver() {

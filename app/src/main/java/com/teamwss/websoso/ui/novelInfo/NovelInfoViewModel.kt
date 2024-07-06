@@ -29,7 +29,7 @@ class NovelInfoViewModel @Inject constructor(
             }.onSuccess { novelInfo ->
                 _uiState.value = uiState.value?.copy(
                     novelInfoModel = novelInfo.toUi(),
-                    platforms = uiState.value?.platforms?.formatPlatforms(novelInfo.platforms) ?: PlatformsModel(),
+                    platforms = PlatformsModel.formatPlatforms(novelInfo.platforms),
                     keywords = novelInfo.keywords.map { it.toUi() },
                     loading = false,
                 )
