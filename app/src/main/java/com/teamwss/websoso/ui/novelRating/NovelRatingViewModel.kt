@@ -63,6 +63,7 @@ class NovelRatingViewModel @Inject constructor(
         updateKeywordCategories()
     }
 
+    // TODO: 검색 결과 없을시 이미지 추가
     fun updateKeywordCategories(keyword: String = "") {
         viewModelScope.launch {
             runCatching {
