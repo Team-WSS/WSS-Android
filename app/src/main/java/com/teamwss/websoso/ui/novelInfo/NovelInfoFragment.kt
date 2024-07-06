@@ -53,6 +53,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
             updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
             updateGraphUi(uiState.novelInfoModel.unifiedReviewCount)
             updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
+            updateUsersCharmPointBody(uiState.novelInfoModel.formatAttractivePoints())
         }
     }
 
@@ -104,10 +105,12 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
                 updateGraphHeight(binding.viewNovelInfoReadStatusWatching, unifiedReviewCountModel.watchingCount.graphHeight)
                 updateGraphSelection(binding.viewNovelInfoReadStatusWatching, binding.tvNovelInfoReadStatusWatchingCount, binding.tvNovelInfoReadStatusWatching)
             }
+
             ReadStatus.WATCHED -> {
                 updateGraphHeight(binding.viewNovelInfoReadStatusWatched, unifiedReviewCountModel.watchedCount.graphHeight)
                 updateGraphSelection(binding.viewNovelInfoReadStatusWatched, binding.tvNovelInfoReadStatusWatchedCount, binding.tvNovelInfoReadStatusWatched)
             }
+
             ReadStatus.QUIT -> {
                 updateGraphHeight(binding.viewNovelInfoReadStatusQuit, unifiedReviewCountModel.quitCount.graphHeight)
                 updateGraphSelection(binding.viewNovelInfoReadStatusQuit, binding.tvNovelInfoReadStatusQuitCount, binding.tvNovelInfoReadStatusQuit)
@@ -127,28 +130,47 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun updateUsersReadStatusText(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        val color = getColor(requireContext(), R.color.primary_100_6A5DFD)
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
                 val watchingCountText = getString(R.string.novel_info_read_status_watching_count, unifiedReviewCountModel.watchingCount.count)
-                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchingCountText)
+                val coloredWatchingCountText = unifiedReviewCountModel.watchingCount.count.toString() + getString(R.string.novel_info_user_unit)
+                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchingCountText, listOf(coloredWatchingCountText), color)
             }
+
             ReadStatus.WATCHED -> {
                 val watchedCountText = getString(R.string.novel_info_read_status_watched_count, unifiedReviewCountModel.watchedCount.count)
-                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchedCountText)
+                val coloredWatchedText = unifiedReviewCountModel.watchedCount.count.toString() + getString(R.string.novel_info_user_unit)
+                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchedCountText, listOf(coloredWatchedText), color)
             }
+
             ReadStatus.QUIT -> {
                 val quitCountText = getString(R.string.novel_info_read_status_quit_count, unifiedReviewCountModel.quitCount.count)
-                binding.tvNovelInfoReadStatusTitle.text = getColoredText(quitCountText)
+                val coloredQuitText = unifiedReviewCountModel.quitCount.count.toString() + getString(R.string.novel_info_user_unit)
+                binding.tvNovelInfoReadStatusTitle.text = getColoredText(quitCountText, listOf(coloredQuitText), color)
             }
         }
     }
 
-    private fun getColoredText(text: String): SpannableString {
+    private fun getColoredText(text: String, wordsToColor: List<String>, color: Int): SpannableString {
         val spannableString = SpannableString(text)
-        val end = text.indexOf(getString(R.string.novel_info_user_unit)) + 1
-        val colorSpan = ForegroundColorSpan(getColor(requireContext(), R.color.primary_100_6A5DFD))
-        spannableString.setSpan(colorSpan, 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        wordsToColor.forEach { word ->
+            val start = text.indexOf(word)
+            if (start >= 0) {
+                val end = start + word.length
+                val colorSpan = ForegroundColorSpan(color)
+                spannableString.setSpan(colorSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
         return spannableString
+    }
+
+    private fun updateUsersCharmPointBody(charmPoints: String) {
+        binding.tvNovelInfoCharmPointsBody.text = getColoredText(
+            getString(R.string.novel_info_charm_points_body, charmPoints),
+            listOf(charmPoints),
+            getColor(requireContext(),R.color.primary_100_6A5DFD),
+        )
     }
 
     override fun onResume() {

@@ -9,12 +9,18 @@ data class NovelInfoUiModel(
     val attractivePoints: List<String> = emptyList(),
     val unifiedReviewCount: UnifiedReviewCountModel = UnifiedReviewCountModel(),
     val isUserReviewExist: Boolean = (unifiedReviewCount.watchingCount.count + unifiedReviewCount.watchedCount.count + unifiedReviewCount.quitCount.count) > 0,
-)
+) {
+
+    fun formatAttractivePoints(): String {
+        return attractivePoints.joinToString(", ")
+    }
+}
 
 data class PlatformsModel(
     val naverModel: PlatformModel? = null,
     val kakaoModel: PlatformModel? = null,
 ) {
+
     companion object {
         fun formatPlatforms(platforms: List<NovelInfoEntity.PlatformEntity>): PlatformsModel =
             PlatformsModel(

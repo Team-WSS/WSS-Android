@@ -152,7 +152,7 @@
                 app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
 
                 <TextView
-                    android:id="@+id/tv_novel_info_reviews_title"
+                    android:id="@+id/tv_novel_info_charm_points_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -170,9 +170,10 @@
                     android:background="@drawable/bg_novel_info_gray_50_radius_12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_novel_info_reviews_title" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_info_charm_points_title" />
 
                 <TextView
+                    android:id="@+id/tv_novel_info_charm_points_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/body2"
