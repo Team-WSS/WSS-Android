@@ -105,9 +105,9 @@
                     android:layout_width="46dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/btn_novel_info_naver"
-                    android:visibility="gone"
+                    app:cornerRadius="@{24f}"
                     app:isVisible="@{novelInfoViewModel.uiState.platforms.naverModel.isVisible}"
+                    app:loadImageUrl="@{novelInfoViewModel.uiState.platforms.naverModel.platformImage}"
                     tools:visibility="visible" />
 
                 <ImageView
@@ -115,11 +115,10 @@
                     android:layout_width="46dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/btn_novel_info_kakao"
-                    android:visibility="gone"
+                    app:cornerRadius="@{24f}"
                     app:isVisible="@{novelInfoViewModel.uiState.platforms.kakaoModel.isVisible}"
+                    app:loadImageUrl="@{novelInfoViewModel.uiState.platforms.kakaoModel.platformImage}"
                     tools:visibility="visible" />
-
             </LinearLayout>
 
             <View

@@ -24,7 +24,7 @@ data class PlatformModel(
     val platformName: String,
     val platformImage: String,
     val platformUrl: String,
-    val isVisible: Boolean,
+    val isVisible: Boolean = platformName.isNotBlank(),
 )
 
 data class KeywordModel(
