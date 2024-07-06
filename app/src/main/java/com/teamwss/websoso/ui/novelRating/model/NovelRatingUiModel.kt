@@ -3,13 +3,13 @@ package com.teamwss.websoso.ui.novelRating.model
 import com.teamwss.websoso.R
 
 data class NovelRatingModel(
-    val novelTitle: String,
-    val readStatus: String,
-    val startDate: String?,
-    val endDate: String?,
-    val userNovelRating: Float,
-    val charmPoints: List<CharmPoint>,
-    val userKeywords: List<NovelRatingKeywordModel>,
+    val novelTitle: String = "",
+    val readStatus: String = ReadStatus.WATCHING.toString(),
+    val startDate: String? = null,
+    val endDate: String? = null,
+    val userNovelRating: Float = 0f,
+    val charmPoints: List<CharmPoint> = emptyList(),
+    val userKeywords: List<NovelRatingKeywordModel> = emptyList(),
     val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus),
     val ratingDateModel: RatingDateModel =
         RatingDateModel(
