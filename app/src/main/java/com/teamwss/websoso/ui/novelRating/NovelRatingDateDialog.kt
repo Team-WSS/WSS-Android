@@ -23,7 +23,6 @@ class NovelRatingDateDialog : BindingBottomSheetDialog<DialogNovelRatingDateBind
         setupObserver()
         setupDialogBehavior()
         initNullDate()
-        initNumberPickerRange()
         setupValueChangeListener()
     }
 
@@ -38,6 +37,7 @@ class NovelRatingDateDialog : BindingBottomSheetDialog<DialogNovelRatingDateBind
                 uiState.maxDayValue,
                 "%02d",
             )
+            initNumberPickerRange(uiState?.maxDayValue ?: MAX_DAY_VALUE)
         }
     }
 
@@ -74,12 +74,12 @@ class NovelRatingDateDialog : BindingBottomSheetDialog<DialogNovelRatingDateBind
         viewModel.updateNotNullDate()
     }
 
-    private fun initNumberPickerRange() {
+    private fun initNumberPickerRange(maxDayValue: Int) {
         with(binding) {
             npRatingDateYear.formatNumberPicker(MAX_YEAR_VALUE, "%04d")
             npRatingDateMonth.formatNumberPicker(MAX_MONTH_VALUE, "%02d")
             npRatingDateDay.formatNumberPicker(
-                viewModel?.uiState?.value?.maxDayValue ?: MAX_DAY_VALUE,
+                maxDayValue,
                 "%02d",
             )
         }
