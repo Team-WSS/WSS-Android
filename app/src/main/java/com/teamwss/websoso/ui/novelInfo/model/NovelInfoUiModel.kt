@@ -10,16 +10,14 @@ data class NovelInfoUiModel(
 )
 
 data class PlatformsModel(
-    val naverModel: PlatformModel?,
-    val kakaoModel: PlatformModel?,
+    val naverModel: PlatformModel? = null,
+    val kakaoModel: PlatformModel? = null,
 ) {
-    companion object {
-        fun formatPlatforms(platforms: List<NovelInfoEntity.PlatformEntity>): PlatformsModel =
-            PlatformsModel(
-                naverModel = platforms.find { it.platformName == "네이버시리즈" }?.toUi(),
-                kakaoModel = platforms.find { it.platformName == "카카오페이지" }?.toUi(),
-            )
-    }
+    fun formatPlatforms(platforms: List<NovelInfoEntity.PlatformEntity>): PlatformsModel =
+        PlatformsModel(
+            naverModel = platforms.find { it.platformName == "네이버시리즈" }?.toUi(),
+            kakaoModel = platforms.find { it.platformName == "카카오페이지" }?.toUi(),
+        )
 }
 
 data class PlatformModel(

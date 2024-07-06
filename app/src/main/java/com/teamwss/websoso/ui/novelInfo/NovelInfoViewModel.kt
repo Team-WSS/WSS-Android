@@ -26,9 +26,9 @@ class NovelInfoViewModel @Inject constructor(
             runCatching {
                 novelInfoRepository.fetchNovelInfo(novelId)
             }.onSuccess { novelInfo ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     novelInfoModel = novelInfo.toUi(),
-                    platforms = PlatformsModel.formatPlatforms(novelInfo.platforms),
+                    platforms = uiState.value?.platforms?.formatPlatforms(novelInfo.platforms) ?: PlatformsModel(),
                     keywords = novelInfo.keywords.map { it.toUi() },
                     loading = false,
                 )
