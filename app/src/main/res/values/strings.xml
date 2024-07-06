@@ -66,6 +66,10 @@
     <string name="novel_info_read_status_watching">보는 중</string>
     <string name="novel_info_read_status_watched">봤어요</string>
     <string name="novel_info_read_status_quit">하차</string>
+    <string name="novel_info_read_status_watching_count">%d명이 작품을\n같이 보고 있어요</string>
+    <string name="novel_info_read_status_watched_count">%d명이 작품을\n같이 봤어요</string>
+    <string name="novel_info_read_status_quit_count">%d명이 작품을\n하차했어요</string>
+    <string name="novel_info_user_unit">명</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>

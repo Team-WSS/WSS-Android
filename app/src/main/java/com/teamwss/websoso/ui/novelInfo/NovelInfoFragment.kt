@@ -3,7 +3,12 @@ package com.teamwss.websoso.ui.novelInfo
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.TextView
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
@@ -11,6 +16,7 @@ import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
+import com.teamwss.websoso.ui.novelInfo.model.ReadStatus
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,6 +52,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
             updateExpandTextToggleVisibility(uiState.expandTextModel)
             updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
             updateGraphUi(uiState.novelInfoModel.unifiedReviewCount)
+            updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
         }
     }
 
@@ -92,35 +99,56 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        updateGraphHeights(unifiedReviewCountModel)
-        updateGraphSelectionStates(unifiedReviewCountModel)
-        updateTextViewSelectionStates(unifiedReviewCountModel)
+        when (unifiedReviewCountModel.maxCountReadStatus()) {
+            ReadStatus.WATCHING -> {
+                updateGraphHeight(binding.viewNovelInfoReadStatusWatching, unifiedReviewCountModel.watchingCount.graphHeight)
+                updateGraphSelection(binding.viewNovelInfoReadStatusWatching, binding.tvNovelInfoReadStatusWatchingCount, binding.tvNovelInfoReadStatusWatching)
+            }
+            ReadStatus.WATCHED -> {
+                updateGraphHeight(binding.viewNovelInfoReadStatusWatched, unifiedReviewCountModel.watchedCount.graphHeight)
+                updateGraphSelection(binding.viewNovelInfoReadStatusWatched, binding.tvNovelInfoReadStatusWatchedCount, binding.tvNovelInfoReadStatusWatched)
+            }
+            ReadStatus.QUIT -> {
+                updateGraphHeight(binding.viewNovelInfoReadStatusQuit, unifiedReviewCountModel.quitCount.graphHeight)
+                updateGraphSelection(binding.viewNovelInfoReadStatusQuit, binding.tvNovelInfoReadStatusQuitCount, binding.tvNovelInfoReadStatusQuit)
+            }
+        }
     }
 
-    private fun updateGraphHeights(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        binding.viewNovelInfoReadStatusWatching.layoutParams.height = unifiedReviewCountModel.watchingCount.graphHeight
-        binding.viewNovelInfoReadStatusWatched.layoutParams.height = unifiedReviewCountModel.watchedCount.graphHeight
-        binding.viewNovelInfoReadStatusQuit.layoutParams.height = unifiedReviewCountModel.quitCount.graphHeight
-
-        binding.viewNovelInfoReadStatusWatching.requestLayout()
-        binding.viewNovelInfoReadStatusWatched.requestLayout()
-        binding.viewNovelInfoReadStatusQuit.requestLayout()
+    private fun updateGraphHeight(view: View, height: Int) {
+        view.layoutParams.height = height
+        view.requestLayout()
     }
 
-    private fun updateGraphSelectionStates(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        binding.viewNovelInfoReadStatusWatching.isSelected = unifiedReviewCountModel.watchingCount.isMaxValue
-        binding.viewNovelInfoReadStatusWatched.isSelected = unifiedReviewCountModel.watchedCount.isMaxValue
-        binding.viewNovelInfoReadStatusQuit.isSelected = unifiedReviewCountModel.quitCount.isMaxValue
+    private fun updateGraphSelection(graphView: View, countTextView: TextView, statusTextView: TextView) {
+        graphView.isSelected = true
+        countTextView.isSelected = true
+        statusTextView.isSelected = true
     }
 
-    private fun updateTextViewSelectionStates(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        binding.tvNovelInfoReadStatusWatchingCount.isSelected = unifiedReviewCountModel.watchingCount.isMaxValue
-        binding.tvNovelInfoReadStatusWatchedCount.isSelected = unifiedReviewCountModel.watchedCount.isMaxValue
-        binding.tvNovelInfoReadStatusQuitCount.isSelected = unifiedReviewCountModel.quitCount.isMaxValue
+    private fun updateUsersReadStatusText(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        when (unifiedReviewCountModel.maxCountReadStatus()) {
+            ReadStatus.WATCHING -> {
+                val watchingCountText = getString(R.string.novel_info_read_status_watching_count, unifiedReviewCountModel.watchingCount.count)
+                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchingCountText)
+            }
+            ReadStatus.WATCHED -> {
+                val watchedCountText = getString(R.string.novel_info_read_status_watched_count, unifiedReviewCountModel.watchedCount.count)
+                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchedCountText)
+            }
+            ReadStatus.QUIT -> {
+                val quitCountText = getString(R.string.novel_info_read_status_quit_count, unifiedReviewCountModel.quitCount.count)
+                binding.tvNovelInfoReadStatusTitle.text = getColoredText(quitCountText)
+            }
+        }
+    }
 
-        binding.tvNovelInfoReadStatusWatching.isSelected = unifiedReviewCountModel.watchingCount.isMaxValue
-        binding.tvNovelInfoReadStatusWatched.isSelected = unifiedReviewCountModel.watchedCount.isMaxValue
-        binding.tvNovelInfoReadStatusQuit.isSelected = unifiedReviewCountModel.quitCount.isMaxValue
+    private fun getColoredText(text: String): SpannableString {
+        val spannableString = SpannableString(text)
+        val end = text.indexOf(getString(R.string.novel_info_user_unit)) + 1
+        val colorSpan = ForegroundColorSpan(getColor(requireContext(), R.color.primary_100_6A5DFD))
+        spannableString.setSpan(colorSpan, 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return spannableString
     }
 
     override fun onResume() {
