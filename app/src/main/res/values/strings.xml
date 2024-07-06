@@ -63,6 +63,9 @@
     <string name="novel_info_rating_title">독자들의 평가</string>
     <string name="novel_info_keyword_chip_text">%s %d</string>
     <string name="novel_info_review_none">아직 평가가 없어요\n최초로 남겨보세요!</string>
+    <string name="novel_info_read_status_watching">보는 중</string>
+    <string name="novel_info_read_status_watched">봤어요</string>
+    <string name="novel_info_read_status_quit">하차</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>

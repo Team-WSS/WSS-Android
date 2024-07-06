@@ -92,14 +92,35 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        updateGraphHeight(binding.viewNovelInfoReadStatusWatching, unifiedReviewCountModel.watchingCount.graphHeight)
-        updateGraphHeight(binding.viewNovelInfoReadStatusWatched, unifiedReviewCountModel.watchedCount.graphHeight)
-        updateGraphHeight(binding.viewNovelInfoReadStatusQuit, unifiedReviewCountModel.quitCount.graphHeight)
+        updateGraphHeights(unifiedReviewCountModel)
+        updateGraphSelectionStates(unifiedReviewCountModel)
+        updateTextViewSelectionStates(unifiedReviewCountModel)
     }
 
-    private fun updateGraphHeight(view: View, height: Int) {
-        view.layoutParams.height = height
-        view.requestLayout()
+    private fun updateGraphHeights(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        binding.viewNovelInfoReadStatusWatching.layoutParams.height = unifiedReviewCountModel.watchingCount.graphHeight
+        binding.viewNovelInfoReadStatusWatched.layoutParams.height = unifiedReviewCountModel.watchedCount.graphHeight
+        binding.viewNovelInfoReadStatusQuit.layoutParams.height = unifiedReviewCountModel.quitCount.graphHeight
+
+        binding.viewNovelInfoReadStatusWatching.requestLayout()
+        binding.viewNovelInfoReadStatusWatched.requestLayout()
+        binding.viewNovelInfoReadStatusQuit.requestLayout()
+    }
+
+    private fun updateGraphSelectionStates(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        binding.viewNovelInfoReadStatusWatching.isSelected = unifiedReviewCountModel.watchingCount.isMaxValue
+        binding.viewNovelInfoReadStatusWatched.isSelected = unifiedReviewCountModel.watchedCount.isMaxValue
+        binding.viewNovelInfoReadStatusQuit.isSelected = unifiedReviewCountModel.quitCount.isMaxValue
+    }
+
+    private fun updateTextViewSelectionStates(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        binding.tvNovelInfoReadStatusWatchingCount.isSelected = unifiedReviewCountModel.watchingCount.isMaxValue
+        binding.tvNovelInfoReadStatusWatchedCount.isSelected = unifiedReviewCountModel.watchedCount.isMaxValue
+        binding.tvNovelInfoReadStatusQuitCount.isSelected = unifiedReviewCountModel.quitCount.isMaxValue
+
+        binding.tvNovelInfoReadStatusWatching.isSelected = unifiedReviewCountModel.watchingCount.isMaxValue
+        binding.tvNovelInfoReadStatusWatched.isSelected = unifiedReviewCountModel.watchedCount.isMaxValue
+        binding.tvNovelInfoReadStatusQuit.isSelected = unifiedReviewCountModel.quitCount.isMaxValue
     }
 
     override fun onResume() {

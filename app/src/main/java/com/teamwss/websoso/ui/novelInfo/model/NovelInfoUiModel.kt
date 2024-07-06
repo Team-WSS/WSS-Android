@@ -42,13 +42,25 @@ data class UnifiedReviewCountModel(
     val quitCount: ReviewCountModel = ReviewCountModel(ReadStatus.QUIT, 0),
 ) {
     fun formattedUnifiedReviewCount(viewHeight: Int): UnifiedReviewCountModel {
+        val maxCount = maxOf(watchingCount.count, watchedCount.count, quitCount.count)
+
         val watchingGraphHeight = formattedHeight(viewHeight, watchingCount.count)
         val watchedGraphHeight = formattedHeight(viewHeight, watchedCount.count)
         val quitGraphHeight = formattedHeight(viewHeight, quitCount.count)
+
         return UnifiedReviewCountModel(
-            watchingCount = watchingCount.copy(graphHeight = watchingGraphHeight),
-            watchedCount = watchedCount.copy(graphHeight = watchedGraphHeight),
-            quitCount = quitCount.copy(graphHeight = quitGraphHeight),
+            watchingCount = watchingCount.copy(
+                graphHeight = watchingGraphHeight,
+                isMaxValue = watchingCount.count == maxCount,
+            ),
+            watchedCount = watchedCount.copy(
+                graphHeight = watchedGraphHeight,
+                isMaxValue = watchedCount.count == maxCount && !watchingCount.isMaxValue,
+            ),
+            quitCount = quitCount.copy(
+                graphHeight = quitGraphHeight,
+                isMaxValue = quitCount.count == maxCount && !watchingCount.isMaxValue && !watchedCount.isMaxValue,
+            ),
         )
     }
 
@@ -64,6 +76,7 @@ data class ReviewCountModel(
     val count: Int,
     val isVisible: Boolean = count > 0,
     val graphHeight: Int = 0,
+    val isMaxValue: Boolean = false,
 )
 
 data class ExpandTextUiModel(
