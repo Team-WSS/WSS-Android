@@ -59,7 +59,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         viewModel.uiState.observe(this) { uiState ->
             updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
             updateCharmPointChips(uiState.novelRatingModel.charmPoints)
-            updateKeywordChips(uiState.keywords.previousSelectedKeywords)
+            updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
         }
     }
 
@@ -99,7 +99,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
                     setWebsosoChipPaddingHorizontal(12f)
                     setWebsosoChipRadius(40f)
                     setOnCloseIconClickListener {
-                        viewModel.updatePreviousSelectedKeywords(keyword)
+                        viewModel.updateSelectedKeywords(keyword, false)
                     }
                     setWebsosoChipCloseIconVisibility(true)
                     setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)

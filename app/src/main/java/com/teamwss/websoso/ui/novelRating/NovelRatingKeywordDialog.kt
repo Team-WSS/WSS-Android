@@ -10,7 +10,7 @@ import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 
 class NovelRatingKeywordDialog :
     BindingBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
@@ -27,7 +27,7 @@ class NovelRatingKeywordDialog :
         setupDialogBehavior()
         setupRecyclerView()
         observeUiState()
-        viewModel.initCurrentSelectedKeywords()
+        setupSearchEditTextListener()
     }
 
     private fun bindViewModel() {
@@ -68,7 +68,7 @@ class NovelRatingKeywordDialog :
         novelRatingKeywordAdapter =
             NovelRatingKeywordAdapter(
                 onKeywordClick = { keyword, isSelected ->
-                    viewModel.updateCurrentSelectedKeywords(keyword, isSelected)
+                    viewModel.updateSelectedKeywords(keyword, isSelected)
                 },
             )
         binding.rvRatingKeywordList.apply {
@@ -78,16 +78,14 @@ class NovelRatingKeywordDialog :
     }
 
     private fun observeUiState() {
-        viewModel.uiState.observe(viewLifecycleOwner) {
-            setupCurrentSelectedChips(it)
-            novelRatingKeywordAdapter.submitList(it.keywords.categories)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            setupCurrentSelectedChips(uiState.keywordsModel.currentSelectedKeywords)
+            novelRatingKeywordAdapter.submitList(uiState.keywordsModel.categories)
         }
     }
 
-    private fun setupCurrentSelectedChips(uiState: NovelRatingUiState) {
-        val currentSelectedKeywords = uiState.keywords.currentSelectedKeywords
-        val keywordChipGroup = binding.wcgNovelRatingKeywordSelectedKeyword
-        keywordChipGroup.removeAllViews()
+    private fun setupCurrentSelectedChips(currentSelectedKeywords: List<NovelRatingKeywordModel>) {
+        binding.wcgNovelRatingKeywordSelectedKeyword.removeAllViews()
         currentSelectedKeywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {
                 setWebsosoChipText(keyword.keywordName)
@@ -99,15 +97,33 @@ class NovelRatingKeywordDialog :
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(40f)
                 setOnCloseIconClickListener {
-                    viewModel.updateCurrentSelectedKeywords(keyword, isSelected = false)
+                    viewModel.updateSelectedKeywords(keyword, isSelected = false)
                 }
                 setWebsosoChipCloseIconVisibility(true)
                 setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
                 setWebsosoChipCloseIconSize(20f)
                 setWebsosoChipCloseIconEndPadding(18f)
                 setCloseIconTintResource(R.color.primary_100_6A5DFD)
-            }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
+            }.also { websosoChip -> binding.wcgNovelRatingKeywordSelectedKeyword.addChip(websosoChip) }
         }
+    }
+
+    private fun setupSearchEditTextListener() {
+        binding.etRatingKeywordSearch.setOnEditorActionListener { _, _, _ ->
+            performSearch(binding.etRatingKeywordSearch.text.toString())
+            true
+        }
+    }
+
+    private fun performSearch(input: String?) {
+        viewModel.updateKeywordCategories(input.orEmpty())
+        binding.etRatingKeywordSearch.clearFocus()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateKeywordCategories()
+        binding.etRatingKeywordSearch.requestFocus()
     }
 
     override fun onDestroyView() {

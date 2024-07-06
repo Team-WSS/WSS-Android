@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.NovelRatingEntity
+import com.teamwss.websoso.data.model.NovelRatingKeywordCategoryEntity
 import com.teamwss.websoso.data.repository.FakeNovelRatingRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
@@ -24,7 +24,6 @@ class NovelRatingViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableLiveData<NovelRatingUiState>(NovelRatingUiState())
     val uiState: LiveData<NovelRatingUiState> get() = _uiState
-
     private val ratingDateManager = RatingDateManager()
 
     fun updateNovelRating(userNovelId: Long) {
@@ -55,51 +54,44 @@ class NovelRatingViewModel @Inject constructor(
         _uiState.value =
             uiState.value?.copy(
                 novelRatingModel = novelRatingModel,
+                keywordsModel = NovelRatingKeywordsModel(
+                    currentSelectedKeywords = novelRatingModel.userKeywords,
+                ),
                 isEditingStartDate = isEditingStartDate,
                 maxDayValue = dayMaxValue,
             )
-        updateKeywords()
+        updateKeywordCategories()
     }
 
-    fun updateKeywords(keyword: String = "") {
+    fun updateKeywordCategories(keyword: String = "") {
         viewModelScope.launch {
             runCatching {
                 fakeNovelRatingRepository.fetchNovelRatingKeywordCategories(keyword)
             }.onSuccess { categories ->
-                _uiState.value =
-                    uiState.value?.copy(
-                        keywords = NovelRatingKeywordsModel(categories.map { it.toUi() }),
-                    )
-                if (uiState.value?.loading == true) initPreviousSelectedKeywords()
+                handleSuccessfulFetchKeywordCategories(categories)
             }.onFailure {
-                _uiState.value =
-                    uiState.value?.copy(
-                        loading = false,
-                        error = true,
-                    )
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = true,
+                )
             }
         }
     }
 
-    private fun initPreviousSelectedKeywords() {
-        val keywords: MutableList<NovelRatingKeywordModel> = mutableListOf()
-        uiState.value
-            ?.novelRatingModel
-            ?.userKeywords
-            ?.forEach {
-                keywords.add(it)
-            }.apply {
-                _uiState.value =
-                    uiState.value?.let { uiState ->
-                        uiState.copy(
-                            keywords =
-                            uiState.keywords.copy(
-                                previousSelectedKeywords = keywords,
-                            ),
-                            loading = false,
-                        )
-                    }
-            }
+    private fun handleSuccessfulFetchKeywordCategories(categories: List<NovelRatingKeywordCategoryEntity>) {
+        val previousSelectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
+        val updatedCategories = categories.map { it.toUi() }.map {
+            it.copy(keywords = it.keywords.map { keyword ->
+                keyword.copy(isSelected = previousSelectedKeywords.contains(keyword))
+            })
+        }
+        _uiState.value = uiState.value?.copy(
+            keywordsModel = NovelRatingKeywordsModel(
+                categories = updatedCategories,
+                currentSelectedKeywords = previousSelectedKeywords,
+            ),
+            loading = false,
+        )
     }
 
     fun updatePreviousDate() {
@@ -210,162 +202,53 @@ class NovelRatingViewModel @Inject constructor(
         }
     }
 
-    fun updateCurrentSelectedKeywords(
-        keyword: NovelRatingKeywordModel,
-        isSelected: Boolean,
-    ) {
+    fun updateSelectedKeywords(keyword: NovelRatingKeywordModel, isSelected: Boolean) {
         uiState.value?.let { uiState ->
-            val updatedCategories =
-                updateCategories(uiState.keywords.categories, keyword, isSelected)
-            val currentSelectedKeywords =
-                updateSelectedKeywords(
-                    uiState.keywords.currentSelectedKeywords,
-                    keyword,
-                    isSelected,
-                )
-
-            _uiState.value =
-                uiState.copy(
-                    keywords =
-                    uiState.keywords.copy(
-                        categories = updatedCategories,
-                        currentSelectedKeywords = currentSelectedKeywords,
-                    ),
-                )
-        }
-    }
-
-    fun updatePreviousSelectedKeywords(keyword: NovelRatingKeywordModel) {
-        uiState.value?.let { uiState ->
-            val updatedCategories = updateCategories(uiState.keywords.categories, keyword, false)
-            val previousSelectedKeywords =
-                uiState.keywords.previousSelectedKeywords.filterNot { it.keywordId == keyword.keywordId }
-
-            _uiState.value =
-                uiState.copy(
-                    keywords =
-                    uiState.keywords.copy(
-                        categories = updatedCategories,
-                        previousSelectedKeywords = previousSelectedKeywords,
-                    ),
-                )
-        }
-    }
-
-    private fun updateCategories(
-        categories: List<NovelRatingKeywordCategoryModel>,
-        keyword: NovelRatingKeywordModel,
-        isSelected: Boolean,
-    ): List<NovelRatingKeywordCategoryModel> =
-        categories.map { category ->
-            val updatedKeywords =
-                category.keywords.map { keywordInCategory ->
-                    when (keywordInCategory.keywordId == keyword.keywordId) {
-                        true -> keywordInCategory.copy(isSelected = isSelected)
-                        false -> keywordInCategory
-                    }
-                }
-            category.copy(keywords = updatedKeywords)
-        }
-
-    private fun updateSelectedKeywords(
-        currentSelectedKeywords: List<NovelRatingKeywordModel>,
-        keyword: NovelRatingKeywordModel,
-        isSelected: Boolean,
-    ): List<NovelRatingKeywordModel> =
-        currentSelectedKeywords.toMutableList().apply {
-            when (isSelected) {
-                true -> add(keyword)
-                false -> removeIf { it.keywordId == keyword.keywordId }
-            }
-        }.toList()
-
-    fun initCurrentSelectedKeywords() {
-        uiState.value?.let { uiState ->
-            val updatedCategories =
-                uiState.keywords.categories.map { category ->
-                    val updatedKeywords =
-                        category.keywords.map { keyword ->
-                            keyword.copy(
-                                isSelected =
-                                uiState.keywords.previousSelectedKeywords.any {
-                                    it.keywordId == keyword.keywordId
-                                },
-                            )
+            _uiState.value = uiState.copy(
+                keywordsModel = uiState.keywordsModel.copy(
+                    categories = uiState.keywordsModel.updatedCategories(keyword.copy(isSelected = isSelected)),
+                    currentSelectedKeywords = uiState.keywordsModel.currentSelectedKeywords.toMutableList().apply {
+                        when (isSelected) {
+                            true -> add(keyword)
+                            false -> this.removeIf { it.keywordId == keyword.keywordId }
                         }
-                    category.copy(keywords = updatedKeywords)
-                }
-
-            _uiState.value =
-                uiState.copy(
-                    keywords =
-                    uiState.keywords.copy(
-                        categories = updatedCategories,
-                        currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
-                    ),
-                )
+                    }.toList(),
+                ),
+            )
         }
     }
 
     fun saveSelectedKeywords() {
         uiState.value?.let { uiState ->
-            _uiState.value =
-                uiState.copy(
-                    keywords =
-                    uiState.keywords.copy(
-                        previousSelectedKeywords = uiState.keywords.currentSelectedKeywords,
-                    ),
-                )
+            val previousSelectedKeywords = uiState.keywordsModel.currentSelectedKeywords
+            val updatedRatingModel = uiState.novelRatingModel.copy(userKeywords = previousSelectedKeywords)
+            _uiState.value = uiState.copy(novelRatingModel = updatedRatingModel)
         }
     }
 
     fun clearEditingKeyword() {
         uiState.value?.let { uiState ->
-            val updatedCategories =
-                uiState.keywords.categories.map { category ->
-                    val updatedKeywords =
-                        category.keywords.map { keyword ->
+            _uiState.value = uiState.copy(
+                novelRatingModel = uiState.novelRatingModel.copy(userKeywords = emptyList()),
+                keywordsModel = uiState.keywordsModel.copy(
+                    categories = uiState.keywordsModel.categories.map { category ->
+                        category.copy(keywords = category.keywords.map { keyword ->
                             keyword.copy(isSelected = false)
-                        }
-                    category.copy(keywords = updatedKeywords)
-                }
-
-            _uiState.value =
-                uiState.copy(
-                    keywords =
-                    uiState.keywords.copy(
-                        categories = updatedCategories,
-                        previousSelectedKeywords = emptyList(),
-                        currentSelectedKeywords = emptyList(),
-                    ),
-                )
+                        })
+                    },
+                    currentSelectedKeywords = emptyList(),
+                ),
+            )
         }
     }
 
     fun cancelEditingKeyword() {
         uiState.value?.let { uiState ->
-            val updatedCategories =
-                uiState.keywords.categories.map { category ->
-                    val updatedKeywords =
-                        category.keywords.map { keyword ->
-                            keyword.copy(
-                                isSelected =
-                                uiState.keywords.previousSelectedKeywords.any {
-                                    it.keywordId == keyword.keywordId
-                                },
-                            )
-                        }
-                    category.copy(keywords = updatedKeywords)
-                }
-
-            _uiState.value =
-                uiState.copy(
-                    keywords =
-                    uiState.keywords.copy(
-                        categories = updatedCategories,
-                        currentSelectedKeywords = uiState.keywords.previousSelectedKeywords,
-                    ),
-                )
+            _uiState.value = uiState.copy(
+                keywordsModel = uiState.keywordsModel.copy(
+                    currentSelectedKeywords = uiState.novelRatingModel.userKeywords,
+                ),
+            )
         }
     }
 }
