@@ -4,9 +4,9 @@ import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.ui.mapper.toUi
 
 data class NovelInfoUiModel(
-    val novelDescription: String,
-    val attractivePoints: List<String>,
-    val unifiedReviewCount: UnifiedReviewCountModel,
+    val novelDescription: String = "",
+    val attractivePoints: List<String> = emptyList(),
+    val unifiedReviewCount: UnifiedReviewCountModel = UnifiedReviewCountModel(),
 )
 
 data class PlatformsModel(
@@ -33,9 +33,9 @@ data class KeywordModel(
 )
 
 data class UnifiedReviewCountModel(
-    val watchingCount: ReviewCountModel,
-    val watchedCount: ReviewCountModel,
-    val quitCount: ReviewCountModel,
+    val watchingCount: ReviewCountModel = ReviewCountModel(ReadStatus.WATCHING, 0),
+    val watchedCount: ReviewCountModel = ReviewCountModel(ReadStatus.WATCHED, 0),
+    val quitCount: ReviewCountModel = ReviewCountModel(ReadStatus.QUIT, 0),
 )
 
 data class ReviewCountModel(
