@@ -263,9 +263,9 @@
                             <View
                                 android:id="@+id/view_novel_info_read_status_watching"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="80dp"
                                 android:layout_gravity="bottom"
-                                tools:background="@color/primary_100_6A5DFD"
+                                android:background="@color/primary_100_6A5DFD"
                                 tools:layout_height="100dp" />
                         </androidx.cardview.widget.CardView>
 
@@ -311,9 +311,9 @@
                             <View
                                 android:id="@+id/view_novel_info_read_status_watched"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="100dp"
                                 android:layout_gravity="bottom"
-                                tools:background="@color/gray_70_DFDFE3"
+                                android:background="@color/gray_70_DFDFE3"
                                 tools:layout_height="8dp" />
                         </androidx.cardview.widget.CardView>
 
@@ -358,9 +358,9 @@
                             <View
                                 android:id="@+id/view_novel_info_read_status_quit"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="100dp"
                                 android:layout_gravity="bottom"
-                                tools:background="@color/gray_70_DFDFE3"
+                                android:background="@color/gray_70_DFDFE3"
                                 tools:layout_height="77dp" />
                         </androidx.cardview.widget.CardView>
 

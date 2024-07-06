@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelInfo.model
 
+import android.util.Log
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.ui.mapper.toUi
 
@@ -39,12 +40,30 @@ data class UnifiedReviewCountModel(
     val watchingCount: ReviewCountModel = ReviewCountModel(ReadStatus.WATCHING, 0),
     val watchedCount: ReviewCountModel = ReviewCountModel(ReadStatus.WATCHED, 0),
     val quitCount: ReviewCountModel = ReviewCountModel(ReadStatus.QUIT, 0),
-)
+) {
+    fun formattedUnifiedReviewCount(viewHeight: Int): UnifiedReviewCountModel {
+        val watchingGraphHeight = formattedHeight(viewHeight, watchingCount.count)
+        val watchedGraphHeight = formattedHeight(viewHeight, watchedCount.count)
+        val quitGraphHeight = formattedHeight(viewHeight, quitCount.count)
+        return UnifiedReviewCountModel(
+            watchingCount = watchingCount.copy(graphHeight = watchingGraphHeight),
+            watchedCount = watchedCount.copy(graphHeight = watchedGraphHeight),
+            quitCount = quitCount.copy(graphHeight = quitGraphHeight),
+        )
+    }
+
+    private fun formattedHeight(viewHeight: Int, count: Int): Int {
+        val maxCount = maxOf(watchingCount.count, watchedCount.count, quitCount.count)
+        if (maxCount == 0) return 0
+        return viewHeight * count / maxCount
+    }
+}
 
 data class ReviewCountModel(
     val readStatus: ReadStatus,
     val count: Int,
     val isVisible: Boolean = count > 0,
+    val graphHeight: Int = 0,
 )
 
 data class ExpandTextUiModel(

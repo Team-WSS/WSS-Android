@@ -11,11 +11,12 @@ import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
+import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
-    private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
+    private val viewModel by viewModels<NovelInfoViewModel>()
 
     override fun onViewCreated(
         view: View,
@@ -24,12 +25,12 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupObserver()
-        novelInfoViewModel.updateNovelInfo(1)
+        viewModel.updateNovelInfo(1)
     }
 
     private fun bindViewModel() {
         binding.navigateToReadNovel = ::navigateToReadNovel
-        binding.novelInfoViewModel = novelInfoViewModel
+        binding.novelInfoViewModel = viewModel
         binding.lifecycleOwner = this
     }
 
@@ -39,10 +40,12 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun setupObserver() {
-        novelInfoViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             setupKeywordChip(uiState.keywords)
             updateExpandTextToggle(uiState.expandTextModel)
             updateExpandTextToggleVisibility(uiState.expandTextModel)
+            updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
+            updateGraphUi(uiState.novelInfoModel.unifiedReviewCount)
         }
     }
 
@@ -78,8 +81,25 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         bodyTextView.post {
             val lineCount = bodyTextView.layout.lineCount
             val ellipsisCount = bodyTextView.layout.getEllipsisCount(lineCount - 1)
-            novelInfoViewModel.updateExpandTextToggleVisibility(lineCount, ellipsisCount)
+            viewModel.updateExpandTextToggleVisibility(lineCount, ellipsisCount)
         }
+    }
+
+    private fun updateGraphHeightValue(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        if (unifiedReviewCountModel.watchingCount.graphHeight != 0) return
+        val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
+        viewModel.updateGraphHeight(graphHeight)
+    }
+
+    private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        updateGraphHeight(binding.viewNovelInfoReadStatusWatching, unifiedReviewCountModel.watchingCount.graphHeight)
+        updateGraphHeight(binding.viewNovelInfoReadStatusWatched, unifiedReviewCountModel.watchedCount.graphHeight)
+        updateGraphHeight(binding.viewNovelInfoReadStatusQuit, unifiedReviewCountModel.quitCount.graphHeight)
+    }
+
+    private fun updateGraphHeight(view: View, height: Int) {
+        view.layoutParams.height = height
+        view.requestLayout()
     }
 
     override fun onResume() {

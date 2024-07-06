@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.novelInfo
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +38,16 @@ class NovelInfoViewModel @Inject constructor(
                     error = true,
                 )
             }
+        }
+    }
+
+    fun updateGraphHeight(viewHeight: Int) {
+        _uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                novelInfoModel = uiState.novelInfoModel.copy(
+                    unifiedReviewCount = uiState.novelInfoModel.unifiedReviewCount.formattedUnifiedReviewCount(viewHeight)
+                )
+            )
         }
     }
 
