@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.novelInfo.model
 
-import android.util.Log
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.ui.mapper.toUi
 
