@@ -15,6 +15,7 @@ class NovelRatingKeywordViewHolder(
         isClicked: Boolean,
     ) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(category: NovelRatingKeywordCategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
