@@ -27,7 +27,7 @@ class NovelRatingKeywordDialog :
         setupDialogBehavior()
         setupRecyclerView()
         setupObserver()
-        setupSearchEditTextListener()
+        onSearchEditorAction()
     }
 
     private fun bindViewModel() {
@@ -108,7 +108,7 @@ class NovelRatingKeywordDialog :
         }
     }
 
-    private fun setupSearchEditTextListener() {
+    private fun onSearchEditorAction() {
         binding.etRatingKeywordSearch.setOnEditorActionListener { _, _, _ ->
             performSearch(binding.etRatingKeywordSearch.text.toString())
             true
