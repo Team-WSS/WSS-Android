@@ -26,7 +26,7 @@ class NovelRatingKeywordDialog :
         bindViewModel()
         setupDialogBehavior()
         setupRecyclerView()
-        observeUiState()
+        setupObserver()
         setupSearchEditTextListener()
     }
 
@@ -77,7 +77,7 @@ class NovelRatingKeywordDialog :
         }
     }
 
-    private fun observeUiState() {
+    private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             setupCurrentSelectedChips(uiState.keywordsModel.currentSelectedKeywords)
             novelRatingKeywordAdapter.submitList(uiState.keywordsModel.categories)
