@@ -10,7 +10,9 @@ import com.teamwss.websoso.data.remote.response.NovelRatingResponseDto
 import javax.inject.Inject
 
 class FakeNovelRatingRepository @Inject constructor() {
-    suspend fun fetchNovelRating(userNovelId: Long): NovelRatingEntity = dummyNovelRating.toData()
+    suspend fun fetchNovelRating(userNovelId: Long): NovelRatingEntity {
+        return dummyNovelRating.toData()
+    }
 
     suspend fun fetchNovelRatingKeywordCategories(keyword: String): List<NovelRatingKeywordCategoryEntity> {
         return if (keyword == "영웅") {
