@@ -14,8 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DetailExploreDialog :
     BindingBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
-    private lateinit var detailExploreInfoFragment: DetailExploreInfoFragment
-    private lateinit var detailExploreKeywordFragment: DetailExploreKeywordFragment
+    private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
+    private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,9 +36,6 @@ class DetailExploreDialog :
     }
 
     private fun initDetailExploreFragment() {
-        detailExploreInfoFragment = DetailExploreInfoFragment()
-        detailExploreKeywordFragment = DetailExploreKeywordFragment()
-
         childFragmentManager.beginTransaction()
             .add(R.id.fcv_detail_explore, detailExploreInfoFragment)
             .add(R.id.fcv_detail_explore, detailExploreKeywordFragment)
@@ -47,7 +44,6 @@ class DetailExploreDialog :
     }
 
     private fun replaceDetailExploreFragment() {
-        
         binding.tvDetailExploreInfoButton.setOnClickListener {
             childFragmentManager.beginTransaction()
                 .hide(detailExploreKeywordFragment)
