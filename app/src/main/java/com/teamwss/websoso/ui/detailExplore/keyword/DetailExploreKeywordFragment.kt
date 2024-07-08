@@ -42,9 +42,8 @@ class DetailExploreKeywordFragment :
     }
 
     private fun setupObserver() {
-
         detailExploreKeywordViewModel.searchWord.observe(viewLifecycleOwner) {
-            detailExploreKeywordViewModel.validateSearchWordClearButton()
+            detailExploreKeywordViewModel.updateSearchCancelButtonVisibility()
         }
     }
 }

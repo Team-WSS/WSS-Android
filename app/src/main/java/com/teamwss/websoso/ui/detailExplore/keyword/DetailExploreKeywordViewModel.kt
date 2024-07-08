@@ -14,7 +14,7 @@ class DetailExploreKeywordViewModel @Inject constructor() : ViewModel() {
     private val _isSearchCancelButtonVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSearchCancelButtonVisibility: LiveData<Boolean> get() = _isSearchCancelButtonVisibility
 
-    fun validateSearchWordClearButton() {
+    fun updateSearchCancelButtonVisibility() {
         _isSearchCancelButtonVisibility.value = _searchWord.value.isNullOrEmpty().not()
     }
 
