@@ -28,12 +28,12 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun bindViewModel() {
-        binding.navigateToReadNovel = ::openReadNovelWebView
+        binding.navigateToReadNovel = ::navigateToWebView
         binding.novelInfoViewModel = novelInfoViewModel
         binding.lifecycleOwner = this
     }
 
-    private fun openReadNovelWebView(url: String) {
+    private fun navigateToWebView(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
