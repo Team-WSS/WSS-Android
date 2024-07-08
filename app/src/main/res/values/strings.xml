@@ -36,7 +36,7 @@
     <string name="detail_explore_info_status">연재상태</string>
     <string name="detail_explore_info_rating">별점</string>
     <string name="detail_explore_info_status_in_series">연재중</string>
-    <string name="detail_explore_info_status_complete">완결</string>
+    <string name="detail_explore_info_status_complete">완결작</string>
     <string name="detail_explore_info_rating_lowest">%1$.1f이상</string>
     <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
     <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
