@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/sv_detail_explore_keyword_search"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/bg_novel_rating_keyword_search_selector"
+            android:hint="@string/detail_explore_search_hint"
+            android:paddingStart="16dp"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_200_AEADB3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlSymmetry" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:padding="8dp"
+            android:src="@drawable/ic_novel_rating_search_cancel"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/sv_detail_explore_keyword_search"
+            app:layout_constraintEnd_toStartOf="@id/iv_detail_explore_keyword_search_button"
+            app:layout_constraintTop_toTopOf="@id/sv_detail_explore_keyword_search" />
+
+        <ImageView
+            android:id="@+id/iv_detail_explore_keyword_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/gray_300_52515F"
+            android:contentDescription="@null"
+            android:padding="4dp"
+            android:src="@drawable/ic_novel_rating_search"
+            app:layout_constraintBottom_toBottomOf="@id/sv_detail_explore_keyword_search"
+            app:layout_constraintEnd_toEndOf="@id/sv_detail_explore_keyword_search"
+            app:layout_constraintTop_toTopOf="@id/sv_detail_explore_keyword_search" />
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_rating_keyword_selected_keyword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="-6dp"
+            android:paddingHorizontal="20dp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@id/rv_detail_explore_keyword_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_detail_explore_keyword_search"
+            tools:visibility="gone">
+
+            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+                android:id="@+id/wcg_detail_explore_keyword_selected_keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacing="6dp"
+                app:singleLine="true" />
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/view_detail_explore_keyword"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rv_detail_explore_keyword_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_detail_explore_keyword_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="104dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_min="384dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_rating_keyword_selected_keyword" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_explore_keyword_reset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:background="@color/gray_50_F4F5F8"
+            android:paddingVertical="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_detail_explore_info_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_detail_explore_reset"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="36dp"
+                android:text="@string/detail_explore_reset"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/gray_300_52515F"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_explore_info_reset"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_detail_explore_info_reset"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_explore_info_reset" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_detail_explore_search_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/primary_100_6A5DFD"
+            android:gravity="center"
+            android:text="@string/detail_explore_search_novel"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/cl_detail_explore_keyword_reset_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cl_detail_explore_keyword_reset_button"
+            app:layout_constraintTop_toTopOf="@id/cl_detail_explore_keyword_reset_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
