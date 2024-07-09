@@ -14,8 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private var _binding: FragmentMyPageBinding? = null
-    private val myPageBinding get() = _binding ?: error("error: binding is null")
-    private val viewModel: MyPageViewModel by viewModels()
+    private val myPageBinding get() = _binding ?: error("error: myPageBinding is null")
+    private val myPageViewModel: MyPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,20 +23,20 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        return binding.root
+        return myPageBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        myPageBinding.viewModel = myPageViewModel
         setupViewPagerAndTabs()
     }
 
     private fun setupViewPagerAndTabs() {
         val pagerAdapter = MyViewPagerAdapter(childFragmentManager, lifecycle)
-        binding.vpMyPage.adapter = pagerAdapter
+        myPageBinding.vpMyPage.adapter = pagerAdapter
 
-        TabLayoutMediator(binding.tbMyPage, binding.vpMyPage) { tab, position ->
+        TabLayoutMediator(myPageBinding.tbMyPage, myPageBinding.vpMyPage) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.my_page_library)
                 1 -> tab.text = getString(R.string.my_page_feed)
