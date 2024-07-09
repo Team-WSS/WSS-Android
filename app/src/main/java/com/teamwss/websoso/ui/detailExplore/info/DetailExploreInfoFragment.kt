@@ -62,10 +62,13 @@ class DetailExploreInfoFragment :
         )
 
         seriesStatusChips.forEach { chip ->
-            setupChipCheckListener(chip) {
-                detailExploreViewModel.updateSelectedSeriesStatus(
-                    if (it) chip.text.toString() else null
-                )
+            setupChipCheckListener(chip) { isChecked ->
+                if (isChecked) {
+                    seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
+                    detailExploreViewModel.updateSelectedSeriesStatus(chip.text.toString())
+                } else {
+                    detailExploreViewModel.updateSelectedSeriesStatus(null)
+                }
             }
         }
     }
@@ -82,9 +85,9 @@ class DetailExploreInfoFragment :
             setupChipCheckListener(chip) { isChecked ->
                 if (isChecked) {
                     ratingChips.filter { it != chip }.forEach { it.isChecked = false }
-                    val ratingEnum =
-                        Rating.values().find { chip.text.toString().contains(it.value.toString()) }
-                    detailExploreViewModel.updateSelectedRating(ratingEnum?.value)
+                    val ratingValue =
+                        Rating.entries.find { chip.text.toString().contains(it.value.toString()) }
+                    detailExploreViewModel.updateSelectedRating(ratingValue?.value)
                 } else {
                     detailExploreViewModel.updateSelectedRating(null)
                 }
@@ -99,7 +102,6 @@ class DetailExploreInfoFragment :
     }
 
     private fun setupObserver() {
-
         detailExploreViewModel.selectedStatus.observe(viewLifecycleOwner) { selectedStatus ->
             seriesStatusChips.forEach { chip ->
                 chip.isChecked = selectedStatus == chip.text.toString()
@@ -108,9 +110,9 @@ class DetailExploreInfoFragment :
 
         detailExploreViewModel.selectedRating.observe(viewLifecycleOwner) { selectedRating ->
             ratingChips.forEach { chip ->
-                val ratingEnum =
-                    Rating.values().find { chip.text.toString().contains(it.value.toString()) }
-                chip.isChecked = selectedRating == ratingEnum?.value
+                val ratingValue =
+                    Rating.entries.find { chip.text.toString().contains(it.value.toString()) }
+                chip.isChecked = selectedRating == ratingValue?.value
             }
         }
     }
