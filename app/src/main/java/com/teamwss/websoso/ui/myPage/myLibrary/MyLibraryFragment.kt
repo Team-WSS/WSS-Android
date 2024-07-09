@@ -4,21 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.AttractivePointData
 import com.teamwss.websoso.data.model.PreferredGenreEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
+import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import dagger.hilt.android.AndroidEntryPoint
 
-class MyLibraryFragment : Fragment() {
+@AndroidEntryPoint
+class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
     private var _binding: FragmentMyLibraryBinding? = null
-    private val binding get() = _binding!!
+    private val myLibraryBinding get() = _binding ?: error("error: myLibraryBinding is null")
     private val libraryViewModel: MyLibraryViewModel by viewModels()
 
     override fun onCreateView(
@@ -27,14 +28,14 @@ class MyLibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyLibraryBinding.inflate(inflater, container, false)
-        return binding.root
+        return myLibraryBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initializeViews()
-        observeViewModel()
+        setUpObserveViewModel()
     }
 
     private fun initializeViews() {
@@ -44,11 +45,11 @@ class MyLibraryFragment : Fragment() {
 
     private fun initializeAttractivePoints() {
         libraryViewModel.attractivePoints.observe(viewLifecycleOwner) { attractivePoints ->
-            binding.cgMyLibraryAttractivePoints.removeAllViews()
+            myLibraryBinding.cgMyLibraryAttractivePoints.removeAllViews()
 
             for (data in attractivePoints) {
                 val chip = createChip(data)
-                binding.cgMyLibraryAttractivePoints.addView(chip)
+                myLibraryBinding.cgMyLibraryAttractivePoints.addView(chip)
             }
         }
     }
@@ -60,23 +61,21 @@ class MyLibraryFragment : Fragment() {
         chip.isChecked = false
 
         chip.setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
-
         chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
-
         chip.setTextAppearance(R.style.body2)
 
         return chip
     }
 
     private fun onGenrePathToggled() {
-        binding.ivMyLibraryPreferredGenrePath.setOnClickListener {
+        myLibraryBinding.ivMyLibraryPreferredGenrePath.setOnClickListener {
             libraryViewModel.toggleGenreListVisibility()
         }
     }
 
-    private fun observeViewModel() {
+    private fun setUpObserveViewModel() {
         libraryViewModel.genres.observe(viewLifecycleOwner) { genres ->
-            updateGenreBottomList(genres)
+            updateRestPreferredGenreList(genres)
         }
 
         libraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
@@ -86,47 +85,35 @@ class MyLibraryFragment : Fragment() {
         libraryViewModel.attractivePoints.observe(viewLifecycleOwner) { attractivePoints ->
             updateAttractivePoints(attractivePoints)
         }
-    }
 
-    private fun updateGenreBottomList(genres: List<PreferredGenreEntity>) {
-        val adapter =
-            RestPreferredGenreAdapter(requireContext(), R.layout.item_rest_preferred_genre, genres)
-        binding.listMyLibraryRestPreferredGenre.adapter = adapter
-        adjustListViewHeight(binding.listMyLibraryRestPreferredGenre)
-    }
-
-    private fun adjustListViewHeight(listView: ListView) {
-        val listAdapter = listView.adapter ?: return
-        var totalHeight = 0
-
-        for (i in 0 until listAdapter.count) {
-            val listItem = listAdapter.getView(i, null, listView)
-            listItem.measure(
-                View.MeasureSpec.makeMeasureSpec(listView.width, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            )
-            totalHeight += listItem.measuredHeight
+        libraryViewModel.genreCount.observe(viewLifecycleOwner) { genreCountString ->
+            updateGenreCount(genreCountString)
         }
+    }
 
-        val params = listView.layoutParams
-        params.height = totalHeight + (listView.dividerHeight * (listAdapter.count - 1))
-        listView.layoutParams = params
-        listView.requestLayout()
+    private fun updateRestPreferredGenreList(genres: List<PreferredGenreEntity>) {
+        val adapter = RestPreferredGenreAdapter(genres)
+        myLibraryBinding.listMyLibraryRestPreferredGenre.adapter = adapter
     }
 
     private fun updateRestPreferredGenreVisibility(isVisible: Boolean) {
-        binding.listMyLibraryRestPreferredGenre.isVisible = isVisible
-        binding.ivMyLibraryPreferredGenrePath.setImageResource(
+        myLibraryBinding.listMyLibraryRestPreferredGenre.isVisible = isVisible
+        myLibraryBinding.ivMyLibraryPreferredGenrePath.setImageResource(
             if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
         )
     }
 
     private fun updateAttractivePoints(attractivePoints: List<AttractivePointData>) {
-        binding.cgMyLibraryAttractivePoints.removeAllViews()
+        myLibraryBinding.cgMyLibraryAttractivePoints.removeAllViews()
         attractivePoints.forEach { data ->
             val attractiveChip = createChip(data)
-            binding.cgMyLibraryAttractivePoints.addView(attractiveChip)
+            myLibraryBinding.cgMyLibraryAttractivePoints.addView(attractiveChip)
         }
+    }
+
+    private fun updateGenreCount(genreCount: String) {
+        val adapter = myLibraryBinding.listMyLibraryRestPreferredGenre.adapter as? RestPreferredGenreAdapter
+        adapter?.updateGenreCount(genreCount)
     }
 
     override fun onDestroyView() {
