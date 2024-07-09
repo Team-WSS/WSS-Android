@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreClickListener" />
+
+        <variable
+            name="detailExploreKeywordViewModel"
+            type="com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_explore_keyword_search_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/bg_detail_explore_keyword_gray50_radius_14dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/et_detail_explore_keyword_search_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autofillHints="@null"
+                android:background="@null"
+                android:cursorVisible="true"
+                android:hint="@string/detail_explore_search_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:text="@={detailExploreKeywordViewModel.searchWord}"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_detail_explore_keyword_cancel_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_detail_explore_keyword_cancel_button"
+                isVisible="@{detailExploreKeywordViewModel.isSearchCancelButtonVisibility}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:onClick="@{() -> onClick.onSearchCancelButtonClick()}"
+                android:padding="8dp"
+                android:src="@drawable/btn_explore_cancel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_detail_explore_keyword_search_button"
+                app:layout_constraintStart_toEndOf="@id/et_detail_explore_keyword_search_content"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_detail_explore_keyword_search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:contentDescription="@null"
+                android:onClick="@{() -> onClick.onSearchButtonClick()}"
+                android:padding="4dp"
+                android:src="@drawable/btn_explore_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_rating_keyword_selected_keyword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="-6dp"
+            android:paddingHorizontal="20dp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@id/rv_detail_explore_keyword_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_keyword_search_bar"
+            tools:visibility="gone">
+
+            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+                android:id="@+id/wcg_detail_explore_keyword_selected_keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacing="6dp"
+                app:singleLine="true" />
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/view_detail_explore_keyword"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rv_detail_explore_keyword_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_detail_explore_keyword_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="104dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_min="384dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_rating_keyword_selected_keyword" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_explore_keyword_reset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:background="@color/gray_50_F4F5F8"
+            android:paddingVertical="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_detail_explore_info_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_detail_explore_reset"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="36dp"
+                android:text="@string/detail_explore_reset"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/gray_300_52515F"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_explore_info_reset"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_detail_explore_info_reset"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_explore_info_reset" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_detail_explore_search_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/primary_100_6A5DFD"
+            android:gravity="center"
+            android:text="@string/detail_explore_search_novel"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/cl_detail_explore_keyword_reset_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cl_detail_explore_keyword_reset_button"
+            app:layout_constraintTop_toTopOf="@id/cl_detail_explore_keyword_reset_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

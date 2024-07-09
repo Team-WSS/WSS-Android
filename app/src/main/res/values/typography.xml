@@ -68,7 +68,7 @@
     </style>
 
     <style name="label1">
-        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">13dp</item>
         <item name="lineHeight">19dp</item>
     </style>
