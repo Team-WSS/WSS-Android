@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.myPage.myLibrary
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.AttractivePointData
 import com.teamwss.websoso.data.model.PreferredGenreEntity
@@ -44,6 +45,10 @@ class MyLibraryViewModel : ViewModel() {
         )
     }
     val attractivePoints: LiveData<List<AttractivePointData>> = _attractivePoints
+
+    val genreCount: LiveData<String> = _genres.map { genres ->
+        genres.sumOf { it.genreCount }.toString()
+    }
 
     fun toggleGenreListVisibility() {
         _isGenreListVisible.value = _isGenreListVisible.value?.not()
