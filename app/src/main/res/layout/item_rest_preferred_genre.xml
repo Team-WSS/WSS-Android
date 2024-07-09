@@ -5,7 +5,11 @@
     <data>
         <variable
             name="restPreferredGenre"
-            type="com.teamwss.websoso.data.model.PreferredGenreEntity" />
+            type="com.teamwss.websoso.data.model.PreferredGenreEntity"/>
+
+        <variable
+            name="myLibraryViewModel"
+            type="com.teamwss.websoso.ui.myPage.myLibrary.MyLibraryViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +41,7 @@
             android:id="@+id/tv_preferred_genre_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{String.format(@string/my_library_genre_count, restPreferredGenre.genreCount)}'
+            android:text='@{String.format(@string/my_library_genre_count,myLibraryViewModel.genreCount)}'
             android:textAppearance="@style/body3"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="parent"
