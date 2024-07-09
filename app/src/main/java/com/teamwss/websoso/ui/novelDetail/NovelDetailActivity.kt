@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.novelDetail
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
