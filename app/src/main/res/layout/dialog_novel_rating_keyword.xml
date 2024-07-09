@@ -43,26 +43,37 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/sv_rating_keyword_search"
+        <View
+            android:id="@+id/view_rating_keyword_search_background"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="26dp"
             android:background="@drawable/bg_novel_rating_keyword_search_selector"
-            android:focusedByDefault="false"
-            android:paddingStart="0dp"
-            android:paddingEnd="36dp"
-            android:textAppearance="@style/label1"
-            android:textColor="@color/gray_200_AEADB3"
-            app:closeIcon="@drawable/ic_novel_rating_search_cancel"
-            app:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_rating_keyword_title"
-            app:queryBackground="@null"
-            app:queryHint="@string/novel_rating_keyword_search_hint"
-            app:searchIcon="@null" />
+            app:layout_constraintTop_toBottomOf="@id/tv_rating_keyword_title" />
+
+        <EditText
+            android:id="@+id/et_rating_keyword_search"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:autofillHints="@string/novel_rating_keyword_search_hint"
+            android:paddingStart="16dp"
+            android:paddingEnd="90dp"
+            android:textColorHint="@color/gray_200_AEADB3"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:inputType="text"
+            android:background="@null"
+            android:textColor="@color/black"
+            android:textAppearance="@style/label1"
+            app:layout_constraintTop_toTopOf="@id/view_rating_keyword_search_background"
+            app:layout_constraintBottom_toBottomOf="@id/view_rating_keyword_search_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:hint="@string/novel_rating_keyword_search_hint"/>
 
         <ImageView
             android:layout_width="24dp"
@@ -70,9 +81,9 @@
             android:layout_marginEnd="14dp"
             android:backgroundTint="@color/gray_300_52515F"
             android:src="@drawable/ic_novel_rating_search"
-            app:layout_constraintBottom_toBottomOf="@id/sv_rating_keyword_search"
-            app:layout_constraintEnd_toEndOf="@id/sv_rating_keyword_search"
-            app:layout_constraintTop_toTopOf="@id/sv_rating_keyword_search" />
+            app:layout_constraintBottom_toBottomOf="@id/view_rating_keyword_search_background"
+            app:layout_constraintEnd_toEndOf="@id/view_rating_keyword_search_background"
+            app:layout_constraintTop_toTopOf="@id/view_rating_keyword_search_background" />
 
         <HorizontalScrollView
             android:id="@+id/hsv_rating_keyword_selected_keyword"
@@ -82,11 +93,11 @@
             android:layout_marginBottom="-6dp"
             android:paddingHorizontal="20dp"
             android:scrollbars="none"
-            app:isVisible="@{viewModel.uiState.keywords.currentSelectedKeywords.size > 0}"
+            app:isVisible="@{!viewModel.uiState.keywordsModel.currentSelectedKeywordsEmpty}"
             app:layout_constraintBottom_toTopOf="@id/rv_rating_keyword_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sv_rating_keyword_search"
+            app:layout_constraintTop_toBottomOf="@id/view_rating_keyword_search_background"
             tools:visibility="gone">
 
             <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
@@ -151,7 +162,7 @@
             android:background="@color/primary_100_6A5DFD"
             android:gravity="center"
             android:onClick="@{() -> onClick.onSaveClick()}"
-            android:text="@{@string/novel_rating_keyword_enroll(viewModel.uiState.keywords.currentSelectedKeywords.size)}"
+            android:text="@{@string/novel_rating_keyword_enroll(viewModel.uiState.keywordsModel.currentSelectedKeywords.size)}"
             android:textAppearance="@style/title2"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
