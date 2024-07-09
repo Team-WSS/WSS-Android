@@ -12,7 +12,7 @@ import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.util.toFloatScaledByPx
-import com.teamwss.websoso.util.toIntScaledByDp
+import com.teamwss.websoso.util.toIntScaledByPx
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -78,8 +78,8 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             this.elevation = 14f.toFloatScaledByPx()
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.toIntScaledByDp(),
-                POPUP_MARGIN_TOP.toIntScaledByDp(),
+                POPUP_MARGIN_END.toIntScaledByPx(),
+                POPUP_MARGIN_TOP.toIntScaledByPx(),
                 Gravity.END,
             )
         }
@@ -89,7 +89,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
 
-        private const val POPUP_MARGIN_END = -180
+        private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
     }
 }
