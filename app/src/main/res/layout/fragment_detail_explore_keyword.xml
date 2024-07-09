@@ -113,7 +113,7 @@
             android:id="@+id/cl_detail_explore_keyword_list"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/cl_detail_explore_keyword_reset_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_min="384dp"
@@ -179,9 +179,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_explore_keyword_not_exist_result"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/cl_detail_explore_keyword_reset_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_min="384dp"
