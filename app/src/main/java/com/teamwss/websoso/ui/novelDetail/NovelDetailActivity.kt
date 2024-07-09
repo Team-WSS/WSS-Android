@@ -11,8 +11,8 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
-import com.teamwss.websoso.util.toPxFloat
-import com.teamwss.websoso.util.toPxInt
+import com.teamwss.websoso.util.toFloatScaledByPx
+import com.teamwss.websoso.util.toIntScaledByDp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,11 +66,11 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             true,
         ).apply {
             popupBinding.userNovelId = userNovelId
-            this.elevation = 14f.toPxFloat()
+            this.elevation = 14f.toFloatScaledByPx()
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.toPxInt(),
-                POPUP_MARGIN_TOP.toPxInt(),
+                POPUP_MARGIN_END.toIntScaledByDp(),
+                POPUP_MARGIN_TOP.toIntScaledByDp(),
                 Gravity.END,
             )
         }
