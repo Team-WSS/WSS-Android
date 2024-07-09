@@ -18,12 +18,12 @@ class FeedViewHolder(
 
     fun bind(feed: FeedModel) {
         binding.feed = feed
-        binding.clFeedThumbUp.isSelected = feed.isThumbUpSelected
+        binding.clFeedLike.isSelected = feed.isLiked
     }
 
     companion object {
 
-        fun from(parent: ViewGroup, onClick: FeedItemClickListener): FeedViewHolder =
+        fun of(parent: ViewGroup, onClick: FeedItemClickListener): FeedViewHolder =
             FeedViewHolder(
                 ItemFeedBinding.inflate(
                     LayoutInflater.from(parent.context),

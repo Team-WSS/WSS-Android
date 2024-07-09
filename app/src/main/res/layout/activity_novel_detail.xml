@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageUrl="@{novelDetailViewModel.dummyNovelInfo.novelImage}" />
+            app:loadImageUrl="@{novelDetailViewModel.novelDetail.novel.novelImage}" />
 
         <View
             android:id="@+id/view_novel_detail_cover_background"
@@ -85,7 +85,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:loadImageUrl="@{novelDetailViewModel.dummyNovelInfo.novelImage}" />
+                            app:loadImageUrl="@{novelDetailViewModel.novelDetail.novel.novelImage}" />
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover_genre"
@@ -94,7 +94,7 @@
                             android:scaleType="fitXY"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
                             app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
-                            app:loadImageUrl="@{novelDetailViewModel.dummyNovelInfo.novelGenreImage}" />
+                            app:loadImageUrl="@{novelDetailViewModel.novelDetail.novel.novelGenreImage}" />
 
                         <TextView
                             android:id="@+id/tv_novel_detail_title"
@@ -102,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:maxLines="4"
-                            android:text="@{novelDetailViewModel.dummyNovelInfo.novelTitle}"
+                            android:text="@{novelDetailViewModel.novelDetail.novel.novelTitle}"
                             android:textAlignment="center"
                             android:textAppearance="@style/headline1"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -115,6 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
+                            android:text="@{novelDetailViewModel.novelDetail.novel.formattedNovelGenres}"
                             android:textAppearance="@style/body2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -141,6 +142,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
+                                android:text="@{String.valueOf(novelDetailViewModel.novelDetail.userRating.interestCount)}"
                                 android:textAppearance="@style/body3"
                                 android:textColor="@color/gray_300_52515F"
                                 tools:text="0" />
@@ -156,6 +158,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
+                                android:text="@{novelDetailViewModel.novelDetail.userRating.formattedNovelRating}"
                                 android:textAppearance="@style/body3"
                                 android:textColor="@color/gray_300_52515F"
                                 tools:text="0.0 (0)" />
@@ -171,6 +174,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
+                                android:text="@{String.valueOf(novelDetailViewModel.novelDetail.userRating.feedCount)}"
                                 android:textAppearance="@style/body3"
                                 android:textColor="@color/gray_300_52515F"
                                 tools:text="0" />
@@ -196,7 +200,7 @@
                             android:numStars="5"
                             android:progressBackgroundTint="@color/gray_70_DFDFE3"
                             android:progressTint="@color/secondary_100_FF675D"
-                            android:rating="5"
+                            android:rating="@{novelDetailViewModel.novelDetail.userNovel.userNovelRating}"
                             android:secondaryProgressTint="@color/secondary_100_FF675D"
                             android:stepSize="0.5"
                             app:layout_constraintBottom_toBottomOf="@id/view_novel_detail_rating"
@@ -301,7 +305,7 @@
                                 android:layout_width="38dp"
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="12dp"
-                                android:onClick="@{() -> showPopupWindow.invoke(novelDetailViewModel.dummyNovelInfo.userNovelId)}"
+                                android:onClick="@{() -> showPopupWindow.invoke(novelDetailViewModel.novelDetail.userNovel.userNovelId)}"
                                 android:padding="10dp"
                                 android:src="@drawable/ic_novel_detail_menu"
                                 app:layout_constraintBottom_toBottomOf="parent"

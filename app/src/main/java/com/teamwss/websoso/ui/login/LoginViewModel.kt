@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.R
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 class LoginViewModel : ViewModel() {
     private val _images = MutableLiveData<List<Int>>()

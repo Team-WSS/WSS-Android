@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelDetail
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
@@ -25,11 +26,13 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.showPopupWindow = ::showPopupWindow
         bindViewModel()
         setupPopupBinding()
         setupViewPager()
         setupTabLayout()
+        setupObserver()
+        binding.showPopupWindow = ::showPopupWindow
+        novelDetailViewModel.updateNovelDetail(1)
     }
 
     private fun bindViewModel() {
@@ -49,13 +52,21 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupTabLayout() {
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
-            tab.text =
-                when (position) {
-                    INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
-                    FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
-                    else -> throw IllegalArgumentException()
-                }
+            tab.text = when (position) {
+                INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
+                FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
+                else -> throw IllegalArgumentException()
+            }
         }.attach()
+    }
+
+    private fun setupObserver() {
+        novelDetailViewModel.loading.observe(this) {
+            // TODO: Show loading
+        }
+        novelDetailViewModel.error.observe(this) {
+            // TODO: Show error
+        }
     }
 
     private fun showPopupWindow(userNovelId: Int) {
@@ -65,7 +76,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             WindowManager.LayoutParams.WRAP_CONTENT,
             true,
         ).apply {
-            popupBinding.userNovelId = userNovelId
             this.elevation = 14f.toFloatScaledByPx()
             showAsDropDown(
                 binding.ivNovelDetailMenu,

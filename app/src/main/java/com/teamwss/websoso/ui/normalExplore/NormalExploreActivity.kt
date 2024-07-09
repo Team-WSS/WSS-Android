@@ -52,6 +52,10 @@ class NormalExploreActivity :
         override fun onSearchCancelButtonClick() {
             normalExploreViewModel.updateSearchWordEmpty()
         }
+
+        override fun onNovelInquireButtonClick() {
+            // TODO 카카오톡 채널로 연결
+        }
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -61,9 +65,7 @@ class NormalExploreActivity :
         )
     }
 
-    private fun navigateToNovelDetail(
-        novelId: Long,
-    ) {
+    private fun navigateToNovelDetail(novelId: Long) {
         // TODO 작품 정보 뷰로 이동
     }
 
