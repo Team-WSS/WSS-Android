@@ -42,6 +42,11 @@
     <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
     <string name="detail_explore_info_rating_highest">%1$.1f이상</string>
 
+    <!-- 상세 탐색 뷰(키워드) -->
+    <string name="detail_explore_search_hint">키워드를 검색하세요</string>
+    <string name="detail_explore_keyword_search_result">검색결과</string>
+    <string name="detail_explore_keyword_not_exist_result">해당 키워드는\n아직 등록되지 않았어요..</string>
+
     <!-- 작품 상세 -->
     <string name="novel_detail_review">리뷰 남기기</string>
     <string name="novel_detail_interest">관심 있어요</string>
@@ -116,6 +121,5 @@
     <string name="onboarding_second_next">다음으로</string>
     <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
-    <string name="detail_explore_search_hint">키워드를 검색하세요</string>
-
+    <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
 </resources>
