@@ -2,17 +2,17 @@ package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.domain.model.Feed
 import com.teamwss.websoso.ui.feed.model.Category
+import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedModel
-import com.teamwss.websoso.ui.feed.model.FeedUiState.CategoryUiState
 
-fun List<Category>.toPresentation(): List<CategoryUiState> {
-    return map {
-        CategoryUiState(
-            category = it,
-            isSelected = it == Category.ALL,
+fun String.toPresentation(): List<CategoryModel> = split(",")
+    .map {
+        val category: Category = Category.from(it)
+        CategoryModel(
+            category = category,
+            isSelected = category == Category.ALL,
         )
     }
-}
 
 fun Feed.toPresentation(): FeedModel = FeedModel(
     user = FeedModel.UserModel(
