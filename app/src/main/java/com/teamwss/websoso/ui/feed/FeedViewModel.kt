@@ -48,8 +48,8 @@ class FeedViewModel @Inject constructor(
             }.onSuccess { feeds ->
                 if (feeds.category != selectedCategory.title) throw IllegalStateException()
                 // Return result state of error in domain layer later
-                _uiState.value = uiState.value?.let { feedUiState ->
-                    feedUiState.copy(
+                uiState.value?.let { uiState ->
+                    _uiState.value = uiState.copy(
                         loading = false,
                         isLoadable = feeds.isLoadable,
                         feeds = feeds.feeds.map { it.toPresentation() },
