@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.IntegerRes
@@ -63,6 +65,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             fun valueOf(id: Int): FragmentType = values().find { fragmentView ->
                 fragmentView.resId == id
             } ?: throw IllegalArgumentException()
+        }
+    }
+
+    companion object{
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
         }
     }
 }
