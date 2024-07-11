@@ -1,23 +1,26 @@
 package com.teamwss.websoso.ui.feed.model
 
-enum class Category(val title: String) {
-    ALL("전체"),
-    ROMANCE("로맨스"),
-    ROMANCE_FANTASY("로판"),
-    BOYS_LOVE("BL"),
-    FANTASY("판타지"),
-    MODERN_FANTASY("현판"),
-    WUXIA("무협"),
-    DRAMA("드라마"),
-    MYSTERY("미스터리"),
-    LIGHT_NOVEL("라노벨"),
-    ETC("기타"),
+enum class Category(
+    val titleKr: String,
+    val titleEn: String,
+) {
+    ALL("전체", "all"),
+    ROMANCE("로맨스", "romance"),
+    ROMANCE_FANTASY("로판", "romanceFantasy"),
+    BOYS_LOVE("BL", "bl"),
+    FANTASY("판타지", "fantasy"),
+    MODERN_FANTASY("현판", "modernFantasy"),
+    WUXIA("무협", "wuxia"),
+    DRAMA("드라마", "drama"),
+    MYSTERY("미스터리", "mystery"),
+    LIGHT_NOVEL("라노벨", "lightNovel"),
+    ETC("기타", "etc")
     ;
 
     companion object {
 
         fun from(title: String): Category = Category.entries.find { category ->
-            title == category.title
+            title == category.titleKr
         } ?: throw IllegalArgumentException()
     }
 }

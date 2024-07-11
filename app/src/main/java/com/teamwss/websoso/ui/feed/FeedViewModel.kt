@@ -43,6 +43,7 @@ class FeedViewModel @Inject constructor(
                 else -> return@forEachIndexed
             }
         }
+        updateFeeds()
     }
 
     fun updateFeeds() {
@@ -51,9 +52,9 @@ class FeedViewModel @Inject constructor(
                 categories.find { it.isSelected }?.category ?: throw IllegalStateException()
 
             runCatching {
-                getFeedsUseCase(selectedCategory.title)
+                getFeedsUseCase(selectedCategory.titleEn)
             }.onSuccess { feeds ->
-//                if (feeds.category != selectedCategory.title) throw IllegalStateException()
+                if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
                 // Return result state of error in domain layer later
                 feedUiState.value?.let { uiState ->
                     _feedUiState.value = uiState.copy(

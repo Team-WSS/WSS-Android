@@ -23,7 +23,7 @@ class GetFeedsUseCase @Inject constructor(
             size = if (lastFeedId == INITIAL_ID) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
         ).toDomain()
             .also {
-                lastFeedId = it.feeds.last().id
+                if (it.feeds.isNotEmpty()) lastFeedId = it.feeds.last().id
                 previousCategory = selectedCategory
             }
     }
