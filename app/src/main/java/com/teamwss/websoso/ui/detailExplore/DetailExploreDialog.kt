@@ -8,16 +8,20 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoFragment
+import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailExploreDialog :
     BindingBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
+    private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
+    private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupBottomSheet()
+        initDetailExploreFragment()
         replaceDetailExploreFragment()
         onBottomSheetExitButtonClick()
     }
@@ -31,11 +35,28 @@ class DetailExploreDialog :
         }
     }
 
-    private fun replaceDetailExploreFragment() {
-        // TODO 정보/키워드 탭에 따른 fragment 수정
+    private fun initDetailExploreFragment() {
         childFragmentManager.beginTransaction()
-            .replace(R.id.fcv_detail_explore, DetailExploreInfoFragment())
+            .add(R.id.fcv_detail_explore, detailExploreInfoFragment)
+            .add(R.id.fcv_detail_explore, detailExploreKeywordFragment)
+            .hide(detailExploreKeywordFragment)
             .commit()
+    }
+
+    private fun replaceDetailExploreFragment() {
+        binding.tvDetailExploreInfoButton.setOnClickListener {
+            childFragmentManager.beginTransaction()
+                .hide(detailExploreKeywordFragment)
+                .show(detailExploreInfoFragment)
+                .commit()
+        }
+
+        binding.tvDetailExploreKeywordButton.setOnClickListener {
+            childFragmentManager.beginTransaction()
+                .hide(detailExploreInfoFragment)
+                .show(detailExploreKeywordFragment)
+                .commit()
+        }
     }
 
     private fun onBottomSheetExitButtonClick() {
