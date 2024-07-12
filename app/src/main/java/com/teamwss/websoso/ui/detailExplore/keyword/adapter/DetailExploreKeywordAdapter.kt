@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel.CategoryModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
 
 class DetailExploreKeywordAdapter(
-    private val onKeywordClick: (keyword: CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
-) : ListAdapter<CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
+    private val onKeywordClick: (keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
+) : ListAdapter<DetailExploreKeywordModel.CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -32,18 +33,19 @@ class DetailExploreKeywordAdapter(
     }
 
     companion object {
-        val diffUtil =
-            object : DiffUtil.ItemCallback<CategoryModel>() {
+        private val diffUtil =
+            object : DiffUtil.ItemCallback<DetailExploreKeywordModel.CategoryModel>() {
+
                 override fun areItemsTheSame(
-                    oldItem: CategoryModel,
-                    newItem: CategoryModel,
+                    oldItem: DetailExploreKeywordModel.CategoryModel,
+                    newItem: DetailExploreKeywordModel.CategoryModel,
                 ): Boolean {
                     return oldItem.categoryName == newItem.categoryName
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: CategoryModel,
-                    newItem: CategoryModel,
+                    oldItem: DetailExploreKeywordModel.CategoryModel,
+                    newItem: DetailExploreKeywordModel.CategoryModel,
                 ): Boolean {
                     return oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
                 }

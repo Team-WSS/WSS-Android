@@ -5,16 +5,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
+import com.teamwss.websoso.util.toIntScaledByDp
 
 class DetailExploreKeywordViewHolder(
     private val binding: ItemNovelRatingKeywordBinding,
     private val onKeywordClick: (
-        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
+        keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel,
         isClicked: Boolean,
     ) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(category: RatingKeywordModel.CategoryModel) {
+
+    fun bind(category: DetailExploreKeywordModel.CategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
             setupWebsosoChips(category)
@@ -22,7 +24,7 @@ class DetailExploreKeywordViewHolder(
         }
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: RatingKeywordModel.CategoryModel) {
+    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: DetailExploreKeywordModel.CategoryModel) {
         wcgNovelRatingKeyword.removeAllViews()
         category.keywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {
@@ -51,14 +53,9 @@ class DetailExploreKeywordViewHolder(
                     layoutParams.matchConstraintMaxHeight =
                         ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toDp()
+                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByDp()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
-    }
-
-    private fun Int.toDp(): Int {
-        val scale = binding.root.context.resources.displayMetrics.density
-        return (this * scale + 0.5f).toInt()
     }
 }
