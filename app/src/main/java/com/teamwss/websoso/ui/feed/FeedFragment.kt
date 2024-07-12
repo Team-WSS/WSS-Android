@@ -129,11 +129,11 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun observeUiState() {
-        feedViewModel.feedUiState.observe(viewLifecycleOwner) { uiState ->
+        feedViewModel.feedUiState.observe(viewLifecycleOwner) { feedUiState ->
             when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> updateFeeds(uiState)
+                feedUiState.loading -> loading()
+                feedUiState.error -> throw IllegalStateException()
+                !feedUiState.loading -> updateFeeds(feedUiState)
             }
         }
     }
