@@ -40,19 +40,30 @@ object FakeApi {
         feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto {
         delay(500)
+
         val from = feedsRequestDto.lastFeedId.toInt()
         val to = when (feedsRequestDto.lastFeedId + 10 > Fixture.feedsResponseDto.size) {
             true -> Fixture.feedsResponseDto.size
             false -> (feedsRequestDto.lastFeedId + feedsRequestDto.size).toInt()
         }
 
-        return if (to >= Fixture.feedsResponseDto.size) {
-            Fixture.copy(
+        return when {
+            to >= Fixture.feedsResponseDto.size -> Fixture.copy(
                 isLoadable = false,
                 feedsResponseDto = Fixture.feedsResponseDto.subList(from, to),
             )
-        } else Fixture.copy(
-            feedsResponseDto = Fixture.feedsResponseDto.subList(from, to),
-        )
+
+            category != null -> {
+                FeedsResponseDto(
+                    category = category,
+                    isLoadable = false,
+                    feedsResponseDto = emptyList(),
+                )
+            }
+
+            else -> Fixture.copy(
+                feedsResponseDto = Fixture.feedsResponseDto.subList(from, to),
+            )
+        }
     }
 }

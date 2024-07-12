@@ -16,7 +16,7 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
-import com.teamwss.websoso.ui.feed.model.Category
+import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,17 +87,21 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        feedViewModel.updateFeeds()
-        feedViewModel.category.setUpChips()
-        setupAdapter()
+        initView()
         bindViewModel()
         observeUiState()
     }
 
-    private fun List<Category>.setUpChips() {
-        forEach { category ->
+    private fun initView() {
+        feedViewModel.categories.setUpChips()
+        feedViewModel.updateFeeds()
+        setupAdapter()
+    }
+
+    private fun List<CategoryModel>.setUpChips() {
+        forEach { categoryUiState ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(category.title)
+                setWebsosoChipText(categoryUiState.category.titleKr)
                 setWebsosoChipTextAppearance(R.style.title3)
                 setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_feed_chip_stroke_selector)
@@ -105,7 +109,8 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                 setWebsosoChipPaddingVertical(20f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(30f)
-                setOnWebsosoChipClick { feedViewModel::updateFeeds }
+                setWebsosoChipSelected(categoryUiState.isSelected)
+                setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
@@ -124,11 +129,11 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun observeUiState() {
-        feedViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        feedViewModel.feedUiState.observe(viewLifecycleOwner) { feedUiState ->
             when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> updateView(uiState)
+                feedUiState.loading -> loading()
+                feedUiState.error -> throw IllegalStateException()
+                !feedUiState.loading -> updateFeeds(feedUiState)
             }
         }
     }
@@ -137,10 +142,9 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         // 로딩 뷰
     }
 
-    private fun updateView(uiState: FeedUiState) {
-        // binding.wcgFeed.submitList(categories) 구현 예정
-        val feeds = uiState.feeds.map { Feed(it) }
-        when (uiState.isLoadable) {
+    private fun updateFeeds(feedUiState: FeedUiState) {
+        val feeds = feedUiState.feeds.map { Feed(it) }
+        when (feedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
         }

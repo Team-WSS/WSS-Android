@@ -14,7 +14,7 @@ class DefaultFeedRepository @Inject constructor() {
     suspend fun fetchFeeds(category: String, lastFeedId: Long, size: Int): FeedsEntity {
         val requestBody = FeedsRequestDto(lastFeedId = lastFeedId, size = size)
         val result = FakeApi.getFeeds(
-            category = if (category == "전체") null else category,
+            category = if (category == "all") null else category,
             feedsRequestDto = requestBody,
         )
 
