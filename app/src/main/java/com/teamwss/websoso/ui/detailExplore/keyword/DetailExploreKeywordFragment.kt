@@ -20,6 +20,7 @@ class DetailExploreKeywordFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        detailExploreKeywordViewModel.updateKeywords()
         bindViewModel()
         setupRecyclerView()
         setupObserver()
@@ -63,6 +64,7 @@ class DetailExploreKeywordFragment :
         detailExploreKeywordViewModel.searchWord.observe(viewLifecycleOwner) {
             detailExploreKeywordViewModel.updateSearchCancelButtonVisibility()
         }
+
         detailExploreKeywordViewModel.uiState.observe(viewLifecycleOwner) {
             setupCurrentSelectedChips(it)
             detailExploreKeywordAdapter.submitList(it.keywordModel.categories)

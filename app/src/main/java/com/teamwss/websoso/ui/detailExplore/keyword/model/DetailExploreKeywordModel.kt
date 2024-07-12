@@ -16,7 +16,7 @@ data class DetailExploreKeywordModel(
         val keywords: List<KeywordModel>,
     ) {
         data class KeywordModel(
-            val keywordId: Long,
+            val keywordId: Int,
             val keywordName: String,
             val isSelected: Boolean = false,
         )
