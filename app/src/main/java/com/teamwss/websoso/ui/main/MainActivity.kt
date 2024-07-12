@@ -27,10 +27,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setBottomNavigationView()
+        onCompleteButtonClick()
     }
 
-    private fun setBottomNavigationView() {
+    private fun onCompleteButtonClick() {
         binding.bnvMain.selectedItemId = R.id.menu_home
         replaceFragment<HomeFragment>()
 
@@ -69,6 +69,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     }
 
     companion object{
+
         fun getIntent(context: Context): Intent {
             return Intent(context, MainActivity::class.java)
         }
