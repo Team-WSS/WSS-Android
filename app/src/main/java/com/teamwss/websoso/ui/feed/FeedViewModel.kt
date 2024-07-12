@@ -30,7 +30,14 @@ class FeedViewModel @Inject constructor(
             "MALE" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
             "FEMALE" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
             else -> throw IllegalArgumentException()
-        }.toPresentation()
+        }.split(",")
+            .map {
+                val category: Category = Category.from(it)
+                CategoryModel(
+                    category = category,
+                    isSelected = category == Category.ALL,
+                )
+            }
 
         _categories.addAll(categories)
     }
