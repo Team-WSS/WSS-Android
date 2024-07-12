@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.onboarding.welcome
 
-import android.content.Intent
 import android.os.Bundle
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWelcomeBinding
@@ -16,9 +15,7 @@ class WelcomeActivity : BindingActivity<ActivityWelcomeBinding>(R.layout.activit
 
     private fun setupOnCompleteButtonClick() {
         binding.btnWelcomeStart.setOnClickListener {
-            val intent = MainActivity.getIntent(this)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
+            startActivity(MainActivity.getIntent(this))
         }
     }
 }

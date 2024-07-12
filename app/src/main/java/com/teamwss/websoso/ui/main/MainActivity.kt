@@ -71,7 +71,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     companion object{
 
         fun getIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
+            val intent = Intent(context, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            return intent
         }
     }
 }
