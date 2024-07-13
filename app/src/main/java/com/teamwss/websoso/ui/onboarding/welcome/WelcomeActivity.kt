@@ -10,10 +10,10 @@ class WelcomeActivity : BindingActivity<ActivityWelcomeBinding>(R.layout.activit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupOnCompleteButtonClick()
+        onCompleteButtonClick()
     }
 
-    private fun setupOnCompleteButtonClick() {
+    private fun onCompleteButtonClick() {
         binding.btnWelcomeStart.setOnClickListener {
             startActivity(MainActivity.getIntent(this))
         }

@@ -27,10 +27,10 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        onCompleteButtonClick()
+        setBottomNavigationView()
     }
 
-    private fun onCompleteButtonClick() {
+    private fun setBottomNavigationView() {
         binding.bnvMain.selectedItemId = R.id.menu_home
         replaceFragment<HomeFragment>()
 
