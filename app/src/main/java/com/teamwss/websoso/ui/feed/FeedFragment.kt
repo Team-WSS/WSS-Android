@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
@@ -59,7 +60,14 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             // navigateToNovelDetail(id)
         }
 
+        @SuppressLint("CutPasteId")
         override fun onLikeButtonClick(view: View, id: Long) {
+            val likeCount: String = view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString()
+            view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text =
+                when (view.isSelected) {
+                    true ->  (likeCount.toInt() - 1).toString()
+                    false -> (likeCount.toInt() + 1).toString()
+                }
             view.isSelected = !view.isSelected
 
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
@@ -160,11 +168,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        feedViewModel.saveLikeCount()
     }
 
     override fun onDestroyView() {
