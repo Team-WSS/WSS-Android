@@ -60,18 +60,20 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             // navigateToNovelDetail(id)
         }
 
-        @SuppressLint("CutPasteId")
         override fun onLikeButtonClick(view: View, id: Long) {
-            val likeCount: String = view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString()
+            val likeCount: String =
+                view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString()
+            val updatedLikeCount: Int = when (view.isSelected) {
+                true -> (likeCount.toInt() - 1)
+                false -> (likeCount.toInt() + 1)
+            }
+
             view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text =
-                when (view.isSelected) {
-                    true ->  (likeCount.toInt() - 1).toString()
-                    false -> (likeCount.toInt() + 1).toString()
-                }
+                updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-                feedViewModel.updateLike(view.isSelected, id)
+                feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
             }
         }
 
@@ -133,6 +135,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun setupAdapter() {
         binding.rvFeed.apply {
             adapter = feedAdapter
+            itemAnimator = null
             addOnScrollListener(
                 FeedScrollListener.of(
                     singleEventHandler = singleEventHandler,

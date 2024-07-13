@@ -82,7 +82,7 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun updateLike(isLiked: Boolean, selectedFeedId: Long) {
+    fun updateLike(selectedFeedId: Long, isLiked: Boolean, updatedLikeCount: Int) {
         feedUiState.value?.let { feedUiState ->
             val selectedFeed = feedUiState.feeds.find { feedModel ->
                 feedModel.id == selectedFeedId
@@ -97,7 +97,11 @@ class FeedViewModel @Inject constructor(
                     _feedUiState.value = feedUiState.copy(
                         feeds = feedUiState.feeds.map { feedModel ->
                             when (feedModel.id == selectedFeedId) {
-                                true -> feedModel.copy(isLiked = isLiked)
+                                true -> feedModel.copy(
+                                    isLiked = isLiked,
+                                    likeCount = updatedLikeCount,
+                                )
+
                                 false -> feedModel
                             }
                         }
