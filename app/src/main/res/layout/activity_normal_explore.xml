@@ -69,7 +69,7 @@
 
             <ImageView
                 android:id="@+id/iv_normal_explore_cancel_button"
-                isVisible="@{normalExploreViewModel.isSearchCancelButtonVisibility()}"
+                isVisible="@{normalExploreViewModel.isSearchCancelButtonVisibility}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
@@ -109,7 +109,7 @@
 
             <TextView
                 android:id="@+id/tv_normal_explore_novel_count_title"
-                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility()}"
+                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -122,7 +122,7 @@
 
             <TextView
                 android:id="@+id/tv_normal_explore_novel_count"
-                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility()}"
+                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -135,6 +135,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_normal_explore_result"
+                isVisible="@{!normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="20dp"
@@ -152,9 +153,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_normal_explore_result_not_exist"
+            isVisible="@{normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +166,6 @@
                 android:id="@+id/iv_normal_explore_not_exist_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="180dp"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_explore_not_exist_result"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -191,11 +192,13 @@
                 android:layout_marginTop="36dp"
                 android:background="@drawable/bg_explore_primary50_radius_14dp"
                 android:gravity="center"
+                android:onClick="@{() -> onClick.onNovelInquireButtonClick()}"
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="20dp"
                 android:text="@string/normal_explore_add_novel_inquire"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/primary_100_6A5DFD"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_not_exist_result" />
