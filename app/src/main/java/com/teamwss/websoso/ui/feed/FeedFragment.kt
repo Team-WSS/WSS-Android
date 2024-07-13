@@ -71,7 +71,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             view.isSelected = !view.isSelected
 
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-                feedViewModel.updateLikeCount(view.isSelected, id)
+                feedViewModel.updateLike(view.isSelected, id)
             }
         }
 
