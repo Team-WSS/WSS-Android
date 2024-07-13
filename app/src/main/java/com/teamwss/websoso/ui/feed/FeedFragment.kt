@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
@@ -19,6 +20,7 @@ import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +30,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         get() = _popupBinding ?: error("error: binding is null")
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +60,11 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
-            feedViewModel.updateLikeCount(view.isSelected, id)
+            view.isSelected = !view.isSelected
+
+            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                feedViewModel.updateLikeCount(view.isSelected, id)
+            }
         }
 
         override fun onCommentButtonClick(feedId: Long) {
@@ -118,7 +125,12 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun setupAdapter() {
         binding.rvFeed.apply {
             adapter = feedAdapter
-            addOnScrollListener(FeedScrollListener.from(feedViewModel::updateFeeds))
+            addOnScrollListener(
+                FeedScrollListener.of(
+                    singleEventHandler = singleEventHandler,
+                    event = feedViewModel::updateFeeds
+                )
+            )
             setHasFixedSize(true)
         }
     }
