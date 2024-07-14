@@ -95,10 +95,6 @@ class FeedViewModel @Inject constructor(
         // 좋아요 API
     }
 
-    fun saveBlockedUser(userId: Long) {
-        // 유저 차단 API
-    }
-
     fun saveReportedSpoilingFeed(feedId: Long) {
         // 스포일러 신고 API - 소소피드
     }
