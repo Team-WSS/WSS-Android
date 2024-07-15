@@ -61,11 +61,11 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
-            val likeCount: String =
-                view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString()
+            val likeCount: Int =
+                view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString().toInt()
             val updatedLikeCount: Int = when (view.isSelected) {
-                true -> (likeCount.toInt() - 1)
-                false -> (likeCount.toInt() + 1)
+                true -> if (likeCount > 0) likeCount - 1 else 0
+                false -> likeCount + 1
             }
 
             view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text =
