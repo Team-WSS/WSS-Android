@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
@@ -19,6 +21,7 @@ import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +31,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         get() = _popupBinding ?: error("error: binding is null")
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +61,20 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
-            feedViewModel.updateLikeCount(view.isSelected, id)
+            val likeCount: Int =
+                view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString().toInt()
+            val updatedLikeCount: Int = when (view.isSelected) {
+                true -> if (likeCount > 0) likeCount - 1 else 0
+                false -> likeCount + 1
+            }
+
+            view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text =
+                updatedLikeCount.toString()
+            view.isSelected = !view.isSelected
+
+            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
+            }
         }
 
         override fun onCommentButtonClick(feedId: Long) {
@@ -118,7 +135,13 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun setupAdapter() {
         binding.rvFeed.apply {
             adapter = feedAdapter
-            addOnScrollListener(FeedScrollListener.from(feedViewModel::updateFeeds))
+            itemAnimator = null
+            addOnScrollListener(
+                FeedScrollListener.of(
+                    singleEventHandler = singleEventHandler,
+                    event = feedViewModel::updateFeeds
+                )
+            )
             setHasFixedSize(true)
         }
     }
@@ -148,11 +171,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        feedViewModel.saveLikeCount()
     }
 
     override fun onDestroyView() {

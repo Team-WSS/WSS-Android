@@ -2,8 +2,12 @@ package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FeedApi {
@@ -18,4 +22,14 @@ interface FeedApi {
         @Query("category") category: String,
         @Body feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto
+
+    @POST("feeds/{feedId}/likes")
+    suspend fun postLikes(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
+
+    @DELETE("feeds/{feedId}/likes")
+    suspend fun deleteLikes(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
 }

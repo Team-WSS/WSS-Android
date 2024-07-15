@@ -4,12 +4,17 @@ import com.teamwss.websoso.data.FakeApi
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
+import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
+import retrofit2.Response
 import javax.inject.Inject
 
 class DefaultFeedRepository @Inject constructor() {
     private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
     val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
+
+    @Inject
+    private lateinit var feedApi: FeedApi
 
     suspend fun fetchFeeds(category: String, lastFeedId: Long, size: Int): FeedsEntity {
         val requestBody = FeedsRequestDto(lastFeedId = lastFeedId, size = size)
@@ -23,6 +28,13 @@ class DefaultFeedRepository @Inject constructor() {
                 _cachedFeeds.addAll(it.feeds)
             }
             .copy(feeds = cachedFeeds)
+    }
+
+    suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long): Response<Unit> {
+        return when (isLikedOfLikedFeed) {
+            true -> feedApi.deleteLikes(selectedFeedId)
+            false -> feedApi.postLikes(selectedFeedId)
+        }
     }
 
     fun clearCachedFeeds() {
