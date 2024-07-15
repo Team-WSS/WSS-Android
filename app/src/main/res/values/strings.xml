@@ -76,6 +76,16 @@
     <string name="feed_category_male">전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타</string>
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
 
+    <!-- 피드 팝업 매뉴 다이얼로그 뷰 -->
+    <string name="report_popup_menu_cancel">취소</string>
+    <string name="report_popup_menu_report">신고</string>
+    <string name="remove_popup_menu_title">해당 글을 삭제할까요?</string>
+    <string name="remove_popup_menu_description">삭제한 글은 되돌릴 수 없어요</string>
+    <string name="remove_popup_menu_remove">삭제</string>
+    <string name="report_popup_menu_title">신고가 접수되었어요!</string>
+    <string name="report_popup_menu_description">해당 글이 커뮤니티 가이드\n위반했는지 검토할게요.</string>
+    <string name="report_popup_menu_check">확인</string>
+
     <!-- 로그인 뷰 -->
     <string name="login_browse_without_signup">회원가입 없이 둘러보기</string>
 
@@ -121,4 +131,5 @@
     <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
     <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
+
 </resources>
