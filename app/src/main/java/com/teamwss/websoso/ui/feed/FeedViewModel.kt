@@ -123,4 +123,9 @@ class FeedViewModel @Inject constructor(
     fun saveReportedImpertinenceFeed(feedId: Long) {
         // 부적절한 표현 신고 API - 소소피드
     }
+
+    fun saveDeletedFeed(feedId: Long) {
+
+        // 피드 삭제
+    }
 }

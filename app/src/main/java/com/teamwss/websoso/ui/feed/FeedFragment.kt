@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.feed
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,8 +47,8 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             // ProfileActivity.from(context, id)
         }
 
-        override fun onMoreButtonClick(view: View, feedId: Long, userId: Long) {
-            showMenu(view, feedId, userId)
+        override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
+            showMenu(view, feedId, isMyFeed)
         }
 
         override fun onContentClick(id: Long) {
@@ -82,19 +81,43 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    @SuppressLint("InflateParams")
-    private fun showMenu(view: View, feedId: Long, userId: Long) {
+    private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             true
         ).apply {
-            popupBinding.feedId = feedId
-            popupBinding.userId = userId
             elevation = 12f
             showAsDropDown(view)
+            bindMenuByIsMyFeed(isMyFeed, feedId)
         }
+    }
+
+    private fun bindMenuByIsMyFeed(isMyFeed: Boolean, feedId: Long) {
+        when (isMyFeed) {
+            true -> {
+                popupBinding.onFirstItemClick = ::navigateToFeedEdit
+                popupBinding.onSecondItemClick = feedViewModel::saveDeletedFeed
+                popupBinding.menuContentTitle =
+                    getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+                popupBinding.tvFeedPopupFirstItem.isSelected = true
+                popupBinding.tvFeedPopupSecondItem.isSelected = true
+            }
+
+            false -> {
+                popupBinding.onFirstItemClick = feedViewModel::saveReportedSpoilingFeed
+                popupBinding.onSecondItemClick = feedViewModel::saveReportedImpertinenceFeed
+                popupBinding.menuContentTitle =
+                    getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+                popupBinding.tvFeedPopupFirstItem.isSelected = false
+                popupBinding.tvFeedPopupSecondItem.isSelected = false
+            }
+        }.also { popupBinding.feedId = feedId }
+    }
+
+    private fun navigateToFeedEdit(feedId: Long) {
+
     }
 
     private fun navigateToFeedDetail(id: Long) {
@@ -105,7 +128,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        bindViewModel()
         observeUiState()
     }
 
@@ -144,11 +166,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             )
             setHasFixedSize(true)
         }
-    }
-
-    private fun bindViewModel() {
-        popupBinding.lifecycleOwner = viewLifecycleOwner
-        popupBinding.viewModel = feedViewModel
     }
 
     private fun observeUiState() {
