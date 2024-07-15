@@ -7,9 +7,9 @@ import com.teamwss.websoso.ui.feed.adapter.FeedType
 import com.teamwss.websoso.util.SingleEventHandler
 
 class FeedScrollListener private constructor(
+    private val singleEventHandler: SingleEventHandler,
     private val loadAdditionalFeeds: () -> Unit,
 ) : RecyclerView.OnScrollListener() {
-    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         if ((recyclerView.adapter as FeedAdapter).currentList.last() !is FeedType.Loading) return
@@ -20,11 +20,14 @@ class FeedScrollListener private constructor(
             (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
 
         if (visibleLastItemPosition in totalItemCount - 2..totalItemCount)
-            singleEventHandler.handle(event = loadAdditionalFeeds)
+            singleEventHandler.throttleFirst { loadAdditionalFeeds() }
     }
 
     companion object {
 
-        fun from(event: () -> Unit): FeedScrollListener = FeedScrollListener(event)
+        fun of(
+            singleEventHandler: SingleEventHandler,
+            event: () -> Unit,
+        ): FeedScrollListener = FeedScrollListener(singleEventHandler, event)
     }
 }
