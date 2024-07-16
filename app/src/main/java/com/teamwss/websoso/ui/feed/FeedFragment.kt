@@ -145,12 +145,13 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         crossinline event: () -> Unit, // noinline 과의 차이
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance { event() }
-                .show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
+                event = { event() },
+            ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
 
             DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
                 title = title ?: throw IllegalArgumentException(),
-                event = { event() }
+                event = { event() },
             ).show(childFragmentManager, FeedReportDialogFragment.TAG)
         }
     }

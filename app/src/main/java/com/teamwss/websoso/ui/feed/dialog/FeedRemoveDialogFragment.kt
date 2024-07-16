@@ -1,7 +1,5 @@
 package com.teamwss.websoso.ui.feed.dialog
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
@@ -18,18 +16,12 @@ class FeedRemoveDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.onClick = {
+        binding.onCancelClick = { dismiss() }
+        binding.onRemoveClick = {
             onRemoveClick()
             dismiss()
         }
-        initDialog()
-    }
-
-    private fun initDialog() {
-        dialog?.let {
-            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            it.setCanceledOnTouchOutside(false)
-        }
+        dialog?.setCanceledOnTouchOutside(false)
     }
 
     companion object {

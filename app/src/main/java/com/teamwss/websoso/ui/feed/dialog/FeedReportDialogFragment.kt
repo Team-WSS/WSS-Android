@@ -1,7 +1,5 @@
 package com.teamwss.websoso.ui.feed.dialog
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
@@ -20,18 +18,13 @@ class FeedReportDialogFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.title = reportTitle
-        binding.onClick = {
+        binding.onCancelClick = { dismiss() }
+        binding.onReportClick = {
             onReportClick()
-            dismiss()
+            FeedReportDoneDialogFragment.newInstance { dismiss() }
+                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
         }
-        initDialog()
-    }
-
-    private fun initDialog() {
-        dialog?.let {
-            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            //  it.setCanceledOnTouchOutside(false)
-        }
+        dialog?.setCanceledOnTouchOutside(false)
     }
 
     companion object {

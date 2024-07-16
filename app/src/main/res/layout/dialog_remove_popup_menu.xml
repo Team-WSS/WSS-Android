@@ -5,7 +5,11 @@
     <data>
 
         <variable
-            name="onClick"
+            name="onCancelClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onRemoveClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
 
@@ -65,6 +69,7 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_novel_info_gray_50_radius_8dp"
             android:gravity="center"
+            android:onClick="@{()->onCancelClick.invoke()}"
             android:paddingHorizontal="48dp"
             android:paddingVertical="12dp"
             android:text="@string/report_popup_menu_cancel"
@@ -84,7 +89,7 @@
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_dialog_remove_100_radius_8dp"
             android:gravity="center"
-            android:onClick="@{()-> onClick.invoke()}"
+            android:onClick="@{()-> onRemoveClick.invoke()}"
             android:paddingHorizontal="48dp"
             android:paddingVertical="12dp"
             android:text="@string/remove_popup_menu_remove"
