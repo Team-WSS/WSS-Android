@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.DefaultFeedRepository
+import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val getFeedsUseCase: GetFeedsUseCase,
-    private val feedRepository: DefaultFeedRepository,
+    private val feedRepository: FeedRepository,
     fakeUserRepository: FakeUserRepository,
 ) : ViewModel() {
     private val _categories: MutableList<CategoryModel> = mutableListOf()
