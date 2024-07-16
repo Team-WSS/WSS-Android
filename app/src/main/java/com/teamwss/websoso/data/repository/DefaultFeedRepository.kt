@@ -31,10 +31,18 @@ class DefaultFeedRepository @Inject constructor() {
     }
 
     suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long): Response<Unit> {
+
         return when (isLikedOfLikedFeed) {
             true -> feedApi.deleteLikes(selectedFeedId)
             false -> feedApi.postLikes(selectedFeedId)
         }
+    }
+
+    suspend fun saveRemovedFeed(feedId: Long): Response<Unit> {
+        return feedApi.deleteFeed(feedId)
+            .also {
+                _cachedFeeds.removeIf { it.id == feedId }
+            }
     }
 
     fun clearCachedFeeds() {

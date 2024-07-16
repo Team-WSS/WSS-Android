@@ -66,7 +66,6 @@ class FeedViewModel @Inject constructor(
                 }.onSuccess { feeds ->
                     if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
                     // Return result state of error in domain layer later
-
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
                         isLoadable = feeds.isLoadable,
@@ -124,8 +123,25 @@ class FeedViewModel @Inject constructor(
         // 부적절한 표현 신고 API - 소소피드
     }
 
-    fun saveDeletedFeed(feedId: Long) {
+    fun saveRemoveFeed(feedId: Long) {
+        feedUiState.value?.let { feedUiState ->
+            _feedUiState.value = feedUiState.copy(
+                feeds = feedUiState.feeds.filter { it.id != feedId }
+            )
 
-        // 피드 삭제
+            viewModelScope.launch {
+                _feedUiState.value = feedUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveRemovedFeed(feedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(loading = false)
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
     }
 }

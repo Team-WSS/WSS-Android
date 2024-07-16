@@ -23,6 +23,11 @@ interface FeedApi {
         @Body feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto
 
+    @DELETE("feeds/{feedId}")
+    suspend fun deleteFeed(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
+
     @POST("feeds/{feedId}/likes")
     suspend fun postLikes(
         @Path("feedId") feedId: Long,
