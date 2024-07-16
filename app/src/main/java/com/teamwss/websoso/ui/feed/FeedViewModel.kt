@@ -120,7 +120,25 @@ class FeedViewModel @Inject constructor(
     }
 
     fun saveReportedImpertinenceFeed(feedId: Long) {
-        // 부적절한 표현 신고 API - 소소피드
+        feedUiState.value?.let { feedUiState ->
+            _feedUiState.value = feedUiState.copy(
+                feeds = feedUiState.feeds.filter { it.id != feedId }
+            )
+
+            viewModelScope.launch {
+                _feedUiState.value = feedUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveSpoilerFeed(feedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(loading = false)
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
     }
 
     fun saveRemoveFeed(feedId: Long) {

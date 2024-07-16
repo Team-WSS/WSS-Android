@@ -45,6 +45,13 @@ class DefaultFeedRepository @Inject constructor() {
             }
     }
 
+    suspend fun saveSpoilerFeed(feedId: Long): Response<Unit> {
+        return feedApi.postSpoilerFeed(feedId)
+            .also {
+                _cachedFeeds.removeIf { it.id == feedId }
+            }
+    }
+
     fun clearCachedFeeds() {
         if (cachedFeeds.isNotEmpty()) _cachedFeeds.clear()
     }

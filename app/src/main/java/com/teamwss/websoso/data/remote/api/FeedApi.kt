@@ -37,4 +37,9 @@ interface FeedApi {
     suspend fun deleteLikes(
         @Path("feedId") feedId: Long,
     ): Response<Unit>
+
+    @POST("feeds/{feedId}/spoiler")
+    suspend fun postSpoilerFeed(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
 }
