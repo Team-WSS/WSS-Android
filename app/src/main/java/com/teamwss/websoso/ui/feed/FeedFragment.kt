@@ -113,7 +113,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                     }
                     onSecondItemClick = {
                         showDialog<DialogRemovePopupMenuBinding>(
-                            event = { feedViewModel.saveRemoveFeed(feedId) },
+                            event = { feedViewModel.updateRemovedFeed(feedId) },
                         )
                         popup.dismiss()
                     }
@@ -127,14 +127,14 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                     onFirstItemClick = {
                         showDialog<DialogReportPopupMenuBinding>(
                             title = getString(R.string.report_popup_menu_spoiling_feed),
-                            event = { feedViewModel.saveReportedSpoilingFeed(feedId) },
+                            event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
                         )
                         popup.dismiss()
                     }
                     onSecondItemClick = {
                         showDialog<DialogReportPopupMenuBinding>(
                             title = getString(R.string.report_popup_menu_impertinence_feed),
-                            event = { feedViewModel.saveReportedImpertinenceFeed(feedId) },
+                            event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
                         )
                         popup.dismiss()
                     }

@@ -115,29 +115,7 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun saveReportedSpoilingFeed(feedId: Long) {
-        feedUiState.value?.let { feedUiState ->
-            _feedUiState.value = feedUiState.copy(
-                feeds = feedUiState.feeds.filter { it.id != feedId }
-            )
-
-            viewModelScope.launch {
-                _feedUiState.value = feedUiState.copy(loading = true)
-                runCatching {
-                    feedRepository.saveImpertinenceFeed(feedId)
-                }.onSuccess {
-                    _feedUiState.value = feedUiState.copy(loading = false)
-                }.onFailure {
-                    _feedUiState.value = feedUiState.copy(
-                        loading = false,
-                        error = true,
-                    )
-                }
-            }
-        }
-    }
-
-    fun saveReportedImpertinenceFeed(feedId: Long) {
+    fun updateReportedSpoilerFeed(feedId: Long) {
         feedUiState.value?.let { feedUiState ->
             _feedUiState.value = feedUiState.copy(
                 feeds = feedUiState.feeds.filter { it.id != feedId }
@@ -159,7 +137,29 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun saveRemoveFeed(feedId: Long) {
+    fun updateReportedImpertinenceFeed(feedId: Long) {
+        feedUiState.value?.let { feedUiState ->
+            _feedUiState.value = feedUiState.copy(
+                feeds = feedUiState.feeds.filter { it.id != feedId }
+            )
+
+            viewModelScope.launch {
+                _feedUiState.value = feedUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveImpertinenceFeed(feedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(loading = false)
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateRemovedFeed(feedId: Long) {
         feedUiState.value?.let { feedUiState ->
             _feedUiState.value = feedUiState.copy(
                 feeds = feedUiState.feeds.filter { it.id != feedId }
