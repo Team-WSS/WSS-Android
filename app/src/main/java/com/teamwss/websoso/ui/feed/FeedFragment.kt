@@ -142,7 +142,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
 
     private inline fun <reified Dialog : ViewDataBinding> showDialog(
         title: String? = null,
-        crossinline event: () -> Unit, // noinline 과의 차이
+        noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
             DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
@@ -161,7 +161,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun navigateToFeedEdit(feedId: Long) {
-
+        // 피드 수정 뷰
     }
 
     private fun navigateToFeedDetail(id: Long) {
