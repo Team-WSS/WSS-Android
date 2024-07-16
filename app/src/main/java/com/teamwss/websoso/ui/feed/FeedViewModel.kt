@@ -117,16 +117,15 @@ class FeedViewModel @Inject constructor(
 
     fun updateReportedSpoilerFeed(feedId: Long) {
         feedUiState.value?.let { feedUiState ->
-            _feedUiState.value = feedUiState.copy(
-                feeds = feedUiState.feeds.filter { it.id != feedId }
-            )
-
             viewModelScope.launch {
                 _feedUiState.value = feedUiState.copy(loading = true)
                 runCatching {
                     feedRepository.saveSpoilerFeed(feedId)
                 }.onSuccess {
-                    _feedUiState.value = feedUiState.copy(loading = false)
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        feeds = feedUiState.feeds.filter { it.id != feedId }
+                    )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
@@ -139,16 +138,15 @@ class FeedViewModel @Inject constructor(
 
     fun updateReportedImpertinenceFeed(feedId: Long) {
         feedUiState.value?.let { feedUiState ->
-            _feedUiState.value = feedUiState.copy(
-                feeds = feedUiState.feeds.filter { it.id != feedId }
-            )
-
             viewModelScope.launch {
                 _feedUiState.value = feedUiState.copy(loading = true)
                 runCatching {
                     feedRepository.saveImpertinenceFeed(feedId)
                 }.onSuccess {
-                    _feedUiState.value = feedUiState.copy(loading = false)
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        feeds = feedUiState.feeds.filter { it.id != feedId }
+                    )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
@@ -161,16 +159,15 @@ class FeedViewModel @Inject constructor(
 
     fun updateRemovedFeed(feedId: Long) {
         feedUiState.value?.let { feedUiState ->
-            _feedUiState.value = feedUiState.copy(
-                feeds = feedUiState.feeds.filter { it.id != feedId }
-            )
-
             viewModelScope.launch {
                 _feedUiState.value = feedUiState.copy(loading = true)
                 runCatching {
                     feedRepository.saveRemovedFeed(feedId)
                 }.onSuccess {
-                    _feedUiState.value = feedUiState.copy(loading = false)
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        feeds = feedUiState.feeds.filter { it.id != feedId }
+                    )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
