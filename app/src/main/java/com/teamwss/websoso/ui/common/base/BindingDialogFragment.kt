@@ -8,13 +8,18 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.teamwss.websoso.R
 
 abstract class BindingDialogFragment<B : ViewDataBinding>(
     @LayoutRes private val layoutResId: Int,
 ) : DialogFragment() {
     private var _binding: B? = null
     val binding get() = _binding ?: error("error: binding is null")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.WebsosoDialogTheme)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
