@@ -88,7 +88,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
-        PopupWindow(
+        val popupWindow: PopupWindow = PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -96,11 +96,12 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         ).apply {
             elevation = 12f
             showAsDropDown(view)
-            bindMenuByIsMyFeed(isMyFeed, feedId)
         }
+
+        bindMenuByIsMyFeed(popupWindow, isMyFeed, feedId)
     }
 
-    private fun bindMenuByIsMyFeed(isMyFeed: Boolean, feedId: Long) {
+    private fun bindMenuByIsMyFeed(popup: PopupWindow, isMyFeed: Boolean, feedId: Long) {
         with(popupBinding) {
             when (isMyFeed) {
                 true -> {
@@ -108,11 +109,13 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                     tvFeedPopupSecondItem.isSelected = true
                     onFirstItemClick = {
                         navigateToFeedEdit(feedId)
+                        popup.dismiss()
                     }
                     onSecondItemClick = {
                         showDialog<DialogRemovePopupMenuBinding>(
                             event = { feedViewModel.saveRemoveFeed(feedId) },
                         )
+                        popup.dismiss()
                     }
                     menuContentTitle =
                         getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
@@ -126,12 +129,14 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                             title = getString(R.string.report_popup_menu_spoiling_feed),
                             event = { feedViewModel.saveReportedSpoilingFeed(feedId) },
                         )
+                        popup.dismiss()
                     }
                     onSecondItemClick = {
                         showDialog<DialogReportPopupMenuBinding>(
                             title = getString(R.string.report_popup_menu_impertinence_feed),
                             event = { feedViewModel.saveReportedImpertinenceFeed(feedId) },
                         )
+                        popup.dismiss()
                     }
                     menuContentTitle =
                         getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
