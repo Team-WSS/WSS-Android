@@ -105,8 +105,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         with(popupBinding) {
             when (isMyFeed) {
                 true -> {
-                    tvFeedPopupFirstItem.isSelected = true
-                    tvFeedPopupSecondItem.isSelected = true
                     onFirstItemClick = {
                         navigateToFeedEdit(feedId)
                         popup.dismiss()
@@ -119,11 +117,11 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                     }
                     menuContentTitle =
                         getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+                    tvFeedPopupFirstItem.isSelected = true
+                    tvFeedPopupSecondItem.isSelected = true
                 }
 
                 false -> {
-                    tvFeedPopupFirstItem.isSelected = false
-                    tvFeedPopupSecondItem.isSelected = false
                     onFirstItemClick = {
                         showDialog<DialogReportPopupMenuBinding>(
                             title = getString(R.string.report_popup_menu_spoiling_feed),
@@ -140,6 +138,8 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
                     }
                     menuContentTitle =
                         getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+                    tvFeedPopupFirstItem.isSelected = false
+                    tvFeedPopupSecondItem.isSelected = false
                 }
             }
         }
