@@ -85,6 +85,8 @@
     <string name="report_popup_menu_title">신고가 접수되었어요!</string>
     <string name="report_popup_menu_description">해당 글이 커뮤니티 가이드\n위반했는지 검토할게요.</string>
     <string name="report_popup_menu_check">확인</string>
+    <string name="report_popup_menu_impertinence_feed">해당 글에 부적절한 표현이 사용되었나요?</string>
+    <string name="report_popup_menu_spoiling_feed">해당 글이 스포일러를 포함하고 있나요?</string>
 
     <!-- 로그인 뷰 -->
     <string name="login_browse_without_signup">회원가입 없이 둘러보기</string>

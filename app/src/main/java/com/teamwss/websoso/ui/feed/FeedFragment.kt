@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
+import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
+import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
@@ -17,11 +20,14 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
+import com.teamwss.websoso.ui.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
 
 @AndroidEntryPoint
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
@@ -95,25 +101,62 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun bindMenuByIsMyFeed(isMyFeed: Boolean, feedId: Long) {
-        when (isMyFeed) {
-            true -> {
-                popupBinding.onFirstItemClick = ::navigateToFeedEdit
-                popupBinding.onSecondItemClick = feedViewModel::saveDeletedFeed
-                popupBinding.menuContentTitle =
-                    getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
-                popupBinding.tvFeedPopupFirstItem.isSelected = true
-                popupBinding.tvFeedPopupSecondItem.isSelected = true
-            }
+        with(popupBinding) {
+            when (isMyFeed) {
+                true -> {
+                    tvFeedPopupFirstItem.isSelected = true
+                    tvFeedPopupSecondItem.isSelected = true
+                    onFirstItemClick = {
+                        navigateToFeedEdit(feedId)
+                    }
+                    onSecondItemClick = {
+                        showDialog<DialogRemovePopupMenuBinding>(
+                            event = { feedViewModel.saveRemoveFeed(feedId) },
+                        )
+                    }
+                    menuContentTitle =
+                        getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+                }
 
-            false -> {
-                popupBinding.onFirstItemClick = feedViewModel::saveReportedSpoilingFeed
-                popupBinding.onSecondItemClick = feedViewModel::saveReportedImpertinenceFeed
-                popupBinding.menuContentTitle =
-                    getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
-                popupBinding.tvFeedPopupFirstItem.isSelected = false
-                popupBinding.tvFeedPopupSecondItem.isSelected = false
+                false -> {
+                    tvFeedPopupFirstItem.isSelected = false
+                    tvFeedPopupSecondItem.isSelected = false
+                    onFirstItemClick = {
+                        showDialog<DialogReportPopupMenuBinding>(
+                            title = getString(R.string.report_popup_menu_spoiling_feed),
+                            event = { feedViewModel.saveReportedSpoilingFeed(feedId) },
+                        )
+                    }
+                    onSecondItemClick = {
+                        showDialog<DialogReportPopupMenuBinding>(
+                            title = getString(R.string.report_popup_menu_impertinence_feed),
+                            event = { feedViewModel.saveReportedImpertinenceFeed(feedId) },
+                        )
+                    }
+                    menuContentTitle =
+                        getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+                }
             }
-        }.also { popupBinding.feedId = feedId }
+        }
+    }
+
+    private inline fun <reified Dialog : ViewDataBinding> showDialog(
+        title: String? = null,
+        crossinline event: () -> Unit, // noinline 과의 차이
+    ) {
+        when (Dialog::class) {
+            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance { event() }
+                .show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+
+            DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
+                title = title ?: throw IllegalArgumentException(),
+                event = { event() }
+            ).show(childFragmentManager, FeedReportDialogFragment.TAG)
+        }
+    }
+
+    fun interface FeedDialogClickListener : Serializable {
+        operator fun invoke()
     }
 
     private fun navigateToFeedEdit(feedId: Long) {

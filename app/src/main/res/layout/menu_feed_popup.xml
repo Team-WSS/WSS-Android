@@ -5,20 +5,16 @@
     <data>
 
         <variable
-            name="feedId"
-            type="Long" />
-
-        <variable
             name="menuContentTitle"
             type="java.util.List&lt;String&gt;" />
 
         <variable
             name="onFirstItemClick"
-            type="kotlin.jvm.functions.Function1" />
+            type="kotlin.jvm.functions.Function0" />
 
         <variable
             name="onSecondItemClick"
-            type="kotlin.jvm.functions.Function1" />
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:onClick="@{() -> onFirstItemClick.invoke(feedId)}"
+            android:onClick="@{() -> onFirstItemClick.invoke()}"
             android:paddingHorizontal="48dp"
             android:paddingVertical="16dp"
             android:text="@{menuContentTitle[0]}"
@@ -48,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:onClick="@{() -> onSecondItemClick.invoke(feedId)}"
+            android:onClick="@{() -> onSecondItemClick.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="16dp"
             android:text="@{menuContentTitle[1]}"
