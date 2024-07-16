@@ -42,4 +42,9 @@ interface FeedApi {
     suspend fun postSpoilerFeed(
         @Path("feedId") feedId: Long,
     ): Response<Unit>
+
+    @POST("feeds/{feedId}/impertinence")
+    suspend fun postImpertinenceFeed(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
 }

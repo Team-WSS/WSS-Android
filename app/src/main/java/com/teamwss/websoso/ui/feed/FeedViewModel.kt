@@ -116,7 +116,25 @@ class FeedViewModel @Inject constructor(
     }
 
     fun saveReportedSpoilingFeed(feedId: Long) {
-        // 스포일러 신고 API - 소소피드
+        feedUiState.value?.let { feedUiState ->
+            _feedUiState.value = feedUiState.copy(
+                feeds = feedUiState.feeds.filter { it.id != feedId }
+            )
+
+            viewModelScope.launch {
+                _feedUiState.value = feedUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveImpertinenceFeed(feedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(loading = false)
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
     }
 
     fun saveReportedImpertinenceFeed(feedId: Long) {
