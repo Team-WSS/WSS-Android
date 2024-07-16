@@ -16,7 +16,10 @@ class FeedReportDoneDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.onCheckClick = { onCheckClick() }
+        binding.onCheckClick = {
+            onCheckClick()
+            dismiss()
+        }
         dialog?.setCanceledOnTouchOutside(false)
     }
 
