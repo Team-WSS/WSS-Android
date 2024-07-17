@@ -14,6 +14,7 @@ data class FeedModel(
     val novel: NovelModel,
     val categories: String = relevantCategories.joinToString(prefix = "", postfix = ""),
 ) {
+    val formattedCreatedDate: String = " · $createdDate"
 
     data class UserModel(
         val id: Long,
