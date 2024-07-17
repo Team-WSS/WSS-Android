@@ -1,6 +1,5 @@
 package com.teamwss.websoso.data.di
 
-import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -25,15 +24,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLogOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor { message ->
-            Log.d("Retrofit2", "CONNECTION INFO -> $message")
-        }
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
-    }
+    fun provideLogOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        ).build()
+
 
     @Provides
     @Singleton
@@ -42,8 +39,4 @@ object NetworkModule {
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
-
-    @Provides
-    @Singleton
-    inline fun <reified T> provideService(retrofit: Retrofit): T = retrofit.create(T::class.java)
 }

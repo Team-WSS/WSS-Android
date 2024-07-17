@@ -18,6 +18,7 @@ fun Feed.toPresentation(): FeedModel = FeedModel(
     isModified = isModified,
     isSpoiler = isSpoiler,
     isLiked = isLiked,
+    isMyFeed = isMyFeed,
     novel = FeedModel.NovelModel(
         id = novel.id,
         title = novel.title,

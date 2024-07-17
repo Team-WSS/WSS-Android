@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.feed
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +7,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
+import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
+import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
@@ -18,11 +20,14 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
+import com.teamwss.websoso.ui.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.util.SingleEventHandler
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
 
 @AndroidEntryPoint
 class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
@@ -48,8 +53,8 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             // ProfileActivity.from(context, id)
         }
 
-        override fun onMoreButtonClick(view: View, feedId: Long, userId: Long) {
-            showMenu(view, feedId, userId)
+        override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
+            showMenu(view, feedId, isMyFeed)
         }
 
         override fun onContentClick(id: Long) {
@@ -82,19 +87,95 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
-    @SuppressLint("InflateParams")
-    private fun showMenu(view: View, feedId: Long, userId: Long) {
-        PopupWindow(
+    private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
+        val popupWindow: PopupWindow = PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             true
         ).apply {
-            popupBinding.feedId = feedId
-            popupBinding.userId = userId
             elevation = 12f
             showAsDropDown(view)
         }
+
+        bindMenuByIsMyFeed(popupWindow, isMyFeed, feedId)
+    }
+
+    private fun bindMenuByIsMyFeed(popup: PopupWindow, isMyFeed: Boolean, feedId: Long) {
+        with(popupBinding) {
+            when (isMyFeed) {
+                true -> setupMyFeed(feedId, popup)
+                false -> setupNotMyFeed(feedId, popup)
+            }
+        }
+    }
+
+    private fun MenuFeedPopupBinding.setupNotMyFeed(
+        feedId: Long,
+        popup: PopupWindow,
+    ) {
+        onFirstItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                title = getString(R.string.report_popup_menu_spoiling_feed),
+                event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        onSecondItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                title = getString(R.string.report_popup_menu_impertinence_feed),
+                event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        menuContentTitle =
+            getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        tvFeedPopupFirstItem.isSelected = false
+        tvFeedPopupSecondItem.isSelected = false
+    }
+
+    private fun MenuFeedPopupBinding.setupMyFeed(
+        feedId: Long,
+        popup: PopupWindow,
+    ) {
+        onFirstItemClick = {
+            navigateToFeedEdit(feedId)
+            popup.dismiss()
+        }
+        onSecondItemClick = {
+            showDialog<DialogRemovePopupMenuBinding>(
+                event = { feedViewModel.updateRemovedFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        menuContentTitle =
+            getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        tvFeedPopupFirstItem.isSelected = true
+        tvFeedPopupSecondItem.isSelected = true
+    }
+
+    private inline fun <reified Dialog : ViewDataBinding> showDialog(
+        title: String? = null,
+        noinline event: () -> Unit,
+    ) {
+        when (Dialog::class) {
+            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
+                event = { event() },
+            ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+
+            DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
+                title = title ?: throw IllegalArgumentException(),
+                event = { event() },
+            ).show(childFragmentManager, FeedReportDialogFragment.TAG)
+        }
+    }
+
+    fun interface FeedDialogClickListener : Serializable {
+        operator fun invoke()
+    }
+
+    private fun navigateToFeedEdit(feedId: Long) {
+        // 피드 수정 뷰
     }
 
     private fun navigateToFeedDetail(id: Long) {
@@ -105,7 +186,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        bindViewModel()
         observeUiState()
     }
 
@@ -144,11 +224,6 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             )
             setHasFixedSize(true)
         }
-    }
-
-    private fun bindViewModel() {
-        popupBinding.lifecycleOwner = viewLifecycleOwner
-        popupBinding.viewModel = feedViewModel
     }
 
     private fun observeUiState() {

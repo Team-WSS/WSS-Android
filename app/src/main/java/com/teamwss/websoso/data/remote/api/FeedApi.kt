@@ -23,6 +23,11 @@ interface FeedApi {
         @Body feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto
 
+    @DELETE("feeds/{feedId}")
+    suspend fun deleteFeed(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
+
     @POST("feeds/{feedId}/likes")
     suspend fun postLikes(
         @Path("feedId") feedId: Long,
@@ -30,6 +35,16 @@ interface FeedApi {
 
     @DELETE("feeds/{feedId}/likes")
     suspend fun deleteLikes(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
+
+    @POST("feeds/{feedId}/spoiler")
+    suspend fun postSpoilerFeed(
+        @Path("feedId") feedId: Long,
+    ): Response<Unit>
+
+    @POST("feeds/{feedId}/impertinence")
+    suspend fun postImpertinenceFeed(
         @Path("feedId") feedId: Long,
     ): Response<Unit>
 }

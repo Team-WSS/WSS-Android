@@ -1,23 +1,23 @@
 package com.teamwss.websoso.domain.usecase
 
-import com.teamwss.websoso.data.repository.DefaultFeedRepository
+import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.domain.mapper.toDomain
 import com.teamwss.websoso.domain.model.Feeds
 import javax.inject.Inject
 
 class GetFeedsUseCase @Inject constructor(
-    private val defaultFeedRepository: DefaultFeedRepository,
+    private val feedRepository: FeedRepository,
 ) {
     private var lastFeedId: Long = INITIAL_ID
     private var previousCategory: String = ""
 
     suspend operator fun invoke(selectedCategory: String): Feeds {
-        if (defaultFeedRepository.cachedFeeds.isNotEmpty() && previousCategory != selectedCategory) {
-            defaultFeedRepository.clearCachedFeeds()
+        if (feedRepository.cachedFeeds.isNotEmpty() && previousCategory != selectedCategory) {
+            feedRepository.clearCachedFeeds()
             lastFeedId = INITIAL_ID
         }
 
-        return defaultFeedRepository.fetchFeeds(
+        return feedRepository.fetchFeeds(
             category = selectedCategory,
             lastFeedId = lastFeedId,
             size = if (lastFeedId == INITIAL_ID) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,

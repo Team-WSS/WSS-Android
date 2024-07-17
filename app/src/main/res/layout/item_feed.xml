@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:onClick="@{(iv_feed_more) -> onClick.onMoreButtonClick(iv_feed_more, feed.id, feed.user.id)}"
+            android:onClick="@{(iv_feed_more) -> onClick.onMoreButtonClick(iv_feed_more, feed.id, feed.isMyFeed)}"
             android:padding="12dp"
             android:src="@drawable/ic_more"
             app:layout_constraintBottom_toBottomOf="@+id/cl_feed_profile"
