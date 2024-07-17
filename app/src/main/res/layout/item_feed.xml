@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="(수정됨)"
+            android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="@+id/tv_feed_created_date"

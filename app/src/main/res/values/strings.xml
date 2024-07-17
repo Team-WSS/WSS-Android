@@ -76,6 +76,7 @@
     <string name="feed_spoiler_warning">스포일러가 포함된 글 보기</string>
     <string name="feed_category_male">전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타</string>
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
+    <string name="feed_is_modified">(수정됨)</string>
 
     <!-- 피드 팝업 매뉴 다이얼로그 뷰 -->
     <string name="report_popup_menu_cancel">취소</string>
