@@ -68,10 +68,24 @@
             app:layout_constraintTop_toTopOf="@+id/cl_feed_profile" />
 
         <TextView
+            android:id="@+id/tv_feed_spoiler_warning"
+            isVisible="@{!feed.spoiler}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:onClick="@{() -> onClick.onContentClick(feed.id)}"
+            android:text="@string/feed_spoiler_warning"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/secondary_100_FF675D"
+            app:layout_constraintStart_toStartOf="@+id/cl_feed_profile"
+            app:layout_constraintTop_toBottomOf="@+id/cl_feed_profile" />
+
+        <TextView
             android:id="@+id/tv_feed_content"
+            isVisible="@{feed.spoiler}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:breakStrategy="simple"
             android:ellipsize="end"
             android:gravity="top"
@@ -82,18 +96,20 @@
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/iv_feed_more"
             app:layout_constraintStart_toStartOf="@+id/cl_feed_profile"
-            app:layout_constraintTop_toBottomOf="@+id/cl_feed_profile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_feed_spoiler_warning"
             tools:text="최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요 애매한 건 빼고 주로 무협 중에서도 회귀물로 골라봤어요 왜냐면 내가 회귀물을 좋아하기 때문에 최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요최근 잼께 봤던 무협 소설 목록 진짜들을 가 회귀물을 좋아하기 때문에 최근 잼께 봤습니다 몇글자 까지 될지 모르겠네요" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_novel_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/btn_feed_novel_info"
             android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
-            app:layout_constraintEnd_toEndOf="@+id/tv_feed_content"
-            app:layout_constraintStart_toStartOf="@+id/tv_feed_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_feed_content">
 
             <ImageView
