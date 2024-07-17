@@ -104,45 +104,54 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun bindMenuByIsMyFeed(popup: PopupWindow, isMyFeed: Boolean, feedId: Long) {
         with(popupBinding) {
             when (isMyFeed) {
-                true -> {
-                    onFirstItemClick = {
-                        navigateToFeedEdit(feedId)
-                        popup.dismiss()
-                    }
-                    onSecondItemClick = {
-                        showDialog<DialogRemovePopupMenuBinding>(
-                            event = { feedViewModel.updateRemovedFeed(feedId) },
-                        )
-                        popup.dismiss()
-                    }
-                    menuContentTitle =
-                        getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
-                    tvFeedPopupFirstItem.isSelected = true
-                    tvFeedPopupSecondItem.isSelected = true
-                }
-
-                false -> {
-                    onFirstItemClick = {
-                        showDialog<DialogReportPopupMenuBinding>(
-                            title = getString(R.string.report_popup_menu_spoiling_feed),
-                            event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
-                        )
-                        popup.dismiss()
-                    }
-                    onSecondItemClick = {
-                        showDialog<DialogReportPopupMenuBinding>(
-                            title = getString(R.string.report_popup_menu_impertinence_feed),
-                            event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
-                        )
-                        popup.dismiss()
-                    }
-                    menuContentTitle =
-                        getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
-                    tvFeedPopupFirstItem.isSelected = false
-                    tvFeedPopupSecondItem.isSelected = false
-                }
+                true -> setupMyFeed(feedId, popup)
+                false -> setupNotMyFeed(feedId, popup)
             }
         }
+    }
+
+    private fun MenuFeedPopupBinding.setupNotMyFeed(
+        feedId: Long,
+        popup: PopupWindow,
+    ) {
+        onFirstItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                title = getString(R.string.report_popup_menu_spoiling_feed),
+                event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        onSecondItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                title = getString(R.string.report_popup_menu_impertinence_feed),
+                event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        menuContentTitle =
+            getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        tvFeedPopupFirstItem.isSelected = false
+        tvFeedPopupSecondItem.isSelected = false
+    }
+
+    private fun MenuFeedPopupBinding.setupMyFeed(
+        feedId: Long,
+        popup: PopupWindow,
+    ) {
+        onFirstItemClick = {
+            navigateToFeedEdit(feedId)
+            popup.dismiss()
+        }
+        onSecondItemClick = {
+            showDialog<DialogRemovePopupMenuBinding>(
+                event = { feedViewModel.updateRemovedFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        menuContentTitle =
+            getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        tvFeedPopupFirstItem.isSelected = true
+        tvFeedPopupSecondItem.isSelected = true
     }
 
     private inline fun <reified Dialog : ViewDataBinding> showDialog(
