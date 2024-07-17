@@ -27,13 +27,13 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/bg_login_request_primary_100_radius_8dp"
-            android:text="로그인 하러가기"
+            android:text="@string/login_request_go_to_login"
             android:textAppearance="@style/label1"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_login_request_description" />
-
+현
         <TextView
             android:id="@+id/tv_login_request_dismiss"
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="18dp"
             android:padding="4dp"
-            android:text="닫기"
+            android:text="@string/login_request_dismiss"
             android:textAppearance="@style/label1"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="parent"
