@@ -25,4 +25,9 @@
         <item name="android:colorBackground">@color/transparent</item>
     </style>
 
+    <style name="WebsosoDialogTheme">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:colorBackground">@color/transparent</item>
+    </style>
+
 </resources>
