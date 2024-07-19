@@ -15,14 +15,18 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailExploreKeywordFragment :
     BindingFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
     private val detailExploreKeywordViewModel: DetailExploreKeywordViewModel by viewModels()
-    private lateinit var detailExploreKeywordAdapter: DetailExploreKeywordAdapter
+    private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
+        DetailExploreKeywordAdapter(onKeywordClick = { keyword, isSelected ->
+            detailExploreKeywordViewModel.updateCurrentSelectedKeywords(keyword, isSelected)
+        })
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         detailExploreKeywordViewModel.updateKeywords()
         bindViewModel()
-        setupRecyclerView()
+        setupAdapter()
         setupObserver()
     }
 
@@ -47,13 +51,7 @@ class DetailExploreKeywordFragment :
         }
     }
 
-    private fun setupRecyclerView() {
-        detailExploreKeywordAdapter =
-            DetailExploreKeywordAdapter(
-                onKeywordClick = { keyword, isSelected ->
-                    detailExploreKeywordViewModel.updateCurrentSelectedKeywords(keyword, isSelected)
-                },
-            )
+    private fun setupAdapter() {
         binding.rvDetailExploreKeywordList.apply {
             adapter = detailExploreKeywordAdapter
             itemAnimator = null
@@ -76,7 +74,7 @@ class DetailExploreKeywordFragment :
         val keywordChipGroup = binding.wcgDetailExploreKeywordSelectedKeyword
         keywordChipGroup.removeAllViews()
         currentSelectedKeywords.forEach { keyword ->
-            WebsosoChip(binding.root.context).apply {
+            WebsosoChip(requireContext()).apply {
                 setWebsosoChipText(keyword.keywordName)
                 setWebsosoChipTextAppearance(R.style.body2)
                 setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
@@ -87,8 +85,7 @@ class DetailExploreKeywordFragment :
                 setWebsosoChipRadius(40f)
                 setOnCloseIconClickListener {
                     detailExploreKeywordViewModel.updateCurrentSelectedKeywords(
-                        keyword,
-                        isSelected = false
+                        keyword, isSelected = false
                     )
                 }
                 setWebsosoChipCloseIconVisibility(true)
