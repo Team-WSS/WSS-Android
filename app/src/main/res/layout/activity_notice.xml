@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="알림"
+            android:text="@string/notice_notification"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"

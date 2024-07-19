@@ -132,4 +132,7 @@
     <string name="login_request_go_to_login">로그인 하러가기</string>
     <string name="login_request_dismiss">닫기</string>
 
+    <!-- 알림 뷰 -->
+    <string name="notice_notification">알림</string>
+
 </resources>
