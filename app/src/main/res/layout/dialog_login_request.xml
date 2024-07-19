@@ -33,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_login_request_description" />
-현
+
         <TextView
             android:id="@+id/tv_login_request_dismiss"
             android:layout_width="wrap_content"
