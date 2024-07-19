@@ -29,14 +29,14 @@ class OnboardingActivity :
     }
 
     private fun setupViewPager() {
-        binding.vpOnBoarding.adapter = OnboardingPagerAdapter(this)
+        binding.vpOnboarding.adapter = OnboardingPagerAdapter(this)
     }
 
     private fun observeCurrentPageChanges() {
         viewModel.currentPage.observe(this) { page ->
             val pageIndex = OnboardingPage.pages.indexOf(page)
-            if (binding.vpOnBoarding.currentItem != pageIndex) {
-                binding.vpOnBoarding.setCurrentItem(pageIndex, true)
+            if (binding.vpOnboarding.currentItem != pageIndex) {
+                binding.vpOnboarding.setCurrentItem(pageIndex, true)
             }
         }
     }
@@ -49,9 +49,9 @@ class OnboardingActivity :
 
     private fun animateProgressBar(targetProgress: Int) {
         ObjectAnimator.ofInt(
-            binding.pbOnBoarding,
+            binding.pbOnboarding,
             ANIMATION_PROPERTY_NAME,
-            binding.pbOnBoarding.progress,
+            binding.pbOnboarding.progress,
             targetProgress
         ).run {
             duration = ANIMATION_DURATION_TIME
