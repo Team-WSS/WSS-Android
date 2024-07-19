@@ -55,17 +55,22 @@
             </com.teamwss.websoso.ui.common.customView.WebsosoChipGroup>
         </HorizontalScrollView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_feed"
+        <com.simform.refresh.SSPullToRefreshLayout
+            android:id="@+id/sptr_feed_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hsv_feed"
-            tools:listitem="@layout/item_feed" />
+            app:layout_constraintTop_toBottomOf="@+id/hsv_feed">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_feed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_feed" />
+        </com.simform.refresh.SSPullToRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

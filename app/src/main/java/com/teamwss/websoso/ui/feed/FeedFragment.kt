@@ -186,13 +186,14 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         super.onViewCreated(view, savedInstanceState)
 
         initView()
+        feedViewModel.updateFeeds()
         observeUiState()
     }
 
     private fun initView() {
         feedViewModel.categories.setUpChips()
-        feedViewModel.updateFeeds()
         setupAdapter()
+        setupRefreshView()
     }
 
     private fun List<CategoryModel>.setUpChips() {
@@ -226,12 +227,29 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         }
     }
 
+    private fun setupRefreshView() {
+        binding.sptrFeedRefresh.apply {
+            setRefreshViewParams(
+                params = ViewGroup.LayoutParams(
+                    30, 30
+                )
+            )
+            setLottieAnimation("lottie_websoso_loading.json")
+            setOnRefreshListener {
+                feedViewModel.updateFeeds()
+            }
+        }
+    }
+
     private fun observeUiState() {
         feedViewModel.feedUiState.observe(viewLifecycleOwner) { feedUiState ->
             when {
                 feedUiState.loading -> loading()
                 feedUiState.error -> throw IllegalStateException()
-                !feedUiState.loading -> updateFeeds(feedUiState)
+                !feedUiState.loading -> {
+                    binding.sptrFeedRefresh.setRefreshing(false)
+                    updateFeeds(feedUiState)
+                }
             }
         }
     }
