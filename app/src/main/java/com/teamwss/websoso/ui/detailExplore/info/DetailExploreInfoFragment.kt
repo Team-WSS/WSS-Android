@@ -20,8 +20,8 @@ class DetailExploreInfoFragment :
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
     private val detailExploreInfoViewModel: DetailExploreInfoViewModel by viewModels()
 
-    private lateinit var seriesStatusChips: List<Chip>
-    private lateinit var ratingChips: List<Chip>
+    private var seriesStatusChips: List<Chip> = emptyList()
+    private var ratingChips: List<Chip> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

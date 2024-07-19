@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.detailExplore
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,8 +25,6 @@ class DetailExploreViewModel @Inject constructor() : ViewModel() {
         } else {
             _selectedGenres.value?.add(genre)
         }
-
-        Log.d("123123", selectedGenres.value.toString())
     }
 
     fun updateSelectedSeriesStatus(status: String?) {
