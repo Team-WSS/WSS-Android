@@ -58,11 +58,11 @@ class FakeKeywordRepository @Inject constructor() {
                         keywordName = "환생",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 138,
+                        keywordId = 154,
                         keywordName = "빙의",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 149,
+                        keywordId = 155,
                         keywordName = "회귀",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
@@ -84,19 +84,19 @@ class FakeKeywordRepository @Inject constructor() {
                         keywordName = "악당/빌런",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 293,
+                        keywordId = 236,
                         keywordName = "먼치킨",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 230,
+                        keywordId = 237,
                         keywordName = "천재",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 149,
+                        keywordId = 238,
                         keywordName = "회귀",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 192,
+                        keywordId = 239,
                         keywordName = "삼국지",
                     ),
                 ),
@@ -106,27 +106,27 @@ class FakeKeywordRepository @Inject constructor() {
                 categoryImage = "https://png.pngtree.com/element_our/20190604/ourmid/pngtree-a-sharp-sword-image_1473377.jpg",
                 keywords = listOf(
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 234,
+                        keywordId = 240,
                         keywordName = "친구",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 235,
+                        keywordId = 241,
                         keywordName = "동료",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 293,
+                        keywordId = 242,
                         keywordName = "료동",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 230,
+                        keywordId = 243,
                         keywordName = "구친",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 149,
+                        keywordId = 244,
                         keywordName = "첫사랑",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 192,
+                        keywordId = 245,
                         keywordName = "막사랑",
                     ),
                 ),
@@ -136,31 +136,31 @@ class FakeKeywordRepository @Inject constructor() {
                 categoryImage = "https://png.pngtree.com/element_our/20190604/ourmid/pngtree-a-sharp-sword-image_1473377.jpg",
                 keywords = listOf(
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 234,
+                        keywordId = 300,
                         keywordName = "뻔한",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 235,
+                        keywordId = 301,
                         keywordName = "반전있는",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 293,
+                        keywordId = 302,
                         keywordName = "탄탄한",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 230,
+                        keywordId = 303,
                         keywordName = "힐링되는",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 149,
+                        keywordId = 304,
                         keywordName = "현실적인",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 192,
+                        keywordId = 305,
                         keywordName = "정치적인",
                     ),
                     KeywordsEntity.CategoryEntity.KeywordEntity(
-                        keywordId = 4,
+                        keywordId = 306,
                         keywordName = "일상적인",
                     ),
                 ),
