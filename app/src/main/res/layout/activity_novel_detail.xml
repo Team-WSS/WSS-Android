@@ -298,7 +298,7 @@
                                 android:text="@string/novel_rating_read_status_watching"
                                 android:textAppearance="@style/body4"
                                 android:textColor="@color/bg_novel_detail_read_status_selector"
-                                app:icon="@drawable/ic_novel_detail_watching"
+                                app:icon="@drawable/ic_novel_detail_watching_selector"
                                 app:iconGravity="top"
                                 app:iconPadding="4dp"
                                 app:iconTint="@color/bg_novel_detail_read_status_selector" />
