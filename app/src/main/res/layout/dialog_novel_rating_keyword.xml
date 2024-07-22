@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_rating_white_radius_top_12dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <TextView
+            android:id="@+id/tv_rating_keyword_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="26dp"
+            android:text="@string/novel_rating_keyword_title"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_rating_keyword_cancel"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:onClick="@{() -> onClick.onCancelClick()}"
+            android:padding="22dp"
+            android:src="@drawable/ic_novel_rating_date_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/sv_rating_keyword_search"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="26dp"
+            android:background="@drawable/bg_novel_rating_keyword_search_selector"
+            android:focusedByDefault="false"
+            android:paddingStart="0dp"
+            android:paddingEnd="36dp"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/gray_200_AEADB3"
+            app:closeIcon="@drawable/ic_novel_rating_search_cancel"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_rating_keyword_title"
+            app:queryBackground="@null"
+            app:queryHint="@string/novel_rating_keyword_search_hint"
+            app:searchIcon="@null" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="14dp"
+            android:backgroundTint="@color/gray_300_52515F"
+            android:src="@drawable/ic_novel_rating_search"
+            app:layout_constraintBottom_toBottomOf="@id/sv_rating_keyword_search"
+            app:layout_constraintEnd_toEndOf="@id/sv_rating_keyword_search"
+            app:layout_constraintTop_toTopOf="@id/sv_rating_keyword_search" />
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_rating_keyword_selected_keyword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="-6dp"
+            android:paddingHorizontal="20dp"
+            android:scrollbars="none"
+            app:isVisible="@{viewModel.uiState.ratingKeywordModel.currentSelectedKeywords.size != 0}"
+            app:layout_constraintBottom_toTopOf="@id/rv_rating_keyword_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_rating_keyword_search"
+            tools:visibility="gone">
+
+            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+                android:id="@+id/wcg_novel_rating_keyword_selected_keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacing="6dp"
+                app:singleLine="true" />
+        </HorizontalScrollView>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rv_rating_keyword_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_rating_keyword_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="104dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_min="384dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_rating_keyword_selected_keyword" />
+
+        <LinearLayout
+            android:id="@+id/ll_rating_keyword_reset"
+            android:layout_width="126dp"
+            android:layout_height="62dp"
+            android:gravity="center"
+            android:onClick="@{() -> onClick.onClearClick()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:backgroundTint="@color/gray_300_52515F"
+                android:src="@drawable/ic_novel_rating_search_reset" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/novel_rating_keyword_clear"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/gray_300_52515F" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_rating_keyword_enroll"
+            android:layout_width="0dp"
+            android:layout_height="62dp"
+            android:background="@color/primary_100_6A5DFD"
+            android:gravity="center"
+            android:onClick="@{() -> onClick.onSaveClick()}"
+            android:text="@{@string/novel_rating_keyword_enroll(viewModel.uiState.ratingKeywordModel.currentSelectedKeywords.size)}"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ll_rating_keyword_reset"
+            tools:text="0개 선택" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

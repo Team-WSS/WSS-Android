@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.novelRating.NovelRatingClickListener" />
+
+        <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_rating_white_radius_top_12dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <TextView
+            android:id="@+id/tv_rating_date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="26dp"
+            android:text="@{viewModel.isEditingStartDate() ? @string/novel_rating_date_start_date : @string/novel_rating_date_end_date}"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/gray_300_52515F"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus != ReadStatus.WATCHED}"
+            app:layout_constraintBottom_toTopOf="@id/cl_rating_date_number_picker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="시작 날짜" />
+
+        <ImageView
+            android:id="@+id/iv_rating_date_cancel"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:onClick="@{() -> onClick.onCancelClick()}"
+            android:padding="22dp"
+            android:src="@drawable/ic_novel_rating_date_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view_rating_date_toggle"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bg_novel_rating_date_btn_deselected_selector"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
+            app:layout_constraintBottom_toTopOf="@id/cl_rating_date_number_picker"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ll_rating_date_read_date_start" />
+
+        <LinearLayout
+            android:id="@+id/ll_rating_date_read_date_start"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="64dp"
+            android:background="@drawable/bg_novel_rating_date_btn_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusedByDefault="true"
+            android:gravity="center"
+            android:onClick="@{() -> viewModel.toggleEditingStartDate(true)}"
+            android:orientation="vertical"
+            android:paddingVertical="10dp"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
+            app:layout_constraintEnd_toStartOf="@id/ll_rating_date_read_date_end"
+            app:layout_constraintStart_toStartOf="@id/view_rating_date_toggle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:selected="@{viewModel.isEditingStartDate}">
+
+            <TextView
+                android:id="@+id/tv_rating_date_read_date_start_title"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="56dp"
+                android:maxLines="1"
+                android:text="@string/novel_rating_date_start_date"
+                android:textAlignment="center"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/bg_rating_date_text_selector"
+                app:selected="@{viewModel.isEditingStartDate}" />
+
+            <TextView
+                android:id="@+id/tv_rating_date_read_date_start"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="56dp"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:text="@{@string/novel_rating_current_date(viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.first, viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.second, viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.third)}"
+                android:textAlignment="center"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/bg_rating_date_text_selector"
+                app:selected="@{viewModel.isEditingStartDate}"
+                tools:text="2024-03-04" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_rating_date_read_date_end"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_novel_rating_date_btn_selector"
+            android:gravity="center"
+            android:onClick="@{() -> viewModel.toggleEditingStartDate(false)}"
+            android:orientation="vertical"
+            android:paddingVertical="10dp"
+            app:isVisible="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
+            app:layout_constraintEnd_toEndOf="@id/view_rating_date_toggle"
+            app:layout_constraintStart_toEndOf="@id/ll_rating_date_read_date_start"
+            app:layout_constraintTop_toTopOf="@id/ll_rating_date_read_date_start"
+            app:selected="@{!viewModel.isEditingStartDate}">
+
+            <TextView
+                android:id="@+id/tv_rating_date_read_date_end_title"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="56dp"
+                android:maxLines="1"
+                android:text="@string/novel_rating_date_end_date"
+                android:textAlignment="center"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/bg_rating_date_text_selector"
+                app:selected="@{!viewModel.isEditingStartDate}" />
+
+            <TextView
+                android:id="@+id/tv_rating_date_read_date_end"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="56dp"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:text="@{@string/novel_rating_current_date(viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.first, viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.second, viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.third)}"
+                android:textAlignment="center"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/bg_rating_date_text_selector"
+                app:selected="@{!viewModel.isEditingStartDate}"
+                tools:text="2024-05-11" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_rating_date_number_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_rating_date_complete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_novel_rating_date_primary_20_radius_12dp"
+                android:backgroundTint="@color/primary_20_F5F7FF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="78dp"
+                android:background="@drawable/ic_novel_rating_date_selected"
+                app:layout_constraintBottom_toBottomOf="@id/np_rating_date_year"
+                app:layout_constraintEnd_toEndOf="@id/np_rating_date_year"
+                app:layout_constraintTop_toTopOf="@id/np_rating_date_year" />
+
+            <NumberPicker
+                android:id="@+id/np_rating_date_year"
+                style="@style/NumberPicker"
+                android:layout_width="90dp"
+                android:layout_height="112dp"
+                android:layout_marginStart="14dp"
+                android:selectionDividerHeight="0dp"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.first : viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.first}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="64dp"
+                android:background="@drawable/ic_novel_rating_date_selected"
+                app:layout_constraintBottom_toBottomOf="@id/np_rating_date_month"
+                app:layout_constraintEnd_toEndOf="@id/np_rating_date_month"
+                app:layout_constraintTop_toTopOf="@id/np_rating_date_month" />
+
+            <NumberPicker
+                android:id="@+id/np_rating_date_month"
+                style="@style/NumberPicker"
+                android:layout_width="74dp"
+                android:layout_height="112dp"
+                android:layout_marginEnd="-52dp"
+                android:selectionDividerHeight="0dp"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.second : viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.second}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="64dp"
+                android:background="@drawable/ic_novel_rating_date_selected"
+                app:layout_constraintBottom_toBottomOf="@id/np_rating_date_month"
+                app:layout_constraintEnd_toEndOf="@id/np_rating_date_day"
+                app:layout_constraintStart_toStartOf="@id/np_rating_date_day"
+                app:layout_constraintTop_toTopOf="@id/np_rating_date_day" />
+
+            <NumberPicker
+                android:id="@+id/np_rating_date_day"
+                style="@style/NumberPicker"
+                android:layout_width="74dp"
+                android:layout_height="112dp"
+                android:layout_marginEnd="-8dp"
+                android:selectionDividerHeight="0dp"
+                android:value="@{viewModel.isEditingStartDate()? viewModel.uiState.novelRatingModel.ratingDateModel.currentStartDate.third : viewModel.uiState.novelRatingModel.ratingDateModel.currentEndDate.third}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_rating_date_complete"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="34dp"
+            android:background="@drawable/bg_novel_rating_date_primary_100_radius_12dp"
+            android:gravity="center"
+            android:onClick="@{() -> onClick.onSaveClick()}"
+            android:text="@string/novel_rating_date_complete"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_rating_date_number_picker" />
+
+        <TextView
+            android:id="@+id/tv_rating_date_clear"
+            android:layout_width="134dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:gravity="center"
+            android:onClick="@{() -> onClick.onClearClick()}"
+            android:text="@string/novel_rating_date_remove"
+            android:textAppearance="@style/body1"
+            android:textColor="@color/primary_100_6A5DFD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_rating_date_complete" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

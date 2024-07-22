@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.IntegerRes
@@ -9,12 +11,12 @@ import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityMainBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
-import com.teamwss.websoso.ui.main.explore.ExploreFragment
 import com.teamwss.websoso.ui.feed.FeedFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.HOME
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
+import com.teamwss.websoso.ui.main.explore.ExploreFragment
 import com.teamwss.websoso.ui.main.home.HomeFragment
 import com.teamwss.websoso.ui.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,6 +65,15 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             fun valueOf(id: Int): FragmentType = values().find { fragmentView ->
                 fragmentView.resId == id
             } ?: throw IllegalArgumentException()
+        }
+    }
+
+    companion object{
+
+        fun getIntent(context: Context): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            return intent
         }
     }
 }
