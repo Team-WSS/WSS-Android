@@ -8,7 +8,7 @@ import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.model.NovelRatingKeywordCategoryEntity
 import com.teamwss.websoso.data.repository.FakeNovelRatingRepository
 import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
+import com.teamwss.websoso.ui.novelRating.util.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel

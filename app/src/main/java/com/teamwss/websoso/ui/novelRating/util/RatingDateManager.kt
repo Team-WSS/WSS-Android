@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelRating.manager
+package com.teamwss.websoso.ui.novelRating.util
 
 import com.teamwss.websoso.ui.novelRating.model.Month
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
