@@ -1,15 +1,15 @@
 package com.teamwss.websoso.data.mapper
 
 import com.teamwss.websoso.data.model.KeywordsEntity
-import com.teamwss.websoso.data.remote.response.KeywordResponseDto
+import com.teamwss.websoso.data.remote.response.KeywordsResponseDto
 
-fun KeywordResponseDto.toData(): KeywordsEntity {
+fun KeywordsResponseDto.toData(): KeywordsEntity {
     return KeywordsEntity(
         categories = categories.map { it.toData() },
     )
 }
 
-fun KeywordResponseDto.CategoryResponseDto.toData(): KeywordsEntity.CategoryEntity {
+fun KeywordsResponseDto.CategoryResponseDto.toData(): KeywordsEntity.CategoryEntity {
     return KeywordsEntity.CategoryEntity(
         categoryName = categoryName,
         categoryImage = categoryImage,
@@ -17,7 +17,7 @@ fun KeywordResponseDto.CategoryResponseDto.toData(): KeywordsEntity.CategoryEnti
     )
 }
 
-fun KeywordResponseDto.CategoryResponseDto.KeywordResponseDto.toData(): KeywordsEntity.CategoryEntity.KeywordEntity {
+fun KeywordsResponseDto.CategoryResponseDto.KeywordResponseDto.toData(): KeywordsEntity.CategoryEntity.KeywordEntity {
     return KeywordsEntity.CategoryEntity.KeywordEntity(
         keywordId = keywordId.toInt(),
         keywordName = keywordName,
