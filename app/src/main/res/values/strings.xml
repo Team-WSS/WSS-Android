@@ -128,4 +128,11 @@
     <string name="welcome_lets_falling_websoso">웹소소와 함께 웹소설에 빠져봐요</string>
     <string name="welcome_start">시작하기</string>
 
+    <!-- 로그인 요청 다이얼로그 -->
+    <string name="login_request_go_to_login">로그인 하러가기</string>
+    <string name="login_request_dismiss">닫기</string>
+
+    <!-- 알림 뷰 -->
+    <string name="notice_notification">알림</string>
+
 </resources>
