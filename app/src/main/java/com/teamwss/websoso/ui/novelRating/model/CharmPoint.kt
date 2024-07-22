@@ -10,12 +10,12 @@ enum class CharmPoint(val value: String, val title: String) {
     companion object {
         fun String.toWrappedCharmPoint(): List<CharmPoint> {
             return split(",").map {
-                values().find { charmPoint -> charmPoint.title == it } ?: return emptyList()
+                entries.find { charmPoint -> charmPoint.title == it } ?: return emptyList()
             }
         }
 
         fun String.toFormattedCharmPoint(): String {
-            CharmPoint.values().forEach { charmPoint ->
+            entries.forEach { charmPoint ->
                 if (charmPoint.value == this) return charmPoint.title
             }
             return ""
