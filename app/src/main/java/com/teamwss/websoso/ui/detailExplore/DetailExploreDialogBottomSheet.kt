@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.detailExplore
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
@@ -12,8 +13,9 @@ import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreDialog :
+class DetailExploreDialogBottomSheet :
     BindingBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
+    private val detailExploreViewModel: DetailExploreViewModel by viewModels()
     private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
     private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
 
@@ -22,7 +24,7 @@ class DetailExploreDialog :
 
         setupBottomSheet()
         initDetailExploreFragment()
-        replaceDetailExploreFragment()
+        showContentByTabs()
         onBottomSheetExitButtonClick()
     }
 
@@ -43,7 +45,7 @@ class DetailExploreDialog :
             .commit()
     }
 
-    private fun replaceDetailExploreFragment() {
+    private fun showContentByTabs() {
         binding.tvDetailExploreInfoButton.setOnClickListener {
             childFragmentManager.beginTransaction()
                 .hide(detailExploreKeywordFragment)
@@ -67,8 +69,8 @@ class DetailExploreDialog :
 
     companion object {
 
-        fun newInstance(): DetailExploreDialog {
-            return DetailExploreDialog()
+        fun newInstance(): DetailExploreDialogBottomSheet {
+            return DetailExploreDialogBottomSheet()
         }
     }
 }
