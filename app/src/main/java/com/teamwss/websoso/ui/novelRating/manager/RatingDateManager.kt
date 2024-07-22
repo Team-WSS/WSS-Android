@@ -26,7 +26,7 @@ class RatingDateManager {
 
         return novelRatingModel.copy(
             ratingDateModel = updatedRatingDateModel,
-            uiReadStatus = readStatus
+            uiReadStatus = readStatus,
         )
     }
 
