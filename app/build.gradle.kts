@@ -86,4 +86,7 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
+
+    // SwipeRefreshLayout
+    implementation("com.github.SimformSolutionsPvtLtd:SSPullToRefresh:1.5.2")
 }
