@@ -135,7 +135,7 @@
                             <ImageView
                                 android:layout_width="12dp"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_novel_detail_interest_deselected" />
+                                android:src="@drawable/ic_novel_detail_interest" />
 
                             <TextView
                                 android:id="@+id/tv_novel_detail_interest_count"
