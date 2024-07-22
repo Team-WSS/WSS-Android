@@ -20,6 +20,10 @@ class DetailExploreKeywordViewModel @Inject constructor(
         MutableLiveData(DetailExploreKeywordUiState())
     val uiState: LiveData<DetailExploreKeywordUiState> get() = _uiState
 
+    private val _selectedKeywords: MutableLiveData<List<DetailExploreKeywordModel.CategoryModel.KeywordModel>> =
+        MutableLiveData()
+    val selectedKeywords: LiveData<List<DetailExploreKeywordModel.CategoryModel.KeywordModel>> get() = _selectedKeywords
+
     private val _searchWord: MutableLiveData<String> = MutableLiveData()
     val searchWord: MutableLiveData<String> get() = _searchWord
 
@@ -78,6 +82,7 @@ class DetailExploreKeywordViewModel @Inject constructor(
                         currentSelectedKeywords = currentSelectedKeywords,
                     ),
                 )
+            _selectedKeywords.value = currentSelectedKeywords
         }
     }
 

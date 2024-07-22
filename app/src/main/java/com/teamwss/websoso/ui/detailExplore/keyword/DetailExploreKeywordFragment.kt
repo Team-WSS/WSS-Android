@@ -8,7 +8,7 @@ import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,13 +64,16 @@ class DetailExploreKeywordFragment :
         }
 
         detailExploreKeywordViewModel.uiState.observe(viewLifecycleOwner) {
-            setupCurrentSelectedChips(it)
             detailExploreKeywordAdapter.submitList(it.keywordModel.categories)
+        }
+
+        detailExploreKeywordViewModel.selectedKeywords.observe(viewLifecycleOwner) { keywords ->
+            setupCurrentSelectedChips(keywords)
         }
     }
 
-    private fun setupCurrentSelectedChips(uiState: DetailExploreKeywordUiState) {
-        val currentSelectedKeywords = uiState.keywordModel.currentSelectedKeywords
+    private fun setupCurrentSelectedChips(selectedKeywords: List<DetailExploreKeywordModel.CategoryModel.KeywordModel>) {
+        val currentSelectedKeywords: List<DetailExploreKeywordModel.CategoryModel.KeywordModel> = selectedKeywords
         val keywordChipGroup = binding.wcgDetailExploreKeywordSelectedKeyword
         keywordChipGroup.removeAllViews()
         currentSelectedKeywords.forEach { keyword ->
