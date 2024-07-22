@@ -11,23 +11,16 @@ class DetailExploreKeywordAdapter(
     private val onKeywordClick: (keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
 ) : ListAdapter<DetailExploreKeywordModel.CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int,
-    ): DetailExploreKeywordViewHolder {
-        val binding =
-            ItemNovelRatingKeywordBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            )
+    override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): DetailExploreKeywordViewHolder {
+        val binding = ItemNovelRatingKeywordBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return DetailExploreKeywordViewHolder(binding, onKeywordClick)
     }
 
-    override fun onBindViewHolder(
-        holder: DetailExploreKeywordViewHolder,
-        position: Int,
-    ) {
+    override fun onBindViewHolder(holder: DetailExploreKeywordViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
     }
@@ -47,7 +40,7 @@ class DetailExploreKeywordAdapter(
                     oldItem: DetailExploreKeywordModel.CategoryModel,
                     newItem: DetailExploreKeywordModel.CategoryModel,
                 ): Boolean {
-                    return oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
+                    return oldItem == newItem
                 }
             }
     }
