@@ -48,8 +48,8 @@
     <string name="detail_explore_keyword_not_exist_result">해당 키워드는\n아직 등록되지 않았어요..</string>
 
     <!-- 작품 상세 -->
-    <string name="novel_detail_review">리뷰 남기기</string>
-    <string name="novel_detail_interest">관심 있어요</string>
+    <string name="novel_detail_review">나도 한마디</string>
+    <string name="novel_detail_interest">관심</string>
     <string name="novel_detail_info">정보</string>
     <string name="novel_detail_feed">피드</string>
     <string name="novel_detail_report_error">오류 제보</string>
