@@ -2,17 +2,22 @@ package com.teamwss.websoso.ui.detailExplore.info
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
+import com.teamwss.websoso.ui.detailExplore.info.model.Rating
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailExploreInfoFragment :
     BindingFragment<FragmentDetailExploreInfoBinding>(R.layout.fragment_detail_explore_info) {
+    private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
     private val detailExploreInfoViewModel: DetailExploreInfoViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -20,8 +25,9 @@ class DetailExploreInfoFragment :
 
         bindViewModel()
         setupGenreChips()
-        setupStatusChipsSingleSelection()
-        setupRatingChipsSingleSelection()
+        setupSeriesStatusChips()
+        setupRatingChips()
+        setupObserver()
     }
 
     private fun bindViewModel() {
@@ -41,27 +47,32 @@ class DetailExploreInfoFragment :
                 setWebsosoChipPaddingVertical(30f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(45f)
-                setOnWebsosoChipClick { } // TODO 추후 추가 예정
+                setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre.title) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
 
-    private fun setupStatusChipsSingleSelection() {
-        val statusChips = listOf(
+    private fun setupSeriesStatusChips() {
+        val seriesStatusChips = listOf(
             binding.chipDetailExploreInfoStatusInSeries,
             binding.chipDetailExploreInfoStatusComplete,
         )
 
-        statusChips.forEach { chip ->
-            chip.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    statusChips.filter { it != chip }.forEach { it.isChecked = false }
+        seriesStatusChips.forEach { chip ->
+            setupChipCheckListener(chip) { isChecked ->
+                when (isChecked) {
+                    true -> {
+                        seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
+                        detailExploreViewModel.updateSelectedSeriesStatus(chip.text.toString())
+                    }
+
+                    false -> detailExploreViewModel.updateSelectedSeriesStatus(null)
                 }
             }
         }
     }
 
-    private fun setupRatingChipsSingleSelection() {
+    private fun setupRatingChips() {
         val ratingChips = listOf(
             binding.chipDetailExploreInfoRatingLowest,
             binding.chipDetailExploreInfoRatingLower,
@@ -70,10 +81,49 @@ class DetailExploreInfoFragment :
         )
 
         ratingChips.forEach { chip ->
-            chip.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    ratingChips.filter { it != chip }.forEach { it.isChecked = false }
+            setupChipCheckListener(chip) { isChecked ->
+                when (isChecked) {
+                    true -> {
+                        ratingChips.filter { it != chip }.forEach { it.isChecked = false }
+                        val ratingValue =
+                            Rating.entries.find {
+                                chip.text.toString().contains(it.value.toString())
+                            }
+                        detailExploreViewModel.updateSelectedRating(ratingValue?.value)
+                    }
+
+                    false -> detailExploreViewModel.updateSelectedRating(null)
                 }
+            }
+        }
+    }
+
+    private fun setupChipCheckListener(chip: Chip, onCheckedChange: (Boolean) -> Unit) {
+        chip.setOnCheckedChangeListener(null)
+        chip.isChecked = false
+        chip.setOnCheckedChangeListener { _, isChecked -> onCheckedChange(isChecked) }
+    }
+
+    private fun setupObserver() {
+        detailExploreViewModel.selectedStatus.observe(viewLifecycleOwner) { selectedStatus ->
+            listOf(
+                binding.chipDetailExploreInfoStatusInSeries,
+                binding.chipDetailExploreInfoStatusComplete,
+            ).forEach { chip ->
+                chip.isChecked = selectedStatus == chip.text.toString()
+            }
+        }
+
+        detailExploreViewModel.selectedRating.observe(viewLifecycleOwner) { selectedRating ->
+            listOf(
+                binding.chipDetailExploreInfoRatingLowest,
+                binding.chipDetailExploreInfoRatingLower,
+                binding.chipDetailExploreInfoRatingHigher,
+                binding.chipDetailExploreInfoRatingHighest,
+            ).forEach { chip ->
+                val ratingValue =
+                    Rating.entries.find { chip.text.toString().contains(it.value.toString()) }
+                chip.isChecked = selectedRating == ratingValue?.value
             }
         }
     }
