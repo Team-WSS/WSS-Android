@@ -20,9 +20,6 @@ class DetailExploreInfoFragment :
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
     private val detailExploreInfoViewModel: DetailExploreInfoViewModel by viewModels()
 
-    private var seriesStatusChips: List<Chip> = emptyList()
-    private var ratingChips: List<Chip> = emptyList()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -56,25 +53,27 @@ class DetailExploreInfoFragment :
     }
 
     private fun setupSeriesStatusChips() {
-        seriesStatusChips = listOf(
+        val seriesStatusChips = listOf(
             binding.chipDetailExploreInfoStatusInSeries,
             binding.chipDetailExploreInfoStatusComplete,
         )
 
         seriesStatusChips.forEach { chip ->
             setupChipCheckListener(chip) { isChecked ->
-                if (isChecked) {
-                    seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
-                    detailExploreViewModel.updateSelectedSeriesStatus(chip.text.toString())
-                } else {
-                    detailExploreViewModel.updateSelectedSeriesStatus(null)
+                when (isChecked) {
+                    true -> {
+                        seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
+                        detailExploreViewModel.updateSelectedSeriesStatus(chip.text.toString())
+                    }
+
+                    false -> detailExploreViewModel.updateSelectedSeriesStatus(null)
                 }
             }
         }
     }
 
     private fun setupRatingChips() {
-        ratingChips = listOf(
+        val ratingChips = listOf(
             binding.chipDetailExploreInfoRatingLowest,
             binding.chipDetailExploreInfoRatingLower,
             binding.chipDetailExploreInfoRatingHigher,
@@ -83,13 +82,17 @@ class DetailExploreInfoFragment :
 
         ratingChips.forEach { chip ->
             setupChipCheckListener(chip) { isChecked ->
-                if (isChecked) {
-                    ratingChips.filter { it != chip }.forEach { it.isChecked = false }
-                    val ratingValue =
-                        Rating.entries.find { chip.text.toString().contains(it.value.toString()) }
-                    detailExploreViewModel.updateSelectedRating(ratingValue?.value)
-                } else {
-                    detailExploreViewModel.updateSelectedRating(null)
+                when (isChecked) {
+                    true -> {
+                        ratingChips.filter { it != chip }.forEach { it.isChecked = false }
+                        val ratingValue =
+                            Rating.entries.find {
+                                chip.text.toString().contains(it.value.toString())
+                            }
+                        detailExploreViewModel.updateSelectedRating(ratingValue?.value)
+                    }
+
+                    false -> detailExploreViewModel.updateSelectedRating(null)
                 }
             }
         }
@@ -103,13 +106,21 @@ class DetailExploreInfoFragment :
 
     private fun setupObserver() {
         detailExploreViewModel.selectedStatus.observe(viewLifecycleOwner) { selectedStatus ->
-            seriesStatusChips.forEach { chip ->
+            listOf(
+                binding.chipDetailExploreInfoStatusInSeries,
+                binding.chipDetailExploreInfoStatusComplete,
+            ).forEach { chip ->
                 chip.isChecked = selectedStatus == chip.text.toString()
             }
         }
 
         detailExploreViewModel.selectedRating.observe(viewLifecycleOwner) { selectedRating ->
-            ratingChips.forEach { chip ->
+            listOf(
+                binding.chipDetailExploreInfoRatingLowest,
+                binding.chipDetailExploreInfoRatingLower,
+                binding.chipDetailExploreInfoRatingHigher,
+                binding.chipDetailExploreInfoRatingHighest,
+            ).forEach { chip ->
                 val ratingValue =
                     Rating.entries.find { chip.text.toString().contains(it.value.toString()) }
                 chip.isChecked = selectedRating == ratingValue?.value
