@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.detailExplore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -11,7 +10,6 @@ import javax.inject.Inject
 class DetailExploreViewModel @Inject constructor() : ViewModel() {
     private val _selectedGenres: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf())
-    val selectedGenres: LiveData<List<String>> get() = _selectedGenres.map { it.toList() }
 
     private val _selectedSeriesStatus: MutableLiveData<String?> = MutableLiveData()
     val selectedStatus: LiveData<String?> get() = _selectedSeriesStatus
@@ -20,11 +18,8 @@ class DetailExploreViewModel @Inject constructor() : ViewModel() {
     val selectedRating: LiveData<Float?> get() = _selectedRating
 
     fun updateSelectedGenres(genre: String) {
-        if (selectedGenres.value?.contains(genre) == true) {
-            _selectedGenres.value?.remove(genre)
-        } else {
-            _selectedGenres.value?.add(genre)
-        }
+        if (_selectedGenres.value?.remove(genre) == true) return
+        _selectedGenres.value?.add(genre)
     }
 
     fun updateSelectedSeriesStatus(status: String?) {
