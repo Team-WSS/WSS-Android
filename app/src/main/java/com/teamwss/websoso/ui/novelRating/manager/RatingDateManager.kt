@@ -171,8 +171,8 @@ class RatingDateManager {
         return when (isEditingStartDate) {
             true -> ratingDateModel.copy(
                 currentStartDate = validateIsStartAfterEnd(
-                    ratingDateModel.currentStartDate!!,
-                    ratingDateModel.currentEndDate!!
+                    ratingDateModel.currentStartDate ?: today.toFormattedDate(),
+                    ratingDateModel.currentEndDate ?: today.toFormattedDate(),
                 )
             )
 
