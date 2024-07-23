@@ -22,4 +22,8 @@ class WebsosoLoad @JvmOverloads constructor(
     fun setReloadButtonClickListener(listener: OnClickListener) {
         binding.tvLoadFailReload.setOnClickListener(listener)
     }
+
+    fun setErrorLayoutVisibility(isVisible: Boolean) {
+        binding.clLoadFail.visibility = if (isVisible) VISIBLE else GONE
+    }
 }
