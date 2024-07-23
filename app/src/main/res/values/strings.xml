@@ -134,6 +134,8 @@
 
     <!-- 알림 뷰 -->
     <string name="notice_notification">알림</string>
+
+    <!-- 로드 뷰 -->
     <string name="load_load_title">로딩 중…</string>
     <string name="load_load_description">잠시만 기다려주세요</string>
     <string name="load_fail_title">네트워크에\n연결되어 있지 않아요</string>
