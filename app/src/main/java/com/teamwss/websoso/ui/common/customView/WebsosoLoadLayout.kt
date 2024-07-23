@@ -27,12 +27,12 @@ class WebsosoLoadLayout @JvmOverloads constructor(
      * @param context The context to be used for the ImageLoader.
      */
     private fun setupLoadAnimation(context: Context) {
-        val imageLoader = ImageLoader.Builder(context)
+        val gifImageLoader = ImageLoader.Builder(context)
             .components {
                 add(ImageDecoderDecoder.Factory())
             }
             .build()
-        binding.ivLoadLoad.load(R.drawable.ic_load_load, imageLoader)
+        binding.ivLoadLoad.load(R.drawable.ic_load_load, gifImageLoader)
     }
 
     /**
