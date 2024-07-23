@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.novelDetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.PopupWindow
@@ -30,8 +31,8 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupViewPager()
         setupTabLayout()
         setupObserver()
+        setupLoadLayout()
         binding.showPopupWindow = ::showPopupWindow
-        novelDetailViewModel.updateNovelDetail(1)
     }
 
     private fun bindViewModel() {
@@ -60,11 +61,24 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupObserver() {
-        novelDetailViewModel.loading.observe(this) {
-            // TODO: Show loading
+        novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
+            when (novelDetail.novel.novelTitle.isNotBlank()) {
+                true -> binding.wlNovelDetail.setWebsosoLoadVisibility(false)
+                false -> binding.wlNovelDetail.setWebsosoLoadVisibility(true)
+            }
         }
-        novelDetailViewModel.error.observe(this) {
-            // TODO: Show error
+        novelDetailViewModel.loading.observe(this) { isLoading ->
+            if (isLoading) novelDetailViewModel.updateNovelDetail(1)
+        }
+        novelDetailViewModel.error.observe(this) { isError ->
+            binding.wlNovelDetail.setErrorLayoutVisibility(isError)
+        }
+    }
+
+    private fun setupLoadLayout() {
+        binding.wlNovelDetail.setReloadButtonClickListener {
+            novelDetailViewModel.updateNovelDetail(1)
+            binding.wlNovelDetail.setErrorLayoutVisibility(false)
         }
     }
 
