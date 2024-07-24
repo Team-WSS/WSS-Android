@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
-    private val viewModel by viewModels<NovelInfoViewModel>()
+    private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
 
     override fun onViewCreated(
         view: View,
@@ -31,22 +31,22 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupObserver()
-        viewModel.updateNovelInfo(1)
+        novelInfoViewModel.updateNovelInfo(1)
     }
 
     private fun bindViewModel() {
-        binding.navigateToReadNovel = ::navigateToReadNovel
-        binding.novelInfoViewModel = viewModel
+        binding.navigateToReadNovel = ::navigateToWebView
+        binding.novelInfoViewModel = novelInfoViewModel
         binding.lifecycleOwner = this
     }
 
-    private fun navigateToReadNovel(url: String) {
+    private fun navigateToWebView(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        novelInfoViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             setupKeywordChip(uiState.keywords)
             updateExpandTextToggle(uiState.expandTextModel)
             updateExpandTextToggleVisibility(uiState.expandTextModel)
@@ -89,14 +89,14 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         bodyTextView.post {
             val lineCount = bodyTextView.layout.lineCount
             val ellipsisCount = bodyTextView.layout.getEllipsisCount(lineCount - 1)
-            viewModel.updateExpandTextToggleVisibility(lineCount, ellipsisCount)
+            novelInfoViewModel.updateExpandTextToggleVisibility(lineCount, ellipsisCount)
         }
     }
 
     private fun updateGraphHeightValue(unifiedReviewCountModel: UnifiedReviewCountModel) {
         if (unifiedReviewCountModel.watchingCount.graphHeight != 0) return
         val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
-        viewModel.updateGraphHeight(graphHeight)
+        novelInfoViewModel.updateGraphHeight(graphHeight)
     }
 
     private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
