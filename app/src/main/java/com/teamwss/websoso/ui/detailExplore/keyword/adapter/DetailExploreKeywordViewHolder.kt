@@ -3,10 +3,12 @@ package com.teamwss.websoso.ui.detailExplore.keyword.adapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
+import com.teamwss.websoso.util.toFloatScaledByDp
 import com.teamwss.websoso.util.toIntScaledByDp
 
 class DetailExploreKeywordViewHolder(
@@ -43,7 +45,9 @@ class DetailExploreKeywordViewHolder(
     fun setWebsosoChip(category: DetailExploreKeywordModel.CategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
-            ivNovelRatingKeyword.load(category.categoryImage)
+            ivNovelRatingKeyword.load(category.categoryImage) {
+                transformations(RoundedCornersTransformation(60f.toFloatScaledByDp()))
+            }
             setupWebsosoChips(category)
         }
     }
