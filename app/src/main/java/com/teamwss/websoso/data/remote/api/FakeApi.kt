@@ -1,4 +1,4 @@
-package com.teamwss.websoso.data
+package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import com.teamwss.websoso.data.remote.response.FeedResponseDto

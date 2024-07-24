@@ -6,7 +6,7 @@ import com.teamwss.websoso.data.remote.api.NovelApi
 import javax.inject.Inject
 
 class NovelRepository @Inject constructor(
-    private val novelApi: NovelApi
+    private val novelApi: NovelApi,
 ) {
 
     suspend fun getNovelDetail(novelId: Long): NovelDetailEntity {

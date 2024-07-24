@@ -21,7 +21,7 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideNovelService(retrofit: Retrofit) = NetworkModule.provideApi<NovelApi>(
+    fun provideNovelService() = NetworkModule.provideApi<NovelApi>(
         NetworkModule.provideRetrofit(
             NetworkModule.provideLogOkHttpClient()
         )

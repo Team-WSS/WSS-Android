@@ -12,7 +12,7 @@ data class NovelDetailResponseDto(
     @SerialName("novelImage")
     val novelImage: String,
     @SerialName("novelGenres")
-    val novelGenres: List<String>,
+    val novelGenres: String,
     @SerialName("novelGenreImage")
     val novelGenreImage: String,
     @SerialName("isNovelCompleted")

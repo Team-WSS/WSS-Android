@@ -7,9 +7,9 @@ import retrofit2.http.Path
 
 interface NovelApi {
 
-    @GET("novels/{novelld}")
+    @GET("novels/{novelId}")
     suspend fun getNovelDetail(
-        @Path("novelld") novelId: Long,
+        @Path("novelId") novelId: Long,
     ): NovelDetailResponseDto
 
     @POST("novels/{novelId}/is-interest")

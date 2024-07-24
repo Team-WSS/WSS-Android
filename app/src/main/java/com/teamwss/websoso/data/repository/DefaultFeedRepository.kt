@@ -1,6 +1,6 @@
 package com.teamwss.websoso.data.repository
 
-import com.teamwss.websoso.data.FakeApi
+import com.teamwss.websoso.data.remote.api.FakeApi
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
