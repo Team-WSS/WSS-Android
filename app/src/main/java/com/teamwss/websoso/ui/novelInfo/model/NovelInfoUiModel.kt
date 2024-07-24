@@ -8,12 +8,18 @@ data class NovelInfoUiModel(
     val attractivePoints: List<String> = emptyList(),
     val unifiedReviewCount: UnifiedReviewCountModel = UnifiedReviewCountModel(),
     val isUserReviewExist: Boolean = (unifiedReviewCount.watchingCount.count + unifiedReviewCount.watchedCount.count + unifiedReviewCount.quitCount.count) > 0,
-)
+) {
+
+    fun formatAttractivePoints(): String {
+        return attractivePoints.joinToString(", ")
+    }
+}
 
 data class PlatformsModel(
     val naverModel: PlatformModel? = null,
     val kakaoModel: PlatformModel? = null,
 ) {
+
     companion object {
         fun formatPlatforms(platforms: List<NovelInfoEntity.PlatformEntity>): PlatformsModel =
             PlatformsModel(
@@ -39,12 +45,41 @@ data class UnifiedReviewCountModel(
     val watchingCount: ReviewCountModel = ReviewCountModel(ReadStatus.WATCHING, 0),
     val watchedCount: ReviewCountModel = ReviewCountModel(ReadStatus.WATCHED, 0),
     val quitCount: ReviewCountModel = ReviewCountModel(ReadStatus.QUIT, 0),
-)
+) {
+    fun formattedUnifiedReviewCount(viewHeight: Int): UnifiedReviewCountModel {
+        val watchingGraphHeight = formattedHeight(viewHeight, watchingCount.count)
+        val watchedGraphHeight = formattedHeight(viewHeight, watchedCount.count)
+        val quitGraphHeight = formattedHeight(viewHeight, quitCount.count)
+
+        return UnifiedReviewCountModel(
+            watchingCount = watchingCount.copy(graphHeight = watchingGraphHeight),
+            watchedCount = watchedCount.copy(graphHeight = watchedGraphHeight),
+            quitCount = quitCount.copy(graphHeight = quitGraphHeight),
+        )
+    }
+
+    private fun formattedHeight(viewHeight: Int, count: Int): Int {
+        val maxCount = maxOf(watchingCount.count, watchedCount.count, quitCount.count)
+        if (maxCount == 0) return 0
+        return viewHeight * count / maxCount
+    }
+
+    fun maxCountReadStatus(): ReadStatus {
+        val maxCount = maxOf(watchingCount.count, watchedCount.count, quitCount.count)
+        return when (maxCount) {
+            watchingCount.count -> ReadStatus.WATCHING
+            watchedCount.count -> ReadStatus.WATCHED
+            quitCount.count -> ReadStatus.QUIT
+            else -> ReadStatus.WATCHING
+        }
+    }
+}
 
 data class ReviewCountModel(
     val readStatus: ReadStatus,
     val count: Int,
     val isVisible: Boolean = count > 0,
+    val graphHeight: Int = 0,
 )
 
 data class ExpandTextUiModel(

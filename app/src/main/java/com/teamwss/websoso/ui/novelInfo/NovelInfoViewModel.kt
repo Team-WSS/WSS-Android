@@ -41,8 +41,18 @@ class NovelInfoViewModel @Inject constructor(
         }
     }
 
+    fun updateGraphHeight(viewHeight: Int) {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                novelInfoModel = uiState.novelInfoModel.copy(
+                    unifiedReviewCount = uiState.novelInfoModel.unifiedReviewCount.formattedUnifiedReviewCount(viewHeight)
+                )
+            )
+        }
+    }
+
     fun updateExpandTextToggle() {
-        _uiState.value?.let { currentState ->
+        uiState.value?.let { currentState ->
             val expandTextUiModel = currentState.expandTextModel
             val updatedExpandTextUiModel = when (!expandTextUiModel.isExpandTextToggleSelected) {
                 true -> expandTextUiModel.copy(
@@ -63,7 +73,7 @@ class NovelInfoViewModel @Inject constructor(
         lineCount: Int,
         ellipsisCount: Int,
     ) {
-        _uiState.value?.let { currentState ->
+        uiState.value?.let { currentState ->
             val expandTextUiModel = currentState.expandTextModel
             val updatedExpandTextUiModel = expandTextUiModel.copy(
                 expandTextToggleVisibility = lineCount >= DEFAULT_BODY_MAX_LINES && ellipsisCount > 0,
