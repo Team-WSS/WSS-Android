@@ -16,8 +16,8 @@ import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
-import com.teamwss.websoso.ui.novelInfo.model.ReadStatus
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
+import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

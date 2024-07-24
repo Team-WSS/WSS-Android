@@ -60,6 +60,9 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupObserver() {
+        novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
+            // TODO: Update UI
+        }
         novelDetailViewModel.loading.observe(this) {
             // TODO: Show loading
         }

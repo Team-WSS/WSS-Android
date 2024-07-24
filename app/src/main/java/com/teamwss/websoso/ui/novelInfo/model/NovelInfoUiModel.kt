@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.novelInfo.model
 
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
 data class NovelInfoUiModel(
     val novelDescription: String = "",

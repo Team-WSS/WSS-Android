@@ -2,13 +2,19 @@ package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.domain.model.NovelDetail
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
+import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
 fun NovelDetail.toUi(): NovelDetailModel {
     return NovelDetailModel(
         userNovel =
         NovelDetailModel.UserNovelModel(
             userNovelId = userNovel.userNovelId,
-            readStatus = userNovel.readStatus,
+            readStatus = when (userNovel.readStatus) {
+                "WATCHING" -> ReadStatus.WATCHING
+                "WATCHED" -> ReadStatus.WATCHED
+                "QUIT" -> ReadStatus.QUIT
+                else -> null
+            },
             startDate = userNovel.startDate,
             endDate = userNovel.endDate,
             isUserNovelInterest = userNovel.isUserNovelInterest,
