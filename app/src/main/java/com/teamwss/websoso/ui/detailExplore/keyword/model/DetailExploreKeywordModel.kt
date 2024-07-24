@@ -1,7 +1,7 @@
 package com.teamwss.websoso.ui.detailExplore.keyword.model
 
 data class DetailExploreKeywordModel(
-    val categories: List<CategoryModel>,
+    val categories: List<CategoryModel> = emptyList(),
     val previousSelectedKeywords: List<CategoryModel.KeywordModel> =
         categories.flatMap {
             it.keywords.filter { keyword ->
