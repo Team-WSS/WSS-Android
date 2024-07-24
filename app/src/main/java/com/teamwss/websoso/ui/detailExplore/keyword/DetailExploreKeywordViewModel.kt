@@ -67,21 +67,18 @@ class DetailExploreKeywordViewModel @Inject constructor(
         _uiState.value?.let { uiState ->
             val updatedCategories =
                 updateCategories(uiState.keywordModel.categories, keyword, isSelected)
-            val currentSelectedKeywords =
-                updateSelectedKeywords(
-                    uiState.keywordModel.currentSelectedKeywords,
-                    keyword,
-                    isSelected,
-                )
+            val currentSelectedKeywords = updateSelectedKeywords(
+                uiState.keywordModel.currentSelectedKeywords,
+                keyword,
+                isSelected,
+            )
 
-            _uiState.value =
-                uiState.copy(
-                    keywordModel =
-                    uiState.keywordModel.copy(
-                        categories = updatedCategories,
-                        currentSelectedKeywords = currentSelectedKeywords,
-                    ),
-                )
+            _uiState.value = uiState.copy(
+                keywordModel = uiState.keywordModel.copy(
+                    categories = updatedCategories,
+                    currentSelectedKeywords = currentSelectedKeywords,
+                ),
+            )
             _selectedKeywords.value = currentSelectedKeywords
         }
     }

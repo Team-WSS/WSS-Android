@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.detailExplore.keyword.adapter
 
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
@@ -15,12 +16,35 @@ class DetailExploreKeywordViewHolder(
         isClicked: Boolean,
     ) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+    private var _isChipSetting: Boolean = false
+    val isChipSetting: Boolean get() = _isChipSetting
 
-    fun bind(category: DetailExploreKeywordModel.CategoryModel) {
+    init {
+        binding.setupExpandToggleBtn()
+    }
+
+    private fun ItemNovelRatingKeywordBinding.setupExpandToggleBtn() {
+        ivNovelRatingKeywordToggle.setOnClickListener {
+            ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
+            val layoutParams =
+                wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
+
+            when (ivNovelRatingKeywordToggle.isSelected) {
+                true ->
+                    layoutParams.matchConstraintMaxHeight =
+                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+
+                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByDp()
+            }
+            wcgNovelRatingKeyword.layoutParams = layoutParams
+        }
+    }
+
+    fun setWebsosoChip(category: DetailExploreKeywordModel.CategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
+            ivNovelRatingKeyword.load(category.categoryImage)
             setupWebsosoChips(category)
-            setupExpandToggleBtn()
         }
     }
 
@@ -40,22 +64,18 @@ class DetailExploreKeywordViewHolder(
                 isSelected = keyword.isSelected
             }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
         }
+        _isChipSetting = true
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupExpandToggleBtn() {
-        ivNovelRatingKeywordToggle.setOnClickListener {
-            ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
-            val layoutParams =
-                wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
+    fun updateChipState(keywords: List<DetailExploreKeywordModel.CategoryModel.KeywordModel>) {
+        val keywordSelectionMap =
+            keywords.associateBy({ it.keywordName }, { it.isSelected })
 
-            when (ivNovelRatingKeywordToggle.isSelected) {
-                true ->
-                    layoutParams.matchConstraintMaxHeight =
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT
-
-                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByDp()
+        for (i in 0 until binding.wcgNovelRatingKeyword.childCount) {
+            val chip = binding.wcgNovelRatingKeyword.getChildAt(i) as? WebsosoChip
+            if (chip != null) {
+                chip.isSelected = keywordSelectionMap[chip.text] ?: false
             }
-            wcgNovelRatingKeyword.layoutParams = layoutParams
         }
     }
 }

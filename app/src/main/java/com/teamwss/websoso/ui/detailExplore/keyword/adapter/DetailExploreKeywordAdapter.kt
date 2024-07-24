@@ -11,18 +11,26 @@ class DetailExploreKeywordAdapter(
     private val onKeywordClick: (keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
 ) : ListAdapter<DetailExploreKeywordModel.CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): DetailExploreKeywordViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): DetailExploreKeywordViewHolder {
         val binding = ItemNovelRatingKeywordBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
-            false
+            false,
         )
         return DetailExploreKeywordViewHolder(binding, onKeywordClick)
     }
 
     override fun onBindViewHolder(holder: DetailExploreKeywordViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.apply {
+            when (isChipSetting) {
+                true -> updateChipState(item.keywords)
+                false -> setWebsosoChip(item)
+            }
+        }
     }
 
     companion object {
