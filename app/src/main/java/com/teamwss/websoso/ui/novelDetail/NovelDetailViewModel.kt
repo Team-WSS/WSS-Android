@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelDetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,13 +44,13 @@ class NovelDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 when (novelDetail.value?.userNovel?.isUserNovelInterest == true) {
-                    true -> {return@launch}
+                    true -> novelRepository.deleteUserInterest(novelId)
                     else -> novelRepository.postUserInterest(novelId)
                 }
             }.onSuccess {
-                _novelDetail.value = _novelDetail.value?.copy(
-                    userNovel = _novelDetail.value?.userNovel?.copy(
-                        isUserNovelInterest = true
+                _novelDetail.value = novelDetail.value?.copy(
+                    userNovel = novelDetail.value?.userNovel?.copy(
+                        isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
                     ) ?: return@onSuccess
                 )
             }.onFailure {}

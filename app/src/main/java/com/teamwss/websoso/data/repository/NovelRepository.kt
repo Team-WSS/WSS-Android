@@ -16,4 +16,8 @@ class NovelRepository @Inject constructor(
     suspend fun postUserInterest(novelId: Long) {
         novelApi.postUserInterest(novelId)
     }
+
+    suspend fun deleteUserInterest(novelId: Long) {
+        novelApi.deleteUserInterest(novelId)
+    }
 }
