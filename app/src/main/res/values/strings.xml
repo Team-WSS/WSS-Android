@@ -36,15 +36,20 @@
     <string name="detail_explore_info_status">연재상태</string>
     <string name="detail_explore_info_rating">별점</string>
     <string name="detail_explore_info_status_in_series">연재중</string>
-    <string name="detail_explore_info_status_complete">완결</string>
+    <string name="detail_explore_info_status_complete">완결작</string>
     <string name="detail_explore_info_rating_lowest">%1$.1f이상</string>
     <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
     <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
     <string name="detail_explore_info_rating_highest">%1$.1f이상</string>
 
+    <!-- 상세 탐색 뷰(키워드) -->
+    <string name="detail_explore_search_hint">키워드를 검색하세요</string>
+    <string name="detail_explore_keyword_search_result">검색결과</string>
+    <string name="detail_explore_keyword_not_exist_result">해당 키워드는\n아직 등록되지 않았어요..</string>
+
     <!-- 작품 상세 -->
-    <string name="novel_detail_review">리뷰 남기기</string>
-    <string name="novel_detail_interest">관심 있어요</string>
+    <string name="novel_detail_review">나도 한마디</string>
+    <string name="novel_detail_interest">관심</string>
     <string name="novel_detail_info">정보</string>
     <string name="novel_detail_feed">피드</string>
     <string name="novel_detail_report_error">오류 제보</string>
@@ -117,5 +122,18 @@
     <string name="onboarding_second_next">다음으로</string>
     <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
+    <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
+
+    <!-- 환영 뷰 -->
+    <string name="welcome_welcome_websoso">웹소소에 오신 것을 환영해요!</string>
+    <string name="welcome_lets_falling_websoso">웹소소와 함께 웹소설에 빠져봐요</string>
+    <string name="welcome_start">시작하기</string>
+
+    <!-- 로그인 요청 다이얼로그 -->
+    <string name="login_request_go_to_login">로그인 하러가기</string>
+    <string name="login_request_dismiss">닫기</string>
+
+    <!-- 알림 뷰 -->
+    <string name="notice_notification">알림</string>
 
 </resources>

@@ -17,6 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.onboarding.welcome.WelcomeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.normalExplore.NormalExploreActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -43,6 +47,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.notice.NoticeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.feedDetail.FeedDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -55,4 +63,5 @@
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
+
 </manifest>
