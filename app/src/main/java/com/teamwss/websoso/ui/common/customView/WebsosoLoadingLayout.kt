@@ -8,25 +8,25 @@ import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import coil.load
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.LayoutLoadBinding
+import com.teamwss.websoso.databinding.LayoutLoadingBinding
 
-class WebsosoLoadLayout @JvmOverloads constructor(
+class WebsosoLoadingLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val binding: LayoutLoadBinding = LayoutLoadBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: LayoutLoadingBinding = LayoutLoadingBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
-        setupLoadAnimation(context)
+        setupLoadingAnimation(context)
     }
 
     /**
      * Initializes and sets up the loading animation using Coil for loading GIFs.
      * @param context The context to be used for the ImageLoader.
      */
-    private fun setupLoadAnimation(context: Context) {
+    private fun setupLoadingAnimation(context: Context) {
         val gifImageLoader = ImageLoader.Builder(context)
             .components {
                 add(ImageDecoderDecoder.Factory())
@@ -75,7 +75,7 @@ class WebsosoLoadLayout @JvmOverloads constructor(
      * Sets the overall visibility of the WebsosoLoadLayout.
      * @param isVisible Boolean indicating whether the WebsosoLoadLayout should be visible.
      */
-    fun setWebsosoLoadVisibility(isVisible: Boolean) {
+    fun setWebsosoLoadingVisibility(isVisible: Boolean) {
         this.visibility = if (isVisible) VISIBLE else GONE
     }
 }
