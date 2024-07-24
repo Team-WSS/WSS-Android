@@ -2,7 +2,6 @@ package com.teamwss.websoso.domain.usecase
 
 import android.content.Context
 import com.teamwss.websoso.R
-import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.domain.mapper.toDomain
 import com.teamwss.websoso.domain.model.NovelDetail
@@ -30,7 +29,7 @@ class GetNovelDetailUseCase @Inject constructor(
         return genres.mapNotNull { genreMap[it] }
     }
 
-    suspend fun execute(novelId: Long): NovelDetail {
+    suspend operator fun invoke(novelId: Long): NovelDetail {
         val novelDetailEntity = novelRepository.getNovelDetail(novelId)
         return novelDetailEntity.toDomain(
             formattedGenres(novelDetailEntity.novelGenres.split(",")),

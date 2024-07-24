@@ -12,4 +12,8 @@ class NovelRepository @Inject constructor(
     suspend fun getNovelDetail(novelId: Long): NovelDetailEntity {
         return novelApi.getNovelDetail(novelId).toData()
     }
+
+    suspend fun postUserInterest(novelId: Long) {
+        novelApi.postUserInterest(novelId)
+    }
 }

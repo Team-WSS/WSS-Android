@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.domain.usecase.GetNovelDetailUseCase
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NovelDetailViewModel @Inject constructor(
     private val novelDetailUseCase: GetNovelDetailUseCase,
+    private val novelRepository: NovelRepository,
 ) : ViewModel() {
 
     private val _novelDetail = MutableLiveData<NovelDetailModel>()
@@ -26,7 +28,7 @@ class NovelDetailViewModel @Inject constructor(
     fun updateNovelDetail(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                novelDetailUseCase.execute(novelId)
+                novelDetailUseCase.invoke(novelId)
             }.onSuccess { novelDetail ->
                 _loading.value = false
                 _novelDetail.value = novelDetail.toUi()
@@ -34,6 +36,23 @@ class NovelDetailViewModel @Inject constructor(
                 _loading.value = false
                 _error.value = true
             }
+        }
+    }
+
+    fun updateUserInterest(novelId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                when (novelDetail.value?.userNovel?.isUserNovelInterest == true) {
+                    true -> {return@launch}
+                    else -> novelRepository.postUserInterest(novelId)
+                }
+            }.onSuccess {
+                _novelDetail.value = _novelDetail.value?.copy(
+                    userNovel = _novelDetail.value?.userNovel?.copy(
+                        isUserNovelInterest = true
+                    ) ?: return@onSuccess
+                )
+            }.onFailure {}
         }
     }
 }

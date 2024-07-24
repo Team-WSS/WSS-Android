@@ -17,10 +17,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
-    private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
 
+    private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
     private var _popupBinding: MenuNovelDetailPopupBinding? = null
     private val popupBinding get() = _popupBinding ?: error("")
+    private val dummyNovelId = 1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +31,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupViewPager()
         setupTabLayout()
         setupObserver()
-        binding.showPopupWindow = ::showPopupWindow
-        novelDetailViewModel.updateNovelDetail(1)
+        novelDetailViewModel.updateNovelDetail(dummyNovelId)
     }
 
     private fun bindViewModel() {
@@ -61,7 +61,8 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupObserver() {
         novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
-            // TODO: Update UI
+            bindFunction()
+            binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
         }
         novelDetailViewModel.loading.observe(this) {
             // TODO: Show loading
@@ -71,7 +72,12 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         }
     }
 
-    private fun showPopupWindow(userNovelId: Int) {
+    private fun bindFunction() {
+        binding.showPopupWindow = ::showPopupWindow
+        binding.updateUserInterest = ::updateUserInterest
+    }
+
+    private fun showPopupWindow() {
         PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -86,6 +92,10 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
                 Gravity.END,
             )
         }
+    }
+
+    private fun updateUserInterest() {
+        novelDetailViewModel.updateUserInterest(dummyNovelId)
     }
 
     companion object {

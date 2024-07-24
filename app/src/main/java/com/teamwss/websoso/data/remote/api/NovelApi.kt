@@ -2,6 +2,7 @@ package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
