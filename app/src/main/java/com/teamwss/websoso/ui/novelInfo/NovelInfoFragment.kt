@@ -8,7 +8,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getColor
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
@@ -130,7 +130,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun updateUsersReadStatusText(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        val color = getColor(requireContext(), R.color.primary_100_6A5DFD)
+        val color = AppCompatResources.getColorStateList(requireContext(), R.color.primary_100_6A5DFD).defaultColor
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
                 val watchingCountText = getString(R.string.novel_info_read_status_watching_count, unifiedReviewCountModel.watchingCount.count)
@@ -169,7 +169,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         binding.tvNovelInfoCharmPointsBody.text = getColoredText(
             getString(R.string.novel_info_charm_points_body, charmPoints),
             listOf(charmPoints),
-            getColor(requireContext(),R.color.primary_100_6A5DFD),
+            AppCompatResources.getColorStateList(requireContext(),R.color.primary_100_6A5DFD).defaultColor,
         )
     }
 
