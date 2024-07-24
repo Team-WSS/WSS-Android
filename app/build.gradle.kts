@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -17,6 +19,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

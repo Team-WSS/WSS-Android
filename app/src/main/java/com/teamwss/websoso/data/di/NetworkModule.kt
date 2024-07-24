@@ -2,6 +2,7 @@ package com.teamwss.websoso.data.di
 
 import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.teamwss.websoso.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = ""
+    private const val BASE_URL = BuildConfig.BASE_URL
     private const val CONTENT_TYPE = "application/json"
 
     private val json: Json = Json {
@@ -45,5 +46,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    inline fun <reified T> provideService(retrofit: Retrofit): T = retrofit.create(T::class.java)
+    inline fun <reified T> provideApi(retrofit: Retrofit): T = retrofit.create(T::class.java)
 }
