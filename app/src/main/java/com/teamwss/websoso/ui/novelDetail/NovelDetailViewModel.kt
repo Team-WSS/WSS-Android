@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeNovelDetailRepository
+import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NovelDetailViewModel @Inject constructor(
-    private val fakeNovelDetailRepository: FakeNovelDetailRepository,
+    private val novelRepository: NovelRepository,
 ) : ViewModel() {
     private val _novelDetail = MutableLiveData<NovelDetailModel>()
     val novelDetail: LiveData<NovelDetailModel> get() = _novelDetail
@@ -25,11 +26,12 @@ class NovelDetailViewModel @Inject constructor(
     fun updateNovelDetail(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                fakeNovelDetailRepository.fetchNovelDetail(novelId)
+                novelRepository.getNovelDetail(novelId)
             }.onSuccess { novelDetail ->
                 _loading.value = false
                 _novelDetail.value = novelDetail.toUi()
             }.onFailure {
+                _loading.value = false
                 _error.value = true
             }
         }
