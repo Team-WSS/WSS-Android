@@ -72,8 +72,8 @@ class WebsosoLoadingLayout @JvmOverloads constructor(
     }
 
     /**
-     * Sets the overall visibility of the WebsosoLoadLayout.
-     * @param isVisible Boolean indicating whether the WebsosoLoadLayout should be visible.
+     * Sets the overall visibility of the WebsosoLoadingLayout.
+     * @param isVisible Boolean indicating whether the WebsosoLoadingLayout should be visible.
      */
     fun setWebsosoLoadingVisibility(isVisible: Boolean) {
         this.visibility = if (isVisible) VISIBLE else GONE
