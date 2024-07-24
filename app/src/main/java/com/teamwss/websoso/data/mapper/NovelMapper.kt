@@ -7,31 +7,22 @@ import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 
 fun NovelDetailResponseDto.toData(): NovelDetailEntity {
     return NovelDetailEntity(
-        userNovel =
-        NovelDetailEntity.UserNovelEntity(
-            userNovelId = userNovelId,
-            readStatus = readStatus,
-            startDate = startDate,
-            endDate = endDate,
-            isUserNovelInterest = isUserNovelInterest,
-            userNovelRating = userNovelRating,
-        ),
-        novel =
-        NovelDetailEntity.NovelEntity(
-            novelTitle = novelTitle,
-            novelImage = novelImage,
-            novelGenres = novelGenres.split(","),
-            novelGenreImage = novelGenreImage,
-            isNovelCompleted = isNovelCompleted,
-            author = author,
-        ),
-        userRating =
-        NovelDetailEntity.UserRatingEntity(
-            interestCount = interestCount,
-            novelRating = novelRating,
-            novelRatingCount = novelRatingCount,
-            feedCount = feedCount,
-        ),
+        userNovelId = userNovelId,
+        novelTitle = novelTitle,
+        novelImage = novelImage,
+        novelGenres = novelGenres,
+        novelGenreImage = novelGenreImage,
+        isNovelCompleted = isNovelCompleted,
+        author = author,
+        interestCount = interestCount,
+        novelRating = novelRating,
+        novelRatingCount = novelRatingCount,
+        feedCount = feedCount,
+        userNovelRating = userNovelRating,
+        readStatus = readStatus,
+        startDate = startDate,
+        endDate = endDate,
+        isUserNovelInterest = isUserNovelInterest,
     )
 }
 

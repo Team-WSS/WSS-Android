@@ -1,9 +1,9 @@
 package com.teamwss.websoso.ui.mapper
 
-import com.teamwss.websoso.data.model.NovelDetailEntity
+import com.teamwss.websoso.domain.model.NovelDetail
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 
-fun NovelDetailEntity.toUi(): NovelDetailModel {
+fun NovelDetail.toUi(): NovelDetailModel {
     return NovelDetailModel(
         userNovel =
         NovelDetailModel.UserNovelModel(
@@ -20,7 +20,7 @@ fun NovelDetailEntity.toUi(): NovelDetailModel {
             novelImage = novel.novelImage,
             novelGenres = novel.novelGenres,
             novelGenreImage = novel.novelGenreImage,
-            isNovelCompleted = novel.isNovelCompleted,
+            isNovelCompletedText = novel.isNovelCompletedText,
             author = novel.author,
         ),
         userRating =

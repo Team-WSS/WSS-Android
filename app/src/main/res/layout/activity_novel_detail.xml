@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@{novelDetailViewModel.novelDetail.novel.formattedNovelGenres}"
+                            android:text="@{novelDetailViewModel.novelDetail.formattedNovelDetailSummary}"
                             android:textAppearance="@style/body2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

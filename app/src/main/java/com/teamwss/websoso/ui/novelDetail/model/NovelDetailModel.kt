@@ -19,9 +19,9 @@ data class NovelDetailModel(
         val novelTitle: String,
         val novelImage: String,
         val novelGenres: List<String>,
-        val formattedNovelGenres: String = novelGenres.joinToString(" ・ "),
+        val formattedNovelGenres: String = novelGenres.joinToString("/"),
         val novelGenreImage: String,
-        val isNovelCompleted: Boolean,
+        val isNovelCompletedText: String,
         val author: String,
     )
 
@@ -32,4 +32,6 @@ data class NovelDetailModel(
         val formattedNovelRating: String = "$novelRating ($novelRatingCount)",
         val feedCount: Int,
     )
+
+    val formattedNovelDetailSummary: String = "${novel.formattedNovelGenres} ・ ${novel.isNovelCompletedText} ・ ${novel.author}"
 }
