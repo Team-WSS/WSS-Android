@@ -42,7 +42,7 @@ class DetailExploreKeywordViewHolder(
         }
     }
 
-    fun setWebsosoChip(category: DetailExploreKeywordModel.CategoryModel) {
+    fun initKeywordView(category: DetailExploreKeywordModel.CategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
             ivNovelRatingKeyword.load(category.categoryImage) {

@@ -28,7 +28,7 @@ class DetailExploreKeywordAdapter(
         holder.apply {
             when (isChipSetting) {
                 true -> updateChipState(item.keywords)
-                false -> setWebsosoChip(item)
+                false -> initKeywordView(item)
             }
         }
     }
