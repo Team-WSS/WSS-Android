@@ -57,7 +57,7 @@ class WebsosoLoadingLayout @JvmOverloads constructor(
      * Sets the visibility of the loading layout.
      * @param isVisible Boolean indicating whether the loading layout should be visible.
      */
-    fun setLoadLayoutVisibility(isVisible: Boolean) {
+    fun setLoadingLayoutVisibility(isVisible: Boolean) {
         binding.clLoadLoad.visibility = if (isVisible) VISIBLE else GONE
         binding.clLoadFail.visibility = if (isVisible) GONE else VISIBLE
     }
