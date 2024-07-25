@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.detailExplore.DetailExploreDialog
+import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +43,7 @@ class ExploreFragment : BindingFragment<FragmentExploreBinding>(R.layout.fragmen
 
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
-            val detailExploreBottomSheet = DetailExploreDialog.newInstance()
+            val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
             detailExploreBottomSheet.show(this@ExploreFragment.childFragmentManager, tag)
         }
     }

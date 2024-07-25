@@ -15,7 +15,7 @@ import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreDialog :
+class DetailExploreDialogBottomSheet :
     BindingBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
     private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
     private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
@@ -109,8 +109,8 @@ class DetailExploreDialog :
 
     companion object {
 
-        fun newInstance(): DetailExploreDialog {
-            return DetailExploreDialog()
+        fun newInstance(): DetailExploreDialogBottomSheet {
+            return DetailExploreDialogBottomSheet()
         }
     }
 }

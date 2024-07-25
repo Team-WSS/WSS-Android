@@ -46,7 +46,7 @@ class OnboardingFirstFragment :
             with(binding) {
                 clOnBoardingFirstNicknameInput.background =
                     requireContext().getDrawable(res.editTextBackgroundRes)
-                ivOnBoardingFirstNicknameInputClear.setImageDrawable(
+                ivOnboardingFirstNicknameInputClear.setImageDrawable(
                     requireContext().getDrawable(res.clearIconRes)
                 )
                 tvOnBoardingFirstMessage.setTextColor(

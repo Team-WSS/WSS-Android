@@ -36,7 +36,7 @@
     <string name="detail_explore_info_status">연재상태</string>
     <string name="detail_explore_info_rating">별점</string>
     <string name="detail_explore_info_status_in_series">연재중</string>
-    <string name="detail_explore_info_status_complete">완결</string>
+    <string name="detail_explore_info_status_complete">완결작</string>
     <string name="detail_explore_info_rating_lowest">%1$.1f이상</string>
     <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
     <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
@@ -48,8 +48,8 @@
     <string name="detail_explore_keyword_not_exist_result">해당 키워드는\n아직 등록되지 않았어요..</string>
 
     <!-- 작품 상세 -->
-    <string name="novel_detail_review">리뷰 남기기</string>
-    <string name="novel_detail_interest">관심 있어요</string>
+    <string name="novel_detail_review">나도 한마디</string>
+    <string name="novel_detail_interest">관심</string>
     <string name="novel_detail_info">정보</string>
     <string name="novel_detail_feed">피드</string>
     <string name="novel_detail_report_error">오류 제보</string>
@@ -67,6 +67,15 @@
     <string name="novel_info_title">작품 소개</string>
     <string name="novel_info_rating_title">독자들의 평가</string>
     <string name="novel_info_keyword_chip_text">%s %d</string>
+    <string name="novel_info_review_none">아직 평가가 없어요\n최초로 남겨보세요!</string>
+    <string name="novel_info_read_status_watching">보는 중</string>
+    <string name="novel_info_read_status_watched">봤어요</string>
+    <string name="novel_info_read_status_quit">하차</string>
+    <string name="novel_info_read_status_watching_count">%d명이 작품을\n같이 보고 있어요</string>
+    <string name="novel_info_read_status_watched_count">%d명이 작품을\n같이 봤어요</string>
+    <string name="novel_info_read_status_quit_count">%d명이 작품을\n하차했어요</string>
+    <string name="novel_info_user_unit">명</string>
+    <string name="novel_info_charm_points_body">%s가 매력적인 작품이에요</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>
@@ -122,4 +131,17 @@
     <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
     <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
+
+    <!-- 환영 뷰 -->
+    <string name="welcome_welcome_websoso">웹소소에 오신 것을 환영해요!</string>
+    <string name="welcome_lets_falling_websoso">웹소소와 함께 웹소설에 빠져봐요</string>
+    <string name="welcome_start">시작하기</string>
+
+    <!-- 로그인 요청 다이얼로그 -->
+    <string name="login_request_go_to_login">로그인 하러가기</string>
+    <string name="login_request_dismiss">닫기</string>
+
+    <!-- 알림 뷰 -->
+    <string name="notice_notification">알림</string>
+
 </resources>
