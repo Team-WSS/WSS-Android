@@ -50,7 +50,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
             setupKeywordChip(uiState.keywords)
             updateExpandTextToggle(uiState.expandTextModel)
             updateExpandTextToggleVisibility(uiState.expandTextModel)
-            updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
+//            updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
             updateGraphUi(uiState.novelInfoModel.unifiedReviewCount)
             updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
             updateUsersCharmPointBody(uiState.novelInfoModel.formatAttractivePoints())
@@ -95,6 +95,11 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
 
     private fun updateGraphHeightValue(unifiedReviewCountModel: UnifiedReviewCountModel) {
         if (unifiedReviewCountModel.watchingCount.graphHeight != 0) return
+        if (listOf(
+                unifiedReviewCountModel.watchingCount.count,
+                unifiedReviewCountModel.watchedCount.count,
+                unifiedReviewCountModel.quitCount.count,
+            ).sumOf { it } == 0) return
         val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
         novelInfoViewModel.updateGraphHeight(graphHeight)
     }
