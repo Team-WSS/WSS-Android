@@ -20,7 +20,7 @@ data class KeywordsResponseDto(
         @Serializable
         data class KeywordResponseDto(
             @SerialName("keywordId")
-            val keywordId: Long,
+            val keywordId: Int,
             @SerialName("keywordName")
             val keywordName: String,
         )

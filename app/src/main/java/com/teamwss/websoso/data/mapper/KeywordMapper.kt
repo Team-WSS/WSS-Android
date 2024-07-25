@@ -19,7 +19,7 @@ fun KeywordsResponseDto.CategoryResponseDto.toData(): KeywordsEntity.CategoryEnt
 
 fun KeywordsResponseDto.CategoryResponseDto.KeywordResponseDto.toData(): KeywordsEntity.CategoryEntity.KeywordEntity {
     return KeywordsEntity.CategoryEntity.KeywordEntity(
-        keywordId = keywordId.toInt(),
+        keywordId = keywordId,
         keywordName = keywordName,
     )
 }
