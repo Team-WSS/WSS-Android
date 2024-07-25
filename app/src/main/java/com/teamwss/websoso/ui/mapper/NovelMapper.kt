@@ -19,6 +19,7 @@ fun NovelDetail.toUi(): NovelDetailModel {
             endDate = userNovel.endDate,
             isUserNovelInterest = userNovel.isUserNovelInterest,
             userNovelRating = userNovel.userNovelRating,
+            hasUserNovelInfo = userNovel.hasUserNovelInfo,
         ),
         novel =
         NovelDetailModel.NovelModel(

@@ -16,7 +16,7 @@ data class NovelDetailModel(
         val endDate: String?,
         val isUserNovelInterest: Boolean,
         val userNovelRating: Float,
-        val hasUserNovelInfo: Boolean = userNovelId != null,
+        val hasUserNovelInfo: Boolean,
         val formattedUserNovelDate: String = formattedDateRange(startDate, endDate),
     )
 

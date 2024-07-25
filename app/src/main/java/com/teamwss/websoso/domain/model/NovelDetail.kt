@@ -12,6 +12,7 @@ data class NovelDetail(
         val endDate: String?,
         val isUserNovelInterest: Boolean,
         val userNovelRating: Float,
+        val hasUserNovelInfo: Boolean = userNovelId != null,
     )
 
     data class Novel(
