@@ -50,7 +50,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
             setupKeywordChip(uiState.keywords)
             updateExpandTextToggle(uiState.expandTextModel)
             updateExpandTextToggleVisibility(uiState.expandTextModel)
-//            updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
+            updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
             updateGraphUi(uiState.novelInfoModel.unifiedReviewCount)
             updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
             updateUsersCharmPointBody(uiState.novelInfoModel.formatAttractivePoints())
