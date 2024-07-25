@@ -13,7 +13,7 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter(value = ["loadImageUrl", "cornerRadius", "blurRadius", "isVectorImage"], requireAll = false)
-    fun loadImage(
+    fun loadImageWithOptions(
         view: ImageView,
         imageUrl: String?,
         cornerRadius: Float?,
