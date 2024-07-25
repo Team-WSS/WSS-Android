@@ -21,6 +21,7 @@ data class NovelDetailModel(
     )
 
     data class NovelModel(
+        val novelId: Long,
         val novelTitle: String,
         val novelImage: String,
         val novelGenres: List<String>,
@@ -54,4 +55,15 @@ data class NovelDetailModel(
             }
         }
     }
+
+    val defaultUserNovelModel = UserNovelModel(
+        userNovelId = null,
+        readStatus = null,
+        startDate = null,
+        endDate = null,
+        isUserNovelInterest = false,
+        userNovelRating = 0.0f,
+        hasUserNovelInfo = false,
+        formattedUserNovelDate = "",
+    )
 }

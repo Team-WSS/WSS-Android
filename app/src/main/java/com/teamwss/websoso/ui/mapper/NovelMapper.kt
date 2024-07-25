@@ -4,7 +4,7 @@ import com.teamwss.websoso.domain.model.NovelDetail
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
-fun NovelDetail.toUi(): NovelDetailModel {
+fun NovelDetail.toUi(novelId: Long): NovelDetailModel {
     return NovelDetailModel(
         userNovel =
         NovelDetailModel.UserNovelModel(
@@ -23,6 +23,7 @@ fun NovelDetail.toUi(): NovelDetailModel {
         ),
         novel =
         NovelDetailModel.NovelModel(
+            novelId = novelId,
             novelTitle = novel.novelTitle,
             novelImage = novel.novelImage,
             novelGenres = novel.novelGenres,

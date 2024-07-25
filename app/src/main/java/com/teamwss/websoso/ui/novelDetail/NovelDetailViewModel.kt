@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.NovelRepository
+import com.teamwss.websoso.data.repository.UserNovelRepository
 import com.teamwss.websoso.domain.usecase.GetNovelDetailUseCase
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class NovelDetailViewModel @Inject constructor(
     private val novelDetailUseCase: GetNovelDetailUseCase,
     private val novelRepository: NovelRepository,
+    private val userNovelRepository: UserNovelRepository,
 ) : ViewModel() {
 
     private val _novelDetail = MutableLiveData<NovelDetailModel>()
@@ -31,7 +33,7 @@ class NovelDetailViewModel @Inject constructor(
                 novelDetailUseCase.invoke(novelId)
             }.onSuccess { novelDetail ->
                 _loading.value = false
-                _novelDetail.value = novelDetail.toUi()
+                _novelDetail.value = novelDetail.toUi(novelId)
             }.onFailure {
                 _loading.value = false
                 _error.value = true
@@ -51,6 +53,18 @@ class NovelDetailViewModel @Inject constructor(
                     userNovel = novelDetail.value?.userNovel?.copy(
                         isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
                     ) ?: return@onSuccess
+                )
+            }.onFailure {}
+        }
+    }
+
+    fun deleteUserNovel(novelId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                userNovelRepository.deleteUserNovel(novelId)
+            }.onSuccess {
+                _novelDetail.value = novelDetail.value?.copy(
+                    userNovel = novelDetail.value?.defaultUserNovelModel ?: return@onSuccess
                 )
             }.onFailure {}
         }

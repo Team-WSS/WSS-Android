@@ -61,7 +61,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupObserver() {
         novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
-            bindFunction()
+            binding.showPopupWindow = ::showPopupWindow
             binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
         }
         novelDetailViewModel.loading.observe(this) {
@@ -70,11 +70,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         novelDetailViewModel.error.observe(this) {
             // TODO: Show error
         }
-    }
-
-    private fun bindFunction() {
-        binding.showPopupWindow = ::showPopupWindow
-        binding.updateUserInterest = ::updateUserInterest
     }
 
     private fun showPopupWindow() {
@@ -92,10 +87,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
                 Gravity.END,
             )
         }
-    }
-
-    private fun updateUserInterest() {
-        novelDetailViewModel.updateUserInterest(dummyNovelId)
     }
 
     companion object {
