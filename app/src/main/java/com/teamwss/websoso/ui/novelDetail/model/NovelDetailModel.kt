@@ -17,7 +17,7 @@ data class NovelDetailModel(
         val isUserNovelInterest: Boolean,
         val userNovelRating: Float,
         val hasUserNovelInfo: Boolean = userNovelId != null,
-        val formattedUserNovelDate: String = formatDateRange(startDate, endDate),
+        val formattedUserNovelDate: String = formattedDateRange(startDate, endDate),
     )
 
     data class NovelModel(
@@ -40,7 +40,7 @@ data class NovelDetailModel(
     )
 
     companion object {
-        fun formatDateRange(startDate: String?, endDate: String?): String {
+        fun formattedDateRange(startDate: String?, endDate: String?): String {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val outputFormat = SimpleDateFormat("yy. MM. dd", Locale.getDefault())
             val start = startDate?.let { inputFormat.parse(it) }
