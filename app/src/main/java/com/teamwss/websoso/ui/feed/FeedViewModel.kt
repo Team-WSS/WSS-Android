@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.FakeUserRepository
+import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.CategoryModel
@@ -56,6 +56,39 @@ class FeedViewModel @Inject constructor(
     }
 
     fun updateFeeds() {
+        feedUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                val selectedCategory: Category =
+                    categories.find { it.isSelected }?.category ?: throw IllegalStateException()
+
+                runCatching {
+                    when (feedUiState.feeds.isNotEmpty()) {
+                        true -> getFeedsUseCase(
+                            selectedCategory.titleEn,
+                            feedUiState.feeds.last().id,
+                        )
+
+                        false -> getFeedsUseCase(selectedCategory.titleEn)
+                    }
+                }.onSuccess { feeds ->
+                    if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
+                    // Return result state of error in domain layer later
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        isLoadable = feeds.isLoadable,
+                        feeds = feeds.feeds.map { it.toPresentation() },
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateRefreshedFeeds() {
         feedUiState.value?.let { feedUiState ->
             viewModelScope.launch {
                 val selectedCategory: Category =
