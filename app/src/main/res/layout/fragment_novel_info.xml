@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="navigateToReadNovel"
+            type="kotlin.jvm.functions.Function1" />
+
+        <variable
             name="novelInfoViewModel"
             type="com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel" />
     </data>
@@ -105,9 +109,11 @@
                     android:layout_width="46dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/btn_novel_info_naver"
-                    android:visibility="gone"
+                    android:onClick="@{() -> navigateToReadNovel.invoke(novelInfoViewModel.uiState.platforms.naverModel.platformUrl)}"
+                    app:cornerRadius="@{24f}"
                     app:isVisible="@{novelInfoViewModel.uiState.platforms.naverModel.isVisible}"
+                    app:loadImageUrl="@{novelInfoViewModel.uiState.platforms.naverModel.platformImage}"
+                    tools:src="@color/black"
                     tools:visibility="visible" />
 
                 <ImageView
@@ -115,11 +121,12 @@
                     android:layout_width="46dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/btn_novel_info_kakao"
-                    android:visibility="gone"
+                    android:onClick="@{() -> navigateToReadNovel.invoke(novelInfoViewModel.uiState.platforms.kakaoModel.platformUrl)}"
+                    app:cornerRadius="@{24f}"
                     app:isVisible="@{novelInfoViewModel.uiState.platforms.kakaoModel.isVisible}"
+                    app:loadImageUrl="@{novelInfoViewModel.uiState.platforms.kakaoModel.platformImage}"
+                    tools:src="@color/black"
                     tools:visibility="visible" />
-
             </LinearLayout>
 
             <View
@@ -139,12 +146,13 @@
                 android:background="@color/white"
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
+                app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.userReviewExist}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
 
                 <TextView
-                    android:id="@+id/tv_novel_info_reviews_title"
+                    android:id="@+id/tv_novel_info_charm_points_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -162,9 +170,10 @@
                     android:background="@drawable/bg_novel_info_gray_50_radius_12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_novel_info_reviews_title" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_info_charm_points_title" />
 
                 <TextView
+                    android:id="@+id/tv_novel_info_charm_points_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/body2"
@@ -240,8 +249,8 @@
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.watchingCount.count)}"
                             android:textAppearance="@style/body3"
-                            tools:text="130"
-                            tools:textColor="@color/primary_200_240991" />
+                            android:textColor="@color/bg_novel_info_read_status_graph_text_selector"
+                            tools:text="130" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cv_novel_info_read_status_watching"
@@ -255,9 +264,9 @@
                             <View
                                 android:id="@+id/view_novel_info_read_status_watching"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="80dp"
                                 android:layout_gravity="bottom"
-                                tools:background="@color/primary_100_6A5DFD"
+                                android:background="@color/bg_novel_info_read_status_graph_selector"
                                 tools:layout_height="100dp" />
                         </androidx.cardview.widget.CardView>
 
@@ -267,9 +276,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/pretendard_semibold"
-                            android:text="보는 중"
+                            android:text="@string/novel_info_read_status_watching"
                             android:textAppearance="@style/body2"
-                            tools:textColor="@color/primary_200_240991" />
+                            android:textColor="@color/bg_novel_info_read_status_graph_text_selector" />
 
                     </LinearLayout>
 
@@ -288,8 +297,8 @@
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.watchedCount.count)}"
                             android:textAppearance="@style/body3"
-                            tools:text="10"
-                            tools:textColor="@color/gray_200_AEADB3" />
+                            android:textColor="@color/bg_novel_info_read_status_graph_text_selector"
+                            tools:text="10" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cv_novel_info_read_status_watched"
@@ -303,9 +312,9 @@
                             <View
                                 android:id="@+id/view_novel_info_read_status_watched"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="100dp"
                                 android:layout_gravity="bottom"
-                                tools:background="@color/gray_70_DFDFE3"
+                                android:background="@color/bg_novel_info_read_status_graph_selector"
                                 tools:layout_height="8dp" />
                         </androidx.cardview.widget.CardView>
 
@@ -314,9 +323,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="봤어요"
+                            android:text="@string/novel_info_read_status_watched"
                             android:textAppearance="@style/body2"
-                            tools:textColor="@color/gray_200_AEADB3" />
+                            android:textColor="@color/bg_novel_info_read_status_graph_text_selector" />
 
                     </LinearLayout>
 
@@ -335,8 +344,8 @@
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(novelInfoViewModel.uiState.novelInfoModel.unifiedReviewCount.quitCount.count)}"
                             android:textAppearance="@style/body3"
-                            tools:text="100"
-                            tools:textColor="@color/gray_200_AEADB3" />
+                            android:textColor="@color/bg_novel_info_read_status_graph_text_selector"
+                            tools:text="100" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cv_novel_info_read_status_quit"
@@ -350,9 +359,9 @@
                             <View
                                 android:id="@+id/view_novel_info_read_status_quit"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="100dp"
                                 android:layout_gravity="bottom"
-                                tools:background="@color/gray_70_DFDFE3"
+                                android:background="@color/bg_novel_info_read_status_graph_selector"
                                 tools:layout_height="77dp" />
                         </androidx.cardview.widget.CardView>
 
@@ -361,9 +370,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="하차"
+                            android:text="@string/novel_info_read_status_quit"
                             android:textAppearance="@style/body2"
-                            tools:textColor="@color/gray_200_AEADB3" />
+                            android:textColor="@color/bg_novel_info_read_status_graph_text_selector" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -378,6 +387,7 @@
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
                 android:visibility="gone"
+                app:isVisible="@{!novelInfoViewModel.uiState.novelInfoModel.userReviewExist}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
@@ -406,7 +416,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="평가가 아직 없어요\n최초로 남겨보세요!"
+                    android:text="@string/novel_info_review_none"
                     android:textAlignment="center"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
