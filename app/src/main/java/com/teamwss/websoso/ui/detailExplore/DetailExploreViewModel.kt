@@ -21,8 +21,10 @@ class DetailExploreViewModel @Inject constructor() : ViewModel() {
     val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
 
     fun updateSelectedGenres(genre: String) {
-        if (_selectedGenres.value?.remove(genre) == true) return
-        _selectedGenres.value?.add(genre)
+        when (_selectedGenres.value?.contains(genre) ?: emptyList<String>()) {
+            true -> _selectedGenres.value?.removeAll(listOf(genre))
+            false -> _selectedGenres.value?.add(genre)
+        }
         updateIsInfoChipSelected()
     }
 
@@ -37,7 +39,7 @@ class DetailExploreViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateIsInfoChipSelected() {
-        val genreChipValue: Boolean = _selectedGenres.value?.isNotEmpty() ?: false
+        val genreChipValue: Boolean = _selectedGenres.value?.isEmpty()?.not() ?: false
         val statusChipValue: Boolean = _selectedSeriesStatus.value.isNullOrEmpty().not()
         val ratingChipValue: Boolean = _selectedRating.value != null
 
