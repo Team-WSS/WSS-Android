@@ -8,30 +8,37 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sl_my_page"
+        android:id="@+id/cl_my_page"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/abl_my_page"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="280dp"
+                    android:background="@color/transparent"
+                    app:collapsedTitleGravity="center"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_page_user_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        app:layout_collapseMode="parallax"
                         android:background="@color/primary_20_F5F7FF"
-                        android:paddingBottom="30dp">
+                        android:paddingTop="36dp"
+                        android:paddingBottom="30dp"
+                        app:layout_collapseMode="parallax">
 
                         <ImageView
                             android:id="@+id/iv_my_page_user_profile"
@@ -70,9 +77,11 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/toolbar"
+                        android:id="@+id/tb_my_page"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
+                        android:layout_marginTop="32dp"
+                        app:contentInsetStart="0dp"
                         app:layout_collapseMode="pin">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,20 +92,20 @@
                                 android:id="@+id/tv_my_page_sticky_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingVertical="12dp"
                                 android:text="마이페이지"
                                 android:textAppearance="@style/title2"
                                 android:textColor="@color/black"
                                 android:visibility="gone"
-                                android:paddingVertical="12dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"/>
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <ImageView
                                 android:id="@+id/iv_my_page_sticky_go_to_setting"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
+                                android:layout_marginEnd="16dp"
                                 android:paddingVertical="10dp"
                                 android:src="@drawable/ic_settings"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -113,24 +122,25 @@
                     android:id="@+id/tl_my_page"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:tabTextAppearance="@style/title2"
-                    app:tabSelectedTextColor="@color/black"
-                    app:tabTextColor="@color/gray_100_CBCBD1"
+                    app:layout_scrollFlags="scroll|enterAlways"
                     app:tabIndicatorColor="@color/black"
                     app:tabIndicatorFullWidth="true"
-                    app:tabIndicatorHeight="2dp">
+                    app:tabIndicatorHeight="2dp"
+                    app:tabSelectedTextColor="@color/black"
+                    app:tabTextAppearance="@style/title2"
+                    app:tabTextColor="@color/gray_100_CBCBD1">
 
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingVertical="12dp"
-                        android:text="내 서재"/>
+                        android:text="내 서재" />
 
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingVertical="12dp"
-                        android:text="내 활동"/>
+                        android:text="내 활동" />
 
                 </com.google.android.material.tabs.TabLayout>
 
@@ -144,10 +154,17 @@
                 android:overScrollMode="never"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vp_my_page"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:clipChildren="false">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vp_my_page"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.core.widget.NestedScrollView>
 
