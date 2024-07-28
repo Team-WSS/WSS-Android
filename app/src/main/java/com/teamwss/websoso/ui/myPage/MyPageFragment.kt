@@ -16,7 +16,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViewPager()
-        setItemVisibilityOnToolBar()
+        setUpItemVisibilityOnToolBar()
     }
 
     private fun setUpViewPager() {
@@ -29,15 +29,15 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }.attach()
     }
 
-    private fun setItemVisibilityOnToolBar() {
+    private fun setUpItemVisibilityOnToolBar() {
         binding.ablMyPage.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val totalScrollRange = appBarLayout.totalScrollRange
             val percentage = (totalScrollRange.toFloat() + verticalOffset) / totalScrollRange
-            updateToolbarAppearance(percentage <= TOOLBAR_COLLAPSE_THRESHOLD)
+            updateToolbarUi(percentage <= TOOLBAR_COLLAPSE_THRESHOLD)
         }
     }
 
-    private fun updateToolbarAppearance(isCollapsed: Boolean) {
+    private fun updateToolbarUi(isCollapsed: Boolean) {
         with(binding) {
             val color = if (isCollapsed) R.color.white else R.color.transparent
             tbMyPage.setBackgroundColor(
@@ -50,18 +50,11 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             tvMyPageStickyTitle.visibility =
                 if (isCollapsed) View.VISIBLE else View.GONE
 
-            val window = requireActivity().window
-            window.statusBarColor = ContextCompat.getColor(
-                requireContext(),
-                if (isCollapsed) R.color.white else android.R.color.transparent
-            )
-
             clMyPageUserProfile.visibility = if (isCollapsed) View.INVISIBLE else View.VISIBLE
         }
     }
 
     companion object {
-        const val TOOLBAR_COLLAPSE_THRESHOLD = 0
+        private const val TOOLBAR_COLLAPSE_THRESHOLD = 0
     }
-
 }
