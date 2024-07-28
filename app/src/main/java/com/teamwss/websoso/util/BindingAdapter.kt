@@ -54,9 +54,4 @@ object BindingAdapter {
         view.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    @JvmStatic
-    @BindingAdapter("android:text")
-    fun setIntToString(view: TextView, value: Int) {
-        view.text = value.toString()
-    }
 }
