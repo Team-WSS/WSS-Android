@@ -9,5 +9,5 @@ interface UserNovelApi {
     @DELETE("user-novels/{novelId}")
     suspend fun deleteUserNovel(
         @Path("novelId") novelId: Long,
-    ): Response<Unit>
+    )
 }

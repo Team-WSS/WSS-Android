@@ -32,7 +32,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupTabLayout()
         setupObserver()
         setupLoadingLayout()
-        novelDetailViewModel.updateNovelDetail(dummyNovelId)
     }
 
     private fun bindViewModel() {
@@ -62,19 +61,17 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupObserver() {
         novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
-            binding.showPopupWindow = ::showPopupWindow
-            binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
-        }
-        novelDetailViewModel.loading.observe(this) {
-            // TODO: Show loading
-        novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
             when (novelDetail.novel.novelTitle.isNotBlank()) {
-                true -> binding.wlNovelDetail.setWebsosoLoadingVisibility(false)
+                true -> {
+                    binding.showPopupWindow = ::showPopupWindow
+                    binding.wlNovelDetail.setWebsosoLoadingVisibility(false)
+                    binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
+                }
                 false -> binding.wlNovelDetail.setWebsosoLoadingVisibility(true)
             }
         }
         novelDetailViewModel.loading.observe(this) { isLoading ->
-            if (isLoading) novelDetailViewModel.updateNovelDetail(1)
+            if (isLoading) novelDetailViewModel.updateNovelDetail(dummyNovelId)
         }
         novelDetailViewModel.error.observe(this) { isError ->
             binding.wlNovelDetail.setErrorLayoutVisibility(isError)
@@ -83,7 +80,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupLoadingLayout() {
         binding.wlNovelDetail.setReloadButtonClickListener {
-            novelDetailViewModel.updateNovelDetail(1)
+            novelDetailViewModel.updateNovelDetail(dummyNovelId)
             binding.wlNovelDetail.setErrorLayoutVisibility(false)
         }
     }

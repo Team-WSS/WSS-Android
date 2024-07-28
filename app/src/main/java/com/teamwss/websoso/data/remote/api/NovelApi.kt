@@ -17,10 +17,10 @@ interface NovelApi {
     @POST("novels/{novelId}/is-interest")
     suspend fun postUserInterest(
         @Path("novelId") novelId: Long,
-    ): Response<Unit>
+    )
 
     @DELETE("novels/{novelId}/is-interest")
     suspend fun deleteUserInterest(
         @Path("novelId") novelId: Long,
-    ): Response<Unit>
+    )
 }
