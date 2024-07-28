@@ -24,6 +24,10 @@
             android:id="@+id/bnv_main"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:elevation="0dp"
+            android:outlineProvider="none"
+            android:background="@color/white"
+            android:layout_marginBottom="?attr/actionBarSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_main_bnv"
             tools:menu="@menu/menu_main_bnv" />

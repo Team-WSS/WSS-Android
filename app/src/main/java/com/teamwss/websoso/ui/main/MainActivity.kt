@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -28,6 +29,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         super.onCreate(savedInstanceState)
 
         setBottomNavigationView()
+        setupTranslucentOnStatusBar()
     }
 
     private fun setBottomNavigationView() {
@@ -35,6 +37,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         replaceFragment<HomeFragment>()
 
         binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
+    }
+
+    private fun setupTranslucentOnStatusBar() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
     }
 
     private fun replaceFragment(item: MenuItem): Boolean {
