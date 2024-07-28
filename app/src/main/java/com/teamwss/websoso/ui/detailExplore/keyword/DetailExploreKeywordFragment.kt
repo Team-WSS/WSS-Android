@@ -73,10 +73,9 @@ class DetailExploreKeywordFragment :
     }
 
     private fun setupCurrentSelectedChips(selectedKeywords: List<DetailExploreKeywordModel.CategoryModel.KeywordModel>) {
-        val currentSelectedKeywords: List<DetailExploreKeywordModel.CategoryModel.KeywordModel> = selectedKeywords
         val keywordChipGroup = binding.wcgDetailExploreKeywordSelectedKeyword
         keywordChipGroup.removeAllViews()
-        currentSelectedKeywords.forEach { keyword ->
+        selectedKeywords.forEach { keyword ->
             WebsosoChip(requireContext()).apply {
                 setWebsosoChipText(keyword.keywordName)
                 setWebsosoChipTextAppearance(R.style.body2)
