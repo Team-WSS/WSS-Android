@@ -31,7 +31,7 @@
             android:id="@+id/iv_popular_feed_like"
             android:layout_width="16dp"
             android:layout_height="0dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="13dp"
             android:layout_marginBottom="20dp"
             android:src="@drawable/ic_popular_feed_like"
             app:layout_constraintBottom_toBottomOf="parent"
