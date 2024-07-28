@@ -96,7 +96,6 @@ class DetailExploreDialogBottomSheet :
                     tvDetailExploreInfoButton.setTextColor(defaultColor)
                     viewDetailExploreSelectedInfoTab.isVisible = false
                     viewDetailExploreSelectedKeywordTab.isVisible = true
-
                 }
             }
         }
@@ -109,8 +108,8 @@ class DetailExploreDialogBottomSheet :
     }
 
     private fun setupObserver() {
-        detailExploreViewModel.isInfoChipSelected.observe(viewLifecycleOwner) { boolean ->
-            binding.ivDetailExploreInfoActiveDot.isVisible = boolean
+        detailExploreViewModel.isInfoChipSelected.observe(viewLifecycleOwner) { isVisible ->
+            binding.ivDetailExploreInfoActiveDot.isVisible = isVisible
         }
     }
 
