@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.model.NovelRatingKeywordCategoryEntity
-import com.teamwss.websoso.data.repository.FakeNovelRatingRepository
+import com.teamwss.websoso.data.repository.UserNovelRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelRating.util.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NovelRatingViewModel @Inject constructor(
-    private val fakeNovelRatingRepository: FakeNovelRatingRepository,
+    private val userNovelRepository: UserNovelRepository,
 ) : ViewModel() {
     private val _uiState = MutableLiveData<NovelRatingUiState>(NovelRatingUiState())
     val uiState: LiveData<NovelRatingUiState> get() = _uiState
@@ -29,7 +29,7 @@ class NovelRatingViewModel @Inject constructor(
     fun updateNovelRating(userNovelId: Long) {
         viewModelScope.launch {
             runCatching {
-                fakeNovelRatingRepository.fetchNovelRating(userNovelId)
+                userNovelRepository.fetchNovelRating(userNovelId)
             }.onSuccess { novelRatingEntity ->
                 handleSuccessfulFetchNovelRating(novelRatingEntity)
             }.onFailure {
@@ -57,13 +57,14 @@ class NovelRatingViewModel @Inject constructor(
                 keywordsModel = NovelRatingKeywordsModel(
                     currentSelectedKeywords = novelRatingModel.userKeywords,
                 ),
+                isAlreadyRated = novelRatingEntity.readStatus != null,
                 isEditingStartDate = isEditingStartDate,
                 maxDayValue = dayMaxValue,
             )
-        updateKeywordCategories()
+//        updateKeywordCategories()
     }
-
-    // TODO: 검색 결과 없을시 이미지 추가
+/*
+    // TODO: 명지 키워드 뷰 병합 이후 수정
     fun updateKeywordCategories(keyword: String = "") {
         viewModelScope.launch {
             runCatching {
@@ -78,7 +79,7 @@ class NovelRatingViewModel @Inject constructor(
             }
         }
     }
-
+*/
     private fun handleSuccessfulFetchKeywordCategories(categories: List<NovelRatingKeywordCategoryEntity>) {
         val previousSelectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
         val updatedCategories = categories.map { it.toUi() }.map {

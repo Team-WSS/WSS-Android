@@ -4,13 +4,13 @@ import com.teamwss.websoso.R
 
 data class NovelRatingModel(
     val novelTitle: String = "",
-    val readStatus: String = ReadStatus.WATCHING.toString(),
+    val readStatus: String? = null,
     val startDate: String? = null,
     val endDate: String? = null,
     val userNovelRating: Float = 0f,
     val charmPoints: List<CharmPoint> = emptyList(),
     val userKeywords: List<NovelRatingKeywordModel> = emptyList(),
-    val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus),
+    val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus ?: ReadStatus.WATCHING.name),
     val ratingDateModel: RatingDateModel =
         RatingDateModel(
             currentStartDate = startDate.toFormattedDate(),

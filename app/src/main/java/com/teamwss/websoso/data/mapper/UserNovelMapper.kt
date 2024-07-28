@@ -17,12 +17,12 @@ fun NovelRatingResponseDto.toData(): NovelRatingEntity =
         userNovelRating = userNovelRating,
         charmPoints = attractivePoints,
         userKeywords =
-            keywords.map { keyword ->
-                NovelRatingKeywordEntity(
-                    keywordId = keyword.keywordId,
-                    keywordName = keyword.keywordName,
-                )
-            },
+        keywords.map { keyword ->
+            NovelRatingKeywordEntity(
+                keywordId = keyword.keywordId,
+                keywordName = keyword.keywordName,
+            )
+        },
     )
 
 fun NovelRatingKeywordCategoriesResponseDto.toData(): List<NovelRatingKeywordCategoryEntity> = categories.map { it.toData() }
