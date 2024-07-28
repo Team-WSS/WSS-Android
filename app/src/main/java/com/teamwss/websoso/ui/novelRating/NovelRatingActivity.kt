@@ -37,11 +37,11 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
     private fun onNovelRatingButtonClick() =
         object : NovelRatingClickListener {
             override fun onDateEditClick() {
-                showDatePickerBottomSheet()
+                showDatePickerBottomSheetDialog()
             }
 
             override fun onKeywordEditClick() {
-                showRatingKeywordBottomSheet()
+                showRatingKeywordBottomSheetDialog()
             }
 
             override fun onNavigateBackClick() {
@@ -131,14 +131,14 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         viewModel.updateCharmPoints(charmPoints.find { it == charmPoint } ?: return)
     }
 
-    private fun showDatePickerBottomSheet() {
+    private fun showDatePickerBottomSheetDialog() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")
         if (existingDialog == null) {
             NovelRatingDateBottomSheetDialog().show(supportFragmentManager, "RatingDateDialog")
         }
     }
 
-    private fun showRatingKeywordBottomSheet() {
+    private fun showRatingKeywordBottomSheetDialog() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingKeywordDialog")
         if (existingDialog == null) {
             NovelRatingKeywordBottomSheetDialog().show(supportFragmentManager, "RatingKeywordDialog")
