@@ -151,4 +151,9 @@
     <string name="load_fail_description">연결 상태를 확인한 후\n다시 시도해 보세요.</string>
     <string name="load_fail_reload">페이지 다시 불러오기</string>
 
+    <!-- 마이페이지 뷰 -->
+    <string name="my_page_title">마이페이지</string>
+    <string name="my_page_library">내 서재</string>
+    <string name="my_page_activity">내 활동</string>
+
 </resources>
