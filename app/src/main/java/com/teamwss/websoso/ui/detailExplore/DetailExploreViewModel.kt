@@ -39,10 +39,10 @@ class DetailExploreViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateIsInfoChipSelected() {
-        val genreChipValue: Boolean = _selectedGenres.value?.isEmpty()?.not() ?: false
-        val statusChipValue: Boolean = _selectedSeriesStatus.value.isNullOrEmpty().not()
-        val ratingChipValue: Boolean = _selectedRating.value != null
+        val isGenreChipSelected: Boolean = _selectedGenres.value?.isEmpty()?.not() ?: false
+        val isStatusChipSelected: Boolean = _selectedSeriesStatus.value.isNullOrEmpty().not()
+        val isRatingChipSelected: Boolean = _selectedRating.value != null
 
-        _isInfoChipSelected.value = genreChipValue || statusChipValue || ratingChipValue
+        _isInfoChipSelected.value = isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
     }
 }
