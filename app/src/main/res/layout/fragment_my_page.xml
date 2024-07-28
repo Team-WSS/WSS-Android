@@ -89,6 +89,7 @@
                                 android:textAppearance="@style/title2"
                                 android:textColor="@color/black"
                                 android:visibility="gone"
+                                android:paddingVertical="12dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"/>
@@ -98,6 +99,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
+                                android:paddingVertical="10dp"
                                 android:src="@drawable/ic_settings"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -107,8 +109,33 @@
 
                     </androidx.appcompat.widget.Toolbar>
 
-
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_my_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabTextAppearance="@style/title2"
+                    app:tabSelectedTextColor="@color/black"
+                    app:tabTextColor="@color/gray_100_CBCBD1"
+                    app:tabIndicatorColor="@color/black"
+                    app:tabIndicatorFullWidth="true"
+                    app:tabIndicatorHeight="2dp">
+                    
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="12dp"
+                        android:text="내 서재"/>
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="12dp"
+                        android:text="내 활동"/>
+
+                </com.google.android.material.tabs.TabLayout>
+
 
             </com.google.android.material.appbar.AppBarLayout>
 
