@@ -137,7 +137,7 @@
 
     <!-- 마이페이지 뷰 -->
     <string name="my_page_library">내 서재</string>
-    <string name="my_page_feed">내 피드</string>
+    <string name="my_page_activity">내 활동</string>
 
     <!-- 내 서재 뷰 -->
     <string name="my_library_genre_count">%d편</string>
