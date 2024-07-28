@@ -182,56 +182,183 @@
                         </LinearLayout>
 
                         <View
-                            android:id="@+id/view_novel_detail_rating"
+                            android:id="@+id/view_novel_detail_user_novel"
                             android:layout_width="0dp"
-                            android:layout_height="68dp"
+                            android:layout_height="0dp"
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="24dp"
                             android:background="@drawable/bg_novel_detail_white_radius_15dp"
+                            app:layout_constraintBottom_toBottomOf="@id/tg_novel_detail_read_status"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_numeric_info" />
 
-                        <RatingBar
-                            android:id="@+id/rb_novel_detail_rating"
+                        <LinearLayout
+                            android:id="@+id/ll_novel_detail_user_rating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:numStars="5"
-                            android:progressBackgroundTint="@color/gray_70_DFDFE3"
-                            android:progressTint="@color/secondary_100_FF675D"
-                            android:rating="@{novelDetailViewModel.novelDetail.userNovel.userNovelRating}"
-                            android:secondaryProgressTint="@color/secondary_100_FF675D"
-                            android:stepSize="0.5"
-                            app:layout_constraintBottom_toBottomOf="@id/view_novel_detail_rating"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/view_novel_detail_rating" />
+                            android:layout_marginStart="28dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
+                            android:gravity="center_vertical"
+                            app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
+                            app:layout_constraintStart_toStartOf="@id/view_novel_detail_user_novel"
+                            app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_marginVertical="4dp"
+                                android:layout_marginStart="14dp"
+                                android:src="@drawable/ic_novel_detail_user_rating" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="6dp"
+                                android:layout_marginStart="4dp"
+                                android:text="@{String.valueOf(novelDetailViewModel.novelDetail.userNovel.userNovelRating)}"
+                                android:textAppearance="@style/body5"
+                                android:textColor="@color/gray_300_52515F"
+                                tools:text="4.0" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="12dp"
+                                android:src="@drawable/ic_novel_detail_navigate_next"
+                                app:tint="@color/primary_200_240991" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_novel_detail_user_date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="28dp"
+                            android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
+                            android:gravity="center_vertical"
+                            app:layout_constraintEnd_toEndOf="@id/view_novel_detail_user_novel"
+                            app:layout_constraintStart_toEndOf="@id/ll_novel_detail_user_rating"
+                            app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_marginVertical="4dp"
+                                android:layout_marginStart="14dp"
+                                android:src="@drawable/ic_novel_detail_user_date" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="6dp"
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1"
+                                android:text="24. 01. 03 ~ 25. 03. 08"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/body5"
+                                android:textColor="@color/gray_300_52515F"
+                                tools:text="24. 01. 03 ~ 25. 03. 08" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="12dp"
+                                android:src="@drawable/ic_novel_detail_navigate_next"
+                                app:tint="@color/gray_200_AEADB3" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButtonToggleGroup
+                            android:id="@+id/tg_novel_detail_read_status"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:divider="@color/gray_70_DFDFE3"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:paddingBottom="12dp"
+                            android:showDividers="middle"
+                            app:layout_constraintBottom_toBottomOf="@id/view_novel_detail_user_novel"
+                            app:layout_constraintEnd_toEndOf="@id/view_novel_detail_user_novel"
+                            app:layout_constraintStart_toStartOf="@id/view_novel_detail_user_novel"
+                            app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_user_rating"
+                            app:singleSelection="true">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_novel_rating_watching"
+                                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@color/transparent"
+                                android:checked="true"
+                                android:text="@string/novel_rating_read_status_watching"
+                                android:textAppearance="@style/body4"
+                                android:textColor="@color/bg_novel_detail_read_status_selector"
+                                app:icon="@drawable/ic_novel_detail_watching_selector"
+                                app:iconGravity="top"
+                                app:iconPadding="4dp"
+                                app:iconTint="@color/bg_novel_detail_read_status_selector" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_novel_rating_watched"
+                                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@color/transparent"
+                                android:checked="false"
+                                android:text="@string/novel_rating_read_status_watched"
+                                android:textAppearance="@style/body4"
+                                android:textColor="@color/bg_novel_detail_read_status_selector"
+                                app:icon="@drawable/ic_novel_detail_watched"
+                                app:iconGravity="top"
+                                app:iconPadding="4dp"
+                                app:iconTint="@color/bg_novel_detail_read_status_selector" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_novel_rating_quit"
+                                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@color/transparent"
+                                android:checked="false"
+                                android:text="@string/novel_rating_read_status_quit"
+                                android:textAppearance="@style/body4"
+                                android:textColor="@color/bg_novel_detail_read_status_selector"
+                                app:icon="@drawable/ic_novel_detail_quit"
+                                app:iconGravity="top"
+                                app:iconPadding="4dp"
+                                app:iconTint="@color/bg_novel_detail_read_status_selector" />
+                        </com.google.android.material.button.MaterialButtonToggleGroup>
 
                         <LinearLayout
                             android:id="@+id/ll_novel_detail_interest_and_review"
                             android:layout_width="0dp"
                             android:layout_height="42dp"
                             android:layout_marginHorizontal="20dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
-                            android:background="@drawable/bg_novel_detail_white_radius_10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_rating">
+                            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_user_novel">
 
                             <LinearLayout
                                 android:id="@+id/view_novel_detail_interest"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginEnd="4dp"
                                 android:layout_weight="1"
+                                android:background="@drawable/bg_novel_detail_interest_selector"
                                 android:gravity="center">
 
                                 <ImageView
                                     android:layout_width="16dp"
                                     android:layout_height="14dp"
-                                    android:src="@drawable/ic_novel_detail_interest" />
+                                    android:src="@drawable/ic_novel_detail_interest_selector" />
 
                                 <TextView
                                     android:id="@+id/tv_novel_detail_interest"
@@ -239,21 +366,17 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
                                     android:text="@string/novel_detail_interest"
-                                    android:textAppearance="@style/body3"
-                                    android:textColor="@color/gray_300_52515F" />
+                                    android:textAppearance="@style/body4"
+                                    android:textColor="@color/primary_100_6A5DFD" />
                             </LinearLayout>
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:background="@color/gray_70_DFDFE3" />
 
                             <LinearLayout
                                 android:id="@+id/view_novel_detail_review"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginStart="4dp"
                                 android:layout_weight="1"
+                                android:background="@drawable/bg_novel_detail_primary_100_radius_14dp"
                                 android:gravity="center">
 
                                 <ImageView
@@ -267,8 +390,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
                                     android:text="@string/novel_detail_review"
-                                    android:textAppearance="@style/body3"
-                                    android:textColor="@color/gray_300_52515F" />
+                                    android:textAppearance="@style/body4"
+                                    android:textColor="@color/white" />
                             </LinearLayout>
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -359,5 +482,15 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+            android:id="@+id/wl_novel_detail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

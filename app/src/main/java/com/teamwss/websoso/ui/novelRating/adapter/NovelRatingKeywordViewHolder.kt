@@ -5,17 +5,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemNovelRatingKeywordBinding,
     private val onKeywordClick: (
-        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
+        keyword: NovelRatingKeywordModel,
         isClicked: Boolean,
     ) -> Unit,
-) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(category: RatingKeywordModel.CategoryModel) {
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(category: NovelRatingKeywordCategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
             setupWebsosoChips(category)
@@ -23,21 +24,22 @@ class NovelRatingKeywordViewHolder(
         }
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: RatingKeywordModel.CategoryModel) {
+    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: NovelRatingKeywordCategoryModel) {
         wcgNovelRatingKeyword.removeAllViews()
         category.keywords.forEach { keyword ->
-            WebsosoChip(binding.root.context).apply {
-                setWebsosoChipText(keyword.keywordName)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
-                setOnWebsosoChipClick { onKeywordClick(keyword, this.isSelected) }
-                isSelected = keyword.isSelected
-            }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
+            WebsosoChip(binding.root.context)
+                .apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    setOnWebsosoChipClick { onKeywordClick(keyword, this.isSelected) }
+                    isSelected = keyword.isSelected
+                }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
         }
     }
 
