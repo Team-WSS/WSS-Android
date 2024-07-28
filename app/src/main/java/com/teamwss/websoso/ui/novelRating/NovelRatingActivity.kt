@@ -134,14 +134,14 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
     private fun showDatePickerBottomSheet() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")
         if (existingDialog == null) {
-            NovelRatingDateDialog().show(supportFragmentManager, "RatingDateDialog")
+            NovelRatingDateBottomSheetDialog().show(supportFragmentManager, "RatingDateDialog")
         }
     }
 
     private fun showRatingKeywordBottomSheet() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingKeywordDialog")
         if (existingDialog == null) {
-            NovelRatingKeywordDialog().show(supportFragmentManager, "RatingKeywordDialog")
+            NovelRatingKeywordBottomSheetDialog().show(supportFragmentManager, "RatingKeywordDialog")
         }
     }
 }

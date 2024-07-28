@@ -12,7 +12,7 @@ import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 
-class NovelRatingKeywordDialog :
+class NovelRatingKeywordBottomSheetDialog :
     BindingBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
     private val viewModel: NovelRatingViewModel by activityViewModels()
     private lateinit var novelRatingKeywordAdapter: NovelRatingKeywordAdapter
