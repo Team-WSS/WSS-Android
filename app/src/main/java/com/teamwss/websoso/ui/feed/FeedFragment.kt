@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.feed
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -192,9 +193,14 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun initView() {
+        binding.onWriteClick = ::navigateToFeedWriting
         feedViewModel.categories.setUpChips()
         setupAdapter()
         setupRefreshView()
+    }
+
+    private fun navigateToFeedWriting() {
+        Log.d("123123", "123123")
     }
 
     private fun List<CategoryModel>.setUpChips() {
