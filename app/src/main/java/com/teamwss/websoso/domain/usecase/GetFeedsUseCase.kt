@@ -12,10 +12,10 @@ class GetFeedsUseCase @Inject constructor(
 
     suspend operator fun invoke(selectedCategory: String, lastFeedId: Long = INITIAL_ID): Feeds {
         val isFeedRefreshed: Boolean = lastFeedId == INITIAL_ID
-        val isCategorySwitched: Boolean =
-            feedRepository.cachedFeeds.isNotEmpty() && previousCategory != selectedCategory
+        val isCategorySwitched: Boolean = previousCategory != selectedCategory
 
-        if (isFeedRefreshed or isCategorySwitched) feedRepository.clearCachedFeeds()
+        if ((isFeedRefreshed || isCategorySwitched) && feedRepository.cachedFeeds.isNotEmpty())
+            feedRepository.clearCachedFeeds()
 
         return feedRepository.fetchFeeds(
             category = selectedCategory,
