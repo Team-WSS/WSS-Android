@@ -32,7 +32,7 @@
             <ImageView
                 android:id="@+id/iv_feed_profile"
                 cornerRadius="@{12f}"
-                loadImageUrl="@{feed.user.profileImage}"
+                loadImageUrl="@{feed.user.avatarImage}"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -173,12 +173,12 @@
             tools:text="로판" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_feed_thumb_up"
+            android:id="@+id/cl_feed_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="28dp"
-            android:onClick="@{(cl_feed_thumb_up) -> onClick.onThumbUpButtonClick(cl_feed_thumb_up, feed.id)}"
+            android:onClick="@{(cl_feed_like) -> onClick.onLikeButtonClick(cl_feed_like, feed.id)}"
             app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
             app:layout_constraintStart_toStartOf="@+id/tv_feed_genre"
             app:layout_constraintTop_toBottomOf="@+id/tv_feed_genre">
@@ -217,10 +217,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:onClick="@{() -> onClick.onCommentButtonClick()}"
-            app:layout_constraintBottom_toBottomOf="@+id/cl_feed_thumb_up"
-            app:layout_constraintStart_toEndOf="@+id/cl_feed_thumb_up"
-            app:layout_constraintTop_toTopOf="@+id/cl_feed_thumb_up">
+            android:onClick="@{() -> onClick.onCommentButtonClick(feed.novel.id)}"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_feed_like"
+            app:layout_constraintStart_toEndOf="@+id/cl_feed_like"
+            app:layout_constraintTop_toTopOf="@+id/cl_feed_like">
 
             <ImageView
                 android:id="@+id/iv_feed_comment"

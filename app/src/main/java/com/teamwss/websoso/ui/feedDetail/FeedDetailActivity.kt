@@ -18,7 +18,7 @@ class FeedDetailActivity : AppCompatActivity() {
         private const val FEED_ID = "FEED_ID"
 
         fun from(
-            id: Int,
+            id: Long,
             context: Context
         ): Intent = Intent(context, FeedDetailActivity::class.java).apply {
             putExtra(FEED_ID, id)
