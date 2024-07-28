@@ -244,18 +244,15 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     private fun observeUiState() {
         feedViewModel.feedUiState.observe(viewLifecycleOwner) { feedUiState ->
             when {
-                feedUiState.loading -> loading()
-                feedUiState.error -> throw IllegalStateException()
+                feedUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
+                feedUiState.error -> binding.wllFeed.setLoadingLayoutVisibility(false)
                 !feedUiState.loading -> {
+                    binding.wllFeed.setWebsosoLoadingVisibility(false)
                     binding.sptrFeedRefresh.setRefreshing(false)
                     updateFeeds(feedUiState)
                 }
             }
         }
-    }
-
-    private fun loading() {
-        // 로딩 뷰
     }
 
     private fun updateFeeds(feedUiState: FeedUiState) {
