@@ -3,7 +3,7 @@ package com.teamwss.websoso.ui.detailExplore
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
@@ -20,7 +20,7 @@ class DetailExploreDialogBottomSheet :
     private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
     private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
 
-    private val detailExploreViewModel: DetailExploreViewModel by viewModels()
+    private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,6 +29,7 @@ class DetailExploreDialogBottomSheet :
         initDetailExploreFragment()
         onReplaceFragmentButtonClick()
         onBottomSheetExitButtonClick()
+        setupObserver()
     }
 
     private fun setupBottomSheet() {
@@ -104,6 +105,12 @@ class DetailExploreDialogBottomSheet :
     private fun onBottomSheetExitButtonClick() {
         binding.ivDetailExploreExitButton.setOnClickListener {
             dismiss()
+        }
+    }
+
+    private fun setupObserver() {
+        detailExploreViewModel.isInfoChipSelected.observe(viewLifecycleOwner) { boolean ->
+            binding.ivDetailExploreInfoActiveDot.isVisible = boolean
         }
     }
 
