@@ -220,7 +220,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
             addOnScrollListener(
                 FeedScrollListener.of(
                     singleEventHandler = singleEventHandler,
-                    event = feedViewModel::updateFeeds
+                    event = feedViewModel::updateFeeds,
                 )
             )
             setHasFixedSize(true)
@@ -231,12 +231,12 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         binding.sptrFeedRefresh.apply {
             setRefreshViewParams(
                 params = ViewGroup.LayoutParams(
-                    30, 30
+                    30, 30,
                 )
             )
             setLottieAnimation("lottie_websoso_loading.json")
             setOnRefreshListener {
-                feedViewModel.updateFeeds()
+                feedViewModel.updateRefreshedFeeds()
             }
         }
     }

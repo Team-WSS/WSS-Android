@@ -8,24 +8,21 @@ import javax.inject.Inject
 class GetFeedsUseCase @Inject constructor(
     private val feedRepository: FeedRepository,
 ) {
-    private var lastFeedId: Long = INITIAL_ID
     private var previousCategory: String = ""
 
-    suspend operator fun invoke(selectedCategory: String): Feeds {
-        if (feedRepository.cachedFeeds.isNotEmpty() && previousCategory != selectedCategory) {
+    suspend operator fun invoke(selectedCategory: String, lastFeedId: Long = INITIAL_ID): Feeds {
+        val isFeedRefreshed: Boolean = lastFeedId == INITIAL_ID
+        val isCategorySwitched: Boolean = previousCategory != selectedCategory
+
+        if ((isFeedRefreshed || isCategorySwitched) && feedRepository.cachedFeeds.isNotEmpty())
             feedRepository.clearCachedFeeds()
-            lastFeedId = INITIAL_ID
-        }
 
         return feedRepository.fetchFeeds(
             category = selectedCategory,
             lastFeedId = lastFeedId,
-            size = if (lastFeedId == INITIAL_ID) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
+            size = if (isFeedRefreshed) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
         ).toDomain()
-            .also {
-                if (it.feeds.isNotEmpty()) lastFeedId = it.feeds.last().id
-                previousCategory = selectedCategory
-            }
+            .also { previousCategory = selectedCategory }
     }
 
     companion object {
