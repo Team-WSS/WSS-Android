@@ -18,8 +18,8 @@ class DetailExploreKeywordViewHolder(
         isClicked: Boolean,
     ) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private var _isChipSetting: Boolean = false
-    val isChipSetting: Boolean get() = _isChipSetting
+    var isChipSetting: Boolean = false
+        private set
 
     init {
         binding.setupExpandToggleBtn()
@@ -68,7 +68,7 @@ class DetailExploreKeywordViewHolder(
                 isSelected = keyword.isSelected
             }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
         }
-        _isChipSetting = true
+        isChipSetting = true
     }
 
     fun updateChipState(keywords: List<DetailExploreKeywordModel.CategoryModel.KeywordModel>) {
