@@ -12,6 +12,35 @@
         android:layout_height="match_parent"
         tools:context=".ui.feed.FeedFragment">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_feed_none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_feed_logo_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="212dp"
+                android:src="@drawable/img_novel_info_none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_feed_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/feed_none"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintEnd_toEndOf="@+id/iv_feed_logo_none"
+                app:layout_constraintStart_toStartOf="@+id/iv_feed_logo_none"
+                app:layout_constraintTop_toBottomOf="@+id/iv_feed_logo_none" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/tv_feed_title"
             android:layout_width="wrap_content"

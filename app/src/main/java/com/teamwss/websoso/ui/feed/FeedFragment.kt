@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -256,6 +257,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun updateFeeds(feedUiState: FeedUiState) {
+        binding.clFeedNone.isVisible = feedUiState.feeds.isEmpty()
         val feeds = feedUiState.feeds.map { Feed(it) }
         when (feedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
