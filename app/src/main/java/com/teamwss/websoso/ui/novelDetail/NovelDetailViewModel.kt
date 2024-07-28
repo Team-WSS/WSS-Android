@@ -17,7 +17,7 @@ class NovelDetailViewModel @Inject constructor(
 ) : ViewModel() {
     private val _novelDetail = MutableLiveData<NovelDetailModel>()
     val novelDetail: LiveData<NovelDetailModel> get() = _novelDetail
-    private val _loading = MutableLiveData<Boolean>(false)
+    private val _loading = MutableLiveData<Boolean>(true)
     val loading: LiveData<Boolean> get() = _loading
     private val _error = MutableLiveData<Boolean>(false)
     val error: LiveData<Boolean> get() = _error
@@ -30,6 +30,7 @@ class NovelDetailViewModel @Inject constructor(
                 _loading.value = false
                 _novelDetail.value = novelDetail.toUi()
             }.onFailure {
+                _loading.value = false
                 _error.value = true
             }
         }

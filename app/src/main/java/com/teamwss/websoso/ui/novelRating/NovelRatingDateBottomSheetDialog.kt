@@ -10,8 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 
-class NovelRatingDateDialog :
-    BindingBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
+class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
     private val viewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onViewCreated(
@@ -21,16 +20,25 @@ class NovelRatingDateDialog :
         super.onViewCreated(view, savedInstanceState)
         binding.onClick = onNovelRatingButtonClick()
         bindViewModel()
+        setupObserver()
         setupDialogBehavior()
         initNullDate()
-        initNumberPickerRange()
-        observeDayRange()
         setupValueChangeListener()
     }
 
     private fun bindViewModel() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    private fun setupObserver() {
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            binding.npRatingDateDay.formatNumberPicker(
+                uiState.maxDayValue,
+                "%02d",
+            )
+            initNumberPickerRange(uiState?.maxDayValue ?: MAX_DAY_VALUE)
+        }
     }
 
     private fun onNovelRatingButtonClick() =
@@ -66,20 +74,14 @@ class NovelRatingDateDialog :
         viewModel.updateNotNullDate()
     }
 
-    private fun initNumberPickerRange() {
+    private fun initNumberPickerRange(maxDayValue: Int) {
         with(binding) {
             npRatingDateYear.formatNumberPicker(MAX_YEAR_VALUE, "%04d")
             npRatingDateMonth.formatNumberPicker(MAX_MONTH_VALUE, "%02d")
             npRatingDateDay.formatNumberPicker(
-                viewModel?.maxDayValue?.value ?: MAX_DAY_VALUE,
+                maxDayValue,
                 "%02d",
             )
-        }
-    }
-
-    private fun observeDayRange() {
-        viewModel.maxDayValue.observe(viewLifecycleOwner) { maxDayValue ->
-            binding.npRatingDateDay.formatNumberPicker(maxDayValue, "%02d")
         }
     }
 

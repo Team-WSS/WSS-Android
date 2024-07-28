@@ -36,7 +36,7 @@
     <string name="detail_explore_info_status">연재상태</string>
     <string name="detail_explore_info_rating">별점</string>
     <string name="detail_explore_info_status_in_series">연재중</string>
-    <string name="detail_explore_info_status_complete">완결</string>
+    <string name="detail_explore_info_status_complete">완결작</string>
     <string name="detail_explore_info_rating_lowest">%1$.1f이상</string>
     <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
     <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
@@ -48,8 +48,8 @@
     <string name="detail_explore_keyword_not_exist_result">해당 키워드는\n아직 등록되지 않았어요..</string>
 
     <!-- 작품 상세 -->
-    <string name="novel_detail_review">리뷰 남기기</string>
-    <string name="novel_detail_interest">관심 있어요</string>
+    <string name="novel_detail_review">나도 한마디</string>
+    <string name="novel_detail_interest">관심</string>
     <string name="novel_detail_info">정보</string>
     <string name="novel_detail_feed">피드</string>
     <string name="novel_detail_report_error">오류 제보</string>
@@ -67,6 +67,15 @@
     <string name="novel_info_title">작품 소개</string>
     <string name="novel_info_rating_title">독자들의 평가</string>
     <string name="novel_info_keyword_chip_text">%s %d</string>
+    <string name="novel_info_review_none">아직 평가가 없어요\n최초로 남겨보세요!</string>
+    <string name="novel_info_read_status_watching">보는 중</string>
+    <string name="novel_info_read_status_watched">봤어요</string>
+    <string name="novel_info_read_status_quit">하차</string>
+    <string name="novel_info_read_status_watching_count">%d명이 작품을\n같이 보고 있어요</string>
+    <string name="novel_info_read_status_watched_count">%d명이 작품을\n같이 봤어요</string>
+    <string name="novel_info_read_status_quit_count">%d명이 작품을\n하차했어요</string>
+    <string name="novel_info_user_unit">명</string>
+    <string name="novel_info_charm_points_body">%s가 매력적인 작품이에요</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>
@@ -135,19 +144,11 @@
     <!-- 알림 뷰 -->
     <string name="notice_notification">알림</string>
 
-    <!-- 마이페이지 뷰 -->
-    <string name="my_page_title">마이페이지</string>
-    <string name="my_page_library">내 서재</string>
-    <string name="my_page_activity">내 활동</string>
-
-    <!-- 내 서재 뷰 -->
-    <string name="my_library_genre_count">%d편</string>
-    <string name="my_library_storage">보관함</string>
-    <string name="my_library_interesting">관심</string>
-    <string name="my_library_watching">보는중</string>
-    <string name="my_library_watched">봤어요</string>
-    <string name="my_library_quitting">하차</string>
-    <string name="my_library_genre_preference">장르 취향</string>
-    <string name="my_library_preferred_novel">작품 취향</string>
+    <!-- 로드 뷰 -->
+    <string name="load_load_title">로딩 중…</string>
+    <string name="load_load_description">잠시만 기다려주세요</string>
+    <string name="load_fail_title">네트워크에\n연결되어 있지 않아요</string>
+    <string name="load_fail_description">연결 상태를 확인한 후\n다시 시도해 보세요.</string>
+    <string name="load_fail_reload">페이지 다시 불러오기</string>
 
 </resources>
