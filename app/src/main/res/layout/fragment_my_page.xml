@@ -93,7 +93,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="12dp"
-                                android:text="마이페이지"
+                                android:text="@string/my_page_title"
                                 android:textAppearance="@style/title2"
                                 android:textColor="@color/black"
                                 android:visibility="gone"
@@ -134,13 +134,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingVertical="12dp"
-                        android:text="내 서재" />
+                        android:text="@string/my_page_library" />
 
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingVertical="12dp"
-                        android:text="내 활동" />
+                        android:text="@string/my_page_activity" />
 
                 </com.google.android.material.tabs.TabLayout>
 
