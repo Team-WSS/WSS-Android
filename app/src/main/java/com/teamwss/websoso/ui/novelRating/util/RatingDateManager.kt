@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.novelRating.manager
+package com.teamwss.websoso.ui.novelRating.util
 
 import com.teamwss.websoso.ui.novelRating.model.Month
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
@@ -18,47 +18,53 @@ class RatingDateManager {
             return novelRatingModel.copy(uiReadStatus = readStatus)
         }
 
-        when (readStatus) {
+        val updatedRatingDateModel = when (readStatus) {
             ReadStatus.WATCHING -> handleWatchingStatus(ratingDateModel)
             ReadStatus.WATCHED -> handleWatchedStatus(ratingDateModel)
             ReadStatus.QUIT -> handleQuitStatus(ratingDateModel)
         }
 
-        return novelRatingModel.copy(ratingDateModel = ratingDateModel, uiReadStatus = readStatus)
+        return novelRatingModel.copy(
+            ratingDateModel = updatedRatingDateModel,
+            uiReadStatus = readStatus,
+        )
     }
 
-    private fun handleWatchingStatus(ratingDateModel: RatingDateModel) {
-        ratingDateModel.currentStartDate =
-            when (ratingDateModel.previousStartDate == null) {
+    private fun handleWatchingStatus(ratingDateModel: RatingDateModel): RatingDateModel {
+        return ratingDateModel.copy(
+            currentStartDate = when (ratingDateModel.previousStartDate == null) {
                 true -> today.toFormattedDate()
                 false -> ratingDateModel.previousStartDate
-            }
-        ratingDateModel.previousEndDate = ratingDateModel.currentEndDate
-        ratingDateModel.currentEndDate = null
+            },
+            previousEndDate = ratingDateModel.currentEndDate,
+            currentEndDate = null
+        )
     }
 
-    private fun handleWatchedStatus(ratingDateModel: RatingDateModel) {
-        ratingDateModel.currentStartDate =
-            when (ratingDateModel.previousStartDate == null) {
+    private fun handleWatchedStatus(ratingDateModel: RatingDateModel): RatingDateModel {
+        val updatedRatingDateModel = ratingDateModel.copy(
+            currentStartDate = when (ratingDateModel.previousStartDate == null) {
                 true -> today.toFormattedDate()
                 false -> ratingDateModel.previousStartDate
-            }
-        ratingDateModel.currentEndDate =
-            when (ratingDateModel.previousEndDate == null) {
+            },
+            currentEndDate = when (ratingDateModel.previousEndDate == null) {
                 true -> today.toFormattedDate()
                 false -> ratingDateModel.previousEndDate
             }
-        checkIsStartAfterEnd(ratingDateModel, ReadStatus.WATCHED, isEditingStartDate = false)
+        )
+        checkIsStartAfterEnd(updatedRatingDateModel, ReadStatus.WATCHED, isEditingStartDate = false)
+        return updatedRatingDateModel
     }
 
-    private fun handleQuitStatus(ratingDateModel: RatingDateModel) {
-        ratingDateModel.currentEndDate =
-            when (ratingDateModel.previousEndDate == null) {
+    private fun handleQuitStatus(ratingDateModel: RatingDateModel): RatingDateModel {
+        return ratingDateModel.copy(
+            currentEndDate = when (ratingDateModel.previousEndDate == null) {
                 true -> today.toFormattedDate()
                 false -> ratingDateModel.previousEndDate
-            }
-        ratingDateModel.previousStartDate = ratingDateModel.currentStartDate
-        ratingDateModel.currentStartDate = null
+            },
+            previousStartDate = ratingDateModel.currentStartDate,
+            currentStartDate = null
+        )
     }
 
     fun updateIsEditingStartDate(readStatus: ReadStatus): Boolean {
@@ -113,18 +119,17 @@ class RatingDateManager {
 
     private fun checkIsTodayAfterToday(
         ratingDateModel: RatingDateModel,
-        isEditingStartDate: Boolean,
+        isEditingStartDate: Boolean
     ): RatingDateModel {
-        when (isEditingStartDate) {
-            true ->
-                ratingDateModel.currentStartDate =
-                    validateIsAfterToday(ratingDateModel.currentStartDate)
+        return when (isEditingStartDate) {
+            true -> ratingDateModel.copy(
+                currentStartDate = validateIsAfterToday(ratingDateModel.currentStartDate)
+            )
 
-            false ->
-                ratingDateModel.currentEndDate =
-                    validateIsAfterToday(ratingDateModel.currentEndDate)
+            false -> ratingDateModel.copy(
+                currentEndDate = validateIsAfterToday(ratingDateModel.currentEndDate)
+            )
         }
-        return ratingDateModel
     }
 
     private fun validateIsAfterToday(date: Triple<Int, Int, Int>?): Triple<Int, Int, Int> {
@@ -163,22 +168,22 @@ class RatingDateManager {
     ): RatingDateModel {
         if (readStatus != ReadStatus.WATCHED) return ratingDateModel
 
-        when (isEditingStartDate) {
-            true ->
-                ratingDateModel.currentStartDate =
-                    validateIsStartAfterEnd(
-                        ratingDateModel.currentStartDate!!,
-                        ratingDateModel.currentEndDate!!,
-                    )
+        return when (isEditingStartDate) {
+            true -> ratingDateModel.copy(
+                currentStartDate = validateIsStartAfterEnd(
+                    ratingDateModel.currentStartDate ?: today.toFormattedDate(),
+                    ratingDateModel.currentEndDate ?: today.toFormattedDate(),
+                )
+            )
 
-            false ->
-                if (ratingDateModel.currentStartDate.toLocalDate()
-                        .isAfter(ratingDateModel.currentEndDate.toLocalDate())
-                ) {
-                    ratingDateModel.currentStartDate = ratingDateModel.currentEndDate
-                }
+            false -> if (ratingDateModel.currentStartDate.toLocalDate()
+                    .isAfter(ratingDateModel.currentEndDate.toLocalDate())
+            ) {
+                ratingDateModel.copy(
+                    currentStartDate = ratingDateModel.currentEndDate
+                )
+            } else ratingDateModel
         }
-        return ratingDateModel
     }
 
     private fun Triple<Int, Int, Int>?.toLocalDate(): LocalDate {
@@ -202,35 +207,32 @@ class RatingDateManager {
     }
 
     fun cancelDateEdit(ratingDateModel: RatingDateModel): RatingDateModel {
-        if (ratingDateModel.currentStartDate != null) {
-            ratingDateModel.currentStartDate = ratingDateModel.previousStartDate
-        }
-        if (ratingDateModel.currentEndDate != null) {
-            ratingDateModel.currentEndDate = ratingDateModel.previousEndDate
-        }
-        return ratingDateModel
+        return ratingDateModel.copy(
+            currentStartDate = if (ratingDateModel.currentStartDate != null) {
+                ratingDateModel.previousStartDate
+            } else null,
+            currentEndDate = if (ratingDateModel.currentEndDate != null) {
+                ratingDateModel.previousEndDate
+            } else null,
+        )
     }
+
 
     fun getNotNullDate(novelRatingModel: NovelRatingModel): RatingDateModel {
         val ratingDateModel = novelRatingModel.ratingDateModel
-        when (novelRatingModel.uiReadStatus) {
-            ReadStatus.WATCHING -> {
-                ratingDateModel.currentStartDate =
-                    ratingDateModel.currentStartDate ?: today.toFormattedDate()
-            }
+        return when (novelRatingModel.uiReadStatus) {
+            ReadStatus.WATCHING -> ratingDateModel.copy(
+                currentStartDate = ratingDateModel.currentStartDate ?: today.toFormattedDate()
+            )
 
-            ReadStatus.WATCHED -> {
-                ratingDateModel.currentStartDate =
-                    ratingDateModel.currentStartDate ?: today.toFormattedDate()
-                ratingDateModel.currentEndDate =
-                    ratingDateModel.currentEndDate ?: today.toFormattedDate()
-            }
+            ReadStatus.WATCHED -> ratingDateModel.copy(
+                currentStartDate = ratingDateModel.currentStartDate ?: today.toFormattedDate(),
+                currentEndDate = ratingDateModel.currentEndDate ?: today.toFormattedDate()
+            )
 
-            ReadStatus.QUIT -> {
-                ratingDateModel.currentEndDate =
-                    ratingDateModel.currentEndDate ?: today.toFormattedDate()
-            }
+            ReadStatus.QUIT -> ratingDateModel.copy(
+                currentEndDate = ratingDateModel.currentEndDate ?: today.toFormattedDate()
+            )
         }
-        return ratingDateModel
     }
 }
