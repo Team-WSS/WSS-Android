@@ -94,14 +94,20 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun updateGraphHeightValue(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        if (unifiedReviewCountModel.watchingCount.graphHeight != 0) return
-        if (listOf(
-                unifiedReviewCountModel.watchingCount.count,
-                unifiedReviewCountModel.watchedCount.count,
-                unifiedReviewCountModel.quitCount.count,
-            ).sumOf { it } == 0) return
-        val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
-        novelInfoViewModel.updateGraphHeight(graphHeight)
+        val counts = listOf(
+            unifiedReviewCountModel.watchingCount.count,
+            unifiedReviewCountModel.watchedCount.count,
+            unifiedReviewCountModel.quitCount.count
+        )
+
+        when {
+            unifiedReviewCountModel.watchingCount.graphHeight != 0 -> return
+            counts.sumOf { it } == 0 -> return
+            else -> {
+                val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
+                novelInfoViewModel.updateGraphHeight(graphHeight)
+            }
+        }
     }
 
     private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
