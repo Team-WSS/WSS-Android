@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.novelRating.model
 
 import com.teamwss.websoso.R
+import java.util.Locale
 
 data class NovelRatingModel(
     val novelTitle: String = "",
@@ -67,6 +68,12 @@ data class RatingDateModel(
                         )
 
             else -> R.string.novel_rating_add_date to arrayOf()
+        }
+    }
+
+    companion object {
+        fun Triple<Int, Int, Int>.toFormattedDate(): String {
+            return String.format(Locale.getDefault(), "%04d-%02d-%02d", first, second, third)
         }
     }
 }

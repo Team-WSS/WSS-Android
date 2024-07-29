@@ -55,7 +55,9 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
                 finish()
             }
 
-            override fun onSaveClick() {}
+            override fun onSaveClick() {
+                novelRatingViewModel.updateNovelRating(novelId, intent.getBooleanExtra(IS_ALREADY_RATED, false))
+            }
 
             override fun onCancelClick() {}
 

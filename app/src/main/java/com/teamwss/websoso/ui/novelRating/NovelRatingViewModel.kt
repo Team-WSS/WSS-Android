@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelRating
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,13 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.model.NovelRatingKeywordCategoryEntity
 import com.teamwss.websoso.data.repository.UserNovelRepository
+import com.teamwss.websoso.ui.mapper.toData
 import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.novelRating.util.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
+import com.teamwss.websoso.ui.novelRating.model.RatingDateModel.Companion.toFormattedDate
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
+import com.teamwss.websoso.ui.novelRating.util.RatingDateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -64,23 +67,24 @@ class NovelRatingViewModel @Inject constructor(
             )
 //        updateKeywordCategories()
     }
-/*
-    // TODO: 명지 키워드 뷰 병합 이후 수정
-    fun updateKeywordCategories(keyword: String = "") {
-        viewModelScope.launch {
-            runCatching {
-                fakeNovelRatingRepository.fetchNovelRatingKeywordCategories(keyword)
-            }.onSuccess { categories ->
-                handleSuccessfulFetchKeywordCategories(categories)
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
-                )
+
+    /*
+        // TODO: 명지 키워드 뷰 병합 이후 수정
+        fun updateKeywordCategories(keyword: String = "") {
+            viewModelScope.launch {
+                runCatching {
+                    fakeNovelRatingRepository.fetchNovelRatingKeywordCategories(keyword)
+                }.onSuccess { categories ->
+                    handleSuccessfulFetchKeywordCategories(categories)
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
             }
         }
-    }
-*/
+    */
     private fun handleSuccessfulFetchKeywordCategories(categories: List<NovelRatingKeywordCategoryEntity>) {
         val previousSelectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
         val updatedCategories = categories.map { it.toUi() }.map {
@@ -145,7 +149,7 @@ class NovelRatingViewModel @Inject constructor(
                 )
             val maxDayValue =
                 ratingDateManager.updateDayMaxValue(
-                    uiState.novelRatingModel.ratingDateModel,
+                    updatedModel,
                     uiState.isEditingStartDate,
                 )
             _uiState.value =

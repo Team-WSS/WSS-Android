@@ -16,4 +16,11 @@ class UserNovelRepository @Inject constructor(
     suspend fun fetchNovelRating(novelId: Long): NovelRatingEntity {
         return userNovelApi.fetchNovelRating(novelId).toData()
     }
+
+    suspend fun saveNovelRating(novelRatingEntity: NovelRatingEntity, isAlreadyRated: Boolean) {
+        when (isAlreadyRated) {
+            true -> userNovelApi.putNovelRating(novelRatingEntity.novelId ?: throw IllegalArgumentException("novelId must not be null"), novelRatingEntity.toData())
+            false -> userNovelApi.postNovelRating(novelRatingEntity.toData())
+        }
+    }
 }
