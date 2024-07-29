@@ -24,7 +24,7 @@ class NovelInfoViewModel @Inject constructor(
     fun updateNovelInfo(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                novelRepository.getNovelInfo(novelId)
+                novelRepository.fetchNovelInfo(novelId)
             }.onSuccess { novelInfo ->
                 _uiState.value = uiState.value?.copy(
                     novelInfoModel = novelInfo.toUi(),

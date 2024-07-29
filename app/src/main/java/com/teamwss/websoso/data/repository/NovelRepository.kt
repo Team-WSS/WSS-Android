@@ -22,7 +22,7 @@ class NovelRepository @Inject constructor(
         novelApi.deleteUserInterest(novelId)
     }
 
-    suspend fun getNovelInfo(novelId: Long): NovelInfoEntity {
+    suspend fun fetchNovelInfo(novelId: Long): NovelInfoEntity {
         return novelApi.getNovelInfo(novelId).toData()
     }
 }
