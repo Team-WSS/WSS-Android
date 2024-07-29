@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.data.repository.UserNovelRepository
-import com.teamwss.websoso.domain.usecase.GetNovelDetailUseCase
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +14,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NovelDetailViewModel @Inject constructor(
-    private val novelDetailUseCase: GetNovelDetailUseCase,
     private val novelRepository: NovelRepository,
     private val userNovelRepository: UserNovelRepository,
 ) : ViewModel() {
@@ -30,7 +28,7 @@ class NovelDetailViewModel @Inject constructor(
     fun updateNovelDetail(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                novelDetailUseCase.invoke(novelId)
+                novelRepository.getNovelDetail(novelId)
             }.onSuccess { novelDetail ->
                 _loading.value = false
                 _novelDetail.value = novelDetail.toUi(novelId)
@@ -44,17 +42,14 @@ class NovelDetailViewModel @Inject constructor(
     fun updateUserInterest(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                when (novelDetail.value?.userNovel?.isUserNovelInterest == true) {
-                    true -> novelRepository.deleteUserInterest(novelId)
-                    else -> novelRepository.postUserInterest(novelId)
-                }
+                novelRepository.saveUserInterest(novelId, novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false)
             }.onSuccess {
                 _novelDetail.value = novelDetail.value?.copy(
                     userNovel = novelDetail.value?.userNovel?.copy(
                         isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
                     ) ?: return@onSuccess
                 )
-            }.onFailure {}
+            }
         }
     }
 

@@ -1,10 +1,11 @@
 package com.teamwss.websoso.ui.mapper
 
-import com.teamwss.websoso.domain.model.NovelDetail
+import com.teamwss.websoso.data.model.NovelDetailEntity
+import com.teamwss.websoso.ui.novelDetail.model.Category
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
-fun NovelDetail.toUi(novelId: Long): NovelDetailModel {
+fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
     return NovelDetailModel(
         userNovel =
         NovelDetailModel.UserNovelModel(
@@ -19,16 +20,15 @@ fun NovelDetail.toUi(novelId: Long): NovelDetailModel {
             endDate = userNovel.endDate,
             isUserNovelInterest = userNovel.isUserNovelInterest,
             userNovelRating = userNovel.userNovelRating,
-            hasUserNovelInfo = userNovel.hasUserNovelInfo,
         ),
         novel =
         NovelDetailModel.NovelModel(
             novelId = novelId,
             novelTitle = novel.novelTitle,
             novelImage = novel.novelImage,
-            novelGenres = novel.novelGenres,
+            novelGenres = novel.novelGenres.map { Category.from(it) },
             novelGenreImage = novel.novelGenreImage,
-            isNovelCompletedText = novel.isNovelCompletedText,
+            isNovelCompleted = novel.isNovelCompleted,
             author = novel.author,
         ),
         userRating =
