@@ -13,11 +13,10 @@ class NovelRepository @Inject constructor(
         return novelApi.getNovelDetail(novelId).toData()
     }
 
-    suspend fun postUserInterest(novelId: Long) {
-        novelApi.postUserInterest(novelId)
-    }
-
-    suspend fun deleteUserInterest(novelId: Long) {
-        novelApi.deleteUserInterest(novelId)
+    suspend fun saveUserInterest(novelId: Long, isInterest: Boolean) {
+        when (isInterest) {
+            true -> novelApi.postUserInterest(novelId)
+            false -> novelApi.deleteUserInterest(novelId)
+        }
     }
 }

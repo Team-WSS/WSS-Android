@@ -44,10 +44,7 @@ class NovelDetailViewModel @Inject constructor(
     fun updateUserInterest(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                when (novelDetail.value?.userNovel?.isUserNovelInterest == true) {
-                    true -> novelRepository.deleteUserInterest(novelId)
-                    else -> novelRepository.postUserInterest(novelId)
-                }
+                novelRepository.saveUserInterest(novelId, novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false)
             }.onSuccess {
                 _novelDetail.value = novelDetail.value?.copy(
                     userNovel = novelDetail.value?.userNovel?.copy(
