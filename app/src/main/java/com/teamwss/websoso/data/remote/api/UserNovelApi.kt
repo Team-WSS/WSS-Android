@@ -20,4 +20,15 @@ interface UserNovelApi {
     suspend fun fetchNovelRating(
         @Path("novelId") novelId: Long,
     ): NovelRatingResponseDto
+
+    @POST("user-novels")
+    suspend fun postNovelRating(
+        @Body novelRatingRequestDto: NovelRatingRequestDto,
+    )
+
+    @PUT("user-novels/{novelId}")
+    suspend fun putNovelRating(
+        @Path("novelId") novelId: Long,
+        @Body novelRatingRequestDto: NovelRatingRequestDto,
+    )
 }

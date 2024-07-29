@@ -6,9 +6,9 @@ import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.forEach
+import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
@@ -68,20 +68,20 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         var isInitialUpdate = true
 
         novelRatingViewModel.uiState.observe(this) { uiState ->
-            when {
-                isInitialUpdate && !uiState.error && !uiState.loading -> {
-                    isInitialUpdate = false
-                    binding.wllNovelRating.setWebsosoLoadingVisibility(false)
-                    updateInitialReadStatus()
-                }
-                !uiState.error && !uiState.loading -> {
-                    updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-                    updateCharmPointChips(uiState.novelRatingModel.charmPoints)
-                    updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
-                }
-                uiState.loading -> binding.wllNovelRating.setWebsosoLoadingVisibility(true)
-                else -> binding.wllNovelRating.setErrorLayoutVisibility(true)
+            if (isInitialUpdate && !uiState.isFetchError && !uiState.loading) {
+                isInitialUpdate = false
+                binding.wllNovelRating.setWebsosoLoadingVisibility(false)
+                updateInitialReadStatus()
             }
+            if (!uiState.isFetchError && !uiState.loading) {
+                updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
+                updateCharmPointChips(uiState.novelRatingModel.charmPoints)
+                updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
+            }
+            if (uiState.loading) binding.wllNovelRating.setWebsosoLoadingVisibility(true)
+            if (uiState.isFetchError) binding.wllNovelRating.setErrorLayoutVisibility(true)
+            if (uiState.isSaveSuccess) finish()
+            if (uiState.isSaveError) Snackbar.make(binding.root, "임시 실패 메시지", Snackbar.LENGTH_SHORT).show()
         }
     }
 

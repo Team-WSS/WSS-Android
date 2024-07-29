@@ -40,7 +40,7 @@ class NovelRatingViewModel @Inject constructor(
                 _uiState.value =
                     uiState.value?.copy(
                         loading = false,
-                        error = true,
+                        isFetchError = true,
                     )
             }
         }
@@ -256,6 +256,29 @@ class NovelRatingViewModel @Inject constructor(
                     currentSelectedKeywords = uiState.novelRatingModel.userKeywords,
                 ),
             )
+        }
+    }
+
+    fun updateNovelRating(novelId: Long, isAlreadyRated: Boolean) {
+        viewModelScope.launch {
+            runCatching {
+                userNovelRepository.saveNovelRating(
+                    NovelRatingEntity(
+                        novelId = novelId,
+                        readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name,
+                        startDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousStartDate?.toFormattedDate(),
+                        endDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousEndDate?.toFormattedDate(),
+                        userNovelRating = uiState.value?.novelRatingModel?.userNovelRating ?: 0.0f,
+                        charmPoints = uiState.value?.novelRatingModel?.charmPoints?.map { it.value } ?: emptyList(),
+                        userKeywords = uiState.value?.novelRatingModel?.userKeywords?.map { it.toData() } ?: emptyList(),
+                    ),
+                    isAlreadyRated
+                )
+            }.onSuccess {
+                _uiState.value = uiState.value?.copy(isSaveSuccess = true)
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(isSaveError = true)
+            }
         }
     }
 }
