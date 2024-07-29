@@ -49,7 +49,7 @@ class NovelDetailViewModel @Inject constructor(
                         isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
                     ) ?: return@onSuccess
                 )
-            }.onFailure {}
+            }
         }
     }
 
