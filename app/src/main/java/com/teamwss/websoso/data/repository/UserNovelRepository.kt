@@ -14,6 +14,6 @@ class UserNovelRepository @Inject constructor(
     }
 
     suspend fun fetchNovelRating(novelId: Long): NovelRatingEntity {
-        return userNovelApi.fetchUserNovel(novelId).toData()
+        return userNovelApi.fetchNovelRating(novelId).toData()
     }
 }
