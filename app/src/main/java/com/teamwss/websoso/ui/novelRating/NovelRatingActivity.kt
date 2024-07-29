@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.novelRating
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
@@ -69,9 +70,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
                 isInitialUpdate && !uiState.error && !uiState.loading -> {
                     isInitialUpdate = false
                     binding.wllNovelRating.setWebsosoLoadingVisibility(false)
-                    if (intent.getSerializableExtra(READ_STATUS) != null) {
-                        novelRatingViewModel.updateReadStatus(intent.getSerializableExtra(READ_STATUS) as ReadStatus)
-                    }
+                    updateInitialReadStatus()
                 }
                 !uiState.error && !uiState.loading -> {
                     updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
@@ -80,6 +79,20 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
                 }
                 uiState.loading -> binding.wllNovelRating.setWebsosoLoadingVisibility(true)
                 else -> binding.wllNovelRating.setErrorLayoutVisibility(true)
+            }
+        }
+    }
+
+    private fun updateInitialReadStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val readStatus = intent.getSerializableExtra(READ_STATUS, ReadStatus::class.java)
+            if (readStatus != null) {
+                novelRatingViewModel.updateReadStatus(readStatus)
+            }
+        } else {
+            val readStatus = intent.getSerializableExtra(READ_STATUS) as? ReadStatus
+            if (readStatus != null) {
+                novelRatingViewModel.updateReadStatus(readStatus)
             }
         }
     }
