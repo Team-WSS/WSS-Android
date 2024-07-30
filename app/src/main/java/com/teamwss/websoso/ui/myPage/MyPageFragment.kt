@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.myPage
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
@@ -11,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
-    private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(requireActivity()) }
+    private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,10 +48,8 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 )
             )
 
-            tvMyPageStickyTitle.visibility =
-                if (isCollapsed) View.VISIBLE else View.GONE
-
-            clMyPageUserProfile.visibility = if (isCollapsed) View.INVISIBLE else View.VISIBLE
+            tvMyPageStickyTitle.isVisible = isCollapsed
+            clMyPageUserProfile.isVisible = !isCollapsed
         }
     }
 

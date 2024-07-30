@@ -6,16 +6,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.teamwss.websoso.ui.myPage.myActivity.MyActivityFragment
 import com.teamwss.websoso.ui.myPage.myLibrary.MyLibraryFragment
 
-class MyPageViewPagerAdapter(fragmentActivity: FragmentActivity) :
-    FragmentStateAdapter(fragmentActivity) {
+class MyPageViewPagerAdapter(fragment: Fragment) :
+    FragmentStateAdapter(fragment) {
     val fragments = listOf(MyLibraryFragment(), MyActivityFragment())
 
     override fun getItemCount(): Int = fragments.size
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> fragments.first()
-            else -> fragments.last()
-        }
+        return fragments[position]
     }
 }
