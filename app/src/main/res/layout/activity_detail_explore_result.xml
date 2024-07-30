@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_detail_explore_result_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@drawable/btn_explore_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_explore_result_filter_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_detail_explore_result_gray50_radius_14dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_explore_result_back_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_detail_explore_result_back_button"
+            app:layout_constraintTop_toTopOf="@id/iv_detail_explore_result_back_button">
+
+            <TextView
+                android:id="@+id/tv_detail_explore_result_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:maxLines="1"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="장르, 연재상태, 별점, 키워드" />
+
+            <TextView
+                android:id="@+id/tv_detail_explore_result_filter_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_explore_result_filter_description"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_detail_explore_result_filter"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/tv_detail_explore_result_filter"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_detail_explore_result_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_detail_explore_result_filter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -47,6 +47,9 @@
     <string name="detail_explore_keyword_search_result">검색결과</string>
     <string name="detail_explore_keyword_not_exist_result">해당 키워드는\n아직 등록되지 않았어요..</string>
 
+    <!-- 상세 탐색 결과 뷰 -->
+    <string name="detail_explore_result_filter_description">가 적용됐어요</string>
+
     <!-- 작품 상세 -->
     <string name="novel_detail_review">나도 한마디</string>
     <string name="novel_detail_interest">관심</string>
