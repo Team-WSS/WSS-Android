@@ -211,7 +211,7 @@
                 android:id="@+id/iv_my_library_unknown_preference_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_empty_cat"
+                android:src="@drawable/img_my_library_empty_cat"
                 android:layout_marginTop="36dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_my_library_preference_analysis_title"
                 app:layout_constraintStart_toStartOf="parent"
