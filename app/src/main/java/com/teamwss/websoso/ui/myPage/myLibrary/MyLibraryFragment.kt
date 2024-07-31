@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
@@ -28,17 +29,35 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onGenrePathToggled()
         setUpObserveViewModel()
+    }
+
+    private fun onGenrePathToggled() {
+        myLibraryBinding.ivMyLibraryGenrePreferencePath.setOnClickListener {
+            myLibraryViewModel.toggleGenreListVisibility()
+        }
     }
 
     private fun setUpObserveViewModel() {
         myLibraryViewModel.genres.observe(viewLifecycleOwner) { genres ->
             updateRestPreferredGenreList(genres)
         }
+
+        myLibraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
+            updateRestGenrePreferenceVisibility(isVisible)
+        }
     }
 
     private fun updateRestPreferredGenreList(genres: List<GenrePreferenceEntity>) {
         val adapter = RestGenrePreferenceAdapter(genres)
         myLibraryBinding.lvMyLibraryRestGenre.adapter = adapter
+    }
+
+    private fun updateRestGenrePreferenceVisibility(isVisible: Boolean) {
+        myLibraryBinding.lvMyLibraryRestGenre.isVisible = isVisible
+        myLibraryBinding.ivMyLibraryGenrePreferencePath.setImageResource(
+            if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
+        )
     }
 }

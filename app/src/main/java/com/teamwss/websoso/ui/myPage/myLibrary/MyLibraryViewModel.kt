@@ -18,4 +18,11 @@ class MyLibraryViewModel : ViewModel() {
         )
     }
     val genres: LiveData<List<GenrePreferenceEntity>> = _genres
+
+    private val _isGenreListVisible = MutableLiveData<Boolean>().apply { value = false }
+    val isGenreListVisible: LiveData<Boolean> = _isGenreListVisible
+
+    fun toggleGenreListVisibility() {
+        _isGenreListVisible.value = _isGenreListVisible.value?.not()
+    }
 }
