@@ -1,11 +1,14 @@
 package com.teamwss.websoso.ui.detailExplore.keyword
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeKeywordRepository
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,15 +23,19 @@ class DetailExploreKeywordViewModel @Inject constructor(
         MutableLiveData(DetailExploreKeywordUiState())
     val uiState: LiveData<DetailExploreKeywordUiState> get() = _uiState
 
-    private val _selectedKeywords: MutableLiveData<List<DetailExploreKeywordModel.CategoryModel.KeywordModel>> =
-        MutableLiveData()
-    val selectedKeywords: LiveData<List<DetailExploreKeywordModel.CategoryModel.KeywordModel>> get() = _selectedKeywords
+    private val _selectedKeywords: MutableLiveData<List<KeywordModel>> = MutableLiveData()
+    val selectedKeywords: LiveData<List<KeywordModel>> get() = _selectedKeywords
 
     private val _searchWord: MutableLiveData<String> = MutableLiveData()
     val searchWord: MutableLiveData<String> get() = _searchWord
 
     private val _isSearchCancelButtonVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSearchCancelButtonVisibility: LiveData<Boolean> get() = _isSearchCancelButtonVisibility
+
+    private val _selectedKeywords2: MutableLiveData<List<Int>> = MutableLiveData(emptyList())
+    val selectedKeywords2: LiveData<List<Int>> get() = _selectedKeywords2
+
+    val keywords = HashMap<Int, String>()
 
     fun updateSearchCancelButtonVisibility() {
         _isSearchCancelButtonVisibility.value = _searchWord.value.isNullOrEmpty().not()
@@ -43,6 +50,15 @@ class DetailExploreKeywordViewModel @Inject constructor(
             runCatching {
                 fakeKeywordRepository.fetchKeyword()
             }.onSuccess { keywordsList ->
+
+                keywordsList.forEach { categories ->
+                    categories.keywords.forEach { keywordEntity ->
+                        keywords[keywordEntity.keywordId] = keywordEntity.keywordName
+                    }
+                }
+
+                Log.d("123123", "updateKeywords: $keywords")
+
                 val detailExploreKeywordModel = DetailExploreKeywordModel(
                     categories = keywordsList.map { it.toUi() }
                 )
@@ -51,6 +67,7 @@ class DetailExploreKeywordViewModel @Inject constructor(
                     loading = false,
                     keywordModel = detailExploreKeywordModel
                 )
+
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
@@ -61,38 +78,66 @@ class DetailExploreKeywordViewModel @Inject constructor(
     }
 
     fun updateCurrentSelectedKeywords(
-        keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel,
+        keyword: KeywordModel,
         isSelected: Boolean,
     ) {
         _uiState.value?.let { uiState ->
             val updatedCategories =
-                updateCategories(uiState.keywordModel.categories, keyword, isSelected)
-            val currentSelectedKeywords = updateSelectedKeywords(
-                uiState.keywordModel.currentSelectedKeywords,
-                keyword,
-                isSelected,
-            )
+                updateCategories(uiState.keywordModel.categories, keyword)
+            val currentSelectedKeywords = selectedKeywords.value?.toList()?.let {
+                updateSelectedKeywords(
+                    it,
+                    keyword,
+                    !isSelected,
+                )
+            }
 
             _uiState.value = uiState.copy(
                 keywordModel = uiState.keywordModel.copy(
                     categories = updatedCategories,
-                    currentSelectedKeywords = currentSelectedKeywords,
                 ),
             )
-            _selectedKeywords.value = currentSelectedKeywords
+            _selectedKeywords.value = currentSelectedKeywords ?: emptyList()
         }
     }
 
+    fun updateCurrentSelectedKeywords2(keywordId: Int) {
+        if (selectedKeywords2.value?.contains(keywordId) == true) {
+            _selectedKeywords2.value = _selectedKeywords2.value?.filterNot {
+                it == keywordId
+            }
+        } else {
+            _selectedKeywords2.value = _selectedKeywords2.value?.let { currentList ->
+                currentList.toMutableList().apply {
+                    add(keywordId)
+                }
+            }
+        }
+
+        updateSelectedKeywords()
+    }
+
+    private fun updateSelectedKeywords() {
+        val keywordModels = keywords.map { (keywordId, keywordName) ->
+            KeywordModel(
+                keywordId = keywordId,
+                keywordName = keywordName,
+                isSelected = selectedKeywords2.value?.contains(keywordId) == true,
+            )
+        }
+
+        _selectedKeywords.value = keywordModels
+    }
+
     private fun updateCategories(
-        categories: List<DetailExploreKeywordModel.CategoryModel>,
-        keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel,
-        isSelected: Boolean,
-    ): List<DetailExploreKeywordModel.CategoryModel> {
+        categories: List<CategoryModel>,
+        keyword: KeywordModel,
+    ): List<CategoryModel> {
         return categories.map { category ->
             val updatedKeywords =
                 category.keywords.map { keywordInCategory ->
                     when (keywordInCategory.keywordId == keyword.keywordId) {
-                        true -> keywordInCategory.copy(isSelected = isSelected)
+                        true -> keywordInCategory
                         false -> keywordInCategory
                     }
                 }
@@ -101,10 +146,10 @@ class DetailExploreKeywordViewModel @Inject constructor(
     }
 
     private fun updateSelectedKeywords(
-        currentSelectedKeywords: List<DetailExploreKeywordModel.CategoryModel.KeywordModel>,
-        keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel,
+        currentSelectedKeywords: List<KeywordModel>,
+        keyword: KeywordModel,
         isSelected: Boolean,
-    ): List<DetailExploreKeywordModel.CategoryModel.KeywordModel> {
+    ): List<KeywordModel> {
         return currentSelectedKeywords.toMutableList().apply {
             when (isSelected) {
                 true -> add(keyword)

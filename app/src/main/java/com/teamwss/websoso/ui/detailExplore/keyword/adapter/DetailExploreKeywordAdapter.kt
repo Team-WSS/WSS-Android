@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
 
 class DetailExploreKeywordAdapter(
-    private val onKeywordClick: (keyword: DetailExploreKeywordModel.CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
-) : ListAdapter<DetailExploreKeywordModel.CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
+    private val onKeywordClick: (keywordId: Int) -> (Unit),
+) : ListAdapter<CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -25,28 +25,23 @@ class DetailExploreKeywordAdapter(
 
     override fun onBindViewHolder(holder: DetailExploreKeywordViewHolder, position: Int) {
         val item = getItem(position)
-        holder.apply {
-            when (isChipSetting) {
-                true -> updateChipState(item.keywords)
-                false -> initKeywordView(item)
-            }
-        }
+        holder.initKeywordView(item)
     }
 
     companion object {
         private val diffUtil =
-            object : DiffUtil.ItemCallback<DetailExploreKeywordModel.CategoryModel>() {
+            object : DiffUtil.ItemCallback<CategoryModel>() {
 
                 override fun areItemsTheSame(
-                    oldItem: DetailExploreKeywordModel.CategoryModel,
-                    newItem: DetailExploreKeywordModel.CategoryModel,
+                    oldItem: CategoryModel,
+                    newItem: CategoryModel,
                 ): Boolean {
                     return oldItem.categoryName == newItem.categoryName
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: DetailExploreKeywordModel.CategoryModel,
-                    newItem: DetailExploreKeywordModel.CategoryModel,
+                    oldItem: CategoryModel,
+                    newItem: CategoryModel,
                 ): Boolean {
                     return oldItem == newItem
                 }
