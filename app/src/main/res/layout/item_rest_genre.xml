@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="genrePreference"
+            type="com.teamwss.websoso.data.model.GenrePreferenceEntity"/>
 
     </data>
 
@@ -16,8 +19,8 @@
             android:id="@+id/iv_rest_genre_logo"
             android:layout_width="24dp"
             android:layout_height="28dp"
-            android:src="@{}"
-            android:scaleType="centerCrop"
+            android:src="@{genrePreference.genreIcon}"
+            android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_novel_detail_genre_test"/>
@@ -27,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            android:text="@{}"
+            android:text="@{genrePreference.genreName}"
             android:textAppearance="@style/body3"
             app:layout_constraintBottom_toBottomOf="@id/iv_rest_genre_logo"
             app:layout_constraintStart_toEndOf="@id/iv_rest_genre_logo"
@@ -38,7 +41,7 @@
             android:id="@+id/tv_rest_genre_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{}'
+            android:text='@{String.format("%d편", genrePreference.genreCount)}'
             android:textAppearance="@style/body3"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="parent"
