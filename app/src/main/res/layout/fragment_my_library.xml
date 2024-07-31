@@ -278,7 +278,7 @@
                             android:id="@+id/iv_my_library_dominant_genre_first_logo"
                             android:layout_width="30dp"
                             android:layout_height="37dp"
-                            android:src="@{}"
+                            android:src="@drawable/ic_novel_detail_genre_test"
                             tools:src="@drawable/ic_novel_detail_genre_test"/>
 
                         <TextView
@@ -315,7 +315,7 @@
                             android:id="@+id/iv_my_library_dominant_genre_second_logo"
                             android:layout_width="30dp"
                             android:layout_height="37dp"
-                            android:src="@{}"
+                            android:src="@drawable/ic_novel_detail_genre_test"
                             tools:src="@drawable/ic_novel_detail_genre_test"/>
 
                         <TextView
@@ -352,7 +352,7 @@
                             android:id="@+id/iv_my_library_dominant_genre_third_logo"
                             android:layout_width="30dp"
                             android:layout_height="37dp"
-                            android:src="@{}"
+                            android:src="@drawable/ic_novel_detail_genre_test"
                             tools:src="@drawable/ic_novel_detail_genre_test"/>
 
                         <TextView
@@ -384,7 +384,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:divider="@null"
-                    android:visibility="gone"
                     android:layout_marginTop="32dp"
                     android:layout_marginHorizontal="40dp"
                     app:layout_constraintTop_toBottomOf="@id/linear_my_library_dominant_genre"/>
