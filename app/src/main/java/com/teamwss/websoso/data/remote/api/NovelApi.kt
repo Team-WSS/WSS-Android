@@ -1,7 +1,7 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
-import retrofit2.Response
+import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -23,4 +23,9 @@ interface NovelApi {
     suspend fun deleteUserInterest(
         @Path("novelId") novelId: Long,
     )
+
+    @GET("novels/{novelId}/info")
+    suspend fun getNovelInfo(
+        @Path("novelId") novelId: Long,
+    ): NovelInfoResponseDto
 }

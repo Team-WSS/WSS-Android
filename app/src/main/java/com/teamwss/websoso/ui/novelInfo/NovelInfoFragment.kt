@@ -23,15 +23,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
+    private val novelId: Long by lazy { arguments?.getLong(NOVEL_ID) ?: 0L }
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        novelInfoViewModel.updateNovelInfo(novelId)
         bindViewModel()
         setupObserver()
-        novelInfoViewModel.updateNovelInfo(1)
+        setupWebsosoLoadingLayout()
     }
 
     private fun bindViewModel() {
@@ -47,13 +49,27 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
 
     private fun setupObserver() {
         novelInfoViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            setupKeywordChip(uiState.keywords)
-            updateExpandTextToggle(uiState.expandTextModel)
-            updateExpandTextToggleVisibility(uiState.expandTextModel)
-            updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
-            updateGraphUi(uiState.novelInfoModel.unifiedReviewCount)
-            updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
-            updateUsersCharmPointBody(uiState.novelInfoModel.formatAttractivePoints())
+            when {
+                uiState.novelInfoModel.novelDescription.isNotBlank() -> {
+                    setupKeywordChip(uiState.keywords)
+                    updateExpandTextToggle(uiState.expandTextModel)
+                    updateExpandTextToggleVisibility(uiState.expandTextModel)
+                    updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
+                    updateGraphUi(uiState.novelInfoModel.unifiedReviewCount)
+                    updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
+                    updateUsersCharmPointBody(uiState.novelInfoModel.formatAttractivePoints())
+                    binding.wllNovelInfo.setWebsosoLoadingVisibility(false)
+                }
+
+                uiState.loading -> {
+                    novelInfoViewModel.updateNovelInfo(novelId)
+                    binding.wllNovelInfo.setLoadingLayoutVisibility(true)
+                }
+
+                uiState.error -> {
+                    binding.wllNovelInfo.setErrorLayoutVisibility(true)
+                }
+            }
         }
     }
 
@@ -94,21 +110,45 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     }
 
     private fun updateGraphHeightValue(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        if (unifiedReviewCountModel.watchingCount.graphHeight != 0) return
-        val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
-        novelInfoViewModel.updateGraphHeight(graphHeight)
+        val counts = listOf(
+            unifiedReviewCountModel.watchingCount.count,
+            unifiedReviewCountModel.watchedCount.count,
+            unifiedReviewCountModel.quitCount.count,
+        )
+
+        val graphHeights = listOf(
+            unifiedReviewCountModel.watchingCount.graphHeight,
+            unifiedReviewCountModel.watchedCount.graphHeight,
+            unifiedReviewCountModel.quitCount.graphHeight,
+        )
+
+        when {
+            counts.sumOf { it } == 0 || graphHeights.sumOf { it } != 0 -> return
+            else -> {
+                val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
+                novelInfoViewModel.updateGraphHeight(graphHeight)
+            }
+        }
     }
 
     private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
                 updateGraphHeight(binding.viewNovelInfoReadStatusWatching, unifiedReviewCountModel.watchingCount.graphHeight)
-                updateGraphSelection(binding.viewNovelInfoReadStatusWatching, binding.tvNovelInfoReadStatusWatchingCount, binding.tvNovelInfoReadStatusWatching)
+                updateGraphSelection(
+                    binding.viewNovelInfoReadStatusWatching,
+                    binding.tvNovelInfoReadStatusWatchingCount,
+                    binding.tvNovelInfoReadStatusWatching
+                )
             }
 
             ReadStatus.WATCHED -> {
                 updateGraphHeight(binding.viewNovelInfoReadStatusWatched, unifiedReviewCountModel.watchedCount.graphHeight)
-                updateGraphSelection(binding.viewNovelInfoReadStatusWatched, binding.tvNovelInfoReadStatusWatchedCount, binding.tvNovelInfoReadStatusWatched)
+                updateGraphSelection(
+                    binding.viewNovelInfoReadStatusWatched,
+                    binding.tvNovelInfoReadStatusWatchedCount,
+                    binding.tvNovelInfoReadStatusWatched
+                )
             }
 
             ReadStatus.QUIT -> {
@@ -169,8 +209,15 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         binding.tvNovelInfoCharmPointsBody.text = getColoredText(
             getString(R.string.novel_info_charm_points_body, charmPoints),
             listOf(charmPoints),
-            AppCompatResources.getColorStateList(requireContext(),R.color.primary_100_6A5DFD).defaultColor,
+            AppCompatResources.getColorStateList(requireContext(), R.color.primary_100_6A5DFD).defaultColor,
         )
+    }
+
+    private fun setupWebsosoLoadingLayout() {
+        binding.wllNovelInfo.setReloadButtonClickListener {
+            novelInfoViewModel.updateNovelInfo(novelId)
+            binding.wllNovelInfo.setErrorLayoutVisibility(false)
+        }
     }
 
     override fun onResume() {
@@ -189,5 +236,13 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
     companion object {
         private const val PRIMATE_SCROLL_POSITION = 0
         private const val SCROLL_TO_TOP_DURATION = 1700
+
+        private const val NOVEL_ID = "NOVEL_ID"
+
+        fun newInstance(novelId: Long): NovelInfoFragment {
+            return NovelInfoFragment().also {
+                it.arguments = Bundle().apply { putLong(NOVEL_ID, novelId) }
+            }
+        }
     }
 }
