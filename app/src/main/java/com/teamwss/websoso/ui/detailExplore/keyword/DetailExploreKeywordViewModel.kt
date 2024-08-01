@@ -61,23 +61,29 @@ class DetailExploreKeywordViewModel @Inject constructor(
     }
 
     fun updateCurrentSelectedKeywords2(keyword: KeywordModel) {
-        if (selectedKeywords.value?.any { it.keywordId == keyword.keywordId } == true) {
-            _selectedKeywords.value =
-                _selectedKeywords.value?.filterNot { it.keywordId == keyword.keywordId }
-        } else {
-            _selectedKeywords.value = _selectedKeywords.value?.let { currentList ->
+        _selectedKeywords.value = _selectedKeywords.value?.let { currentList ->
+            if (currentList.any { it.keywordId == keyword.keywordId }) {
+                currentList.map { existingKeyword ->
+                    if (existingKeyword.keywordId == keyword.keywordId) {
+                        existingKeyword.copy(isSelected = false)
+                    } else {
+                        existingKeyword
+                    }
+                }.filter { it.isSelected }.toList()
+            } else {
                 currentList.toMutableList().apply {
-                    add(keyword)
+                    add(keyword.copy(isSelected = true))
                 }
             }
         }
         updateKeywordState(keyword)
     }
 
-    private fun updateKeywordState(keyword: KeywordModel) {
-        val currentState = _uiState.value ?: return
 
-        val updatedCategories = currentState.keywordModel.categories.map { category ->
+    private fun updateKeywordState(keyword: KeywordModel) {
+        val currentUiState = _uiState.value ?: return
+
+        val updatedCategories = currentUiState.keywordModel.categories.map { category ->
             val updatedKeywords = category.keywords.map { existingKeyword ->
                 if (existingKeyword.keywordId == keyword.keywordId) {
                     existingKeyword.copy(isSelected = !existingKeyword.isSelected)
@@ -88,7 +94,7 @@ class DetailExploreKeywordViewModel @Inject constructor(
             category.copy(keywords = updatedKeywords)
         }
 
-        val updatedKeywordModel = currentState.keywordModel.copy(categories = updatedCategories)
-        _uiState.value = currentState.copy(keywordModel = updatedKeywordModel)
+        val updatedKeywordModel = currentUiState.keywordModel.copy(categories = updatedCategories)
+        _uiState.value = currentUiState.copy(keywordModel = updatedKeywordModel)
     }
 }

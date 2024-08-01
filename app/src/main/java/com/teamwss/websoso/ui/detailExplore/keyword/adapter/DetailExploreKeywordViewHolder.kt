@@ -7,6 +7,7 @@ import coil.transform.RoundedCornersTransformation
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.util.toFloatScaledByDp
@@ -72,15 +73,12 @@ class DetailExploreKeywordViewHolder(
     }
 
     fun updateChipState(category: CategoryModel) {
-        val keywordMap = category.keywords.associateBy { it.keywordId }
+        val keywordSelectionMap = category.keywords.associateBy({ it.keywordName }, { it.isSelected })
 
         for (i in 0 until binding.wcgNovelRatingKeyword.childCount) {
-            val chipView = binding.wcgNovelRatingKeyword.getChildAt(i) as? WebsosoChip
-            chipView?.let { chip ->
-                val keyword = keywordMap[chip.id]
-                if (keyword != null) {
-                    chip.isSelected = keyword.isSelected
-                }
+            val chip = binding.wcgNovelRatingKeyword.getChildAt(i) as? WebsosoChip
+            if (chip != null) {
+                chip.isSelected = keywordSelectionMap[chip.text] ?: false
             }
         }
     }

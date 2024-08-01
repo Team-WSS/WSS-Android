@@ -67,27 +67,36 @@ class DetailExploreKeywordFragment :
         }
 
         detailExploreKeywordViewModel.selectedKeywords.observe(viewLifecycleOwner) { keywords ->
-            keywords.forEach { keyword ->
-                val isContained = binding.wcgDetailExploreKeywordSelectedKeyword.children.any {
-                    (it as WebsosoChip).text == keyword.keywordName
-                }
+            if (keywords.isEmpty()) {
+                binding.wcgDetailExploreKeywordSelectedKeyword.removeAllViews()
+                return@observe
+            }
 
-                when (isContained) {
-                    true -> {
-                        removeSelectedChip(keyword)
-                    }
+            val currentChipKeywords = binding.wcgDetailExploreKeywordSelectedKeyword.children
+                .filterIsInstance<WebsosoChip>()
+                .map { it.text.toString() }
+                .toList()
 
-                    false -> {
-                        setupSelectedChip(keyword)
-                    }
-                }
+            val newKeywords = keywords.map { it.keywordName }
+
+            currentChipKeywords.filter { chipKeyword ->
+                !newKeywords.contains(chipKeyword)
+            }.forEach { keywordName ->
+                removeSelectedChip(keywordName)
+            }
+
+            newKeywords.filter { newKeyword ->
+                !currentChipKeywords.any { it == newKeyword }
+            }.forEach { keywordName ->
+                val keywordModel = keywords.find { it.keywordName == keywordName }
+                keywordModel?.let { setupSelectedChip(it) }
             }
         }
     }
 
-    private fun removeSelectedChip(keyword: KeywordModel) {
+    private fun removeSelectedChip(keywordName: String) {
         val chipToRemove = binding.wcgDetailExploreKeywordSelectedKeyword.children.find {
-            (it as WebsosoChip).text == keyword.keywordName
+            (it as WebsosoChip).text == keywordName
         }
         chipToRemove?.let {
             binding.wcgDetailExploreKeywordSelectedKeyword.removeView(it)
@@ -104,7 +113,11 @@ class DetailExploreKeywordFragment :
             setWebsosoChipPaddingVertical(20f)
             setWebsosoChipPaddingHorizontal(12f)
             setWebsosoChipRadius(40f)
-            setOnCloseIconClickListener {}
+            setOnCloseIconClickListener {
+                detailExploreKeywordViewModel.updateCurrentSelectedKeywords2(
+                    selectedKeyword
+                )
+            }
             setWebsosoChipCloseIconVisibility(true)
             setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
             setWebsosoChipCloseIconSize(20f)
