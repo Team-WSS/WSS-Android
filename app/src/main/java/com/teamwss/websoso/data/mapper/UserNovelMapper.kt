@@ -29,7 +29,7 @@ fun NovelRatingResponseDto.toData(): NovelRatingEntity =
 fun NovelRatingEntity.toData(): NovelRatingRequestDto =
     NovelRatingRequestDto(
         novelId = novelId,
-        status = readStatus ?: throw IllegalArgumentException("readStatus must not be null"),
+        status = readStatus,
         startDate = startDate,
         endDate = endDate,
         userNovelRating = userNovelRating,

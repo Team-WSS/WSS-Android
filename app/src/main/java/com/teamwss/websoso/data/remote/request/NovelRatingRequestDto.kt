@@ -11,7 +11,7 @@ data class NovelRatingRequestDto(
     @SerialName("userNovelRating")
     val userNovelRating: Float,
     @SerialName("status")
-    val status: String,
+    val status: String?,
     @SerialName("startDate")
     val startDate: String?,
     @SerialName("endDate")
