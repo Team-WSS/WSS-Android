@@ -8,8 +8,8 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.databinding.ItemRestGenreBinding
 
 class RestGenrePreferenceAdapter(
-    var items:List<GenrePreferenceEntity>
-):BaseAdapter() {
+    var items: List<GenrePreferenceEntity>
+) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val binding: ItemRestGenreBinding
@@ -32,6 +32,7 @@ class RestGenrePreferenceAdapter(
         binding.executePendingBindings()
         return view
     }
+
     override fun getCount(): Int {
         return items.size
     }
