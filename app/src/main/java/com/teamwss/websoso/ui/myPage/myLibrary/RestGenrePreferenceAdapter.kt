@@ -8,29 +8,23 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.databinding.ItemRestGenreBinding
 
 class RestGenrePreferenceAdapter(
-    private var items: List<GenrePreferenceEntity> = emptyList()
+    items: List<GenrePreferenceEntity> = emptyList()
 ) : BaseAdapter() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val binding: ItemRestGenreBinding
-        val view: View
+    private var items: List<GenrePreferenceEntity> = items
 
-        if (convertView == null) {
-            binding = ItemRestGenreBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-            view = binding.root
-            view.tag = binding
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val binding: ItemRestGenreBinding = if (convertView == null) {
+            ItemRestGenreBinding.inflate(LayoutInflater.from(parent.context), parent, false).also {
+                it.root.tag = it
+            }
         } else {
-            binding = convertView.tag as ItemRestGenreBinding
-            view = convertView
+            convertView.tag as ItemRestGenreBinding
         }
 
         binding.genrePreference = getItem(position)
         binding.executePendingBindings()
-        return view
+        return binding.root
     }
 
     override fun getCount(): Int {
