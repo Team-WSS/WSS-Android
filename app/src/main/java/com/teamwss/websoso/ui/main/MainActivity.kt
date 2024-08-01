@@ -30,7 +30,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
         setupTranslucentOnStatusBar()
         setBottomNavigationView()
-        setupTranslucentOnStatusBar()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -45,13 +44,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         replaceFragment<HomeFragment>()
 
         binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
     }
 
     private fun replaceFragment(item: MenuItem): Boolean {
