@@ -19,7 +19,7 @@ class DetailExploreKeywordFragment :
     BindingFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
     private val detailExploreKeywordViewModel: DetailExploreKeywordViewModel by viewModels()
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
-        DetailExploreKeywordAdapter(detailExploreKeywordViewModel::updateCurrentSelectedKeywords)
+        DetailExploreKeywordAdapter(detailExploreKeywordViewModel::updateClickChipState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,7 +80,6 @@ class DetailExploreKeywordFragment :
         }
 
         val keywordsToAdd = newKeywords - currentChipKeywords.toSet()
-
         keywordsToAdd.forEach { keywordName ->
             DetailExploreKeywordModel.findKeywordByName(keywordName, categories)?.let { keywordModel ->
                 createSelectedChip(keywordModel)
@@ -113,7 +112,7 @@ class DetailExploreKeywordFragment :
             setWebsosoChipPaddingHorizontal(12f)
             setWebsosoChipRadius(40f)
             setOnCloseIconClickListener {
-                detailExploreKeywordViewModel.updateCurrentSelectedKeywords(
+                detailExploreKeywordViewModel.updateClickChipState(
                     selectedKeyword.keywordId
                 )
             }

@@ -56,7 +56,7 @@ class DetailExploreKeywordViewModel @Inject constructor(
         }
     }
 
-    fun updateCurrentSelectedKeywords(keywordId: Int) {
+    fun updateClickChipState(keywordId: Int) {
         val currentUiState = _uiState.value ?: return
 
         val updatedCategories = currentUiState.categories.map { category ->
