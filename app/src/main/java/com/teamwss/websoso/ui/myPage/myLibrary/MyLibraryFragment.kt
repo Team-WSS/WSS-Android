@@ -42,10 +42,6 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
 
     private fun updateRestGenrePreferenceVisibility(isVisible: Boolean) {
         binding.lvMyLibraryRestGenre.isVisible = isVisible
-        binding.ivMyLibraryGenrePreferencePath.setImageResource(
-            if (isVisible) R.drawable.ic_my_library_upper_path else R.drawable.ic_my_library_lower_path
-        )
-
         if (isVisible) {
             binding.lvMyLibraryRestGenre.setListViewHeightBasedOnChildren()
         }

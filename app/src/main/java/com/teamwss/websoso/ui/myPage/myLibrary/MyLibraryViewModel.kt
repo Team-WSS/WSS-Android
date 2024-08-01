@@ -25,6 +25,6 @@ class MyLibraryViewModel @Inject constructor() : ViewModel() {
     val isGenreListVisible: LiveData<Boolean> = _isGenreListVisible
 
     fun updateToggleGenresVisibility() {
-        _isGenreListVisible.value = _isGenreListVisible.value?.not()
+        _isGenreListVisible.value = _isGenreListVisible.value?.not() ?: false
     }
 }
