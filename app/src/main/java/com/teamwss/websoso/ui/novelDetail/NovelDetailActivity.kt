@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.novelDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.PopupWindow
@@ -73,6 +72,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
                     binding.wlNovelDetail.setWebsosoLoadingVisibility(false)
                     binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
                 }
+
                 false -> binding.wlNovelDetail.setWebsosoLoadingVisibility(true)
             }
         }
@@ -113,7 +113,12 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun navigateToNovelRating(readStatus: ReadStatus?) {
-        val intent = NovelRatingActivity.getIntent(this, novelId, novelDetailViewModel.novelDetail.value?.userNovel?.isAlreadyRated ?: false, readStatus)
+        val intent = NovelRatingActivity.getIntent(
+            context = this,
+            novelId = novelId,
+            isAlreadyRated = novelDetailViewModel.novelDetail.value?.userNovel?.isAlreadyRated ?: false,
+            readStatus = readStatus,
+        )
         startActivity(intent)
     }
 
