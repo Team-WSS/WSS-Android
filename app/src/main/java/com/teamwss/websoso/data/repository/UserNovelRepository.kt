@@ -19,7 +19,11 @@ class UserNovelRepository @Inject constructor(
 
     suspend fun saveNovelRating(novelRatingEntity: NovelRatingEntity, isAlreadyRated: Boolean) {
         when (isAlreadyRated) {
-            true -> userNovelApi.putNovelRating(novelRatingEntity.novelId ?: throw IllegalArgumentException("novelId must not be null"), novelRatingEntity.toData())
+            true -> userNovelApi.putNovelRating(
+                novelRatingEntity.novelId ?: throw IllegalArgumentException("novelId must not be null"),
+                novelRatingEntity.toData()
+            )
+
             false -> userNovelApi.postNovelRating(novelRatingEntity.toData())
         }
     }
