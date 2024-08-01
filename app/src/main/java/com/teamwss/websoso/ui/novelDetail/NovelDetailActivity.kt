@@ -13,6 +13,8 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
+import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
+import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import com.teamwss.websoso.util.toFloatScaledByPx
 import com.teamwss.websoso.util.toIntScaledByPx
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +33,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         bindViewModel()
         setupPopupBinding()
         setupObserver()
+        setupClickListeners()
         setupWebsosoLoadingLayout()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
@@ -47,10 +50,12 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupViewPager() {
+        if (binding.vpNovelDetail.adapter != null) return
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
     }
 
     private fun setupTabLayout() {
+        if (binding.tlNovelDetail.tabCount > 0) return
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
             tab.text = when (position) {
                 INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
@@ -104,6 +109,25 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
                 Gravity.END,
             )
         }
+    }
+
+    private fun setupClickListeners() {
+        binding.navigateToNovelRating = ::navigateToNovelRating
+    }
+
+    private fun navigateToNovelRating(readStatus: ReadStatus?) {
+        val intent = NovelRatingActivity.getIntent(
+            context = this,
+            novelId = novelId,
+            isAlreadyRated = novelDetailViewModel.novelDetail.value?.userNovel?.isAlreadyRated ?: false,
+            readStatus = readStatus,
+        )
+        startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        novelDetailViewModel.updateNovelDetail(novelId)
     }
 
     companion object {

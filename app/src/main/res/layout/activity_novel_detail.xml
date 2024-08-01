@@ -14,6 +14,10 @@
             type="kotlin.jvm.functions.Function0" />
 
         <variable
+            name="navigateToNovelRating"
+            type="kotlin.jvm.functions.Function1" />
+
+        <variable
             name="novelDetailViewModel"
             type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
 
@@ -208,6 +212,7 @@
                             android:layout_marginTop="12dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
+                            android:onClick="@{() -> navigateToNovelRating}"
                             app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
                             app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
                             app:layout_constraintStart_toStartOf="@id/view_novel_detail_user_novel"
@@ -248,6 +253,7 @@
                             android:layout_marginEnd="28dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
+                            android:onClick="@{() -> navigateToNovelRating}"
                             app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
                             app:layout_constraintEnd_toEndOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintStart_toEndOf="@id/ll_novel_detail_user_rating"
@@ -305,6 +311,7 @@
                                 android:backgroundTint="@color/transparent"
                                 android:checked="@{novelDetailViewModel.novelDetail.userNovel.readStatus == ReadStatus.WATCHING}"
                                 android:clickable="false"
+                                android:onClick="@{() -> navigateToNovelRating.invoke(ReadStatus.WATCHING)}"
                                 android:text="@string/novel_rating_read_status_watching"
                                 android:textAppearance="@style/body4"
                                 android:textColor="@color/bg_novel_detail_read_status_selector"
@@ -321,6 +328,7 @@
                                 android:backgroundTint="@color/transparent"
                                 android:checked="@{novelDetailViewModel.novelDetail.userNovel.readStatus == ReadStatus.WATCHED}"
                                 android:clickable="false"
+                                android:onClick="@{() -> navigateToNovelRating.invoke(ReadStatus.WATCHED)}"
                                 android:text="@string/novel_rating_read_status_watched"
                                 android:textAppearance="@style/body4"
                                 android:textColor="@color/bg_novel_detail_read_status_selector"
@@ -337,6 +345,7 @@
                                 android:backgroundTint="@color/transparent"
                                 android:checked="@{novelDetailViewModel.novelDetail.userNovel.readStatus == ReadStatus.QUIT}"
                                 android:clickable="false"
+                                android:onClick="@{() -> navigateToNovelRating.invoke(ReadStatus.QUIT)}"
                                 android:text="@string/novel_rating_read_status_quit"
                                 android:textAppearance="@style/body4"
                                 android:textColor="@color/bg_novel_detail_read_status_selector"
@@ -363,10 +372,10 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="4dp"
-                                android:onClick="@{() -> novelDetailViewModel.updateUserInterest(novelDetailViewModel.novelDetail.novel.novelId)}"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_interest_selector"
-                                android:gravity="center">
+                                android:gravity="center"
+                                android:onClick="@{() -> novelDetailViewModel.updateUserInterest(novelDetailViewModel.novelDetail.novel.novelId)}">
 
                                 <ImageView
                                     android:layout_width="16dp"

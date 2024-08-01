@@ -114,7 +114,7 @@
             android:numStars="5"
             android:progressBackgroundTint="@color/gray_70_DFDFE3"
             android:progressTint="@color/secondary_50_FFAA8F"
-            android:rating="5"
+            android:rating="0"
             android:secondaryProgressTint="@color/secondary_50_FFAA8F"
             android:stepSize="0.5"
             app:layout_constraintEnd_toEndOf="parent"
@@ -268,6 +268,7 @@
                     android:layout_marginEnd="6dp"
                     android:height="44dp"
                     android:gravity="center"
+                    android:onClick="@{() -> onClick.onSaveClick()}"
                     android:text="@string/novel_rating_enroll"
                     android:textAlignment="center"
                     android:textAppearance="@style/title2"
@@ -277,5 +278,15 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
+
+        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+            android:id="@+id/wll_novel_rating"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
