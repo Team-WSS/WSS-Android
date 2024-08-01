@@ -101,6 +101,7 @@
                             android:id="@+id/iv_novel_detail_cover_genre"
                             android:layout_width="72dp"
                             android:layout_height="72dp"
+                            app:isVectorImage="@{true}"
                             android:scaleType="fitXY"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
                             app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
@@ -505,7 +506,7 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
-            android:id="@+id/wl_novel_detail"
+            android:id="@+id/wll_novel_detail"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

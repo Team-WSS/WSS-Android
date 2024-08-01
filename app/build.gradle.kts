@@ -82,6 +82,7 @@ dependencies {
     // coil
     implementation("io.coil-kt:coil:2.6.0")
     implementation("io.coil-kt:coil-gif:2.6.0")
+    implementation("io.coil-kt:coil-svg:2.6.0")
     implementation("jp.wasabeef.transformers:coil:1.0.6")
 
     // Pager Dots Indicator
