@@ -31,7 +31,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupViewPager()
         setupTabLayout()
         setupObserver()
-        setupLoadingLayout()
+        setupWebsosoLoadingLayout()
     }
 
     private fun bindViewModel() {
@@ -78,7 +78,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         }
     }
 
-    private fun setupLoadingLayout() {
+    private fun setupWebsosoLoadingLayout() {
         binding.wlNovelDetail.setReloadButtonClickListener {
             novelDetailViewModel.updateNovelDetail(dummyNovelId)
             binding.wlNovelDetail.setErrorLayoutVisibility(false)
