@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.novelDetail
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
@@ -21,18 +23,16 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private var _popupBinding: MenuNovelDetailPopupBinding? = null
     private val popupBinding get() = _popupBinding ?: error("")
-    private val dummyNovelId = 1L
+    private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 1L) } // TODO: 1L -> 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         bindViewModel()
         setupPopupBinding()
-        setupViewPager()
-        setupTabLayout()
         setupObserver()
         setupWebsosoLoadingLayout()
-        novelDetailViewModel.updateNovelDetail(dummyNovelId)
+        novelDetailViewModel.updateNovelDetail(novelId)
     }
 
     private fun bindViewModel() {
@@ -47,7 +47,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupViewPager() {
-        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this)
+        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
     }
 
     private fun setupTabLayout() {
@@ -64,6 +64,8 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
             when (novelDetail.novel.novelTitle.isNotBlank()) {
                 true -> {
+                    setupViewPager()
+                    setupTabLayout()
                     binding.showPopupWindow = ::showPopupWindow
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
                     binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
@@ -73,7 +75,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             }
         }
         novelDetailViewModel.loading.observe(this) { isLoading ->
-            if (isLoading) novelDetailViewModel.updateNovelDetail(dummyNovelId)
+            if (isLoading) novelDetailViewModel.updateNovelDetail(novelId)
         }
         novelDetailViewModel.error.observe(this) { isError ->
             binding.wllNovelDetail.setErrorLayoutVisibility(isError)
@@ -82,7 +84,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupWebsosoLoadingLayout() {
         binding.wllNovelDetail.setReloadButtonClickListener {
-            novelDetailViewModel.updateNovelDetail(dummyNovelId)
+            novelDetailViewModel.updateNovelDetail(novelId)
             binding.wllNovelDetail.setErrorLayoutVisibility(false)
         }
     }
@@ -107,8 +109,15 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     companion object {
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
+        private const val NOVEL_ID = "NOVEL_ID"
 
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
+
+        fun getIntent(context: Context, novelId: Long): Intent {
+            return Intent(context, NovelDetailActivity::class.java).apply {
+                putExtra(NOVEL_ID, novelId)
+            }
+        }
     }
 }

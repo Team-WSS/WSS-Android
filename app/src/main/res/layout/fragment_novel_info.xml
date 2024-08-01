@@ -109,9 +109,9 @@
                     android:layout_width="46dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="8dp"
-                    app:isVectorImage="@{true}"
                     android:onClick="@{() -> navigateToReadNovel.invoke(novelInfoViewModel.uiState.platforms.naverModel.platformUrl)}"
                     app:cornerRadius="@{24f}"
+                    app:isVectorImage="@{true}"
                     app:isVisible="@{novelInfoViewModel.uiState.platforms.naverModel.isVisible}"
                     app:loadImageUrl="@{novelInfoViewModel.uiState.platforms.naverModel.platformImage}"
                     tools:src="@color/black"
@@ -120,11 +120,11 @@
                 <ImageView
                     android:id="@+id/iv_novel_info_kakao"
                     android:layout_width="46dp"
-                    app:isVectorImage="@{true}"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="8dp"
                     android:onClick="@{() -> navigateToReadNovel.invoke(novelInfoViewModel.uiState.platforms.kakaoModel.platformUrl)}"
                     app:cornerRadius="@{24f}"
+                    app:isVectorImage="@{true}"
                     app:isVisible="@{novelInfoViewModel.uiState.platforms.kakaoModel.isVisible}"
                     app:loadImageUrl="@{novelInfoViewModel.uiState.platforms.kakaoModel.platformImage}"
                     tools:src="@color/black"
@@ -427,6 +427,16 @@
                     app:layout_constraintTop_toBottomOf="@id/iv_novel_info_none" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+                android:id="@+id/wll_novel_info"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

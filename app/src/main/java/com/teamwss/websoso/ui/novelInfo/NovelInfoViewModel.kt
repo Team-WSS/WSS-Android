@@ -22,8 +22,10 @@ class NovelInfoViewModel @Inject constructor(
     val uiState: LiveData<NovelInfoUiState> get() = _uiState
 
     fun updateNovelInfo(novelId: Long) {
+        if (uiState.value?.loading == true) return
         viewModelScope.launch {
             runCatching {
+                _uiState.value = uiState.value?.copy(loading = true, error = false)
                 novelRepository.fetchNovelInfo(novelId)
             }.onSuccess { novelInfo ->
                 _uiState.value = uiState.value?.copy(
