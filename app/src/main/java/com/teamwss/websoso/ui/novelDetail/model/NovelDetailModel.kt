@@ -16,17 +16,19 @@ data class NovelDetailModel(
         val endDate: String?,
         val isUserNovelInterest: Boolean,
         val userNovelRating: Float,
-        val hasUserNovelInfo: Boolean,
+        val isAlreadyRated: Boolean = userNovelId != null,
         val formattedUserNovelDate: String = formattedDateRange(startDate, endDate),
     )
 
     data class NovelModel(
+        val novelId: Long,
         val novelTitle: String,
         val novelImage: String,
-        val novelGenres: List<String>,
-        val formattedNovelGenres: String = novelGenres.joinToString("/"),
+        val novelGenres: List<Category>,
+        val formattedNovelGenres: String = novelGenres.joinToString(separator = "/") { it.titleKr },
         val novelGenreImage: String,
-        val isNovelCompletedText: String,
+        val isNovelCompleted: Boolean,
+        val isNovelCompletedText: String = if (isNovelCompleted) "완결작" else "연재중",
         val author: String,
         val formattedNovelDetailSummary: String = "$formattedNovelGenres ・ $isNovelCompletedText ・ $author",
     )
@@ -54,4 +56,15 @@ data class NovelDetailModel(
             }
         }
     }
+
+    val defaultUserNovelModel = UserNovelModel(
+        userNovelId = null,
+        readStatus = null,
+        startDate = null,
+        endDate = null,
+        isUserNovelInterest = false,
+        userNovelRating = 0.0f,
+        isAlreadyRated = false,
+        formattedUserNovelDate = "",
+    )
 }

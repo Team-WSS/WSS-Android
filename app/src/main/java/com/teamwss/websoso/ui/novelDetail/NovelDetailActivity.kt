@@ -17,8 +17,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
-
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
+
     private var _popupBinding: MenuNovelDetailPopupBinding? = null
     private val popupBinding get() = _popupBinding ?: error("")
     private val dummyNovelId = 1L
@@ -31,7 +31,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupViewPager()
         setupTabLayout()
         setupObserver()
-        novelDetailViewModel.updateNovelDetail(dummyNovelId)
+        setupWebsosoLoadingLayout()
     }
 
     private fun bindViewModel() {
@@ -61,20 +61,28 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupObserver() {
         novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
-            bindFunction()
-            binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
+            when (novelDetail.novel.novelTitle.isNotBlank()) {
+                true -> {
+                    binding.showPopupWindow = ::showPopupWindow
+                    binding.wlNovelDetail.setWebsosoLoadingVisibility(false)
+                    binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
+                }
+                false -> binding.wlNovelDetail.setWebsosoLoadingVisibility(true)
+            }
         }
-        novelDetailViewModel.loading.observe(this) {
-            // TODO: Show loading
+        novelDetailViewModel.loading.observe(this) { isLoading ->
+            if (isLoading) novelDetailViewModel.updateNovelDetail(dummyNovelId)
         }
-        novelDetailViewModel.error.observe(this) {
-            // TODO: Show error
+        novelDetailViewModel.error.observe(this) { isError ->
+            binding.wlNovelDetail.setErrorLayoutVisibility(isError)
         }
     }
 
-    private fun bindFunction() {
-        binding.showPopupWindow = ::showPopupWindow
-        binding.updateUserInterest = ::updateUserInterest
+    private fun setupWebsosoLoadingLayout() {
+        binding.wlNovelDetail.setReloadButtonClickListener {
+            novelDetailViewModel.updateNovelDetail(dummyNovelId)
+            binding.wlNovelDetail.setErrorLayoutVisibility(false)
+        }
     }
 
     private fun showPopupWindow() {
@@ -92,10 +100,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
                 Gravity.END,
             )
         }
-    }
-
-    private fun updateUserInterest() {
-        novelDetailViewModel.updateUserInterest(dummyNovelId)
     }
 
     companion object {

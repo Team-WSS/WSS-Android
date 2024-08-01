@@ -208,7 +208,7 @@
                             android:layout_marginTop="12dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
-                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.hasUserNovelInfo}"
+                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
                             app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
                             app:layout_constraintStart_toStartOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
@@ -248,7 +248,7 @@
                             android:layout_marginEnd="28dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
-                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.hasUserNovelInfo}"
+                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
                             app:layout_constraintEnd_toEndOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintStart_toEndOf="@id/ll_novel_detail_user_rating"
                             app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
@@ -363,10 +363,10 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="4dp"
+                                android:onClick="@{() -> novelDetailViewModel.updateUserInterest(novelDetailViewModel.novelDetail.novel.novelId)}"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_interest_selector"
-                                android:gravity="center"
-                                android:onClick="@{() -> updateUserInterest.invoke()}">
+                                android:gravity="center">
 
                                 <ImageView
                                     android:layout_width="16dp"
@@ -495,5 +495,15 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+            android:id="@+id/wll_novel_detail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
