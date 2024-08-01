@@ -31,7 +31,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         binding.onClick = onNovelRatingButtonClick()
         novelRatingViewModel.updateNovelRating(novelId)
         bindViewModel()
-        observeUiState()
+        setupObserver()
         setupCharmPointChips()
         setupWebsosoLoadingLayout()
     }
@@ -64,7 +64,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
             override fun onClearClick() {}
         }
 
-    private fun observeUiState() {
+    private fun setupObserver() {
         var isInitialUpdate = true
 
         novelRatingViewModel.uiState.observe(this) { uiState ->
