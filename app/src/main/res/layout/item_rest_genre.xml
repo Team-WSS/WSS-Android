@@ -19,7 +19,7 @@
             android:id="@+id/iv_rest_genre_logo"
             android:layout_width="24dp"
             android:layout_height="28dp"
-            android:src="@{genrePreference.genreIcon}"
+            app:loadImageUrl="@{genrePreference.genreIcon}"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
