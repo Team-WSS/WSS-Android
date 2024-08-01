@@ -28,8 +28,16 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupTranslucentOnStatusBar()
         setBottomNavigationView()
         setupTranslucentOnStatusBar()
+    }
+
+    private fun setupTranslucentOnStatusBar() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
     }
 
     private fun setBottomNavigationView() {
@@ -77,7 +85,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         }
     }
 
-    companion object{
+    companion object {
 
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, MainActivity::class.java)

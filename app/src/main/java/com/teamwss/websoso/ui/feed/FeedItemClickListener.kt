@@ -6,7 +6,7 @@ interface FeedItemClickListener {
 
     fun onProfileClick(id: Long)
 
-    fun onMoreButtonClick(view: View, feedId: Long, userId: Long)
+    fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean)
 
     fun onContentClick(id: Long)
 
