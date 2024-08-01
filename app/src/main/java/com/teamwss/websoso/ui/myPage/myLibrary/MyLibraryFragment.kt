@@ -21,11 +21,11 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
         binding.lifecycleOwner = viewLifecycleOwner
         binding.myLibraryViewModel= myLibraryViewModel
 
-        onGenrePathToggled()
+        onGenrePathToggle()
         setUpObserve()
     }
 
-    private fun onGenrePathToggled() {
+    private fun onGenrePathToggle() {
         binding.ivMyLibraryGenrePreferencePath.setOnClickListener {
             myLibraryViewModel.updateToggleGenresVisibility()
         }
