@@ -24,7 +24,7 @@ class MyLibraryViewModel : ViewModel() {
     private val _isGenreListVisible = MutableLiveData<Boolean>().apply { value = false }
     val isGenreListVisible: LiveData<Boolean> = _isGenreListVisible
 
-    fun toggleGenreListVisibility() {
+    fun updateToggleGenresVisibility() {
         _isGenreListVisible.value = _isGenreListVisible.value?.not()
     }
 }

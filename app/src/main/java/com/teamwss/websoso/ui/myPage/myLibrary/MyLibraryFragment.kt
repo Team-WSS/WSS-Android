@@ -27,7 +27,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
 
     private fun onGenrePathToggled() {
         binding.ivMyLibraryGenrePreferencePath.setOnClickListener {
-            myLibraryViewModel.toggleGenreListVisibility()
+            myLibraryViewModel.updateToggleGenresVisibility()
         }
     }
 
