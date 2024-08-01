@@ -8,7 +8,7 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.databinding.ItemRestGenreBinding
 
 class RestGenrePreferenceAdapter(
-    var items: List<GenrePreferenceEntity>
+    private var items: List<GenrePreferenceEntity> = emptyList()
 ) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -43,5 +43,10 @@ class RestGenrePreferenceAdapter(
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
+    }
+
+    fun updateRestGenrePreferenceData(newItems: List<GenrePreferenceEntity>) {
+        items = newItems
+        notifyDataSetChanged()
     }
 }
