@@ -14,27 +14,19 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
-    private var _binding: FragmentMyLibraryBinding? = null
-    private val myLibraryBinding get() = _binding ?: error("error: myLibraryBinding is null")
     private val myLibraryViewModel: MyLibraryViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMyLibraryBinding.inflate(inflater, container, false)
-        return myLibraryBinding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.myLibraryViewModel= myLibraryViewModel
+
         onGenrePathToggled()
         setUpObserve()
     }
 
     private fun onGenrePathToggled() {
-        myLibraryBinding.ivMyLibraryGenrePreferencePath.setOnClickListener {
+        binding.ivMyLibraryGenrePreferencePath.setOnClickListener {
             myLibraryViewModel.toggleGenreListVisibility()
         }
     }
@@ -51,12 +43,12 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
 
     private fun updateRestPreferredGenreList(genres: List<GenrePreferenceEntity>) {
         val adapter = RestGenrePreferenceAdapter(genres)
-        myLibraryBinding.lvMyLibraryRestGenre.adapter = adapter
+        binding.lvMyLibraryRestGenre.adapter = adapter
     }
 
     private fun updateRestGenrePreferenceVisibility(isVisible: Boolean) {
-        myLibraryBinding.lvMyLibraryRestGenre.isVisible = isVisible
-        myLibraryBinding.ivMyLibraryGenrePreferencePath.setImageResource(
+        binding.lvMyLibraryRestGenre.isVisible = isVisible
+        binding.ivMyLibraryGenrePreferencePath.setImageResource(
             if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
         )
     }
