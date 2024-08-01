@@ -60,7 +60,7 @@ class DetailExploreKeywordViewModel @Inject constructor(
         }
     }
 
-    fun updateCurrentSelectedKeywords2(keyword: KeywordModel) {
+    fun updateCurrentSelectedKeywords(keyword: KeywordModel) {
         _selectedKeywords.value = _selectedKeywords.value?.let { currentList ->
             if (currentList.any { it.keywordId == keyword.keywordId }) {
                 currentList.map { existingKeyword ->
