@@ -16,7 +16,8 @@ class WebsosoLoadingLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val binding: LayoutLoadingBinding = LayoutLoadingBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: LayoutLoadingBinding =
+        LayoutLoadingBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
         setupLoadingAnimation(context)

@@ -28,15 +28,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setBottomNavigationView()
         setupTranslucentOnStatusBar()
-    }
-
-    private fun setBottomNavigationView() {
-        binding.bnvMain.selectedItemId = R.id.menu_home
-        replaceFragment<HomeFragment>()
-
-        binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
+        setBottomNavigationView()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -44,6 +37,13 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+    }
+
+    private fun setBottomNavigationView() {
+        binding.bnvMain.selectedItemId = R.id.menu_home
+        replaceFragment<HomeFragment>()
+
+        binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
     }
 
     private fun replaceFragment(item: MenuItem): Boolean {
@@ -77,7 +77,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         }
     }
 
-    companion object{
+    companion object {
 
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, MainActivity::class.java)

@@ -16,7 +16,7 @@ sealed class FeedType {
         companion object {
 
             fun valueOf(ordinal: Int): ItemType =
-                values().find { it.ordinal == ordinal } ?: throw IllegalArgumentException()
+                entries.find { it.ordinal == ordinal } ?: throw IllegalArgumentException()
         }
     }
 }
