@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.util.setListViewHeightBasedOnChildren
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,5 +45,9 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
         binding.ivMyLibraryGenrePreferencePath.setImageResource(
             if (isVisible) R.drawable.ic_my_library_upper_path else R.drawable.ic_my_library_lower_path
         )
+
+        if (isVisible) {
+            binding.lvMyLibraryRestGenre.setListViewHeightBasedOnChildren()
+        }
     }
 }
