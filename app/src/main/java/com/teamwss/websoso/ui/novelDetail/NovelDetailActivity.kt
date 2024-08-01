@@ -50,10 +50,12 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupViewPager() {
+        if (binding.vpNovelDetail.adapter != null) return
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
     }
 
     private fun setupTabLayout() {
+        if (binding.tlNovelDetail.tabCount > 0) return
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
             tab.text = when (position) {
                 INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)

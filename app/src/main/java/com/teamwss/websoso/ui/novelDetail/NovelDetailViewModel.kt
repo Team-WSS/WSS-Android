@@ -44,12 +44,17 @@ class NovelDetailViewModel @Inject constructor(
     fun updateUserInterest(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                novelRepository.saveUserInterest(novelId, novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false)
-            }.onSuccess {
                 _novelDetail.value = novelDetail.value?.copy(
                     userNovel = novelDetail.value?.userNovel?.copy(
                         isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
-                    ) ?: return@onSuccess
+                    ) ?: return@runCatching
+                )
+                novelRepository.saveUserInterest(novelId, novelDetail.value?.userNovel?.isUserNovelInterest ?: false)
+            }.onFailure {
+                _novelDetail.value = novelDetail.value?.copy(
+                    userNovel = novelDetail.value?.userNovel?.copy(
+                        isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
+                    ) ?: return@onFailure
                 )
             }
         }
