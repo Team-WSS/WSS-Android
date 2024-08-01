@@ -2,17 +2,18 @@ package com.teamwss.websoso.ui.novelInfo.model
 
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
 data class NovelInfoUiModel(
     val novelDescription: String = "",
-    val attractivePoints: List<String> = emptyList(),
+    val attractivePoints: List<CharmPoint> = emptyList(),
     val unifiedReviewCount: UnifiedReviewCountModel = UnifiedReviewCountModel(),
     val isUserReviewExist: Boolean = (unifiedReviewCount.watchingCount.count + unifiedReviewCount.watchedCount.count + unifiedReviewCount.quitCount.count) > 0,
 ) {
 
     fun formatAttractivePoints(): String {
-        return attractivePoints.joinToString(", ")
+        return attractivePoints.joinToString(", ") { it.title }
     }
 }
 

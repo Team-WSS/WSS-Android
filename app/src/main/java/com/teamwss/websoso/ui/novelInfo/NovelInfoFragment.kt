@@ -97,12 +97,17 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         val counts = listOf(
             unifiedReviewCountModel.watchingCount.count,
             unifiedReviewCountModel.watchedCount.count,
-            unifiedReviewCountModel.quitCount.count
+            unifiedReviewCountModel.quitCount.count,
+        )
+
+        val graphHeights = listOf(
+            unifiedReviewCountModel.watchingCount.graphHeight,
+            unifiedReviewCountModel.watchedCount.graphHeight,
+            unifiedReviewCountModel.quitCount.graphHeight,
         )
 
         when {
-            unifiedReviewCountModel.watchingCount.graphHeight != 0 -> return
-            counts.sumOf { it } == 0 -> return
+            counts.sumOf { it } == 0 || graphHeights.sumOf { it } != 0 -> return
             else -> {
                 val graphHeight = binding.cvNovelInfoReadStatusWatching.layoutParams.height
                 novelInfoViewModel.updateGraphHeight(graphHeight)
@@ -114,12 +119,20 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
                 updateGraphHeight(binding.viewNovelInfoReadStatusWatching, unifiedReviewCountModel.watchingCount.graphHeight)
-                updateGraphSelection(binding.viewNovelInfoReadStatusWatching, binding.tvNovelInfoReadStatusWatchingCount, binding.tvNovelInfoReadStatusWatching)
+                updateGraphSelection(
+                    binding.viewNovelInfoReadStatusWatching,
+                    binding.tvNovelInfoReadStatusWatchingCount,
+                    binding.tvNovelInfoReadStatusWatching
+                )
             }
 
             ReadStatus.WATCHED -> {
                 updateGraphHeight(binding.viewNovelInfoReadStatusWatched, unifiedReviewCountModel.watchedCount.graphHeight)
-                updateGraphSelection(binding.viewNovelInfoReadStatusWatched, binding.tvNovelInfoReadStatusWatchedCount, binding.tvNovelInfoReadStatusWatched)
+                updateGraphSelection(
+                    binding.viewNovelInfoReadStatusWatched,
+                    binding.tvNovelInfoReadStatusWatchedCount,
+                    binding.tvNovelInfoReadStatusWatched
+                )
             }
 
             ReadStatus.QUIT -> {
@@ -180,7 +193,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
         binding.tvNovelInfoCharmPointsBody.text = getColoredText(
             getString(R.string.novel_info_charm_points_body, charmPoints),
             listOf(charmPoints),
-            AppCompatResources.getColorStateList(requireContext(),R.color.primary_100_6A5DFD).defaultColor,
+            AppCompatResources.getColorStateList(requireContext(), R.color.primary_100_6A5DFD).defaultColor,
         )
     }
 

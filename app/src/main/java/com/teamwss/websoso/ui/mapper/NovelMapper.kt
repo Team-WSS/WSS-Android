@@ -1,15 +1,15 @@
 package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.data.model.NovelDetailEntity
-import com.teamwss.websoso.ui.novelDetail.model.Category
 import com.teamwss.websoso.data.model.NovelInfoEntity
-import com.teamwss.websoso.domain.model.NovelDetail
+import com.teamwss.websoso.ui.novelDetail.model.Category
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiModel
 import com.teamwss.websoso.ui.novelInfo.model.PlatformModel
 import com.teamwss.websoso.ui.novelInfo.model.ReviewCountModel
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel.Companion.toCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
 fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
@@ -50,7 +50,7 @@ fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
 
 fun NovelInfoEntity.toUi() = NovelInfoUiModel(
     novelDescription = novelDescription,
-    attractivePoints = attractivePoints,
+    attractivePoints = attractivePoints.map { it.toCharmPoint() },
     unifiedReviewCount = reviewCount.toUi(),
 )
 

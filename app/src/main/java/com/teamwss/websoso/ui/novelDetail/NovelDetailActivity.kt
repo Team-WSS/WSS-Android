@@ -32,6 +32,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupTabLayout()
         setupObserver()
         setupWebsosoLoadingLayout()
+        novelDetailViewModel.updateNovelDetail(dummyNovelId)
     }
 
     private fun bindViewModel() {
@@ -64,24 +65,25 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             when (novelDetail.novel.novelTitle.isNotBlank()) {
                 true -> {
                     binding.showPopupWindow = ::showPopupWindow
-                    binding.wlNovelDetail.setWebsosoLoadingVisibility(false)
+                    binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
                     binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
                 }
-                false -> binding.wlNovelDetail.setWebsosoLoadingVisibility(true)
+
+                false -> binding.wllNovelDetail.setWebsosoLoadingVisibility(true)
             }
         }
         novelDetailViewModel.loading.observe(this) { isLoading ->
             if (isLoading) novelDetailViewModel.updateNovelDetail(dummyNovelId)
         }
         novelDetailViewModel.error.observe(this) { isError ->
-            binding.wlNovelDetail.setErrorLayoutVisibility(isError)
+            binding.wllNovelDetail.setErrorLayoutVisibility(isError)
         }
     }
 
     private fun setupWebsosoLoadingLayout() {
-        binding.wlNovelDetail.setReloadButtonClickListener {
+        binding.wllNovelDetail.setReloadButtonClickListener {
             novelDetailViewModel.updateNovelDetail(dummyNovelId)
-            binding.wlNovelDetail.setErrorLayoutVisibility(false)
+            binding.wllNovelDetail.setErrorLayoutVisibility(false)
         }
     }
 
