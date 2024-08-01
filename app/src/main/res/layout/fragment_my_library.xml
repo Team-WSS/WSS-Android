@@ -397,7 +397,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:padding="8dp"
-                    android:src="@drawable/ic_lower_path"
+                    android:src="@drawable/ic_my_library_lower_path"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lv_my_library_rest_genre"/>

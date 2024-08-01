@@ -1,9 +1,7 @@
 package com.teamwss.websoso.ui.myPage.myLibrary
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
@@ -49,7 +47,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
     private fun updateRestGenrePreferenceVisibility(isVisible: Boolean) {
         binding.lvMyLibraryRestGenre.isVisible = isVisible
         binding.ivMyLibraryGenrePreferencePath.setImageResource(
-            if (isVisible) R.drawable.ic_upper_path else R.drawable.ic_lower_path
+            if (isVisible) R.drawable.ic_my_library_upper_path else R.drawable.ic_my_library_lower_path
         )
     }
 }
