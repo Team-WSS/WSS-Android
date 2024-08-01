@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class MyLibraryViewModel : ViewModel() {
     private val _genres = MutableLiveData<List<GenrePreferenceEntity>>().apply {
         value = listOf(
