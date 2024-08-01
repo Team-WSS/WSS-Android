@@ -19,5 +19,5 @@ data class NovelRatingRequestDto(
     @SerialName("attractivePoints")
     val attractivePoints: List<String>,
     @SerialName("keywordIds")
-    val keywordIds: List<Int>
+    val keywordIds: List<Int>,
 )
