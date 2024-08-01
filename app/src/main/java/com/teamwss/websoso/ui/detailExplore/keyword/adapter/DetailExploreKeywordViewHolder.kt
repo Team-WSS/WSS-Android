@@ -8,13 +8,16 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.util.toFloatScaledByDp
 import com.teamwss.websoso.util.toIntScaledByDp
 
 class DetailExploreKeywordViewHolder(
     private val binding: ItemNovelRatingKeywordBinding,
-    private val onKeywordClick: (keywordId: Int) -> Unit,
+    private val onKeywordClick: (keyword: KeywordModel) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+    var isChipSetting: Boolean = false
+        private set
 
     init {
         binding.setupExpandToggleBtn()
@@ -45,6 +48,7 @@ class DetailExploreKeywordViewHolder(
             }
             setupWebsosoChips(category)
         }
+        isChipSetting = true
     }
 
     private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: CategoryModel) {
@@ -60,10 +64,24 @@ class DetailExploreKeywordViewHolder(
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(40f)
                 setOnWebsosoChipClick {
-                    onKeywordClick(keyword.keywordId)
+                    onKeywordClick(keyword)
                 }
                 isSelected = keyword.isSelected
             }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
+        }
+    }
+
+    fun updateChipState(category: CategoryModel) {
+        val keywordMap = category.keywords.associateBy { it.keywordId }
+
+        for (i in 0 until binding.wcgNovelRatingKeyword.childCount) {
+            val chipView = binding.wcgNovelRatingKeyword.getChildAt(i) as? WebsosoChip
+            chipView?.let { chip ->
+                val keyword = keywordMap[chip.id]
+                if (keyword != null) {
+                    chip.isSelected = keyword.isSelected
+                }
+            }
         }
     }
 }

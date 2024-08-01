@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.*
 
 class DetailExploreKeywordAdapter(
-    private val onKeywordClick: (keywordId: Int) -> (Unit),
+    private val onKeywordClick: (keyword: KeywordModel) -> (Unit),
 ) : ListAdapter<CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(
@@ -25,7 +26,12 @@ class DetailExploreKeywordAdapter(
 
     override fun onBindViewHolder(holder: DetailExploreKeywordViewHolder, position: Int) {
         val item = getItem(position)
-        holder.initKeywordView(item)
+        holder.apply {
+            when(isChipSetting) {
+                true -> updateChipState(item)
+                false -> initKeywordView(item)
+            }
+        }
     }
 
     companion object {

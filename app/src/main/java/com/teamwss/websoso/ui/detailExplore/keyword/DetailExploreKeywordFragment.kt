@@ -1,7 +1,6 @@
 package com.teamwss.websoso.ui.detailExplore.keyword
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
@@ -105,11 +104,7 @@ class DetailExploreKeywordFragment :
             setWebsosoChipPaddingVertical(20f)
             setWebsosoChipPaddingHorizontal(12f)
             setWebsosoChipRadius(40f)
-            setOnCloseIconClickListener {
-                detailExploreKeywordViewModel.updateCurrentSelectedKeywords(
-                    selectedKeyword, isSelected = false
-                )
-            }
+            setOnCloseIconClickListener {}
             setWebsosoChipCloseIconVisibility(true)
             setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
             setWebsosoChipCloseIconSize(20f)
