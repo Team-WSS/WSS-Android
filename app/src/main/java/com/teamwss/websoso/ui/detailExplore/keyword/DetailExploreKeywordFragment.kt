@@ -9,6 +9,8 @@ import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -63,34 +65,31 @@ class DetailExploreKeywordFragment :
         }
 
         detailExploreKeywordViewModel.uiState.observe(viewLifecycleOwner) {
-            detailExploreKeywordAdapter.submitList(it.keywordModel.categories)
+            detailExploreKeywordAdapter.submitList(it.categories)
+            setupSelectedChips(it.categories)
+        }
+    }
+
+    private fun setupSelectedChips(categories: List<CategoryModel>) {
+        val currentChipKeywords = binding.wcgDetailExploreKeywordSelectedKeyword.children
+            .filterIsInstance<WebsosoChip>()
+            .map { it.text.toString() }
+
+        val newKeywords = categories.flatMap { category ->
+            category.keywords.filter { it.isSelected }.map { it.keywordName }
         }
 
-        detailExploreKeywordViewModel.selectedKeywords.observe(viewLifecycleOwner) { keywords ->
-            if (keywords.isEmpty()) {
-                binding.wcgDetailExploreKeywordSelectedKeyword.removeAllViews()
-                return@observe
+        val keywordsToAdd = newKeywords - currentChipKeywords.toSet()
+
+        keywordsToAdd.forEach { keywordName ->
+            DetailExploreKeywordModel.findKeywordByName(keywordName, categories)?.let { keywordModel ->
+                createSelectedChip(keywordModel)
             }
+        }
 
-            val currentChipKeywords = binding.wcgDetailExploreKeywordSelectedKeyword.children
-                .filterIsInstance<WebsosoChip>()
-                .map { it.text.toString() }
-                .toList()
-
-            val newKeywords = keywords.map { it.keywordName }
-
-            currentChipKeywords.filter { chipKeyword ->
-                !newKeywords.contains(chipKeyword)
-            }.forEach { keywordName ->
-                removeSelectedChip(keywordName)
-            }
-
-            newKeywords.filter { newKeyword ->
-                !currentChipKeywords.any { it == newKeyword }
-            }.forEach { keywordName ->
-                val keywordModel = keywords.find { it.keywordName == keywordName }
-                keywordModel?.let { setupSelectedChip(it) }
-            }
+        val keywordsToRemove = currentChipKeywords - newKeywords.toSet()
+        keywordsToRemove.forEach { keywordName ->
+            removeSelectedChip(keywordName)
         }
     }
 
@@ -103,7 +102,7 @@ class DetailExploreKeywordFragment :
         }
     }
 
-    private fun setupSelectedChip(selectedKeyword: KeywordModel) {
+    private fun createSelectedChip(selectedKeyword: KeywordModel) {
         WebsosoChip(requireContext()).apply {
             setWebsosoChipText(selectedKeyword.keywordName)
             setWebsosoChipTextAppearance(R.style.body2)
@@ -115,7 +114,7 @@ class DetailExploreKeywordFragment :
             setWebsosoChipRadius(40f)
             setOnCloseIconClickListener {
                 detailExploreKeywordViewModel.updateCurrentSelectedKeywords(
-                    selectedKeyword
+                    selectedKeyword.keywordId
                 )
             }
             setWebsosoChipCloseIconVisibility(true)

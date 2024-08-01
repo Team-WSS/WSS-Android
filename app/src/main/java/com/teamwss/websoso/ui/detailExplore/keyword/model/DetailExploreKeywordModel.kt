@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.detailExplore.keyword.model
 
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
+
 data class DetailExploreKeywordModel(
     val categories: List<CategoryModel> = emptyList(),
 ) {
@@ -13,5 +15,13 @@ data class DetailExploreKeywordModel(
             val keywordName: String,
             val isSelected: Boolean = false,
         )
+    }
+
+    companion object {
+
+        fun findKeywordByName(keywordName: String, categories: List<CategoryModel>): KeywordModel? {
+            return categories.flatMap { it.keywords }
+                .find { it.keywordName == keywordName }
+        }
     }
 }
