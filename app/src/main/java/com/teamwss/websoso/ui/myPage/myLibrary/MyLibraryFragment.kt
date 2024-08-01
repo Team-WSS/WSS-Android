@@ -30,7 +30,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onGenrePathToggled()
-        setUpObserveViewModel()
+        setUpObserve()
     }
 
     private fun onGenrePathToggled() {
@@ -39,7 +39,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
         }
     }
 
-    private fun setUpObserveViewModel() {
+    private fun setUpObserve() {
         myLibraryViewModel.genres.observe(viewLifecycleOwner) { genres ->
             updateRestPreferredGenreList(genres)
         }
