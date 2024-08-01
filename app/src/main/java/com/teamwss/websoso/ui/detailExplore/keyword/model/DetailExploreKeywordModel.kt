@@ -19,8 +19,8 @@ data class DetailExploreKeywordModel(
 
     companion object {
 
-        fun findKeywordByName(keywordName: String, categories: List<CategoryModel>): KeywordModel? {
-            return categories.flatMap { it.keywords }
+        fun List<CategoryModel>.findKeywordByName(keywordName: String): KeywordModel? {
+            return this.flatMap { it.keywords }
                 .find { it.keywordName == keywordName }
         }
     }

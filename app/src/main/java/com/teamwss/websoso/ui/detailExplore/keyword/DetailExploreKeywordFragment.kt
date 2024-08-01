@@ -9,9 +9,9 @@ import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.Companion.findKeywordByName
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,22 +73,19 @@ class DetailExploreKeywordFragment :
     private fun setupSelectedChips(categories: List<CategoryModel>) {
         val currentChipKeywords = binding.wcgDetailExploreKeywordSelectedKeyword.children
             .filterIsInstance<WebsosoChip>()
-            .map { it.text.toString() }
+            .map { it.text.toString() }.toList()
 
         val newKeywords = categories.flatMap { category ->
             category.keywords.filter { it.isSelected }.map { it.keywordName }
         }
 
-        val keywordsToAdd = newKeywords - currentChipKeywords.toSet()
-        keywordsToAdd.forEach { keywordName ->
-            DetailExploreKeywordModel.findKeywordByName(keywordName, categories)?.let { keywordModel ->
-                createSelectedChip(keywordModel)
-            }
-        }
-
-        val keywordsToRemove = currentChipKeywords - newKeywords.toSet()
-        keywordsToRemove.forEach { keywordName ->
-            removeSelectedChip(keywordName)
+        when {
+            currentChipKeywords.size > newKeywords.size -> removeSelectedChip((currentChipKeywords - newKeywords.toSet()).first())
+            currentChipKeywords.size < newKeywords.size ->
+                createSelectedChip(
+                    categories.findKeywordByName((newKeywords - currentChipKeywords.toSet()).first())
+                        ?: throw IllegalArgumentException("Keyword not found: ${(newKeywords - currentChipKeywords.toSet()).first()}")
+                )
         }
     }
 
