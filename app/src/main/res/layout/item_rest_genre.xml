@@ -41,7 +41,7 @@
             android:id="@+id/tv_rest_genre_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{String.format("%d편", genrePreference.genreCount)}'
+            android:text='@{@string/my_library_genre_count(genrePreference.genreCount)}'
             android:textAppearance="@style/body3"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="parent"
