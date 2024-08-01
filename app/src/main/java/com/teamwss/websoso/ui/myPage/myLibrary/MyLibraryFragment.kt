@@ -33,7 +33,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
 
     private fun setUpObserve() {
         myLibraryViewModel.genres.observe(viewLifecycleOwner) { genres ->
-            updateRestGenrePreferenceList(genres)
+            initializeGenreAdapter(genres)
         }
 
         myLibraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
@@ -41,7 +41,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
         }
     }
 
-    private fun updateRestGenrePreferenceList(genres: List<GenrePreferenceEntity>) {
+    private fun initializeGenreAdapter(genres: List<GenrePreferenceEntity>) {
         val adapter = RestGenrePreferenceAdapter(genres)
         binding.lvMyLibraryRestGenre.adapter = adapter
     }
