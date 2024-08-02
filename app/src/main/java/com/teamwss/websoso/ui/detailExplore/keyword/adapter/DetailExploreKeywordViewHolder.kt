@@ -74,11 +74,11 @@ class DetailExploreKeywordViewHolder(
         val keywordSelectionMap =
             category.keywords.associateBy({ it.keywordName }, { it.isSelected })
 
-        for (i in 0 until binding.wcgNovelRatingKeyword.childCount) {
-            val chip = binding.wcgNovelRatingKeyword.getChildAt(i) as? WebsosoChip
-            if (chip != null) {
+        (0 until binding.wcgNovelRatingKeyword.childCount)
+            .map { binding.wcgNovelRatingKeyword.getChildAt(it) }
+            .filterIsInstance<WebsosoChip>()
+            .forEach { chip ->
                 chip.isSelected = keywordSelectionMap[chip.text] ?: false
             }
-        }
     }
 }
