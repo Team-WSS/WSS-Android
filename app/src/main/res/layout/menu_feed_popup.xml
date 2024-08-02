@@ -5,16 +5,16 @@
     <data>
 
         <variable
-            name="feedId"
-            type="Long" />
+            name="menuContentTitle"
+            type="java.util.List&lt;String&gt;" />
 
         <variable
-            name="userId"
-            type="Long" />
+            name="onFirstItemClick"
+            type="kotlin.jvm.functions.Function0" />
 
         <variable
-            name="viewModel"
-            type="com.teamwss.websoso.ui.feed.FeedViewModel" />
+            name="onSecondItemClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,51 +23,44 @@
         android:background="@drawable/bg_feed_popup">
 
         <TextView
-            android:id="@+id/tv_feed_popup_user_block"
+            android:id="@+id/tv_feed_popup_first_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:onClick="@{() -> viewModel.saveBlockedUser(userId)}"
+            android:onClick="@{() -> onFirstItemClick.invoke()}"
             android:paddingHorizontal="48dp"
             android:paddingVertical="16dp"
-            android:text="@string/feed_popup_user_block"
+            android:text="@{menuContentTitle[0]}"
             android:textAppearance="@style/body2"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_spoiler"
+            android:textColor="@color/bg_popup_menu_content_text_selector"
+            app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_second_item"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_feed_popup_spoiler"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:onClick="@{() -> viewModel.saveReportedSpoilingFeed(feedId)}"
-            android:paddingHorizontal="48dp"
-            android:paddingVertical="16dp"
-            android:text="@string/feed_popup_spoiler"
-            android:textAppearance="@style/body2"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/tv_feed_popup_report"
-            app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_user_block"
-            app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_user_block"
-            app:layout_constraintTop_toBottomOf="@+id/tv_feed_popup_user_block" />
+        <View
+            android:id="@+id/view_feed_popup_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_feed_popup_first_item" />
 
         <TextView
-            android:id="@+id/tv_feed_popup_report"
+            android:id="@+id/tv_feed_popup_second_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:onClick="@{() -> viewModel.saveReportedImpertinenceFeed(feedId)}"
+            android:onClick="@{() -> onSecondItemClick.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="16dp"
-            android:text="@string/feed_popup_report"
+            android:text="@{menuContentTitle[1]}"
             android:textAppearance="@style/body2"
-            android:textColor="@color/black"
+            android:textColor="@color/bg_popup_menu_content_text_selector"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_spoiler"
-            app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_spoiler"
-            app:layout_constraintTop_toBottomOf="@+id/tv_feed_popup_spoiler" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_feed_popup_first_item"
+            app:layout_constraintStart_toStartOf="@+id/tv_feed_popup_first_item"
+            app:layout_constraintTop_toBottomOf="@+id/view_feed_popup_divider" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

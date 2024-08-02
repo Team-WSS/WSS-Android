@@ -1,9 +1,11 @@
 <resources>
 
     <style name="Base.Theme.Websoso" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="actionBarItemBackground">@color/transparent</item>
     </style>
 
     <style name="Theme.Websoso" parent="Base.Theme.Websoso" />
@@ -22,6 +24,11 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:colorBackground">@color/transparent</item>
+    </style>
+
+    <style name="WebsosoDialogTheme">
+        <item name="android:windowIsFloating">true</item>
         <item name="android:colorBackground">@color/transparent</item>
     </style>
 

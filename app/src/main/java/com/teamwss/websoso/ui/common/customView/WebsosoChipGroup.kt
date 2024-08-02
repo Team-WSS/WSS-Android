@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.common.customView
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.view.children
 import com.google.android.material.chip.ChipGroup
 
 class WebsosoChipGroup(
@@ -25,6 +26,12 @@ class WebsosoChipGroup(
     }
 
     fun updateSelectedChip(view: View) {
+        if (previousChip == null) {
+            children.find { selectedChip ->
+                selectedChip.isSelected
+            }?.isSelected = false
+        }
+
         previousChip = view
     }
 

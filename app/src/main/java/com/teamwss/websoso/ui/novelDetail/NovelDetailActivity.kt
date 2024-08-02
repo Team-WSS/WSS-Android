@@ -30,8 +30,8 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupViewPager()
         setupTabLayout()
         setupObserver()
+        setupLoadingLayout()
         binding.showPopupWindow = ::showPopupWindow
-        novelDetailViewModel.updateNovelDetail(1)
     }
 
     private fun bindViewModel() {
@@ -60,11 +60,24 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupObserver() {
-        novelDetailViewModel.loading.observe(this) {
-            // TODO: Show loading
+        novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
+            when (novelDetail.novel.novelTitle.isNotBlank()) {
+                true -> binding.wlNovelDetail.setWebsosoLoadingVisibility(false)
+                false -> binding.wlNovelDetail.setWebsosoLoadingVisibility(true)
+            }
         }
-        novelDetailViewModel.error.observe(this) {
-            // TODO: Show error
+        novelDetailViewModel.loading.observe(this) { isLoading ->
+            if (isLoading) novelDetailViewModel.updateNovelDetail(1)
+        }
+        novelDetailViewModel.error.observe(this) { isError ->
+            binding.wlNovelDetail.setErrorLayoutVisibility(isError)
+        }
+    }
+
+    private fun setupLoadingLayout() {
+        binding.wlNovelDetail.setReloadButtonClickListener {
+            novelDetailViewModel.updateNovelDetail(1)
+            binding.wlNovelDetail.setErrorLayoutVisibility(false)
         }
     }
 
