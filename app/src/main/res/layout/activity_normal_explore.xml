@@ -121,59 +121,21 @@
             </com.google.android.material.appbar.AppBarLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_normal_explore_result_exist"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_normal_explore_result"
+            isVisible="@{!normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="visible"
+            android:layout_marginHorizontal="20dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="40dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cnl_normal_explore">
-
-            <TextView
-                android:id="@+id/tv_normal_explore_novel_count_title"
-                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/normal_explore_novel_count_title"
-                android:textAppearance="@style/title2"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_normal_explore_novel_count"
-                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textAppearance="@style/body3"
-                android:textColor="@color/gray_100_CBCBD1"
-                app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_novel_count_title"
-                app:layout_constraintStart_toEndOf="@id/tv_normal_explore_novel_count_title"
-                app:layout_constraintTop_toTopOf="@id/tv_normal_explore_novel_count_title"
-                tools:hint="8" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_normal_explore_result"
-                isVisible="@{!normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingBottom="40dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_novel_count_title"
-                tools:listitem="@layout/item_normal_explore" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/cnl_normal_explore"
+            tools:listitem="@layout/item_normal_explore" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_normal_explore_result_not_exist"
