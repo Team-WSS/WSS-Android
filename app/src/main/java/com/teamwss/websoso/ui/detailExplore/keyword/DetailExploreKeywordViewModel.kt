@@ -16,7 +16,8 @@ import javax.inject.Inject
 class DetailExploreKeywordViewModel @Inject constructor(
     private val fakeKeywordRepository: FakeKeywordRepository,
 ) : ViewModel() {
-    private val _uiState: MutableLiveData<DetailExploreKeywordUiState> = MutableLiveData(DetailExploreKeywordUiState())
+    private val _uiState: MutableLiveData<DetailExploreKeywordUiState> =
+        MutableLiveData(DetailExploreKeywordUiState())
     val uiState: LiveData<DetailExploreKeywordUiState> get() = _uiState
 
     private val _searchWord: MutableLiveData<String> = MutableLiveData()
@@ -61,10 +62,9 @@ class DetailExploreKeywordViewModel @Inject constructor(
 
         val updatedCategories = currentUiState.categories.map { category ->
             val updatedKeywords = category.keywords.map { existingKeyword ->
-                if (existingKeyword.keywordId == keywordId) {
-                    existingKeyword.copy(isSelected = !existingKeyword.isSelected)
-                } else {
-                    existingKeyword
+                when (existingKeyword.keywordId == keywordId) {
+                    true -> existingKeyword.copy(isSelected = !existingKeyword.isSelected)
+                    false -> existingKeyword
                 }
             }
             category.copy(keywords = updatedKeywords)
