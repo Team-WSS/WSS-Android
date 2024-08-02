@@ -71,21 +71,23 @@ class DetailExploreKeywordFragment :
     }
 
     private fun setupSelectedChips(categories: List<CategoryModel>) {
-        val currentChipKeywords = binding.wcgDetailExploreKeywordSelectedKeyword.children
-            .filterIsInstance<WebsosoChip>()
-            .map { it.text.toString() }.toList()
+        val currentChipKeywords =
+            binding.wcgDetailExploreKeywordSelectedKeyword.children
+                .filterIsInstance<WebsosoChip>()
+                .map { it.text.toString() }.toList()
 
-        val newKeywords = categories.flatMap { category ->
-            category.keywords.filter { it.isSelected }.map { it.keywordName }
-        }
+        val selectedKeywords =
+            categories.asSequence()
+                .flatMap { it.keywords.asSequence() }
+                .filter { it.isSelected }
+                .map { it.keywordName }.toList()
 
         when {
-            currentChipKeywords.size > newKeywords.size -> removeSelectedChip((currentChipKeywords - newKeywords.toSet()).first())
-            currentChipKeywords.size < newKeywords.size ->
-                createSelectedChip(
-                    categories.findKeywordByName((newKeywords - currentChipKeywords.toSet()).first())
-                        ?: throw IllegalArgumentException("Keyword not found: ${(newKeywords - currentChipKeywords.toSet()).first()}")
-                )
+            currentChipKeywords.size > selectedKeywords.size -> removeSelectedChip((currentChipKeywords - selectedKeywords.toSet()).first())
+            currentChipKeywords.size < selectedKeywords.size -> createSelectedChip(
+                categories.findKeywordByName((selectedKeywords - currentChipKeywords.toSet()).first())
+                    ?: throw IllegalArgumentException("Keyword not found: ${(selectedKeywords - currentChipKeywords.toSet()).first()}")
+            )
         }
     }
 
