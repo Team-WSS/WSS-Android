@@ -35,6 +35,8 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupObserver()
         setupClickListeners()
         setupWebsosoLoadingLayout()
+        setupViewPager()
+        setupTabLayout()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
@@ -50,12 +52,10 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupViewPager() {
-        if (binding.vpNovelDetail.adapter != null) return
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
     }
 
     private fun setupTabLayout() {
-        if (binding.tlNovelDetail.tabCount > 0) return
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
             tab.text = when (position) {
                 INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
@@ -69,8 +69,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         novelDetailViewModel.novelDetail.observe(this) { novelDetail ->
             when (novelDetail.novel.novelTitle.isNotBlank()) {
                 true -> {
-                    setupViewPager()
-                    setupTabLayout()
                     binding.showPopupWindow = ::showPopupWindow
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
                     binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
