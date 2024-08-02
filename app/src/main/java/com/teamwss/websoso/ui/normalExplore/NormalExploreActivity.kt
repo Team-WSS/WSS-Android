@@ -33,8 +33,7 @@ class NormalExploreActivity :
 
         bindViewModel()
         setupUI()
-        setupUiStateObserver()
-        setupSearchWordObserver()
+        setupObserver()
     }
 
     private fun bindViewModel() {
@@ -81,13 +80,17 @@ class NormalExploreActivity :
         // TODO 작품 정보 뷰로 이동
     }
 
-    private fun setupUiStateObserver() {
+    private fun setupObserver() {
         normalExploreViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> loading()
                 uiState.error -> throw IllegalStateException()
                 !uiState.loading -> updateResultView(uiState)
             }
+        }
+
+        normalExploreViewModel.searchWord.observe(this) {
+            normalExploreViewModel.validateSearchWordClearButton()
         }
     }
 
@@ -98,12 +101,6 @@ class NormalExploreActivity :
     private fun updateResultView(uiState: NormalExploreUiState) {
         normalExploreAdapter.updateResultNovels(uiState.novels)
         normalExploreCountAdapter.updateResultNovels(uiState.novels.count())
-    }
-
-    private fun setupSearchWordObserver() {
-        normalExploreViewModel.searchWord.observe(this) {
-            normalExploreViewModel.validateSearchWordClearButton()
-        }
     }
 
     companion object {
