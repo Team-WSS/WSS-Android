@@ -6,6 +6,7 @@ import android.widget.ListView
 fun ListView.setListViewHeightBasedOnChildren() {
     val listAdapter = adapter ?: return
     var totalHeight = 0
+
     for (i in 0 until listAdapter.count) {
         val listItem = listAdapter.getView(i, null, this)
         listItem.measure(
@@ -14,6 +15,7 @@ fun ListView.setListViewHeightBasedOnChildren() {
         )
         totalHeight += listItem.measuredHeight
     }
+
     val params = layoutParams
     params.height = totalHeight + (dividerHeight * (listAdapter.count - 1))
     layoutParams = params
