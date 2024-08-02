@@ -23,7 +23,7 @@
             android:id="@+id/cl_detail_explore_keyword_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp"
+            android:paddingBottom="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -82,8 +82,8 @@
             android:id="@+id/hsv_rating_keyword_selected_keyword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
             android:paddingHorizontal="20dp"
+            android:paddingBottom="8dp"
             android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -116,7 +116,6 @@
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/cl_detail_explore_keyword_reset_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_min="384dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_detail_explore_divider">
 
@@ -133,9 +132,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_detail_explore_keyword_list"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="500dp"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
+                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constrainedHeight="true"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -147,7 +147,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_detail_explore_keyword_result"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="500dp"
             android:background="@color/white"
             android:paddingHorizontal="20dp"
             android:visibility="gone"
@@ -238,11 +238,13 @@
             android:id="@+id/cl_detail_explore_keyword_reset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
             android:background="@color/gray_50_F4F5F8"
             android:paddingVertical="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintEnd_toStartOf="@id/tv_detail_explore_search_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_keyword_list"
+            app:layout_constraintVertical_chainStyle="packed">
 
             <ImageView
                 android:id="@+id/iv_detail_explore_info_reset"

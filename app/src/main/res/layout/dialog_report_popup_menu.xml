@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="onCancelClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onReportClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_detail_white_radius_12dp">
+
+        <ImageView
+            android:id="@+id/iv_report_popup_menu_warning"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="100dp"
+            android:layout_marginStart="124dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="124dp"
+            android:src="@drawable/ic_novel_detail_warning"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_report_popup_menu_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@{title}"
+            android:textAlignment="center"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_report_popup_menu_warning" />
+
+        <TextView
+            android:id="@+id/tv_report_popup_menu_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_novel_info_gray_50_radius_8dp"
+            android:gravity="center"
+            android:onClick="@{()->onCancelClick.invoke()}"
+            android:paddingHorizontal="48dp"
+            android:paddingVertical="12dp"
+            android:text="@string/report_popup_menu_cancel"
+            android:textAlignment="center"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_report_popup_menu_report"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_report_popup_menu_title" />
+
+        <TextView
+            android:id="@+id/tv_report_popup_menu_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_novel_info_primary_100_radius_8dp"
+            android:gravity="center"
+            android:onClick="@{() -> onReportClick.invoke()}"
+            android:paddingHorizontal="48dp"
+            android:paddingVertical="12dp"
+            android:text="@string/report_popup_menu_report"
+            android:textAlignment="center"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_report_popup_menu_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_report_popup_menu_cancel"
+            app:layout_constraintTop_toTopOf="@+id/tv_report_popup_menu_cancel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

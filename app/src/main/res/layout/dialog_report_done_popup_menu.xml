@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="onCheckClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_detail_white_radius_12dp">
+
+        <ImageView
+            android:id="@+id/iv_report_popup_menu_done"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="100dp"
+            android:layout_marginStart="124dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="124dp"
+            android:src="@drawable/ic_report_check"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_report_popup_menu_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/report_popup_menu_title"
+            android:textAlignment="center"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/iv_report_popup_menu_done"
+            app:layout_constraintStart_toStartOf="@+id/iv_report_popup_menu_done"
+            app:layout_constraintTop_toBottomOf="@id/iv_report_popup_menu_done" />
+
+        <TextView
+            android:id="@+id/tv_report_popup_menu_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/report_popup_menu_description"
+            android:textAlignment="center"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintEnd_toEndOf="@+id/tv_report_popup_menu_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_report_popup_menu_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_report_popup_menu_title" />
+
+        <TextView
+            android:id="@+id/tv_report_popup_menu_check"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_novel_info_primary_100_radius_8dp"
+            android:gravity="center"
+            android:onClick="@{()-> onCheckClick.invoke()}"
+            android:paddingHorizontal="48dp"
+            android:paddingVertical="12dp"
+            android:text="@string/report_popup_menu_check"
+            android:textAlignment="center"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_report_popup_menu_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

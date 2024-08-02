@@ -2,10 +2,10 @@ package com.teamwss.websoso.ui.common.customView
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.chip.Chip
+import com.teamwss.websoso.util.toFloatScaledByPx
 
 class WebsosoChip(
     context: Context,
@@ -69,7 +69,7 @@ class WebsosoChip(
     color - The resource id of this chip's stroke color.
      */
     fun setWebsosoChipStrokeColor(color: Int) {
-        chipStrokeWidth = 1f
+        chipStrokeWidth = 1f.toFloatScaledByPx()
         chipStrokeColor = context.getColorStateList(color)
     }
 
@@ -107,6 +107,15 @@ class WebsosoChip(
     }
 
     /*
+   Sets this chip's selected.
+   Params:
+   isSelected - The state of this chip's selected.
+    */
+    fun setWebsosoChipSelected(isSelected: Boolean) {
+        this.isSelected = isSelected
+    }
+
+    /*
     Sets this chip's Click Listener. Its behavior depends on whether 'isSingleSelectionMode' of
     WebsosoChipGroup is true or false. If 'app:singleSelection' is true, it enables single selection mode.
     Single Selection Mode - Can only select a chip at a time. If the currently selected chip is clicked,
@@ -118,11 +127,11 @@ class WebsosoChip(
     fun setOnWebsosoChipClick(event: () -> Unit) {
         setOnClickListener {
             if ((parent as WebsosoChipGroup).isSingleSelectionMode) {
-                eventOnSingleSelectionMode(it, event)
+                eventOnSingleSelectionMode(event)
                 return@setOnClickListener
             }
 
-            it.isSelected = !it.isSelected
+            setWebsosoChipSelected(!isSelected)
             event()
         }
     }
@@ -163,26 +172,21 @@ class WebsosoChip(
         closeIconEndPadding = padding
     }
 
-    private fun eventOnSingleSelectionMode(
-        currentChip: View,
-        event: () -> Unit,
-    ) {
-        val websosoChipGroup: WebsosoChipGroup = parent as? WebsosoChipGroup ?: return
-
-        with(websosoChipGroup) {
+    private fun eventOnSingleSelectionMode(event: () -> Unit) {
+        (parent as WebsosoChipGroup).let { websosoChipGroup ->
             when {
-                previousChip == null -> {
-                    currentChip.isSelected = true
-                    updateSelectedChip(currentChip)
+                websosoChipGroup.previousChip == null -> {
+                    setWebsosoChipSelected(true)
+                    websosoChipGroup.updateSelectedChip(this)
                 }
 
-                previousChip != currentChip -> {
-                    currentChip.isSelected = true
-                    removePreviousChipSelected()
-                    updateSelectedChip(currentChip)
+                websosoChipGroup.previousChip != this -> {
+                    setWebsosoChipSelected(true)
+                    websosoChipGroup.removePreviousChipSelected()
+                    websosoChipGroup.updateSelectedChip(this)
                 }
 
-                previousChip == currentChip -> return
+                websosoChipGroup.previousChip == this -> return
             }
         }
 
