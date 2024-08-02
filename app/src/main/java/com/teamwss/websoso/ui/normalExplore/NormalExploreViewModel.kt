@@ -24,9 +24,6 @@ class NormalExploreViewModel @Inject constructor(
     private val _isSearchCancelButtonVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSearchCancelButtonVisibility: LiveData<Boolean> get() = _isSearchCancelButtonVisibility
 
-    private val _isNovelResultCountBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isNovelResultCountBoxVisibility: LiveData<Boolean> get() = _isNovelResultCountBoxVisibility
-
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
@@ -41,7 +38,6 @@ class NormalExploreViewModel @Inject constructor(
                             loading = false,
                             novels = results.novels,
                         )
-                        _isNovelResultCountBoxVisibility.value = true
                     }
 
                     false -> {
