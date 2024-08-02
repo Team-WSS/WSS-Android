@@ -21,7 +21,7 @@ class NormalExploreCountAdapter : RecyclerView.Adapter<NormalExploreCountViewHol
         return NormalExploreCountViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = 1
+    override fun getItemCount(): Int = ITEM_NOVEL_COUNT_AREA
 
     override fun onBindViewHolder(holder: NormalExploreCountViewHolder, position: Int) {
         holder.bind(item)
@@ -30,5 +30,9 @@ class NormalExploreCountAdapter : RecyclerView.Adapter<NormalExploreCountViewHol
     fun updateResultNovels(novelSize: Int) {
         item = novelSize
         notifyDataSetChanged()
+    }
+
+    companion object {
+        private const val ITEM_NOVEL_COUNT_AREA = 1
     }
 }

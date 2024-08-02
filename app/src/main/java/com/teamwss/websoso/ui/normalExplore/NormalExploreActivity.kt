@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreCountAdapter
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,6 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class NormalExploreActivity :
     BindingActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
+    private val normalExploreCountAdapter: NormalExploreCountAdapter by lazy { NormalExploreCountAdapter() }
+    private val combinedScrollAreaAdapter: ConcatAdapter by lazy {
+        ConcatAdapter(
+            normalExploreCountAdapter,
+            normalExploreAdapter,
+        )
+    }
+
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +43,11 @@ class NormalExploreActivity :
     }
 
     private fun setupUI() {
-        binding.etNormalExploreSearchContent.requestFocus()
-        binding.onClick = onNormalExploreButtonClick()
-        binding.rvNormalExploreResult.adapter = normalExploreAdapter
+        binding.apply {
+            etNormalExploreSearchContent.requestFocus()
+            rvNormalExploreResult.adapter = combinedScrollAreaAdapter
+            onClick = onNormalExploreButtonClick()
+        }
         setupTranslucentOnStatusBar()
     }
 
@@ -85,7 +97,7 @@ class NormalExploreActivity :
 
     private fun updateResultView(uiState: NormalExploreUiState) {
         normalExploreAdapter.updateResultNovels(uiState.novels)
-        binding.tvNormalExploreNovelCount.text = uiState.novels.count().toString()
+        normalExploreCountAdapter.updateResultNovels(uiState.novels.count())
     }
 
     private fun setupSearchWordObserver() {
