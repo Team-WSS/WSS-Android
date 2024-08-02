@@ -33,7 +33,7 @@ class NormalExploreViewModel @Inject constructor(
     fun updateSearchResult() {
         viewModelScope.launch {
             runCatching {
-                novelRepository.normalExploreEmptyDummyData
+                novelRepository.normalExploreResultDummyData
             }.onSuccess { results ->
                 when (results.novels.isNotEmpty()) {
                     true -> {
