@@ -21,7 +21,7 @@
         tools:context=".MainActivity">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/cnl_normal_explore"
+            android:id="@+id/cdl_normal_explore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -134,7 +134,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cnl_normal_explore"
+            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore"
             tools:listitem="@layout/item_normal_explore" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -146,7 +146,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cnl_normal_explore">
+            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore">
 
             <ImageView
                 android:id="@+id/iv_normal_explore_not_exist_result"
