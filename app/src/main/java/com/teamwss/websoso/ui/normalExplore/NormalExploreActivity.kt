@@ -10,7 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
-import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreCountAdapter
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreHeaderAdapter
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,10 +18,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class NormalExploreActivity :
     BindingActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
-    private val normalExploreCountAdapter: NormalExploreCountAdapter by lazy { NormalExploreCountAdapter() }
+    private val normalExploreHeaderAdapter: NormalExploreHeaderAdapter by lazy { NormalExploreHeaderAdapter() }
     private val combinedScrollAreaAdapter: ConcatAdapter by lazy {
         ConcatAdapter(
-            normalExploreCountAdapter,
+            normalExploreHeaderAdapter,
             normalExploreAdapter,
         )
     }
@@ -100,7 +100,7 @@ class NormalExploreActivity :
 
     private fun updateResultView(uiState: NormalExploreUiState) {
         normalExploreAdapter.updateResultNovels(uiState.novels)
-        normalExploreCountAdapter.updateResultNovels(uiState.novels.count())
+        normalExploreHeaderAdapter.updateResultNovels(uiState.novels.count())
     }
 
     companion object {

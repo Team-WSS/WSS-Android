@@ -4,7 +4,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemNormalExploreResultCountBinding
 
-class NormalExploreCountViewHolder(private val binding: ItemNormalExploreResultCountBinding) :
+class NormalExploreHeaderViewHolder(private val binding: ItemNormalExploreResultCountBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(novelCount: Int) {

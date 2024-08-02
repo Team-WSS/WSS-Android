@@ -5,25 +5,25 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemNormalExploreResultCountBinding
 
-class NormalExploreCountAdapter : RecyclerView.Adapter<NormalExploreCountViewHolder>() {
+class NormalExploreHeaderAdapter : RecyclerView.Adapter<NormalExploreHeaderViewHolder>() {
     private var item: Int = 0
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): NormalExploreCountViewHolder {
+    ): NormalExploreHeaderViewHolder {
         val binding =
             ItemNormalExploreResultCountBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
             )
-        return NormalExploreCountViewHolder(binding)
+        return NormalExploreHeaderViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = ITEM_NOVEL_COUNT_AREA
+    override fun getItemCount(): Int = ITEM_COUNT
 
-    override fun onBindViewHolder(holder: NormalExploreCountViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NormalExploreHeaderViewHolder, position: Int) {
         holder.bind(item)
     }
 
@@ -33,6 +33,6 @@ class NormalExploreCountAdapter : RecyclerView.Adapter<NormalExploreCountViewHol
     }
 
     companion object {
-        private const val ITEM_NOVEL_COUNT_AREA = 1
+        private const val ITEM_COUNT = 1
     }
 }
