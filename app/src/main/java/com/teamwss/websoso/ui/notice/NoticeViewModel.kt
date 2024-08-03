@@ -20,10 +20,10 @@ class NoticeViewModel @Inject constructor(
     val notices: LiveData<List<Notice>> = _notices
 
     init {
-        fetchNotices()
+        updateNotices()
     }
 
-    private fun fetchNotices() {
+    private fun updateNotices() {
         viewModelScope.launch {
             try {
                 val entities = noticeRepository.fetchNotices().notices
