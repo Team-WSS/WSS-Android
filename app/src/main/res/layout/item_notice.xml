@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="notice"
+            type="com.teamwss.websoso.ui.notice.model.Notice" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
+            android:text="@{notice.noticeTitle}"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@id/iv_item_notice_icon"
@@ -39,6 +43,7 @@
             android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{notice.noticeContent}"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,12 +56,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
+            android:text="@{notice.createDate}"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@id/tv_item_notice_title"
             app:layout_constraintTop_toBottomOf="@id/tv_item_notice_content"
             tools:text="2024.07.17" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
