@@ -85,7 +85,7 @@ class NormalExploreActivity :
             when {
                 uiState.loading -> loading()
                 uiState.error -> throw IllegalStateException()
-                !uiState.loading -> updateResultView(uiState)
+                !uiState.loading -> updateNormalExploreResultView(uiState)
             }
         }
 
@@ -98,7 +98,7 @@ class NormalExploreActivity :
         // TODO 로딩 뷰
     }
 
-    private fun updateResultView(uiState: NormalExploreUiState) {
+    private fun updateNormalExploreResultView(uiState: NormalExploreUiState) {
         normalExploreAdapter.updateResultNovels(uiState.novels)
         normalExploreHeaderAdapter.updateResultNovels(uiState.novels.count())
     }
