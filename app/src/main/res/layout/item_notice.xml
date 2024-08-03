@@ -7,7 +7,7 @@
 
         <variable
             name="notice"
-            type="com.teamwss.websoso.ui.notice.model.Notice" />
+            type="com.teamwss.websoso.ui.notice.model.NoticeModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,16 +2,16 @@ package com.teamwss.websoso.ui.mapper
 
 
 import com.teamwss.websoso.data.model.NoticeEntity
-import com.teamwss.websoso.ui.notice.model.Notice
+import com.teamwss.websoso.ui.notice.model.NoticeModel
 
-fun NoticeEntity.toUiModel(): Notice {
-    return Notice(
+fun NoticeEntity.toUi(): NoticeModel{
+    return NoticeModel(
         createDate = this.createDate,
         noticeTitle = this.noticeTitle,
         noticeContent = this.noticeContent,
     )
 }
 
-fun List<NoticeEntity>.toUiModel(): List<Notice> {
-    return this.map { it.toUiModel() }
+fun List<NoticeEntity>.toUi(): List<NoticeModel> {
+    return this.map { it.toUi() }
 }

@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNoticeBinding
-import com.teamwss.websoso.ui.notice.model.Notice
+import com.teamwss.websoso.ui.notice.model.NoticeModel
 
-class NoticeAdapter : ListAdapter<Notice, NoticeViewHolder>(NoticeDiffCallback) {
+class NoticeAdapter : ListAdapter<NoticeModel, NoticeViewHolder>(NoticeModelDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
         val binding = ItemNoticeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,12 +19,12 @@ class NoticeAdapter : ListAdapter<Notice, NoticeViewHolder>(NoticeDiffCallback) 
     }
 
     companion object {
-        private val NoticeDiffCallback = object : DiffUtil.ItemCallback<Notice>() {
-            override fun areItemsTheSame(oldItem: Notice, newItem: Notice): Boolean {
+        private val NoticeModelDiffCallback = object : DiffUtil.ItemCallback<NoticeModel>() {
+            override fun areItemsTheSame(oldItem: NoticeModel, newItem: NoticeModel): Boolean {
                 return oldItem.noticeTitle == newItem.noticeTitle
             }
 
-            override fun areContentsTheSame(oldItem: Notice, newItem: Notice): Boolean {
+            override fun areContentsTheSame(oldItem: NoticeModel, newItem: NoticeModel): Boolean {
                 return oldItem == newItem
             }
         }
