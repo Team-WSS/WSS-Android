@@ -12,5 +12,4 @@ class NoticeRepository @Inject constructor(
     suspend fun fetchNotices(): NoticesEntity {
         return noticeApi.getNotices().toData()
     }
-
 }
