@@ -20,11 +20,13 @@ class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setupClickListeners()
         setupRecyclerView()
         setupObservers()
     }
 
-    private fun setupUi() {
+    private fun setupClickListeners() {
         binding.ivNoticeBack.setOnClickListener {
             navigateToMainActivity()
         }
