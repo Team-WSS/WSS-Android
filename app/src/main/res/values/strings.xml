@@ -127,6 +127,8 @@
     <string name="welcome_welcome_websoso">웹소소에 오신 것을 환영해요!</string>
     <string name="welcome_lets_falling_websoso">웹소소와 함께 웹소설에 빠져봐요</string>
     <string name="welcome_start">시작하기</string>
+
+    <!-- 홈 뷰 -->
     <string name="home_today_popular">오늘의인기작</string>
     <string name="home_rising_feed">지금 뜨는 수다글</string>
     <string name="home_interest_feed">관심글</string>
