@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.mapper
 
+import com.teamwss.websoso.data.model.NoticeEntity
 import com.teamwss.websoso.data.model.NoticesEntity
 import com.teamwss.websoso.data.remote.response.NoticesResponseDto
 
