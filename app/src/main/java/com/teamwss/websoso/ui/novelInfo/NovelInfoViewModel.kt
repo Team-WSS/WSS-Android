@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FakeNovelInfoRepository
+import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiState
@@ -15,18 +15,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NovelInfoViewModel @Inject constructor(
-    private val novelInfoRepository: FakeNovelInfoRepository,
+    private val novelRepository: NovelRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableLiveData<NovelInfoUiState> = MutableLiveData(NovelInfoUiState())
     val uiState: LiveData<NovelInfoUiState> get() = _uiState
 
     fun updateNovelInfo(novelId: Long) {
+        if (uiState.value?.loading == true) return
         viewModelScope.launch {
             runCatching {
-                novelInfoRepository.fetchNovelInfo(novelId)
+                _uiState.value = uiState.value?.copy(loading = true, error = false)
+                novelRepository.fetchNovelInfo(novelId)
             }.onSuccess { novelInfo ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     novelInfoModel = novelInfo.toUi(),
                     platforms = PlatformsModel.formatPlatforms(novelInfo.platforms),
                     keywords = novelInfo.keywords.map { it.toUi() },
@@ -41,8 +43,18 @@ class NovelInfoViewModel @Inject constructor(
         }
     }
 
+    fun updateGraphHeight(viewHeight: Int) {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                novelInfoModel = uiState.novelInfoModel.copy(
+                    unifiedReviewCount = uiState.novelInfoModel.unifiedReviewCount.formattedUnifiedReviewCount(viewHeight)
+                )
+            )
+        }
+    }
+
     fun updateExpandTextToggle() {
-        _uiState.value?.let { currentState ->
+        uiState.value?.let { currentState ->
             val expandTextUiModel = currentState.expandTextModel
             val updatedExpandTextUiModel = when (!expandTextUiModel.isExpandTextToggleSelected) {
                 true -> expandTextUiModel.copy(
@@ -63,7 +75,7 @@ class NovelInfoViewModel @Inject constructor(
         lineCount: Int,
         ellipsisCount: Int,
     ) {
-        _uiState.value?.let { currentState ->
+        uiState.value?.let { currentState ->
             val expandTextUiModel = currentState.expandTextModel
             val updatedExpandTextUiModel = expandTextUiModel.copy(
                 expandTextToggleVisibility = lineCount >= DEFAULT_BODY_MAX_LINES && ellipsisCount > 0,
