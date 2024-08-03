@@ -36,7 +36,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupClickListeners()
         setupWebsosoLoadingLayout()
         setupViewPager()
-        setupTabLayout()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
@@ -53,6 +52,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupViewPager() {
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
+        setupTabLayout()
     }
 
     private fun setupTabLayout() {
@@ -87,6 +87,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupWebsosoLoadingLayout() {
         binding.wllNovelDetail.setReloadButtonClickListener {
+            setupViewPager()
             novelDetailViewModel.updateNovelDetail(novelId)
             binding.wllNovelDetail.setErrorLayoutVisibility(false)
         }
