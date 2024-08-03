@@ -1,7 +1,6 @@
 package com.teamwss.websoso.ui.mapper
 
 
-import com.teamwss.websoso.data.model.NoticeEntity
 import com.teamwss.websoso.ui.notice.model.Notice
 
 fun NoticeEntity.toUiModel(): Notice {
