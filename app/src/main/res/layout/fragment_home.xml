@@ -141,6 +141,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_user_interest_feed"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -187,7 +188,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <TextView
                 android:id="@+id/tv_home_recommend_novel"
                 android:layout_width="wrap_content"
@@ -216,6 +216,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_user_recommend_novel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
