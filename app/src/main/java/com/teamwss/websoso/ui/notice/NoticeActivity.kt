@@ -2,7 +2,6 @@ package com.teamwss.websoso.ui.notice
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNoticeBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
@@ -42,8 +41,8 @@ class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_
     }
 
     private fun setupObservers() {
-        viewModel.notices.observe(this, Observer {
+        viewModel.notices.observe(this) {
             adapter.submitList(it)
-        })
+        }
     }
 }
