@@ -11,12 +11,15 @@ import javax.inject.Inject
 class MyLibraryViewModel @Inject constructor() : ViewModel() {
     private val _genres = MutableLiveData(
         listOf(
-            GenrePreferenceEntity("https://imgur.com/bdP0jm0", "로판", 10),
-            GenrePreferenceEntity("https://imgur.com/bdP0jm0", "로맨스", 8),
-            GenrePreferenceEntity("https://imgur.com/bdP0jm0", "무협", 6),
-            GenrePreferenceEntity("https://imgur.com/bdP0jm0", "판타지", 4),
-            GenrePreferenceEntity("https://imgur.com/bdP0jm0", "코믹", 2),
-            GenrePreferenceEntity("https://imgur.com/bdP0jm0", "무협", 1)
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "로판", 10),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "로맨스", 8),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "무협", 6),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "판타지", 4),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "코믹", 2),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "무협", 1),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "로판", 10),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "로판", 10),
+            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "로판", 10)
         )
     )
     val genres: LiveData<List<GenrePreferenceEntity>> = _genres
