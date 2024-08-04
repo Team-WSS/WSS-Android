@@ -385,7 +385,7 @@
                 <ListView
                     android:id="@+id/lv_my_library_rest_genre"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:divider="@null"
                     android:layout_marginTop="32dp"
                     android:layout_marginHorizontal="40dp"

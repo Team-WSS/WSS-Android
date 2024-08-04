@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.ui.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import com.teamwss.websoso.util.setListViewHeightBasedOnChildren
 import dagger.hilt.android.AndroidEntryPoint
 
