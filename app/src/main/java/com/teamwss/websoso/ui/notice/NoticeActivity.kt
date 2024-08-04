@@ -11,9 +11,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_notice) {
 
-    private val viewModel: NoticeViewModel by viewModels()
+    private val noticeViewModel: NoticeViewModel by viewModels()
 
-    private val adapter: NoticeAdapter by lazy {
+    private val noticeAdapter: NoticeAdapter by lazy {
         NoticeAdapter()
     }
 
@@ -37,12 +37,12 @@ class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_
     }
 
     private fun setupRecyclerView() {
-        binding.rvNotice.adapter = adapter
+        binding.rvNotice.adapter = noticeAdapter
     }
 
     private fun setupObservers() {
-        viewModel.notices.observe(this) {
-            adapter.submitList(it)
+        noticeViewModel.notices.observe(this) {
+            noticeAdapter.submitList(it)
         }
     }
 }
