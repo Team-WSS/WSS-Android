@@ -9,6 +9,7 @@ import com.teamwss.websoso.ui.notice.model.NoticeModel
 class NoticeViewHolder(private val binding: ItemNoticeBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(noticeModel: NoticeModel) {
+
         binding.notice = noticeModel
 
         // 1차 릴리즈에는 공지사항만 존재 하기 때문에 고정 이미지를 사용합니다.
