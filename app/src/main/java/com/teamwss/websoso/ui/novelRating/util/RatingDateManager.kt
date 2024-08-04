@@ -119,7 +119,7 @@ class RatingDateManager {
 
     private fun checkIsTodayAfterToday(
         ratingDateModel: RatingDateModel,
-        isEditingStartDate: Boolean
+        isEditingStartDate: Boolean,
     ): RatingDateModel {
         return when (isEditingStartDate) {
             true -> ratingDateModel.copy(
@@ -187,7 +187,7 @@ class RatingDateManager {
     }
 
     private fun Triple<Int, Int, Int>?.toLocalDate(): LocalDate {
-        return LocalDate.of(this!!.first, this.second, this.third)
+        return LocalDate.of(this?.first ?: 1, this?.second ?: 1, this?.third ?: 1)
     }
 
     private fun validateIsStartAfterEnd(

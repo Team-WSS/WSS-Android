@@ -7,11 +7,21 @@
 
         <variable
             name="showPopupWindow"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="updateUserInterest"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="navigateToNovelRating"
             type="kotlin.jvm.functions.Function1" />
 
         <variable
             name="novelDetailViewModel"
             type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
+
+        <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,6 +101,7 @@
                             android:id="@+id/iv_novel_detail_cover_genre"
                             android:layout_width="72dp"
                             android:layout_height="72dp"
+                            app:isVectorImage="@{true}"
                             android:scaleType="fitXY"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
                             app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
@@ -115,7 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@{novelDetailViewModel.novelDetail.novel.formattedNovelGenres}"
+                            android:text="@{novelDetailViewModel.novelDetail.novel.formattedNovelDetailSummary}"
                             android:textAppearance="@style/body2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -201,6 +212,8 @@
                             android:layout_marginTop="12dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
+                            android:onClick="@{() -> navigateToNovelRating}"
+                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
                             app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
                             app:layout_constraintStart_toStartOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
@@ -240,6 +253,8 @@
                             android:layout_marginEnd="28dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
+                            android:onClick="@{() -> navigateToNovelRating}"
+                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
                             app:layout_constraintEnd_toEndOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintStart_toEndOf="@id/ll_novel_detail_user_rating"
                             app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
@@ -252,12 +267,13 @@
                                 android:src="@drawable/ic_novel_detail_user_date" />
 
                             <TextView
+                                android:id="@+id/tv_novel_detail_user_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="6dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
-                                android:text="24. 01. 03 ~ 25. 03. 08"
+                                android:text="@{novelDetailViewModel.novelDetail.userNovel.formattedUserNovelDate}"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/body5"
                                 android:textColor="@color/gray_300_52515F"
@@ -278,7 +294,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:divider="@color/gray_70_DFDFE3"
-                            android:enabled="false"
                             android:gravity="center"
                             android:paddingBottom="12dp"
                             android:showDividers="middle"
@@ -289,12 +304,14 @@
                             app:singleSelection="true">
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_novel_rating_watching"
+                                android:id="@+id/btn_novel_detail_watching"
                                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                                 android:layout_width="100dp"
                                 android:layout_height="match_parent"
                                 android:backgroundTint="@color/transparent"
-                                android:checked="true"
+                                android:checked="@{novelDetailViewModel.novelDetail.userNovel.readStatus == ReadStatus.WATCHING}"
+                                android:clickable="false"
+                                android:onClick="@{() -> navigateToNovelRating.invoke(ReadStatus.WATCHING)}"
                                 android:text="@string/novel_rating_read_status_watching"
                                 android:textAppearance="@style/body4"
                                 android:textColor="@color/bg_novel_detail_read_status_selector"
@@ -304,12 +321,14 @@
                                 app:iconTint="@color/bg_novel_detail_read_status_selector" />
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_novel_rating_watched"
+                                android:id="@+id/btn_novel_detail_watched"
                                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                                 android:layout_width="100dp"
                                 android:layout_height="match_parent"
                                 android:backgroundTint="@color/transparent"
-                                android:checked="false"
+                                android:checked="@{novelDetailViewModel.novelDetail.userNovel.readStatus == ReadStatus.WATCHED}"
+                                android:clickable="false"
+                                android:onClick="@{() -> navigateToNovelRating.invoke(ReadStatus.WATCHED)}"
                                 android:text="@string/novel_rating_read_status_watched"
                                 android:textAppearance="@style/body4"
                                 android:textColor="@color/bg_novel_detail_read_status_selector"
@@ -319,12 +338,14 @@
                                 app:iconTint="@color/bg_novel_detail_read_status_selector" />
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_novel_rating_quit"
+                                android:id="@+id/btn_novel_detail_quit"
                                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                                 android:layout_width="100dp"
                                 android:layout_height="match_parent"
                                 android:backgroundTint="@color/transparent"
-                                android:checked="false"
+                                android:checked="@{novelDetailViewModel.novelDetail.userNovel.readStatus == ReadStatus.QUIT}"
+                                android:clickable="false"
+                                android:onClick="@{() -> navigateToNovelRating.invoke(ReadStatus.QUIT)}"
                                 android:text="@string/novel_rating_read_status_quit"
                                 android:textAppearance="@style/body4"
                                 android:textColor="@color/bg_novel_detail_read_status_selector"
@@ -347,13 +368,14 @@
                             app:layout_constraintTop_toBottomOf="@id/view_novel_detail_user_novel">
 
                             <LinearLayout
-                                android:id="@+id/view_novel_detail_interest"
+                                android:id="@+id/ll_novel_detail_interest"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="4dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_interest_selector"
-                                android:gravity="center">
+                                android:gravity="center"
+                                android:onClick="@{() -> novelDetailViewModel.updateUserInterest(novelDetailViewModel.novelDetail.novel.novelId)}">
 
                                 <ImageView
                                     android:layout_width="16dp"
@@ -371,7 +393,7 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/view_novel_detail_review"
+                                android:id="@+id/ll_novel_detail_review"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="4dp"
@@ -428,7 +450,7 @@
                                 android:layout_width="38dp"
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="12dp"
-                                android:onClick="@{() -> showPopupWindow.invoke(novelDetailViewModel.novelDetail.userNovel.userNovelId)}"
+                                android:onClick="@{() -> showPopupWindow.invoke()}"
                                 android:padding="10dp"
                                 android:src="@drawable/ic_novel_detail_menu"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -484,7 +506,7 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
-            android:id="@+id/wl_novel_detail"
+            android:id="@+id/wll_novel_detail"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
