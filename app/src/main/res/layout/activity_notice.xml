@@ -48,5 +48,12 @@
             app:layout_constraintTop_toBottomOf="@id/iv_notice_back"
             tools:listitem="@layout/item_notice" />
 
+        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+            android:id="@+id/wll_notice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

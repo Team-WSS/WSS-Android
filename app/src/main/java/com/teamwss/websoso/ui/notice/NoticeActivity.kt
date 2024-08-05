@@ -22,7 +22,7 @@ class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_
 
         setupClickListeners()
         setupRecyclerView()
-        setupObservers()
+        observeUiState()
     }
 
     private fun setupClickListeners() {
@@ -40,9 +40,16 @@ class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_
         binding.rvNotice.adapter = noticeAdapter
     }
 
-    private fun setupObservers() {
-        noticeViewModel.notices.observe(this) {
-            noticeAdapter.submitList(it)
+    private fun observeUiState() {
+        noticeViewModel.noticeUiState.observe(this) { noticeUiState ->
+            when {
+                noticeUiState.loading -> binding.wllNotice.setLoadingLayoutVisibility(true)
+                noticeUiState.error -> binding.wllNotice.setLoadingLayoutVisibility(false)
+                !noticeUiState.loading -> {
+                    binding.wllNotice.setWebsosoLoadingVisibility(false)
+                    noticeAdapter.submitList(noticeUiState.notices)
+                }
+            }
         }
     }
 }
