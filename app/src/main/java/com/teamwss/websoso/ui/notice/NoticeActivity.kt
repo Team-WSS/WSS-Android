@@ -21,8 +21,8 @@ class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_
         super.onCreate(savedInstanceState)
 
         setupClickListeners()
-        setupRecyclerView()
-        observeUiState()
+        setupAdapter()
+        setupObserver()
     }
 
     private fun setupClickListeners() {
@@ -36,11 +36,11 @@ class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_
         startActivity(intent)
     }
 
-    private fun setupRecyclerView() {
+    private fun setupAdapter() {
         binding.rvNotice.adapter = noticeAdapter
     }
 
-    private fun observeUiState() {
+    private fun setupObserver() {
         noticeViewModel.noticeUiState.observe(this) { noticeUiState ->
             when {
                 noticeUiState.loading -> binding.wllNotice.setLoadingLayoutVisibility(true)
