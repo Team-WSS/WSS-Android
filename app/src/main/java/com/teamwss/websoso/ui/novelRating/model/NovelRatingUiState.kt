@@ -6,5 +6,7 @@ data class NovelRatingUiState(
     val maxDayValue: Int = 0,
     val isEditingStartDate: Boolean = true,
     val loading: Boolean = true,
-    val error: Boolean = false,
+    val isFetchError: Boolean = false,
+    val isSaveSuccess: Boolean = false,
+    val isSaveError: Boolean = false,
 )

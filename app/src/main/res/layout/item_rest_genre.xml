@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="genrePreference"
+            type="com.teamwss.websoso.data.model.GenrePreferenceEntity"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp">
+
+        <ImageView
+            android:id="@+id/iv_rest_genre_logo"
+            android:layout_width="24dp"
+            android:layout_height="28dp"
+            app:loadImageUrl="@{genrePreference.genreIcon}"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_novel_detail_genre_test"/>
+
+        <TextView
+            android:id="@+id/tv_rest_genre_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:text="@{genrePreference.genreName}"
+            android:textAppearance="@style/body3"
+            app:layout_constraintBottom_toBottomOf="@id/iv_rest_genre_logo"
+            app:layout_constraintStart_toEndOf="@id/iv_rest_genre_logo"
+            app:layout_constraintTop_toTopOf="@id/iv_rest_genre_logo"
+            tools:text="로판"/>
+
+        <TextView
+            android:id="@+id/tv_rest_genre_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{@string/my_library_genre_count(genrePreference.genreCount)}'
+            android:textAppearance="@style/body3"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12편"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

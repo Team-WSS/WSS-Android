@@ -7,12 +7,12 @@ import kotlinx.serialization.Serializable
 data class NovelDetailResponseDto(
     @SerialName("userNovelId")
     val userNovelId: Long?,
-    @SerialName("novelId")
+    @SerialName("novelTitle")
     val novelTitle: String,
     @SerialName("novelImage")
     val novelImage: String,
     @SerialName("novelGenres")
-    val novelGenres: List<String>,
+    val novelGenres: String,
     @SerialName("novelGenreImage")
     val novelGenreImage: String,
     @SerialName("isNovelCompleted")
