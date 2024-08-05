@@ -47,16 +47,6 @@
                 app:layout_constraintStart_toStartOf="@id/iv_home_logo"
                 app:layout_constraintTop_toBottomOf="@id/iv_home_logo" />
 
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="6dp"
-                android:src="@drawable/ic_home_info_circle"
-                app:layout_constraintBottom_toBottomOf="@id/tv_home_today_popular_novel"
-                app:layout_constraintDimensionRatio="1"
-                app:layout_constraintStart_toEndOf="@id/tv_home_today_popular_novel"
-                app:layout_constraintTop_toTopOf="@id/tv_home_today_popular_novel" />
-
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_home_today_popular_novel"
                 android:layout_width="0dp"
