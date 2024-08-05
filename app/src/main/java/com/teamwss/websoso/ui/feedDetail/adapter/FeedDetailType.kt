@@ -3,15 +3,15 @@ package com.teamwss.websoso.ui.feedDetail.adapter
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailModel.CommentModel
 
-sealed class FeedDetailItemType {
+sealed interface FeedDetailType {
 
     data class Header(
         val feed: FeedDetailModel,
-    ) : FeedDetailItemType()
+    ) : FeedDetailType
 
     data class Comment(
         val comment: CommentModel,
-    ) : FeedDetailItemType()
+    ) : FeedDetailType
 
     enum class ItemType {
         HEADER, COMMENT;

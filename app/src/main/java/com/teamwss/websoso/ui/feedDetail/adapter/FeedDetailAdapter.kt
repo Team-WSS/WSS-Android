@@ -4,11 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailItemType.Comment
-import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailItemType.Header
-import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailItemType.ItemType
+import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
+import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
+import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.ItemType
 
-class FeedDetailAdapter : ListAdapter<FeedDetailItemType, ViewHolder>(diffCallBack) {
+class FeedDetailAdapter : ListAdapter<FeedDetailType, ViewHolder>(diffCallBack) {
 
     init {
         setHasStableIds(true)
@@ -38,10 +38,10 @@ class FeedDetailAdapter : ListAdapter<FeedDetailItemType, ViewHolder>(diffCallBa
     }
 
     companion object {
-        private val diffCallBack = object : DiffUtil.ItemCallback<FeedDetailItemType>() {
+        private val diffCallBack = object : DiffUtil.ItemCallback<FeedDetailType>() {
             override fun areItemsTheSame(
-                oldItem: FeedDetailItemType,
-                newItem: FeedDetailItemType,
+                oldItem: FeedDetailType,
+                newItem: FeedDetailType,
             ): Boolean =
                 when {
                     (oldItem is Header) and (newItem is Comment) -> false
@@ -52,8 +52,8 @@ class FeedDetailAdapter : ListAdapter<FeedDetailItemType, ViewHolder>(diffCallBa
                 }
 
             override fun areContentsTheSame(
-                oldItem: FeedDetailItemType,
-                newItem: FeedDetailItemType,
+                oldItem: FeedDetailType,
+                newItem: FeedDetailType,
             ): Boolean = oldItem == newItem
         }
     }
