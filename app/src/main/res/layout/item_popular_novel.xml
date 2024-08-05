@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="378dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_popular_novel_gradient_radius_14dp">
+
+        <ImageView
+            android:id="@+id/iv_popular_novel_best"
+            android:layout_width="50dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:src="@drawable/ic_popular_novel_best"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_popular_novel_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_popular_novel_best"
+            tools:text="상수리 나무 아래" />
+
+        <ImageView
+            cornerRadius="@{84f}"
+            android:layout_width="128dp"
+            android:layout_height="188dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_popular_novel_title"
+            tools:src="@drawable/img_normal_explore_test_cover" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_popular_novel_in_short"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="238dp"
+            android:background="@drawable/bg_popular_novel_white_botttom_radius_14dp"
+            android:paddingHorizontal="18dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_popular_novel_in_short_icon"
+                android:layout_width="24dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/tv_popular_novel_in_short_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/gray_300_52515F"
+                app:layout_constraintBottom_toBottomOf="@id/iv_popular_novel_in_short_icon"
+                app:layout_constraintStart_toEndOf="@id/iv_popular_novel_in_short_icon"
+                app:layout_constraintTop_toTopOf="@id/iv_popular_novel_in_short_icon"
+                tools:text="밝보 님의 한마디" />
+
+            <ImageView
+                android:id="@+id/iv_popular_novel_in_short_commas_started"
+                android:layout_width="20dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_popular_novel_commas_started"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintStart_toStartOf="@id/iv_popular_novel_in_short_icon"
+                app:layout_constraintTop_toBottomOf="@id/iv_popular_novel_in_short_icon" />
+
+            <TextView
+                android:id="@+id/tv_popular_novel_in_short_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/gray_300_52515F"
+                app:layout_constraintEnd_toStartOf="@id/iv_popular_novel_in_short_commas_finished"
+                app:layout_constraintStart_toEndOf="@id/iv_popular_novel_in_short_commas_started"
+                app:layout_constraintTop_toTopOf="@id/iv_popular_novel_in_short_commas_started"
+                tools:text="상수리 나무 아래 웹소설 진짜 재밌어! 주인공 캐릭터가 너무 매력적이고, 성장 스토리도 흥미진진해서 시간 가는 줄 모르고 읽었어. 특히 로맨스랑 서스펜스가 적절히 섞여 있어서 몰입감 장난 아니야. 중간중간 감동적인 장면도 있어서 눈물 찔끔 흘렸어. 요즘 할 거 없으면 이거 한번 읽어봐, 후회 안 할 거야!" />
+
+            <ImageView
+                android:id="@+id/iv_popular_novel_in_short_commas_finished"
+                android:layout_width="20dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_popular_novel_commas_finished"
+                app:layout_constraintBottom_toBottomOf="@id/tv_popular_novel_in_short_description"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
