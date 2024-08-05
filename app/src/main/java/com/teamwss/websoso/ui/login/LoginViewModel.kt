@@ -15,7 +15,7 @@ class LoginViewModel : ViewModel() {
                 R.drawable.img_login_1,
                 R.drawable.img_login_2,
                 R.drawable.img_login_3,
-                R.drawable.img_login_4
+                R.drawable.img_login_4,
             )
     }
 }
