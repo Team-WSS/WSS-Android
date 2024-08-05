@@ -22,13 +22,14 @@
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_notice_back" />
 
         <ImageView
             android:id="@+id/iv_notice_back"
             android:layout_width="44dp"
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
+            android:layout_marginTop="24dp"
             android:src="@drawable/ic_notice_back"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,12 +40,20 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_notice_back"
             tools:listitem="@layout/item_notice" />
+
+        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+            android:id="@+id/wll_notice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

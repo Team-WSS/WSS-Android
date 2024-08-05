@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.di
 
+import com.teamwss.websoso.data.remote.api.NoticeApi
 import com.teamwss.websoso.data.remote.api.NovelApi
 import com.teamwss.websoso.data.remote.api.UserNovelApi
 import dagger.Module
@@ -21,4 +22,8 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideUserNovelApi(retrofit: Retrofit): UserNovelApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideNoticeApi(retrofit: Retrofit): NoticeApi = retrofit.create()
 }
