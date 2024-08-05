@@ -92,6 +92,12 @@
     <string name="feed_is_modified">(수정됨)</string>
     <string name="feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
 
+    <!-- 피드 상세 뷰 -->
+    <string name="feed_detail_title">수다글</string>
+    <string name="feed_detail_comment_title">댓글</string>
+    <string name="feed_detail_comment_dot">·</string>
+    <string name="feed_detail_input">댓글을 남겨보세요</string>
+
     <!-- 피드 팝업 매뉴 다이얼로그 뷰 -->
     <string name="report_popup_menu_cancel">취소</string>
     <string name="report_popup_menu_report">신고</string>
