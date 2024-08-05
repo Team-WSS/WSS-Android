@@ -6,11 +6,16 @@ import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.R
 
 class LoginViewModel : ViewModel() {
-    private val _images = MutableLiveData<List<Int>>()
-    val images: LiveData<List<Int>> = _images
+    private val _loginImages = MutableLiveData<List<Int>>()
+    val loginImages: LiveData<List<Int>> = _loginImages
 
     init {
-        _images.value =
-            listOf(R.drawable.img_login_1, R.drawable.img_login_2, R.drawable.img_login_3)
+        _loginImages.value =
+            listOf(
+                R.drawable.img_login_1,
+                R.drawable.img_login_2,
+                R.drawable.img_login_3,
+                R.drawable.img_login_4
+            )
     }
 }

@@ -47,12 +47,12 @@
             android:layout_marginTop="42dp"
             android:layout_marginBottom="26dp"
             android:src="@drawable/ic_login_kakao"
-            app:layout_constraintBottom_toTopOf="@id/tv_login_without_login_look_around"
+            app:layout_constraintBottom_toTopOf="@id/tv_login_without_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/tv_login_without_login_look_around"
+            android:id="@+id/tv_login_without_login"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginHorizontal="20dp"
