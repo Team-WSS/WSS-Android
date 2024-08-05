@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.myPage
+package com.teamwss.websoso.ui.myPage.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
