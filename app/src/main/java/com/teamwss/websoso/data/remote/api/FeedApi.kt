@@ -1,6 +1,8 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
+import com.teamwss.websoso.data.remote.response.CommentsResponseDto
+import com.teamwss.websoso.data.remote.response.FeedResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -16,6 +18,16 @@ interface FeedApi {
         @Query("category") category: String?,
         @Body feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto
+
+    @GET("feeds/{feedId}")
+    suspend fun getFeed(
+        @Path("feedId") feedId: Long,
+    ): FeedResponseDto
+
+    @GET("feeds/{feedId}/comments")
+    suspend fun getComments(
+        @Path("feedId") feedId: Long,
+    ): CommentsResponseDto
 
     @DELETE("feeds/{feedId}")
     suspend fun deleteFeed(
