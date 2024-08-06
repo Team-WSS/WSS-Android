@@ -3,31 +3,36 @@ package com.teamwss.websoso.ui.normalExplore.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.data.model.NormalExploreEntity.NovelEntity
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter.ItemType.HEADER
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter.ItemType.RESULT
 
 class NormalExploreAdapter(
-    private val novelItemClickListener: (novelId: Long) -> Unit,
+    private val novelItemClickListener: (novelId: Long) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: List<NovelEntity> = emptyList()
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0) TYPE_HEADER else TYPE_RESULT
+        return when (position) {
+            HEADER_POSITION -> HEADER.ordinal
+            else -> RESULT.ordinal
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (ItemType.valueOf(viewType)) {
-            ItemType.HEADER -> NormalExploreHeaderViewHolder.from(parent)
-            ItemType.RESULT -> NormalExploreViewHolder.of(parent, novelItemClickListener)
+            HEADER -> NormalExploreHeaderViewHolder.from(parent)
+            RESULT -> NormalExploreViewHolder.of(parent, novelItemClickListener)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is NormalExploreHeaderViewHolder -> holder.bind(items.count())
-            is NormalExploreViewHolder -> holder.onBind(items[position - 1])
+            is NormalExploreHeaderViewHolder -> holder.bind(items.size)
+            is NormalExploreViewHolder -> holder.onBind(items[position - HEADER_OFFSET])
         }
     }
 
-    override fun getItemCount(): Int = items.size + 1
+    override fun getItemCount(): Int = items.size + HEADER_ITEM_COUNT
 
     fun updateItems(newItems: List<NovelEntity>) {
         items = newItems
@@ -38,14 +43,15 @@ class NormalExploreAdapter(
         HEADER, RESULT;
 
         companion object {
-
             fun valueOf(ordinal: Int): ItemType =
-                entries.find { it.ordinal == ordinal } ?: throw IllegalArgumentException()
+                entries.find { it.ordinal == ordinal }
+                    ?: throw IllegalArgumentException()
         }
     }
 
     companion object {
-        private const val TYPE_HEADER = 0
-        private const val TYPE_RESULT = 1
+        private const val HEADER_POSITION = 0
+        private const val HEADER_ITEM_COUNT = 1
+        private const val HEADER_OFFSET = 1
     }
 }
