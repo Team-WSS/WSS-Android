@@ -3,22 +3,19 @@ package com.teamwss.websoso.data.repository
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
-import com.teamwss.websoso.data.remote.api.FakeApi
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import javax.inject.Inject
 
-class FeedRepository @Inject constructor() {
-
-    @Inject
-    lateinit var feedApi: FeedApi
-
+class FeedRepository @Inject constructor(
+    private val feedApi: FeedApi,
+) {
     private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
     val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
 
     suspend fun fetchFeeds(category: String, lastFeedId: Long, size: Int): FeedsEntity {
         val requestBody = FeedsRequestDto(lastFeedId = lastFeedId, size = size)
-        val result = FakeApi.getFeeds(
+        val result = feedApi.getFeeds(
             category = if (category == "all") null else category,
             feedsRequestDto = requestBody,
         )

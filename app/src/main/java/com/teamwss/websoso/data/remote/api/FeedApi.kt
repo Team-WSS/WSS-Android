@@ -11,14 +11,9 @@ import retrofit2.http.Query
 
 interface FeedApi {
 
-    @GET("feeds")
-    suspend fun getFeeds(
-        @Body feedsRequestDto: FeedsRequestDto,
-    ): FeedsResponseDto
-
     @GET("feeds?")
-    suspend fun getFeedsByCategory(
-        @Query("category") category: String,
+    suspend fun getFeeds(
+        @Query("category") category: String?,
         @Body feedsRequestDto: FeedsRequestDto,
     ): FeedsResponseDto
 
