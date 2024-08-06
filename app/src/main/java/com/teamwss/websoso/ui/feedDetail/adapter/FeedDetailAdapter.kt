@@ -42,14 +42,12 @@ class FeedDetailAdapter : ListAdapter<FeedDetailType, ViewHolder>(diffCallBack) 
             override fun areItemsTheSame(
                 oldItem: FeedDetailType,
                 newItem: FeedDetailType,
-            ): Boolean =
-                when {
-                    (oldItem is Header) and (newItem is Comment) -> false
-                    (oldItem is Comment) and (newItem is Comment) ->
-                        (oldItem as Comment).comment.commentId == (newItem as Comment).comment.commentId
+            ): Boolean = when {
+                (oldItem is Comment) and (newItem is Comment) ->
+                    (oldItem as Comment).comment.commentId == (newItem as Comment).comment.commentId
 
-                    else -> oldItem == newItem
-                }
+                else -> oldItem == newItem
+            }
 
             override fun areContentsTheSame(
                 oldItem: FeedDetailType,
