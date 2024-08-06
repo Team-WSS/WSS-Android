@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.databinding.ItemNormalExploreResultCountBinding
+import com.teamwss.websoso.databinding.ItemNormalExploreHeaderBinding
 
-class NormalExploreHeaderViewHolder(private val binding: ItemNormalExploreResultCountBinding) :
+class NormalExploreHeaderViewHolder(private val binding: ItemNormalExploreHeaderBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(novelCount: Int) {
@@ -21,7 +21,7 @@ class NormalExploreHeaderViewHolder(private val binding: ItemNormalExploreResult
 
         fun from(parent: ViewGroup): NormalExploreHeaderViewHolder =
             NormalExploreHeaderViewHolder(
-                ItemNormalExploreResultCountBinding.inflate(
+                ItemNormalExploreHeaderBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false,
