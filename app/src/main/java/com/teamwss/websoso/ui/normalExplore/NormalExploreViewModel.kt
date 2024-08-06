@@ -29,6 +29,9 @@ class NormalExploreViewModel @Inject constructor(
 
     fun updateSearchResult() {
         viewModelScope.launch {
+            _uiState.value = uiState.value?.copy(
+                loading = true,
+            )
             runCatching {
                 novelRepository.normalExploreResultDummyData
             }.onSuccess { results ->

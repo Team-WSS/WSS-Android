@@ -72,19 +72,27 @@ class NormalExploreActivity :
     private fun setupObserver() {
         normalExploreViewModel.uiState.observe(this) { uiState ->
             when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> normalExploreAdapter.updateItems(uiState.novels)
+                uiState.loading -> {
+                    binding.wlNormalExplore.setWebsosoLoadingVisibility(true)
+                    binding.wlNormalExplore.setErrorLayoutVisibility(false)
+                }
+
+                uiState.error -> {
+                    binding.wlNormalExplore.setWebsosoLoadingVisibility(false)
+                    binding.wlNormalExplore.setErrorLayoutVisibility(true)
+                }
+
+                else -> {
+                    binding.wlNormalExplore.setWebsosoLoadingVisibility(false)
+                    binding.wlNormalExplore.setErrorLayoutVisibility(false)
+                    normalExploreAdapter.updateItems(uiState.novels)
+                }
             }
         }
 
         normalExploreViewModel.searchWord.observe(this) {
             normalExploreViewModel.validateSearchWordClearButton()
         }
-    }
-
-    private fun loading() {
-        // TODO 로딩 뷰
     }
 
     companion object {
