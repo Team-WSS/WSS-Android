@@ -2,17 +2,29 @@ package com.teamwss.websoso.ui.detailExploreResult
 
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityDetailExploreResultBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailExploreResultActivity :
     BindingActivity<ActivityDetailExploreResultBinding>(R.layout.activity_detail_explore_result) {
+    private val detailExploreResultAdapter: DetailExploreResultAdapter by lazy {
+        DetailExploreResultAdapter(::navigateToNovelDetail)
+    }
+
+    private val detailExploreResultViewModel: DetailExploreResultViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        detailExploreResultViewModel.updateSearchResult()
         setupTranslucentOnStatusBar()
+        setupAdapter()
+        setupObserver()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -20,5 +32,25 @@ class DetailExploreResultActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+    }
+
+    private fun setupAdapter() {
+        binding.apply {
+            rvDetailExploreResult.adapter = detailExploreResultAdapter
+        }
+    }
+
+    private fun setupObserver() {
+        detailExploreResultViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.loading -> Unit //TODO 로딩뷰
+                uiState.error -> throw IllegalStateException()
+                !uiState.loading -> detailExploreResultAdapter.submitList(uiState.novels)
+            }
+        }
+    }
+
+    private fun navigateToNovelDetail(novelId: Long) {
+        // TODO 작품 상세로 이동
     }
 }

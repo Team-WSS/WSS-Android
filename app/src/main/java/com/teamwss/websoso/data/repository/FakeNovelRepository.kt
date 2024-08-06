@@ -25,4 +25,15 @@ class FakeNovelRepository @Inject constructor() {
         isLoadable = false,
         novels = emptyList()
     )
+
+    suspend fun fetchDetailExploreResult(
+        page: Int,
+        size: Int,
+        genres: List<String>?,
+        isCompleted: Boolean?,
+        novelRating: Float?,
+        keywordIds: List<Int>?,
+    ): ExploreResultEntity {
+        return normalExploreResultDummyData
+    }
 }

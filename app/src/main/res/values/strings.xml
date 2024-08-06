@@ -28,6 +28,7 @@
     <!-- 상세 탐색 뷰 -->
     <string name="detail_explore_info">정보</string>
     <string name="detail_explore_keyword">키워드</string>
+    <string name="detail_explore_novel_rating">%.1f (%d)</string>
     <string name="detail_explore_reset">초기화</string>
     <string name="detail_explore_search_novel">작품 찾기</string>
 

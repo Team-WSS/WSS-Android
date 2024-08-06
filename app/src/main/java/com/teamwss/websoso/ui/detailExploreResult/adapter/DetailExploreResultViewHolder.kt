@@ -11,7 +11,12 @@ class DetailExploreResultViewHolder(
     onNovelClick: (novelId: Long) -> (Unit),
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    init {
+        binding.onClick = onNovelClick
+    }
+
     fun bind(result: NovelEntity) {
+        binding.novel = result
     }
 
     companion object {
