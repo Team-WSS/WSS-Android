@@ -45,7 +45,7 @@ class FeedDetailActivity :
     }
 
     private fun updateView(feedDetailUiState: Success) {
-        val header = Header(feedDetailUiState.feedDetail)
+        val header = Header(feedDetailUiState.feedDetail.feed)
         val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
 
         feedDetailAdapter.submitList(listOf(header) + comments)
@@ -55,11 +55,7 @@ class FeedDetailActivity :
         private const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
 
-        fun from(
-            id: Long,
-            context: Context,
-        ): Intent = Intent(context, FeedDetailActivity::class.java).apply {
-            putExtra(FEED_ID, id)
-        }
+        fun from(id: Long, context: Context): Intent =
+            Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, id) }
     }
 }
