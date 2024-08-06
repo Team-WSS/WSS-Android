@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FakeNovelInfoRepository
+import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiState
@@ -15,16 +15,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NovelInfoViewModel @Inject constructor(
-    private val novelInfoRepository: FakeNovelInfoRepository,
+    private val novelRepository: NovelRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableLiveData<NovelInfoUiState> = MutableLiveData(NovelInfoUiState())
     val uiState: LiveData<NovelInfoUiState> get() = _uiState
 
     fun updateNovelInfo(novelId: Long) {
+        if (uiState.value?.loading == true) return
         viewModelScope.launch {
             runCatching {
-                novelInfoRepository.fetchNovelInfo(novelId)
+                _uiState.value = uiState.value?.copy(loading = true, error = false)
+                novelRepository.fetchNovelInfo(novelId)
             }.onSuccess { novelInfo ->
                 _uiState.value = uiState.value?.copy(
                     novelInfoModel = novelInfo.toUi(),

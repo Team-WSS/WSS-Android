@@ -11,7 +11,7 @@ import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 
 class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
-    private val viewModel: NovelRatingViewModel by activityViewModels()
+    private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onViewCreated(
         view: View,
@@ -22,22 +22,25 @@ class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRat
         bindViewModel()
         setupObserver()
         setupDialogBehavior()
-        initNullDate()
         setupValueChangeListener()
+        initNullDate()
     }
 
     private fun bindViewModel() {
-        binding.viewModel = viewModel
+        binding.viewModel = novelRatingViewModel
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        novelRatingViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             binding.npRatingDateDay.formatNumberPicker(
                 uiState.maxDayValue,
                 "%02d",
             )
             initNumberPickerRange(uiState?.maxDayValue ?: MAX_DAY_VALUE)
+            binding.npRatingDateYear.value = uiState.novelRatingModel.ratingDateModel.currentStartDate?.first ?: 1
+            binding.npRatingDateMonth.value = uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
+            binding.npRatingDateDay.value = uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
         }
     }
 
@@ -50,17 +53,17 @@ class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRat
             override fun onNavigateBackClick() {}
 
             override fun onSaveClick() {
-                viewModel.updatePreviousDate()
+                novelRatingViewModel.updatePreviousDate()
                 dismiss()
             }
 
             override fun onCancelClick() {
-                viewModel.cancelDateEdit()
+                novelRatingViewModel.cancelDateEdit()
                 dismiss()
             }
 
             override fun onClearClick() {
-                viewModel.clearCurrentDate()
+                novelRatingViewModel.clearCurrentDate()
                 dismiss()
             }
         }
@@ -71,7 +74,7 @@ class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRat
     }
 
     private fun initNullDate() {
-        viewModel.updateNotNullDate()
+        novelRatingViewModel.updateNotNullDate()
     }
 
     private fun initNumberPickerRange(maxDayValue: Int) {
@@ -97,7 +100,7 @@ class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRat
 
     private fun setupValueChangeListener() {
         val updateCurrentDate = {
-            viewModel.updateCurrentDate(
+            novelRatingViewModel.updateCurrentDate(
                 Triple(
                     binding.npRatingDateYear.value,
                     binding.npRatingDateMonth.value,
@@ -113,7 +116,7 @@ class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRat
     }
 
     override fun onDestroyView() {
-        viewModel.cancelDateEdit()
+        novelRatingViewModel.cancelDateEdit()
         super.onDestroyView()
     }
 

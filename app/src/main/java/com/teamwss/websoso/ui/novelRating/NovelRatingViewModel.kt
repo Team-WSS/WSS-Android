@@ -6,37 +6,40 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.model.NovelRatingKeywordCategoryEntity
-import com.teamwss.websoso.data.repository.FakeNovelRatingRepository
+import com.teamwss.websoso.data.repository.UserNovelRepository
+import com.teamwss.websoso.ui.mapper.toData
 import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.novelRating.util.RatingDateManager
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
+import com.teamwss.websoso.ui.novelRating.model.RatingDateModel.Companion.toFormattedDate
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
+import com.teamwss.websoso.ui.novelRating.util.RatingDateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NovelRatingViewModel @Inject constructor(
-    private val fakeNovelRatingRepository: FakeNovelRatingRepository,
+    private val userNovelRepository: UserNovelRepository,
 ) : ViewModel() {
     private val _uiState = MutableLiveData<NovelRatingUiState>(NovelRatingUiState())
     val uiState: LiveData<NovelRatingUiState> get() = _uiState
     private val ratingDateManager = RatingDateManager()
 
-    fun updateNovelRating(userNovelId: Long) {
+    fun updateNovelRating(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                fakeNovelRatingRepository.fetchNovelRating(userNovelId)
+                _uiState.value = uiState.value?.copy(loading = true)
+                userNovelRepository.fetchNovelRating(novelId)
             }.onSuccess { novelRatingEntity ->
                 handleSuccessfulFetchNovelRating(novelRatingEntity)
             }.onFailure {
                 _uiState.value =
                     uiState.value?.copy(
                         loading = false,
-                        error = true,
+                        isFetchError = true,
                     )
             }
         }
@@ -59,26 +62,28 @@ class NovelRatingViewModel @Inject constructor(
                 ),
                 isEditingStartDate = isEditingStartDate,
                 maxDayValue = dayMaxValue,
+                loading = false,
             )
-        updateKeywordCategories()
+//        updateKeywordCategories()
     }
 
-    // TODO: 검색 결과 없을시 이미지 추가
-    fun updateKeywordCategories(keyword: String = "") {
-        viewModelScope.launch {
-            runCatching {
-                fakeNovelRatingRepository.fetchNovelRatingKeywordCategories(keyword)
-            }.onSuccess { categories ->
-                handleSuccessfulFetchKeywordCategories(categories)
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
-                )
+    /*
+        // TODO: 명지 키워드 뷰 병합 이후 수정
+        fun updateKeywordCategories(keyword: String = "") {
+            viewModelScope.launch {
+                runCatching {
+                    fakeNovelRatingRepository.fetchNovelRatingKeywordCategories(keyword)
+                }.onSuccess { categories ->
+                    handleSuccessfulFetchKeywordCategories(categories)
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
             }
         }
-    }
-
+    */
     private fun handleSuccessfulFetchKeywordCategories(categories: List<NovelRatingKeywordCategoryEntity>) {
         val previousSelectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
         val updatedCategories = categories.map { it.toUi() }.map {
@@ -143,7 +148,7 @@ class NovelRatingViewModel @Inject constructor(
                 )
             val maxDayValue =
                 ratingDateManager.updateDayMaxValue(
-                    uiState.novelRatingModel.ratingDateModel,
+                    updatedModel,
                     uiState.isEditingStartDate,
                 )
             _uiState.value =
@@ -250,6 +255,30 @@ class NovelRatingViewModel @Inject constructor(
                     currentSelectedKeywords = uiState.novelRatingModel.userKeywords,
                 ),
             )
+        }
+    }
+
+    fun updateNovelRating(novelId: Long, isAlreadyRated: Boolean) {
+        viewModelScope.launch {
+            runCatching {
+                userNovelRepository.saveNovelRating(
+                    NovelRatingEntity(
+                        novelId = novelId,
+                        readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name
+                            ?: throw IllegalArgumentException("readStatus must not be null"),
+                        startDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousStartDate?.toFormattedDate(),
+                        endDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousEndDate?.toFormattedDate(),
+                        userNovelRating = uiState.value?.novelRatingModel?.userNovelRating ?: 0.0f,
+                        charmPoints = uiState.value?.novelRatingModel?.charmPoints?.map { it.value } ?: emptyList(),
+                        userKeywords = uiState.value?.novelRatingModel?.userKeywords?.map { it.toData() } ?: emptyList(),
+                    ),
+                    isAlreadyRated
+                )
+            }.onSuccess {
+                _uiState.value = uiState.value?.copy(isSaveSuccess = true)
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(isSaveError = true)
+            }
         }
     }
 }

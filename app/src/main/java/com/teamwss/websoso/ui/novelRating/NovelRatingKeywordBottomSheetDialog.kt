@@ -116,13 +116,13 @@ class NovelRatingKeywordBottomSheetDialog :
     }
 
     private fun performSearch(input: String?) {
-        viewModel.updateKeywordCategories(input.orEmpty())
+//        viewModel.updateKeywordCategories(input.orEmpty())
         binding.etRatingKeywordSearch.clearFocus()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.updateKeywordCategories()
+//        viewModel.updateKeywordCategories()
         binding.etRatingKeywordSearch.requestFocus()
     }
 
