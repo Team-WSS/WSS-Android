@@ -7,9 +7,9 @@ import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter.ItemTyp
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter.ItemType.RESULT
 
 class NormalExploreAdapter(
-    private val novelItemClickListener: (novelId: Long) -> Unit
+    private val novelItemClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var items: List<NovelEntity> = emptyList()
+    private var novels: List<NovelEntity> = emptyList()
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
