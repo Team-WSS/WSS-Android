@@ -6,7 +6,6 @@ import com.teamwss.websoso.data.model.FeedsEntity
 import com.teamwss.websoso.data.remote.api.FakeApi
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
-import retrofit2.Response
 import javax.inject.Inject
 
 class FeedRepository @Inject constructor() {
@@ -29,7 +28,7 @@ class FeedRepository @Inject constructor() {
             .copy(feeds = cachedFeeds)
     }
 
-    suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long): Response<Unit> {
+    suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long) {
 
         return when (isLikedOfLikedFeed) {
             true -> feedApi.deleteLikes(selectedFeedId)
@@ -37,17 +36,17 @@ class FeedRepository @Inject constructor() {
         }
     }
 
-    suspend fun saveRemovedFeed(feedId: Long): Response<Unit> {
+    suspend fun saveRemovedFeed(feedId: Long) {
         return feedApi.deleteFeed(feedId)
             .also { _cachedFeeds.removeIf { it.id == feedId } }
     }
 
-    suspend fun saveSpoilerFeed(feedId: Long): Response<Unit> {
+    suspend fun saveSpoilerFeed(feedId: Long) {
         return feedApi.postSpoilerFeed(feedId)
             .also { _cachedFeeds.removeIf { it.id == feedId } }
     }
 
-    suspend fun saveImpertinenceFeed(feedId: Long): Response<Unit> {
+    suspend fun saveImpertinenceFeed(feedId: Long) {
         return feedApi.postImpertinenceFeed(feedId)
             .also { _cachedFeeds.removeIf { it.id == feedId } }
     }
