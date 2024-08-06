@@ -8,6 +8,11 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
+import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
+import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
+import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Error
+import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Loading
+import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Success
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +25,30 @@ class FeedDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initView()
+        setupObserver()
+    }
+
+    private fun initView() {
+        feedDetailViewModel.updateFeedDetail(feedId)
         binding.rvFeedDetail.adapter = feedDetailAdapter
+    }
+
+    private fun setupObserver() {
+        feedDetailViewModel.feedDetailUiState.observe(this) { feedDetailUiState ->
+            when (feedDetailUiState) {
+                is Success -> updateView(feedDetailUiState)
+                is Loading -> {}
+                is Error -> {}
+            }
+        }
+    }
+
+    private fun updateView(feedDetailUiState: Success) {
+        val header = Header(feedDetailUiState.feedDetail)
+        val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
+
+        feedDetailAdapter.submitList(listOf(header) + comments)
     }
 
     companion object {
