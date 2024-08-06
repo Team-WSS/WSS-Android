@@ -25,6 +25,8 @@ class FeedRepository @Inject constructor(
             .copy(feeds = cachedFeeds)
     }
 
+    suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
+
     suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long) {
 
         return when (isLikedOfLikedFeed) {
