@@ -1,6 +1,7 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
+import com.teamwss.websoso.data.model.CommentsEntity
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
 import com.teamwss.websoso.data.remote.api.FeedApi
@@ -26,6 +27,8 @@ class FeedRepository @Inject constructor(
     }
 
     suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
+
+    suspend fun fetchComments(feedId: Long): CommentsEntity = feedApi.getComments(feedId).toData()
 
     suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long) {
 
