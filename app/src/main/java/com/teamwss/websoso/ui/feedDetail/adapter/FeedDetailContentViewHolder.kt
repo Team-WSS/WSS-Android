@@ -11,7 +11,8 @@ class FeedDetailContentViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(feed: FeedModel, commentsCount: Int) {
-
+        binding.feed = feed
+        binding.commentsCount = commentsCount
     }
 
     companion object {
