@@ -1,10 +1,14 @@
 package com.teamwss.websoso.ui.novelRating
 
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import androidx.activity.viewModels
 import androidx.core.view.forEach
+import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
@@ -13,24 +17,27 @@ import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
+import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
-    private val viewModel: NovelRatingViewModel by viewModels()
+    private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
+    private val novelId: Long by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.onClick = onNovelRatingButtonClick()
-        viewModel.updateNovelRating(1)
+        novelRatingViewModel.updateNovelRating(novelId)
         bindViewModel()
-        observeUiState()
+        setupObserver()
         setupCharmPointChips()
+        setupWebsosoLoadingLayout()
     }
 
     private fun bindViewModel() {
-        binding.viewModel = viewModel
+        binding.viewModel = novelRatingViewModel
         binding.lifecycleOwner = this
     }
 
@@ -48,18 +55,47 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
                 finish()
             }
 
-            override fun onSaveClick() {}
+            override fun onSaveClick() {
+                novelRatingViewModel.updateNovelRating(novelId, intent.getBooleanExtra(IS_ALREADY_RATED, false))
+            }
 
             override fun onCancelClick() {}
 
             override fun onClearClick() {}
         }
 
-    private fun observeUiState() {
-        viewModel.uiState.observe(this) { uiState ->
-            updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-            updateCharmPointChips(uiState.novelRatingModel.charmPoints)
-            updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
+    private fun setupObserver() {
+        var isInitialUpdate = true
+
+        novelRatingViewModel.uiState.observe(this) { uiState ->
+            if (isInitialUpdate && !uiState.isFetchError && !uiState.loading) {
+                isInitialUpdate = false
+                binding.wllNovelRating.setWebsosoLoadingVisibility(false)
+                updateInitialReadStatus()
+            }
+            if (!uiState.isFetchError && !uiState.loading) {
+                updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
+                updateCharmPointChips(uiState.novelRatingModel.charmPoints)
+                updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
+            }
+            if (uiState.loading) binding.wllNovelRating.setWebsosoLoadingVisibility(true)
+            if (uiState.isFetchError) binding.wllNovelRating.setErrorLayoutVisibility(true)
+            if (uiState.isSaveSuccess) finish()
+            if (uiState.isSaveError) Snackbar.make(binding.root, "임시 실패 메시지", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateInitialReadStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val readStatus = intent.getSerializableExtra(READ_STATUS, ReadStatus::class.java)
+            if (readStatus != null) {
+                novelRatingViewModel.updateReadStatus(readStatus)
+            }
+        } else {
+            val readStatus = intent.getSerializableExtra(READ_STATUS) as? ReadStatus
+            if (readStatus != null) {
+                novelRatingViewModel.updateReadStatus(readStatus)
+            }
         }
     }
 
@@ -99,7 +135,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
                     setWebsosoChipPaddingHorizontal(12f)
                     setWebsosoChipRadius(40f)
                     setOnCloseIconClickListener {
-                        viewModel.updateSelectedKeywords(keyword, false)
+                        novelRatingViewModel.updateSelectedKeywords(keyword, false)
                     }
                     setWebsosoChipCloseIconVisibility(true)
                     setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
@@ -128,7 +164,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
     }
 
     private fun handleCharmPointClick(charmPoint: CharmPoint) {
-        viewModel.updateCharmPoints(charmPoints.find { it == charmPoint } ?: return)
+        novelRatingViewModel.updateCharmPoints(charmPoints.find { it == charmPoint } ?: return)
     }
 
     private fun showDatePickerBottomSheetDialog() {
@@ -142,6 +178,26 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingKeywordDialog")
         if (existingDialog == null) {
             NovelRatingKeywordBottomSheetDialog().show(supportFragmentManager, "RatingKeywordDialog")
+        }
+    }
+
+    private fun setupWebsosoLoadingLayout() {
+        binding.wllNovelRating.setReloadButtonClickListener {
+            novelRatingViewModel.updateNovelRating(novelId)
+        }
+    }
+
+    companion object {
+        private const val NOVEL_ID = "NOVEL_ID"
+        private const val IS_ALREADY_RATED = "IS_ALREADY_RATED"
+        private const val READ_STATUS = "READ_STATUS"
+
+        fun getIntent(context: Context, novelId: Long, isAlreadyRated: Boolean, readStatus: ReadStatus?): Intent {
+            return Intent(context, NovelRatingActivity::class.java).apply {
+                putExtra(NOVEL_ID, novelId)
+                putExtra(IS_ALREADY_RATED, isAlreadyRated)
+                putExtra(READ_STATUS, readStatus)
+            }
         }
     }
 }

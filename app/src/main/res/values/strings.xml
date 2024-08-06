@@ -47,6 +47,7 @@
     <string name="detail_explore_search_hint">키워드를 검색하세요</string>
     <string name="detail_explore_keyword_search_result">검색결과</string>
     <string name="detail_explore_keyword_not_exist_result">해당 키워드는\n아직 등록되지 않았어요..</string>
+    <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
 
     <!-- 상세 탐색 결과 뷰 -->
     <string name="detail_explore_result_filter_description">가 적용됐어요</string>
@@ -65,7 +66,6 @@
     <string name="novel_detail_remove_accept">네</string>
 
     <!-- 작품 소개 -->
-    <string name="novel_info_body">왕실에는 막대한 빚이 있었고, 그들은 빚을 갚기 위해\n왕녀인 바이올렛을 막대한 돈을 지녔지만 공작의 사생아인\n윈터에게 시집보낸다.\n\n\'태어나서 이렇게 멋있는 남자는 처음 봐…….\'\n\n다행히 바이올렛은 정략 결혼 상대에게 첫 눈에 반하지만\n두 사람의 결혼 생활은 처음부터 어긋나고.\n\n"쉬운 일이었으면 당신에게 말하러 오지도 않았어요. 이번\n한 번만 같이……."\n"당신이 여기서 고집부리며 내 시간을 허비하는 사이에 얼\n마나 많은 돈이 움직였는지 알아?"\n\n그로부터 3년. 바이올렛은 저 바쁜 남자가\n제 장례식이라고 와 줄지에 대해조차 확신할 수 없다.\n그렇게 그녀가 이혼을 결심했을 때,\n\n"뭐가 어떻게 된 거야……."\n\n바이올렛이 멍한 얼굴로 침실에 있는 전신 거울에 제 모습\n을 비춰 보았다.\n거울 속 사내는 분명 남편인 윈터 블루밍이었다.\n그런데 어째서 자신과 남편의 몸이 뒤바뀌게 된 것일까?\n\n"이제 진짜로 미쳐 버렸나 봐."</string>
     <string name="novel_info_platforms_title">작품 보러가기</string>
     <string name="novel_info_view_more">…더보기</string>
     <string name="novel_info_view_less">접기</string>
@@ -92,6 +92,12 @@
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
     <string name="feed_is_modified">(수정됨)</string>
     <string name="feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
+
+    <!-- 피드 상세 뷰 -->
+    <string name="feed_detail_title">수다글</string>
+    <string name="feed_detail_comment_title">댓글</string>
+    <string name="feed_detail_comment_dot">·</string>
+    <string name="feed_detail_input">댓글을 남겨보세요</string>
 
     <!-- 피드 팝업 매뉴 다이얼로그 뷰 -->
     <string name="report_popup_menu_cancel">취소</string>
@@ -149,7 +155,6 @@
     <string name="onboarding_second_next">다음으로</string>
     <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
-    <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
 
     <!-- 환영 뷰 -->
     <string name="welcome_welcome_websoso">웹소소에 오신 것을 환영해요!</string>
@@ -177,11 +182,25 @@
 
     <!-- 마이페이지 내 서재 뷰 -->
     <string name="my_library_storage">보관함</string>
-    <string name="my_library_preference_analysis">취향분석</string>
+    <string name="my_library_preference_analysis">취향 분석</string>
     <string name="my_library_interesting">관심</string>
     <string name="my_library_watching">보는중</string>
     <string name="my_library_watched">봤어요</string>
     <string name="my_library_quite">하차</string>
     <string name="my_library_unknown_preference">작품 취향을 파악할 수 없어요</string>
+    <string name="my_library_genre_preference">장르 취향</string>
+    <string name="my_library_genre_count">%d편</string>
+
+    <!-- 홈 뷰 -->
+    <string name="home_today_popular">오늘의인기작</string>
+    <string name="home_rising_feed">지금 뜨는 수다글</string>
+    <string name="home_interest_feed">관심글</string>
+    <string name="home_user_interest_recent_feed">관심 등록한 작품의 최근 수다예요</string>
+    <string name="home_interest_feed_description">관심작품의 최신 소식을 모아서 볼 수 있어요.\n좋아하는 웹소설을 관심 등록 해볼까요?</string>
+    <string name="home_post_interest_novel">관심작품 등록하기</string>
+    <string name="home_user_recommend_novel_description">관심 등록한 작품의 최근 수다예요</string>
+    <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해 드려요!</string>
+    <string name="home_setting_interest_general">선호장르 설정하기</string>
+    <string name="home_recommend_novel">이 웹소설은 어때요?</string>
 
 </resources>

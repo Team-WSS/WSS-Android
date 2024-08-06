@@ -10,7 +10,7 @@ import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel.Companion.toCha
 
 fun NovelRatingEntity.toUi(): NovelRatingModel =
     NovelRatingModel(
-        novelTitle = novelTitle,
+        novelTitle = novelTitle ?: "",
         readStatus = readStatus,
         startDate = startDate,
         endDate = endDate,
@@ -29,4 +29,10 @@ fun NovelRatingKeywordCategoryEntity.toUi(): NovelRatingKeywordCategoryModel =
     NovelRatingKeywordCategoryModel(
         categoryName = categoryName,
         keywords = keywords.map { it.toUi() },
+    )
+
+fun NovelRatingKeywordModel.toData(): NovelRatingKeywordEntity =
+    NovelRatingKeywordEntity(
+        keywordId = keywordId,
+        keywordName = keywordName,
     )
