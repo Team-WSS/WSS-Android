@@ -5,27 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
-import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreHeaderAdapter
-import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NormalExploreActivity :
     BindingActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
-    private val normalExploreHeaderAdapter: NormalExploreHeaderAdapter by lazy { NormalExploreHeaderAdapter() }
-    private val combinedScrollAreaAdapter: ConcatAdapter by lazy {
-        ConcatAdapter(
-            normalExploreHeaderAdapter,
-            normalExploreAdapter,
-        )
-    }
-
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +33,7 @@ class NormalExploreActivity :
     private fun setupUI() {
         binding.apply {
             etNormalExploreSearchContent.requestFocus()
-            rvNormalExploreResult.adapter = combinedScrollAreaAdapter
+            rvNormalExploreResult.adapter = normalExploreAdapter
             onClick = onNormalExploreButtonClick()
         }
         setupTranslucentOnStatusBar()
@@ -85,7 +74,7 @@ class NormalExploreActivity :
             when {
                 uiState.loading -> loading()
                 uiState.error -> throw IllegalStateException()
-                !uiState.loading -> updateNormalExploreResultView(uiState)
+                !uiState.loading -> normalExploreAdapter.updateItems(uiState.novels)
             }
         }
 
@@ -96,11 +85,6 @@ class NormalExploreActivity :
 
     private fun loading() {
         // TODO 로딩 뷰
-    }
-
-    private fun updateNormalExploreResultView(uiState: NormalExploreUiState) {
-        normalExploreAdapter.updateResultNovels(uiState.novels)
-        normalExploreHeaderAdapter.updateResultNovels(uiState.novels.count())
     }
 
     companion object {

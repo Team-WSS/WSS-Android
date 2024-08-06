@@ -1,7 +1,9 @@
 package com.teamwss.websoso.ui.normalExplore.adapter
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.data.model.NormalExploreEntity
+import com.teamwss.websoso.data.model.NormalExploreEntity.*
 import com.teamwss.websoso.databinding.ItemNormalExploreBinding
 
 class NormalExploreViewHolder(
@@ -13,7 +15,19 @@ class NormalExploreViewHolder(
         binding.onClick = novelItemClickListener
     }
 
-    fun onBind(normalExploreResult: NormalExploreEntity.NovelEntity) {
+    fun onBind(normalExploreResult: NovelEntity) {
         binding.novel = normalExploreResult
+    }
+
+    companion object {
+
+        fun of(
+            parent: ViewGroup, novelItemClickListener: (novelId: Long) -> Unit,
+        ): NormalExploreViewHolder {
+            val binding = ItemNormalExploreBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false,
+            )
+            return NormalExploreViewHolder(binding, novelItemClickListener)
+        }
     }
 }
