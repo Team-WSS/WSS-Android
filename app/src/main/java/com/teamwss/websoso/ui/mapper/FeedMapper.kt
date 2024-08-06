@@ -3,7 +3,7 @@ package com.teamwss.websoso.ui.mapper
 import com.teamwss.websoso.domain.model.Feed
 import com.teamwss.websoso.ui.feed.model.FeedModel
 
-fun Feed.toPresentation(): FeedModel = FeedModel(
+fun Feed.toUi(): FeedModel = FeedModel(
     user = FeedModel.UserModel(
         id = user.id,
         nickname = user.nickname,
@@ -26,4 +26,3 @@ fun Feed.toPresentation(): FeedModel = FeedModel(
         ratingCount = novel.ratingCount,
     ),
 )
-

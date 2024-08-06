@@ -10,7 +10,7 @@ import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
-import com.teamwss.websoso.ui.mapper.toPresentation
+import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -76,7 +76,7 @@ class FeedViewModel @Inject constructor(
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
                         isLoadable = feeds.isLoadable,
-                        feeds = feeds.feeds.map { it.toPresentation() },
+                        feeds = feeds.feeds.map { it.toUi() },
                     )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
@@ -102,7 +102,7 @@ class FeedViewModel @Inject constructor(
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
                         isLoadable = feeds.isLoadable,
-                        feeds = feeds.feeds.map { it.toPresentation() },
+                        feeds = feeds.feeds.map { it.toUi() },
                     )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
