@@ -28,7 +28,7 @@ class NormalExploreAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is NormalExploreHeaderViewHolder -> holder.bind(items.size)
-            is NormalExploreViewHolder -> holder.onBind(items[position - HEADER_OFFSET])
+            is NormalExploreViewHolder -> holder.bind(items[position - HEADER_OFFSET])
         }
     }
 
