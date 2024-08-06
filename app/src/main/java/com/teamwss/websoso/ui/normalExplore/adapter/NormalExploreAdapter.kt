@@ -27,15 +27,15 @@ class NormalExploreAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is NormalExploreHeaderViewHolder -> holder.bind(items.size)
-            is NormalExploreViewHolder -> holder.bind(items[position - HEADER_OFFSET])
+            is NormalExploreHeaderViewHolder -> holder.bind(novels.size)
+            is NormalExploreViewHolder -> holder.bind(novels[position - HEADER_OFFSET])
         }
     }
 
-    override fun getItemCount(): Int = items.size + HEADER_ITEM_COUNT
+    override fun getItemCount(): Int = novels.size + HEADER_ITEM_COUNT
 
     fun updateItems(newItems: List<NovelEntity>) {
-        items = newItems
+        novels = newItems
         notifyDataSetChanged()
     }
 
