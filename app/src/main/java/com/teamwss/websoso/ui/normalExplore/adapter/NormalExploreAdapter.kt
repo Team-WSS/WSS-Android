@@ -1,15 +1,18 @@
 package com.teamwss.websoso.ui.normalExplore.adapter
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.data.model.NormalExploreEntity.NovelEntity
-import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter.ItemType.HEADER
-import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter.ItemType.RESULT
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.ItemType
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.ItemType.HEADER
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.ItemType.RESULT
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
 
 class NormalExploreAdapter(
     private val novelItemClickListener: (novelId: Long) -> Unit,
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var novels: List<NovelEntity> = emptyList()
+) : ListAdapter<NormalExploreItemType, RecyclerView.ViewHolder>(diffCallBack) {
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
@@ -27,31 +30,33 @@ class NormalExploreAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is NormalExploreHeaderViewHolder -> holder.bind(novels.size)
-            is NormalExploreViewHolder -> holder.bind(novels[position - HEADER_OFFSET])
-        }
-    }
-
-    override fun getItemCount(): Int = novels.size + HEADER_ITEM_COUNT
-
-    fun updateItems(newItems: List<NovelEntity>) {
-        novels = newItems
-        notifyDataSetChanged()
-    }
-
-    private enum class ItemType {
-        HEADER, RESULT;
-
-        companion object {
-            fun valueOf(ordinal: Int): ItemType =
-                entries.find { it.ordinal == ordinal }
-                    ?: throw IllegalArgumentException()
+            is NormalExploreHeaderViewHolder -> holder.bind((getItem(position) as Header).novelCount)
+            is NormalExploreViewHolder -> holder.bind((getItem(position) as Result).novel)
         }
     }
 
     companion object {
         private const val HEADER_POSITION = 0
-        private const val HEADER_ITEM_COUNT = 1
-        private const val HEADER_OFFSET = 1
+
+        private val diffCallBack = object : DiffUtil.ItemCallback<NormalExploreItemType>() {
+
+            override fun areItemsTheSame(
+                oldItem: NormalExploreItemType,
+                newItem: NormalExploreItemType
+            ): Boolean {
+                return when {
+                    oldItem is Result && newItem is Result -> oldItem.novel.id == newItem.novel.id
+                    oldItem is Header && newItem is Header -> oldItem.novelCount == newItem.novelCount
+                    else -> false
+                }
+            }
+
+            override fun areContentsTheSame(
+                oldItem: NormalExploreItemType,
+                newItem: NormalExploreItemType
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

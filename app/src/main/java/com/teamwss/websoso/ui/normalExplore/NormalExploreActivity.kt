@@ -5,10 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -85,7 +89,7 @@ class NormalExploreActivity :
                 else -> {
                     binding.wlNormalExplore.setWebsosoLoadingVisibility(false)
                     binding.wlNormalExplore.setErrorLayoutVisibility(false)
-                    normalExploreAdapter.updateItems(uiState.novels)
+                    updateView(uiState)
                 }
             }
         }
@@ -93,6 +97,12 @@ class NormalExploreActivity :
         normalExploreViewModel.searchWord.observe(this) {
             normalExploreViewModel.validateSearchWordClearButton()
         }
+    }
+
+    private fun updateView(uiState: NormalExploreUiState) {
+        val header = Header(uiState.novels.count())
+        val results = uiState.novels.map { Result(it) }
+        normalExploreAdapter.submitList(listOf(header) + results)
     }
 
     companion object {
