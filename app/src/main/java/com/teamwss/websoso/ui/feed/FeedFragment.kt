@@ -182,7 +182,7 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
     }
 
     private fun navigateToFeedDetail(id: Long) {
-        startActivity(FeedDetailActivity.from(id, requireContext()))
+        startActivity(FeedDetailActivity.getIntent(id, requireContext()))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

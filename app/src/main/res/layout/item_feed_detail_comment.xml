@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="comment"
+            type="com.teamwss.websoso.ui.feedDetail.model.CommentModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +19,7 @@
         <ImageView
             android:id="@+id/iv_feed_detail_comment_profile"
             cornerRadius="@{12f}"
+            loadImageUrl="@{comment.user.avatarImage}"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="4dp"
@@ -30,7 +34,7 @@
             android:layout_marginStart="14dp"
             android:maxLength="10"
             android:maxLines="1"
-            android:text="@{}"
+            android:text="@{comment.user.nickname}"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/iv_feed_detail_comment_profile"
@@ -54,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="@{}"
+            android:text="@{comment.createdDate}"
             android:textAppearance="@style/body5"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/tv_feed_user_name"
@@ -67,6 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
+            isVisible="@{comment.modified}"
             android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
@@ -81,6 +86,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginEnd="12dp"
             android:maxLines="3"
+            android:text="@{comment.commentContent}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"

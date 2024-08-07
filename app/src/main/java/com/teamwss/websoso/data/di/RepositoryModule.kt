@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.di
 
+import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.repository.FeedRepository
 import dagger.Module
 import dagger.Provides
@@ -13,5 +14,5 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesFeedRepository(): FeedRepository = FeedRepository()
+    fun provideFeedRepository(feedApi: FeedApi): FeedRepository = FeedRepository(feedApi)
 }

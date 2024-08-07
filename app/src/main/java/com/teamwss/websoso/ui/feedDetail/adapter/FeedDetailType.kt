@@ -1,12 +1,12 @@
 package com.teamwss.websoso.ui.feedDetail.adapter
 
-import com.teamwss.websoso.ui.feedDetail.model.FeedDetailModel
-import com.teamwss.websoso.ui.feedDetail.model.FeedDetailModel.CommentModel
+import com.teamwss.websoso.ui.feed.model.FeedModel
+import com.teamwss.websoso.ui.feedDetail.model.CommentModel
 
 sealed interface FeedDetailType {
 
     data class Header(
-        val feed: FeedDetailModel,
+        val feed: FeedModel,
     ) : FeedDetailType
 
     data class Comment(
