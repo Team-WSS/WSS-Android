@@ -29,14 +29,12 @@ class FeedDetailViewModel @Inject constructor(
                 val feed = async { feedRepository.fetchFeed(feedId) }
                 val comments = async { feedRepository.fetchComments(feedId) }
 
-                Success(
-                    FeedDetailModel(
-                        feed = feed.await().toUi(),
-                        comments = comments.await().comments.map { it.toUi() },
-                    )
+                FeedDetailModel(
+                    feed = feed.await().toUi(),
+                    comments = comments.await().comments.map { it.toUi() },
                 )
-            }.onSuccess {
-                _feedDetailUiState.value = it
+            }.onSuccess { feedDetail ->
+                _feedDetailUiState.value = Success(feedDetail)
             }.onFailure {
                 _feedDetailUiState.value = Error
             }
