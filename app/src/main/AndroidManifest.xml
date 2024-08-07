@@ -62,6 +62,10 @@
             android:name=".ui.novelRating.NovelRatingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.detailExploreResult.DetailExploreResultActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
