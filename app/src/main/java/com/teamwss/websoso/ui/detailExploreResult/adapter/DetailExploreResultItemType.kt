@@ -1,12 +1,12 @@
-package com.teamwss.websoso.ui.normalExplore.adapter
+package com.teamwss.websoso.ui.detailExploreResult.adapter
 
 import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 
-sealed class NormalExploreItemType {
+sealed class DetailExploreResultItemType {
 
-    data class Header(val novelCount: Int) : NormalExploreItemType()
+    data class Header(val novelCount: Int) : DetailExploreResultItemType()
 
-    data class Result(val novel: NovelEntity) : NormalExploreItemType()
+    data class Result(val novel: NovelEntity) : DetailExploreResultItemType()
 
     enum class ItemType {
         HEADER, RESULT;

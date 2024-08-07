@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity

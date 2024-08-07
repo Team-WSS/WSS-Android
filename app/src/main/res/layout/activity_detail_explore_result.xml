@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingTop="56dp">
 
         <ImageView
             android:id="@+id/iv_detail_explore_result_back_button"
@@ -73,48 +74,21 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_detail_explore_result"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_detail_explore_result"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="14dp"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="46dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_result_filter_button">
-
-            <TextView
-                android:id="@+id/tv_detail_explore_result_novel_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/detail_explore_result_novel"
-                android:textAppearance="@style/title1"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textAppearance="@style/body4"
-                android:textColor="@color/gray_100_CBCBD1"
-                app:layout_constraintBottom_toBottomOf="@id/tv_detail_explore_result_novel_count"
-                app:layout_constraintStart_toEndOf="@id/tv_detail_explore_result_novel_count"
-                app:layout_constraintTop_toTopOf="@id/tv_detail_explore_result_novel_count"
-                tools:text="8" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_detail_explore_result"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_result_novel_count"
-                tools:listitem="@layout/item_detail_explore_result" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_result_filter_button"
+            tools:listitem="@layout/item_detail_explore_result" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
