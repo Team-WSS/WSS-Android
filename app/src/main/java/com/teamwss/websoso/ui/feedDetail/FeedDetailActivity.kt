@@ -25,11 +25,11 @@ class FeedDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initView()
+        setupView()
         setupObserver()
     }
 
-    private fun initView() {
+    private fun setupView() {
         feedDetailViewModel.updateFeedDetail(feedId)
         binding.rvFeedDetail.adapter = feedDetailAdapter
     }
