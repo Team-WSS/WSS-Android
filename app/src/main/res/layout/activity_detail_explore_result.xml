@@ -81,6 +81,8 @@
             android:layout_marginTop="14dp"
             android:clipToPadding="false"
             android:orientation="vertical"
+            android:overScrollMode="never"
+            android:paddingHorizontal="20dp"
             android:paddingBottom="46dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
