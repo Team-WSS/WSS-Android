@@ -1,6 +1,6 @@
 package com.teamwss.websoso.ui.normalExplore.adapter
 
-import com.teamwss.websoso.data.model.NormalExploreEntity.NovelEntity
+import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 
 sealed class NormalExploreItemType {
 
