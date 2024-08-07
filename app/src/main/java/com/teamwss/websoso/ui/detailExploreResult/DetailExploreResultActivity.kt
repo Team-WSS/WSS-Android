@@ -7,6 +7,9 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityDetailExploreResultBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Result
+import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,9 +48,15 @@ class DetailExploreResultActivity :
             when {
                 uiState.loading -> Unit //TODO 로딩뷰
                 uiState.error -> throw IllegalStateException()
-                !uiState.loading -> detailExploreResultAdapter.submitList(uiState.novels)
+                !uiState.loading -> updateView(uiState)
             }
         }
+    }
+
+    private fun updateView(uiState: DetailExploreResultUiState) {
+        val header = Header(uiState.novels.count())
+        val results = uiState.novels.map { Result(it) }
+        detailExploreResultAdapter.submitList(listOf(header) + results)
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
