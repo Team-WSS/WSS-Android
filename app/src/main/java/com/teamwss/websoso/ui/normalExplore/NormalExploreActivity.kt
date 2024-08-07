@@ -5,10 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,8 +26,7 @@ class NormalExploreActivity :
 
         bindViewModel()
         setupUI()
-        setupUiStateObserver()
-        setupSearchWordObserver()
+        setupObserver()
     }
 
     private fun bindViewModel() {
@@ -33,9 +35,11 @@ class NormalExploreActivity :
     }
 
     private fun setupUI() {
-        binding.etNormalExploreSearchContent.requestFocus()
-        binding.onClick = onNormalExploreButtonClick()
-        binding.rvNormalExploreResult.adapter = normalExploreAdapter
+        binding.apply {
+            etNormalExploreSearchContent.requestFocus()
+            rvNormalExploreResult.adapter = normalExploreAdapter
+            onClick = onNormalExploreButtonClick()
+        }
         setupTranslucentOnStatusBar()
     }
 
@@ -69,29 +73,36 @@ class NormalExploreActivity :
         // TODO 작품 정보 뷰로 이동
     }
 
-    private fun setupUiStateObserver() {
+    private fun setupObserver() {
         normalExploreViewModel.uiState.observe(this) { uiState ->
             when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> updateResultView(uiState)
+                uiState.loading -> {
+                    binding.wlNormalExplore.setWebsosoLoadingVisibility(true)
+                    binding.wlNormalExplore.setErrorLayoutVisibility(false)
+                }
+
+                uiState.error -> {
+                    binding.wlNormalExplore.setWebsosoLoadingVisibility(false)
+                    binding.wlNormalExplore.setErrorLayoutVisibility(true)
+                }
+
+                else -> {
+                    binding.wlNormalExplore.setWebsosoLoadingVisibility(false)
+                    binding.wlNormalExplore.setErrorLayoutVisibility(false)
+                    updateView(uiState)
+                }
             }
         }
-    }
 
-    private fun loading() {
-        // TODO 로딩 뷰
-    }
-
-    private fun updateResultView(uiState: NormalExploreUiState) {
-        normalExploreAdapter.updateResultNovels(uiState.novels)
-        binding.tvNormalExploreNovelCount.text = uiState.novels.count().toString()
-    }
-
-    private fun setupSearchWordObserver() {
         normalExploreViewModel.searchWord.observe(this) {
             normalExploreViewModel.validateSearchWordClearButton()
         }
+    }
+
+    private fun updateView(uiState: NormalExploreUiState) {
+        val header = Header(uiState.novels.count())
+        val results = uiState.novels.map { Result(it) }
+        normalExploreAdapter.submitList(listOf(header) + results)
     }
 
     companion object {
