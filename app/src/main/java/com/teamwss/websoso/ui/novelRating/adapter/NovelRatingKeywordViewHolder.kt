@@ -22,15 +22,12 @@ class NovelRatingKeywordViewHolder(
     private fun ItemCommonKeywordBinding.setupExpandToggleBtn() {
         ivNovelRatingKeywordToggle.setOnClickListener {
             ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
-            val layoutParams =
-                wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
+            val layoutParams = wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
 
             when (ivNovelRatingKeywordToggle.isSelected) {
-                true ->
-                    layoutParams.matchConstraintMaxHeight =
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+                true -> layoutParams.matchConstraintMaxHeight = ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByDp()
+                false -> layoutParams.matchConstraintMaxHeight = MIN_WEBSOSO_CHIP_GROUP_HEIGHT
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
@@ -75,5 +72,9 @@ class NovelRatingKeywordViewHolder(
             .forEach { chip ->
                 chip.isSelected = keywordSelectionMap[chip.text] ?: false
             }
+    }
+
+    companion object {
+        private const val MIN_WEBSOSO_CHIP_GROUP_HEIGHT = 206
     }
 }
