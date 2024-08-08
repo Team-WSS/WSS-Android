@@ -15,12 +15,11 @@ class NovelRatingKeywordAdapter(
         parent: ViewGroup,
         viewType: Int,
     ): NovelRatingKeywordViewHolder {
-        val binding =
-            ItemNovelRatingKeywordBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            )
+        val binding = ItemNovelRatingKeywordBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+        )
         return NovelRatingKeywordViewHolder(binding, onKeywordClick)
     }
 
