@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
-            android:text="계정정보"
+            android:text="@string/setting_account_info"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/view_setting_account_info_underline"
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
-            android:text="프로필 공개 여부 설정"
+            android:text="@string/setting_profile_disclosure"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/view_setting_profile_disclosure_underline"
@@ -119,7 +119,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_setting_navigation_to_websoso_account"
+        android:id="@+id/cl_setting_websoso_account"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -131,10 +131,10 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
-            android:text="웹소소 공식 계정"
+            android:text="@string/setting_websoso_account"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@id/view_setting_navigation_to_websoso_account_underline"
+            app:layout_constraintBottom_toTopOf="@id/view_setting_websoso_account_underline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -143,12 +143,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:src="@drawable/btn_setting_right"
-            app:layout_constraintBottom_toTopOf="@id/view_setting_navigation_to_websoso_account_underline"
+            app:layout_constraintBottom_toTopOf="@id/view_setting_websoso_account_underline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/view_setting_navigation_to_websoso_account_underline"
+            android:id="@+id/view_setting_websoso_account_underline"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/gray_50_F4F5F8"
@@ -163,14 +163,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_setting_navigation_to_websoso_account">
+        app:layout_constraintTop_toBottomOf="@id/cl_setting_websoso_account">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
-            android:text="문의하기 &amp; 의견 보내기"
+            android:text="@string/setting_inquire_and_feedback"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/view_setting_inquire_and_feedback_underline"
@@ -209,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
-            android:text="앱 평점 남기기"
+            android:text="@string/setting_app_rating"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/view_setting_app_rating_underline"
@@ -248,7 +248,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
-            android:text="서비스 이용약관"
+            android:text="@string/setting_terms_of_use"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/view_setting_terms_of_use_underline"
