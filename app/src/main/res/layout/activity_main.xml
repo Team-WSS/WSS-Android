@@ -15,18 +15,37 @@
             android:id="@+id/fcv_main"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/bnv_main"
+            app:layout_constraintBottom_toTopOf="@id/view_main_divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:id="@+id/view_main_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintBottom_toTopOf="@id/bnv_main"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnv_main"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="58dp"
+            android:layout_marginBottom="?attr/actionBarSize"
             android:elevation="0dp"
             android:outlineProvider="none"
-            android:layout_marginBottom="?attr/actionBarSize"
+            app:elevation="0dp"
+            app:itemActiveIndicatorStyle="@color/white"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@color/bg_main_bottom_nav_item_selector"
+            app:itemPaddingBottom="12dp"
+            app:itemPaddingTop="10dp"
+            app:itemTextAppearanceActive="@style/label2"
+            app:itemTextAppearanceInactive="@style/label2"
+            app:itemTextColor="@color/bg_main_bottom_nav_item_selector"
+            app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_main_bnv"
             tools:menu="@menu/menu_main_bnv" />
