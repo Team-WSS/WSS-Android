@@ -2,17 +2,14 @@ package com.teamwss.websoso.ui.detailExplore.keyword.adapter
 
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
+import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.util.toFloatScaledByDp
 import com.teamwss.websoso.util.toIntScaledByDp
 
 class DetailExploreKeywordViewHolder(
-    private val binding: ItemNovelRatingKeywordBinding,
+    private val binding: ItemCommonKeywordBinding,
     private val onKeywordClick: (keywordId: Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     var isChipSetting: Boolean = false
@@ -22,7 +19,7 @@ class DetailExploreKeywordViewHolder(
         binding.setupExpandToggleBtn()
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupExpandToggleBtn() {
+    private fun ItemCommonKeywordBinding.setupExpandToggleBtn() {
         ivNovelRatingKeywordToggle.setOnClickListener {
             ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
             val layoutParams =
@@ -42,15 +39,13 @@ class DetailExploreKeywordViewHolder(
     fun initKeywordView(category: CategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
-            ivNovelRatingKeyword.load(category.categoryImage) {
-                transformations(RoundedCornersTransformation(60f.toFloatScaledByDp()))
-            }
+            categoryImageUrl = category.categoryImage
             setupWebsosoChips(category)
         }
         isChipSetting = true
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: CategoryModel) {
+    private fun ItemCommonKeywordBinding.setupWebsosoChips(category: CategoryModel) {
         wcgNovelRatingKeyword.removeAllViews()
         category.keywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {
