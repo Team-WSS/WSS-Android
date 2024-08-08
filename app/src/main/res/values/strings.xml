@@ -203,4 +203,12 @@
     <string name="home_setting_interest_general">선호장르 설정하기</string>
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
 
+    <!-- 환경설정 뷰-->
+    <string name="setting_title">설정</string>
+    <string name="setting_account_info">계정정보</string>
+    <string name="setting_profile_disclosure">프로필 공개 여부 설정</string>
+    <string name="setting_websoso_account">웹소소 공식 계정</string>
+    <string name="setting_inquire_and_feedback"><![CDATA[문의하기 & 의견 보내기]]></string>
+    <string name="setting_app_rating">앱 평점 남기기</string>
+    <string name="setting_terms_of_use">서비스 이용약관</string>
 </resources>
