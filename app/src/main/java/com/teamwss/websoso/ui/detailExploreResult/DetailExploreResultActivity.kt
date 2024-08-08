@@ -53,8 +53,8 @@ class DetailExploreResultActivity :
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when (position) {
-                    0 -> 2
-                    else -> 1
+                    HEADER_POSITION -> FULL_SPAN
+                    else -> HALF_SPAN
                 }
             }
         }
@@ -112,6 +112,9 @@ class DetailExploreResultActivity :
     }
 
     companion object {
+        private const val HEADER_POSITION = 0
+        private const val FULL_SPAN = 2
+        private const val HALF_SPAN = 1
         private const val DETAIL_EXPLORE_BOTTOM_SHEET_TAG = "DetailExploreDialogBottomSheet"
     }
 }
