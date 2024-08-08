@@ -70,6 +70,9 @@
             android:name=".ui.setting.SettingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.accountInfo.AccountInfoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
-
 </manifest>
