@@ -1,6 +1,6 @@
 package com.teamwss.websoso.data.model
 
-data class NormalExploreEntity(
+data class ExploreResultEntity(
     val resultCount: Long,
     val isLoadable: Boolean,
     val novels: List<NovelEntity>,

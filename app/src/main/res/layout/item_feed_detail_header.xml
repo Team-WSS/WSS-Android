@@ -4,6 +4,13 @@
 
     <data>
 
+        <variable
+            name="feed"
+            type="com.teamwss.websoso.ui.feed.model.FeedModel" />
+
+        <variable
+            name="commentsCount"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +21,8 @@
             android:id="@+id/include_feed_detail_layout"
             layout="@layout/item_feed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:feed="@{feed}" />
 
         <View
             android:id="@+id/view_feed_detail_divider"
@@ -45,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:hint="30"
+            android:text="@{String.valueOf(commentsCount)"
             android:textAppearance="@style/title2"
             android:textColor="@color/primary_100_6A5DFD"
             app:layout_constraintBottom_toBottomOf="@+id/tv_feed_detail_comment_title"

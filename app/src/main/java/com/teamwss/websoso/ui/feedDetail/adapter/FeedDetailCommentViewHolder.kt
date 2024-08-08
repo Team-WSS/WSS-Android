@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemFeedDetailCommentBinding
-import com.teamwss.websoso.ui.feedDetail.model.FeedDetailModel.CommentModel
+import com.teamwss.websoso.ui.feedDetail.model.CommentModel
 
 class FeedDetailCommentViewHolder(
     private val binding: ItemFeedDetailCommentBinding,

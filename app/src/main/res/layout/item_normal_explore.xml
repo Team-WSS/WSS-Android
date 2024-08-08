@@ -7,7 +7,7 @@
 
         <variable
             name="novel"
-            type="com.teamwss.websoso.data.model.NormalExploreEntity.NovelEntity" />
+            type="com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity" />
 
         <variable
             name="onClick"

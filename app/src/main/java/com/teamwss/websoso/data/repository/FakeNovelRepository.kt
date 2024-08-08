@@ -1,14 +1,14 @@
 package com.teamwss.websoso.data.repository
 
-import com.teamwss.websoso.data.model.NormalExploreEntity
+import com.teamwss.websoso.data.model.ExploreResultEntity
 import javax.inject.Inject
 
 class FakeNovelRepository @Inject constructor() {
-    val normalExploreResultDummyData: NormalExploreEntity = NormalExploreEntity(
+    val normalExploreResultDummyData: ExploreResultEntity = ExploreResultEntity(
         resultCount = 8,
         isLoadable = false,
         novels = List(9) {
-            NormalExploreEntity.NovelEntity(
+            ExploreResultEntity.NovelEntity(
                 id = (it + 1).toLong(),
                 title = "악역의 엔딩은 죽음뿐이다 두두둥둥",
                 author = "손명지${it + 1}",
@@ -20,9 +20,20 @@ class FakeNovelRepository @Inject constructor() {
         }
     )
 
-    val normalExploreEmptyDummyData = NormalExploreEntity(
+    val normalExploreEmptyDummyData = ExploreResultEntity(
         resultCount = 0,
         isLoadable = false,
         novels = emptyList()
     )
+
+    suspend fun fetchDetailExploreResult(
+        page: Int,
+        size: Int,
+        genres: List<String>?,
+        isCompleted: Boolean?,
+        novelRating: Float?,
+        keywordIds: List<Int>?,
+    ): ExploreResultEntity {
+        return normalExploreResultDummyData
+    }
 }
