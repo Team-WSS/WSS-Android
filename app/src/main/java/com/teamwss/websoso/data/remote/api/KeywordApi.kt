@@ -8,6 +8,6 @@ interface KeywordApi {
 
     @GET("keywords")
     suspend fun getKeywords(
-        @Query("keyword") keyword: String?,
+        @Query("query") keyword: String?,
     ): KeywordsResponseDto
 }
