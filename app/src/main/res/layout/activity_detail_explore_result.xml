@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="detailExploreResultViewModel"
+            type="com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,6 +79,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_detail_explore_result"
+            isVisible="@{!detailExploreResultViewModel.isNovelResultEmptyBoxVisibility}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
@@ -91,5 +95,41 @@
             app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_result_filter_button"
             app:spanCount="2"
             tools:listitem="@layout/item_detail_explore_result" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            isVisible="@{detailExploreResultViewModel.isNovelResultEmptyBoxVisibility}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_result_filter_button">
+
+            <ImageView
+                android:id="@+id/iv_detail_explore_result_not_exist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_explore_not_exist_result"
+                app:layout_constraintBottom_toTopOf="@id/tv_detail_explore_result_not_exist"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_detail_explore_result_not_exist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/detail_explore_result_not_exist"
+                android:textAppearance="@style/body1"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_explore_result_not_exist" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

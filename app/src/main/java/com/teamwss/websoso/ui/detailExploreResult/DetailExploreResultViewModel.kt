@@ -18,19 +18,24 @@ class DetailExploreResultViewModel @Inject constructor(
         MutableLiveData(DetailExploreResultUiState())
     val uiState: LiveData<DetailExploreResultUiState> get() = _uiState
 
+    private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
+
+
     fun updateSearchResult() {
         viewModelScope.launch {
             runCatching {
-                novelRepository.fetchDetailExploreResult(
-                    page = 1,
-                    size = 20,
-                    genres = listOf("로맨스"),
-                    isCompleted = false,
-                    novelRating = 4.5f,
-                    keywordIds = listOf() // TODO 이건 더미임요 서버 붙이면서 추후 제거 예정
-                )
+                novelRepository.normalExploreEmptyDummyData
+//                novelRepository.fetchDetailExploreResult(
+//                    page = 1,
+//                    size = 20,
+//                    genres = listOf("로맨스"),
+//                    isCompleted = false,
+//                    novelRating = 4.5f,
+//                    keywordIds = listOf() // TODO 이건 더미임요 서버 붙이면서 추후 제거 예정
+//                )
             }.onSuccess { results ->
-                when (results.novels.isNotEmpty()) {
+                when (results.novels.isEmpty().not()) {
                     true -> {
                         _uiState.value = uiState.value?.copy(
                             loading = false,
@@ -42,6 +47,8 @@ class DetailExploreResultViewModel @Inject constructor(
                         _uiState.value = uiState.value?.copy(
                             loading = false,
                         )
+
+                        _isNovelResultEmptyBoxVisibility.value = true
                     }
                 }
             }.onFailure {

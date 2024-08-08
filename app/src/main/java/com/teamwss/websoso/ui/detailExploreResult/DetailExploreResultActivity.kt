@@ -27,6 +27,7 @@ class DetailExploreResultActivity :
 
         detailExploreResultViewModel.updateSearchResult()
         setupTranslucentOnStatusBar()
+        bindViewModel()
         setupAdapter()
         setupObserver()
     }
@@ -36,6 +37,11 @@ class DetailExploreResultActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+    }
+
+    private fun bindViewModel() {
+        binding.detailExploreResultViewModel = detailExploreResultViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupAdapter() {
