@@ -101,8 +101,8 @@
                             android:id="@+id/iv_novel_detail_cover_genre"
                             android:layout_width="72dp"
                             android:layout_height="72dp"
-                            app:isVectorImage="@{true}"
                             android:scaleType="fitXY"
+                            app:isVectorImage="@{true}"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
                             app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover"
                             app:loadImageUrl="@{novelDetailViewModel.novelDetail.novel.novelGenreImage}" />
@@ -212,8 +212,8 @@
                             android:layout_marginTop="12dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
-                            android:onClick="@{() -> navigateToNovelRating}"
-                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
+                            android:onClick="@{() -> navigateToNovelRating.invoke(null)}"
+                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyAllRated}"
                             app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
                             app:layout_constraintStart_toStartOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
@@ -253,8 +253,8 @@
                             android:layout_marginEnd="28dp"
                             android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                             android:gravity="center_vertical"
-                            android:onClick="@{() -> navigateToNovelRating}"
-                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyRated}"
+                            android:onClick="@{() -> navigateToNovelRating.invoke(null)}"
+                            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyAllRated}"
                             app:layout_constraintEnd_toEndOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintStart_toEndOf="@id/ll_novel_detail_user_rating"
                             app:layout_constraintTop_toTopOf="@id/view_novel_detail_user_novel">
@@ -301,6 +301,7 @@
                             app:layout_constraintEnd_toEndOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintStart_toStartOf="@id/view_novel_detail_user_novel"
                             app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_user_rating"
+                            app:selectionRequired="true"
                             app:singleSelection="true">
 
                             <com.google.android.material.button.MaterialButton

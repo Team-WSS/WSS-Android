@@ -114,7 +114,7 @@
             android:numStars="5"
             android:progressBackgroundTint="@color/gray_70_DFDFE3"
             android:progressTint="@color/secondary_50_FFAA8F"
-            android:rating="0"
+            android:rating="@{viewModel.uiState.novelRatingModel.userNovelRating}"
             android:secondaryProgressTint="@color/secondary_50_FFAA8F"
             android:stepSize="0.5"
             app:layout_constraintEnd_toEndOf="parent"

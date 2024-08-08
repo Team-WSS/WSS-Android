@@ -142,43 +142,37 @@ class NovelRatingViewModel @Inject constructor(
 
     fun updateReadStatus(readStatus: ReadStatus) {
         uiState.value?.let { uiState ->
-            val updatedModel =
-                ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
-            _uiState.value =
-                uiState.copy(
-                    novelRatingModel = updatedModel,
-                    isEditingStartDate = ratingDateManager.updateIsEditingStartDate(readStatus),
-                )
+            val updatedModel = ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
+            _uiState.value = uiState.copy(
+                novelRatingModel = updatedModel,
+                isEditingStartDate = ratingDateManager.updateIsEditingStartDate(readStatus),
+            )
         }
     }
 
     fun toggleEditingStartDate(boolean: Boolean) {
         uiState.value?.let { uiState ->
-            _uiState.value =
-                uiState.copy(
-                    isEditingStartDate = boolean,
-                )
+            _uiState.value = uiState.copy(
+                isEditingStartDate = boolean,
+            )
         }
     }
 
     fun updateCurrentDate(date: Triple<Int, Int, Int>) {
         uiState.value?.let { uiState ->
-            val updatedModel =
-                ratingDateManager.updateCurrentDate(
-                    uiState.novelRatingModel,
-                    date,
-                    uiState.isEditingStartDate,
-                )
-            val maxDayValue =
-                ratingDateManager.updateDayMaxValue(
-                    updatedModel,
-                    uiState.isEditingStartDate,
-                )
-            _uiState.value =
-                uiState.copy(
-                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
-                    maxDayValue = maxDayValue,
-                )
+            val updatedModel = ratingDateManager.updateCurrentDate(
+                uiState.novelRatingModel,
+                date,
+                uiState.isEditingStartDate,
+            )
+            val maxDayValue = ratingDateManager.updateDayMaxValue(
+                updatedModel,
+                uiState.isEditingStartDate,
+            )
+            _uiState.value = uiState.copy(
+                novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
+                maxDayValue = maxDayValue,
+            )
         }
     }
 
@@ -197,24 +191,21 @@ class NovelRatingViewModel @Inject constructor(
 
     fun cancelDateEdit() {
         uiState.value?.let { uiState ->
-            val updatedModel =
-                ratingDateManager.cancelDateEdit(
-                    uiState.novelRatingModel.ratingDateModel,
-                )
-            _uiState.value =
-                uiState.copy(
-                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
-                )
+            val updatedModel = ratingDateManager.cancelDateEdit(
+                uiState.novelRatingModel.ratingDateModel,
+            )
+            _uiState.value = uiState.copy(
+                novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
+            )
         }
     }
 
     fun updateNotNullDate() {
         uiState.value?.let { uiState ->
             val updatedModel = ratingDateManager.getNotNullDate(uiState.novelRatingModel)
-            _uiState.value =
-                uiState.copy(
-                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
-                )
+            _uiState.value = uiState.copy(
+                novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
+            )
         }
     }
 
@@ -281,8 +272,8 @@ class NovelRatingViewModel @Inject constructor(
                         novelId = novelId,
                         readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name
                             ?: throw IllegalArgumentException("readStatus must not be null"),
-                        startDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousStartDate?.toFormattedDate(),
-                        endDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousEndDate?.toFormattedDate(),
+                        startDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentStartDate?.toFormattedDate(),
+                        endDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentEndDate?.toFormattedDate(),
                         userNovelRating = novelRating,
                         charmPoints = uiState.value?.novelRatingModel?.charmPoints?.map { it.value } ?: emptyList(),
                         userKeywords = uiState.value?.novelRatingModel?.userKeywords?.map { it.toData() } ?: emptyList(),

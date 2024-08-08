@@ -125,6 +125,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     override fun onResume() {
         super.onResume()
+        binding.tgNovelDetailReadStatus.clearChecked()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
