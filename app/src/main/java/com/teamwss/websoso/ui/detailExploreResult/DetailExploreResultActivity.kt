@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.detailExploreResult
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityDetailExploreResultBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
@@ -38,7 +39,17 @@ class DetailExploreResultActivity :
     }
 
     private fun setupAdapter() {
+        val gridLayoutManager = GridLayoutManager(this, 2)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (position) {
+                    0 -> 2
+                    else -> 1
+                }
+            }
+        }
         binding.apply {
+            rvDetailExploreResult.layoutManager = gridLayoutManager
             rvDetailExploreResult.adapter = detailExploreResultAdapter
         }
     }
