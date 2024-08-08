@@ -418,7 +418,7 @@
                     android:id="@+id/tv_my_library_novel_preference_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/my_library_preferred_novel"
+                    android:text="@string/my_library_novel_preference"
                     android:textAppearance="@style/title1"
                     android:textColor="@color/black"
                     android:layout_marginTop="30dp"
