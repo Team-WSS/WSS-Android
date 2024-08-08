@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityDetailExploreResultBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Result
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +32,8 @@ class DetailExploreResultActivity :
         bindViewModel()
         setupAdapter()
         setupObserver()
+        onBackButtonClick()
+        onEditFilterItemButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -88,7 +92,26 @@ class DetailExploreResultActivity :
         detailExploreResultAdapter.submitList(listOf(header) + results)
     }
 
+    private fun onBackButtonClick() {
+        binding.ivDetailExploreResultBackButton.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun onEditFilterItemButtonClick() {
+        binding.clDetailExploreResultFilterButton.setOnClickListener {
+            val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
+            detailExploreBottomSheet.show(supportFragmentManager, DETAIL_EXPLORE_BOTTOM_SHEET_TAG)
+        }
+    }
+
     private fun navigateToNovelDetail(novelId: Long) {
-        // TODO 작품 상세로 이동
+        val intent = NovelDetailActivity.getIntent(this, novelId)
+        startActivity(intent)
+        finish()
+    }
+
+    companion object {
+        private const val DETAIL_EXPLORE_BOTTOM_SHEET_TAG = "DetailExploreDialogBottomSheet"
     }
 }
