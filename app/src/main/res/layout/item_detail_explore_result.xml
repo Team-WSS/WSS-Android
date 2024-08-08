@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="novel"
+            type="com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity" />
+
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function1" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_detail_explore_result_cover"
+            cornerRadius="@{16f}"
+            loadImageUrl="@{novel.image}"
+            android:layout_width="156dp"
+            android:layout_height="232dp"
+            android:contentDescription="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/img_explore_test_cover" />
+
+        <ImageView
+            android:id="@+id/iv_detail_explore_result_interested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:contentDescription="@null"
+            android:padding="2dp"
+            android:src="@drawable/ic_normal_explore_interested"
+            app:layout_constraintStart_toStartOf="@id/iv_detail_explore_result_cover"
+            app:layout_constraintTop_toBottomOf="@id/iv_detail_explore_result_cover" />
+
+        <TextView
+            android:id="@+id/tv_detail_explore_result_interested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{String.valueOf(novel.interestedCount)}"
+            android:textAppearance="@style/body5"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_explore_result_interested"
+            app:layout_constraintStart_toEndOf="@id/iv_detail_explore_result_interested"
+            app:layout_constraintTop_toTopOf="@id/iv_detail_explore_result_interested"
+            tools:hint="23" />
+
+        <ImageView
+            android:id="@+id/iv_detail_explore_result_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@null"
+            android:padding="2dp"
+            android:src="@drawable/ic_normal_explore_rating"
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_explore_result_interested"
+            app:layout_constraintStart_toEndOf="@id/tv_detail_explore_result_interested"
+            app:layout_constraintTop_toTopOf="@id/iv_detail_explore_result_interested" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{@string/detail_explore_novel_rating(novel.rating, novel.ratingCount)}"
+            android:textAppearance="@style/body5"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_explore_result_rating"
+            app:layout_constraintStart_toEndOf="@id/iv_detail_explore_result_rating"
+            app:layout_constraintTop_toTopOf="@id/iv_detail_explore_result_rating"
+            tools:hint="4.5(24)" />
+
+        <TextView
+            android:id="@+id/tv_detail_explore_result_novel_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{novel.title}"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@id/iv_detail_explore_result_cover"
+            app:layout_constraintStart_toStartOf="@id/iv_detail_explore_result_interested"
+            app:layout_constraintTop_toBottomOf="@id/iv_detail_explore_result_interested"
+            tools:text="신데렐라는 이 멧밭쥐가 데려갑니다나나나나나나나나나나나나나나ㅏ" />
+
+        <TextView
+            android:id="@+id/tv_detail_explore_result_novel_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{novel.author}"
+            android:textAppearance="@style/body5"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/iv_detail_explore_result_cover"
+            app:layout_constraintStart_toStartOf="@id/iv_detail_explore_result_cover"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_result_novel_title"
+            tools:text="이보라" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

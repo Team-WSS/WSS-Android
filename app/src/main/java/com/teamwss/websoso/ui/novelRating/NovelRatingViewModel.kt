@@ -3,393 +3,282 @@ package com.teamwss.websoso.ui.novelRating
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.teamwss.websoso.ui.novelRating.manager.RatingDateManager
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel
+import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.model.NovelRatingEntity
+import com.teamwss.websoso.data.model.NovelRatingKeywordCategoryEntity
+import com.teamwss.websoso.data.repository.UserNovelRepository
+import com.teamwss.websoso.ui.mapper.toData
+import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.novelRating.model.CharmPoint
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
-import com.teamwss.websoso.ui.novelRating.model.RatingKeywordModel
+import com.teamwss.websoso.ui.novelRating.model.RatingDateModel.Companion.toFormattedDate
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
+import com.teamwss.websoso.ui.novelRating.util.RatingDateManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NovelRatingViewModel : ViewModel() {
-    private val _maxDayValue = MutableLiveData<Int>()
-    val maxDayValue: LiveData<Int> get() = _maxDayValue
-
-    private val _uiState = MutableLiveData<NovelRatingUiState>()
+@HiltViewModel
+class NovelRatingViewModel @Inject constructor(
+    private val userNovelRepository: UserNovelRepository,
+) : ViewModel() {
+    private val _uiState = MutableLiveData<NovelRatingUiState>(NovelRatingUiState())
     val uiState: LiveData<NovelRatingUiState> get() = _uiState
-
-    private val _isEditingStartDate = MutableLiveData<Boolean>()
-    val isEditingStartDate: LiveData<Boolean> get() = _isEditingStartDate
-
     private val ratingDateManager = RatingDateManager()
 
-    fun updatePreviousDate() {
-        _uiState.value?.let { uiState ->
-            uiState.novelRatingModel.ratingDateModel.run {
-                previousStartDate = currentStartDate
-                previousEndDate = currentEndDate
+    fun updateNovelRating(novelId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                _uiState.value = uiState.value?.copy(loading = true)
+                userNovelRepository.fetchNovelRating(novelId)
+            }.onSuccess { novelRatingEntity ->
+                handleSuccessfulFetchNovelRating(novelRatingEntity)
+            }.onFailure {
+                _uiState.value =
+                    uiState.value?.copy(
+                        loading = false,
+                        isFetchError = true,
+                    )
             }
-            _uiState.value = uiState
+        }
+    }
+
+    private fun handleSuccessfulFetchNovelRating(novelRatingEntity: NovelRatingEntity) {
+        val novelRatingModel = novelRatingEntity.toUi()
+        val isEditingStartDate =
+            ratingDateManager.updateIsEditingStartDate(novelRatingModel.uiReadStatus)
+        val dayMaxValue =
+            ratingDateManager.updateDayMaxValue(
+                novelRatingModel.ratingDateModel,
+                isEditingStartDate,
+            )
+        _uiState.value =
+            uiState.value?.copy(
+                novelRatingModel = novelRatingModel,
+                keywordsModel = NovelRatingKeywordsModel(
+                    currentSelectedKeywords = novelRatingModel.userKeywords,
+                ),
+                isEditingStartDate = isEditingStartDate,
+                maxDayValue = dayMaxValue,
+                loading = false,
+            )
+//        updateKeywordCategories()
+    }
+
+    /*
+        // TODO: 명지 키워드 뷰 병합 이후 수정
+        fun updateKeywordCategories(keyword: String = "") {
+            viewModelScope.launch {
+                runCatching {
+                    fakeNovelRatingRepository.fetchNovelRatingKeywordCategories(keyword)
+                }.onSuccess { categories ->
+                    handleSuccessfulFetchKeywordCategories(categories)
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    */
+    private fun handleSuccessfulFetchKeywordCategories(categories: List<NovelRatingKeywordCategoryEntity>) {
+        val previousSelectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
+        val updatedCategories = categories.map { it.toUi() }.map {
+            it.copy(keywords = it.keywords.map { keyword ->
+                keyword.copy(isSelected = previousSelectedKeywords.contains(keyword))
+            })
+        }
+        _uiState.value = uiState.value?.copy(
+            keywordsModel = NovelRatingKeywordsModel(
+                categories = updatedCategories,
+                currentSelectedKeywords = previousSelectedKeywords,
+            ),
+            loading = false,
+        )
+    }
+
+    fun updatePreviousDate() {
+        uiState.value?.let { currentState ->
+            val updatedRatingDateModel =
+                currentState.novelRatingModel.ratingDateModel.copy(
+                    previousStartDate = currentState.novelRatingModel.ratingDateModel.currentStartDate,
+                    previousEndDate = currentState.novelRatingModel.ratingDateModel.currentEndDate,
+                )
+
+            val updatedNovelRatingModel =
+                currentState.novelRatingModel.copy(
+                    ratingDateModel = updatedRatingDateModel,
+                )
+
+            _uiState.value = currentState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
 
     fun updateReadStatus(readStatus: ReadStatus) {
-        _uiState.value?.let { uiState ->
+        uiState.value?.let { uiState ->
             val updatedModel =
                 ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
-            _uiState.value = uiState.copy(novelRatingModel = updatedModel)
-            _isEditingStartDate.value = ratingDateManager.updateIsEditingStartDate(readStatus)
+            _uiState.value =
+                uiState.copy(
+                    novelRatingModel = updatedModel,
+                    isEditingStartDate = ratingDateManager.updateIsEditingStartDate(readStatus),
+                )
         }
     }
 
     fun toggleEditingStartDate(boolean: Boolean) {
-        _isEditingStartDate.value = boolean
+        uiState.value?.let { uiState ->
+            _uiState.value =
+                uiState.copy(
+                    isEditingStartDate = boolean,
+                )
+        }
     }
 
     fun updateCurrentDate(date: Triple<Int, Int, Int>) {
-        _uiState.value?.let { uiState ->
+        uiState.value?.let { uiState ->
             val updatedModel =
                 ratingDateManager.updateCurrentDate(
                     uiState.novelRatingModel,
                     date,
-                    _isEditingStartDate.value!!,
+                    uiState.isEditingStartDate,
+                )
+            val maxDayValue =
+                ratingDateManager.updateDayMaxValue(
+                    updatedModel,
+                    uiState.isEditingStartDate,
                 )
             _uiState.value =
-                uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
-            _maxDayValue.value =
-                ratingDateManager.updateDayMaxValue(
-                    uiState.novelRatingModel.ratingDateModel,
-                    _isEditingStartDate.value!!,
+                uiState.copy(
+                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
+                    maxDayValue = maxDayValue,
                 )
         }
     }
 
     fun clearCurrentDate() {
-        _uiState.value?.let { uiState ->
+        uiState.value?.let { uiState ->
             val updatedModel =
-                ratingDateManager.clearCurrentDate(uiState.novelRatingModel.ratingDateModel)
+                ratingDateManager.clearCurrentDate(
+                    uiState.novelRatingModel.ratingDateModel,
+                )
             _uiState.value =
-                uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
+                uiState.copy(
+                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
+                )
         }
     }
 
     fun cancelDateEdit() {
-        _uiState.value?.let { uiState ->
+        uiState.value?.let { uiState ->
             val updatedModel =
-                ratingDateManager.cancelDateEdit(uiState.novelRatingModel.ratingDateModel)
+                ratingDateManager.cancelDateEdit(
+                    uiState.novelRatingModel.ratingDateModel,
+                )
             _uiState.value =
-                uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
+                uiState.copy(
+                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
+                )
         }
     }
 
     fun updateNotNullDate() {
-        _uiState.value?.let { uiState ->
+        uiState.value?.let { uiState ->
             val updatedModel = ratingDateManager.getNotNullDate(uiState.novelRatingModel)
             _uiState.value =
-                uiState.copy(novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel))
-        }
-    }
-
-    fun updateCurrentSelectedKeywords(
-        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
-        isSelected: Boolean,
-    ) {
-        _uiState.value?.let { uiState ->
-            val updatedCategories =
-                updateCategories(uiState.ratingKeywordModel.categories, keyword, isSelected)
-            val currentSelectedKeywords =
-                updateSelectedKeywords(
-                    uiState.ratingKeywordModel.currentSelectedKeywords,
-                    keyword,
-                    isSelected,
-                )
-
-            _uiState.value =
                 uiState.copy(
-                    ratingKeywordModel =
-                        uiState.ratingKeywordModel.copy(
-                            categories = updatedCategories,
-                            currentSelectedKeywords = currentSelectedKeywords,
-                        ),
+                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
                 )
         }
     }
 
-    fun updatePreviousSelectedKeywords(keyword: RatingKeywordModel.CategoryModel.KeywordModel) {
-        _uiState.value?.let { uiState ->
-            val updatedCategories =
-                updateCategories(uiState.ratingKeywordModel.categories, keyword, false)
-            val previousSelectedKeywords =
-                uiState.ratingKeywordModel.previousSelectedKeywords.filterNot { it.keywordId == keyword.keywordId }
-
-            _uiState.value =
-                uiState.copy(
-                    ratingKeywordModel =
-                        uiState.ratingKeywordModel.copy(
-                            categories = updatedCategories,
-                            previousSelectedKeywords = previousSelectedKeywords,
-                        ),
-                )
-        }
-    }
-
-    private fun updateCategories(
-        categories: List<RatingKeywordModel.CategoryModel>,
-        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
-        isSelected: Boolean,
-    ): List<RatingKeywordModel.CategoryModel> {
-        return categories.map { category ->
-            val updatedKeywords =
-                category.keywords.map { keywordInCategory ->
-                    when (keywordInCategory.keywordId == keyword.keywordId) {
-                        true -> keywordInCategory.copy(isSelected = isSelected)
-                        false -> keywordInCategory
-                    }
-                }
-            category.copy(keywords = updatedKeywords)
-        }
-    }
-
-    private fun updateSelectedKeywords(
-        currentSelectedKeywords: List<RatingKeywordModel.CategoryModel.KeywordModel>,
-        keyword: RatingKeywordModel.CategoryModel.KeywordModel,
-        isSelected: Boolean,
-    ): List<RatingKeywordModel.CategoryModel.KeywordModel> {
-        return currentSelectedKeywords.toMutableList().apply {
-            when (isSelected) {
-                true -> add(keyword)
-                false -> removeIf { it.keywordId == keyword.keywordId }
+    fun updateCharmPoints(charmPoint: CharmPoint) {
+        uiState.value?.let { uiState ->
+            val charmPoints = uiState.novelRatingModel.charmPoints.toMutableList()
+            when (charmPoints.contains(charmPoint)) {
+                true -> charmPoints.remove(charmPoint)
+                false -> charmPoints.add(charmPoint)
             }
+            val updatedNovelRatingModel =
+                uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
+            _uiState.value = uiState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
 
-    fun initCurrentSelectedKeywords() {
-        _uiState.value?.let { uiState ->
-            val updatedCategories =
-                uiState.ratingKeywordModel.categories.map { category ->
-                    val updatedKeywords =
-                        category.keywords.map { keyword ->
-                            keyword.copy(
-                                isSelected =
-                                    uiState.ratingKeywordModel.previousSelectedKeywords.any {
-                                        it.keywordId == keyword.keywordId
-                                    },
-                            )
+    fun updateSelectedKeywords(keyword: NovelRatingKeywordModel, isSelected: Boolean) {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                keywordsModel = uiState.keywordsModel.copy(
+                    categories = uiState.keywordsModel.updatedCategories(keyword.copy(isSelected = isSelected)),
+                    currentSelectedKeywords = uiState.keywordsModel.currentSelectedKeywords.toMutableList().apply {
+                        when (isSelected) {
+                            true -> add(keyword)
+                            false -> this.removeIf { it.keywordId == keyword.keywordId }
                         }
-                    category.copy(keywords = updatedKeywords)
-                }
-
-            _uiState.value =
-                uiState.copy(
-                    ratingKeywordModel =
-                        uiState.ratingKeywordModel.copy(
-                            categories = updatedCategories,
-                            currentSelectedKeywords = uiState.ratingKeywordModel.previousSelectedKeywords,
-                        ),
-                )
+                    }.toList(),
+                ),
+            )
         }
     }
 
     fun saveSelectedKeywords() {
-        _uiState.value?.let { uiState ->
-            _uiState.value =
-                uiState.copy(
-                    ratingKeywordModel =
-                        uiState.ratingKeywordModel.copy(
-                            previousSelectedKeywords = uiState.ratingKeywordModel.currentSelectedKeywords,
-                        ),
-                )
+        uiState.value?.let { uiState ->
+            val previousSelectedKeywords = uiState.keywordsModel.currentSelectedKeywords
+            val updatedRatingModel = uiState.novelRatingModel.copy(userKeywords = previousSelectedKeywords)
+            _uiState.value = uiState.copy(novelRatingModel = updatedRatingModel)
         }
     }
 
     fun clearEditingKeyword() {
-        _uiState.value?.let { uiState ->
-            val updatedCategories =
-                uiState.ratingKeywordModel.categories.map { category ->
-                    val updatedKeywords =
-                        category.keywords.map { keyword -> keyword.copy(isSelected = false) }
-                    category.copy(keywords = updatedKeywords)
-                }
-
-            _uiState.value =
-                uiState.copy(
-                    ratingKeywordModel =
-                        uiState.ratingKeywordModel.copy(
-                            categories = updatedCategories,
-                            previousSelectedKeywords = emptyList(),
-                            currentSelectedKeywords = emptyList(),
-                        ),
-                )
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                novelRatingModel = uiState.novelRatingModel.copy(userKeywords = emptyList()),
+                keywordsModel = uiState.keywordsModel.copy(
+                    categories = uiState.keywordsModel.categories.map { category ->
+                        category.copy(keywords = category.keywords.map { keyword ->
+                            keyword.copy(isSelected = false)
+                        })
+                    },
+                    currentSelectedKeywords = emptyList(),
+                ),
+            )
         }
     }
 
     fun cancelEditingKeyword() {
-        _uiState.value?.let { uiState ->
-            val updatedCategories =
-                uiState.ratingKeywordModel.categories.map { category ->
-                    val updatedKeywords =
-                        category.keywords.map { keyword ->
-                            keyword.copy(
-                                isSelected =
-                                    uiState.ratingKeywordModel.previousSelectedKeywords.any {
-                                        it.keywordId == keyword.keywordId
-                                    },
-                            )
-                        }
-                    category.copy(keywords = updatedKeywords)
-                }
-
-            _uiState.value =
-                uiState.copy(
-                    ratingKeywordModel =
-                        uiState.ratingKeywordModel.copy(
-                            categories = updatedCategories,
-                            currentSelectedKeywords = uiState.ratingKeywordModel.previousSelectedKeywords,
-                        ),
-                )
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                keywordsModel = uiState.keywordsModel.copy(
+                    currentSelectedKeywords = uiState.novelRatingModel.userKeywords,
+                ),
+            )
         }
     }
 
-    // 날릴예정
-    fun getDummy() {
-        _uiState.value =
-            NovelRatingUiState(
-                novelRatingModel =
-                    NovelRatingModel(
-                        userNovelId = 1,
-                        novelTitle = "철혈검가 사냥개의 회귀",
-                        userNovelRating = 4.0f,
-                        readStatus = "WATCHED",
-                        startDate = "2023-02-28",
-                        endDate = "2024-05-11",
+    fun updateNovelRating(novelId: Long, isAlreadyRated: Boolean) {
+        viewModelScope.launch {
+            runCatching {
+                userNovelRepository.saveNovelRating(
+                    NovelRatingEntity(
+                        novelId = novelId,
+                        readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name
+                            ?: throw IllegalArgumentException("readStatus must not be null"),
+                        startDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousStartDate?.toFormattedDate(),
+                        endDate = uiState.value?.novelRatingModel?.ratingDateModel?.previousEndDate?.toFormattedDate(),
+                        userNovelRating = uiState.value?.novelRatingModel?.userNovelRating ?: 0.0f,
+                        charmPoints = uiState.value?.novelRatingModel?.charmPoints?.map { it.value } ?: emptyList(),
+                        userKeywords = uiState.value?.novelRatingModel?.userKeywords?.map { it.toData() } ?: emptyList(),
                     ),
-                ratingKeywordModel =
-                    RatingKeywordModel(
-                        categories =
-                            listOf(
-                                RatingKeywordModel.CategoryModel(
-                                    categoryName = "세계관",
-                                    keywords =
-                                        listOf(
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 1,
-                                                keywordName = "이세계",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 2,
-                                                keywordName = "현대",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 3,
-                                                keywordName = "서양풍/중세시대",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 4,
-                                                keywordName = "SF",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 5,
-                                                keywordName = "동양풍/사극",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 6,
-                                                keywordName = "학원/아카데미",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 7,
-                                                keywordName = "실존역사",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 16,
-                                                keywordName = "전투",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 17,
-                                                keywordName = "로맨스",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 18,
-                                                keywordName = "판타지",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 19,
-                                                keywordName = "드라마",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 20,
-                                                keywordName = "스릴러",
-                                            ),
-                                        ),
-                                ),
-                                RatingKeywordModel.CategoryModel(
-                                    categoryName = "소재",
-                                    keywords =
-                                        listOf(
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 8,
-                                                keywordName = "웹툰화",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 9,
-                                                keywordName = "드라마화",
-                                            ),
-                                        ),
-                                ),
-                                RatingKeywordModel.CategoryModel(
-                                    categoryName = "캐릭터",
-                                    keywords =
-                                        listOf(
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 10,
-                                                keywordName = "영웅",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 11,
-                                                keywordName = "악당/빌런",
-                                            ),
-                                        ),
-                                ),
-                                RatingKeywordModel.CategoryModel(
-                                    categoryName = "관계",
-                                    keywords =
-                                        listOf(
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 12,
-                                                keywordName = "친구",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 13,
-                                                keywordName = "동료",
-                                            ),
-                                        ),
-                                ),
-                                RatingKeywordModel.CategoryModel(
-                                    categoryName = "분위기",
-                                    keywords =
-                                        listOf(
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 14,
-                                                keywordName = "뻔한",
-                                            ),
-                                            RatingKeywordModel.CategoryModel.KeywordModel(
-                                                keywordId = 15,
-                                                keywordName = "반전있는",
-                                            ),
-                                        ),
-                                ),
-                            ),
-                    ),
-            )
-        dummyInit()
-    }
-
-    private fun dummyInit() {
-        _uiState.value?.let { uiState ->
-            _isEditingStartDate.value =
-                ratingDateManager.updateIsEditingStartDate(uiState.novelRatingModel.uiReadStatus)
-            _maxDayValue.value =
-                ratingDateManager.updateDayMaxValue(
-                    uiState.novelRatingModel.ratingDateModel,
-                    _isEditingStartDate.value!!,
+                    isAlreadyRated
                 )
+            }.onSuccess {
+                _uiState.value = uiState.value?.copy(isSaveSuccess = true)
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(isSaveError = true)
+            }
         }
     }
 }

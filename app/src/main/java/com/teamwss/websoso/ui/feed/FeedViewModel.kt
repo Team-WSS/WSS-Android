@@ -3,16 +3,14 @@ package com.teamwss.websoso.ui.feed
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.teamwss.websoso.WebsosoApp
 import com.teamwss.websoso.data.repository.FakeUserRepository
+import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.feed.model.Category
+import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
-import com.teamwss.websoso.ui.mapper.FeedMapper.toPresentation
+import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,56 +18,196 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val getFeedsUseCase: GetFeedsUseCase,
+    private val feedRepository: FeedRepository,
     fakeUserRepository: FakeUserRepository,
 ) : ViewModel() {
-    val gender: String = fakeUserRepository.gender
+    private val _categories: MutableList<CategoryModel> = mutableListOf()
+    val categories: List<CategoryModel> get() = _categories.toList()
 
-    private val _uiState: MutableLiveData<FeedUiState> = MutableLiveData(FeedUiState())
-    val uiState: LiveData<FeedUiState> get() = _uiState
+    private val _feedUiState: MutableLiveData<FeedUiState> = MutableLiveData(FeedUiState())
+    val feedUiState: LiveData<FeedUiState> get() = _feedUiState
 
-    fun fetchFeedsByCategory(category: Category) {
-        viewModelScope.launch {
-            runCatching {
-                getFeedsUseCase()
-            }.onSuccess { feeds ->
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    category = feeds.category,
-                    feeds = feeds.feeds.map { it.toPresentation() }
+    init {
+        val categories: List<CategoryModel> = when (fakeUserRepository.gender) {
+            "MALE" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
+            "FEMALE" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
+            else -> throw IllegalArgumentException()
+        }.split(",")
+            .map {
+                val category: Category = Category.from(it)
+                CategoryModel(
+                    category = category,
+                    isSelected = category == Category.ALL,
                 )
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false, error = true,
-                )
+            }
+
+        _categories.addAll(categories)
+    }
+
+    fun updateSelectedCategory(category: Category) {
+        categories.forEachIndexed { index, categoryUiState ->
+            _categories[index] = when {
+                categoryUiState.isSelected -> categoryUiState.copy(isSelected = false)
+                categoryUiState.category == category -> categoryUiState.copy(isSelected = true)
+                else -> return@forEachIndexed
+            }
+        }
+        updateFeeds()
+    }
+
+    fun updateFeeds() {
+        feedUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                val selectedCategory: Category =
+                    categories.find { it.isSelected }?.category ?: throw IllegalStateException()
+
+                runCatching {
+                    when (feedUiState.feeds.isNotEmpty()) {
+                        true -> getFeedsUseCase(
+                            selectedCategory.titleEn,
+                            feedUiState.feeds.last().id,
+                        )
+
+                        false -> getFeedsUseCase(selectedCategory.titleEn)
+                    }
+                }.onSuccess { feeds ->
+                    if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
+                    // Return result state of error in domain layer later
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        isLoadable = feeds.isLoadable,
+                        feeds = feeds.feeds.map { it.toUi() },
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
             }
         }
     }
 
-    fun updateLikeCount(isSelected: Boolean, selectedFeedId: Int) {
-        val uiState = uiState.value ?: throw IllegalArgumentException()
-        val count = if (isSelected) -1 else 1
-        val updatedFeeds = uiState.feeds.map { feed ->
-            feed.takeIf { feed.id == selectedFeedId }?.copy(
-                likeCount = (feed.likeCount.toInt() + count).toString(),
-                isThumbUpSelected = !isSelected
-            ) ?: feed
+    fun updateRefreshedFeeds() {
+        feedUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                val selectedCategory: Category =
+                    categories.find { it.isSelected }?.category ?: throw IllegalStateException()
+
+                runCatching {
+                    getFeedsUseCase(selectedCategory.titleEn)
+                }.onSuccess { feeds ->
+                    if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
+                    // Return result state of error in domain layer later
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        isLoadable = feeds.isLoadable,
+                        feeds = feeds.feeds.map { it.toUi() },
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
         }
-        _uiState.value = uiState.copy(feeds = updatedFeeds)
     }
 
-    fun saveLikeCount() {
-        // 좋아요 API
+    fun updateLike(selectedFeedId: Long, isLiked: Boolean, updatedLikeCount: Int) {
+        feedUiState.value?.let { feedUiState ->
+            val selectedFeed = feedUiState.feeds.find { feedModel ->
+                feedModel.id == selectedFeedId
+            } ?: throw IllegalArgumentException()
+
+            if (selectedFeed.isLiked == isLiked) return
+
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.saveLike(selectedFeed.isLiked, selectedFeedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(
+                        feeds = feedUiState.feeds.map { feedModel ->
+                            when (feedModel.id == selectedFeedId) {
+                                true -> feedModel.copy(
+                                    isLiked = isLiked,
+                                    likeCount = updatedLikeCount,
+                                )
+
+                                false -> feedModel
+                            }
+                        }
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
     }
 
-    fun saveBlockedUser(userId: Int) {
-        // 유저 차단 API
+    fun updateReportedSpoilerFeed(feedId: Long) {
+        feedUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _feedUiState.value = feedUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveSpoilerFeed(feedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        feeds = feedUiState.feeds.filter { it.id != feedId }
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
     }
 
-    fun saveReportedSpoilingFeed(feedId: Int) {
-        // 스포일러 신고 API - 소소피드
+    fun updateReportedImpertinenceFeed(feedId: Long) {
+        feedUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _feedUiState.value = feedUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveImpertinenceFeed(feedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        feeds = feedUiState.feeds.filter { it.id != feedId }
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
     }
 
-    fun saveReportedImpertinenceFeed(feedId: Int) {
-        // 부적절한 표현 신고 API - 소소피드
+    fun updateRemovedFeed(feedId: Long) {
+        feedUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _feedUiState.value = feedUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveRemovedFeed(feedId)
+                }.onSuccess {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        feeds = feedUiState.feeds.filter { it.id != feedId }
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
     }
 }

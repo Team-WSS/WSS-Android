@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.normalExplore.NormalExploreActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -18,153 +17,141 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        tools:context=".MainActivity">
 
-        <ImageView
-            android:id="@+id/iv_normal_explore_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="54dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@null"
-            android:onClick="@{() -> onClick.onBackButtonClick()}"
-            android:padding="12dp"
-            android:src="@drawable/btn_explore_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_normal_explore_search_bar"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/cdl_normal_explore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_explore_stroke_gray70_radius_14dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_normal_explore_back_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_normal_explore_back_button"
-            app:layout_constraintTop_toTopOf="@id/iv_normal_explore_back_button">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/et_normal_explore_search_content"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:autofillHints="@null"
-                android:background="@null"
-                android:cursorVisible="true"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:maxLines="1"
-                android:scrollHorizontally="true"
-                android:text="@={normalExploreViewModel.searchWord}"
-                android:textAppearance="@style/label1"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/iv_normal_explore_cancel_button"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:hint="d얼마나 길어져야 안 잘리는지 한번 볼게유튜브 프리미엄 구독중입니" />
-
-            <ImageView
-                android:id="@+id/iv_normal_explore_cancel_button"
-                isVisible="@{normalExploreViewModel.isSearchCancelButtonVisibility()}"
-                android:layout_width="wrap_content"
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/abl_normal_explore"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="@null"
-                android:onClick="@{() -> onClick.onSearchCancelButtonClick()}"
-                android:padding="8dp"
-                android:src="@drawable/btn_explore_cancel"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_normal_explore_search_button"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintStart_toEndOf="@id/et_normal_explore_search_content"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_normal_explore_search_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="4dp"
-                android:contentDescription="@null"
-                android:onClick="@{() -> onClick.onSearchButtonClick()}"
-                android:padding="4dp"
-                android:src="@drawable/btn_explore_search"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:elevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_normal_explore_result_exist"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="?attr/actionBarSize">
+
+                    <ImageView
+                        android:id="@+id/iv_normal_explore_back_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@null"
+                        android:onClick="@{() -> onClick.onBackButtonClick()}"
+                        android:padding="12dp"
+                        android:src="@drawable/btn_explore_back"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_normal_explore_search_bar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/bg_explore_stroke_gray70_radius_14dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="8dp"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_normal_explore_back_button"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_normal_explore_back_button"
+                        app:layout_constraintTop_toTopOf="@id/iv_normal_explore_back_button">
+
+                        <EditText
+                            android:id="@+id/et_normal_explore_search_content"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:autofillHints="@null"
+                            android:background="@null"
+                            android:cursorVisible="true"
+                            android:imeOptions="actionSearch"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:scrollHorizontally="true"
+                            android:text="@={normalExploreViewModel.searchWord}"
+                            android:textAppearance="@style/label1"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/iv_normal_explore_cancel_button"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:hint="d얼마나 길어져야 안 잘리는지 한번 볼게유튜브 프리미엄 구독중입니" />
+
+                        <ImageView
+                            android:id="@+id/iv_normal_explore_cancel_button"
+                            isVisible="@{normalExploreViewModel.isSearchCancelButtonVisibility}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@null"
+                            android:onClick="@{() -> onClick.onSearchCancelButtonClick()}"
+                            android:padding="8dp"
+                            android:src="@drawable/btn_explore_cancel"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_normal_explore_search_button"
+                            app:layout_constraintHorizontal_bias="1"
+                            app:layout_constraintHorizontal_chainStyle="spread"
+                            app:layout_constraintStart_toEndOf="@id/et_normal_explore_search_content"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_normal_explore_search_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="4dp"
+                            android:contentDescription="@null"
+                            android:onClick="@{() -> onClick.onSearchButtonClick()}"
+                            android:padding="4dp"
+                            android:src="@drawable/btn_explore_search"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_normal_explore_result"
+            isVisible="@{!normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="visible"
+            android:layout_marginHorizontal="20dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="40dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_search_bar">
-
-            <TextView
-                android:id="@+id/tv_normal_explore_novel_count_title"
-                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/normal_explore_novel_count_title"
-                android:textAppearance="@style/title2"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_normal_explore_novel_count"
-                isVisible="@{normalExploreViewModel.isNovelResultCountBoxVisibility()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textAppearance="@style/body3"
-                android:textColor="@color/gray_100_CBCBD1"
-                app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_novel_count_title"
-                app:layout_constraintStart_toEndOf="@id/tv_normal_explore_novel_count_title"
-                app:layout_constraintTop_toTopOf="@id/tv_normal_explore_novel_count_title"
-                tools:hint="8" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_normal_explore_result"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingBottom="40dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_novel_count_title"
-                tools:listitem="@layout/item_normal_explore" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore"
+            tools:listitem="@layout/item_normal_explore" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_normal_explore_result_not_exist"
+            isVisible="@{normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_search_bar">
+            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore">
 
             <ImageView
                 android:id="@+id/iv_normal_explore_not_exist_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="180dp"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_explore_not_exist_result"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -191,14 +178,26 @@
                 android:layout_marginTop="36dp"
                 android:background="@drawable/bg_explore_primary50_radius_14dp"
                 android:gravity="center"
+                android:onClick="@{() -> onClick.onNovelInquireButtonClick()}"
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="20dp"
                 android:text="@string/normal_explore_add_novel_inquire"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/primary_100_6A5DFD"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_not_exist_result" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+            android:id="@+id/wl_normal_explore"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

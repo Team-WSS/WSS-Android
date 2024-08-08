@@ -9,8 +9,10 @@
     <color name="secondary_100_FF675D">#FF675D</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="gray_20_FAFAFA">#FAFAFA</color>
     <color name="gray_50_F4F5F8">#F4F5F8</color>
     <color name="gray_70_DFDFE3">#DFDFE3</color>
+    <color name="gray_80_DDDDE3">#DDDDE3</color>
     <color name="gray_100_CBCBD1">#CBCBD1</color>
     <color name="gray_200_AEADB3">#AEADB3</color>
     <color name="gray_300_52515F">#52515F</color>
