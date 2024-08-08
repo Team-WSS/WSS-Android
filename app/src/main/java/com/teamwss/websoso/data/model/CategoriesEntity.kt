@@ -1,6 +1,6 @@
 package com.teamwss.websoso.data.model
 
-data class KeywordsEntity(
+data class CategoriesEntity(
     val categories: List<CategoryEntity>,
 ) {
     data class CategoryEntity(

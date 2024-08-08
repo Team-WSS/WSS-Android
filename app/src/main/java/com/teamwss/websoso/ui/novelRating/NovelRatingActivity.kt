@@ -13,9 +13,9 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.common.model.KeywordsModel
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -114,7 +114,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         }
     }
 
-    private fun updateKeywordChips(selectedKeywords: List<NovelRatingKeywordModel>) {
+    private fun updateKeywordChips(selectedKeywords: List<KeywordsModel.CategoryModel.KeywordModel>) {
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
         selectedKeywords.forEach { keyword ->

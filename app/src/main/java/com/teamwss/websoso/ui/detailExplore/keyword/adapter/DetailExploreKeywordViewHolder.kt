@@ -7,7 +7,7 @@ import coil.transform.RoundedCornersTransformation
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
+import com.teamwss.websoso.ui.common.model.KeywordsModel.CategoryModel
 import com.teamwss.websoso.util.toFloatScaledByDp
 import com.teamwss.websoso.util.toIntScaledByDp
 

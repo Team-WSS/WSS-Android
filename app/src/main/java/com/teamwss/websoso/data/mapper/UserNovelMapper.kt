@@ -1,11 +1,8 @@
 package com.teamwss.websoso.data.mapper
 
-import com.teamwss.websoso.data.model.KeywordsEntity
+import com.teamwss.websoso.data.model.CategoriesEntity
 import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.remote.request.NovelRatingRequestDto
-import com.teamwss.websoso.data.remote.response.NovelRatingKeywordCategoriesResponseDto
-import com.teamwss.websoso.data.remote.response.NovelRatingKeywordCategoryResponseDto
-import com.teamwss.websoso.data.remote.response.NovelRatingKeywordResponseDto
 import com.teamwss.websoso.data.remote.response.NovelRatingResponseDto
 
 fun NovelRatingResponseDto.toData(): NovelRatingEntity =
@@ -18,7 +15,7 @@ fun NovelRatingResponseDto.toData(): NovelRatingEntity =
         charmPoints = attractivePoints,
         userKeywords =
         keywords.map { keyword ->
-            KeywordsEntity.CategoryEntity.KeywordEntity(
+            CategoriesEntity.CategoryEntity.KeywordEntity(
                 keywordId = keyword.keywordId,
                 keywordName = keyword.keywordName,
             )

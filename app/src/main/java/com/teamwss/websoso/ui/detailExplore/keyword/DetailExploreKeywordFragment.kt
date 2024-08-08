@@ -9,9 +9,9 @@ import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.Companion.findKeywordByName
+import com.teamwss.websoso.ui.common.model.KeywordsModel.CategoryModel
+import com.teamwss.websoso.ui.common.model.KeywordsModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.ui.common.model.KeywordsModel.Companion.findKeywordByName
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

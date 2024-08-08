@@ -9,9 +9,9 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.ui.common.model.KeywordsModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordViewHolder
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
 class NovelRatingKeywordBottomSheetDialog :
@@ -87,7 +87,7 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateCurrentSelectedKeywordsHeader(currentSelectedKeywords: List<NovelRatingKeywordModel>) {
+    private fun updateCurrentSelectedKeywordsHeader(currentSelectedKeywords: List<KeywordsModel.CategoryModel.KeywordModel>) {
         val existingKeywords = mutableListOf<String>()
 
         for (i in 0 until binding.wcgNovelRatingKeywordSelectedKeyword.childCount) {
@@ -106,7 +106,7 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateCurrentSelectedKeywordsRecyclerView(currentSelectedKeywords: List<NovelRatingKeywordModel>) {
+    private fun updateCurrentSelectedKeywordsRecyclerView(currentSelectedKeywords: List<KeywordsModel.CategoryModel.KeywordModel>) {
         currentSelectedKeywords.forEach { keyword ->
             updateChipSelection(keyword = keyword, isSelected = true)
         }
@@ -117,7 +117,7 @@ class NovelRatingKeywordBottomSheetDialog :
         if (chip != null) binding.wcgNovelRatingKeywordSelectedKeyword.removeView(chip)
     }
 
-    private fun addCurrentSelectedKeywordChip(keyword: NovelRatingKeywordModel) {
+    private fun addCurrentSelectedKeywordChip(keyword: KeywordsModel.CategoryModel.KeywordModel) {
         WebsosoChip(binding.root.context).apply {
             setWebsosoChipText(keyword.keywordName)
             setWebsosoChipTextAppearance(R.style.body2)
@@ -142,7 +142,7 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateChipSelection(keyword: NovelRatingKeywordModel, isSelected: Boolean) {
+    private fun updateChipSelection(keyword: KeywordsModel.CategoryModel.KeywordModel, isSelected: Boolean) {
         for (i in 0 until binding.rvRatingKeywordList.childCount) {
             val child = binding.rvRatingKeywordList.getChildAt(i)
             val viewHolder = binding.rvRatingKeywordList.getChildViewHolder(child) as? NovelRatingKeywordViewHolder

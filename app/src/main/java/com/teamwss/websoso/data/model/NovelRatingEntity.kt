@@ -8,5 +8,5 @@ data class NovelRatingEntity(
     val endDate: String?,
     val userNovelRating: Float,
     val charmPoints: List<String>,
-    val userKeywords: List<KeywordsEntity.CategoryEntity.KeywordEntity>,
+    val userKeywords: List<CategoriesEntity.CategoryEntity.KeywordEntity>,
 )

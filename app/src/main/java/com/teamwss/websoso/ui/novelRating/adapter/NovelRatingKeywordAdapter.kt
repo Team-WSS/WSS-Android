@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
+import com.teamwss.websoso.ui.common.model.KeywordsModel
 
 class NovelRatingKeywordAdapter(
-    private val onKeywordClick: (keyword: NovelRatingKeywordModel, isClicked: Boolean) -> (Unit),
-) : ListAdapter<NovelRatingKeywordCategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
+    private val onKeywordClick: (keyword: KeywordsModel.CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
+) : ListAdapter<KeywordsModel.CategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -32,15 +31,15 @@ class NovelRatingKeywordAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<NovelRatingKeywordCategoryModel>() {
+        val diffUtil = object : DiffUtil.ItemCallback<KeywordsModel.CategoryModel>() {
             override fun areItemsTheSame(
-                oldItem: NovelRatingKeywordCategoryModel,
-                newItem: NovelRatingKeywordCategoryModel,
+                oldItem: KeywordsModel.CategoryModel,
+                newItem: KeywordsModel.CategoryModel,
             ): Boolean = oldItem.categoryName == newItem.categoryName
 
             override fun areContentsTheSame(
-                oldItem: NovelRatingKeywordCategoryModel,
-                newItem: NovelRatingKeywordCategoryModel,
+                oldItem: KeywordsModel.CategoryModel,
+                newItem: KeywordsModel.CategoryModel,
             ): Boolean = oldItem == newItem
         }
     }

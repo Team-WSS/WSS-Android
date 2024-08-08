@@ -1,33 +1,31 @@
 package com.teamwss.websoso.ui.novelRating.adapter
 
-import android.util.Log
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
+import com.teamwss.websoso.ui.common.model.KeywordsModel
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemNovelRatingKeywordBinding,
     private val onKeywordClick: (
-        keyword: NovelRatingKeywordModel,
+        keyword: KeywordsModel.CategoryModel.KeywordModel,
         isClicked: Boolean,
     ) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(category: NovelRatingKeywordCategoryModel) {
+    fun bind(category: KeywordsModel.CategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
-            categoryImageUrl = category.categoryImageUrl
+            categoryImageUrl = category.categoryImage
             setupWebsosoChips(category)
             setupExpandToggleBtn()
         }
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: NovelRatingKeywordCategoryModel) {
+    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: KeywordsModel.CategoryModel) {
         wcgNovelRatingKeyword.removeAllViews()
         category.keywords.forEach { keyword ->
             WebsosoChip(binding.root.context)
@@ -65,7 +63,7 @@ class NovelRatingKeywordViewHolder(
         return (this * scale + 0.5f).toInt()
     }
 
-    fun updateChipSelection(keyword: NovelRatingKeywordModel, isSelected: Boolean) {
+    fun updateChipSelection(keyword: KeywordsModel.CategoryModel.KeywordModel, isSelected: Boolean) {
         binding.wcgNovelRatingKeyword.forEach { view ->
             val chip = view as WebsosoChip
             if (chip.text == keyword.keywordName) {
