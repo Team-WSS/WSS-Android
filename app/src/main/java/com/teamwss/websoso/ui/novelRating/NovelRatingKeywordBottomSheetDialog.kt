@@ -30,7 +30,6 @@ class NovelRatingKeywordBottomSheetDialog :
         setupRecyclerView()
         setupObserver()
         setupSearchEditorAction()
-        viewModel.updateKeywordCategories()
     }
 
     private fun bindViewModel() {

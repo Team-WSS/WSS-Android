@@ -73,6 +73,7 @@ class NovelRatingViewModel @Inject constructor(
     fun updateKeywordCategories(keyword: String? = null) {
         viewModelScope.launch {
             runCatching {
+                if (keyword == null && uiState.value?.keywordsModel?.categories?.isNotEmpty() == true) return@launch
                 keywordRepository.fetchKeywords(keyword)
             }.onSuccess { categories ->
                 handleSuccessfulFetchKeywordCategories(keyword, categories.toNovelRatingUi())
