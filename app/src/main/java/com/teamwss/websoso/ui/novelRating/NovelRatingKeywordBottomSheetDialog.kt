@@ -81,12 +81,13 @@ class NovelRatingKeywordBottomSheetDialog :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            updateCurrentSelectedChips(uiState.keywordsModel.currentSelectedKeywords)
+            updateCurrentSelectedKeywordsHeader(uiState.keywordsModel.currentSelectedKeywords)
+            updateCurrentSelectedKeywordsRecyclerView(uiState.keywordsModel.currentSelectedKeywords)
             updateKeywordRecyclerView(uiState)
         }
     }
 
-    private fun updateCurrentSelectedChips(currentSelectedKeywords: List<NovelRatingKeywordModel>) {
+    private fun updateCurrentSelectedKeywordsHeader(currentSelectedKeywords: List<NovelRatingKeywordModel>) {
         val existingKeywords = mutableListOf<String>()
 
         for (i in 0 until binding.wcgNovelRatingKeywordSelectedKeyword.childCount) {
@@ -102,6 +103,15 @@ class NovelRatingKeywordBottomSheetDialog :
 
         currentSelectedKeywords.filterNot { it.keywordName in existingKeywords }.forEach { keyword ->
             addCurrentSelectedKeywordChip(keyword)
+        }
+    }
+
+    private fun updateCurrentSelectedKeywordsRecyclerView(currentSelectedKeywords: List<NovelRatingKeywordModel>) {
+        currentSelectedKeywords.forEach { keyword ->
+            updateChipSelection(
+                keyword = keyword,
+                isSelected = true,
+            )
         }
     }
 

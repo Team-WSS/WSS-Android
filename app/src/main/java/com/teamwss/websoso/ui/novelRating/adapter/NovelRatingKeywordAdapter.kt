@@ -33,17 +33,16 @@ class NovelRatingKeywordAdapter(
     }
 
     companion object {
-        val diffUtil =
-            object : DiffUtil.ItemCallback<NovelRatingKeywordCategoryModel>() {
-                override fun areItemsTheSame(
-                    oldItem: NovelRatingKeywordCategoryModel,
-                    newItem: NovelRatingKeywordCategoryModel,
-                ): Boolean = oldItem.categoryName == newItem.categoryName
+        val diffUtil = object : DiffUtil.ItemCallback<NovelRatingKeywordCategoryModel>() {
+            override fun areItemsTheSame(
+                oldItem: NovelRatingKeywordCategoryModel,
+                newItem: NovelRatingKeywordCategoryModel,
+            ): Boolean = oldItem.categoryName == newItem.categoryName
 
-                override fun areContentsTheSame(
-                    oldItem: NovelRatingKeywordCategoryModel,
-                    newItem: NovelRatingKeywordCategoryModel,
-                ): Boolean = oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
-            }
+            override fun areContentsTheSame(
+                oldItem: NovelRatingKeywordCategoryModel,
+                newItem: NovelRatingKeywordCategoryModel,
+            ): Boolean = oldItem == newItem
+        }
     }
 }
