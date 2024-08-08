@@ -7,8 +7,8 @@
     <!-- 메인 뷰 -->
     <string name="main_ic_home">홈</string>
     <string name="main_ic_explore">탐색</string>
-    <string name="main_ic_feed">피드</string>
-    <string name="main_ic_my_page">my</string>
+    <string name="main_ic_feed">수다</string>
+    <string name="main_ic_my_page">My</string>
 
     <!--일반 탐색 뷰-->
     <string name="normal_explore_novel_count_title">작품</string>
