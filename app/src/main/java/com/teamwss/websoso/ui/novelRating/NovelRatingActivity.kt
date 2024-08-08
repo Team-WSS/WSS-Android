@@ -88,24 +88,19 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
     private fun updateInitialReadStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val readStatus = intent.getSerializableExtra(READ_STATUS, ReadStatus::class.java)
-            if (readStatus != null) {
-                novelRatingViewModel.updateReadStatus(readStatus)
-            }
+            if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
         } else {
             val readStatus = intent.getSerializableExtra(READ_STATUS) as? ReadStatus
-            if (readStatus != null) {
-                novelRatingViewModel.updateReadStatus(readStatus)
-            }
+            if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
         }
     }
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {
         val (resId, params) = ratingDateModel.formatDisplayDate(ratingDateModel)
 
-        val underlinedText =
-            SpannableString(getString(resId, *params)).apply {
-                setSpan(UnderlineSpan(), 0, this.length, 0)
-            }
+        val underlinedText = SpannableString(getString(resId, *params)).apply {
+            setSpan(UnderlineSpan(), 0, this.length, 0)
+        }
 
         binding.tvNovelRatingDisplayDate.text = underlinedText
     }
@@ -113,10 +108,9 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
     private fun updateCharmPointChips(previousSelectedCharmPoints: List<CharmPoint>) {
         binding.wcgNovelRatingCharmPoints.forEach { view ->
             val chip = view as WebsosoChip
-            chip.isSelected =
-                previousSelectedCharmPoints.contains(
-                    charmPoints.find { charmPoint -> charmPoint.title == chip.text.toString() },
-                )
+            chip.isSelected = previousSelectedCharmPoints.contains(
+                charmPoints.find { charmPoint -> charmPoint.title == chip.text.toString() },
+            )
         }
     }
 
