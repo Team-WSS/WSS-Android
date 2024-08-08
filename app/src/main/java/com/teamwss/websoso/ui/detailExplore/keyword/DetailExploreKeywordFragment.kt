@@ -12,6 +12,7 @@ import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeyword
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.Companion.findKeywordByName
+import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,6 +50,10 @@ class DetailExploreKeywordFragment :
 
         override fun onNovelInquireButtonClick() {
             // TODO 문의하기로 이동
+        }
+
+        override fun onDetailSearchNovelButtonClick() {
+            // TODO 상세 탐색 결과 화면으로 이동
         }
     }
 
