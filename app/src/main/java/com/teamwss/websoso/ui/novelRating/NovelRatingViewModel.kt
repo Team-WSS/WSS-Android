@@ -226,8 +226,8 @@ class NovelRatingViewModel @Inject constructor(
 
     fun saveSelectedKeywords() {
         uiState.value?.let { uiState ->
-            val previousSelectedKeywords = uiState.keywordsModel.currentSelectedKeywords
-            val updatedRatingModel = uiState.novelRatingModel.copy(userKeywords = previousSelectedKeywords)
+            val selectedKeywords = uiState.keywordsModel.currentSelectedKeywords
+            val updatedRatingModel = uiState.novelRatingModel.copy(userKeywords = selectedKeywords)
             _uiState.value = uiState.copy(novelRatingModel = updatedRatingModel)
         }
     }
