@@ -440,13 +440,14 @@
                         android:id="@+id/tv_my_library_attractive_points"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@{myLibraryViewModel.attractivePointsText}"
                         android:textAppearance="@style/title2"
                         android:textColor="@color/gray_300_52515F"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="캐릭터,소재가 매력적인 작품" />
+                        tools:text="현캐릭터,소재가 매력적인 작품" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -454,7 +455,6 @@
                     android:id="@+id/cg_my_library_attractive_points"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintTop_toBottomOf="@id/cl_my_library_attractive_points">
 
