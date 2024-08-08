@@ -33,7 +33,7 @@ class DetailExploreResultViewModel @Inject constructor(
                     keywordIds = listOf() // TODO 이건 더미임요 서버 붙이면서 추후 제거 예정
                 )
             }.onSuccess { results ->
-                when (results.novels.isEmpty().not()) {
+                when (results.novels.isNotEmpty()) {
                     true -> {
                         _uiState.value = uiState.value?.copy(
                             loading = false,
