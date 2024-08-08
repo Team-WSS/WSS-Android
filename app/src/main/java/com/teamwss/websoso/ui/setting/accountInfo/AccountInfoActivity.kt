@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.setting.accountInfo
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import com.teamwss.websoso.R
@@ -20,5 +22,12 @@ class AccountInfoActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
         )
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, AccountInfoActivity::class.java)
+        }
     }
 }
