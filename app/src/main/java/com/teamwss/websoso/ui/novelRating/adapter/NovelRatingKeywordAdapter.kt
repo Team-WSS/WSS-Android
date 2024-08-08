@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.common.model.KeywordsModel
+import com.teamwss.websoso.ui.common.model.KeywordsModel.CategoryModel
 
 class NovelRatingKeywordAdapter(
-    private val onKeywordClick: (keyword: KeywordsModel.CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
-) : ListAdapter<KeywordsModel.CategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
+    private val onKeywordClick: (keyword: CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
+) : ListAdapter<CategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -22,25 +23,32 @@ class NovelRatingKeywordAdapter(
         return NovelRatingKeywordViewHolder(binding, onKeywordClick)
     }
 
-    override fun onBindViewHolder(
-        holder: NovelRatingKeywordViewHolder,
-        position: Int,
-    ) {
+    override fun onBindViewHolder(holder: NovelRatingKeywordViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.apply {
+            when (isChipSetting) {
+                true -> updateChipState(item)
+                false -> initKeywordView(item)
+            }
+        }
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<KeywordsModel.CategoryModel>() {
+        private val diffUtil = object : DiffUtil.ItemCallback<CategoryModel>() {
+
             override fun areItemsTheSame(
-                oldItem: KeywordsModel.CategoryModel,
-                newItem: KeywordsModel.CategoryModel,
-            ): Boolean = oldItem.categoryName == newItem.categoryName
+                oldItem: CategoryModel,
+                newItem: CategoryModel,
+            ): Boolean {
+                return oldItem.categoryName == newItem.categoryName
+            }
 
             override fun areContentsTheSame(
-                oldItem: KeywordsModel.CategoryModel,
-                newItem: KeywordsModel.CategoryModel,
-            ): Boolean = oldItem == newItem
+                oldItem: CategoryModel,
+                newItem: CategoryModel,
+            ): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

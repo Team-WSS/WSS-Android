@@ -11,16 +11,15 @@ import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.common.model.KeywordsModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
-import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordViewHolder
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
 class NovelRatingKeywordBottomSheetDialog :
     BindingBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
-    private val viewModel: NovelRatingViewModel by activityViewModels()
+    private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
     private val novelRatingKeywordAdapter by lazy {
         NovelRatingKeywordAdapter(
             onKeywordClick = { keyword, isSelected ->
-                viewModel.updateSelectedKeywords(keyword, isSelected)
+                novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
             },
         )
     }
@@ -39,7 +38,7 @@ class NovelRatingKeywordBottomSheetDialog :
     }
 
     private fun bindViewModel() {
-        binding.viewModel = viewModel
+        binding.viewModel = novelRatingViewModel
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
@@ -52,17 +51,17 @@ class NovelRatingKeywordBottomSheetDialog :
             override fun onNavigateBackClick() {}
 
             override fun onSaveClick() {
-                viewModel.saveSelectedKeywords()
+                novelRatingViewModel.saveSelectedKeywords()
                 dismiss()
             }
 
             override fun onCancelClick() {
-                viewModel.cancelEditingKeyword()
+                novelRatingViewModel.cancelEditingKeyword()
                 dismiss()
             }
 
             override fun onClearClick() {
-                viewModel.clearEditingKeyword()
+                novelRatingViewModel.clearEditingKeyword()
                 dismiss()
             }
         }
@@ -80,9 +79,8 @@ class NovelRatingKeywordBottomSheetDialog :
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        novelRatingViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             updateCurrentSelectedKeywordsHeader(uiState.keywordsModel.currentSelectedKeywords)
-            updateCurrentSelectedKeywordsRecyclerView(uiState.keywordsModel.currentSelectedKeywords)
             updateKeywordRecyclerView(uiState)
         }
     }
@@ -106,12 +104,6 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateCurrentSelectedKeywordsRecyclerView(currentSelectedKeywords: List<KeywordsModel.CategoryModel.KeywordModel>) {
-        currentSelectedKeywords.forEach { keyword ->
-            updateChipSelection(keyword = keyword, isSelected = true)
-        }
-    }
-
     private fun removeCurrentSelectedKeywordChip(keyword: String) {
         val chip = binding.wcgNovelRatingKeywordSelectedKeyword.findViewWithTag<WebsosoChip>(keyword)
         if (chip != null) binding.wcgNovelRatingKeywordSelectedKeyword.removeView(chip)
@@ -128,8 +120,7 @@ class NovelRatingKeywordBottomSheetDialog :
             setWebsosoChipPaddingHorizontal(12f)
             setWebsosoChipRadius(40f)
             setOnCloseIconClickListener {
-                viewModel.updateSelectedKeywords(keyword = keyword, isSelected = false)
-                updateChipSelection(keyword = keyword, isSelected = false)
+                novelRatingViewModel.updateSelectedKeywords(keyword = keyword, isSelected = false)
             }
             setWebsosoChipCloseIconVisibility(true)
             setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
@@ -142,16 +133,7 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateChipSelection(keyword: KeywordsModel.CategoryModel.KeywordModel, isSelected: Boolean) {
-        for (i in 0 until binding.rvRatingKeywordList.childCount) {
-            val child = binding.rvRatingKeywordList.getChildAt(i)
-            val viewHolder = binding.rvRatingKeywordList.getChildViewHolder(child) as? NovelRatingKeywordViewHolder
-            viewHolder?.updateChipSelection(keyword, isSelected)
-        }
-    }
-
     private fun updateKeywordRecyclerView(uiState: NovelRatingUiState) {
-        if (binding.rvRatingKeywordList.childCount > 0) return
         novelRatingKeywordAdapter.submitList(uiState.keywordsModel.categories)
     }
 
@@ -164,18 +146,18 @@ class NovelRatingKeywordBottomSheetDialog :
 
     private fun performSearch(input: String) {
         if (input.isEmpty()) return
-        viewModel.updateKeywordCategories(input)
+        novelRatingViewModel.updateKeywordCategories(input)
         binding.etRatingKeywordSearch.clearFocus()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.updateKeywordCategories()
+        novelRatingViewModel.updateKeywordCategories()
         binding.etRatingKeywordSearch.requestFocus()
     }
 
     override fun onDestroyView() {
-        viewModel.cancelEditingKeyword()
+        novelRatingViewModel.cancelEditingKeyword()
         super.onDestroyView()
     }
 }
