@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
             android:gravity="center"
-            android:onClick="@{() -> novelDetailViewModel.deleteUserNovel(novelDetailViewModel.novelDetail.novel.novelId)}"
+            android:onClick="@{() -> null}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
             android:text="@string/novel_detail_report_error"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
             android:gravity="center"
-            android:onClick="@{() -> null}"
+            android:onClick="@{() -> novelDetailViewModel.deleteUserNovel(novelDetailViewModel.novelDetail.novel.novelId)}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
             android:text="@string/novel_detail_remove_evaluate"
@@ -48,6 +48,5 @@
             app:layout_constraintEnd_toEndOf="@+id/btn_novel_detail_popup_report_error"
             app:layout_constraintStart_toStartOf="@+id/btn_novel_detail_popup_report_error"
             app:layout_constraintTop_toBottomOf="@+id/btn_novel_detail_popup_report_error" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
