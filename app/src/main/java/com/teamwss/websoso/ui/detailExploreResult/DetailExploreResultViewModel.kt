@@ -21,19 +21,17 @@ class DetailExploreResultViewModel @Inject constructor(
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-
     fun updateSearchResult() {
         viewModelScope.launch {
             runCatching {
-                novelRepository.normalExploreEmptyDummyData
-//                novelRepository.fetchDetailExploreResult(
-//                    page = 1,
-//                    size = 20,
-//                    genres = listOf("로맨스"),
-//                    isCompleted = false,
-//                    novelRating = 4.5f,
-//                    keywordIds = listOf() // TODO 이건 더미임요 서버 붙이면서 추후 제거 예정
-//                )
+                novelRepository.fetchDetailExploreResult(
+                    page = 1,
+                    size = 20,
+                    genres = listOf("로맨스"),
+                    isCompleted = false,
+                    novelRating = 4.5f,
+                    keywordIds = listOf() // TODO 이건 더미임요 서버 붙이면서 추후 제거 예정
+                )
             }.onSuccess { results ->
                 when (results.novels.isEmpty().not()) {
                     true -> {

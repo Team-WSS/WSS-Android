@@ -63,9 +63,21 @@ class DetailExploreResultActivity :
     private fun setupObserver() {
         detailExploreResultViewModel.uiState.observe(this) { uiState ->
             when {
-                uiState.loading -> Unit //TODO 로딩뷰
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> updateView(uiState)
+                uiState.loading -> {
+                    binding.wlDetailExploreResult.setWebsosoLoadingVisibility(true)
+                    binding.wlDetailExploreResult.setErrorLayoutVisibility(false)
+                }
+
+                uiState.error -> {
+                    binding.wlDetailExploreResult.setWebsosoLoadingVisibility(false)
+                    binding.wlDetailExploreResult.setErrorLayoutVisibility(true)
+                }
+
+                else -> {
+                    binding.wlDetailExploreResult.setWebsosoLoadingVisibility(false)
+                    binding.wlDetailExploreResult.setErrorLayoutVisibility(false)
+                    updateView(uiState)
+                }
             }
         }
     }
