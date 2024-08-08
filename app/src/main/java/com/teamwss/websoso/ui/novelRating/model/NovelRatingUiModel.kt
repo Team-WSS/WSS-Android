@@ -1,7 +1,7 @@
 package com.teamwss.websoso.ui.novelRating.model
 
 import com.teamwss.websoso.R
-import com.teamwss.websoso.ui.common.model.KeywordsModel
+import com.teamwss.websoso.ui.common.model.CategoriesModel
 import java.util.Locale
 
 data class NovelRatingModel(
@@ -11,7 +11,7 @@ data class NovelRatingModel(
     val endDate: String? = null,
     val userNovelRating: Float = 0f,
     val charmPoints: List<CharmPoint> = emptyList(),
-    val userKeywords: List<KeywordsModel.CategoryModel.KeywordModel> = emptyList(),
+    val userKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
     val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus ?: ReadStatus.WATCHING.name),
     val ratingDateModel: RatingDateModel =
         RatingDateModel(
@@ -80,13 +80,13 @@ data class RatingDateModel(
 }
 
 data class NovelRatingKeywordsModel(
-    val categories: List<KeywordsModel.CategoryModel> = emptyList(),
-    val currentSelectedKeywords: List<KeywordsModel.CategoryModel.KeywordModel> = emptyList(),
-    val searchResultKeywords: List<KeywordsModel.CategoryModel.KeywordModel> = emptyList(),
+    val categories: List<CategoriesModel.CategoryModel> = emptyList(),
+    val currentSelectedKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
+    val searchResultKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
     val isCurrentSelectedKeywordsEmpty: Boolean = currentSelectedKeywords.isEmpty(),
     val isSearchResultKeywordsEmpty: Boolean = searchResultKeywords.isEmpty(),
 ) {
-    fun updatedCategories(keyword: KeywordsModel.CategoryModel.KeywordModel): List<KeywordsModel.CategoryModel> {
+    fun updatedCategories(keyword: CategoriesModel.CategoryModel.KeywordModel): List<CategoriesModel.CategoryModel> {
         return categories.map { category ->
             val updatedKeywords = category.keywords.map { previousKeyword ->
                 if (previousKeyword.keywordId == keyword.keywordId) keyword
@@ -96,7 +96,7 @@ data class NovelRatingKeywordsModel(
         }
     }
 
-    fun updateSelectedKeywords(keyword: KeywordsModel.CategoryModel.KeywordModel, isSelected: Boolean): NovelRatingKeywordsModel {
+    fun updateSelectedKeywords(keyword: CategoriesModel.CategoryModel.KeywordModel, isSelected: Boolean): NovelRatingKeywordsModel {
         val newSelectedKeywords = currentSelectedKeywords.toMutableList().apply {
             when (isSelected) {
                 true -> add(keyword)

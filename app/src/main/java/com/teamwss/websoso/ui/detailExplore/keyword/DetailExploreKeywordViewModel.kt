@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeKeywordRepository
-import com.teamwss.websoso.ui.common.model.KeywordsModel
+import com.teamwss.websoso.ui.common.model.CategoriesModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,13 +39,13 @@ class DetailExploreKeywordViewModel @Inject constructor(
             runCatching {
                 fakeKeywordRepository.fetchKeyword()
             }.onSuccess { keywordsList ->
-                val keywordsModel = KeywordsModel(
+                val categoriesModel = CategoriesModel(
                     categories = keywordsList.map { it.toUi() }
                 )
 
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
-                    categories = keywordsModel.categories
+                    categories = categoriesModel.categories
                 )
 
             }.onFailure {
