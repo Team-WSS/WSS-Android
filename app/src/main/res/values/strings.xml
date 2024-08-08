@@ -183,5 +183,5 @@
     <string name="my_library_unknown_preference">작품 취향을 파악할 수 없어요</string>
     <string name="my_library_genre_preference">장르 취향</string>
     <string name="my_library_genre_count">%d편</string>
-
+    <string name="my_library_preferred_novel">작품 취향</string>
 </resources>
