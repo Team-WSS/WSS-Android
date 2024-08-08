@@ -17,7 +17,13 @@ import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 class NovelRatingKeywordBottomSheetDialog :
     BindingBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
     private val viewModel: NovelRatingViewModel by activityViewModels()
-    private lateinit var novelRatingKeywordAdapter: NovelRatingKeywordAdapter
+    private val novelRatingKeywordAdapter by lazy {
+        NovelRatingKeywordAdapter(
+            onKeywordClick = { keyword, isSelected ->
+                viewModel.updateSelectedKeywords(keyword, isSelected)
+            },
+        )
+    }
 
     override fun onViewCreated(
         view: View,
@@ -27,7 +33,7 @@ class NovelRatingKeywordBottomSheetDialog :
         binding.onClick = onNovelRatingButtonClick()
         bindViewModel()
         setupDialogBehavior()
-        setupRecyclerView()
+        setupRecyclerViewAnimation()
         setupObserver()
         setupSearchEditorAction()
     }
@@ -66,12 +72,7 @@ class NovelRatingKeywordBottomSheetDialog :
         (dialog as BottomSheetDialog).behavior.skipCollapsed = true
     }
 
-    private fun setupRecyclerView() {
-        novelRatingKeywordAdapter = NovelRatingKeywordAdapter(
-            onKeywordClick = { keyword, isSelected ->
-                viewModel.updateSelectedKeywords(keyword, isSelected)
-            },
-        )
+    private fun setupRecyclerViewAnimation() {
         binding.rvRatingKeywordList.apply {
             adapter = novelRatingKeywordAdapter
             itemAnimator = null
