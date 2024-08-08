@@ -83,12 +83,13 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             android:paddingHorizontal="20dp"
-            android:paddingBottom="46dp"
+            android:paddingBottom="28dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_result_filter_button"
+            app:spanCount="2"
             tools:listitem="@layout/item_detail_explore_result" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
