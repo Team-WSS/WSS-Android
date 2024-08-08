@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.setting.accountInfo
+package com.teamwss.websoso.accountInfo
 
 import android.content.Context
 import android.content.Intent
