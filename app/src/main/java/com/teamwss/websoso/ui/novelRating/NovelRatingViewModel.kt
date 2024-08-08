@@ -50,13 +50,11 @@ class NovelRatingViewModel @Inject constructor(
 
     private fun handleSuccessfulFetchNovelRating(novelRatingEntity: NovelRatingEntity) {
         val novelRatingModel = novelRatingEntity.toUi()
-        val isEditingStartDate =
-            ratingDateManager.updateIsEditingStartDate(novelRatingModel.uiReadStatus)
-        val dayMaxValue =
-            ratingDateManager.updateDayMaxValue(
-                novelRatingModel.ratingDateModel,
-                isEditingStartDate,
-            )
+        val isEditingStartDate = ratingDateManager.updateIsEditingStartDate(novelRatingModel.uiReadStatus)
+        val dayMaxValue = ratingDateManager.updateDayMaxValue(
+            novelRatingModel.ratingDateModel,
+            isEditingStartDate,
+        )
         _uiState.value = uiState.value?.copy(
             novelRatingModel = novelRatingModel,
             keywordsModel = NovelRatingKeywordsModel(
@@ -125,16 +123,14 @@ class NovelRatingViewModel @Inject constructor(
 
     fun updatePreviousDate() {
         uiState.value?.let { currentState ->
-            val updatedRatingDateModel =
-                currentState.novelRatingModel.ratingDateModel.copy(
-                    previousStartDate = currentState.novelRatingModel.ratingDateModel.currentStartDate,
-                    previousEndDate = currentState.novelRatingModel.ratingDateModel.currentEndDate,
-                )
+            val updatedRatingDateModel = currentState.novelRatingModel.ratingDateModel.copy(
+                previousStartDate = currentState.novelRatingModel.ratingDateModel.currentStartDate,
+                previousEndDate = currentState.novelRatingModel.ratingDateModel.currentEndDate,
+            )
 
-            val updatedNovelRatingModel =
-                currentState.novelRatingModel.copy(
-                    ratingDateModel = updatedRatingDateModel,
-                )
+            val updatedNovelRatingModel = currentState.novelRatingModel.copy(
+                ratingDateModel = updatedRatingDateModel,
+            )
 
             _uiState.value = currentState.copy(novelRatingModel = updatedNovelRatingModel)
         }
@@ -178,14 +174,12 @@ class NovelRatingViewModel @Inject constructor(
 
     fun clearCurrentDate() {
         uiState.value?.let { uiState ->
-            val updatedModel =
-                ratingDateManager.clearCurrentDate(
-                    uiState.novelRatingModel.ratingDateModel,
-                )
-            _uiState.value =
-                uiState.copy(
-                    novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
-                )
+            val updatedModel = ratingDateManager.clearCurrentDate(
+                uiState.novelRatingModel.ratingDateModel,
+            )
+            _uiState.value = uiState.copy(
+                novelRatingModel = uiState.novelRatingModel.copy(ratingDateModel = updatedModel),
+            )
         }
     }
 
@@ -216,8 +210,7 @@ class NovelRatingViewModel @Inject constructor(
                 true -> charmPoints.remove(charmPoint)
                 false -> charmPoints.add(charmPoint)
             }
-            val updatedNovelRatingModel =
-                uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
+            val updatedNovelRatingModel = uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
             _uiState.value = uiState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
