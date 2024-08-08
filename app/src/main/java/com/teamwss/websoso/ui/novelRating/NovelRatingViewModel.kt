@@ -278,4 +278,14 @@ class NovelRatingViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateRatingValue(rating: Float) {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                novelRatingModel = uiState.novelRatingModel.copy(
+                    userNovelRating = rating
+                )
+            )
+        }
+    }
 }
