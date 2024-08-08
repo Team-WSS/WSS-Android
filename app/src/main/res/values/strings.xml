@@ -7,8 +7,8 @@
     <!-- 메인 뷰 -->
     <string name="main_ic_home">홈</string>
     <string name="main_ic_explore">탐색</string>
-    <string name="main_ic_feed">피드</string>
-    <string name="main_ic_my_page">my</string>
+    <string name="main_ic_feed">수다</string>
+    <string name="main_ic_my_page">My</string>
 
     <!--일반 탐색 뷰-->
     <string name="normal_explore_novel_count_title">작품</string>
@@ -19,7 +19,7 @@
     <!-- 탐색 뷰 -->
     <string name="explore_title">탐색하기</string>
     <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
-    <string name="explore_detail_search_title">이제 뭐 읽을지 고민될 땐?</string>
+    <string name="explore_detail_search_title">뭐 읽을지 고민될 땐?</string>
     <string name="explore_detail_search_description">장르, 연재상태, 별점, 키워드로 작품 찾기</string>
     <string name="explore_detail_search_button">내 취향에 맞는 작품 탐색하기</string>
     <string name="explore_soso">소소</string>
@@ -91,6 +91,12 @@
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
     <string name="feed_is_modified">(수정됨)</string>
     <string name="feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
+
+    <!-- 피드 상세 뷰 -->
+    <string name="feed_detail_title">수다글</string>
+    <string name="feed_detail_comment_title">댓글</string>
+    <string name="feed_detail_comment_dot">·</string>
+    <string name="feed_detail_input">댓글을 남겨보세요</string>
 
     <!-- 피드 팝업 매뉴 다이얼로그 뷰 -->
     <string name="report_popup_menu_cancel">취소</string>
@@ -183,5 +189,17 @@
     <string name="my_library_unknown_preference">작품 취향을 파악할 수 없어요</string>
     <string name="my_library_genre_preference">장르 취향</string>
     <string name="my_library_genre_count">%d편</string>
-    <string name="my_library_preferred_novel">작품 취향</string>
+
+    <!-- 홈 뷰 -->
+    <string name="home_today_popular">오늘의인기작</string>
+    <string name="home_rising_feed">지금 뜨는 수다글</string>
+    <string name="home_interest_feed">관심글</string>
+    <string name="home_user_interest_recent_feed">관심 등록한 작품의 최근 수다예요</string>
+    <string name="home_interest_feed_description">관심작품의 최신 소식을 모아서 볼 수 있어요.\n좋아하는 웹소설을 관심 등록 해볼까요?</string>
+    <string name="home_post_interest_novel">관심작품 등록하기</string>
+    <string name="home_user_recommend_novel_description">관심 등록한 작품의 최근 수다예요</string>
+    <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해 드려요!</string>
+    <string name="home_setting_interest_general">선호장르 설정하기</string>
+    <string name="home_recommend_novel">이 웹소설은 어때요?</string>
+
 </resources>

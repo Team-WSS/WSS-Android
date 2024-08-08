@@ -93,7 +93,7 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.48")
 
     // lottie
-    implementation ("com.airbnb.android:lottie:5.0.2")
+    implementation("com.airbnb.android:lottie:5.0.2")
 
     // SwipeRefreshLayout
     implementation("com.github.SimformSolutionsPvtLtd:SSPullToRefresh:1.5.2")

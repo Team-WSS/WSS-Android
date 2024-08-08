@@ -8,6 +8,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.login.adapter.ImageViewPagerAdapter
+import com.teamwss.websoso.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,11 +19,12 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupViewPager()
+        setupObserver()
+        onWithoutLoginButtonClick()
     }
 
-    private fun setupViewPager() {
-        viewModel.images.observe(this) { images ->
+    private fun setupObserver() {
+        viewModel.loginImages.observe(this) { images ->
             if (images != null) {
                 binding.vpLogin.adapter = ImageViewPagerAdapter(images)
                 setupDotsIndicator()
@@ -32,6 +34,12 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun setupDotsIndicator() {
         binding.dotsIndicatorLogin.attachTo(binding.vpLogin)
+    }
+
+    private fun onWithoutLoginButtonClick() {
+        binding.tvLoginWithoutLogin.setOnClickListener {
+            startActivity(MainActivity.getIntent(this))
+        }
     }
 
     companion object {

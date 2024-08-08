@@ -2,13 +2,13 @@ package com.teamwss.websoso.ui.feed.adapter
 
 import com.teamwss.websoso.ui.feed.model.FeedModel
 
-sealed class FeedType {
+sealed interface FeedType {
 
     data class Feed(
         val feed: FeedModel,
-    ) : FeedType()
+    ) : FeedType
 
-    data object Loading : FeedType()
+    data object Loading : FeedType
 
     enum class ItemType {
         FEED, LOADING;
