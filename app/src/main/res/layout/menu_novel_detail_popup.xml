@@ -7,6 +7,10 @@
         <variable
             name="novelDetailViewModel"
             type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
+
+        <variable
+            name="deleteUserNovel"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,13 +41,13 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
             android:gravity="center"
-            android:onClick="@{() -> novelDetailViewModel.deleteUserNovel(novelDetailViewModel.novelDetail.novel.novelId)}"
+            android:onClick="@{() -> deleteUserNovel.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
             android:text="@string/novel_detail_remove_evaluate"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.alreadyAllRated}"
+            app:isVisible="@{novelDetailViewModel.novelDetail.userNovel.isAlreadyPartiallyRated}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/btn_novel_detail_popup_report_error"
             app:layout_constraintStart_toStartOf="@+id/btn_novel_detail_popup_report_error"

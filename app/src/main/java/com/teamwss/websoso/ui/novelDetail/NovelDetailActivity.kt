@@ -25,6 +25,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private var _popupBinding: MenuNovelDetailPopupBinding? = null
     private val popupBinding get() = _popupBinding ?: error("")
+    private var popupWindow: PopupWindow? = null
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 1L) } // TODO: 1L -> 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +48,14 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     private fun setupPopupBinding() {
         _popupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
         popupBinding.novelDetailViewModel = novelDetailViewModel
+        popupBinding.deleteUserNovel = ::deleteUserNovel
         popupBinding.lifecycleOwner = this
+    }
+
+    private fun deleteUserNovel() {
+        novelDetailViewModel.deleteUserNovel(novelId)
+        binding.tgNovelDetailReadStatus.clearChecked()
+        popupWindow?.dismiss()
     }
 
     private fun setupViewPager() {
@@ -94,7 +102,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun showPopupWindow() {
-        PopupWindow(
+        popupWindow = PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
