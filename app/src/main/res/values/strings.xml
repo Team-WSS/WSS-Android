@@ -211,4 +211,8 @@
     <string name="setting_inquire_and_feedback"><![CDATA[문의하기 & 의견 보내기]]></string>
     <string name="setting_app_rating">앱 평점 남기기</string>
     <string name="setting_terms_of_use">서비스 이용약관</string>
+
+    <!-- 차단유저 목록 뷰 -->
+    <string name="block_users_cancel">차단 해제</string>
+    <string name="block_users_title">차단유저 목록</string>
 </resources>

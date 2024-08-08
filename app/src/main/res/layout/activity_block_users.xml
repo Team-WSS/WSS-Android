@@ -24,7 +24,7 @@
             android:id="@+id/tv_block_users_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="차단유저 목록"
+            android:text="@string/block_users_title"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/iv_block_users_back_button"
