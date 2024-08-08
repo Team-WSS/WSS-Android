@@ -56,7 +56,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
             }
 
             override fun onSaveClick() {
-                novelRatingViewModel.updateNovelRating(novelId, intent.getBooleanExtra(IS_ALREADY_RATED, false))
+                novelRatingViewModel.updateUserNovelRating(novelId, binding.rbNovelRating.rating)
             }
 
             override fun onCancelClick() {}
@@ -120,10 +120,10 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         }
     }
 
-    private fun updateKeywordChips(previousSelectedKeywords: List<NovelRatingKeywordModel>) {
+    private fun updateKeywordChips(selectedKeywords: List<NovelRatingKeywordModel>) {
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
-        previousSelectedKeywords.forEach { keyword ->
+        selectedKeywords.forEach { keyword ->
             WebsosoChip(binding.root.context)
                 .apply {
                     setWebsosoChipText(keyword.keywordName)
@@ -189,13 +189,11 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
 
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
-        private const val IS_ALREADY_RATED = "IS_ALREADY_RATED"
         private const val READ_STATUS = "READ_STATUS"
 
-        fun getIntent(context: Context, novelId: Long, isAlreadyRated: Boolean, readStatus: ReadStatus?): Intent {
+        fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus?): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
-                putExtra(IS_ALREADY_RATED, isAlreadyRated)
                 putExtra(READ_STATUS, readStatus)
             }
         }

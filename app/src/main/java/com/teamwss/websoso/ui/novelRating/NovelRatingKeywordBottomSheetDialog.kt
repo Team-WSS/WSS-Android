@@ -11,8 +11,8 @@ import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordViewHolder
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
 class NovelRatingKeywordBottomSheetDialog :
     BindingBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
@@ -29,7 +29,8 @@ class NovelRatingKeywordBottomSheetDialog :
         setupDialogBehavior()
         setupRecyclerView()
         setupObserver()
-        performSearch(null)
+        setupSearchEditorAction()
+        viewModel.updateKeywordCategories()
     }
 
     private fun bindViewModel() {
@@ -82,7 +83,7 @@ class NovelRatingKeywordBottomSheetDialog :
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             updateCurrentSelectedChips(uiState.keywordsModel.currentSelectedKeywords)
-            updateKeywordRecyclerView(uiState.keywordsModel.categories)
+            updateKeywordRecyclerView(uiState)
         }
     }
 
@@ -135,11 +136,6 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateKeywordRecyclerView(categories: List<NovelRatingKeywordCategoryModel>) {
-        if (binding.rvRatingKeywordList.childCount != 0) return
-        novelRatingKeywordAdapter.submitList(categories)
-    }
-
     private fun updateChipSelection(keyword: NovelRatingKeywordModel, isSelected: Boolean) {
         for (i in 0 until binding.rvRatingKeywordList.childCount) {
             val child = binding.rvRatingKeywordList.getChildAt(i)
@@ -148,14 +144,27 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun performSearch(input: String?) {
-//        viewModel.updateKeywordCategories(input.orEmpty())
+    private fun updateKeywordRecyclerView(uiState: NovelRatingUiState) {
+        if (binding.rvRatingKeywordList.childCount > 0) return
+        novelRatingKeywordAdapter.submitList(uiState.keywordsModel.categories)
+    }
+
+    private fun setupSearchEditorAction() {
+        binding.etRatingKeywordSearch.setOnEditorActionListener { _, _, _ ->
+            performSearch(binding.etRatingKeywordSearch.text.toString())
+            true
+        }
+    }
+
+    private fun performSearch(input: String) {
+        if (input.isEmpty()) return
+        viewModel.updateKeywordCategories(input)
         binding.etRatingKeywordSearch.clearFocus()
     }
 
     override fun onResume() {
         super.onResume()
-//        viewModel.updateKeywordCategories()
+        viewModel.updateKeywordCategories()
         binding.etRatingKeywordSearch.requestFocus()
     }
 

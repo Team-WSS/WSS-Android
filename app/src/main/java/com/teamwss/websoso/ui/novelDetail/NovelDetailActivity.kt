@@ -118,7 +118,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         val intent = NovelRatingActivity.getIntent(
             context = this,
             novelId = novelId,
-            isAlreadyRated = novelDetailViewModel.novelDetail.value?.userNovel?.isAlreadyRated ?: false,
             readStatus = readStatus,
         )
         startActivity(intent)

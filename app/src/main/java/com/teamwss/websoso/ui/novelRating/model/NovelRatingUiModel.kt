@@ -81,8 +81,9 @@ data class RatingDateModel(
 data class NovelRatingKeywordsModel(
     val categories: List<NovelRatingKeywordCategoryModel> = emptyList(),
     val currentSelectedKeywords: List<NovelRatingKeywordModel> = emptyList(),
+    val searchResultKeywords: List<NovelRatingKeywordModel> = emptyList(),
     val isCurrentSelectedKeywordsEmpty: Boolean = currentSelectedKeywords.isEmpty(),
-    val isKeywordEmpty: Boolean = categories.isEmpty(),
+    val isSearchResultKeywordsEmpty: Boolean = searchResultKeywords.isEmpty(),
 ) {
     fun updatedCategories(keyword: NovelRatingKeywordModel): List<NovelRatingKeywordCategoryModel> {
         return categories.map { category ->
@@ -92,6 +93,21 @@ data class NovelRatingKeywordsModel(
             }
             category.copy(keywords = updatedKeywords)
         }
+    }
+
+    fun updateSelectedKeywords(keyword: NovelRatingKeywordModel, isSelected: Boolean): NovelRatingKeywordsModel {
+        val newSelectedKeywords = currentSelectedKeywords.toMutableList().apply {
+            when (isSelected) {
+                true -> add(keyword)
+                false -> removeIf { it.keywordId == keyword.keywordId }
+            }
+        }.toList()
+
+        return this.copy(
+            categories = this.updatedCategories(keyword.copy(isSelected = isSelected)),
+            currentSelectedKeywords = newSelectedKeywords,
+            isCurrentSelectedKeywordsEmpty = newSelectedKeywords.isEmpty()
+        )
     }
 }
 

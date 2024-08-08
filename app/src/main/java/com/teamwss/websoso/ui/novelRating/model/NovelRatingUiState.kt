@@ -5,6 +5,7 @@ data class NovelRatingUiState(
     val keywordsModel: NovelRatingKeywordsModel = NovelRatingKeywordsModel(emptyList()),
     val maxDayValue: Int = 0,
     val isEditingStartDate: Boolean = true,
+    val isAlreadyRated: Boolean = false,
     val loading: Boolean = true,
     val isFetchError: Boolean = false,
     val isSaveSuccess: Boolean = false,
