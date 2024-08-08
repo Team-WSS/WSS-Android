@@ -70,7 +70,6 @@ class NovelRatingKeywordBottomSheetDialog :
         novelRatingKeywordAdapter = NovelRatingKeywordAdapter(
             onKeywordClick = { keyword, isSelected ->
                 viewModel.updateSelectedKeywords(keyword, isSelected)
-                updateChipSelection(keyword, isSelected)
             },
         )
         binding.rvRatingKeywordList.apply {
@@ -108,10 +107,7 @@ class NovelRatingKeywordBottomSheetDialog :
 
     private fun updateCurrentSelectedKeywordsRecyclerView(currentSelectedKeywords: List<NovelRatingKeywordModel>) {
         currentSelectedKeywords.forEach { keyword ->
-            updateChipSelection(
-                keyword = keyword,
-                isSelected = true,
-            )
+            updateChipSelection(keyword = keyword, isSelected = true)
         }
     }
 
