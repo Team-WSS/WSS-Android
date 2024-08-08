@@ -10,12 +10,12 @@ data class NovelDetailModel(
     val userRating: UserRatingModel,
 ) {
     data class UserNovelModel(
-        val userNovelId: Long?,
-        val readStatus: ReadStatus?,
-        val startDate: String?,
-        val endDate: String?,
-        val isUserNovelInterest: Boolean,
-        val userNovelRating: Float,
+        val userNovelId: Long? = null,
+        val readStatus: ReadStatus? = null,
+        val startDate: String? = null,
+        val endDate: String? = null,
+        val isUserNovelInterest: Boolean = false,
+        val userNovelRating: Float = 0.0f,
         val isDateRated: Boolean = startDate != null || endDate != null,
         val isAlreadyPartiallyRated: Boolean = userNovelId != null,
         val isAlreadyAllRated: Boolean = userNovelId != null && userNovelRating != 0f && isDateRated,
@@ -58,15 +58,4 @@ data class NovelDetailModel(
             }
         }
     }
-
-    val defaultUserNovelModel = UserNovelModel(
-        userNovelId = null,
-        readStatus = null,
-        startDate = null,
-        endDate = null,
-        isUserNovelInterest = false,
-        userNovelRating = 0.0f,
-        isAlreadyAllRated = false,
-        formattedUserNovelDate = "",
-    )
 }
