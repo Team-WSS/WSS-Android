@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelRating.adapter
 
+import android.util.Log
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ class NovelRatingKeywordViewHolder(
     fun bind(category: NovelRatingKeywordCategoryModel) {
         binding.apply {
             tvRatingKeyword.text = category.categoryName
+            categoryImageUrl = category.categoryImageUrl
             setupWebsosoChips(category)
             setupExpandToggleBtn()
         }

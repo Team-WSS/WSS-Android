@@ -113,6 +113,7 @@ data class NovelRatingKeywordsModel(
 
 data class NovelRatingKeywordCategoryModel(
     val categoryName: String,
+    val categoryImageUrl: String,
     val keywords: List<NovelRatingKeywordModel>,
 )
 

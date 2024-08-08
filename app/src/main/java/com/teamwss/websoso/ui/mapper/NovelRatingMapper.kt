@@ -31,6 +31,7 @@ fun KeywordsEntity.toNovelRatingUi(): List<NovelRatingKeywordCategoryModel> {
 fun KeywordsEntity.CategoryEntity.toNovelRatingUi(): NovelRatingKeywordCategoryModel {
     return NovelRatingKeywordCategoryModel(
         categoryName = categoryName,
+        categoryImageUrl = categoryImage,
         keywords = keywords.map { it.toNovelRatingUi() },
     )
 }
