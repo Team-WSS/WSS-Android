@@ -18,6 +18,9 @@ class DetailExploreResultViewModel @Inject constructor(
         MutableLiveData(DetailExploreResultUiState())
     val uiState: LiveData<DetailExploreResultUiState> get() = _uiState
 
+    private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
+
     fun updateSearchResult() {
         viewModelScope.launch {
             runCatching {
@@ -42,6 +45,8 @@ class DetailExploreResultViewModel @Inject constructor(
                         _uiState.value = uiState.value?.copy(
                             loading = false,
                         )
+
+                        _isNovelResultEmptyBoxVisibility.value = true
                     }
                 }
             }.onFailure {
