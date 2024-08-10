@@ -1,7 +1,10 @@
 package com.teamwss.websoso.ui.novelRating
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -34,7 +37,10 @@ class NovelRatingKeywordBottomSheetDialog :
         setupDialogBehavior()
         setupRecyclerViewAnimation()
         setupObserver()
-        setupSearchEditorAction()
+        setupSearchEditorListener()
+        setupWebsosoSearchEditText()
+        setupBackButtonListener()
+        setupDialogDismissListener()
     }
 
     private fun bindViewModel() {
@@ -42,33 +48,34 @@ class NovelRatingKeywordBottomSheetDialog :
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    private fun onNovelRatingButtonClick() =
-        object : NovelRatingClickListener {
-            override fun onDateEditClick() {}
+    private fun onNovelRatingButtonClick() = object : NovelRatingClickListener {
 
-            override fun onKeywordEditClick() {}
+        override fun onDateEditClick() {}
 
-            override fun onNavigateBackClick() {}
+        override fun onKeywordEditClick() {}
 
-            override fun onSaveClick() {
-                novelRatingViewModel.saveSelectedKeywords()
-                dismiss()
-            }
+        override fun onNavigateBackClick() {}
 
-            override fun onCancelClick() {
-                novelRatingViewModel.cancelEditingKeyword()
-                dismiss()
-            }
-
-            override fun onClearClick() {
-                novelRatingViewModel.clearEditingKeyword()
-                dismiss()
-            }
+        override fun onSaveClick() {
+            novelRatingViewModel.saveSelectedKeywords()
+            dismiss()
         }
+
+        override fun onCancelClick() {
+            novelRatingViewModel.cancelEditingKeyword()
+            dismiss()
+        }
+
+        override fun onClearClick() {
+            novelRatingViewModel.clearEditingKeyword()
+            dismiss()
+        }
+    }
 
     private fun setupDialogBehavior() {
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
         (dialog as BottomSheetDialog).behavior.skipCollapsed = true
+        (dialog as BottomSheetDialog).behavior.isDraggable = false
     }
 
     private fun setupRecyclerViewAnimation() {
@@ -82,6 +89,7 @@ class NovelRatingKeywordBottomSheetDialog :
         novelRatingViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             updateCurrentSelectedKeywordsHeader(uiState.keywordsModel.currentSelectedKeywords)
             updateKeywordRecyclerView(uiState)
+            updateSearchKeywordResult(uiState)
         }
     }
 
@@ -137,23 +145,100 @@ class NovelRatingKeywordBottomSheetDialog :
         novelRatingKeywordAdapter.submitList(uiState.keywordsModel.categories)
     }
 
-    private fun setupSearchEditorAction() {
-        binding.etRatingKeywordSearch.setOnEditorActionListener { _, _, _ ->
-            performSearch(binding.etRatingKeywordSearch.text.toString())
-            true
+    private fun updateSearchKeywordResult(uiState: NovelRatingUiState) {
+        val previousSearchResultKeywords = binding.wcgNovelRatingKeywordSearchResult.children.toList().map { it as WebsosoChip }
+        if (!uiState.keywordsModel.isSearchKeywordProceeding) return
+        if (uiState.keywordsModel.isSearchResultKeywordsEmpty) return
+        if (uiState.keywordsModel.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
+            binding.wcgNovelRatingKeywordSearchResult.forEach { chip ->
+                val websosoChip = chip as WebsosoChip
+                websosoChip.isSelected = uiState.keywordsModel.currentSelectedKeywords.any { it.keywordName == websosoChip.text.toString() }
+            }
+            return
+        }
+        binding.wcgNovelRatingKeywordSearchResult.removeAllViews()
+        updateSearchKeywordResultWebsosoChips(uiState)
+    }
+
+    private fun updateSearchKeywordResultWebsosoChips(uiState: NovelRatingUiState) {
+        uiState.keywordsModel.searchResultKeywords.forEach { keyword ->
+            WebsosoChip(binding.root.context).apply {
+                setWebsosoChipText(keyword.keywordName)
+                setWebsosoChipTextAppearance(R.style.body2)
+                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                setWebsosoChipPaddingVertical(20f)
+                setWebsosoChipPaddingHorizontal(12f)
+                setWebsosoChipRadius(40f)
+                setOnWebsosoChipClick {
+                    novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
+                }
+                isSelected = uiState.keywordsModel.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
+            }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
         }
     }
 
-    private fun performSearch(input: String) {
-        if (input.isEmpty()) return
+    private fun setupSearchEditorListener() {
+        binding.wsetRatingKeywordSearch.setOnWebsosoSearchActionListener { _, _, _ ->
+            performSearch()
+            true
+        }
+
+        binding.wsetRatingKeywordSearch.setOnWebsosoSearchFocusChangeListener { _, isFocused ->
+            if (isFocused) novelRatingViewModel.updateIsSearchKeywordProceeding(true)
+        }
+
+        binding.wsetRatingKeywordSearch.setOnWebsosoSearchClearClickListener {
+            initSearchKeyword()
+        }
+    }
+
+    private fun initSearchKeyword() {
+        binding.wsetRatingKeywordSearch.clearWebsosoSearchFocus()
+        novelRatingViewModel.initSearchKeyword()
+    }
+
+    private fun performSearch() {
+        val input = binding.wsetRatingKeywordSearch.getWebsosoSearchText()
+        if (input.isEmpty()) {
+            initSearchKeyword()
+            return
+        }
         novelRatingViewModel.updateKeywordCategories(input)
-        binding.etRatingKeywordSearch.clearFocus()
+    }
+
+    private fun setupWebsosoSearchEditText() {
+        binding.wsetRatingKeywordSearch.setWebsosoSearchHint(getString(R.string.novel_rating_keyword_search_hint))
+    }
+
+    private fun setupBackButtonListener() {
+        dialog?.setOnKeyListener { _, keyCode, event ->
+            when {
+                binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() && keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP -> {
+                    initSearchKeyword()
+                    true
+                }
+
+                !binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() && keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP -> {
+                    dismiss()
+                    false
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    private fun setupDialogDismissListener() {
+        dialog?.setOnDismissListener {
+            initSearchKeyword()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         novelRatingViewModel.updateKeywordCategories()
-        binding.etRatingKeywordSearch.requestFocus()
     }
 
     override fun onDestroyView() {

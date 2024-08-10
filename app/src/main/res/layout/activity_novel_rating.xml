@@ -198,7 +198,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_novel_rating_search"
+            android:src="@drawable/ic_common_search"
             app:layout_constraintBottom_toBottomOf="@id/tv_novel_rating_keyword_button"
             app:layout_constraintEnd_toEndOf="@id/tv_novel_rating_keyword_button"
             app:layout_constraintTop_toTopOf="@id/tv_novel_rating_keyword_button"

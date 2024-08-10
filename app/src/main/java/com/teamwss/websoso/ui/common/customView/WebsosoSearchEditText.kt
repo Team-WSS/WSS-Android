@@ -22,6 +22,7 @@ class WebsosoSearchEditText @JvmOverloads constructor(
 
     private var externalFocusChangeListener: OnFocusChangeListener? = null
     private var externalActionListener: TextView.OnEditorActionListener? = null
+    private var externalClearClickListener: OnClickListener? = null
 
     init {
         setupWebsosoSearchTextChangedListener()
@@ -50,6 +51,7 @@ class WebsosoSearchEditText @JvmOverloads constructor(
 
     private fun setupWebsosoSearchClearClickListener() {
         binding.ivCommonSearchClear.setOnClickListener {
+            externalClearClickListener?.onClick(it)
             binding.etCommonSearch.text?.clear()
             clearWebsosoSearchFocus()
         }
@@ -108,6 +110,12 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         onWebsosoSearchActionListener: TextView.OnEditorActionListener,
     ) {
         externalActionListener = onWebsosoSearchActionListener
+    }
+
+    fun setOnWebsosoSearchClearClickListener(
+        onWebsosoSearchClearClickListener: OnClickListener,
+    ) {
+        externalClearClickListener = onWebsosoSearchClearClickListener
     }
 
     fun setWebsosoSearchText(text: String) {
