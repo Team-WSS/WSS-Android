@@ -34,10 +34,13 @@ class OnboardingSecondFragment :
             with(binding.tvOnboardingSecondBirthYearHint) {
                 text = birthYearText
                 setTextColor(
-                    if (birthYear != 0)
-                        ContextCompat.getColor(context, R.color.black)
-                    else
-                        ContextCompat.getColor(context, R.color.gray_200_AEADB3)
+                    ContextCompat.getColor(
+                        context,
+                        when (birthYear) {
+                            0 -> R.color.gray_200_AEADB3
+                            else -> R.color.black
+                        }
+                    )
                 )
             }
         }
