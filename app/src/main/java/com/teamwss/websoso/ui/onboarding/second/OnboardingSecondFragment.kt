@@ -53,12 +53,16 @@ class OnboardingSecondFragment :
     }
 
     private fun showBirthYearBottomSheetDialog() {
-        val existingDialog = parentFragmentManager.findFragmentByTag("BrithYearBottomSheetDialog")
+        val existingDialog = parentFragmentManager.findFragmentByTag(BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG)
         if (existingDialog == null) {
             OnboardingBirthYearBottomSheetDialog().show(
                 parentFragmentManager,
-                "BrithYearBottomSheetDialog"
+                BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG
             )
         }
+    }
+
+    companion object {
+        private const val BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG = "BrithYearBottomSheetDialog"
     }
 }
