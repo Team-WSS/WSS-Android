@@ -17,11 +17,11 @@
 
         <TextView
             android:id="@+id/tv_onboarding_first_input_nickname"
-            style="@style/headline1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="42dp"
             android:text="@string/onboarding_first_input_nickname"
+            android:textAppearance="@style/headline1"
             android:textColor="@color/black"
             android:textFontWeight="700"
             app:layout_constraintStart_toStartOf="parent"
