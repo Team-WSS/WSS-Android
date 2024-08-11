@@ -150,14 +150,17 @@ class NovelRatingKeywordBottomSheetDialog :
         if (!uiState.keywordsModel.isSearchKeywordProceeding) return
         if (uiState.keywordsModel.isSearchResultKeywordsEmpty) return
         if (uiState.keywordsModel.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
-            binding.wcgNovelRatingKeywordSearchResult.forEach { chip ->
-                val websosoChip = chip as WebsosoChip
-                websosoChip.isSelected = uiState.keywordsModel.currentSelectedKeywords.any { it.keywordName == websosoChip.text.toString() }
-            }
+            updateSearchKeywordResultIsSelected(uiState)
             return
         }
         binding.wcgNovelRatingKeywordSearchResult.removeAllViews()
         updateSearchKeywordResultWebsosoChips(uiState)
+    }
+
+    private fun updateSearchKeywordResultIsSelected(uiState: NovelRatingUiState) {
+        binding.wcgNovelRatingKeywordSearchResult.forEach { chip ->
+            (chip as WebsosoChip).isSelected = uiState.keywordsModel.currentSelectedKeywords.any { it.keywordName == chip.text.toString() }
+        }
     }
 
     private fun updateSearchKeywordResultWebsosoChips(uiState: NovelRatingUiState) {
