@@ -37,8 +37,8 @@ class NovelRatingKeywordBottomSheetDialog :
         setupDialogBehavior()
         setupRecyclerViewAnimation()
         setupObserver()
-        setupSearchEditorListener()
-        setupWebsosoSearchEditText()
+        setupWebsosoSearchEditListener()
+        setupWebsosoSearchEditHint()
         setupBackButtonListener()
     }
 
@@ -181,7 +181,7 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun setupSearchEditorListener() {
+    private fun setupWebsosoSearchEditListener() {
         binding.wsetRatingKeywordSearch.setOnWebsosoSearchActionListener { _, _, _ ->
             performSearch()
             true
@@ -210,7 +210,7 @@ class NovelRatingKeywordBottomSheetDialog :
         novelRatingViewModel.updateKeywordCategories(input)
     }
 
-    private fun setupWebsosoSearchEditText() {
+    private fun setupWebsosoSearchEditHint() {
         binding.wsetRatingKeywordSearch.setWebsosoSearchHint(getString(R.string.novel_rating_keyword_search_hint))
     }
 
