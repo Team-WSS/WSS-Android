@@ -40,7 +40,6 @@ class NovelRatingKeywordBottomSheetDialog :
         setupSearchEditorListener()
         setupWebsosoSearchEditText()
         setupBackButtonListener()
-        setupDialogDismissListener()
     }
 
     private fun bindViewModel() {
@@ -233,12 +232,6 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun setupDialogDismissListener() {
-        dialog?.setOnDismissListener {
-            initSearchKeyword()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         novelRatingViewModel.updateKeywordCategories()
@@ -246,6 +239,7 @@ class NovelRatingKeywordBottomSheetDialog :
 
     override fun onDestroyView() {
         novelRatingViewModel.cancelEditingKeyword()
+        initSearchKeyword()
         super.onDestroyView()
     }
 }
