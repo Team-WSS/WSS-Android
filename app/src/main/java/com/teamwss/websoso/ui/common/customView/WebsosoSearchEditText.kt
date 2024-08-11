@@ -32,6 +32,7 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         updateSearchBackground(null, false)
     }
 
+    /* Sets up a listener to detect changes in the text input */
     private fun setupWebsosoSearchTextChangedListener() {
         binding.etCommonSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -44,11 +45,13 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         })
     }
 
+    /* Updates the visibility of the clear button based on whether there is text in the input */
     private fun updateWebsosoSearchClearVisibility() {
         val isVisible = binding.etCommonSearch.text?.isNotEmpty() == true
         binding.ivCommonSearchClear.visibility = if (isVisible) VISIBLE else GONE
     }
 
+    /* Sets up a click listener for the clear button, clearing the text input and focus */
     private fun setupWebsosoSearchClearClickListener() {
         binding.ivCommonSearchClear.setOnClickListener {
             externalClearClickListener?.onClick(it)
@@ -57,6 +60,7 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         }
     }
 
+    /* Clears the focus from the search input field */
     fun clearWebsosoSearchFocus() {
         if (binding.etCommonSearch.hasFocus()) {
             binding.etCommonSearch.clearFocus()
@@ -66,6 +70,7 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         }
     }
 
+    /* Sets up a focus change listener for the search input field */
     private fun setupWebsosoSearchFocusChangeListener() {
         binding.etCommonSearch.setOnFocusChangeListener { view, isFocused ->
             val editText = view as EditText
@@ -75,11 +80,13 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         }
     }
 
+    /* Hides the soft keyboard */
     private fun hideKeyboard() {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.etCommonSearch.windowToken, 0)
     }
 
+    /* Updates the background of the search input field based on its focus state */
     private fun updateSearchBackground(input: CharSequence?, isFocused: Boolean) {
         when (isFocused) {
             true -> this.setBackgroundResource(R.drawable.bg_novel_rating_keyword_white_radius_14dp)
@@ -88,6 +95,7 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         }
     }
 
+    /* Sets up an action listener for the search input field and search button */
     private fun setupWebsosoSearchActionListener() {
         binding.etCommonSearch.setOnEditorActionListener { view, actionId, event ->
             externalActionListener?.onEditorAction(view, actionId, event)
@@ -100,36 +108,43 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         }
     }
 
+    /* Sets a custom focus change listener for the search input field */
     fun setOnWebsosoSearchFocusChangeListener(
         onWebsosoSearchFocusChangeListener: OnFocusChangeListener,
     ) {
         externalFocusChangeListener = onWebsosoSearchFocusChangeListener
     }
 
+    /* Sets a custom action listener for the search input field */
     fun setOnWebsosoSearchActionListener(
         onWebsosoSearchActionListener: TextView.OnEditorActionListener,
     ) {
         externalActionListener = onWebsosoSearchActionListener
     }
 
+    /* Sets a custom click listener for the clear button */
     fun setOnWebsosoSearchClearClickListener(
         onWebsosoSearchClearClickListener: OnClickListener,
     ) {
         externalClearClickListener = onWebsosoSearchClearClickListener
     }
 
+    /* Sets the text in the search input field when a recent search term is selected */
     fun setWebsosoSearchText(text: String) {
         binding.etCommonSearch.setText(text)
     }
 
+    /* Sets the hint in the search input field */
     fun setWebsosoSearchHint(hint: String) {
         binding.etCommonSearch.hint = hint
     }
 
+    /* Retrieves the text from the search input field */
     fun getWebsosoSearchText(): String {
         return binding.etCommonSearch.text.toString()
     }
 
+    /* Checks if the search input field is focused */
     fun getIsWebsosoSearchFocused(): Boolean {
         return binding.etCommonSearch.hasFocus()
     }
