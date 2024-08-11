@@ -6,7 +6,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.util.toIntScaledByDp
+import com.teamwss.websoso.util.toIntScaledByPx
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemCommonKeywordBinding,
@@ -27,7 +27,7 @@ class NovelRatingKeywordViewHolder(
             when (ivNovelRatingKeywordToggle.isSelected) {
                 true -> layoutParams.matchConstraintMaxHeight = ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = MIN_WEBSOSO_CHIP_GROUP_HEIGHT
+                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByPx()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
@@ -72,9 +72,5 @@ class NovelRatingKeywordViewHolder(
             .forEach { chip ->
                 chip.isSelected = keywordSelectionMap[chip.text] ?: false
             }
-    }
-
-    companion object {
-        private const val MIN_WEBSOSO_CHIP_GROUP_HEIGHT = 206
     }
 }
