@@ -23,11 +23,11 @@ class OnboardingSecondFragment :
         binding.viewModel = onboardingViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        setObserver()
+        setupObserver()
         onBirthYearSelectionButtonClick()
     }
 
-    private fun setObserver() {
+    private fun setupObserver() {
         onboardingViewModel.userBirthYear.observe(viewLifecycleOwner) { birthYear ->
             val birthYearText =
                 if (birthYear != 0) birthYear.toString() else getString(R.string.onboarding_second_input_birth_year)
