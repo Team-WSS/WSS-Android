@@ -212,4 +212,9 @@
     <string name="setting_inquire_and_feedback"><![CDATA[문의하기 & 의견 보내기]]></string>
     <string name="setting_app_rating">앱 평점 남기기</string>
     <string name="setting_terms_of_use">서비스 이용약관</string>
+
+    <!-- 프로필 공개여부 뷰 -->
+    <string name="profile_disclosure_title">프로필 공개여부</string>
+    <string name="profile_disclosure_complete">완료</string>
+    <string name="profile_disclosure_private">비공개</string>
 </resources>
