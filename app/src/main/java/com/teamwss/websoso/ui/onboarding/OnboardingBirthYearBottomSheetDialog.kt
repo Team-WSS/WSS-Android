@@ -44,7 +44,7 @@ class OnboardingBirthYearBottomSheetDialog :
     private fun setupListeners() {
         binding.btnOnboardingSecondBottomSheetComplete.setOnClickListener {
             val selectedYear = binding.npOnboardingSecondBottomSheetBirthYear.value
-            onboardingViewModel.setUserBirthYear(selectedYear)
+            onboardingViewModel.updateUserBirthYear(selectedYear)
             dismiss()
         }
 
