@@ -7,6 +7,8 @@ import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
+import com.teamwss.websoso.ui.onboarding.model.UserModel
+import com.teamwss.websoso.ui.onboarding.second.model.OnboardingSecondUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -30,10 +32,14 @@ class OnboardingViewModel @Inject constructor(
         MutableLiveData(OnboardingFirstUiState())
     val onBoardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
 
+    private val _onboardingSecondUiState: MutableLiveData<OnboardingSecondUiState> =
+        MutableLiveData(OnboardingSecondUiState())
+    val onboardingSecondUiState: LiveData<OnboardingSecondUiState> = _onboardingSecondUiState
+
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
 
-    private val _userBirthYear: MutableLiveData<Int> = MutableLiveData(0)
-    val userBirthYear: LiveData<Int> = _userBirthYear
+    private val _userInfo: MutableLiveData<UserModel> = MutableLiveData(UserModel())
+    val userInfo: LiveData<UserModel> = _userInfo
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
@@ -86,12 +92,34 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun updateUIByPage(page: OnboardingPage) {
-        _progressBarPercent.value = page.progressPercent
-        _isBackButtonVisible.value = page.isBackButtonVisible
-        _isSkipTextVisible.value = page.isSkipTextVisible
+        with(page) {
+            _progressBarPercent.value = progressPercent
+            _isBackButtonVisible.value = isBackButtonVisible
+            _isSkipTextVisible.value = isSkipTextVisible
+        }
     }
 
     fun updateUserBirthYear(birthYear: Int) {
-        _userBirthYear.value = birthYear
+        _userInfo.value = _userInfo.value?.copy(birth = birthYear)
+        updateSecondNextButtonUiState()
+    }
+
+    fun updateUserGenderUiState(isManSelected: Boolean) {
+        _onboardingSecondUiState.value = _onboardingSecondUiState.value?.copy(
+            isManButtonSelected = isManSelected,
+            isWomanButtonSelected = !isManSelected
+        )
+        updateUserGender(isManSelected)
+    }
+
+    private fun updateUserGender(isManSelected: Boolean) {
+        _userInfo.value = _userInfo.value?.copy(gender = if (isManSelected) "Man" else "Woman")
+        updateSecondNextButtonUiState()
+    }
+
+    private fun updateSecondNextButtonUiState() {
+        _onboardingSecondUiState.value = _onboardingSecondUiState.value?.copy(
+            isNextButtonEnable = !userInfo.value?.gender.isNullOrEmpty() && userInfo.value?.birth != 0
+        )
     }
 }
