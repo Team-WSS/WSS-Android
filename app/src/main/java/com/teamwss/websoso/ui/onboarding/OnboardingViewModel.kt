@@ -41,6 +41,9 @@ class OnboardingViewModel @Inject constructor(
     private val _userInfo: MutableLiveData<UserModel> = MutableLiveData(UserModel())
     val userInfo: LiveData<UserModel> = _userInfo
 
+    private val _selectedGenres = MutableLiveData<Set<String>>(setOf())
+    val selectedGenres: LiveData<Set<String>> = _selectedGenres
+
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
         if (currentInput.isEmpty()) {
@@ -121,5 +124,20 @@ class OnboardingViewModel @Inject constructor(
         _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
             isNextButtonEnable = !userInfo.value?.gender.isNullOrEmpty() && userInfo.value?.birthYear != 0
         )
+    }
+
+    fun toggleGenreSelection(genreTag: String) {
+        val currentSelected = _selectedGenres.value?.toMutableSet() ?: mutableSetOf()
+        val isCurrentlySelected = currentSelected.contains(genreTag)
+        if (isCurrentlySelected) {
+            currentSelected.remove(genreTag)
+        } else {
+            currentSelected.add(genreTag)
+        }
+        _selectedGenres.value = currentSelected
+    }
+
+    fun isSelected(genreTag: String): Boolean {
+        return _selectedGenres.value?.contains(genreTag) ?: false
     }
 }
