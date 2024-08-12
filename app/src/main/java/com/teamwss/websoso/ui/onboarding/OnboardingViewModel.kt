@@ -126,18 +126,16 @@ class OnboardingViewModel @Inject constructor(
         )
     }
 
-    fun toggleGenreSelection(genreTag: String) {
+    fun updateGenreSelection(genreTag: String) {
         val currentSelected = _selectedGenres.value?.toMutableSet() ?: mutableSetOf()
-        val isCurrentlySelected = currentSelected.contains(genreTag)
-        if (isCurrentlySelected) {
-            currentSelected.remove(genreTag)
-        } else {
-            currentSelected.add(genreTag)
+        when (currentSelected.contains(genreTag)) {
+            true -> currentSelected.remove(genreTag)
+            false -> currentSelected.add(genreTag)
         }
         _selectedGenres.value = currentSelected
     }
 
-    fun isSelected(genreTag: String): Boolean {
+    fun isGenreSelected(genreTag: String): Boolean {
         return _selectedGenres.value?.contains(genreTag) ?: false
     }
 }

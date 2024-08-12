@@ -26,11 +26,11 @@ class OnboardingThirdFragment :
     }
 
     private fun setupGenreAdapter() {
-        val genres = Genre.values().toList()
+        val genres = Genre.entries.toList()
         val adapter = GenreAdapter(
             genres,
-            onboardingViewModel::toggleGenreSelection,
-            onboardingViewModel::isSelected
+            onboardingViewModel::updateGenreSelection,
+            onboardingViewModel::isGenreSelected,
         )
         binding.rvOnboardingThird.adapter = adapter
     }
