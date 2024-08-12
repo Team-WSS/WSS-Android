@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_navigate_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@null"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="14dp"
+            android:src="@drawable/ic_profile_edit_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_edit_title"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_navigate_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_profile_edit_navigate_back" />
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:height="44dp"
+            android:gravity="center"
+            android:text="@string/profile_edit_finish"
+            android:textAlignment="center"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/primary_100_6A5DFD"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_navigate_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_profile_edit_navigate_back" />
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_profile_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="132dp"
+            android:layout_marginTop="38dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_navigate_back"
+            tools:src="@drawable/ic_profile_edit_clear" />
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_profile_image_change"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_profile_edit_add"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_profile_image"
+            app:layout_constraintEnd_toEndOf="@id/iv_profile_edit_profile_image" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/profile_edit_nickname"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_profile_image" />
+
+        <View
+            android:id="@+id/view_profile_edit_nickname"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_profile_edit_gray_50_radius_12dp"
+            app:layout_constraintEnd_toStartOf="@id/tv_profile_edit_nickname_check_duplicate"
+            app:layout_constraintStart_toStartOf="@id/tv_profile_edit_nickname"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_nickname" />
+
+        <EditText
+            android:id="@+id/et_profile_edit_nickname"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@null"
+            android:inputType="text"
+            android:paddingHorizontal="12dp"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/view_profile_edit_nickname"
+            app:layout_constraintEnd_toStartOf="@id/iv_profile_edit_nickname_clear"
+            app:layout_constraintStart_toStartOf="@id/view_profile_edit_nickname"
+            app:layout_constraintTop_toTopOf="@id/view_profile_edit_nickname"
+            tools:text="공백" />
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_nickname_clear"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:padding="12dp"
+            android:src="@drawable/ic_profile_edit_clear"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/view_profile_edit_nickname"
+            app:layout_constraintEnd_toEndOf="@id/view_profile_edit_nickname"
+            app:layout_constraintTop_toTopOf="@id/view_profile_edit_nickname"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_nickname_check_duplicate"
+            android:layout_width="88dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_profile_edit_gray_70_radius_12dp"
+            android:gravity="center"
+            android:text="@string/profile_edit_duplicate"
+            android:textAlignment="center"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="@id/view_profile_edit_nickname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/view_profile_edit_nickname"
+            app:layout_constraintTop_toTopOf="@id/view_profile_edit_nickname" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_nickname_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/label1"
+            app:layout_constraintEnd_toEndOf="@id/tv_profile_edit_nickname_check_duplicate"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_nickname_check_duplicate"
+            tools:text="2/10" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_profile_edit_nickname"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            app:dividerColor="@color/gray_50_F4F5F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_nickname_count" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_introduction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/profile_edit_introduction"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_nickname" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_profile_edit_introduction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_profile_edit_gray_50_radius_12dp"
+            android:minHeight="66dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_introduction">
+
+            <EditText
+                android:id="@+id/et_profile_edit_introduction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/edit_profile_introduction_hint"
+                android:maxLines="4"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray_200_AEADB3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_profile_edit_introduction_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/label1"
+            app:layout_constraintEnd_toEndOf="@id/cl_profile_edit_introduction"
+            app:layout_constraintTop_toBottomOf="@id/cl_profile_edit_introduction"
+            tools:text="10/60" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider_profile_edit_introduction"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            app:dividerColor="@color/gray_50_F4F5F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_introduction_count" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_prefer_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/profile_edit_prefer_genre"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_profile_edit_introduction" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_prefer_genre_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/profile_edit_prefer_genre_description"
+            android:textAppearance="@style/body5"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@id/tv_profile_edit_prefer_genre"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_prefer_genre" />
+
+        <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+            android:id="@+id/wcg_profile_edit_prefer_genre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="14dp"
+            android:paddingHorizontal="24dp"
+            app:chipSpacing="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_prefer_genre_description"
+            app:singleSelection="false" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

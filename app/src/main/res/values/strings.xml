@@ -217,4 +217,14 @@
     <string name="profile_disclosure_title">프로필 공개여부</string>
     <string name="profile_disclosure_complete">완료</string>
     <string name="profile_disclosure_private">비공개</string>
+
+    <!-- 프로필 편집 뷰 -->
+    <string name="profile_edit_finish">완료</string>
+    <string name="profile_edit_title">프로필 편집</string>
+    <string name="profile_edit_nickname">닉네임</string>
+    <string name="profile_edit_duplicate">중복확인</string>
+    <string name="profile_edit_introduction">소개</string>
+    <string name="edit_profile_introduction_hint">소개글을 적어보세요!</string>
+    <string name="profile_edit_prefer_genre">선호장르</string>
+    <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해 드려요</string>
 </resources>
