@@ -15,6 +15,7 @@ class AccountInfoActivity :
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
+        onLogoutButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -22,6 +23,13 @@ class AccountInfoActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
         )
+    }
+
+    private fun onLogoutButtonClick() {
+        binding.clAccountInfoLogout.setOnClickListener {
+            LogoutDialogFragment.newInstance()
+                .show(supportFragmentManager, LogoutDialogFragment.TAG)
+        }
     }
 
     companion object {
