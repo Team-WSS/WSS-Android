@@ -213,6 +213,10 @@
     <string name="setting_app_rating">앱 평점 남기기</string>
     <string name="setting_terms_of_use">서비스 이용약관</string>
 
+    <!-- 차단유저 목록 뷰 -->
+    <string name="block_users_cancel">차단 해제</string>
+    <string name="block_users_title">차단유저 목록</string>
+
     <!-- 환경설정 - 계정정보 뷰 -->
     <string name="account_info_change_gender_and_age">성별/나이 변경</string>
     <string name="account_info_email">이메일</string>
