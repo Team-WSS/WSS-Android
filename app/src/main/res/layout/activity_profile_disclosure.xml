@@ -44,16 +44,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_profile_disclosure_title" />
 
-        <View
-            android:id="@+id/view_profile_disclosure_title_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_disclosure_title" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,7 +51,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_profile_disclosure_title_divider">
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_disclosure_title">
 
             <TextView
                 android:layout_width="wrap_content"
