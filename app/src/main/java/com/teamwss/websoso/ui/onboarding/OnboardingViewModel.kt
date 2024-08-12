@@ -100,12 +100,12 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun updateUserBirthYear(birthYear: Int) {
-        _userInfo.value = _userInfo.value?.copy(birthYear = birthYear)
+        _userInfo.value = userInfo.value?.copy(birthYear = birthYear)
         updateSecondNextButtonUiState()
     }
 
     fun updateUserGenderUiState(isManSelected: Boolean) {
-        _onboardingSecondUiState.value = _onboardingSecondUiState.value?.copy(
+        _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
             isManButtonSelected = isManSelected,
             isWomanButtonSelected = !isManSelected
         )
@@ -113,12 +113,12 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun updateUserGender(isManSelected: Boolean) {
-        _userInfo.value = _userInfo.value?.copy(gender = if (isManSelected) "Man" else "Woman")
+        _userInfo.value = userInfo.value?.copy(gender = if (isManSelected) "Man" else "Woman")
         updateSecondNextButtonUiState()
     }
 
     private fun updateSecondNextButtonUiState() {
-        _onboardingSecondUiState.value = _onboardingSecondUiState.value?.copy(
+        _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
             isNextButtonEnable = !userInfo.value?.gender.isNullOrEmpty() && userInfo.value?.birthYear != 0
         )
     }
