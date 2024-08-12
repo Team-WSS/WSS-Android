@@ -7,4 +7,6 @@ interface DetailExploreClickListener {
     fun onSearchCancelButtonClick()
 
     fun onNovelInquireButtonClick()
+
+    fun onDetailSearchNovelButtonClick()
 }
