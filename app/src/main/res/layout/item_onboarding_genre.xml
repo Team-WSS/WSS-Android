@@ -21,7 +21,7 @@
             android:id="@+id/view_onboarding_item_genre"
             android:layout_width="80dp"
             android:layout_height="0dp"
-            android:background="@drawable/bg_onboarding_gray50"
+            android:background="@drawable/bg_onboarding_oval_gray50"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
