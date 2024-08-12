@@ -50,9 +50,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
         }
 
         myLibraryViewModel.attractivePointsText.observe(viewLifecycleOwner) { combinedText ->
-            val primary100 = ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD)
-            val gray300 = ContextCompat.getColor(requireContext(), R.color.gray_300_52515F)
-            applyTextColors(binding.tvMyLibraryAttractivePoints, combinedText, primary100, gray300)
+            applyTextColors(combinedText)
         }
 
         myLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
@@ -67,27 +65,52 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
         }
     }
 
-    private fun applyTextColors(
-        attractivePoint: TextView,
-        attractivePointText: String,
-        attractivePointTextColor: Int,
-        fixedTextColor: Int
-    ) {
+    private fun applyTextColors(combinedText: String) {
+        val primary100 = requireContext().getColor(R.color.primary_100_6A5DFD)
+        val gray300 = requireContext().getColor(R.color.gray_300_52515F)
+
         val spannableStringBuilder = SpannableStringBuilder()
 
-        val attractivePointTextLength = attractivePointText.indexOf("가 매력적인 작품")
-        val attractivePoints = SpannableString(attractivePointText.substring(0, attractivePointTextLength)).apply {
-            setSpan(ForegroundColorSpan(attractivePointTextColor), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-        spannableStringBuilder.append(attractivePoints)
+        val fixedText = getString(R.string.my_library_attractive_point_fixed_text).trim()
+        val attractivePointTextLength = combinedText.indexOf(fixedText)
 
-        val fixedSpannable = SpannableString(attractivePointText.substring(attractivePointTextLength)).apply {
-            setSpan(ForegroundColorSpan(fixedTextColor), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
-        spannableStringBuilder.append(fixedSpannable)
+        if (attractivePointTextLength != -1) {
+            val attractivePoints =
+                SpannableString(combinedText.substring(0, attractivePointTextLength)).apply {
+                    setSpan(
+                        ForegroundColorSpan(primary100),
+                        0,
+                        length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            spannableStringBuilder.append(attractivePoints)
 
-        attractivePoint.text = spannableStringBuilder
+            val fixedSpannable =
+                SpannableString(combinedText.substring(attractivePointTextLength)).apply {
+                    setSpan(
+                        ForegroundColorSpan(gray300),
+                        0,
+                        length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            spannableStringBuilder.append(fixedSpannable)
+        } else {
+            val spannable = SpannableString(combinedText).apply {
+                setSpan(
+                    ForegroundColorSpan(primary100),
+                    0,
+                    length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            spannableStringBuilder.append(spannable)
+        }
+
+        binding.tvMyLibraryAttractivePoints.text = spannableStringBuilder
     }
+
 
     private fun updateNovelPreferencesKeywords(novelPreferences: NovelPreferenceEntity) {
         novelPreferences.keywords.forEach { keyword ->

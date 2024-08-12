@@ -16,7 +16,7 @@ class MyLibraryViewModel @Inject constructor(private val fakeUserRepository: Fak
     private val _genres = MutableLiveData<List<GenrePreferenceEntity>>()
     val genres: LiveData<List<GenrePreferenceEntity>> = _genres
 
-    private val _isGenreListVisible = MutableLiveData<Boolean>().apply { value = false }
+    private val _isGenreListVisible = MutableLiveData<Boolean>(false)
     val isGenreListVisible: LiveData<Boolean> = _isGenreListVisible
 
     private val _novelPreferences = MutableLiveData<NovelPreferenceEntity>()
@@ -39,7 +39,7 @@ class MyLibraryViewModel @Inject constructor(private val fakeUserRepository: Fak
         _isGenreListVisible.value = _isGenreListVisible.value?.not() ?: false
     }
 
-    fun setText(serverText: String, fixedText: String) {
+    fun setAttractivePointText(serverText: String, fixedText: String) {
         val translatedText = translateAttractivePointsText(serverText)
         _attractivePointsText.value = "$translatedText$fixedText"
     }
@@ -56,6 +56,6 @@ class MyLibraryViewModel @Inject constructor(private val fakeUserRepository: Fak
         val serverText = dummyPreferences.attractivePoint.joinToString(", ")
         val fixedText = "가 매력적인 작품"
 
-        setText(serverText, fixedText)
+        setAttractivePointText(serverText, fixedText)
     }
 }
