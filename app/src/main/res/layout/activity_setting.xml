@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.setting.SettingClickListener" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,6 +53,7 @@
             android:id="@+id/cl_setting_account_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onClick.onUserAccountInfoButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_setting_title_divider">
@@ -85,6 +93,7 @@
             android:id="@+id/cl_setting_profile_disclosure"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onClick.onProfileDisclosureButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_setting_account_info">
@@ -124,6 +133,7 @@
             android:id="@+id/cl_setting_websoso_account"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onClick.onWebsosoOfficialButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_setting_profile_disclosure">
@@ -163,6 +173,7 @@
             android:id="@+id/cl_setting_inquire_and_feedback"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onClick.onInquireAndFeedbackButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_setting_websoso_account">
@@ -202,6 +213,7 @@
             android:id="@+id/cl_setting_app_rating"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onClick.onAppRatingButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_setting_inquire_and_feedback">
@@ -241,6 +253,7 @@
             android:id="@+id/cl_setting_terms_of_use"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onClick.onTermsOfUseButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_setting_app_rating">
