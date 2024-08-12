@@ -452,7 +452,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
-                    android:id="@+id/cg_my_library_attractive_points"
+                    android:id="@+id/wcg_my_library_attractive_points"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
