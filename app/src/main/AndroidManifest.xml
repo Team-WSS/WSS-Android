@@ -83,5 +83,9 @@
             android:name=".ui.profileDisclosure.ProfileDisclosureActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.changeGenderAndAge.ChangeGenderAndAgeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>
