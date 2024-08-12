@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.onboarding.OnboardingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,15 +48,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_onboarding_third_recommendation_genre"
+            app:spanCount="3"
             tools:itemCount="9"
             tools:listitem="@layout/item_onboarding_genre" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_onboarding_third_complete"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/selector_onboarding_next_button_background"
+            android:enabled="@{!viewModel.selectedGenres.empty}"
             android:text="완료"
             android:textAppearance="@style/title1"
             android:textColor="@color/white"

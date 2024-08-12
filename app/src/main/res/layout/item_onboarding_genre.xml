@@ -1,32 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/iv_onboarding_item_genre_image"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="13dp"
-        app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_novel_detail_genre_test" />
+    <data>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="20dp"
-        android:textAppearance="@style/title3"
-        android:textColor="@color/gray_300_52515F"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/iv_onboarding_item_genre_image"
-        app:layout_constraintStart_toStartOf="@id/iv_onboarding_item_genre_image"
-        app:layout_constraintTop_toBottomOf="@id/iv_onboarding_item_genre_image"
-        tools:text="로멘스" />
+        <variable
+            name="genre"
+            type="com.teamwss.websoso.ui.onboarding.third.model.Genre" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="isSelected"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view_onboarding_item_genre"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_onboarding_gray50"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_onboarding_item_genre_image"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/view_onboarding_item_genre"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="@id/view_onboarding_item_genre"
+            app:layout_constraintStart_toStartOf="@id/view_onboarding_item_genre"
+            app:layout_constraintTop_toTopOf="@id/view_onboarding_item_genre"
+            tools:src="@drawable/ic_onboarding_romance" />
+
+        <ImageView
+            android:id="@+id/iv_onboarding_item_checked"
+            isVisible="@{isSelected}"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_onboarding_item_checked"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_onboarding_item_genre_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp"
+            android:text="@{genre.displayName}"
+            android:textAppearance="@style/title3"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/view_onboarding_item_genre"
+            app:layout_constraintStart_toStartOf="@id/view_onboarding_item_genre"
+            app:layout_constraintTop_toBottomOf="@id/view_onboarding_item_genre"
+            tools:text="로멘스" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
