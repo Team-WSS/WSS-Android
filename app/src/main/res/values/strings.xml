@@ -52,6 +52,7 @@
     <!-- 상세 탐색 결과 뷰 -->
     <string name="detail_explore_result_filter_description">가 적용됐어요</string>
     <string name="detail_explore_result_novel">작품</string>
+    <string name="detail_explore_result_not_exist">해당하는 작품이 없어요\n검색의 범위를 더 넓혀보세요</string>
 
     <!-- 작품 상세 -->
     <string name="novel_detail_review">나도 한마디</string>
@@ -205,4 +206,28 @@
     <string name="home_setting_interest_general">선호장르 설정하기</string>
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
 
+    <!-- 환경설정 뷰-->
+    <string name="setting_title">설정</string>
+    <string name="setting_account_info">계정정보</string>
+    <string name="setting_profile_disclosure">프로필 공개 여부 설정</string>
+    <string name="setting_websoso_account">웹소소 공식 계정</string>
+    <string name="setting_inquire_and_feedback"><![CDATA[문의하기 & 의견 보내기]]></string>
+    <string name="setting_app_rating">앱 평점 남기기</string>
+    <string name="setting_terms_of_use">서비스 이용약관</string>
+
+    <!-- 차단유저 목록 뷰 -->
+    <string name="block_users_cancel">차단 해제</string>
+    <string name="block_users_title">차단유저 목록</string>
+
+    <!-- 환경설정 - 계정정보 뷰 -->
+    <string name="account_info_change_gender_and_age">성별/나이 변경</string>
+    <string name="account_info_email">이메일</string>
+    <string name="account_info_block_user_list">차단유저 목록</string>
+    <string name="account_info_logout">로그아웃</string>
+    <string name="account_info_with_draw">회원탈퇴</string>
+
+    <!-- 프로필 공개여부 뷰 -->
+    <string name="profile_disclosure_title">프로필 공개여부</string>
+    <string name="profile_disclosure_complete">완료</string>
+    <string name="profile_disclosure_private">비공개</string>
 </resources>

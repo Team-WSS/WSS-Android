@@ -66,6 +66,22 @@
             android:name=".ui.detailExploreResult.DetailExploreResultActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-    </application>
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.blockUsers.BlockUsersActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".accountInfo.AccountInfoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.profileDisclosure.ProfileDisclosureActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+    </application>
 </manifest>
