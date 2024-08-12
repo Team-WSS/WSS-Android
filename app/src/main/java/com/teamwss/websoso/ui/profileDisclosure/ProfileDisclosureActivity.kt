@@ -15,6 +15,7 @@ class ProfileDisclosureActivity :
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
+        onBackButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -22,6 +23,12 @@ class ProfileDisclosureActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
         )
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivProfileDisclosureBackButton.setOnClickListener {
+            finish()
+        }
     }
 
     companion object {

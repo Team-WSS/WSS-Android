@@ -58,6 +58,10 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         override fun onTermsOfUseButtonClick() {
             // TODO 서비스 이용약관으로 이동
         }
+
+        override fun onBackButtonClick() {
+            finish()
+        }
     }
 
     companion object {

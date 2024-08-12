@@ -13,4 +13,6 @@ interface SettingClickListener {
     fun onAppRatingButtonClick()
 
     fun onTermsOfUseButtonClick()
+
+    fun onBackButtonClick()
 }
