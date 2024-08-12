@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.onboarding.OnboardingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -98,7 +101,7 @@
                 android:id="@+id/tv_onboarding_second_birth_year_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_second_input_birth_year"
+                android:text="@string/onboarding_second_select_gender_and_birth_year"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -116,11 +119,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/selector_onboarding_next_button_background"
+            android:elevation="0dp"
             android:text="@string/onboarding_second_next"
             android:textAppearance="@style/title1"
             android:textColor="@color/white"

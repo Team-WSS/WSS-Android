@@ -32,6 +32,9 @@ class OnboardingViewModel @Inject constructor(
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
 
+    private val _userBirthYear: MutableLiveData<Int> = MutableLiveData(0)
+    val userBirthYear: LiveData<Int> = _userBirthYear
+
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
         if (currentInput.isEmpty()) {
@@ -86,5 +89,9 @@ class OnboardingViewModel @Inject constructor(
         _progressBarPercent.value = page.progressPercent
         _isBackButtonVisible.value = page.isBackButtonVisible
         _isSkipTextVisible.value = page.isSkipTextVisible
+    }
+
+    fun updateUserBirthYear(birthYear: Int) {
+        _userBirthYear.value = birthYear
     }
 }
