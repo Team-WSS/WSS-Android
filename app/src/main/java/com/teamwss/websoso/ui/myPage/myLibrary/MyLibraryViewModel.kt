@@ -3,9 +3,11 @@ package com.teamwss.websoso.ui.myPage.myLibrary
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.AttractivePointEntity
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.repository.MyLibraryRepository
+import com.teamwss.websoso.domain.model.AttractivePoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,38 +27,33 @@ class MyLibraryViewModel @Inject constructor(private val myLibraryRepository: My
     val attractivePointsText: LiveData<String> get() = _attractivePointsText
 
     init {
-        loadPrefrenceData()
+        updatePreferenceData()
         setDummyData()
     }
 
-    private fun loadPrefrenceData() {
+    private fun updatePreferenceData() {
         _genres.value = myLibraryRepository.getGenres()
         _attractivePoints.value = myLibraryRepository.getAttractivePoints()
-    }
-
-    private fun translateAttractivePointsText(text: String): String {
-        return text.split(", ").joinToString(", ") {
-            when (it) {
-                "character" -> "캐릭터"
-                "relationship" -> "관계"
-                "material" -> "소재"
-                else -> it
-            }
-        }
     }
 
     fun updateToggleGenresVisibility() {
         _isGenreListVisible.value = _isGenreListVisible.value?.not() ?: false
     }
 
-    fun setText(serverText: String, fixedText: String) {
+    fun setText(serverText: String, fixedText: Int) {
         val translatedText = translateAttractivePointsText(serverText)
         _attractivePointsText.value = "$translatedText$fixedText"
     }
 
+    private fun translateAttractivePointsText(text: String): String {
+        return text.split(", ").joinToString(", ") { point ->
+            AttractivePoints.fromString(point)?.korean ?: point
+        }
+    }
+
     private fun setDummyData() {
         val serverText = "character, material"
-        val fixedText = "가 매력적인 작품"
+        val fixedText = R.string.my_library_attractive_point_fixed_text
         setText(serverText, fixedText)
     }
 }
