@@ -100,7 +100,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun updateUserBirthYear(birthYear: Int) {
-        _userInfo.value = _userInfo.value?.copy(birth = birthYear)
+        _userInfo.value = _userInfo.value?.copy(birthYear = birthYear)
         updateSecondNextButtonUiState()
     }
 
@@ -119,7 +119,7 @@ class OnboardingViewModel @Inject constructor(
 
     private fun updateSecondNextButtonUiState() {
         _onboardingSecondUiState.value = _onboardingSecondUiState.value?.copy(
-            isNextButtonEnable = !userInfo.value?.gender.isNullOrEmpty() && userInfo.value?.birth != 0
+            isNextButtonEnable = !userInfo.value?.gender.isNullOrEmpty() && userInfo.value?.birthYear != 0
         )
     }
 }

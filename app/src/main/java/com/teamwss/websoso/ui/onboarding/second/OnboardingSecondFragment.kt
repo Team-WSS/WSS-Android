@@ -36,13 +36,13 @@ class OnboardingSecondFragment :
 
     private fun updateBirthYearTextUi(userModelInfo: UserModel) {
         val birthYearText =
-            if (userModelInfo.birth != 0) userModelInfo.birth.toString() else getString(R.string.onboarding_second_input_birth_year)
+            if (userModelInfo.birthYear != 0) userModelInfo.birthYear.toString() else getString(R.string.onboarding_second_input_birth_year)
         with(binding.tvOnboardingSecondBirthYearHint) {
             text = birthYearText
             setTextColor(
                 ContextCompat.getColor(
                     context,
-                    when (userModelInfo.birth) {
+                    when (userModelInfo.birthYear) {
                         0 -> R.color.gray_200_AEADB3
                         else -> R.color.black
                     }
