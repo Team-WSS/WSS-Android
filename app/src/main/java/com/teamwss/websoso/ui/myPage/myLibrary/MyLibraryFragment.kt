@@ -75,7 +75,7 @@ class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fra
     ) {
         val spannableStringBuilder = SpannableStringBuilder()
 
-        val attractivePointTextLength = attractivePointText.indexOf("가 매력적인 작품")
+        val attractivePointTextLength = attractivePointText.indexOf(getString(R.string.my_library_attractive_point_fixed_text))
         val attractivePoints = SpannableString(attractivePointText.substring(0, attractivePointTextLength)).apply {
             setSpan(ForegroundColorSpan(attractivePointTextColor), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
