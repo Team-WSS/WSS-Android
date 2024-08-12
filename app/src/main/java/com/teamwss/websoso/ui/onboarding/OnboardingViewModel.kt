@@ -30,7 +30,7 @@ class OnboardingViewModel @Inject constructor(
 
     private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> =
         MutableLiveData(OnboardingFirstUiState())
-    val onBoardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
+    val onboardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
 
     private val _onboardingSecondUiState: MutableLiveData<OnboardingSecondUiState> =
         MutableLiveData(OnboardingSecondUiState())
@@ -59,7 +59,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun updateOnBoardingFirstUiState(type: NicknameInputType, message: String) {
-        _onboardingFirstUiState.value = _onboardingFirstUiState.value?.copy(
+        _onboardingFirstUiState.value = onboardingFirstUiState.value?.copy(
             nicknameInputType = type,
             nicknameValidationMessage = message,
             isDuplicationCheckButtonEnable = type == NicknameInputType.TYPING,
