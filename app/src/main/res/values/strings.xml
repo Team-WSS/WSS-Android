@@ -228,4 +228,9 @@
     <string name="profile_disclosure_title">프로필 공개여부</string>
     <string name="profile_disclosure_complete">완료</string>
     <string name="profile_disclosure_private">비공개</string>
+
+    <!-- 로그아웃 다이얼로그 뷰 -->
+    <string name="logout_title">로그아웃 할까요?</string>
+    <string name="logout_cancel">취소</string>
+    <string name="logout_out">로그아웃</string>
 </resources>
