@@ -233,4 +233,13 @@
     <string name="logout_title">로그아웃 할까요?</string>
     <string name="logout_cancel">취소</string>
     <string name="logout_out">로그아웃</string>
+
+    <!-- 회원탈퇴 뷰 -->
+    <string name="with_draw_title">정말 탈퇴하시겠어요?</string>
+    <string name="with_draw_description">남겼던 평가와 기록들이 모두 사라져요..</string>
+    <string name="with_draw_interested">관심</string>
+    <string name="with_draw_watching">보는 중</string>
+    <string name="with_draw_watched">봤어요</string>
+    <string name="with_draw_quit">하차</string>
+    <string name="with_draw_check">확인</string>
 </resources>
