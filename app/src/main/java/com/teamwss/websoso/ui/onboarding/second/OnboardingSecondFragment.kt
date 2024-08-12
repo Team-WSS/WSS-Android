@@ -9,6 +9,7 @@ import com.teamwss.websoso.databinding.FragmentOnboardingSecondBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
+import com.teamwss.websoso.ui.onboarding.model.UserModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,21 +29,25 @@ class OnboardingSecondFragment :
     }
 
     private fun setupObserver() {
-        onboardingViewModel.userBirthYear.observe(viewLifecycleOwner) { birthYear ->
-            val birthYearText =
-                if (birthYear != 0) birthYear.toString() else getString(R.string.onboarding_second_input_birth_year)
-            with(binding.tvOnboardingSecondBirthYearHint) {
-                text = birthYearText
-                setTextColor(
-                    ContextCompat.getColor(
-                        context,
-                        when (birthYear) {
-                            0 -> R.color.gray_200_AEADB3
-                            else -> R.color.black
-                        }
-                    )
+        onboardingViewModel.userInfo.observe(viewLifecycleOwner) { userInfo ->
+            updateBirthYearTextUi(userInfo)
+        }
+    }
+
+    private fun updateBirthYearTextUi(userModelInfo: UserModel) {
+        val birthYearText =
+            if (userModelInfo.birth != 0) userModelInfo.birth.toString() else getString(R.string.onboarding_second_input_birth_year)
+        with(binding.tvOnboardingSecondBirthYearHint) {
+            text = birthYearText
+            setTextColor(
+                ContextCompat.getColor(
+                    context,
+                    when (userModelInfo.birth) {
+                        0 -> R.color.gray_200_AEADB3
+                        else -> R.color.black
+                    }
                 )
-            }
+            )
         }
     }
 
@@ -53,7 +58,8 @@ class OnboardingSecondFragment :
     }
 
     private fun showBirthYearBottomSheetDialog() {
-        val existingDialog = parentFragmentManager.findFragmentByTag(BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG)
+        val existingDialog =
+            parentFragmentManager.findFragmentByTag(BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG)
         if (existingDialog == null) {
             OnboardingBirthYearBottomSheetDialog().show(
                 parentFragmentManager,
