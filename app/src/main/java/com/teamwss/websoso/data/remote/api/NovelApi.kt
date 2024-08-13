@@ -2,6 +2,7 @@ package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
+import com.teamwss.websoso.data.remote.response.SosoPicksResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -28,4 +29,7 @@ interface NovelApi {
     suspend fun getNovelInfo(
         @Path("novelId") novelId: Long,
     ): NovelInfoResponseDto
+
+    @GET("soso-picks")
+    suspend fun getSosoPicks(): SosoPicksResponseDto
 }

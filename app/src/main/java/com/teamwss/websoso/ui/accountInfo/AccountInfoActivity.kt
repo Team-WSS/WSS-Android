@@ -1,4 +1,4 @@
-package com.teamwss.websoso.accountInfo
+package com.teamwss.websoso.ui.accountInfo
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,7 @@ class AccountInfoActivity :
 
         setupTranslucentOnStatusBar()
         onLogoutButtonClick()
+        onBackButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -29,6 +30,12 @@ class AccountInfoActivity :
         binding.clAccountInfoLogout.setOnClickListener {
             LogoutDialogFragment.newInstance()
                 .show(supportFragmentManager, LogoutDialogFragment.TAG)
+        }
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivAccountInfoBackButton.setOnClickListener {
+            finish()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.teamwss.websoso.accountInfo
+package com.teamwss.websoso.ui.accountInfo
 
 import android.os.Bundle
 import android.view.View
