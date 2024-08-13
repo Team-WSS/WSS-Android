@@ -18,10 +18,10 @@ class ExploreViewModel @Inject constructor(
     val uiState: LiveData<SosoPickUiState> get() = _uiState
 
     init {
-        fetchSosoPick()
+        updateSosoPicks()
     }
 
-    private fun fetchSosoPick() {
+    private fun updateSosoPicks() {
         viewModelScope.launch {
             runCatching {
                 novelRepository.fetchSosoPicks()
