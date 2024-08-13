@@ -238,7 +238,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_with_draw_check"
+            android:background="@drawable/btn_with_draw_check_enable"
             android:gravity="center"
             android:paddingVertical="18dp"
             android:text="@string/with_draw_check"

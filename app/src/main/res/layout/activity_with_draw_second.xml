@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/iv_with_draw_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="64dp"
+                android:contentDescription="@null"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:src="@drawable/btn_setting_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_with_draw_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_info_with_draw"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/iv_with_draw_back_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_with_draw_back_button" />
+
+            <TextView
+                android:id="@+id/tv_with_draw_second_reason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="56dp"
+                android:text="탈퇴사유"
+                android:textAppearance="@style/headline1"
+                android:textColor="@color/primary_100_6A5DFD"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="를 알려주세요."
+                android:textAppearance="@style/headline1"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/tv_with_draw_second_reason"
+                app:layout_constraintStart_toEndOf="@id/tv_with_draw_second_reason"
+                app:layout_constraintTop_toTopOf="@id/tv_with_draw_second_reason" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_reason_rarely_using"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_second_reason">
+
+                <ImageView
+                    android:id="@+id/iv_with_draw_reason_rarely_using"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:src="@drawable/btn_profile_disclosure_public"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="자주 사용하지 않아서"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_rarely_using"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_reason_inconvenient"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_rarely_using">
+
+                <ImageView
+                    android:id="@+id/iv_with_draw_reason_inconvenient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:src="@drawable/btn_profile_disclosure_public"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="이용이 불편하고 장애가 많아서"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_inconvenient"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_reason_want_to_delete_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_inconvenient">
+
+                <ImageView
+                    android:id="@+id/iv_with_draw_reason_want_to_delete_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:src="@drawable/btn_profile_disclosure_public"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="삭제하고 싶은 내용이 있어서"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_want_to_delete_content"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_reason_not_exist_any_wanted_novel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_want_to_delete_content">
+
+                <ImageView
+                    android:id="@+id/iv_with_draw_reason_not_exist_any_wanted_novel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:src="@drawable/btn_profile_disclosure_public"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="원하는 작품이 없어서"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_not_exist_any_wanted_novel"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_reason_etc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_not_exist_any_wanted_novel">
+
+                <ImageView
+                    android:id="@+id/iv_with_draw_reason_etc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:src="@drawable/btn_profile_disclosure_public"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="직접입력"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_etc"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/et_with_draw_etc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/bg_with_draw_gray50_radius_14dp"
+                android:gravity="top"
+                android:hint="위 항목 외의 탈퇴 사유를 자유롭게 작성해 주세요."
+                android:maxLength="100"
+                android:minLines="4"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray_200_AEADB3"
+                app:layout_constraintEnd_toEndOf="@id/cl_with_draw_reason_etc"
+                app:layout_constraintStart_toStartOf="@id/cl_with_draw_reason_etc"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_etc" />
+
+            <TextView
+                android:id="@+id/tv_with_draw_etc_text_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/label1"
+                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
+                app:layout_constraintTop_toBottomOf="@id/et_with_draw_etc"
+                tools:text="0/100" />
+
+            <TextView
+                android:id="@+id/tv_with_draw_check_before_draw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:text="탈퇴하기 전에 확인해주세요"
+                android:textAppearance="@style/headline1"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
+                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_etc_text_count" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_check_do_not_recover"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_with_draw_gray50_radius_14dp"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
+                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
+                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_before_draw">
+
+                <TextView
+                    android:id="@+id/tv_with_draw_check_do_not_recover"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="삭제된 계정 정보는 복구할 수 없어요"
+                    android:textAppearance="@style/title2"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="회원님이 평가하고 기록한 서재 정보와 계정 정보는\n탈퇴 즉시 삭제되며, 절대 복구할 수 없어요. "
+                    android:textAppearance="@style/body4"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_do_not_recover" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_check_is_not_automatically_deleted_post"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_with_draw_gray50_radius_14dp"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
+                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_do_not_recover">
+
+                <TextView
+                    android:id="@+id/tv_with_draw_check_is_not_automatically_deleted_post"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="게시글 및 댓글은 자동 삭제되지 않아요"
+                    android:textAppearance="@style/title2"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="리뷰, 피드 게시글, 댓글은 탈퇴 시 자동으로 삭제되지\n않아요. 탈퇴 전 개별적으로 삭제해 주세요."
+                    android:textAppearance="@style/body4"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_is_not_automatically_deleted_post" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_check_re_sign_up"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_with_draw_gray50_radius_14dp"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
+                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_is_not_automatically_deleted_post">
+
+                <TextView
+                    android:id="@+id/tv_with_draw_check_re_sign_up"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="처음부터 다시 가입해야 해요"
+                    android:textAppearance="@style/title2"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="계정 정보는 탈퇴 즉시 삭제되어 바로 재가입 가능하지만,\n회원가입부터 작품 평가를 다시 해야 해요."
+                    android:textAppearance="@style/body4"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_re_sign_up" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_with_draw_check_agree_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintEnd_toEndOf="@id/cl_with_draw_check_re_sign_up"
+                app:layout_constraintStart_toStartOf="@id/cl_with_draw_check_re_sign_up"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_re_sign_up">
+
+                <ImageView
+                    android:id="@+id/iv_with_draw_check_agree"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/btn_profile_disclosure_public"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="위 주의사항을 모두 확인했고, 탈퇴에 동의합니다."
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/gray_300_52515F"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_check_agree"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_with_draw_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_with_draw_check_selector"
+                android:enabled="false"
+                android:gravity="center"
+                android:paddingVertical="18dp"
+                android:text="탈퇴하기"
+                android:textAppearance="@style/title1"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/cl_with_draw_check_agree_button"
+                app:layout_constraintStart_toStartOf="@id/cl_with_draw_check_agree_button"
+                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_agree_button" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
