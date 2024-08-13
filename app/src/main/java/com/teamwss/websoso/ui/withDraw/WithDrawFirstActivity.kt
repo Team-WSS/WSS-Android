@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.withDraw
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import com.teamwss.websoso.R
@@ -35,5 +37,12 @@ class WithDrawFirstActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
         )
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, WithDrawFirstActivity::class.java)
+        }
     }
 }

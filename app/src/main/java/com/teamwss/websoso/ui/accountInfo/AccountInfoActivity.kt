@@ -7,6 +7,7 @@ import android.view.WindowManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.withDraw.WithDrawFirstActivity
 
 class AccountInfoActivity :
     BindingActivity<ActivityAccountInfoBinding>(R.layout.activity_account_info) {
@@ -17,6 +18,7 @@ class AccountInfoActivity :
         setupTranslucentOnStatusBar()
         onLogoutButtonClick()
         onBackButtonClick()
+        onWithDrawButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -30,6 +32,13 @@ class AccountInfoActivity :
         binding.clAccountInfoLogout.setOnClickListener {
             LogoutDialogFragment.newInstance()
                 .show(supportFragmentManager, LogoutDialogFragment.TAG)
+        }
+    }
+
+    private fun onWithDrawButtonClick() {
+        binding.clAccountInfoWithDraw.setOnClickListener {
+            val intent = WithDrawFirstActivity.getIntent(this)
+            startActivity(intent)
         }
     }
 
