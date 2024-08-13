@@ -15,6 +15,7 @@ class WithDrawSecondActivity :
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
+        onBackButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -22,6 +23,12 @@ class WithDrawSecondActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
         )
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivWithDrawBackButton.setOnClickListener {
+            finish()
+        }
     }
 
     companion object {
