@@ -13,12 +13,12 @@ class GenreViewHolder(
     fun bind(genre: Genre, isSelected: Boolean) {
         binding.genre = genre
         binding.isSelected = isSelected
-        binding.ivOnboardingItemGenreImage.load(genre.drawableRes)
-
-        binding.root.setOnClickListener {
-            onGenreToggle(genre.tag)
+        with(binding) {
+            ivOnboardingItemGenreImage.load(genre.drawableRes)
+            root.setOnClickListener {
+                onGenreToggle(genre.tag)
+            }
+            executePendingBindings()
         }
-
-        binding.executePendingBindings()
     }
 }
