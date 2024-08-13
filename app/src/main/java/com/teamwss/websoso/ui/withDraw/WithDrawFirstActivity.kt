@@ -13,6 +13,21 @@ class WithDrawFirstActivity :
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
+        onWithDrawCheckButtonClick()
+        onBackButtonClick()
+    }
+
+    private fun onWithDrawCheckButtonClick() {
+        binding.tvWithDrawCheckButton.setOnClickListener {
+            val intent = WithDrawSecondActivity.getIntent(this)
+            startActivity(intent)
+        }
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivWithDrawBackButton.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupTranslucentOnStatusBar() {
