@@ -261,4 +261,5 @@
     <string name="with_draw_check_re_sign_up_description">계정 정보는 탈퇴 즉시 삭제되어 바로 재가입 가능하지만,\n회원가입부터 작품 평가를 다시 해야 해요.</string>
     <string name="with_draw_check_agree">위 주의사항을 모두 확인했고, 탈퇴에 동의합니다.</string>
     <string name="with_draw_button">탈퇴하기</string>
+    <string name="with_draw_max_length">/80</string>
 </resources>

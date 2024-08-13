@@ -243,11 +243,23 @@
                 android:id="@+id/tv_with_draw_etc_text_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:textAppearance="@style/label1"
+                android:textColor="@color/gray_300_52515F"
+                app:layout_constraintBottom_toBottomOf="@id/tv_with_draw_etc_text_max_count"
+                app:layout_constraintEnd_toStartOf="@id/tv_with_draw_etc_text_max_count"
+                app:layout_constraintTop_toTopOf="@id/tv_with_draw_etc_text_max_count"
+                tools:text="0" />
+
+            <TextView
+                android:id="@+id/tv_with_draw_etc_text_max_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/with_draw_max_length"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
-                app:layout_constraintTop_toBottomOf="@id/et_with_draw_etc"
-                tools:text="0/100" />
+                app:layout_constraintTop_toBottomOf="@id/et_with_draw_etc" />
 
             <TextView
                 android:id="@+id/tv_with_draw_check_before_draw"
