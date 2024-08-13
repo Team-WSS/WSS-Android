@@ -78,9 +78,16 @@
             android:name=".accountInfo.AccountInfoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.profileDisclosure.ProfileDisclosureActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.withDraw.WithDrawFirstActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.withDraw.WithDrawSecondActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
