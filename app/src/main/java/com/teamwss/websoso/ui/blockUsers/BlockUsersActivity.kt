@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.blockUsers
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import com.teamwss.websoso.R
@@ -13,6 +15,7 @@ class BlockUsersActivity :
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
+        onBackButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -20,5 +23,18 @@ class BlockUsersActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
         )
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivBlockUsersBackButton.setOnClickListener {
+            finish()
+        }
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, BlockUsersActivity::class.java)
+        }
     }
 }

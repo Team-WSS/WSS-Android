@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.changeGenderAndAge
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import com.teamwss.websoso.R
@@ -15,6 +17,7 @@ class ChangeGenderAndAgeActivity :
 
         setupTranslucentOnStatusBar()
         onChangeBirthYearClickButton()
+        onBackButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -41,7 +44,17 @@ class ChangeGenderAndAgeActivity :
         }
     }
 
+    private fun onBackButtonClick() {
+        binding.ivChangeGenderAndAgeBackButton.setOnClickListener {
+            finish()
+        }
+    }
+
     companion object {
         private const val BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG = "BirthYearBottomSheetDialog"
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, ChangeGenderAndAgeActivity::class.java)
+        }
     }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
+import com.teamwss.websoso.ui.blockUsers.BlockUsersActivity
+import com.teamwss.websoso.ui.changeGenderAndAge.ChangeGenderAndAgeActivity
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.withDraw.WithDrawFirstActivity
 
@@ -19,6 +21,8 @@ class AccountInfoActivity :
         onLogoutButtonClick()
         onBackButtonClick()
         onWithDrawButtonClick()
+        onChangeGenderAndAgeButtonClick()
+        onBlockUsersButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -45,6 +49,20 @@ class AccountInfoActivity :
     private fun onBackButtonClick() {
         binding.ivAccountInfoBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun onChangeGenderAndAgeButtonClick() {
+        binding.clAccountInfoChangeGenderAndAge.setOnClickListener {
+            val intent = ChangeGenderAndAgeActivity.getIntent(this)
+            startActivity(intent)
+        }
+    }
+
+    private fun onBlockUsersButtonClick() {
+        binding.clAccountInfoBlockUserList.setOnClickListener {
+            val intent = BlockUsersActivity.getIntent(this)
+            startActivity(intent)
         }
     }
 
