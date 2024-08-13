@@ -69,6 +69,6 @@ class OnboardingSecondFragment :
     }
 
     companion object {
-        private const val BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG = "BrithYearBottomSheetDialog"
+        private const val BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG = "BirthYearBottomSheetDialog"
     }
 }

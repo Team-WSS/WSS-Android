@@ -1,4 +1,4 @@
-package com.teamwss.websoso.accountInfo
+package com.teamwss.websoso.ui.accountInfo
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,7 @@ class AccountInfoActivity :
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
+        onBackButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -22,6 +23,12 @@ class AccountInfoActivity :
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
         )
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivAccountInfoBackButton.setOnClickListener {
+            finish()
+        }
     }
 
     companion object {
