@@ -22,14 +22,14 @@ class BlockedUsersAdapter(
 
             override fun areItemsTheSame(
                 oldItem: BlockedUserEntity,
-                newItem: BlockedUserEntity
+                newItem: BlockedUserEntity,
             ): Boolean {
                 return oldItem.blockId == newItem.blockId
             }
 
             override fun areContentsTheSame(
                 oldItem: BlockedUserEntity,
-                newItem: BlockedUserEntity
+                newItem: BlockedUserEntity,
             ): Boolean {
                 return oldItem == newItem
             }
