@@ -137,6 +137,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_withdraw_watching" />
 
             <TextView
+                android:id="@+id/tv_withdraw_watching_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -183,6 +184,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_withdraw_watched" />
 
             <TextView
+                android:id="@+id/tv_withdraw_watched_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -228,6 +230,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_withdraw_quit" />
 
             <TextView
+                android:id="@+id/tv_withdraw_quit_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"

@@ -4,13 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithdrawFirstBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.withdraw.first.model.UserNovelStatsModel
 import com.teamwss.websoso.ui.withdraw.second.WithdrawSecondActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WithdrawFirstActivity :
     BindingActivity<ActivityWithdrawFirstBinding>(R.layout.activity_withdraw_first) {
+    private val withdrawFirstViewModel: WithdrawFirstViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +23,7 @@ class WithdrawFirstActivity :
         setupTranslucentOnStatusBar()
         onWithdrawCheckButtonClick()
         onBackButtonClick()
+        setupObserver()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -37,6 +43,25 @@ class WithdrawFirstActivity :
     private fun onBackButtonClick() {
         binding.ivWithdrawBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun setupObserver() {
+        withdrawFirstViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.loading -> Unit
+                uiState.error -> Unit
+                !uiState.loading -> updateUserNovelStats(uiState.userNovelStats)
+            }
+        }
+    }
+
+    private fun updateUserNovelStats(userNovelStats: UserNovelStatsModel) {
+        binding.apply {
+            tvWithdrawInterestedCount.text = userNovelStats.interestNovelCount.toString()
+            tvWithdrawWatchingCount.text = userNovelStats.watchingNovelCount.toString()
+            tvWithdrawWatchedCount.text = userNovelStats.watchedNovelCount.toString()
+            tvWithdrawQuitCount.text = userNovelStats.quitNovelCount.toString()
         }
     }
 
