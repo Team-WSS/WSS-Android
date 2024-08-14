@@ -9,7 +9,7 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/iv_change_gender_and_age_back_button"
+            android:id="@+id/iv_change_user_info_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -22,19 +22,19 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_change_gender_and_age_title"
+            android:id="@+id/tv_change_user_info_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/account_info_change_gender_and_age"
+            android:text="@string/account_info_change_user_info"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/iv_change_gender_and_age_back_button"
+            app:layout_constraintBottom_toBottomOf="@id/iv_change_user_info_back_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_change_gender_and_age_back_button" />
+            app:layout_constraintTop_toTopOf="@id/iv_change_user_info_back_button" />
 
         <TextView
-            android:id="@+id/tv_change_gender_and_age_user_gender"
+            android:id="@+id/tv_change_user_info_user_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -42,10 +42,10 @@
             android:text="@string/onboarding_second_gender"
             android:textAppearance="@style/body2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_change_gender_and_age_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_change_user_info_title" />
 
         <LinearLayout
-            android:id="@+id/ll_change_gender_and_age_gender_chips"
+            android:id="@+id/ll_change_user_info_gender_chips"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -53,10 +53,9 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_change_gender_and_age_user_gender">
+            app:layout_constraintTop_toBottomOf="@id/tv_change_user_info_user_gender">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_onboarding_second_gender_man"
                 style="@style/HarryMoongChi.Chip.Choice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -65,7 +64,6 @@
                 android:text="@string/onboarding_second_man" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip_onboarding_second_gender_woman"
                 style="@style/HarryMoongChi.Chip.Choice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -76,27 +74,27 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/view_change_gender_and_age_divider"
+            android:id="@+id/view_change_user_info_divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="30dp"
             android:background="@color/gray_50_F4F5F8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_change_gender_and_age_gender_chips" />
+            app:layout_constraintTop_toBottomOf="@id/ll_change_user_info_gender_chips" />
 
         <TextView
-            android:id="@+id/tv_change_gender_and_age_birth_year"
+            android:id="@+id/tv_change_user_info_birth_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/onboarding_second_birth_year"
             android:textAppearance="@style/body2"
-            app:layout_constraintStart_toStartOf="@id/tv_change_gender_and_age_user_gender"
-            app:layout_constraintTop_toBottomOf="@id/view_change_gender_and_age_divider" />
+            app:layout_constraintStart_toStartOf="@id/tv_change_user_info_user_gender"
+            app:layout_constraintTop_toBottomOf="@id/view_change_user_info_divider" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_change_gender_and_age_birth_year"
+            android:id="@+id/cl_change_user_info_birth_year"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -105,7 +103,7 @@
             android:paddingHorizontal="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_change_gender_and_age_birth_year">
+            app:layout_constraintTop_toBottomOf="@id/tv_change_user_info_birth_year">
 
             <TextView
                 android:layout_width="wrap_content"

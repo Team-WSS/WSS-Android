@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="accountInfoViewModel"
+            type="com.teamwss.websoso.ui.accountInfo.AccountInfoViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,30 +40,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_account_info_back_button" />
 
-        <View
-            android:id="@+id/view_account_info_title_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_account_info_title" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_account_info_change_gender_and_age"
+            android:id="@+id/cl_account_info_change_user_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_account_info_title_divider">
+            app:layout_constraintTop_toBottomOf="@id/tv_account_info_title">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
                 android:layout_marginStart="20dp"
-                android:text="@string/account_info_change_gender_and_age"
+                android:text="@string/account_info_change_user_info"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -79,7 +77,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_account_info_change_gender_and_age">
+            app:layout_constraintTop_toBottomOf="@id/cl_account_info_change_user_info">
 
             <TextView
                 android:id="@+id/tv_account_info_email_title"
@@ -98,21 +96,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{accountInfoViewModel.userEmail}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@id/tv_account_info_email_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_account_info_email_title"
                 tools:text="sonmyungj1zz@gmail.com" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/btn_setting_right"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -196,7 +189,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_account_info_with_draw"
+            android:id="@+id/cl_account_info_withdraw"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -208,10 +201,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
                 android:layout_marginStart="20dp"
-                android:text="@string/account_info_with_draw"
+                android:text="@string/account_info_withdraw"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@id/view_account_info_with_draw_underline"
+                app:layout_constraintBottom_toTopOf="@id/view_account_info_withdraw_underline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -220,12 +213,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/btn_setting_right"
-                app:layout_constraintBottom_toTopOf="@id/view_account_info_with_draw_underline"
+                app:layout_constraintBottom_toTopOf="@id/view_account_info_withdraw_underline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                android:id="@+id/view_account_info_with_draw_underline"
+                android:id="@+id/view_account_info_withdraw_underline"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"

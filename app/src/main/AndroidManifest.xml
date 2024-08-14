@@ -83,7 +83,15 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.changeGenderAndAge.ChangeGenderAndAgeActivity"
+            android:name=".ui.withdraw.WithdrawFirstActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.withdraw.WithdrawSecondActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.changeUserInfo.ChangeUserInfoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
