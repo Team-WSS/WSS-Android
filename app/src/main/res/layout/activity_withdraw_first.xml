@@ -60,17 +60,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:background="@drawable/bg_with_draw_primary20_radius_14dp"
+            android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
             app:layout_constraintStart_toStartOf="@id/tv_withdraw_first_description"
             app:layout_constraintTop_toBottomOf="@id/tv_withdraw_first_description">
 
             <ImageView
-                android:id="@+id/iv_with_draw_interested"
+                android:id="@+id/iv_withdraw_interested"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="66dp"
-                android:src="@drawable/ic_with_draw_interested"
+                android:src="@drawable/ic_withdraw_interested"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -85,7 +85,7 @@
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_with_draw_interested" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_withdraw_interested" />
 
             <TextView
                 android:id="@+id/tv_withdraw_interested_count"
@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_with_draw_primary20_radius_14dp"
+            android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
             app:layout_constraintBottom_toBottomOf="@id/cl_withdraw_interested"
             app:layout_constraintEnd_toEndOf="parent"
@@ -150,7 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:background="@drawable/bg_with_draw_primary20_radius_14dp"
+            android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
             app:layout_constraintStart_toStartOf="@id/cl_withdraw_interested"
             app:layout_constraintTop_toBottomOf="@id/cl_withdraw_interested">
@@ -193,7 +193,7 @@
             android:id="@+id/cl_withdraw_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_with_draw_primary20_radius_14dp"
+            android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
             app:layout_constraintBottom_toBottomOf="@id/cl_withdraw_watched"
             app:layout_constraintEnd_toEndOf="@id/cl_withdraw_watching"
@@ -204,7 +204,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="66dp"
-                android:src="@drawable/ic_with_draw_interested"
+                android:src="@drawable/ic_withdraw_interested"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -239,7 +239,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_with_draw_check_enable"
+            android:background="@drawable/btn_withdraw_check_enable"
             android:gravity="center"
             android:paddingVertical="18dp"
             android:text="@string/withdraw_check"

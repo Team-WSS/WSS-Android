@@ -40,7 +40,7 @@ class AccountInfoActivity :
     }
 
     private fun onWithDrawButtonClick() {
-        binding.clAccountInfoWithDraw.setOnClickListener {
+        binding.clAccountInfoWithdraw.setOnClickListener {
             val intent = WithdrawFirstActivity.getIntent(this)
             startActivity(intent)
         }

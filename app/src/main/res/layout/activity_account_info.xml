@@ -178,7 +178,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_account_info_with_draw"
+            android:id="@+id/cl_account_info_withdraw"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -193,7 +193,7 @@
                 android:text="@string/account_info_withdraw"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@id/view_account_info_with_draw_underline"
+                app:layout_constraintBottom_toTopOf="@id/view_account_info_withdraw_underline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -202,12 +202,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/btn_setting_right"
-                app:layout_constraintBottom_toTopOf="@id/view_account_info_with_draw_underline"
+                app:layout_constraintBottom_toTopOf="@id/view_account_info_withdraw_underline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
-                android:id="@+id/view_account_info_with_draw_underline"
+                android:id="@+id/view_account_info_withdraw_underline"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"

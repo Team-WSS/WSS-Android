@@ -425,7 +425,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_with_draw_check_selector"
+                android:background="@drawable/btn_withdraw_check_selector"
                 android:enabled="false"
                 android:gravity="center"
                 android:paddingVertical="18dp"
