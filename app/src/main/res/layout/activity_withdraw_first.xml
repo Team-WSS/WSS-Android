@@ -57,11 +57,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_withdraw_interested"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
+            android:layout_marginEnd="6dp"
             android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
+            app:layout_constraintEnd_toStartOf="@id/cl_withdraw_watching"
             app:layout_constraintStart_toStartOf="@id/tv_withdraw_first_description"
             app:layout_constraintTop_toBottomOf="@id/tv_withdraw_first_description">
 
@@ -102,13 +104,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_withdraw_watching"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
             app:layout_constraintBottom_toBottomOf="@id/cl_withdraw_interested"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cl_withdraw_interested"
             app:layout_constraintTop_toTopOf="@id/cl_withdraw_interested">
 
             <ImageView
@@ -147,11 +150,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_withdraw_watched"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
             android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
+            app:layout_constraintEnd_toStartOf="@id/cl_withdraw_quit"
             app:layout_constraintStart_toStartOf="@id/cl_withdraw_interested"
             app:layout_constraintTop_toBottomOf="@id/cl_withdraw_interested">
 
@@ -191,12 +196,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_withdraw_quit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_withdraw_primary20_radius_14dp"
             android:paddingVertical="20dp"
             app:layout_constraintBottom_toBottomOf="@id/cl_withdraw_watched"
             app:layout_constraintEnd_toEndOf="@id/cl_withdraw_watching"
+            app:layout_constraintStart_toEndOf="@id/cl_withdraw_watched"
             app:layout_constraintTop_toTopOf="@id/cl_withdraw_watched">
 
             <ImageView
