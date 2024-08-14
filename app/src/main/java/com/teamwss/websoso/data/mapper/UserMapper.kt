@@ -5,6 +5,6 @@ import com.teamwss.websoso.data.remote.response.UserEmailResponseDto
 
 fun UserEmailResponseDto.toData(): UserEmailEntity {
     return UserEmailEntity(
-        email = email
+        email = email,
     )
 }
