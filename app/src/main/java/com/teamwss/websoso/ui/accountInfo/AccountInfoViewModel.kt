@@ -14,7 +14,7 @@ class AccountInfoViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _userEmail: MutableLiveData<String> = MutableLiveData()
-    val userEmail: LiveData<String> = _userEmail
+    val userEmail: LiveData<String> get() = _userEmail
 
     init {
         updateUserEmail()
