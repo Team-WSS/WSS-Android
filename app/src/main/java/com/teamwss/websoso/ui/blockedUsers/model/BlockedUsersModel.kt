@@ -1,6 +1,6 @@
-package com.teamwss.websoso.ui.blockUsers.model
+package com.teamwss.websoso.ui.blockedUsers.model
 
-data class BlockUsersModel(
+data class BlockedUsersModel(
     val blockUsers: List<BlockUserModel>
 ) {
 

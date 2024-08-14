@@ -1,19 +1,23 @@
-package com.teamwss.websoso.ui.blockUsers
+package com.teamwss.websoso.ui.blockedUsers
 
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityBlockUsersBinding
-import com.teamwss.websoso.ui.blockUsers.adapter.BlockUsersAdapter
+import com.teamwss.websoso.databinding.ActivityBlockedUsersBinding
+import com.teamwss.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BlockUsersActivity :
-    BindingActivity<ActivityBlockUsersBinding>(R.layout.activity_block_users) {
-    private val blockUsersAdapter: BlockUsersAdapter by lazy { BlockUsersAdapter(blockUsersViewModel::deleteBlockUser) }
-    private val blockUsersViewModel: BlockUsersViewModel by viewModels()
+class BlockedUsersActivity :
+    BindingActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
+    private val blockedUsersAdapter: BlockedUsersAdapter by lazy {
+        BlockedUsersAdapter(
+            blockedUsersViewModel::deleteBlockUser
+        )
+    }
+    private val blockedUsersViewModel: BlockedUsersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +35,15 @@ class BlockUsersActivity :
     }
 
     private fun setupAdapter() {
-        binding.rvBlockUsers.adapter = blockUsersAdapter
+        binding.rvBlockedUsers.adapter = blockedUsersAdapter
     }
 
     private fun setupObserver() {
-        blockUsersViewModel.uiState.observe(this) { uiState ->
+        blockedUsersViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
-                !uiState.loading -> blockUsersAdapter.submitList(uiState.blockUsers)
+                !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockUsers)
             }
         }
     }

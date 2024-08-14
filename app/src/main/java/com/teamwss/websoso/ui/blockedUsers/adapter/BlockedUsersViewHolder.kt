@@ -1,13 +1,13 @@
-package com.teamwss.websoso.ui.blockUsers.adapter
+package com.teamwss.websoso.ui.blockedUsers.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.databinding.ItemBlockUserBinding
-import com.teamwss.websoso.ui.blockUsers.model.BlockUsersModel.BlockUserModel
+import com.teamwss.websoso.databinding.ItemBlockedUserBinding
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel
 
-class BlockUsersViewHolder(
-    private val binding: ItemBlockUserBinding,
+class BlockedUsersViewHolder(
+    private val binding: ItemBlockedUserBinding,
     onRemoveBlockUserClick: (blockId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -16,7 +16,7 @@ class BlockUsersViewHolder(
     }
 
     fun bind(blockUser: BlockUserModel) {
-        binding.blockUser = blockUser
+        binding.blockedUser = blockUser
     }
 
     companion object {
@@ -24,11 +24,11 @@ class BlockUsersViewHolder(
         fun of(
             parent: ViewGroup,
             removeBlockUserClick: (blockId: Long) -> Unit,
-        ): BlockUsersViewHolder {
-            val binding = ItemBlockUserBinding.inflate(
+        ): BlockedUsersViewHolder {
+            val binding = ItemBlockedUserBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false,
             )
-            return BlockUsersViewHolder(binding, removeBlockUserClick)
+            return BlockedUsersViewHolder(binding, removeBlockUserClick)
         }
     }
 }

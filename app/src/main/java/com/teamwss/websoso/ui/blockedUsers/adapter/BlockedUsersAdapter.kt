@@ -1,19 +1,19 @@
-package com.teamwss.websoso.ui.blockUsers.adapter
+package com.teamwss.websoso.ui.blockedUsers.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.ui.blockUsers.model.BlockUsersModel.BlockUserModel
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel
 
-class BlockUsersAdapter(
+class BlockedUsersAdapter(
     private val onRemoveBlockUserClick: (blockId: Long) -> (Unit),
-) : ListAdapter<BlockUserModel, BlockUsersViewHolder>(diffUtil) {
+) : ListAdapter<BlockUserModel, BlockedUsersViewHolder>(diffUtil) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockUsersViewHolder {
-        return BlockUsersViewHolder.of(parent, onRemoveBlockUserClick)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockedUsersViewHolder {
+        return BlockedUsersViewHolder.of(parent, onRemoveBlockUserClick)
     }
 
-    override fun onBindViewHolder(holder: BlockUsersViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BlockedUsersViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 

@@ -1,22 +1,22 @@
-package com.teamwss.websoso.ui.blockUsers
+package com.teamwss.websoso.ui.blockedUsers
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.ui.blockUsers.model.BlockUsersModel
-import com.teamwss.websoso.ui.blockUsers.model.BlockUsersModel.BlockUserModel
-import com.teamwss.websoso.ui.blockUsers.model.BlockUsersUiState
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BlockUsersViewModel @Inject constructor() : ViewModel() {
-    private val _uiState: MutableLiveData<BlockUsersUiState> = MutableLiveData(BlockUsersUiState())
-    val uiState: LiveData<BlockUsersUiState> get() = _uiState
+class BlockedUsersViewModel @Inject constructor() : ViewModel() {
+    private val _uiState: MutableLiveData<BlockedUsersUiState> = MutableLiveData(BlockedUsersUiState())
+    val uiState: LiveData<BlockedUsersUiState> get() = _uiState
 
-    private val blockUserDummyData: BlockUsersModel = BlockUsersModel(
+    private val blockUserDummyData: BlockedUsersModel = BlockedUsersModel(
         listOf(
             BlockUserModel(
                 blockId = 1L,

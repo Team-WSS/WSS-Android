@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="blockUser"
-            type="com.teamwss.websoso.ui.blockUsers.model.BlockUsersModel.BlockUserModel" />
+            name="blockedUser"
+            type="com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel" />
 
         <variable
             name="onClick"
@@ -21,7 +21,7 @@
         <ImageView
             android:id="@+id/iv_block_user_avatar"
             cornerRadius="@{20f}"
-            loadImageUrl="@{blockUser.avatarImage}"
+            loadImageUrl="@{blockedUser.avatarImage}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginVertical="10dp"
@@ -38,7 +38,7 @@
             android:layout_marginStart="14dp"
             android:maxLength="10"
             android:maxLines="1"
-            android:text="@{blockUser.nickName}"
+            android:text="@{blockedUser.nickName}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/iv_block_user_avatar"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_block_users_gray50_radius_20dp"
-            android:onClick="@{() -> onClick.invoke(blockUser.blockId)}"
+            android:onClick="@{() -> onClick.invoke(blockedUser.blockId)}"
             android:paddingHorizontal="14dp"
             android:paddingVertical="8dp"
             android:text="@string/block_users_cancel"
