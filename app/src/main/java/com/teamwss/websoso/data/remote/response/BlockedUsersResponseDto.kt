@@ -15,7 +15,7 @@ data class BlockedUsersResponseDto(
         val blockId: Long,
         @SerialName("userId")
         val userId: Long,
-        @SerialName("nickName")
+        @SerialName("nickname")
         val nickName: String,
         @SerialName("avatarImage")
         val avatarImage: String,
