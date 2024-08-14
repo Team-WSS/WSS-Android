@@ -71,7 +71,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.blockUsers.BlockUsersActivity"
+            android:name=".ui.blockedUsers.BlockedUsersActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
