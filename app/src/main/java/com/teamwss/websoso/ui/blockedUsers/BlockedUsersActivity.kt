@@ -24,9 +24,15 @@ class BlockedUsersActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        bindViewModel()
         setupTranslucentOnStatusBar()
         setupAdapter()
         setupObserver()
+    }
+
+    private fun bindViewModel() {
+        binding.blockedUserViewModel = blockedUsersViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupTranslucentOnStatusBar() {

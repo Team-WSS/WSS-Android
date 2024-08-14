@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,9 @@ class BlockedUsersViewModel @Inject constructor(
         MutableLiveData(BlockedUsersUiState())
     val uiState: LiveData<BlockedUsersUiState> get() = _uiState
 
+    private val _isBlockedUserEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData()
+    val isBlockedUserEmptyBoxVisibility: LiveData<Boolean> get() = _isBlockedUserEmptyBoxVisibility
+
     init {
         updateBlockedUsers()
     }
@@ -27,13 +31,7 @@ class BlockedUsersViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchBlockedUsers()
             }.onSuccess { blockedUserEntity ->
-                when (blockedUserEntity.blockedUsers.isNotEmpty()) {
-                    true -> _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        blockedUsers = blockedUserEntity.blockedUsers,
-                    )
-                }
-
+                updateUiState(blockedUserEntity.blockedUsers)
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
@@ -48,12 +46,33 @@ class BlockedUsersViewModel @Inject constructor(
             runCatching {
                 userRepository.deleteBlockedUser(blockId)
             }.onSuccess {
-                val currentBlockedUsers = uiState.value?.blockedUsers ?: emptyList()
-                val updatedBlockedUsers = currentBlockedUsers.filterNot { it.blockId == blockId }
+                val currentBlockedUsers: List<BlockedUserEntity> =
+                    uiState.value?.blockedUsers ?: emptyList()
+                val updatedBlockedUsers: List<BlockedUserEntity> =
+                    currentBlockedUsers.filterNot { it.blockId == blockId }
 
+                updateUiState(updatedBlockedUsers)
+            }
+        }
+    }
+
+    private fun updateUiState(blockedUsers: List<BlockedUserEntity>) {
+        when (blockedUsers.isNotEmpty()) {
+            true -> {
                 _uiState.value = uiState.value?.copy(
-                    blockedUsers = updatedBlockedUsers,
+                    loading = false,
+                    blockedUsers = blockedUsers,
                 )
+
+                _isBlockedUserEmptyBoxVisibility.value = false
+            }
+
+            false -> {
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    blockedUsers = emptyList(),
+                )
+                _isBlockedUserEmptyBoxVisibility.value = true
             }
         }
     }
