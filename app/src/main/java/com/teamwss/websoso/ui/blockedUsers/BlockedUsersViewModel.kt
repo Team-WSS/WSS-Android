@@ -27,10 +27,13 @@ class BlockedUsersViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchBlockedUsers()
             }.onSuccess { blockedUserEntity ->
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    blockedUsers = blockedUserEntity.blockedUsers,
-                )
+                when (blockedUserEntity.blockedUsers.isNotEmpty()) {
+                    true -> _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        blockedUsers = blockedUserEntity.blockedUsers,
+                    )
+                }
+
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
@@ -41,6 +44,17 @@ class BlockedUsersViewModel @Inject constructor(
     }
 
     fun deleteBlockedUser(blockId: Long) {
-        // TODO 삭제 로직 구현 예정
+        viewModelScope.launch {
+            runCatching {
+                userRepository.deleteBlockedUser(blockId)
+            }.onSuccess {
+                val currentBlockedUsers = uiState.value?.blockedUsers ?: emptyList()
+                val updatedBlockedUsers = currentBlockedUsers.filterNot { it.blockId == blockId }
+
+                _uiState.value = uiState.value?.copy(
+                    blockedUsers = updatedBlockedUsers,
+                )
+            }
+        }
     }
 }

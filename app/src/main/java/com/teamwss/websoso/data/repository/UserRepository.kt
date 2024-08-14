@@ -17,4 +17,8 @@ class UserRepository @Inject constructor(
     suspend fun fetchBlockedUsers(): BlockedUsersEntity {
         return userApi.getBlockedUser().toData()
     }
+
+    suspend fun deleteBlockedUser(blockId: Long) {
+        userApi.deleteBlockedUser(blockId)
+    }
 }
