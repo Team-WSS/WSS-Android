@@ -14,7 +14,7 @@
             android:background="@color/white">
 
             <ImageView
-                android:id="@+id/iv_with_draw_back_button"
+                android:id="@+id/iv_withdraw_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -27,51 +27,51 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_with_draw_title"
+                android:id="@+id/tv_withdraw_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_info_with_draw"
+                android:text="@string/account_info_withdraw"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/iv_with_draw_back_button"
+                app:layout_constraintBottom_toBottomOf="@id/iv_withdraw_back_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/iv_with_draw_back_button" />
+                app:layout_constraintTop_toTopOf="@id/iv_withdraw_back_button" />
 
             <TextView
-                android:id="@+id/tv_with_draw_second_reason"
+                android:id="@+id/tv_withdraw_second_reason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="56dp"
-                android:text="@string/with_draw_second_reason"
+                android:text="@string/withdraw_second_reason"
                 android:textAppearance="@style/headline1"
                 android:textColor="@color/primary_100_6A5DFD"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_title" />
+                app:layout_constraintTop_toBottomOf="@id/tv_withdraw_title" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/with_draw_second_reason_description"
+                android:text="@string/withdraw_second_reason_description"
                 android:textAppearance="@style/headline1"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/tv_with_draw_second_reason"
-                app:layout_constraintStart_toEndOf="@id/tv_with_draw_second_reason"
-                app:layout_constraintTop_toTopOf="@id/tv_with_draw_second_reason" />
+                app:layout_constraintBottom_toBottomOf="@id/tv_withdraw_second_reason"
+                app:layout_constraintStart_toEndOf="@id/tv_withdraw_second_reason"
+                app:layout_constraintTop_toTopOf="@id/tv_withdraw_second_reason" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_reason_rarely_using"
+                android:id="@+id/cl_withdraw_reason_rarely_using"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_second_reason">
+                app:layout_constraintTop_toBottomOf="@id/tv_withdraw_second_reason">
 
                 <ImageView
-                    android:id="@+id/iv_with_draw_reason_rarely_using"
+                    android:id="@+id/iv_withdraw_reason_rarely_using"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
@@ -84,26 +84,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/with_draw_reason_rarely_using"
+                    android:text="@string/withdraw_reason_rarely_using"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_rarely_using"
+                    app:layout_constraintStart_toEndOf="@id/iv_withdraw_reason_rarely_using"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_reason_inconvenient"
+                android:id="@+id/cl_withdraw_reason_inconvenient"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_rarely_using">
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_rarely_using">
 
                 <ImageView
-                    android:id="@+id/iv_with_draw_reason_inconvenient"
+                    android:id="@+id/iv_withdraw_reason_inconvenient"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
@@ -116,26 +116,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/with_draw_reason_inconvenient"
+                    android:text="@string/withdraw_reason_inconvenient"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_inconvenient"
+                    app:layout_constraintStart_toEndOf="@id/iv_withdraw_reason_inconvenient"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_reason_want_to_delete_content"
+                android:id="@+id/cl_withdraw_reason_want_to_delete_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_inconvenient">
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_inconvenient">
 
                 <ImageView
-                    android:id="@+id/iv_with_draw_reason_want_to_delete_content"
+                    android:id="@+id/iv_withdraw_reason_want_to_delete_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
@@ -148,26 +148,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/with_draw_reason_want_to_delete_content"
+                    android:text="@string/withdraw_reason_want_to_delete_content"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_want_to_delete_content"
+                    app:layout_constraintStart_toEndOf="@id/iv_withdraw_reason_want_to_delete_content"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_reason_not_exist_any_wanted_novel"
+                android:id="@+id/cl_withdraw_reason_not_exist_any_wanted_novel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_want_to_delete_content">
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_want_to_delete_content">
 
                 <ImageView
-                    android:id="@+id/iv_with_draw_reason_not_exist_any_wanted_novel"
+                    android:id="@+id/iv_withdraw_reason_not_exist_any_wanted_novel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
@@ -180,26 +180,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/with_draw_reason_not_exist_any_wanted_novel"
+                    android:text="@string/withdraw_reason_not_exist_any_wanted_novel"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_not_exist_any_wanted_novel"
+                    app:layout_constraintStart_toEndOf="@id/iv_withdraw_reason_not_exist_any_wanted_novel"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_reason_etc"
+                android:id="@+id/cl_withdraw_reason_etc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_not_exist_any_wanted_novel">
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_not_exist_any_wanted_novel">
 
                 <ImageView
-                    android:id="@+id/iv_with_draw_reason_etc"
+                    android:id="@+id/iv_withdraw_reason_etc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
@@ -212,22 +212,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@string/with_draw_reason_etc"
+                    android:text="@string/withdraw_reason_etc"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_reason_etc"
+                    app:layout_constraintStart_toEndOf="@id/iv_withdraw_reason_etc"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
-                android:id="@+id/et_with_draw_etc"
+                android:id="@+id/et_withdraw_etc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/bg_novel_rating_keyword_search_selector"
                 android:gravity="top"
-                android:hint="@string/with_draw_etc_hint"
+                android:hint="@string/withdraw_etc_hint"
                 android:maxLength="100"
                 android:minLines="4"
                 android:paddingHorizontal="16dp"
@@ -235,62 +235,62 @@
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_200_AEADB3"
-                app:layout_constraintEnd_toEndOf="@id/cl_with_draw_reason_etc"
-                app:layout_constraintStart_toStartOf="@id/cl_with_draw_reason_etc"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_reason_etc" />
+                app:layout_constraintEnd_toEndOf="@id/cl_withdraw_reason_etc"
+                app:layout_constraintStart_toStartOf="@id/cl_withdraw_reason_etc"
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_etc" />
 
             <TextView
-                android:id="@+id/tv_with_draw_etc_text_count"
+                android:id="@+id/tv_withdraw_etc_text_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/gray_300_52515F"
-                app:layout_constraintBottom_toBottomOf="@id/tv_with_draw_etc_text_max_count"
-                app:layout_constraintEnd_toStartOf="@id/tv_with_draw_etc_text_max_count"
-                app:layout_constraintTop_toTopOf="@id/tv_with_draw_etc_text_max_count"
+                app:layout_constraintBottom_toBottomOf="@id/tv_withdraw_etc_text_max_count"
+                app:layout_constraintEnd_toStartOf="@id/tv_withdraw_etc_text_max_count"
+                app:layout_constraintTop_toTopOf="@id/tv_withdraw_etc_text_max_count"
                 tools:text="0" />
 
             <TextView
-                android:id="@+id/tv_with_draw_etc_text_max_count"
+                android:id="@+id/tv_withdraw_etc_text_max_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/with_draw_max_length"
+                android:text="@string/withdraw_max_length"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/gray_200_AEADB3"
-                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
-                app:layout_constraintTop_toBottomOf="@id/et_with_draw_etc" />
+                app:layout_constraintEnd_toEndOf="@id/et_withdraw_etc"
+                app:layout_constraintTop_toBottomOf="@id/et_withdraw_etc" />
 
             <TextView
-                android:id="@+id/tv_with_draw_check_before_draw"
+                android:id="@+id/tv_withdraw_check_before_draw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
-                android:text="@string/with_draw_check_before_draw"
+                android:text="@string/withdraw_check_before_draw"
                 android:textAppearance="@style/headline1"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
-                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_etc_text_count" />
+                app:layout_constraintStart_toStartOf="@id/et_withdraw_etc"
+                app:layout_constraintTop_toBottomOf="@id/tv_withdraw_etc_text_count" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_check_do_not_recover"
+                android:id="@+id/cl_withdraw_check_do_not_recover"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_with_draw_gray50_radius_14dp"
+                android:background="@drawable/bg_withdraw_gray50_radius_14dp"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="16dp"
-                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
-                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
-                app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_before_draw">
+                app:layout_constraintEnd_toEndOf="@id/et_withdraw_etc"
+                app:layout_constraintStart_toStartOf="@id/et_withdraw_etc"
+                app:layout_constraintTop_toBottomOf="@id/tv_withdraw_check_before_draw">
 
                 <TextView
-                    android:id="@+id/tv_with_draw_check_do_not_recover"
+                    android:id="@+id/tv_withdraw_check_do_not_recover"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:text="@string/with_draw_check_do_not_recover"
+                    android:text="@string/withdraw_check_do_not_recover"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -301,34 +301,34 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/with_draw_check_do_not_recover_description"
+                    android:text="@string/withdraw_check_do_not_recover_description"
                     android:textAppearance="@style/body4"
                     android:textColor="@color/gray_200_AEADB3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_do_not_recover" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_withdraw_check_do_not_recover" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_check_is_not_automatically_deleted_post"
+                android:id="@+id/cl_withdraw_check_is_not_automatically_deleted_post"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_with_draw_gray50_radius_14dp"
+                android:background="@drawable/bg_withdraw_gray50_radius_14dp"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="16dp"
-                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
-                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_do_not_recover">
+                app:layout_constraintEnd_toEndOf="@id/et_withdraw_etc"
+                app:layout_constraintStart_toStartOf="@id/et_withdraw_etc"
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_check_do_not_recover">
 
                 <TextView
-                    android:id="@+id/tv_with_draw_check_is_not_automatically_deleted_post"
+                    android:id="@+id/tv_withdraw_check_is_not_automatically_deleted_post"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:text="@string/with_draw_check_is_not_automatically_deleted_post"
+                    android:text="@string/withdraw_check_is_not_automatically_deleted_post"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -339,34 +339,34 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/with_draw_check_is_not_automatically_deleted_post_description"
+                    android:text="@string/withdraw_check_is_not_automatically_deleted_post_description"
                     android:textAppearance="@style/body4"
                     android:textColor="@color/gray_200_AEADB3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_is_not_automatically_deleted_post" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_withdraw_check_is_not_automatically_deleted_post" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_check_re_sign_up"
+                android:id="@+id/cl_withdraw_check_re_sign_up"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_with_draw_gray50_radius_14dp"
+                android:background="@drawable/bg_withdraw_gray50_radius_14dp"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="16dp"
-                app:layout_constraintEnd_toEndOf="@id/et_with_draw_etc"
-                app:layout_constraintStart_toStartOf="@id/et_with_draw_etc"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_is_not_automatically_deleted_post">
+                app:layout_constraintEnd_toEndOf="@id/et_withdraw_etc"
+                app:layout_constraintStart_toStartOf="@id/et_withdraw_etc"
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_check_is_not_automatically_deleted_post">
 
                 <TextView
-                    android:id="@+id/tv_with_draw_check_re_sign_up"
+                    android:id="@+id/tv_withdraw_check_re_sign_up"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:text="@string/with_draw_check_re_sign_up"
+                    android:text="@string/withdraw_check_re_sign_up"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -377,27 +377,27 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/with_draw_check_re_sign_up_description"
+                    android:text="@string/withdraw_check_re_sign_up_description"
                     android:textAppearance="@style/body4"
                     android:textColor="@color/gray_200_AEADB3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_with_draw_check_re_sign_up" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_withdraw_check_re_sign_up" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_with_draw_check_agree_button"
+                android:id="@+id/cl_withdraw_check_agree_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:paddingVertical="10dp"
-                app:layout_constraintEnd_toEndOf="@id/cl_with_draw_check_re_sign_up"
-                app:layout_constraintStart_toStartOf="@id/cl_with_draw_check_re_sign_up"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_re_sign_up">
+                app:layout_constraintEnd_toEndOf="@id/cl_withdraw_check_re_sign_up"
+                app:layout_constraintStart_toStartOf="@id/cl_withdraw_check_re_sign_up"
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_check_re_sign_up">
 
                 <ImageView
-                    android:id="@+id/iv_with_draw_check_agree"
+                    android:id="@+id/iv_withdraw_check_agree"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/btn_account_info_check_selected"
@@ -409,18 +409,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/with_draw_check_agree"
+                    android:text="@string/withdraw_check_agree"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_300_52515F"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
-                    app:layout_constraintStart_toEndOf="@id/iv_with_draw_check_agree"
+                    app:layout_constraintStart_toEndOf="@id/iv_withdraw_check_agree"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/tv_with_draw_button"
+                android:id="@+id/tv_withdraw_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -429,13 +429,13 @@
                 android:enabled="false"
                 android:gravity="center"
                 android:paddingVertical="18dp"
-                android:text="@string/with_draw_button"
+                android:text="@string/withdraw_button"
                 android:textAppearance="@style/title1"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/cl_with_draw_check_agree_button"
-                app:layout_constraintStart_toStartOf="@id/cl_with_draw_check_agree_button"
-                app:layout_constraintTop_toBottomOf="@id/cl_with_draw_check_agree_button" />
+                app:layout_constraintEnd_toEndOf="@id/cl_withdraw_check_agree_button"
+                app:layout_constraintStart_toStartOf="@id/cl_withdraw_check_agree_button"
+                app:layout_constraintTop_toBottomOf="@id/cl_withdraw_check_agree_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

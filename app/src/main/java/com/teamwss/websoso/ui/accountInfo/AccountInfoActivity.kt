@@ -9,7 +9,7 @@ import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
 import com.teamwss.websoso.ui.blockUsers.BlockUsersActivity
 import com.teamwss.websoso.ui.changeUserInfo.ChangeGenderAndAgeActivity
 import com.teamwss.websoso.ui.common.base.BindingActivity
-import com.teamwss.websoso.ui.withDraw.WithDrawFirstActivity
+import com.teamwss.websoso.ui.withdraw.WithdrawFirstActivity
 
 class AccountInfoActivity :
     BindingActivity<ActivityAccountInfoBinding>(R.layout.activity_account_info) {
@@ -41,7 +41,7 @@ class AccountInfoActivity :
 
     private fun onWithDrawButtonClick() {
         binding.clAccountInfoWithDraw.setOnClickListener {
-            val intent = WithDrawFirstActivity.getIntent(this)
+            val intent = WithdrawFirstActivity.getIntent(this)
             startActivity(intent)
         }
     }

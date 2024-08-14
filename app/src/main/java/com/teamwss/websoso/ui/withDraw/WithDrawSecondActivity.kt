@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.withDraw
+package com.teamwss.websoso.ui.withdraw
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithDrawSecondBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 
-class WithDrawSecondActivity :
+class WithdrawSecondActivity :
     BindingActivity<ActivityWithDrawSecondBinding>(R.layout.activity_with_draw_second) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +26,7 @@ class WithDrawSecondActivity :
     }
 
     private fun onBackButtonClick() {
-        binding.ivWithDrawBackButton.setOnClickListener {
+        binding.ivWithdrawBackButton.setOnClickListener {
             finish()
         }
     }
@@ -34,7 +34,7 @@ class WithDrawSecondActivity :
     companion object {
 
         fun getIntent(context: Context): Intent {
-            return Intent(context, WithDrawSecondActivity::class.java)
+            return Intent(context, WithdrawSecondActivity::class.java)
         }
     }
 }

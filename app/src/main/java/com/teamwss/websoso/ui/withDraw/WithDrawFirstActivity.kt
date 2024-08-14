@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.withDraw
+package com.teamwss.websoso.ui.withdraw
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithDrawFirstBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 
-class WithDrawFirstActivity :
+class WithdrawFirstActivity :
     BindingActivity<ActivityWithDrawFirstBinding>(R.layout.activity_with_draw_first) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,14 +20,14 @@ class WithDrawFirstActivity :
     }
 
     private fun onWithDrawCheckButtonClick() {
-        binding.tvWithDrawCheckButton.setOnClickListener {
-            val intent = WithDrawSecondActivity.getIntent(this)
+        binding.tvWithdrawCheckButton.setOnClickListener {
+            val intent = WithdrawSecondActivity.getIntent(this)
             startActivity(intent)
         }
     }
 
     private fun onBackButtonClick() {
-        binding.ivWithDrawBackButton.setOnClickListener {
+        binding.ivWithdrawBackButton.setOnClickListener {
             finish()
         }
     }
@@ -42,7 +42,7 @@ class WithDrawFirstActivity :
     companion object {
 
         fun getIntent(context: Context): Intent {
-            return Intent(context, WithDrawFirstActivity::class.java)
+            return Intent(context, WithdrawFirstActivity::class.java)
         }
     }
 }
