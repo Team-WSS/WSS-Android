@@ -7,7 +7,7 @@ import android.view.WindowManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
 import com.teamwss.websoso.ui.blockUsers.BlockUsersActivity
-import com.teamwss.websoso.ui.changeUserInfo.ChangeGenderAndAgeActivity
+import com.teamwss.websoso.ui.changeUserInfo.ChangeUserInfoActivity
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.withdraw.WithdrawFirstActivity
 
@@ -21,7 +21,7 @@ class AccountInfoActivity :
         onLogoutButtonClick()
         onBackButtonClick()
         onWithDrawButtonClick()
-        onChangeGenderAndAgeButtonClick()
+        onChangeUserInfoButtonClick()
         onBlockUsersButtonClick()
     }
 
@@ -52,9 +52,9 @@ class AccountInfoActivity :
         }
     }
 
-    private fun onChangeGenderAndAgeButtonClick() {
+    private fun onChangeUserInfoButtonClick() {
         binding.clAccountInfoChangeUserInfo.setOnClickListener {
-            val intent = ChangeGenderAndAgeActivity.getIntent(this)
+            val intent = ChangeUserInfoActivity.getIntent(this)
             startActivity(intent)
         }
     }

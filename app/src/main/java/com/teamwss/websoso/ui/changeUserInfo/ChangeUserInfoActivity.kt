@@ -9,7 +9,7 @@ import com.teamwss.websoso.databinding.ActivityChangeUserInfoBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 
-class ChangeGenderAndAgeActivity :
+class ChangeUserInfoActivity :
     BindingActivity<ActivityChangeUserInfoBinding>(R.layout.activity_change_user_info) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +54,7 @@ class ChangeGenderAndAgeActivity :
         private const val BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG = "BirthYearBottomSheetDialog"
 
         fun getIntent(context: Context): Intent {
-            return Intent(context, ChangeGenderAndAgeActivity::class.java)
+            return Intent(context, ChangeUserInfoActivity::class.java)
         }
     }
 }
