@@ -3,12 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="blockedUser"
+            type="com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel" />
+
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function1" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_block_user_avatar"
+            android:id="@+id/iv_blocked_user_avatar"
+            cornerRadius="@{20f}"
+            loadImageUrl="@{blockedUser.avatarImage}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginVertical="10dp"
@@ -16,30 +29,32 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/img_block_users_avatar_test" />
+            tools:src="@drawable/img_blocked_users_avatar_test" />
 
         <TextView
-            android:id="@+id/tv_block_user_name"
+            android:id="@+id/tv_blocked_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:maxLength="10"
             android:maxLines="1"
+            android:text="@{blockedUser.nickName}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/iv_block_user_avatar"
-            app:layout_constraintStart_toEndOf="@id/iv_block_user_avatar"
-            app:layout_constraintTop_toTopOf="@id/iv_block_user_avatar"
+            app:layout_constraintBottom_toBottomOf="@id/iv_blocked_user_avatar"
+            app:layout_constraintStart_toEndOf="@id/iv_blocked_user_avatar"
+            app:layout_constraintTop_toTopOf="@id/iv_blocked_user_avatar"
             tools:text="노는게제일좋은뽀로로" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_block_users_gray50_radius_20dp"
+            android:background="@drawable/bg_blocked_users_gray50_radius_20dp"
+            android:onClick="@{() -> onClick.invoke(blockedUser.blockId)}"
             android:paddingHorizontal="14dp"
             android:paddingVertical="8dp"
-            android:text="@string/block_users_cancel"
+            android:text="@string/blocked_users_cancel"
             android:textAppearance="@style/body3"
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintBottom_toBottomOf="parent"

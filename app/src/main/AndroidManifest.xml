@@ -71,16 +71,27 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.blockUsers.BlockUsersActivity"
+            android:name=".ui.blockedUsers.BlockedUsersActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".accountInfo.AccountInfoActivity"
+            android:name=".ui.accountInfo.AccountInfoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.profileDisclosure.ProfileDisclosureActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.withdraw.WithdrawFirstActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.withdraw.WithdrawSecondActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.changeUserInfo.ChangeUserInfoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>

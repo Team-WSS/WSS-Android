@@ -4,5 +4,5 @@ data class UserModel(
     val nickname : String = "",
     val gender: String = "",
     val birthYear: Int = 0,
-    val genrePreferences: List<String> = listOf()
+    val genrePreferences: List<String> = listOf(),
 )

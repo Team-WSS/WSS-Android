@@ -1,20 +1,21 @@
-package com.teamwss.websoso.accountInfo
+package com.teamwss.websoso.ui.withdraw
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
+import com.teamwss.websoso.databinding.ActivityWithdrawSecondBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 
-class AccountInfoActivity :
-    BindingActivity<ActivityAccountInfoBinding>(R.layout.activity_account_info) {
+class WithdrawSecondActivity :
+    BindingActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
+        onBackButtonClick()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -24,10 +25,16 @@ class AccountInfoActivity :
         )
     }
 
+    private fun onBackButtonClick() {
+        binding.ivWithdrawBackButton.setOnClickListener {
+            finish()
+        }
+    }
+
     companion object {
 
         fun getIntent(context: Context): Intent {
-            return Intent(context, AccountInfoActivity::class.java)
+            return Intent(context, WithdrawSecondActivity::class.java)
         }
     }
 }
