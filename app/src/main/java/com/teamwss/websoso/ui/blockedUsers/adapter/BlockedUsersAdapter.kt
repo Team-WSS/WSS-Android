@@ -3,11 +3,11 @@ package com.teamwss.websoso.ui.blockedUsers.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel
+import com.teamwss.websoso.data.model.BlockedUsersEntity.*
 
 class BlockedUsersAdapter(
     private val onRemoveBlockedUserClick: (blockId: Long) -> (Unit),
-) : ListAdapter<BlockedUserModel, BlockedUsersViewHolder>(diffUtil) {
+) : ListAdapter<BlockedUserEntity, BlockedUsersViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockedUsersViewHolder {
         return BlockedUsersViewHolder.of(parent, onRemoveBlockedUserClick)
@@ -18,18 +18,18 @@ class BlockedUsersAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<BlockedUserModel>() {
+        val diffUtil = object : DiffUtil.ItemCallback<BlockedUserEntity>() {
 
             override fun areItemsTheSame(
-                oldItem: BlockedUserModel,
-                newItem: BlockedUserModel
+                oldItem: BlockedUserEntity,
+                newItem: BlockedUserEntity
             ): Boolean {
                 return oldItem.blockId == newItem.blockId
             }
 
             override fun areContentsTheSame(
-                oldItem: BlockedUserModel,
-                newItem: BlockedUserModel
+                oldItem: BlockedUserEntity,
+                newItem: BlockedUserEntity
             ): Boolean {
                 return oldItem == newItem
             }
