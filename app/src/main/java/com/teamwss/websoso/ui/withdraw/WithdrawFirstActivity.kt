@@ -15,11 +15,18 @@ class WithdrawFirstActivity :
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
-        onWithDrawCheckButtonClick()
+        onWithdrawCheckButtonClick()
         onBackButtonClick()
     }
 
-    private fun onWithDrawCheckButtonClick() {
+    private fun setupTranslucentOnStatusBar() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+        )
+    }
+
+    private fun onWithdrawCheckButtonClick() {
         binding.tvWithdrawCheckButton.setOnClickListener {
             val intent = WithdrawSecondActivity.getIntent(this)
             startActivity(intent)
@@ -30,13 +37,6 @@ class WithdrawFirstActivity :
         binding.ivWithdrawBackButton.setOnClickListener {
             finish()
         }
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        )
     }
 
     companion object {
