@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.withdraw
+package com.teamwss.websoso.ui.withdraw.second
 
 import android.content.Context
 import android.content.Intent
