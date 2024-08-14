@@ -14,7 +14,7 @@ class BlockedUsersActivity :
     BindingActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
     private val blockedUsersAdapter: BlockedUsersAdapter by lazy {
         BlockedUsersAdapter(
-            blockedUsersViewModel::deleteBlockUser
+            blockedUsersViewModel::deleteBlockUser,
         )
     }
     private val blockedUsersViewModel: BlockedUsersViewModel by viewModels()
