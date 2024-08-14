@@ -1,10 +1,10 @@
 package com.teamwss.websoso.ui.blockedUsers.model
 
 data class BlockedUsersModel(
-    val blockUsers: List<BlockUserModel>
+    val blockedUsers: List<BlockedUserModel>
 ) {
 
-    data class BlockUserModel(
+    data class BlockedUserModel(
         val blockId: Long,
         val userId: Long,
         val nickName: String,

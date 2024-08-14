@@ -14,7 +14,7 @@ class BlockedUsersActivity :
     BindingActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
     private val blockedUsersAdapter: BlockedUsersAdapter by lazy {
         BlockedUsersAdapter(
-            blockedUsersViewModel::deleteBlockUser,
+            blockedUsersViewModel::deleteBlockedUser,
         )
     }
     private val blockedUsersViewModel: BlockedUsersViewModel by viewModels()
@@ -43,7 +43,7 @@ class BlockedUsersActivity :
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
-                !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockUsers)
+                !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockedUsers)
             }
         }
     }

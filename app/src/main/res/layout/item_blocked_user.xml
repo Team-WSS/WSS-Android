@@ -7,7 +7,7 @@
 
         <variable
             name="blockedUser"
-            type="com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel" />
+            type="com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel" />
 
         <variable
             name="onClick"

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel
-import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel
 import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,12 +13,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BlockedUsersViewModel @Inject constructor() : ViewModel() {
-    private val _uiState: MutableLiveData<BlockedUsersUiState> = MutableLiveData(BlockedUsersUiState())
+    private val _uiState: MutableLiveData<BlockedUsersUiState> =
+        MutableLiveData(BlockedUsersUiState())
     val uiState: LiveData<BlockedUsersUiState> get() = _uiState
 
-    private val blockUserDummyData: BlockedUsersModel = BlockedUsersModel(
+    private val blockedUserDummyData: BlockedUsersModel = BlockedUsersModel(
         listOf(
-            BlockUserModel(
+            BlockedUserModel(
                 blockId = 1L,
                 userId = 10L,
                 nickName = "내이름은뽀로로",
@@ -28,17 +29,17 @@ class BlockedUsersViewModel @Inject constructor() : ViewModel() {
     )
 
     init {
-        updateBlockUsers()
+        updateBlockedUsers()
     }
 
-    private fun updateBlockUsers() {
+    private fun updateBlockedUsers() {
         viewModelScope.launch {
             runCatching {
-                blockUserDummyData
-            }.onSuccess { blockUsersModel ->
+                blockedUserDummyData
+            }.onSuccess { blockedUsersModel ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    blockUsers = blockUsersModel.blockUsers
+                    blockedUsers = blockedUsersModel.blockedUsers
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
@@ -49,7 +50,7 @@ class BlockedUsersViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun deleteBlockUser(blockId: Long) {
+    fun deleteBlockedUser(blockId: Long) {
         // TODO 삭제 로직 구현 예정
     }
 }

@@ -3,14 +3,14 @@ package com.teamwss.websoso.ui.blockedUsers.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel
 
 class BlockedUsersAdapter(
-    private val onRemoveBlockUserClick: (blockId: Long) -> (Unit),
-) : ListAdapter<BlockUserModel, BlockedUsersViewHolder>(diffUtil) {
+    private val onRemoveBlockedUserClick: (blockId: Long) -> (Unit),
+) : ListAdapter<BlockedUserModel, BlockedUsersViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockedUsersViewHolder {
-        return BlockedUsersViewHolder.of(parent, onRemoveBlockUserClick)
+        return BlockedUsersViewHolder.of(parent, onRemoveBlockedUserClick)
     }
 
     override fun onBindViewHolder(holder: BlockedUsersViewHolder, position: Int) {
@@ -18,18 +18,18 @@ class BlockedUsersAdapter(
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<BlockUserModel>() {
+        val diffUtil = object : DiffUtil.ItemCallback<BlockedUserModel>() {
 
             override fun areItemsTheSame(
-                oldItem: BlockUserModel,
-                newItem: BlockUserModel
+                oldItem: BlockedUserModel,
+                newItem: BlockedUserModel
             ): Boolean {
                 return oldItem.blockId == newItem.blockId
             }
 
             override fun areContentsTheSame(
-                oldItem: BlockUserModel,
-                newItem: BlockUserModel
+                oldItem: BlockedUserModel,
+                newItem: BlockedUserModel
             ): Boolean {
                 return oldItem == newItem
             }

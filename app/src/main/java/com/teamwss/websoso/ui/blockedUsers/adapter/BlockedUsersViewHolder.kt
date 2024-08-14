@@ -4,19 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemBlockedUserBinding
-import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockUserModel
+import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel
 
 class BlockedUsersViewHolder(
     private val binding: ItemBlockedUserBinding,
-    onRemoveBlockUserClick: (blockId: Long) -> Unit,
+    onRemoveBlockedUserClick: (blockId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        binding.onClick = onRemoveBlockUserClick
+        binding.onClick = onRemoveBlockedUserClick
     }
 
-    fun bind(blockUser: BlockUserModel) {
-        binding.blockedUser = blockUser
+    fun bind(blockedUser: BlockedUserModel) {
+        binding.blockedUser = blockedUser
     }
 
     companion object {
