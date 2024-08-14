@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.remote.api
 
+import PopularNovelsResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.SosoPicksResponseDto
@@ -32,4 +33,7 @@ interface NovelApi {
 
     @GET("soso-picks")
     suspend fun getSosoPicks(): SosoPicksResponseDto
+
+    @GET("novels/popular")
+    suspend fun getPopularNovels(): PopularNovelsResponseDto
 }
