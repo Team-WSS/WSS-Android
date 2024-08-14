@@ -60,11 +60,10 @@
             isVisible="@{blockedUserViewModel.isBlockedUserEmptyBoxVisibility}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_blocked_users_title">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_blocked_users_empty"
@@ -82,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="차단한 유저가 없어요"
+                android:text="@string/blocked_users_empty"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="parent"
