@@ -80,7 +80,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_onboarding_first_nickname_duplicate_check"
-            style="@style/body2"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="88dp"
             android:layout_height="0dp"
             android:background="@drawable/selector_onboarding_first_duplication_check_button_background"
@@ -88,6 +88,7 @@
             android:enabled="@{viewModel.onboardingFirstUiState.isDuplicationCheckButtonEnable}"
             android:onClick="@{() -> viewModel.checkDuplicationNickname()}"
             android:text="@string/onboarding_first_duplicate_check"
+            android:textAppearance="@style/body2"
             android:textColor="@drawable/selector_onboarding_first_duplication_check_button_text_color"
             app:layout_constraintBottom_toBottomOf="@id/cl_on_boarding_first_nickname_input"
             app:layout_constraintEnd_toEndOf="parent"

@@ -40,24 +40,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_setting_back_button" />
 
-        <View
-            android:id="@+id/view_setting_title_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_setting_title" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_setting_account_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:onClick="@{() -> onClick.onUserAccountInfoButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_setting_title_divider">
+            app:layout_constraintTop_toBottomOf="@id/tv_setting_title">
 
             <TextView
                 android:layout_width="wrap_content"

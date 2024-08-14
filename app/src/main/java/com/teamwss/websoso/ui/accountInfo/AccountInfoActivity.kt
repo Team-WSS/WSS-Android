@@ -7,7 +7,10 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
+import com.teamwss.websoso.ui.blockUsers.BlockUsersActivity
+import com.teamwss.websoso.ui.changeUserInfo.ChangeUserInfoActivity
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.ui.withdraw.WithdrawFirstActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +23,11 @@ class AccountInfoActivity :
 
         bindViewModel()
         setupTranslucentOnStatusBar()
+        onLogoutButtonClick()
         onBackButtonClick()
+        onWithDrawButtonClick()
+        onChangeUserInfoButtonClick()
+        onBlockUsersButtonClick()
     }
 
     private fun bindViewModel() {
@@ -35,9 +42,37 @@ class AccountInfoActivity :
         )
     }
 
+    private fun onLogoutButtonClick() {
+        binding.clAccountInfoLogout.setOnClickListener {
+            LogoutDialogFragment.newInstance()
+                .show(supportFragmentManager, LogoutDialogFragment.TAG)
+        }
+    }
+
+    private fun onWithDrawButtonClick() {
+        binding.clAccountInfoWithdraw.setOnClickListener {
+            val intent = WithdrawFirstActivity.getIntent(this)
+            startActivity(intent)
+        }
+    }
+
     private fun onBackButtonClick() {
         binding.ivAccountInfoBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun onChangeUserInfoButtonClick() {
+        binding.clAccountInfoChangeUserInfo.setOnClickListener {
+            val intent = ChangeUserInfoActivity.getIntent(this)
+            startActivity(intent)
+        }
+    }
+
+    private fun onBlockUsersButtonClick() {
+        binding.clAccountInfoBlockUserList.setOnClickListener {
+            val intent = BlockUsersActivity.getIntent(this)
+            startActivity(intent)
         }
     }
 

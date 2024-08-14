@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.changeGenderAndAge
+package com.teamwss.websoso.ui.changeUserInfo
 
 import android.os.Bundle
 import android.view.View
