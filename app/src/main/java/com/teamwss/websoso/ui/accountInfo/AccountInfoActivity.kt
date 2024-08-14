@@ -7,7 +7,7 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
-import com.teamwss.websoso.ui.blockUsers.BlockUsersActivity
+import com.teamwss.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.teamwss.websoso.ui.changeUserInfo.ChangeUserInfoActivity
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.withdraw.WithdrawFirstActivity
@@ -70,8 +70,8 @@ class AccountInfoActivity :
     }
 
     private fun onBlockUsersButtonClick() {
-        binding.clAccountInfoBlockUserList.setOnClickListener {
-            val intent = BlockUsersActivity.getIntent(this)
+        binding.clAccountInfoBlockedUserList.setOnClickListener {
+            val intent = BlockedUsersActivity.getIntent(this)
             startActivity(intent)
         }
     }

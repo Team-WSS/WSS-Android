@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.blockedUsers
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -45,6 +47,13 @@ class BlockedUsersActivity :
                 uiState.error -> Unit
                 !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockedUsers)
             }
+        }
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, BlockedUsersActivity::class.java)
         }
     }
 }
