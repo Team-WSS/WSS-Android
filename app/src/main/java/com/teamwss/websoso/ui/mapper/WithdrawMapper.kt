@@ -8,6 +8,6 @@ fun UserNovelStatsEntity.toUi(): UserNovelStatsModel {
         interestNovelCount = interestNovelCount,
         watchingNovelCount = watchingNovelCount,
         watchedNovelCount = watchedNovelCount,
-        quitNovelCount = quitNovelCount
+        quitNovelCount = quitNovelCount,
     )
 }
