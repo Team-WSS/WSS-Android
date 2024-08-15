@@ -13,6 +13,12 @@ import javax.inject.Inject
 class ProfileDisclosureViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
+    private val _loading: MutableLiveData<Boolean> = MutableLiveData(true)
+    val loading: LiveData<Boolean> get() = _loading
+
+    private val _error: MutableLiveData<Boolean> = MutableLiveData(false)
+    val error: LiveData<Boolean> get() = _error
+
     private val _isProfilePublic: MutableLiveData<Boolean> = MutableLiveData()
     val isProfilePublic: LiveData<Boolean> get() = _isProfilePublic
 
@@ -25,11 +31,12 @@ class ProfileDisclosureViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchUserProfileStatus()
             }.onSuccess { userProfileStatusEntity ->
+                _loading.value = false
                 _isProfilePublic.value = userProfileStatusEntity.isProfilePublic
             }.onFailure {
-
+                _loading.value = false
+                _error.value = true
             }
         }
     }
-
 }
