@@ -22,10 +22,12 @@ class ProfileDisclosureActivity :
         setupTranslucentOnStatusBar()
         onBackButtonClick()
         onProfileDisclosureButtonClick()
+        onCompleteButtonClick()
         setupObserver()
     }
 
     private fun bindViewModel() {
+        binding.profileDisclosureViewModel = profileDisclosureViewModel
         binding.lifecycleOwner = this
     }
 
@@ -45,6 +47,12 @@ class ProfileDisclosureActivity :
     private fun onProfileDisclosureButtonClick() {
         binding.clProfileDisclosureButton.setOnClickListener {
             profileDisclosureViewModel.updateProfileStatus()
+        }
+    }
+
+    private fun onCompleteButtonClick() {
+        binding.tvProfileDisclosureCompleteButton.setOnClickListener {
+            profileDisclosureViewModel.saveProfileDisclosureStatus()
         }
     }
 

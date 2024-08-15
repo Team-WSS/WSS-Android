@@ -1,6 +1,7 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
+import com.teamwss.websoso.data.mapper.toRemote
 import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.UserEmailEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
@@ -30,5 +31,9 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchUserProfileStatus(): UserProfileStatusEntity {
         return userApi.getProfileStatus().toData()
+    }
+
+    suspend fun saveUserProfileStatus(userProfileStatusEntity: UserProfileStatusEntity) {
+        userApi.patchProfileStatus(userProfileStatusEntity.toRemote())
     }
 }

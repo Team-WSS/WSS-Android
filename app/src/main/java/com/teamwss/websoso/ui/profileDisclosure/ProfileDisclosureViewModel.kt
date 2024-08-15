@@ -1,10 +1,10 @@
 package com.teamwss.websoso.ui.profileDisclosure
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,6 +23,11 @@ class ProfileDisclosureViewModel @Inject constructor(
     private val _isProfilePublic: MutableLiveData<Boolean> = MutableLiveData()
     val isProfilePublic: LiveData<Boolean> get() = _isProfilePublic
 
+    private val _isCompleteButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isCompleteButtonEnabled: LiveData<Boolean> get() = _isCompleteButtonEnabled
+
+    private var initIsProfilePublic: Boolean = false
+
     init {
         updateProfileDisclosureStatus()
     }
@@ -34,6 +39,8 @@ class ProfileDisclosureViewModel @Inject constructor(
             }.onSuccess { userProfileStatusEntity ->
                 _loading.value = false
                 _isProfilePublic.value = userProfileStatusEntity.isProfilePublic
+                initIsProfilePublic = userProfileStatusEntity.isProfilePublic
+                updateIsCompleteButtonEnabled()
             }.onFailure {
                 _loading.value = false
                 _error.value = true
@@ -43,6 +50,24 @@ class ProfileDisclosureViewModel @Inject constructor(
 
     fun updateProfileStatus() {
         _isProfilePublic.value = _isProfilePublic.value?.not()
-        Log.d("moongchi", "updateProfileStatus: ${_isProfilePublic.value}")
+        updateIsCompleteButtonEnabled()
+    }
+
+    private fun updateIsCompleteButtonEnabled() {
+        when (initIsProfilePublic == isProfilePublic.value) {
+            true -> _isCompleteButtonEnabled.value = false
+            false -> _isCompleteButtonEnabled.value = true
+        }
+    }
+
+    fun saveProfileDisclosureStatus() {
+        viewModelScope.launch {
+            runCatching {
+                val isProfilePublicValue = isProfilePublic.value ?: initIsProfilePublic.not()
+                val userProfileStatusEntity = UserProfileStatusEntity(isProfilePublicValue)
+                userRepository.saveUserProfileStatus(userProfileStatusEntity)
+            }.onSuccess {
+            }
+        }
     }
 }

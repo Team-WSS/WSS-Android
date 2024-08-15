@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="profileDisclosureViewModel"
+            type="com.teamwss.websoso.ui.profileDisclosure.ProfileDisclosureViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,13 +40,15 @@
             app:layout_constraintTop_toTopOf="@id/iv_profile_disclosure_back_button" />
 
         <TextView
+            android:id="@+id/tv_profile_disclosure_complete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
+            android:enabled="@{profileDisclosureViewModel.isCompleteButtonEnabled}"
             android:padding="10dp"
             android:text="@string/profile_disclosure_complete"
             android:textAppearance="@style/title2"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/bg_profile_disclosure_text_selector"
             app:layout_constraintBottom_toBottomOf="@id/tv_profile_disclosure_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_profile_disclosure_title" />
