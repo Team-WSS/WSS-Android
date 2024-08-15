@@ -4,9 +4,11 @@ import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
 import com.teamwss.websoso.data.model.UserEmailEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
+import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.UserEmailResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
+import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
 
 fun UserEmailResponseDto.toData(): UserEmailEntity {
     return UserEmailEntity(
@@ -33,5 +35,11 @@ fun UserNovelStatsResponseDto.toData(): UserNovelStatsEntity {
         watchingNovelCount = watchingNovelCount,
         watchedNovelCount = watchedNovelCount,
         quitNovelCount = quitNovelCount,
+    )
+}
+
+fun UserProfileStatusResponseDto.toData(): UserProfileStatusEntity {
+    return UserProfileStatusEntity(
+        isProfilePublic = isProfilePublic,
     )
 }
