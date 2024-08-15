@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.repository.UserRepository
+import com.teamwss.websoso.ui.profileDisclosure.model.ProfileDisclosureUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,11 +15,9 @@ import javax.inject.Inject
 class ProfileDisclosureViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    private val _loading: MutableLiveData<Boolean> = MutableLiveData(true)
-    val loading: LiveData<Boolean> get() = _loading
-
-    private val _error: MutableLiveData<Boolean> = MutableLiveData(false)
-    val error: LiveData<Boolean> get() = _error
+    private val _uiState: MutableLiveData<ProfileDisclosureUiState> =
+        MutableLiveData(ProfileDisclosureUiState())
+    val uiState: LiveData<ProfileDisclosureUiState> get() = _uiState
 
     private val _isProfilePublic: MutableLiveData<Boolean> = MutableLiveData()
     val isProfilePublic: LiveData<Boolean> get() = _isProfilePublic
@@ -40,13 +39,17 @@ class ProfileDisclosureViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchUserProfileStatus()
             }.onSuccess { userProfileStatusEntity ->
-                _loading.value = false
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                )
                 _isProfilePublic.value = userProfileStatusEntity.isProfilePublic
                 initIsProfilePublic = userProfileStatusEntity.isProfilePublic
                 updateIsCompleteButtonEnabled()
             }.onFailure {
-                _loading.value = false
-                _error.value = true
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = false,
+                )
             }
         }
     }
@@ -64,18 +67,24 @@ class ProfileDisclosureViewModel @Inject constructor(
     }
 
     fun saveProfileDisclosureStatus() {
+        _uiState.value = uiState.value?.copy(
+            loading = true,
+        )
         viewModelScope.launch {
-            _loading.value = true
             runCatching {
                 val isProfilePublicValue = isProfilePublic.value ?: initIsProfilePublic.not()
                 val userProfileStatusEntity = UserProfileStatusEntity(isProfilePublicValue)
                 userRepository.saveUserProfileStatus(userProfileStatusEntity)
             }.onSuccess {
-                _loading.value = false
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                )
                 _isSaveStatusComplete.value = true
             }.onFailure {
-                _loading.value = false
-                _error.value = true
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = false,
+                )
             }
         }
     }

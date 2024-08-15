@@ -57,6 +57,25 @@ class ProfileDisclosureActivity :
     }
 
     private fun setupObserver() {
+        profileDisclosureViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.loading -> {
+                    binding.wlProfileDisclosure.setWebsosoLoadingVisibility(true)
+                    binding.wlProfileDisclosure.setErrorLayoutVisibility(false)
+                }
+
+                uiState.error -> {
+                    binding.wlProfileDisclosure.setWebsosoLoadingVisibility(false)
+                    binding.wlProfileDisclosure.setErrorLayoutVisibility(true)
+                }
+
+                else -> {
+                    binding.wlProfileDisclosure.setWebsosoLoadingVisibility(false)
+                    binding.wlProfileDisclosure.setErrorLayoutVisibility(false)
+                }
+            }
+        }
+
         profileDisclosureViewModel.isProfilePublic.observe(this) { isProfilePublic ->
             updateProfileDisclosureStatusButton(isProfilePublic)
         }
