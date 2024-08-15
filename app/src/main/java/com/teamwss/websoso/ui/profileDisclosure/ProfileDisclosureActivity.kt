@@ -21,6 +21,7 @@ class ProfileDisclosureActivity :
         bindViewModel()
         setupTranslucentOnStatusBar()
         onBackButtonClick()
+        onProfileDisclosureButtonClick()
         setupObserver()
     }
 
@@ -41,6 +42,12 @@ class ProfileDisclosureActivity :
         }
     }
 
+    private fun onProfileDisclosureButtonClick() {
+        binding.clProfileDisclosureButton.setOnClickListener {
+            profileDisclosureViewModel.updateProfileStatus()
+        }
+    }
+
     private fun setupObserver() {
         profileDisclosureViewModel.isProfilePublic.observe(this) { isProfilePublic ->
             updateProfileDisclosureStatusButton(isProfilePublic)
@@ -48,11 +55,11 @@ class ProfileDisclosureActivity :
     }
 
     private fun updateProfileDisclosureStatusButton(isProfilePublic: Boolean) {
-        val buttonImage = if (isProfilePublic) {
-            R.drawable.btn_account_info_check_unselected
-        } else {
-            R.drawable.btn_account_info_check_selected
-        }
+        val buttonImage =
+            when (isProfilePublic) {
+                true -> R.drawable.btn_account_info_check_unselected
+                false -> R.drawable.btn_account_info_check_selected
+            }
         binding.ivProfileDisclosureStatusButton.setImageResource(buttonImage)
     }
 

@@ -45,6 +45,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_profile_disclosure_title" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_profile_disclosure_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"

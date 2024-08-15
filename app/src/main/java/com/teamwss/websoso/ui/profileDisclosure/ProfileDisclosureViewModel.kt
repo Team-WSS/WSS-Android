@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.profileDisclosure
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,10 +24,10 @@ class ProfileDisclosureViewModel @Inject constructor(
     val isProfilePublic: LiveData<Boolean> get() = _isProfilePublic
 
     init {
-        fetchProfileDisclosureStatus()
+        updateProfileDisclosureStatus()
     }
 
-    private fun fetchProfileDisclosureStatus() {
+    private fun updateProfileDisclosureStatus() {
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchUserProfileStatus()
@@ -38,5 +39,10 @@ class ProfileDisclosureViewModel @Inject constructor(
                 _error.value = true
             }
         }
+    }
+
+    fun updateProfileStatus() {
+        _isProfilePublic.value = _isProfilePublic.value?.not()
+        Log.d("moongchi", "updateProfileStatus: ${_isProfilePublic.value}")
     }
 }
