@@ -28,6 +28,9 @@ class ProfileDisclosureViewModel @Inject constructor(
 
     private var initIsProfilePublic: Boolean = false
 
+    private val _isSaveStatusComplete: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isSaveStatusComplete: LiveData<Boolean> get() = _isSaveStatusComplete
+
     init {
         updateProfileDisclosureStatus()
     }
@@ -62,11 +65,17 @@ class ProfileDisclosureViewModel @Inject constructor(
 
     fun saveProfileDisclosureStatus() {
         viewModelScope.launch {
+            _loading.value = true
             runCatching {
                 val isProfilePublicValue = isProfilePublic.value ?: initIsProfilePublic.not()
                 val userProfileStatusEntity = UserProfileStatusEntity(isProfilePublicValue)
                 userRepository.saveUserProfileStatus(userProfileStatusEntity)
             }.onSuccess {
+                _loading.value = false
+                _isSaveStatusComplete.value = true
+            }.onFailure {
+                _loading.value = false
+                _error.value = true
             }
         }
     }

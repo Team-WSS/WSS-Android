@@ -60,14 +60,17 @@ class ProfileDisclosureActivity :
         profileDisclosureViewModel.isProfilePublic.observe(this) { isProfilePublic ->
             updateProfileDisclosureStatusButton(isProfilePublic)
         }
+
+        profileDisclosureViewModel.isSaveStatusComplete.observe(this) { isSaveStatus ->
+            if (isSaveStatus) finish()
+        }
     }
 
     private fun updateProfileDisclosureStatusButton(isProfilePublic: Boolean) {
-        val buttonImage =
-            when (isProfilePublic) {
-                true -> R.drawable.btn_account_info_check_unselected
-                false -> R.drawable.btn_account_info_check_selected
-            }
+        val buttonImage = when (isProfilePublic) {
+            true -> R.drawable.btn_account_info_check_unselected
+            false -> R.drawable.btn_account_info_check_selected
+        }
         binding.ivProfileDisclosureStatusButton.setImageResource(buttonImage)
     }
 
