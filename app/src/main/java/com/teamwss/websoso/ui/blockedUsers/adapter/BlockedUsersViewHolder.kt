@@ -3,8 +3,8 @@ package com.teamwss.websoso.ui.blockedUsers.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
 import com.teamwss.websoso.databinding.ItemBlockedUserBinding
-import com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel
 
 class BlockedUsersViewHolder(
     private val binding: ItemBlockedUserBinding,
@@ -15,7 +15,7 @@ class BlockedUsersViewHolder(
         binding.onClick = onRemoveBlockedUserClick
     }
 
-    fun bind(blockedUser: BlockedUserModel) {
+    fun bind(blockedUser: BlockedUserEntity) {
         binding.blockedUser = blockedUser
     }
 

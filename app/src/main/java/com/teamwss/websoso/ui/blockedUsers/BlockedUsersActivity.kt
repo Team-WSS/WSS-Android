@@ -24,9 +24,16 @@ class BlockedUsersActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        bindViewModel()
         setupTranslucentOnStatusBar()
         setupAdapter()
         setupObserver()
+        onBackButtonClick()
+    }
+
+    private fun bindViewModel() {
+        binding.blockedUserViewModel = blockedUsersViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -47,6 +54,12 @@ class BlockedUsersActivity :
                 uiState.error -> Unit
                 !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockedUsers)
             }
+        }
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivBlockedUsersBackButton.setOnClickListener {
+            finish()
         }
     }
 
