@@ -28,6 +28,7 @@ class BlockedUsersActivity :
         setupTranslucentOnStatusBar()
         setupAdapter()
         setupObserver()
+        onBackButtonClick()
     }
 
     private fun bindViewModel() {
@@ -53,6 +54,12 @@ class BlockedUsersActivity :
                 uiState.error -> Unit
                 !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockedUsers)
             }
+        }
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivBlockedUsersBackButton.setOnClickListener {
+            finish()
         }
     }
 
