@@ -87,8 +87,8 @@ class ProfileDisclosureActivity :
 
     private fun updateProfileDisclosureStatusButton(isProfilePublic: Boolean) {
         val buttonImage = when (isProfilePublic) {
-            true -> R.drawable.btn_account_info_check_unselected
-            false -> R.drawable.btn_account_info_check_selected
+            true -> R.drawable.img_account_info_check_unselected
+            false -> R.drawable.img_account_info_check_selected
         }
         binding.ivProfileDisclosureStatusButton.setImageResource(buttonImage)
     }
