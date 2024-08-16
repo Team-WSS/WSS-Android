@@ -4,18 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithdrawSecondBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WithdrawSecondActivity :
     BindingActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
+    private val withdrawSecondViewModel: WithdrawSecondViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupTranslucentOnStatusBar()
         onBackButtonClick()
+        onWithdrawCheckAgreeButtonClick()
+        setupObserver()
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -29,6 +35,26 @@ class WithdrawSecondActivity :
         binding.ivWithdrawBackButton.setOnClickListener {
             finish()
         }
+    }
+
+    private fun onWithdrawCheckAgreeButtonClick() {
+        binding.clWithdrawCheckAgreeButton.setOnClickListener {
+            withdrawSecondViewModel.updateIsWithdrawCheckAgree()
+        }
+    }
+
+    private fun setupObserver() {
+        withdrawSecondViewModel.isWithdrawCheckAgree.observe(this) { isAgree ->
+            updateWithdrawCheckAgreeButtonImage(isAgree)
+        }
+    }
+
+    private fun updateWithdrawCheckAgreeButtonImage(isWithdrawAgree: Boolean) {
+        val buttonImage = when (isWithdrawAgree) {
+            true -> R.drawable.img_account_info_check_selected
+            false -> R.drawable.img_account_info_check_unselected
+        }
+        binding.ivWithdrawCheckAgree.setImageResource(buttonImage)
     }
 
     companion object {
