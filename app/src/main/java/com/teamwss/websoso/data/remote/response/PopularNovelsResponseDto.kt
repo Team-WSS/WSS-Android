@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PopularNovelsResponseDto(
     @SerialName("popularNovels")
-    val popularNovels: List<PopularNovel>,
+    val popularNovelResponseDtos: List<PopularNovelResponseDto>,
 ) {
     @Serializable
-    data class PopularNovel(
+    data class PopularNovelResponseDto(
         @SerialName("avatarImage")
         val avatarImage: String?,
         @SerialName("feedContent")

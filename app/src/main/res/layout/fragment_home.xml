@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:minHeight="376dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_today_popular_novel" />
 
             <ImageView

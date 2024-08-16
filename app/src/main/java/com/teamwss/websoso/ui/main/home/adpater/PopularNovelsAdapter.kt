@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 
-
 class PopularNovelsAdapter(
     private val onPopularNovelClick: (novelId: Long) -> (Unit),
 ) : ListAdapter<PopularNovelEntity, PopularNovelsViewHolder>(diffUtil) {

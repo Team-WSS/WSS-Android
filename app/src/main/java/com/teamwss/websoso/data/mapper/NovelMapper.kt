@@ -78,14 +78,14 @@ fun SosoPicksResponseDto.toData(): SosoPickEntity {
 
 fun PopularNovelsResponseDto.toData(): PopularNovelsEntity {
     return PopularNovelsEntity(
-        popularNovels = popularNovels.map { novel ->
+        popularNovels = popularNovelResponseDtos.map { novel ->
             PopularNovelsEntity.PopularNovelEntity(
                 avatarImage = novel.avatarImage,
                 feedContent = novel.feedContent,
                 nickname = novel.nickname,
                 novelId = novel.novelId,
                 novelImage = novel.novelImage,
-                title = novel.title
+                title = novel.title,
             )
         }
     )

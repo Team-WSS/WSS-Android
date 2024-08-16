@@ -17,10 +17,9 @@ class PopularNovelsViewHolder(
     }
 
     fun bind(popularNovel: PopularNovelEntity) {
-        val nickname = popularNovel.nickname ?: "작품 설명"
-        var avatarImage = popularNovel.avatarImage
+        val nickname: String = popularNovel.nickname ?: "작품 설명"
+        val avatarImage: String = popularNovel.avatarImage ?: ""
         if (popularNovel.avatarImage.isNullOrEmpty()) {
-            avatarImage = ""
             with(binding) {
                 ivPopularNovelAvatar.visibility = View.INVISIBLE
                 tvPopularNovelInShortTitle.visibility = View.INVISIBLE
