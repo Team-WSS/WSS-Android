@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
-    private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
+    private val _withdrawReason: MutableLiveData<String> = MutableLiveData("ㅎㅇ")
     val withdrawReason: LiveData<String> get() = _withdrawReason
 
     private val _isWithdrawCheckAgree: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -28,8 +28,9 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateWithdrawButtonEnabled() {
-        if (withdrawReason.value?.isNotBlank() == true && isWithdrawCheckAgree.value == true) {
-            _isWithdrawButtonEnabled.value = _isWithdrawButtonEnabled.value?.not()
+        when (withdrawReason.value?.isNotBlank() == true && isWithdrawCheckAgree.value == true) {
+            true -> _isWithdrawButtonEnabled.value = true
+            false -> _isWithdrawButtonEnabled.value = false
         }
     }
 }
