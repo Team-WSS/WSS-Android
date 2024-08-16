@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="withdrawSecondViewModel"
+            type="com.teamwss.websoso.ui.withdraw.second.WithdrawSecondViewModel" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -426,7 +433,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_withdraw_check_selector"
-                android:enabled="false"
+                android:enabled="@{withdrawSecondViewModel.isWithdrawButtonEnabled}"
                 android:gravity="center"
                 android:paddingVertical="18dp"
                 android:text="@string/withdraw_button"

@@ -18,10 +18,17 @@ class WithdrawSecondActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        bindViewModel()
         setupTranslucentOnStatusBar()
         onBackButtonClick()
         onWithdrawCheckAgreeButtonClick()
         setupObserver()
+        onWithdrawButtonClick()
+    }
+
+    private fun bindViewModel() {
+        binding.withdrawSecondViewModel = withdrawSecondViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -55,6 +62,12 @@ class WithdrawSecondActivity :
             false -> R.drawable.img_account_info_check_unselected
         }
         binding.ivWithdrawCheckAgree.setImageResource(buttonImage)
+    }
+
+    private fun onWithdrawButtonClick() {
+        binding.tvWithdrawButton.setOnClickListener {
+            // TODO 회원탈퇴 함수 호출
+        }
     }
 
     companion object {

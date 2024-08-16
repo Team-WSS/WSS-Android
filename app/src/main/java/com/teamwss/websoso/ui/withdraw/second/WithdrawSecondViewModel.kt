@@ -14,8 +14,8 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
     private val _isWithdrawCheckAgree: MutableLiveData<Boolean> = MutableLiveData(false)
     val isWithdrawCheckAgree: LiveData<Boolean> get() = _isWithdrawCheckAgree
 
-    private val _withdrawButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
-    val withdrawButtonEnabled: LiveData<Boolean> get() = _withdrawButtonEnabled
+    private val _isWithdrawButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
 
     fun updateWithdrawReason(reason: String) {
         _withdrawReason.value = reason
@@ -29,7 +29,7 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
 
     private fun updateWithdrawButtonEnabled() {
         if (withdrawReason.value?.isNotBlank() == true && isWithdrawCheckAgree.value == true) {
-            _withdrawButtonEnabled.value = _withdrawButtonEnabled.value?.not()
+            _isWithdrawButtonEnabled.value = _isWithdrawButtonEnabled.value?.not()
         }
     }
 }
