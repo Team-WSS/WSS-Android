@@ -9,7 +9,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.common.model.CategoriesModel
+import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
@@ -85,7 +85,7 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateCurrentSelectedKeywordsHeader(currentSelectedKeywords: List<CategoriesModel.CategoryModel.KeywordModel>) {
+    private fun updateCurrentSelectedKeywordsHeader(currentSelectedKeywords: List<KeywordModel>) {
         val existingKeywords = mutableListOf<String>()
 
         for (i in 0 until binding.wcgNovelRatingKeywordSelectedKeyword.childCount) {
@@ -109,7 +109,7 @@ class NovelRatingKeywordBottomSheetDialog :
         if (chip != null) binding.wcgNovelRatingKeywordSelectedKeyword.removeView(chip)
     }
 
-    private fun addCurrentSelectedKeywordChip(keyword: CategoriesModel.CategoryModel.KeywordModel) {
+    private fun addCurrentSelectedKeywordChip(keyword: KeywordModel) {
         WebsosoChip(binding.root.context).apply {
             setWebsosoChipText(keyword.keywordName)
             setWebsosoChipTextAppearance(R.style.body2)

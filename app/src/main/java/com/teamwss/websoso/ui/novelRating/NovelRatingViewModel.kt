@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.repository.KeywordRepository
 import com.teamwss.websoso.data.repository.UserNovelRepository
-import com.teamwss.websoso.ui.common.model.CategoriesModel
+import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.mapper.toData
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
@@ -82,7 +83,7 @@ class NovelRatingViewModel @Inject constructor(
         }
     }
 
-    private fun handleSuccessfulFetchKeywordCategories(keyword: String?, categories: List<CategoriesModel.CategoryModel>) {
+    private fun handleSuccessfulFetchKeywordCategories(keyword: String?, categories: List<CategoryModel>) {
         val selectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
         val updatedCategories = categories.map { it }.map {
             it.copy(keywords = it.keywords.map { keyword ->
@@ -96,7 +97,7 @@ class NovelRatingViewModel @Inject constructor(
         }
     }
 
-    private fun updateSearchResultKeywords(updatedCategories: List<CategoriesModel.CategoryModel>) {
+    private fun updateSearchResultKeywords(updatedCategories: List<CategoryModel>) {
         _uiState.value = uiState.value?.let { uiState ->
             uiState.copy(
                 keywordsModel = uiState.keywordsModel.copy(
@@ -107,8 +108,8 @@ class NovelRatingViewModel @Inject constructor(
     }
 
     private fun updateDefaultKeywords(
-        updatedCategories: List<CategoriesModel.CategoryModel>,
-        selectedKeywords: List<CategoriesModel.CategoryModel.KeywordModel>,
+        updatedCategories: List<CategoryModel>,
+        selectedKeywords: List<KeywordModel>,
     ) {
         _uiState.value = uiState.value?.copy(
             keywordsModel = NovelRatingKeywordsModel(
@@ -213,7 +214,7 @@ class NovelRatingViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedKeywords(keyword: CategoriesModel.CategoryModel.KeywordModel, isSelected: Boolean) {
+    fun updateSelectedKeywords(keyword: KeywordModel, isSelected: Boolean) {
         uiState.value?.let { uiState ->
             _uiState.value = uiState.copy(
                 keywordsModel = uiState.keywordsModel.updateSelectedKeywords(keyword, isSelected)
