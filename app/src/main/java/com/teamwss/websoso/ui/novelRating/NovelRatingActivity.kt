@@ -118,7 +118,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
         selectedKeywords.forEach { keyword ->
-            WebsosoChip(binding.root.context)
+            WebsosoChip(this@NovelRatingActivity)
                 .apply {
                     setWebsosoChipText(keyword.keywordName)
                     setWebsosoChipTextAppearance(R.style.body2)
