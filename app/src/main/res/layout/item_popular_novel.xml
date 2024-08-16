@@ -59,12 +59,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_popular_novel_in_short"
             android:layout_width="0dp"
-            android:layout_height="140dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="238dp"
             android:background="@drawable/bg_popular_novel_fcf8f6_bottom_radius_14dp"
-            android:paddingHorizontal="18dp"
-            android:paddingTop="18dp"
-            android:paddingBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -75,26 +73,20 @@
                 loadImageUrl="@{popularNovel.avatarImage}"
                 android:layout_width="24dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@mipmap/ic_launcher" />
 
             <ImageView
-                android:id="@+id/iv_popular_novel_null_avatar"
+                android:id="@+id/iv_popular_novel_avatar_null"
                 android:layout_width="24dp"
                 android:layout_height="0dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/tv_popular_novel_in_short_title"
-                app:layout_constraintDimensionRatio="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_popular_novel_in_short_title"
-                tools:src="@mipmap/ic_launcher" />
-
-            <ImageView
-                android:id="@+id/iv_popular_novel_avatar_null"
-                android:layout_width="18dp"
-                android:layout_height="0dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:padding="2dp"
                 android:src="@drawable/ic_popular_novel_null_avatar"
                 android:visibility="gone"
                 app:layout_constraintDimensionRatio="1"
@@ -106,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@{popularNovel.nickname}"
+                android:text='@{String.format(@string/home_popular_novel_nickname, popularNovel.nickname)}'
                 android:textAppearance="@style/title2"
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintBottom_toBottomOf="@id/iv_popular_novel_avatar"
@@ -144,11 +136,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
+                android:layout_marginBottom="18dp"
                 android:ellipsize="end"
                 android:maxLines="3"
+                android:minLines="3"
                 android:text="@{popularNovel.feedContent}"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/gray_300_52515F"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_popular_novel_in_short_commas_finished"
                 app:layout_constraintStart_toEndOf="@id/iv_popular_novel_in_short_commas_started"
                 app:layout_constraintTop_toTopOf="@id/iv_popular_novel_in_short_commas_started"
@@ -158,11 +153,11 @@
                 android:id="@+id/iv_popular_novel_in_short_commas_finished"
                 android:layout_width="20dp"
                 android:layout_height="0dp"
+                android:layout_marginEnd="18dp"
                 android:src="@drawable/ic_popular_novel_commas_finished"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/tv_popular_novel_feed_description"
                 app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
