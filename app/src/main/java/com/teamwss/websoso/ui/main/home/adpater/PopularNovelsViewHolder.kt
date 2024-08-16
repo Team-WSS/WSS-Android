@@ -1,10 +1,9 @@
 package com.teamwss.websoso.ui.main.home.adpater
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 import com.teamwss.websoso.databinding.ItemPopularNovelBinding
 
@@ -18,14 +17,22 @@ class PopularNovelsViewHolder(
     }
 
     fun bind(popularNovel: PopularNovelEntity) {
-        binding.popularNovel = popularNovel
-        with(binding) {
-            ivPopularNovelNovelCover.load(popularNovel.novelImage)
-            when (popularNovel.avatarImage.isNullOrEmpty()) {
-                true -> ivPopularNovelAvatar.load(R.drawable.ic_home_alert)
-                false -> ivPopularNovelAvatar.load(popularNovel.avatarImage)
+        val nickname = popularNovel.nickname ?: "작품 설명"
+        var avatarImage = popularNovel.avatarImage
+        if (popularNovel.avatarImage.isNullOrEmpty()) {
+            avatarImage = ""
+            with(binding) {
+                ivPopularNovelAvatar.visibility = View.INVISIBLE
+                tvPopularNovelInShortTitle.visibility = View.INVISIBLE
+                ivPopularNovelAvatarNull.visibility = View.VISIBLE
+                tvPopularNovelInShortTitleNull.visibility = View.VISIBLE
             }
         }
+        val updatedPopularNovel = popularNovel.copy(
+            nickname = nickname,
+            avatarImage = avatarImage,
+        )
+        binding.popularNovel = updatedPopularNovel
     }
 
     companion object {
