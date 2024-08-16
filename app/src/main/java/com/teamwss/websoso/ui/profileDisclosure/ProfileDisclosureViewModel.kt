@@ -48,7 +48,7 @@ class ProfileDisclosureViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = false,
+                    error = true,
                 )
             }
         }
@@ -84,7 +84,7 @@ class ProfileDisclosureViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = false,
+                    error = true,
                 )
             }
         }
