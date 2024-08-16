@@ -25,7 +25,7 @@ class ProfileDisclosureViewModel @Inject constructor(
     private val _isCompleteButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
     val isCompleteButtonEnabled: LiveData<Boolean> get() = _isCompleteButtonEnabled
 
-    private var initIsProfilePublic: Boolean = false
+    private var isInitializeOfProfilePublic: Boolean = false
 
     private val _isSaveStatusComplete: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSaveStatusComplete: LiveData<Boolean> get() = _isSaveStatusComplete
@@ -43,7 +43,7 @@ class ProfileDisclosureViewModel @Inject constructor(
                     loading = false,
                 )
                 _isProfilePublic.value = userProfileStatusEntity.isProfilePublic
-                initIsProfilePublic = userProfileStatusEntity.isProfilePublic
+                isInitializeOfProfilePublic = userProfileStatusEntity.isProfilePublic
                 updateIsCompleteButtonEnabled()
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
@@ -60,7 +60,7 @@ class ProfileDisclosureViewModel @Inject constructor(
     }
 
     private fun updateIsCompleteButtonEnabled() {
-        when (initIsProfilePublic == isProfilePublic.value) {
+        when (isInitializeOfProfilePublic == isProfilePublic.value) {
             true -> _isCompleteButtonEnabled.value = false
             false -> _isCompleteButtonEnabled.value = true
         }
@@ -72,7 +72,7 @@ class ProfileDisclosureViewModel @Inject constructor(
         )
         viewModelScope.launch {
             runCatching {
-                val isProfilePublicValue = isProfilePublic.value ?: initIsProfilePublic.not()
+                val isProfilePublicValue = isProfilePublic.value ?: isInitializeOfProfilePublic.not()
                 val userProfileStatusEntity = UserProfileStatusEntity(isProfilePublicValue)
                 userRepository.saveUserProfileStatus(userProfileStatusEntity)
             }.onSuccess {
