@@ -54,16 +54,16 @@ class ProfileDisclosureViewModel @Inject constructor(
         }
     }
 
-    fun updateProfileStatus() {
-        _isProfilePublic.value = _isProfilePublic.value?.not()
-        updateIsCompleteButtonEnabled()
-    }
-
     private fun updateIsCompleteButtonEnabled() {
         when (isInitializeOfProfilePublic == isProfilePublic.value) {
             true -> _isCompleteButtonEnabled.value = false
             false -> _isCompleteButtonEnabled.value = true
         }
+    }
+
+    fun updateProfileStatus() {
+        _isProfilePublic.value = _isProfilePublic.value?.not()
+        updateIsCompleteButtonEnabled()
     }
 
     fun saveProfileDisclosureStatus() {
@@ -72,7 +72,8 @@ class ProfileDisclosureViewModel @Inject constructor(
         )
         viewModelScope.launch {
             runCatching {
-                val isProfilePublicValue = isProfilePublic.value ?: isInitializeOfProfilePublic.not()
+                val isProfilePublicValue =
+                    isProfilePublic.value ?: isInitializeOfProfilePublic.not()
                 val userProfileStatusEntity = UserProfileStatusEntity(isProfilePublicValue)
                 userRepository.saveUserProfileStatus(userProfileStatusEntity)
             }.onSuccess {
