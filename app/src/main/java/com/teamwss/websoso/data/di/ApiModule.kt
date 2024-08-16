@@ -3,6 +3,7 @@ package com.teamwss.websoso.data.di
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.api.NoticeApi
 import com.teamwss.websoso.data.remote.api.NovelApi
+import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.api.UserNovelApi
 import dagger.Module
 import dagger.Provides
@@ -31,4 +32,8 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideFeedApi(retrofit: Retrofit): FeedApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create()
 }

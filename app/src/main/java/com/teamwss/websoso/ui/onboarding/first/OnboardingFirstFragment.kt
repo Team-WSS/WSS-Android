@@ -36,7 +36,7 @@ class OnboardingFirstFragment :
     }
 
     private fun observeInputTypeChanges() {
-        viewModel.onBoardingFirstUiState.observe(viewLifecycleOwner) {
+        viewModel.onboardingFirstUiState.observe(viewLifecycleOwner) {
             updateUI(it.nicknameInputType)
         }
     }

@@ -7,7 +7,7 @@ class OnboardingPage(
 ) {
     fun nextPage(): OnboardingPage {
         val currentIndex = pages.indexOf(this)
-        return if (currentIndex in pages.indices - 1) {
+        return if (currentIndex < pages.size - 1) {
             pages[currentIndex + 1]
         } else {
             this

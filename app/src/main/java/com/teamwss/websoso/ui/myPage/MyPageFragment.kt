@@ -9,6 +9,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.myPage.adapter.MyPageViewPagerAdapter
+import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +20,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         super.onViewCreated(view, savedInstanceState)
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
+        onSettingButtonClick()
     }
 
     private fun setUpViewPager() {
@@ -51,6 +53,13 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
             tvMyPageStickyTitle.isVisible = isCollapsed
             clMyPageUserProfile.isVisible = !isCollapsed
+        }
+    }
+
+    private fun onSettingButtonClick() {
+        binding.ivMyPageStickyGoToSetting.setOnClickListener {
+            val intent = SettingActivity.getIntent(requireContext())
+            startActivity(intent)
         }
     }
 
