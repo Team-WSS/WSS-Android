@@ -1,5 +1,7 @@
 package com.teamwss.websoso.data.model
 
+import com.teamwss.websoso.data.model.CategoriesEntity.CategoryEntity.KeywordEntity
+
 data class NovelRatingEntity(
     val novelId: Long? = null,
     val novelTitle: String? = null,
@@ -8,5 +10,5 @@ data class NovelRatingEntity(
     val endDate: String?,
     val userNovelRating: Float,
     val charmPoints: List<String>,
-    val userKeywords: List<CategoriesEntity.CategoryEntity.KeywordEntity>,
+    val userKeywords: List<KeywordEntity>,
 )
