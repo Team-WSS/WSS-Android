@@ -1,16 +1,13 @@
 package com.teamwss.websoso.ui.profileEdit
 
 import android.os.Bundle
-import android.util.Log
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.profileEdit.model.Genres
 
-class ProfileEditActivity(
-
-): BindingActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
+class ProfileEditActivity : BindingActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +27,6 @@ class ProfileEditActivity(
                     setWebsosoChipPaddingVertical(20f)
                     setWebsosoChipPaddingHorizontal(12f)
                     setWebsosoChipRadius(40f)
-                    setOnWebsosoChipClick { Log.e("123123", genre.krName) }
                 }.also { websosoChip -> binding.wcgProfileEditPreferGenre.addChip(websosoChip) }
         }
     }
