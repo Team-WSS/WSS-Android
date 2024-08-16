@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/btn_account_info_check_unselected"
+                android:src="@drawable/btn_comment_register"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/et_feed_detail_input" />
 

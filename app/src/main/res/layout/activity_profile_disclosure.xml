@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="profileDisclosureViewModel"
+            type="com.teamwss.websoso.ui.profileDisclosure.ProfileDisclosureViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,18 +41,21 @@
             app:layout_constraintTop_toTopOf="@id/iv_profile_disclosure_back_button" />
 
         <TextView
+            android:id="@+id/tv_profile_disclosure_complete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
+            android:enabled="@{profileDisclosureViewModel.isCompleteButtonEnabled}"
             android:padding="10dp"
             android:text="@string/profile_disclosure_complete"
             android:textAppearance="@style/title2"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/bg_profile_disclosure_text_selector"
             app:layout_constraintBottom_toBottomOf="@id/tv_profile_disclosure_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_profile_disclosure_title" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_profile_disclosure_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -64,13 +75,24 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/iv_profile_disclosure_status_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:src="@drawable/btn_profile_disclosure_private"
+                android:src="@drawable/img_account_info_check_unselected"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+            android:id="@+id/wl_profile_disclosure"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
