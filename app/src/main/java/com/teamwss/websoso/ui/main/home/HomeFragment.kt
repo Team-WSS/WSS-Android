@@ -54,9 +54,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
-                !uiState.loading -> {
-                    popularNovelsAdapter.submitList(uiState.popularNovels)
-                }
+                !uiState.loading -> popularNovelsAdapter.submitList(uiState.popularNovels)
             }
         }
     }
