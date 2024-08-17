@@ -205,6 +205,8 @@
     <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해 드려요!</string>
     <string name="home_setting_interest_general">선호장르 설정하기</string>
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
+    <string name="home_popular_novel_nickname">%s 님의 한마디</string>
+    <string name="home_popular_novel_feed_title_null">작품 소개</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>
