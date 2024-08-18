@@ -18,17 +18,9 @@ class WithdrawSecondActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bindViewModel()
         setupTranslucentOnStatusBar()
-        onBackButtonClick()
-        onWithdrawCheckAgreeButtonClick()
+        bindViewModel()
         setupObserver()
-        onWithdrawButtonClick()
-    }
-
-    private fun bindViewModel() {
-        binding.withdrawSecondViewModel = withdrawSecondViewModel
-        binding.lifecycleOwner = this
     }
 
     private fun setupTranslucentOnStatusBar() {
@@ -38,16 +30,46 @@ class WithdrawSecondActivity :
         )
     }
 
-    private fun onBackButtonClick() {
-        binding.ivWithdrawBackButton.setOnClickListener {
-            finish()
-        }
+    private fun bindViewModel() {
+        binding.withdrawSecondViewModel = withdrawSecondViewModel
+        binding.onClick = onWithdrawClick()
+        binding.lifecycleOwner = this
     }
 
-    private fun onWithdrawCheckAgreeButtonClick() {
-        binding.clWithdrawCheckAgreeButton.setOnClickListener {
+    private fun onWithdrawClick() = object : WithdrawClickListener {
+
+        override fun onBackButtonClick() {
+            finish()
+        }
+
+        override fun onWithdrawReasonRarelyUsingButtonClick() {
+
+        }
+
+        override fun onWithdrawReasonInconvenientButtonClick() {
+
+        }
+
+        override fun onWithdrawReasonWantToDeleteContent() {
+
+        }
+
+        override fun onWithdrawReasonNotExistAnyWantedNovel() {
+
+        }
+
+        override fun onWithdrawReasonEtc() {
+            binding.etWithdrawEtc.requestFocus()
+        }
+
+        override fun onWithdrawCheckAgreeButtonClick() {
             withdrawSecondViewModel.updateIsWithdrawCheckAgree()
         }
+
+        override fun onWithdrawButtonClick() {
+            //TODO 회원탈퇴 로직 호출
+        }
+
     }
 
     private fun setupObserver() {
@@ -62,12 +84,6 @@ class WithdrawSecondActivity :
             false -> R.drawable.img_account_info_check_unselected
         }
         binding.ivWithdrawCheckAgree.setImageResource(buttonImage)
-    }
-
-    private fun onWithdrawButtonClick() {
-        binding.tvWithdrawButton.setOnClickListener {
-            // TODO 회원탈퇴 함수 호출
-        }
     }
 
     companion object {

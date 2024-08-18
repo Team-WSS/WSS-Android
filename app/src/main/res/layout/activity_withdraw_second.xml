@@ -8,6 +8,10 @@
         <variable
             name="withdrawSecondViewModel"
             type="com.teamwss.websoso.ui.withdraw.second.WithdrawSecondViewModel" />
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.withdraw.second.WithdrawClickListener" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -27,6 +31,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="64dp"
                 android:contentDescription="@null"
+                android:onClick="@{() -> onClick.onBackButtonClick()}"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
                 android:src="@drawable/btn_setting_back"
@@ -73,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="14dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonRarelyUsingButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_withdraw_second_reason">
@@ -105,6 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonInconvenientButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_rarely_using">
@@ -137,6 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonWantToDeleteContent()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_inconvenient">
@@ -169,6 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonNotExistAnyWantedNovel()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_want_to_delete_content">
@@ -201,6 +210,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonEtc()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_not_exist_any_wanted_novel">
@@ -398,6 +408,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:onClick="@{() -> onClick.onWithdrawCheckAgreeButtonClick()}"
                 android:paddingVertical="10dp"
                 app:layout_constraintEnd_toEndOf="@id/cl_withdraw_check_re_sign_up"
                 app:layout_constraintStart_toStartOf="@id/cl_withdraw_check_re_sign_up"
@@ -435,6 +446,7 @@
                 android:background="@drawable/btn_withdraw_check_selector"
                 android:enabled="@{withdrawSecondViewModel.isWithdrawButtonEnabled}"
                 android:gravity="center"
+                android:onClick="@{() -> onClick.onWithdrawButtonClick()}"
                 android:paddingVertical="18dp"
                 android:text="@string/withdraw_button"
                 android:textAppearance="@style/title1"
