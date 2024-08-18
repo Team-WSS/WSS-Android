@@ -16,6 +16,7 @@ data class FeedModel(
     val categories: String = relevantCategories.joinToString(prefix = "", postfix = ""),
 ) {
     val formattedCreatedDate: String = " · $createdDate"
+    val isEmptyOfRelevantCategories: Boolean = relevantCategories.isEmpty()
 
     data class UserModel(
         val id: Long,
@@ -26,7 +27,10 @@ data class FeedModel(
     data class NovelModel(
         val id: Long?,
         val title: String?,
-        val rating: Float,
-        val ratingCount: Int,
-    )
+        val rating: Float?,
+        val ratingCount: Int?,
+    ) {
+
+        val isNothing: Boolean = id == null
+    }
 }
