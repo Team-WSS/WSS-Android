@@ -5,7 +5,6 @@ import com.teamwss.websoso.data.model.CommentsEntity
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
 import com.teamwss.websoso.data.remote.api.FeedApi
-import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import javax.inject.Inject
 
 class FeedRepository @Inject constructor(
@@ -14,17 +13,14 @@ class FeedRepository @Inject constructor(
     private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
     val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
 
-    suspend fun fetchFeeds(category: String, lastFeedId: Long, size: Int): FeedsEntity {
-        val requestBody = FeedsRequestDto(lastFeedId = lastFeedId, size = size)
-        val result = feedApi.getFeeds(
-            category = if (category == "all") null else category,
-            feedsRequestDto = requestBody,
-        )
-
-        return result.toData()
+    suspend fun fetchFeeds(category: String, lastFeedId: Long, size: Int): FeedsEntity =
+        feedApi.getFeeds(
+            category = category,
+            lastFeedId = lastFeedId,
+            size = size,
+        ).toData()
             .also { _cachedFeeds.addAll(it.feeds) }
             .copy(feeds = cachedFeeds)
-    }
 
     suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
 
