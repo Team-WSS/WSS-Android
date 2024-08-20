@@ -4,46 +4,51 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
+import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
+import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
 
 class NovelRatingKeywordAdapter(
-    private val onKeywordClick: (keyword: NovelRatingKeywordModel, isClicked: Boolean) -> (Unit),
-) : ListAdapter<NovelRatingKeywordCategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
+    private val onKeywordClick: (keyword: CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),
+) : ListAdapter<CategoryModel, NovelRatingKeywordViewHolder>(diffUtil) {
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): NovelRatingKeywordViewHolder {
-        val binding =
-            ItemNovelRatingKeywordBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            )
+        val binding = ItemCommonKeywordBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+        )
         return NovelRatingKeywordViewHolder(binding, onKeywordClick)
     }
 
-    override fun onBindViewHolder(
-        holder: NovelRatingKeywordViewHolder,
-        position: Int,
-    ) {
+    override fun onBindViewHolder(holder: NovelRatingKeywordViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.apply {
+            when (isChipSetting) {
+                true -> updateChipState(item)
+                false -> initKeywordView(item)
+            }
+        }
     }
 
     companion object {
-        val diffUtil =
-            object : DiffUtil.ItemCallback<NovelRatingKeywordCategoryModel>() {
-                override fun areItemsTheSame(
-                    oldItem: NovelRatingKeywordCategoryModel,
-                    newItem: NovelRatingKeywordCategoryModel,
-                ): Boolean = oldItem.categoryName == newItem.categoryName
+        private val diffUtil = object : DiffUtil.ItemCallback<CategoryModel>() {
 
-                override fun areContentsTheSame(
-                    oldItem: NovelRatingKeywordCategoryModel,
-                    newItem: NovelRatingKeywordCategoryModel,
-                ): Boolean = oldItem.keywords.map { it.isSelected } == newItem.keywords.map { it.isSelected }
+            override fun areItemsTheSame(
+                oldItem: CategoryModel,
+                newItem: CategoryModel,
+            ): Boolean {
+                return oldItem.categoryName == newItem.categoryName
             }
+
+            override fun areContentsTheSame(
+                oldItem: CategoryModel,
+                newItem: CategoryModel,
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

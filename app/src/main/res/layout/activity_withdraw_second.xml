@@ -225,7 +225,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/bg_novel_rating_keyword_search_selector"
+                android:background="@drawable/bg_common_search_selector"
                 android:gravity="top"
                 android:hint="@string/withdraw_etc_hint"
                 android:maxLength="100"
