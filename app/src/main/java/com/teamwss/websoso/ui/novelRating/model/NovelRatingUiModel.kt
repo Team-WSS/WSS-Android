@@ -82,9 +82,11 @@ data class RatingDateModel(
 data class NovelRatingKeywordsModel(
     val categories: List<CategoriesModel.CategoryModel> = emptyList(),
     val currentSelectedKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
-    val searchResultKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
     val isCurrentSelectedKeywordsEmpty: Boolean = currentSelectedKeywords.isEmpty(),
-    val isSearchResultKeywordsEmpty: Boolean = searchResultKeywords.isEmpty(),
+    val isSearchKeywordProceeding: Boolean = false,
+    val isInitialSearchKeyword: Boolean = true,
+    val searchResultKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
+    val isSearchResultKeywordsEmpty: Boolean = false,
 ) {
     private fun updatedCategories(keyword: CategoriesModel.CategoryModel.KeywordModel): List<CategoriesModel.CategoryModel> {
         return categories.map { category ->

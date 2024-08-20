@@ -102,6 +102,8 @@ class NovelRatingViewModel @Inject constructor(
             uiState.copy(
                 keywordsModel = uiState.keywordsModel.copy(
                     searchResultKeywords = updatedCategories.flatMap { it.keywords },
+                    isInitialSearchKeyword = false,
+                    isSearchResultKeywordsEmpty = updatedCategories.flatMap { it.keywords }.isEmpty(),
                 )
             )
         }
@@ -285,6 +287,29 @@ class NovelRatingViewModel @Inject constructor(
             _uiState.value = uiState.copy(
                 novelRatingModel = uiState.novelRatingModel.copy(
                     userNovelRating = rating
+                )
+            )
+        }
+    }
+
+    fun updateIsSearchKeywordProceeding(isProceeding: Boolean) {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                keywordsModel = uiState.keywordsModel.copy(
+                    isSearchKeywordProceeding = isProceeding,
+                )
+            )
+        }
+    }
+
+    fun initSearchKeyword() {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                keywordsModel = uiState.keywordsModel.copy(
+                    searchResultKeywords = emptyList(),
+                    isSearchKeywordProceeding = false,
+                    isInitialSearchKeyword = true,
+                    isSearchResultKeywordsEmpty = false,
                 )
             )
         }

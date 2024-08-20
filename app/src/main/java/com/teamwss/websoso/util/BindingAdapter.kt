@@ -42,8 +42,8 @@ object BindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("isVisible")
-    fun setVisibility(view: View, isVisible: Boolean) {
-        view.visibility = if (isVisible) View.VISIBLE else View.GONE
+    @BindingAdapter(value = ["isVisible", "isInvisibleMode"], requireAll = false)
+    fun setVisibility(view: View, isVisible: Boolean, isInvisibleMode: Boolean = false) {
+        view.visibility = if (isVisible) View.VISIBLE else if (isInvisibleMode) View.INVISIBLE else View.GONE
     }
 }

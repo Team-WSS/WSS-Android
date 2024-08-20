@@ -6,7 +6,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 import com.teamwss.websoso.ui.common.customView.WebsosoChip
 import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.util.toIntScaledByDp
+import com.teamwss.websoso.util.toIntScaledByPx
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemCommonKeywordBinding,
@@ -22,15 +22,12 @@ class NovelRatingKeywordViewHolder(
     private fun ItemCommonKeywordBinding.setupExpandToggleBtn() {
         ivNovelRatingKeywordToggle.setOnClickListener {
             ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
-            val layoutParams =
-                wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
+            val layoutParams = wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
 
             when (ivNovelRatingKeywordToggle.isSelected) {
-                true ->
-                    layoutParams.matchConstraintMaxHeight =
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+                true -> layoutParams.matchConstraintMaxHeight = ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByDp()
+                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByPx()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
