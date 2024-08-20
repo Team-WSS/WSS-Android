@@ -37,6 +37,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupClickListeners()
         setupWebsosoLoadingLayout()
         setupViewPager()
+        binding.navigateToBack = { finish() }
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
