@@ -7,6 +7,8 @@ import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
+import com.teamwss.websoso.ui.onboarding.model.UserModel
+import com.teamwss.websoso.ui.onboarding.second.model.OnboardingSecondUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -28,9 +30,19 @@ class OnboardingViewModel @Inject constructor(
 
     private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> =
         MutableLiveData(OnboardingFirstUiState())
-    val onBoardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
+    val onboardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
+
+    private val _onboardingSecondUiState: MutableLiveData<OnboardingSecondUiState> =
+        MutableLiveData(OnboardingSecondUiState())
+    val onboardingSecondUiState: LiveData<OnboardingSecondUiState> = _onboardingSecondUiState
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
+
+    private val _userInfo: MutableLiveData<UserModel> = MutableLiveData(UserModel())
+    val userInfo: LiveData<UserModel> = _userInfo
+
+    private val _selectedGenres = MutableLiveData<Set<String>>(setOf())
+    val selectedGenres: LiveData<Set<String>> = _selectedGenres
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
@@ -50,7 +62,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun updateOnBoardingFirstUiState(type: NicknameInputType, message: String) {
-        _onboardingFirstUiState.value = _onboardingFirstUiState.value?.copy(
+        _onboardingFirstUiState.value = onboardingFirstUiState.value?.copy(
             nicknameInputType = type,
             nicknameValidationMessage = message,
             isDuplicationCheckButtonEnable = type == NicknameInputType.TYPING,
@@ -83,8 +95,47 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun updateUIByPage(page: OnboardingPage) {
-        _progressBarPercent.value = page.progressPercent
-        _isBackButtonVisible.value = page.isBackButtonVisible
-        _isSkipTextVisible.value = page.isSkipTextVisible
+        with(page) {
+            _progressBarPercent.value = progressPercent
+            _isBackButtonVisible.value = isBackButtonVisible
+            _isSkipTextVisible.value = isSkipTextVisible
+        }
+    }
+
+    fun updateUserBirthYear(birthYear: Int) {
+        _userInfo.value = userInfo.value?.copy(birthYear = birthYear)
+        updateSecondNextButtonUiState()
+    }
+
+    fun updateUserGenderUiState(isManSelected: Boolean) {
+        _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
+            isManButtonSelected = isManSelected,
+            isWomanButtonSelected = !isManSelected,
+        )
+        updateUserGender(isManSelected)
+    }
+
+    private fun updateUserGender(isManSelected: Boolean) {
+        _userInfo.value = userInfo.value?.copy(gender = if (isManSelected) "Man" else "Woman")
+        updateSecondNextButtonUiState()
+    }
+
+    private fun updateSecondNextButtonUiState() {
+        _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
+            isNextButtonEnable = !userInfo.value?.gender.isNullOrEmpty() && userInfo.value?.birthYear != 0
+        )
+    }
+
+    fun updateGenreSelection(genreTag: String) {
+        val currentSelected = _selectedGenres.value?.toMutableSet() ?: mutableSetOf()
+        when (currentSelected.contains(genreTag)) {
+            true -> currentSelected.remove(genreTag)
+            false -> currentSelected.add(genreTag)
+        }
+        _selectedGenres.value = currentSelected
+    }
+
+    fun isGenreSelected(genreTag: String): Boolean {
+        return _selectedGenres.value?.contains(genreTag) ?: false
     }
 }

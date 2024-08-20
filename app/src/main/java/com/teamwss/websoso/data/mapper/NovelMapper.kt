@@ -1,9 +1,13 @@
 package com.teamwss.websoso.data.mapper
 
+import PopularNovelsResponseDto
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
+import com.teamwss.websoso.data.model.PopularNovelsEntity
+import com.teamwss.websoso.data.model.SosoPickEntity
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
+import com.teamwss.websoso.data.remote.response.SosoPicksResponseDto
 
 fun NovelDetailResponseDto.toData(): NovelDetailEntity {
     return NovelDetailEntity(
@@ -57,5 +61,32 @@ fun NovelInfoResponseDto.toData(): NovelInfoEntity {
             watchedCount = watchedCount,
             quitCount = quitCount,
         ),
+    )
+}
+
+fun SosoPicksResponseDto.toData(): SosoPickEntity {
+    return SosoPickEntity(
+        novels = sosoPicks.map { sosoPick ->
+            SosoPickEntity.NovelEntity(
+                novelId = sosoPick.novelId,
+                novelTitle = sosoPick.title,
+                novelCover = sosoPick.novelImage
+            )
+        }
+    )
+}
+
+fun PopularNovelsResponseDto.toData(): PopularNovelsEntity {
+    return PopularNovelsEntity(
+        popularNovels = popularNovelResponseDtos.map { novel ->
+            PopularNovelsEntity.PopularNovelEntity(
+                avatarImage = novel.avatarImage,
+                feedContent = novel.feedContent,
+                nickname = novel.nickname,
+                novelId = novel.novelId,
+                novelImage = novel.novelImage,
+                title = novel.title,
+            )
+        }
     )
 }

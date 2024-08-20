@@ -277,6 +277,7 @@
             android:layout_height="0dp"
             android:background="@color/primary_100_6A5DFD"
             android:gravity="center"
+            android:onClick="@{() -> onClick.onDetailSearchNovelButtonClick()}"
             android:text="@string/detail_explore_search_novel"
             android:textAppearance="@style/title2"
             android:textColor="@color/white"

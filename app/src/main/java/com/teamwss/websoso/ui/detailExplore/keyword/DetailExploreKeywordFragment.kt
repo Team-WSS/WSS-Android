@@ -50,6 +50,10 @@ class DetailExploreKeywordFragment :
         override fun onNovelInquireButtonClick() {
             // TODO 문의하기로 이동
         }
+
+        override fun onDetailSearchNovelButtonClick() {
+            // TODO 상세 탐색 결과 화면으로 이동
+        }
     }
 
     private fun setupAdapter() {
