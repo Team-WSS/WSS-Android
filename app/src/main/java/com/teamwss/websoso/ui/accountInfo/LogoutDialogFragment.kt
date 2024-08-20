@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogLogoutBinding
-import com.teamwss.websoso.common.ui.base.BindingDialogFragment
+import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 
-class LogoutDialogFragment : BindingDialogFragment<DialogLogoutBinding>(R.layout.dialog_logout) {
+class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.dialog_logout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

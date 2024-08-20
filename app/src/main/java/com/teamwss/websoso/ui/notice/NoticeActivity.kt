@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNoticeBinding
-import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NoticeActivity : BindingActivity<ActivityNoticeBinding>(R.layout.activity_notice) {
+class NoticeActivity : BaseActivity<ActivityNoticeBinding>(R.layout.activity_notice) {
 
     private val noticeViewModel: NoticeViewModel by viewModels()
 

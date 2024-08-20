@@ -6,12 +6,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityProfileDisclosureBinding
-import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProfileDisclosureActivity :
-    BindingActivity<ActivityProfileDisclosureBinding>(R.layout.activity_profile_disclosure) {
+    BaseActivity<ActivityProfileDisclosureBinding>(R.layout.activity_profile_disclosure) {
     private val profileDisclosureViewModel: ProfileDisclosureViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

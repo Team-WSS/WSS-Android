@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithdrawSecondBinding
-import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 
 class WithdrawSecondActivity :
-    BindingActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
+    BaseActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

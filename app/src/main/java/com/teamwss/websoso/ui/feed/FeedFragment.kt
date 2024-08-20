@@ -16,7 +16,7 @@ import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
-import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
@@ -33,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
 @AndroidEntryPoint
-class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
+class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")

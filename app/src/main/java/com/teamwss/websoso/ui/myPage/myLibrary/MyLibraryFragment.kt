@@ -13,14 +13,14 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
-import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyLibraryFragment : BindingFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
+class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
     private val myLibraryViewModel: MyLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()

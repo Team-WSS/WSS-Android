@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentOnboardingSecondBinding
-import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.model.UserModel
@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingSecondFragment :
-    BindingFragment<FragmentOnboardingSecondBinding>(R.layout.fragment_onboarding_second) {
+    BaseFragment<FragmentOnboardingSecondBinding>(R.layout.fragment_onboarding_second) {
 
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 

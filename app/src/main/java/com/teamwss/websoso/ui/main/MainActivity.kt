@@ -10,7 +10,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityMainBinding
-import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.feed.FeedFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.FEED
@@ -22,7 +22,7 @@ import com.teamwss.websoso.ui.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

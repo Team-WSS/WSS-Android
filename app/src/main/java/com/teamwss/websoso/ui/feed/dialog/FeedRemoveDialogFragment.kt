@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
-import com.teamwss.websoso.common.ui.base.BindingDialogFragment
+import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.ui.feed.FeedFragment.FeedDialogClickListener
 
 class FeedRemoveDialogFragment :
-    BindingDialogFragment<DialogRemovePopupMenuBinding>(R.layout.dialog_remove_popup_menu) {
+    BaseDialogFragment<DialogRemovePopupMenuBinding>(R.layout.dialog_remove_popup_menu) {
     private val onRemoveClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener
     }

@@ -11,7 +11,7 @@ import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
-import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
@@ -21,7 +21,7 @@ import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
+class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
     private val novelId: Long by lazy { intent.getLongExtra(NOVEL_ID, 0) }

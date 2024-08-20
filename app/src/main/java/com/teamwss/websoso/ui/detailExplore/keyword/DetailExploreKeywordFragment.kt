@@ -6,7 +6,7 @@ import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
-import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailExploreKeywordFragment :
-    BindingFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
+    BaseFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
     private val detailExploreKeywordViewModel: DetailExploreKeywordViewModel by viewModels()
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
         DetailExploreKeywordAdapter(detailExploreKeywordViewModel::updateClickedChipState)

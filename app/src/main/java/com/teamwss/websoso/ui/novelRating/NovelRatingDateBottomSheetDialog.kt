@@ -8,9 +8,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
-import com.teamwss.websoso.common.ui.base.BindingBottomSheetDialog
+import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 
-class NovelRatingDateBottomSheetDialog : BindingBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
+class NovelRatingDateBottomSheetDialog : BaseBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
     private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onViewCreated(

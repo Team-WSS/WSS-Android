@@ -7,12 +7,12 @@ import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityBlockedUsersBinding
 import com.teamwss.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
-import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BlockedUsersActivity :
-    BindingActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
+    BaseActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
     private val blockedUsersAdapter: BlockedUsersAdapter by lazy {
         BlockedUsersAdapter(
             blockedUsersViewModel::deleteBlockedUser,

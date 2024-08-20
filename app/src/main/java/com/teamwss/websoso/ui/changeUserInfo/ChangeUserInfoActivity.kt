@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityChangeUserInfoBinding
-import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 
 class ChangeUserInfoActivity :
-    BindingActivity<ActivityChangeUserInfoBinding>(R.layout.activity_change_user_info) {
+    BaseActivity<ActivityChangeUserInfoBinding>(R.layout.activity_change_user_info) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
