@@ -1,7 +1,6 @@
 package com.teamwss.websoso.ui.detailExploreResult
 
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.teamwss.websoso.R
@@ -28,19 +27,11 @@ class DetailExploreResultActivity :
         super.onCreate(savedInstanceState)
 
         detailExploreResultViewModel.updateSearchResult()
-        setupTranslucentOnStatusBar()
         bindViewModel()
         setupAdapter()
         setupObserver()
         onBackButtonClick()
         onEditFilterItemButtonClick()
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
     }
 
     private fun bindViewModel() {

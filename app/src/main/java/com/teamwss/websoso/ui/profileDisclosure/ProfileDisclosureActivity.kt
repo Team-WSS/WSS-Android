@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.profileDisclosure
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityProfileDisclosureBinding
@@ -19,7 +18,6 @@ class ProfileDisclosureActivity :
         super.onCreate(savedInstanceState)
 
         bindViewModel()
-        setupTranslucentOnStatusBar()
         onBackButtonClick()
         onProfileDisclosureButtonClick()
         onCompleteButtonClick()
@@ -29,13 +27,6 @@ class ProfileDisclosureActivity :
     private fun bindViewModel() {
         binding.profileDisclosureViewModel = profileDisclosureViewModel
         binding.lifecycleOwner = this
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        )
     }
 
     private fun onBackButtonClick() {

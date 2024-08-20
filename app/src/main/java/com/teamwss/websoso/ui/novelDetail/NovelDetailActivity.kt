@@ -15,7 +15,6 @@ import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
-import com.teamwss.websoso.util.setupTranslucentOnStatusBar
 import com.teamwss.websoso.util.toFloatScaledByPx
 import com.teamwss.websoso.util.toIntScaledByPx
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +37,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupClickListeners()
         setupWebsosoLoadingLayout()
         setupViewPager()
-        window.setupTranslucentOnStatusBar()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
