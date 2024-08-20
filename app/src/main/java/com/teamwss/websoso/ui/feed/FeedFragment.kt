@@ -16,8 +16,8 @@ import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
@@ -26,9 +26,9 @@ import com.teamwss.websoso.ui.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
-import com.teamwss.websoso.util.SingleEventHandler
-import com.teamwss.websoso.util.toFloatScaledByPx
-import com.teamwss.websoso.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.toFloatScaledByPx
+import com.teamwss.websoso.common.util.toIntScaledByPx
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 

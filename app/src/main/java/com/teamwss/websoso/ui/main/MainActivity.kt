@@ -10,7 +10,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityMainBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BindingActivity
 import com.teamwss.websoso.ui.feed.FeedFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.FEED

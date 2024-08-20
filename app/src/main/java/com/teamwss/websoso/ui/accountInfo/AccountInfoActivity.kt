@@ -8,7 +8,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
 import com.teamwss.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.teamwss.websoso.ui.changeUserInfo.ChangeUserInfoActivity
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BindingActivity
 import com.teamwss.websoso.ui.withdraw.first.WithdrawFirstActivity
 import dagger.hilt.android.AndroidEntryPoint
 

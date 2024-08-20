@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
-import com.teamwss.websoso.ui.common.base.BindingDialogFragment
+import com.teamwss.websoso.common.ui.base.BindingDialogFragment
 import com.teamwss.websoso.ui.feed.FeedFragment.FeedDialogClickListener
 
 class FeedRemoveDialogFragment :

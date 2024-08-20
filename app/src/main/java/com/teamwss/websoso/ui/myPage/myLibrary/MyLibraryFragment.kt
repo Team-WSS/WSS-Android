@@ -6,7 +6,6 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -14,10 +13,10 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
-import com.teamwss.websoso.util.setListViewHeightBasedOnChildren
+import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

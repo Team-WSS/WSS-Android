@@ -7,8 +7,8 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.Rating

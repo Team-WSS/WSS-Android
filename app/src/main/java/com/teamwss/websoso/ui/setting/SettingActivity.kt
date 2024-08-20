@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivitySettingBinding
 import com.teamwss.websoso.ui.accountInfo.AccountInfoActivity
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BindingActivity
 import com.teamwss.websoso.ui.profileDisclosure.ProfileDisclosureActivity
 
 class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activity_setting) {

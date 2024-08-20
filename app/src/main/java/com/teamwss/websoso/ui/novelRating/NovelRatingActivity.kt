@@ -11,9 +11,9 @@ import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.common.model.CategoriesModel
+import com.teamwss.websoso.common.ui.base.BindingActivity
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel

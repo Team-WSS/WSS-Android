@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityOnboardingBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BindingActivity
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 import dagger.hilt.android.AndroidEntryPoint
 

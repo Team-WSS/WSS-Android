@@ -2,7 +2,7 @@ package com.teamwss.websoso.ui.myPage.myActivity
 
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

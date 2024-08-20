@@ -1,4 +1,4 @@
-package com.teamwss.websoso.util
+package com.teamwss.websoso.common.util
 
 import android.view.View
 import android.widget.ImageView

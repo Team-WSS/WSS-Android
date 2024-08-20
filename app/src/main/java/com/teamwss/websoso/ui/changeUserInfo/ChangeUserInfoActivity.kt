@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityChangeUserInfoBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BindingActivity
 import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 
 class ChangeUserInfoActivity :

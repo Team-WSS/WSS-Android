@@ -6,7 +6,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogOnboardingBirthYearBinding
-import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
+import com.teamwss.websoso.common.ui.base.BindingBottomSheetDialog
 import java.time.LocalDate
 
 class ChangeBirthYearBottomSheetDialog :

@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentOnboardingThirdBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BindingFragment
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.third.adapter.GenreAdapter
 import com.teamwss.websoso.ui.onboarding.third.model.Genre

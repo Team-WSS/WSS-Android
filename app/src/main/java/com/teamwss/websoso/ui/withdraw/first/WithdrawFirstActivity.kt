@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithdrawFirstBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BindingActivity
 import com.teamwss.websoso.ui.withdraw.first.model.UserNovelStatsModel
 import com.teamwss.websoso.ui.withdraw.second.WithdrawSecondActivity
 import dagger.hilt.android.AndroidEntryPoint

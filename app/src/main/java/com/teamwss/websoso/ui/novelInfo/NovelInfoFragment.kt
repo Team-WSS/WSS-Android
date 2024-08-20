@@ -12,8 +12,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.common.ui.base.BindingFragment
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel

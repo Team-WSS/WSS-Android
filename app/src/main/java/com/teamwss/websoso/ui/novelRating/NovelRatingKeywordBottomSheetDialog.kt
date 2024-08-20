@@ -10,9 +10,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.common.ui.base.BindingBottomSheetDialog
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 

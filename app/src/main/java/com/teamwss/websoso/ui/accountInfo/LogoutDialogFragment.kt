@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogLogoutBinding
-import com.teamwss.websoso.ui.common.base.BindingDialogFragment
+import com.teamwss.websoso.common.ui.base.BindingDialogFragment
 
 class LogoutDialogFragment : BindingDialogFragment<DialogLogoutBinding>(R.layout.dialog_logout) {
 
