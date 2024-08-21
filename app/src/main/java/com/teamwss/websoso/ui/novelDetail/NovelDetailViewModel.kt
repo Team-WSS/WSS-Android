@@ -36,7 +36,7 @@ class NovelDetailViewModel @Inject constructor(
             }.onSuccess { novelDetail ->
                 _novelDetailModel.value = novelDetail.toUi(novelId)
                 _loading.value = false
-                if (novelDetailModel.value?.userNovel?.isAlreadyPartiallyRated == false || novelDetailModel.value?.userNovel?.isAlreadyAllRated == false) {
+                if (novelDetailModel.value?.userNovel?.isAlreadyPartiallyRated == false && novelDetailModel.value?.userNovel?.isAlreadyAllRated == false) {
                     checkIsFirstLaunched()
                 }
             }.onFailure {

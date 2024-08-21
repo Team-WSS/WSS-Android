@@ -104,6 +104,12 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     }
 
     private fun setupTooltipWindow() {
+        binding.btnNovelDetailWatched.isChecked = true
+        setupTooltipBottomFrame()
+        showTooltipWindow()
+    }
+
+    private fun setupTooltipBottomFrame() {
         binding.ctlNovelDetail.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
@@ -113,6 +119,9 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
                 binding.ctlNovelDetail.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+    }
+
+    private fun showTooltipWindow() {
         tooltipPopupWindow = PopupWindow(
             novelDetailToolTipBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -130,7 +139,10 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             val yOffset = 6.toIntScaledByPx()
 
             showAsDropDown(binding.tgNovelDetailReadStatus, xOffset, yOffset)
-            this.setOnDismissListener { novelDetailViewModel.updateIsFirstLaunched() }
+            this.setOnDismissListener {
+                novelDetailViewModel.updateIsFirstLaunched()
+                binding.tgNovelDetailReadStatus.clearChecked()
+            }
         }
     }
 
