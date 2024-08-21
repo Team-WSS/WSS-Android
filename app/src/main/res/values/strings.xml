@@ -65,6 +65,7 @@
     <string name="novel_detail_remove_evaluate_warning_body">별점, 관심, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
     <string name="novel_detail_remove_reject">아니오</string>
     <string name="novel_detail_remove_accept">네</string>
+    <string name="novel_detail_tooltip">읽기 상태를 체크하여\n작품을 평가해보세요!</string>
 
     <!-- 작품 소개 -->
     <string name="novel_info_platforms_title">작품 보러가기</string>
