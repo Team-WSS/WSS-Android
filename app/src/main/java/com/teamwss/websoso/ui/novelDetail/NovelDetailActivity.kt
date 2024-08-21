@@ -129,7 +129,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         ).apply {
             novelDetailToolTipBinding.root.measure(
                 View.MeasureSpec.UNSPECIFIED,
-                View.MeasureSpec.UNSPECIFIED
+                View.MeasureSpec.UNSPECIFIED,
             )
             val anchorViewWidth = binding.tgNovelDetailReadStatus.measuredWidth
             val popupWidth = novelDetailToolTipBinding.root.measuredWidth
