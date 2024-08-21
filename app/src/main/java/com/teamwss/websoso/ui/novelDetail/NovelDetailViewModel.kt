@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.data.repository.UserNovelRepository
+import com.teamwss.websoso.data.repository.UserPreferencesRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +17,13 @@ import javax.inject.Inject
 class NovelDetailViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val userNovelRepository: UserNovelRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
     private val _novelDetail = MutableLiveData<NovelDetailModel>()
     val novelDetail: LiveData<NovelDetailModel> get() = _novelDetail
+    private val _isFirstLaunched = MutableLiveData<Boolean>(true)
+    val isFirstLaunched: LiveData<Boolean> get() = _isFirstLaunched
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
     private val _error = MutableLiveData<Boolean>(false)
@@ -67,6 +71,28 @@ class NovelDetailViewModel @Inject constructor(
             }.onSuccess {
                 updateNovelDetail(novelId)
             }.onFailure {}
+        }
+    }
+
+    fun checkIsFirstLaunched() {
+        viewModelScope.launch {
+            runCatching {
+                userPreferencesRepository.fetchUserPreferences(UserPreferencesRepository.KEY_NOVEL_DETAIL_FIRST_LAUNCHED)
+            }.onSuccess { isFirstLaunched ->
+                _isFirstLaunched.value = isFirstLaunched
+            }.onFailure {
+                _isFirstLaunched.value = true
+            }
+        }
+    }
+
+    fun updateIsFirstLaunched() {
+        viewModelScope.launch {
+            runCatching {
+                userPreferencesRepository.saveUserPreferences(UserPreferencesRepository.KEY_NOVEL_DETAIL_FIRST_LAUNCHED, false)
+            }.onSuccess {
+                _isFirstLaunched.value = false
+            }
         }
     }
 }

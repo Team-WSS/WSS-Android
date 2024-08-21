@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.novelDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.PopupWindow
@@ -39,6 +40,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         setupViewPager()
         binding.navigateToBack = { finish() }
         novelDetailViewModel.updateNovelDetail(novelId)
+        novelDetailViewModel.checkIsFirstLaunched()
     }
 
     private fun bindViewModel() {
