@@ -22,6 +22,7 @@
         android:paddingVertical="8dp"
         android:text="@string/novel_detail_tooltip"
         android:textAlignment="center"
+        android:textAppearance="@style/body3"
         android:textColor="@color/primary_100_6A5DFD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
