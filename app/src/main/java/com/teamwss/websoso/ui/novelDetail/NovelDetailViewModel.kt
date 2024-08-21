@@ -20,10 +20,8 @@ class NovelDetailViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
-    private val _novelDetail = MutableLiveData<NovelDetailModel>()
-    val novelDetail: LiveData<NovelDetailModel> get() = _novelDetail
-    private val _isFirstLaunched = MutableLiveData<Boolean>(true)
-    val isFirstLaunched: LiveData<Boolean> get() = _isFirstLaunched
+    private val _novelDetailModel = MutableLiveData<NovelDetailModel>()
+    val novelDetailModel: LiveData<NovelDetailModel> get() = _novelDetailModel
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
     private val _error = MutableLiveData<Boolean>(false)
@@ -36,8 +34,11 @@ class NovelDetailViewModel @Inject constructor(
                 _loading.value = true
                 novelRepository.getNovelDetail(novelId)
             }.onSuccess { novelDetail ->
-                _novelDetail.value = novelDetail.toUi(novelId)
+                _novelDetailModel.value = novelDetail.toUi(novelId)
                 _loading.value = false
+                if (novelDetailModel.value?.userNovel?.isAlreadyPartiallyRated == false || novelDetailModel.value?.userNovel?.isAlreadyAllRated == false) {
+                    checkIsFirstLaunched()
+                }
             }.onFailure {
                 _error.value = true
                 _loading.value = false
@@ -48,16 +49,16 @@ class NovelDetailViewModel @Inject constructor(
     fun updateUserInterest(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                _novelDetail.value = novelDetail.value?.copy(
-                    userNovel = novelDetail.value?.userNovel?.copy(
-                        isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
+                _novelDetailModel.value = novelDetailModel.value?.copy(
+                    userNovel = novelDetailModel.value?.userNovel?.copy(
+                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not() ?: false
                     ) ?: return@runCatching
                 )
-                novelRepository.saveUserInterest(novelId, novelDetail.value?.userNovel?.isUserNovelInterest ?: false)
+                novelRepository.saveUserInterest(novelId, novelDetailModel.value?.userNovel?.isUserNovelInterest ?: false)
             }.onFailure {
-                _novelDetail.value = novelDetail.value?.copy(
-                    userNovel = novelDetail.value?.userNovel?.copy(
-                        isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
+                _novelDetailModel.value = novelDetailModel.value?.copy(
+                    userNovel = novelDetailModel.value?.userNovel?.copy(
+                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not() ?: false
                     ) ?: return@onFailure
                 )
             }
@@ -74,14 +75,14 @@ class NovelDetailViewModel @Inject constructor(
         }
     }
 
-    fun checkIsFirstLaunched() {
+    private fun checkIsFirstLaunched() {
         viewModelScope.launch {
             runCatching {
                 userPreferencesRepository.fetchUserPreferences(UserPreferencesRepository.KEY_NOVEL_DETAIL_FIRST_LAUNCHED)
             }.onSuccess { isFirstLaunched ->
-                _isFirstLaunched.value = isFirstLaunched
+                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
             }.onFailure {
-                _isFirstLaunched.value = true
+                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
             }
         }
     }
@@ -91,7 +92,7 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userPreferencesRepository.saveUserPreferences(UserPreferencesRepository.KEY_NOVEL_DETAIL_FIRST_LAUNCHED, false)
             }.onSuccess {
-                _isFirstLaunched.value = false
+                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = false)
             }
         }
     }
