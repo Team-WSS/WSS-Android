@@ -39,13 +39,13 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.onClick = onNovelDetailButtonClick()
         bindViewModel()
         setupPopupBinding()
         setupObserver()
-        setupClickListeners()
+        onNovelDetailButtonClick()
         setupWebsosoLoadingLayout()
         setupViewPager()
-        binding.navigateToBack = { finish() }
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
@@ -86,7 +86,6 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         novelDetailViewModel.novelDetailModel.observe(this) { novelDetail ->
             when (novelDetail.novel.novelTitle.isNotBlank()) {
                 true -> {
-                    binding.showPopupWindow = ::showPopupWindow
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
                     binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
                     if (novelDetail.isFirstLaunched) setupTooltipWindow()
@@ -170,8 +169,18 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
         }
     }
 
-    private fun setupClickListeners() {
-        binding.navigateToNovelRating = ::navigateToNovelRating
+    private fun onNovelDetailButtonClick() = object : NovelDetailClickListener {
+        override fun onNavigateBackClick() {
+            finish()
+        }
+
+        override fun onShowMenuClick() {
+            showPopupWindow()
+        }
+
+        override fun onNavigateToNovelRatingClick(readStatus: ReadStatus?) {
+            navigateToNovelRating(readStatus)
+        }
     }
 
     private fun navigateToNovelRating(readStatus: ReadStatus?) {
