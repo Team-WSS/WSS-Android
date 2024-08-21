@@ -105,17 +105,16 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
 
     private fun setupTooltipWindow() {
         binding.btnNovelDetailWatched.isChecked = true
-        setupTooltipBottomFrame()
+        setupTooltipBottomFramePosition()
         showTooltipWindow()
     }
 
-    private fun setupTooltipBottomFrame() {
+    private fun setupTooltipBottomFramePosition() {
         binding.ctlNovelDetail.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.topMargin = binding.ctlNovelDetail.height
                 binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
-
                 binding.ctlNovelDetail.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
