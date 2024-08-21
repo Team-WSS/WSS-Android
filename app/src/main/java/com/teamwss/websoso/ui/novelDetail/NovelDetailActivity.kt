@@ -19,8 +19,8 @@ import com.teamwss.websoso.ui.common.base.BindingActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
-import com.teamwss.websoso.util.toFloatScaledByPx
-import com.teamwss.websoso.util.toIntScaledByPx
+import com.teamwss.websoso.util.toFloatPxFromDp
+import com.teamwss.websoso.util.toIntPxFromDp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -134,7 +134,7 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             val popupWidth = novelDetailToolTipBinding.root.measuredWidth
 
             val xOffset = (anchorViewWidth - popupWidth) / 2
-            val yOffset = 6.toIntScaledByPx()
+            val yOffset = 6.toIntPxFromDp()
 
             showAsDropDown(binding.tgNovelDetailReadStatus, xOffset, yOffset)
             this.setOnDismissListener {
@@ -159,11 +159,11 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             WindowManager.LayoutParams.WRAP_CONTENT,
             true,
         ).apply {
-            this.elevation = 14f.toFloatScaledByPx()
+            this.elevation = 14f.toFloatPxFromDp()
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.toIntScaledByPx(),
-                POPUP_MARGIN_TOP.toIntScaledByPx(),
+                POPUP_MARGIN_END.toIntPxFromDp(),
+                POPUP_MARGIN_TOP.toIntPxFromDp(),
                 Gravity.END,
             )
         }

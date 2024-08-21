@@ -10,7 +10,7 @@ import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.base.BindingFragment
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
-import com.teamwss.websoso.util.toIntScaledByPx
+import com.teamwss.websoso.util.toIntPxFromDp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +36,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private fun setupViewPager() {
         val recyclerView = binding.vpHomeTodayPopularNovel.getChildAt(0) as RecyclerView
 
-        val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntScaledByPx()
+        val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntPxFromDp()
         recyclerView.apply {
             setPadding(paddingPx, 0, paddingPx, 0)
             clipToPadding = false
