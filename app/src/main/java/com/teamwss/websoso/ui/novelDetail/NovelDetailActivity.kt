@@ -137,6 +137,8 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             val yOffset = 6.toIntPxFromDp()
 
             showAsDropDown(binding.tgNovelDetailReadStatus, xOffset, yOffset)
+
+            novelDetailToolTipBinding.root.setOnClickListener { dismiss() }
             this.setOnDismissListener {
                 novelDetailViewModel.updateIsFirstLaunched()
                 binding.tgNovelDetailReadStatus.clearChecked()
