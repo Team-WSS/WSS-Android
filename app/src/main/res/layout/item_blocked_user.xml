@@ -7,7 +7,7 @@
 
         <variable
             name="blockedUser"
-            type="com.teamwss.websoso.ui.blockedUsers.model.BlockedUsersModel.BlockedUserModel" />
+            type="com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity" />
 
         <variable
             name="onClick"
@@ -21,6 +21,7 @@
         <ImageView
             android:id="@+id/iv_blocked_user_avatar"
             cornerRadius="@{20f}"
+            isVectorImage="@{true}"
             loadImageUrl="@{blockedUser.avatarImage}"
             android:layout_width="50dp"
             android:layout_height="50dp"

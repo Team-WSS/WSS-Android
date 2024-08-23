@@ -65,9 +65,7 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userNovelRepository.deleteUserNovel(novelId)
             }.onSuccess {
-                _novelDetail.value = novelDetail.value?.copy(
-                    userNovel = novelDetail.value?.defaultUserNovelModel ?: return@onSuccess
-                )
+                updateNovelDetail(novelId)
             }.onFailure {}
         }
     }

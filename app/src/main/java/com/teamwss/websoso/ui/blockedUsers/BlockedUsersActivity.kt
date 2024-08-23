@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.blockedUsers
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityBlockedUsersBinding
@@ -24,16 +23,15 @@ class BlockedUsersActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupTranslucentOnStatusBar()
+        bindViewModel()
         setupAdapter()
         setupObserver()
+        onBackButtonClick()
     }
 
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        )
+    private fun bindViewModel() {
+        binding.blockedUserViewModel = blockedUsersViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupAdapter() {
@@ -47,6 +45,12 @@ class BlockedUsersActivity :
                 uiState.error -> Unit
                 !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockedUsers)
             }
+        }
+    }
+
+    private fun onBackButtonClick() {
+        binding.ivBlockedUsersBackButton.setOnClickListener {
+            finish()
         }
     }
 

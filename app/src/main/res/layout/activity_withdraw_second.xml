@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
-                    android:src="@drawable/btn_account_info_check_selected"
+                    android:src="@drawable/img_account_info_check_unselected"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -107,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
-                    android:src="@drawable/btn_account_info_check_selected"
+                    android:src="@drawable/img_account_info_check_unselected"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -139,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
-                    android:src="@drawable/btn_account_info_check_selected"
+                    android:src="@drawable/img_account_info_check_unselected"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -171,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
-                    android:src="@drawable/btn_account_info_check_selected"
+                    android:src="@drawable/img_account_info_check_unselected"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -203,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
-                    android:src="@drawable/btn_account_info_check_selected"
+                    android:src="@drawable/img_account_info_check_unselected"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -225,7 +225,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/bg_novel_rating_keyword_search_selector"
+                android:background="@drawable/bg_common_search_selector"
                 android:gravity="top"
                 android:hint="@string/withdraw_etc_hint"
                 android:maxLength="100"
@@ -400,7 +400,7 @@
                     android:id="@+id/iv_withdraw_check_agree"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/btn_account_info_check_selected"
+                    android:src="@drawable/img_account_info_check_unselected"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

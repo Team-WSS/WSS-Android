@@ -2,7 +2,6 @@ package com.teamwss.websoso.util
 
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import coil.decode.SvgDecoder
 import coil.load
@@ -42,8 +41,8 @@ object BindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("isVisible")
-    fun setVisibility(view: View, isVisible: Boolean) {
-        view.visibility = if (isVisible) View.VISIBLE else View.GONE
+    @BindingAdapter(value = ["isVisible", "isInvisibleMode"], requireAll = false)
+    fun setVisibility(view: View, isVisible: Boolean, isInvisibleMode: Boolean = false) {
+        view.visibility = if (isVisible) View.VISIBLE else if (isInvisibleMode) View.INVISIBLE else View.GONE
     }
 }

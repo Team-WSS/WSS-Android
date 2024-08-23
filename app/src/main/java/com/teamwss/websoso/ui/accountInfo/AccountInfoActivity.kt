@@ -3,14 +3,13 @@ package com.teamwss.websoso.ui.accountInfo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
 import com.teamwss.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.teamwss.websoso.ui.changeUserInfo.ChangeUserInfoActivity
 import com.teamwss.websoso.ui.common.base.BindingActivity
-import com.teamwss.websoso.ui.withdraw.WithdrawFirstActivity
+import com.teamwss.websoso.ui.withdraw.first.WithdrawFirstActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +21,6 @@ class AccountInfoActivity :
         super.onCreate(savedInstanceState)
 
         bindViewModel()
-        setupTranslucentOnStatusBar()
         onLogoutButtonClick()
         onBackButtonClick()
         onWithDrawButtonClick()
@@ -33,13 +31,6 @@ class AccountInfoActivity :
     private fun bindViewModel() {
         binding.accountInfoViewModel = accountInfoViewModel
         binding.lifecycleOwner = this
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        )
     }
 
     private fun onLogoutButtonClick() {
