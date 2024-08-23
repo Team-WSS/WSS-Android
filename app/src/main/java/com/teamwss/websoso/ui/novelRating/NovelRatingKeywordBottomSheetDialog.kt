@@ -10,14 +10,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
 class NovelRatingKeywordBottomSheetDialog :
-    BindingBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
+    BaseBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
     private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
     private val novelRatingKeywordAdapter by lazy {
         NovelRatingKeywordAdapter(

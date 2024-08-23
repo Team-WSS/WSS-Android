@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.repository.KeywordRepository
 import com.teamwss.websoso.data.repository.UserNovelRepository
-import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.mapper.toData
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint

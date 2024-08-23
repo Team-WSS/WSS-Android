@@ -132,7 +132,7 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_detail_explore_result_not_exist" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wl_detail_explore_result"
             android:layout_width="0dp"
             android:layout_height="0dp"

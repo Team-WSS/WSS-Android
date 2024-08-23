@@ -7,13 +7,13 @@ import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.ui.myPage.adapter.MyPageViewPagerAdapter
 import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
+class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

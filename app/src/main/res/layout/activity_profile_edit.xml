@@ -239,7 +239,7 @@
             app:layout_constraintStart_toStartOf="@id/tv_profile_edit_prefer_genre"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_prefer_genre" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
             android:id="@+id/wcg_profile_edit_prefer_genre"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
