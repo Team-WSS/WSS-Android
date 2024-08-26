@@ -19,7 +19,7 @@ data class MyActivitiesEntity(
         val novelId: Int?,
         val title: String?,
         val novelRatingCount: Int?,
-        val novelRating: Double?,
+        val novelRating: Float?,
         val relevantCategories: List<String>,
     )
 }
