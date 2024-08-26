@@ -3,16 +3,16 @@ package com.teamwss.websoso.ui.onboarding.third.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemOnboardingGenreBinding
 import com.teamwss.websoso.ui.onboarding.third.model.Genre
 
 class GenreAdapter(
-    private val genres: List<Genre>,
     private val onGenreToggle: (String) -> Unit,
     private val isGenreSelected: (String) -> Boolean,
-) : RecyclerView.Adapter<GenreViewHolder>() {
+) : ListAdapter<Genre, GenreViewHolder>(GenreDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,9 +23,17 @@ class GenreAdapter(
     }
 
     override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
-        val genre = genres[position]
+        val genre = getItem(position)
         holder.bind(genre, isGenreSelected(genre.tag))
     }
+}
 
-    override fun getItemCount() = genres.size
+class GenreDiffCallback : DiffUtil.ItemCallback<Genre>() {
+    override fun areItemsTheSame(oldItem: Genre, newItem: Genre): Boolean {
+        return oldItem.tag == newItem.tag
+    }
+
+    override fun areContentsTheSame(oldItem: Genre, newItem: Genre): Boolean {
+        return oldItem == newItem
+    }
 }
