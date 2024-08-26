@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel
+import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 
 class DetailExploreKeywordAdapter(
     private val onKeywordClick: (keywordId: Int) -> (Unit),
@@ -15,7 +15,7 @@ class DetailExploreKeywordAdapter(
         parent: ViewGroup,
         viewType: Int,
     ): DetailExploreKeywordViewHolder {
-        val binding = ItemNovelRatingKeywordBinding.inflate(
+        val binding = ItemCommonKeywordBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false,

@@ -112,9 +112,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:numStars="5"
+            android:onRatingChanged="@{(view, rating, fromUser) -> viewModel.updateRatingValue(rating)}"
             android:progressBackgroundTint="@color/gray_70_DFDFE3"
             android:progressTint="@color/secondary_50_FFAA8F"
-            android:rating="0"
+            android:rating="@{viewModel.uiState.novelRatingModel.userNovelRating}"
             android:secondaryProgressTint="@color/secondary_50_FFAA8F"
             android:stepSize="0.5"
             app:layout_constraintEnd_toEndOf="parent"
@@ -143,7 +144,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_rating" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
             android:id="@+id/wcg_novel_rating_charm_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -197,13 +198,13 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_novel_rating_search"
+            android:src="@drawable/ic_common_search"
             app:layout_constraintBottom_toBottomOf="@id/tv_novel_rating_keyword_button"
             app:layout_constraintEnd_toEndOf="@id/tv_novel_rating_keyword_button"
             app:layout_constraintTop_toTopOf="@id/tv_novel_rating_keyword_button"
             app:tint="@color/gray_300_52515F" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
             android:id="@+id/wcg_novel_rating_keywords"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -279,7 +280,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_novel_rating"
             android:layout_width="0dp"
             android:layout_height="0dp"

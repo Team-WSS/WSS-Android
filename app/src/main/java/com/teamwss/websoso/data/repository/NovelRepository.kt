@@ -3,6 +3,7 @@ package com.teamwss.websoso.data.repository
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
+import com.teamwss.websoso.data.model.PopularNovelsEntity
 import com.teamwss.websoso.data.model.SosoPickEntity
 import com.teamwss.websoso.data.remote.api.NovelApi
 import javax.inject.Inject
@@ -28,5 +29,9 @@ class NovelRepository @Inject constructor(
 
     suspend fun fetchSosoPicks(): SosoPickEntity {
         return novelApi.getSosoPicks().toData()
+    }
+
+    suspend fun fetchPopularNovels(): PopularNovelsEntity {
+        return novelApi.getPopularNovels().toData()
     }
 }

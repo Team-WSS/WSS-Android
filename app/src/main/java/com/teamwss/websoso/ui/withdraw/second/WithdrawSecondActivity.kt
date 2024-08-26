@@ -7,13 +7,13 @@ import android.view.WindowManager
 import android.widget.ImageView
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityWithdrawSecondBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WithdrawSecondActivity :
-    BindingActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
+    BaseActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
     private val withdrawSecondViewModel: WithdrawSecondViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

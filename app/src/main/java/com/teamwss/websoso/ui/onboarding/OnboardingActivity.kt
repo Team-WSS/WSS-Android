@@ -5,13 +5,13 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityOnboardingBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingActivity :
-    BindingActivity<ActivityOnboardingBinding>(R.layout.activity_onboarding) {
+    BaseActivity<ActivityOnboardingBinding>(R.layout.activity_onboarding) {
     private val viewModel: OnboardingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
