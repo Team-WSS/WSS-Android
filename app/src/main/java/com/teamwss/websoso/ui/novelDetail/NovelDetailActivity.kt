@@ -180,12 +180,12 @@ class NovelDetailActivity : BindingActivity<ActivityNovelDetailBinding>(R.layout
             showPopupWindow()
         }
 
-        override fun onNavigateToNovelRatingClick(readStatus: ReadStatus?) {
+        override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
             navigateToNovelRating(readStatus)
         }
     }
 
-    private fun navigateToNovelRating(readStatus: ReadStatus?) {
+    private fun navigateToNovelRating(readStatus: ReadStatus) {
         val intent = NovelRatingActivity.getIntent(
             context = this,
             novelId = novelId,

@@ -185,7 +185,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
         private const val NOVEL_ID = "NOVEL_ID"
         private const val READ_STATUS = "READ_STATUS"
 
-        fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus?): Intent {
+        fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
                 putExtra(READ_STATUS, readStatus)
