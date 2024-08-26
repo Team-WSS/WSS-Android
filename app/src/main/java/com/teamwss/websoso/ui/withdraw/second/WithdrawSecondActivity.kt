@@ -45,24 +45,24 @@ class WithdrawSecondActivity :
         }
 
         override fun onWithdrawReasonRarelyUsingButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonRarelyUsing.text.toString())
+            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_rarely_using))
         }
 
         override fun onWithdrawReasonInconvenientButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonInconvenient.text.toString())
+            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_inconvenient))
         }
 
         override fun onWithdrawReasonWantToDeleteContentButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonWantToDeleteContent.text.toString())
+            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_want_to_delete_content))
         }
 
         override fun onWithdrawReasonNotExistAnyWantedNovelButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonNotExistAnyWantedNovel.text.toString())
+            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_not_exist_any_wanted_novel))
         }
 
         override fun onWithdrawReasonEtcButtonClick() {
             binding.etWithdrawEtc.requestFocus()
-            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonEtc.text.toString())
+            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_etc))
         }
 
         override fun onWithdrawCheckAgreeButtonClick() {
