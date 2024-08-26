@@ -1,4 +1,4 @@
-package com.teamwss.websoso.domain.model
+package com.teamwss.websoso.ui.myPage.myLibrary.model
 
 enum class AttractivePoints(val korean: String) {
     CHARACTER("캐릭터"),
