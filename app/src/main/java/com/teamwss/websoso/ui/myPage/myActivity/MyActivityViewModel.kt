@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.model.MyActivitiesEntity
 import com.teamwss.websoso.data.repository.MyActivityRepository
+import com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel
 import com.teamwss.websoso.ui.myPage.myActivity.model.Genres
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,17 +16,36 @@ import javax.inject.Inject
 @HiltViewModel
 class MyActivityViewModel @Inject constructor(private val myActivityRepository: MyActivityRepository) :
     ViewModel() {
-    private val _myActivity = MutableLiveData<List<MyActivitiesEntity.MyActivityEntity>>()
-    val myActivity: LiveData<List<MyActivitiesEntity.MyActivityEntity>> get() = _myActivity
+    private val _myActivity = MutableLiveData<List<ActivityModel>>()
+    val myActivity: LiveData<List<ActivityModel>> get() = _myActivity
 
     init {
         updateMyActivities()
     }
 
-    fun updateMyActivities() {
+    private fun updateMyActivities() {
         viewModelScope.launch {
-            val activities = myActivityRepository.getMyActivities()
-            _myActivity.value = activities.take(5)
+            val activities = myActivityRepository.getMyActivities().take(5).map { entity ->
+                ActivityModel(
+                    feedId = entity.feedId,
+                    userId = entity.userId,
+                    profileImg = entity.profileImg,
+                    nickname = entity.nickname,
+                    isSpoiler = entity.isSpoiler,
+                    feedContent = entity.feedContent,
+                    createdDate = formatDate(entity.createdDate),
+                    isModified = entity.isModified,
+                    isLiked = entity.isLiked,
+                    likeCount = entity.likeCount,
+                    commentCount = entity.commentCount,
+                    novelId = entity.novelId ?: 0,
+                    title = entity.title ?: "",
+                    novelRatingCount = entity.novelRatingCount ?: 0,
+                    novelRating = entity.novelRating ?: 0.0f,
+                    relevantCategories = translateGenres(entity.relevantCategories)
+                )
+            }
+            _myActivity.value = activities
         }
     }
 
