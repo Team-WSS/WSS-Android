@@ -94,6 +94,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_rarely_using"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -127,6 +128,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_inconvenient"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -144,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
-                android:onClick="@{() -> onClick.onWithdrawReasonWantToDeleteContent()}"
+                android:onClick="@{() -> onClick.onWithdrawReasonWantToDeleteContentButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_inconvenient">
@@ -160,6 +162,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_want_to_delete_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -177,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
-                android:onClick="@{() -> onClick.onWithdrawReasonNotExistAnyWantedNovel()}"
+                android:onClick="@{() -> onClick.onWithdrawReasonNotExistAnyWantedNovelButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_want_to_delete_content">
@@ -193,6 +196,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_not_exist_any_wanted_novel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -210,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
-                android:onClick="@{() -> onClick.onWithdrawReasonEtc()}"
+                android:onClick="@{() -> onClick.onWithdrawReasonEtcButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_not_exist_any_wanted_novel">
@@ -226,6 +230,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_etc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -249,6 +254,7 @@
                 android:minLines="4"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="10dp"
+                android:text="@={withdrawSecondViewModel.etcReason}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_200_AEADB3"

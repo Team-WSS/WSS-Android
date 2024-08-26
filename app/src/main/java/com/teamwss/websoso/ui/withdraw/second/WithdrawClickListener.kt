@@ -8,11 +8,11 @@ interface WithdrawClickListener {
 
     fun onWithdrawReasonInconvenientButtonClick()
 
-    fun onWithdrawReasonWantToDeleteContent()
+    fun onWithdrawReasonWantToDeleteContentButtonClick()
 
-    fun onWithdrawReasonNotExistAnyWantedNovel()
+    fun onWithdrawReasonNotExistAnyWantedNovelButtonClick()
 
-    fun onWithdrawReasonEtc()
+    fun onWithdrawReasonEtcButtonClick()
 
     fun onWithdrawCheckAgreeButtonClick()
 

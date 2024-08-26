@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithdrawSecondBinding
@@ -20,6 +21,7 @@ class WithdrawSecondActivity :
 
         setupTranslucentOnStatusBar()
         bindViewModel()
+        onWithdrawEtcEditTextFocusListener()
         setupObserver()
     }
 
@@ -43,23 +45,24 @@ class WithdrawSecondActivity :
         }
 
         override fun onWithdrawReasonRarelyUsingButtonClick() {
-
+            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonRarelyUsing.text.toString())
         }
 
         override fun onWithdrawReasonInconvenientButtonClick() {
-
+            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonInconvenient.text.toString())
         }
 
-        override fun onWithdrawReasonWantToDeleteContent() {
-
+        override fun onWithdrawReasonWantToDeleteContentButtonClick() {
+            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonWantToDeleteContent.text.toString())
         }
 
-        override fun onWithdrawReasonNotExistAnyWantedNovel() {
-
+        override fun onWithdrawReasonNotExistAnyWantedNovelButtonClick() {
+            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonNotExistAnyWantedNovel.text.toString())
         }
 
-        override fun onWithdrawReasonEtc() {
+        override fun onWithdrawReasonEtcButtonClick() {
             binding.etWithdrawEtc.requestFocus()
+            withdrawSecondViewModel.updateWithdrawReason(binding.tvWithdrawReasonEtc.text.toString())
         }
 
         override fun onWithdrawCheckAgreeButtonClick() {
@@ -67,14 +70,29 @@ class WithdrawSecondActivity :
         }
 
         override fun onWithdrawButtonClick() {
-            //TODO 회원탈퇴 로직 호출
+            withdrawSecondViewModel.saveWithdrawReason()
         }
+    }
 
+    private fun onWithdrawEtcEditTextFocusListener() {
+        binding.etWithdrawEtc.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_etc))
+            }
+        }
     }
 
     private fun setupObserver() {
         withdrawSecondViewModel.isWithdrawCheckAgree.observe(this) { isAgree ->
             updateWithdrawCheckAgreeButtonImage(isAgree)
+        }
+
+        withdrawSecondViewModel.withdrawReason.observe(this) { reason ->
+            updateWithdrawReasonCheckButtonImage(reason)
+        }
+
+        withdrawSecondViewModel.etcReason.observe(this) {
+            withdrawSecondViewModel.updateWithdrawButtonEnabled()
         }
     }
 
@@ -84,6 +102,58 @@ class WithdrawSecondActivity :
             false -> R.drawable.img_account_info_check_unselected
         }
         binding.ivWithdrawCheckAgree.setImageResource(buttonImage)
+    }
+
+    private fun updateWithdrawReasonCheckButtonImage(selectedReason: String) {
+        updateCheckImageState(
+            binding.ivWithdrawReasonRarelyUsing,
+            selectedReason,
+            getString(R.string.withdraw_reason_rarely_using),
+        )
+        updateCheckImageState(
+            binding.ivWithdrawReasonInconvenient,
+            selectedReason,
+            getString(R.string.withdraw_reason_inconvenient),
+        )
+        updateCheckImageState(
+            binding.ivWithdrawReasonWantToDeleteContent,
+            selectedReason,
+            getString(R.string.withdraw_reason_want_to_delete_content),
+        )
+        updateCheckImageState(
+            binding.ivWithdrawReasonNotExistAnyWantedNovel,
+            selectedReason,
+            getString(R.string.withdraw_reason_not_exist_any_wanted_novel),
+        )
+
+        val isEtcSelected: Boolean = selectedReason == getString(R.string.withdraw_reason_etc)
+        updateEtcCheckImageState(
+            binding.ivWithdrawReasonEtc,
+            isEtcSelected,
+        )
+    }
+
+    private fun updateCheckImageState(
+        checkImage: ImageView,
+        selectedReason: String,
+        reason: String,
+    ) {
+        when (selectedReason) {
+            reason -> checkImage.setImageResource(R.drawable.img_account_info_check_selected)
+            else -> checkImage.setImageResource(R.drawable.img_account_info_check_unselected)
+        }
+    }
+
+    private fun updateEtcCheckImageState(
+        checkImage: ImageView,
+        isEtcSelected: Boolean
+    ) {
+        val imageResource = if (isEtcSelected) {
+            R.drawable.img_account_info_check_selected
+        } else {
+            R.drawable.img_account_info_check_unselected
+        }
+        checkImage.setImageResource(imageResource)
     }
 
     companion object {
