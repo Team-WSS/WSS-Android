@@ -53,4 +53,8 @@ class ChangeUserInfoViewModel @Inject constructor(
         _gender.value = if (isMaleSelected) MALE else FEMALE
         updateGenderButtonSelection(gender.value ?: throw IllegalArgumentException())
     }
+
+    fun updateBirthYear(selectedYear: Int) {
+        _birthYear.value = selectedYear
+    }
 }
