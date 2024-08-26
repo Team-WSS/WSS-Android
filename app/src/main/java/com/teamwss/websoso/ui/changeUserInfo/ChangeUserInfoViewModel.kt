@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.changeUserInfo
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,6 @@ import com.teamwss.websoso.ui.changeUserInfo.model.Gender.MALE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class ChangeUserInfoViewModel @Inject constructor(
@@ -23,10 +23,17 @@ class ChangeUserInfoViewModel @Inject constructor(
         MutableLiveData(ChangeUserInfoUiState())
     val uiState: LiveData<ChangeUserInfoUiState> get() = _uiState
 
-    private lateinit var isInitializeOfGender: Gender
-    private var isInitializeOfBirthYear by Delegates.notNull<Int>()
+    private var isInitializeOfGender: Gender = FEMALE
+    private var isInitializeOfBirthYear: Int = 2000
+
+    private val _isCompleteButtonEnabled = MediatorLiveData<Boolean>()
+    val isCompleteButtonEnabled: LiveData<Boolean> get() = _isCompleteButtonEnabled
 
     init {
+        _isCompleteButtonEnabled.addSource(_uiState) {
+            _isCompleteButtonEnabled.value = updateCompleteButtonEnabled()
+        }
+
         updateUserInfo()
     }
 
@@ -35,19 +42,24 @@ class ChangeUserInfoViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchUserInfo()
             }.onSuccess { userInfo ->
-                val gender = Gender.from(userInfo.gender)
-                isInitializeOfGender = gender
+                isInitializeOfGender = Gender.from(userInfo.gender)
                 isInitializeOfBirthYear = userInfo.birthYear
 
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    gender = Gender.from(userInfo.gender),
+                    gender = isInitializeOfGender,
                     birthYear = userInfo.birthYear,
-                    isMaleButtonSelected = gender == MALE,
-                    isFemaleButtonSelected = gender == FEMALE,
+                    isMaleButtonSelected = isInitializeOfGender == MALE,
+                    isFemaleButtonSelected = isInitializeOfGender == FEMALE,
                 )
             }
         }
+    }
+
+    private fun updateCompleteButtonEnabled(): Boolean {
+        val genderSelected = uiState.value?.gender != isInitializeOfGender
+        val birthYearSelected = uiState.value?.birthYear != isInitializeOfBirthYear
+        return genderSelected || birthYearSelected
     }
 
     fun updateUserGender(isMaleSelected: Boolean) {
@@ -57,21 +69,10 @@ class ChangeUserInfoViewModel @Inject constructor(
             isMaleButtonSelected = updatedGender == MALE,
             isFemaleButtonSelected = updatedGender == FEMALE,
         )
-        updateIsCompleteButtonEnabled()
     }
 
     fun updateBirthYear(birthYear: Int) {
         _uiState.value = uiState.value?.copy(birthYear = birthYear)
-        updateIsCompleteButtonEnabled()
-    }
-
-    private fun updateIsCompleteButtonEnabled() {
-        val genderSelected = _uiState.value?.gender != isInitializeOfGender
-        val birthYearSelected = _uiState.value?.birthYear != isInitializeOfBirthYear
-
-        _uiState.value = _uiState.value?.copy(
-            isCompleteButtonEnabled = genderSelected || birthYearSelected
-        )
     }
 
     fun saveUserInfo() {

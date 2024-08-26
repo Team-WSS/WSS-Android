@@ -145,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:enabled="@{changeUserInfoViewModel.uiState.isCompleteButtonEnabled}"
+            android:enabled="@{changeUserInfoViewModel.isCompleteButtonEnabled}"
             android:onClick="@{() -> changeUserInfoViewModel.saveUserInfo()}"
             android:padding="10dp"
             android:text="@string/change_user_info_complete"
