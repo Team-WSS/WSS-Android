@@ -4,7 +4,8 @@ import com.teamwss.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 
 data class HomeUiState(
-    val isLogin: Boolean = false,
+    val isLogin: Boolean = true,
+    val nickname: String? = "웹소소",
     val loading: Boolean = true,
     val error: Boolean = false,
     val popularNovels: List<PopularNovelEntity> = listOf(),

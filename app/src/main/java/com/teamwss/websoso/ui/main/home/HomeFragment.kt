@@ -30,10 +30,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bindViewModel()
         setupAdapter()
         setupViewPager()
         setupObserver()
         setupDotsIndicator()
+    }
+
+    private fun bindViewModel() {
+        binding.viewModel = homeViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupAdapter() {
@@ -59,12 +65,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            updateViewVisibleByLogin(uiState.isLogin, uiState.nickname)
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
                 !uiState.loading -> {
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
+                }
+            }
+        }
+    }
+
+    private fun updateViewVisibleByLogin(isLogin: Boolean, nickname: String?) {
+        with(binding) {
+            when (isLogin) {
+                true -> {
+                    tvHomeInterestFeed.text = "$nickname 님의 관심글"
+                    clHomeInterestFeed.visibility = View.GONE
+                    clHomeRecommendNovel.visibility = View.GONE
+                    clHomeUserInterestFeed.visibility = View.VISIBLE
+                    clHomeUserRecommendNovel.visibility = View.VISIBLE
+                }
+
+                false -> {
+                    tvHomeInterestFeed.text = "관심글"
+                    clHomeInterestFeed.visibility = View.VISIBLE
+                    clHomeRecommendNovel.visibility = View.VISIBLE
+                    clHomeUserInterestFeed.visibility = View.GONE
+                    clHomeUserRecommendNovel.visibility = View.GONE
                 }
             }
         }
