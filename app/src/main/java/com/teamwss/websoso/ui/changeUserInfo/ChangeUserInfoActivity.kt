@@ -19,9 +19,8 @@ class ChangeUserInfoActivity :
         super.onCreate(savedInstanceState)
 
         bindViewModel()
-        onChangeBirthYearClickButton()
+        onChangeBirthYearButtonClick()
         onBackButtonClick()
-//        setupObserver()
     }
 
     private fun bindViewModel() {
@@ -29,7 +28,7 @@ class ChangeUserInfoActivity :
         binding.lifecycleOwner = this
     }
 
-    private fun onChangeBirthYearClickButton() {
+    private fun onChangeBirthYearButtonClick() {
         binding.clChangeUserInfoBirthYear.setOnClickListener {
             showBirthYearBottomSheetDialog()
         }
@@ -49,11 +48,6 @@ class ChangeUserInfoActivity :
     private fun onBackButtonClick() {
         binding.ivChangeUserInfoBackButton.setOnClickListener {
             finish()
-        }
-    }
-
-    private fun setupObserver() {
-        changeUserInfoViewModel.birthYear.observe(this) { birthYear ->
         }
     }
 

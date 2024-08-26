@@ -63,20 +63,26 @@
             app:layout_constraintTop_toBottomOf="@id/tv_change_user_info_user_gender">
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/chip_change_user_info_male"
                 style="@style/HarryMoongChi.Chip.Choice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checkable="true"
+                android:checked="@{changeUserInfoViewModel.isMaleButtonSelected}"
+                android:onClick="@{() -> changeUserInfoViewModel.updateUserGender(true)}"
                 android:text="@string/onboarding_second_man" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/chip_change_user_info_female"
                 style="@style/HarryMoongChi.Chip.Choice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:checkable="true"
+                android:checked="@{changeUserInfoViewModel.isFemaleButtonSelected}"
+                android:onClick="@{() -> changeUserInfoViewModel.updateUserGender(false)}"
                 android:text="@string/onboarding_second_woman" />
         </LinearLayout>
 
