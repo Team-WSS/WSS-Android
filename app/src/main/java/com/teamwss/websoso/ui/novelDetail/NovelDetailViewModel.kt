@@ -78,7 +78,7 @@ class NovelDetailViewModel @Inject constructor(
     private fun checkIsFirstLaunched() {
         viewModelScope.launch {
             runCatching {
-                userPreferencesRepository.fetchUserPreferences()
+                userPreferencesRepository.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
                 _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
             }.onFailure {
@@ -90,7 +90,7 @@ class NovelDetailViewModel @Inject constructor(
     fun updateIsFirstLaunched() {
         viewModelScope.launch {
             runCatching {
-                userPreferencesRepository.saveUserPreferences(value = false)
+                userPreferencesRepository.saveNovelDetailFirstLaunched(value = false)
             }.onSuccess {
                 _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = false)
             }

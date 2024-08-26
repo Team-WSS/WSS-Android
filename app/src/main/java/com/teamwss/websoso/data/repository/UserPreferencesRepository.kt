@@ -11,13 +11,13 @@ class UserPreferencesRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) {
 
-    suspend fun saveUserPreferences(value: Boolean) {
+    suspend fun saveNovelDetailFirstLaunched(value: Boolean) {
         dataStore.edit { preferences ->
             preferences[KEY_NOVEL_DETAIL_FIRST_LAUNCHED] = value
         }
     }
 
-    suspend fun fetchUserPreferences(): Boolean {
+    suspend fun fetchNovelDetailFirstLaunched(): Boolean {
         return dataStore.data.first()[KEY_NOVEL_DETAIL_FIRST_LAUNCHED] ?: true
     }
 
