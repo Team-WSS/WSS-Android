@@ -31,7 +31,7 @@ class OnboardingThirdFragment :
     private fun setupGenreAdapter() {
         adapter = GenreAdapter(
             onboardingViewModel::updateGenreSelection,
-            onboardingViewModel::isGenreSelected
+            onboardingViewModel::isGenreSelected,
         )
         binding.rvOnboardingThird.adapter = adapter
         adapter.submitList(Genre.entries.toList())

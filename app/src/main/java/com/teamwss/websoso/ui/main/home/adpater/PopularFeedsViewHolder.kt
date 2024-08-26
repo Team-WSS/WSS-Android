@@ -13,7 +13,7 @@ class PopularFeedsViewHolder(
         listOf(
             binding.itemPopularFeesSlot1,
             binding.itemPopularFeesSlot2,
-            binding.itemPopularFeesSlot3
+            binding.itemPopularFeesSlot3,
         )
     }
 

@@ -210,7 +210,7 @@
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>
-    <string name="setting_account_info">계정정보</string>정
+    <string name="setting_account_info">계정정보</string>
     <string name="setting_profile_disclosure">프로필 공개 여부 설정</string>
     <string name="setting_websoso_account">웹소소 공식 계정</string>
     <string name="setting_inquire_and_feedback"><![CDATA[문의하기 & 의견 보내기]]></string>

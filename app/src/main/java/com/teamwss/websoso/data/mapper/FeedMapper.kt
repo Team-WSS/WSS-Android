@@ -69,7 +69,7 @@ fun PopularFeedsResponseDto.toData(): PopularFeedsEntity {
                 feesContent = feed.feedContent,
                 likeCount = feed.likeCount,
                 commentCount = feed.commentCount,
-                isSpoiler = feed.isSpoiler
+                isSpoiler = feed.isSpoiler,
             )
         }
     )

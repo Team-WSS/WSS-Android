@@ -8,6 +8,6 @@ data class PopularFeedsEntity(
         val feesContent : String,
         val likeCount: Int,
         val commentCount: Int,
-        val isSpoiler: Boolean
+        val isSpoiler: Boolean,
     )
 }

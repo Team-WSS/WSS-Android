@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
             }.onSuccess { popularFeeds ->
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
-                    popularFeeds = popularFeeds.popularFeeds.chunked(3)
+                    popularFeeds = popularFeeds.popularFeeds.chunked(3),
                 )
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
