@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.withdraw.second
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
 import android.widget.ImageView
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
@@ -19,17 +18,9 @@ class WithdrawSecondActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupTranslucentOnStatusBar()
         bindViewModel()
         onWithdrawEtcEditTextFocusListener()
         setupObserver()
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        )
     }
 
     private fun bindViewModel() {
@@ -91,17 +82,13 @@ class WithdrawSecondActivity :
             updateWithdrawReasonCheckButtonImage(reason)
         }
 
-        withdrawSecondViewModel.etcReason.observe(this) {
+        withdrawSecondViewModel.withdrawEtcReason.observe(this) {
             withdrawSecondViewModel.updateWithdrawButtonEnabled()
         }
     }
 
     private fun updateWithdrawCheckAgreeButtonImage(isWithdrawAgree: Boolean) {
-        val buttonImage = when (isWithdrawAgree) {
-            true -> R.drawable.img_account_info_check_selected
-            false -> R.drawable.img_account_info_check_unselected
-        }
-        binding.ivWithdrawCheckAgree.setImageResource(buttonImage)
+        binding.ivWithdrawCheckAgree.isActivated = isWithdrawAgree
     }
 
     private fun updateWithdrawReasonCheckButtonImage(selectedReason: String) {
