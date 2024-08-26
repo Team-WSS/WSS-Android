@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PopularFeedsResponseDto(
     @SerialName("popularFeeds")
-    val popularFeeds: List<PopularFeed>,
+    val popularFeeds: List<PopularFeedResponseDto>,
 ) {
     @Serializable
-    data class PopularFeed(
+    data class PopularFeedResponseDto(
         @SerialName("feedId")
         val feedId: Long,
         @SerialName("feedContent")
