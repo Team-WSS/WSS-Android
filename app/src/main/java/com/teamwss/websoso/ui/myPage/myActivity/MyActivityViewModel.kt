@@ -56,10 +56,13 @@ class MyActivityViewModel @Inject constructor(private val myActivityRepository: 
     }
 
     private fun formatDate(inputDate: String): String {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("M월 d일", Locale.getDefault())
-
-        val date = inputFormat.parse(inputDate)
-        return outputFormat.format(date!!)
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("M월 d일", Locale.getDefault())
+            val date = inputFormat.parse(inputDate)
+            outputFormat.format(date!!)
+        } catch (e: Exception) {
+            ""
+        }
     }
 }
