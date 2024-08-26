@@ -15,7 +15,7 @@ class MyActivityViewHolder(private val binding: ItemMyActivityBinding) :
     }
 
     companion object {
-        fun of(parent: ViewGroup): MyActivityViewHolder {
+        fun from(parent: ViewGroup): MyActivityViewHolder {
             val binding =
                 ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return MyActivityViewHolder(binding)
