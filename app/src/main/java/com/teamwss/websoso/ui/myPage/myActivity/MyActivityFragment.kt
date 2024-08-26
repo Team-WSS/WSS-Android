@@ -1,15 +1,12 @@
 package com.teamwss.websoso.ui.myPage.myActivity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.FragmentMyActivityBinding
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.databinding.FragmentMyActivityBinding
 import com.teamwss.websoso.ui.myPage.myActivity.adapter.MyActivityAdapter
-import com.teamwss.websoso.ui.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,16 +24,14 @@ class MyActivityFragment :
         setUpObserve()
     }
 
-    fun setupMyActivitiesAdapter(){
+    private fun setupMyActivitiesAdapter() {
         binding.rvMyActivity.apply {
-            layoutManager = LinearLayoutManager(context)
             adapter = myActivityAdapter
         }
     }
 
     private fun setUpObserve() {
         myActivityViewModel.myActivity.observe(viewLifecycleOwner) { activities ->
-            Log.d("MyActivityFragment", "Observed activities: $activities")
             myActivityAdapter.submitList(activities)
         }
     }
