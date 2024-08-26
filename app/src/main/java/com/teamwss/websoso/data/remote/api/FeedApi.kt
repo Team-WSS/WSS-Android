@@ -4,6 +4,7 @@ import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import com.teamwss.websoso.data.remote.response.CommentsResponseDto
 import com.teamwss.websoso.data.remote.response.FeedResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
+import com.teamwss.websoso.data.remote.response.PopularFeedsResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -53,4 +54,7 @@ interface FeedApi {
     suspend fun postImpertinenceFeed(
         @Path("feedId") feedId: Long,
     )
+
+    @GET("feeds/popular")
+    suspend fun getPopularFeeds(): PopularFeedsResponseDto
 }

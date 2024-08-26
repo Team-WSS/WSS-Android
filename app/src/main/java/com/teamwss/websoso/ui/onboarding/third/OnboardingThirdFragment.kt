@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.onboarding.third
 
+
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -16,6 +17,13 @@ class OnboardingThirdFragment :
     BaseFragment<FragmentOnboardingThirdBinding>(R.layout.fragment_onboarding_third) {
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 
+    private val adapter: GenreAdapter by lazy {
+        GenreAdapter(
+            onboardingViewModel::updateGenreSelection,
+            onboardingViewModel::isGenreSelected,
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupGenreAdapter()
@@ -26,18 +34,14 @@ class OnboardingThirdFragment :
     }
 
     private fun setupGenreAdapter() {
-        val genres = Genre.entries.toList()
-        val adapter = GenreAdapter(
-            genres,
-            onboardingViewModel::updateGenreSelection,
-            onboardingViewModel::isGenreSelected,
-        )
         binding.rvOnboardingThird.adapter = adapter
+        adapter.submitList(Genre.entries.toList())
     }
 
     private fun setupObserver() {
         onboardingViewModel.selectedGenres.observe(viewLifecycleOwner) {
-            binding.rvOnboardingThird.adapter?.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
     }
 }
+
