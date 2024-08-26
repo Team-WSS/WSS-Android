@@ -8,7 +8,7 @@ import com.teamwss.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
 import com.teamwss.websoso.databinding.ItemPopularFeedBinding
 
 class PopularFeedsAdapter(
-    private val onFeedClick: (feedId :Long)  -> Unit,
+    private val onFeedClick: (feedId: Long) -> Unit,
 ) : ListAdapter<List<PopularFeedEntity>, PopularFeedsViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularFeedsViewHolder {
