@@ -36,7 +36,7 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
         val isWithdrawAgree: Boolean = isWithdrawCheckAgree.value == true
 
         _isWithdrawButtonEnabled.value = when {
-            withdrawReason.value == "직접입력" -> etcReason.value?.isNotBlank() == true && isWithdrawAgree
+            withdrawReason.value == ETC_INPUT_REASON -> etcReason.value?.isNotBlank() == true && isWithdrawAgree
             reasonIsNotBlank && isWithdrawAgree -> true
             else -> false
         }
@@ -46,7 +46,7 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             runCatching {
                 val withdrawReason = when (withdrawReason.value) {
-                    "직접입력" -> etcReason.value
+                    ETC_INPUT_REASON -> etcReason.value
                     else -> withdrawReason.value
                 }
                 // TODO: API 개발 완료 시 reason을 사용하여 회원 탈퇴 진행
@@ -56,5 +56,9 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
                 // TODO: 실패 처리
             }
         }
+    }
+
+    companion object {
+        private const val ETC_INPUT_REASON = "직접입력"
     }
 }
