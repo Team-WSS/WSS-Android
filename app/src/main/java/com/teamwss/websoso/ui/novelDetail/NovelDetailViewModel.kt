@@ -89,7 +89,7 @@ class NovelDetailViewModel @Inject constructor(
     }
 
     fun updateIsFirstLaunched() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 userPreferencesRepository.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
