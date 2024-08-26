@@ -1,6 +1,7 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
+import com.teamwss.websoso.data.model.ExploreResultEntity
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.SosoPickEntity
@@ -28,5 +29,9 @@ class NovelRepository @Inject constructor(
 
     suspend fun fetchSosoPicks(): SosoPickEntity {
         return novelApi.getSosoPicks().toData()
+    }
+
+    suspend fun fetchNormalExploreResult(): ExploreResultEntity {
+        return novelApi.getNormalExploreResult()
     }
 }

@@ -1,8 +1,11 @@
 package com.teamwss.websoso.data.mapper
 
+import com.teamwss.websoso.data.model.ExploreResultEntity
+import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.SosoPickEntity
+import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.SosoPicksResponseDto
@@ -71,5 +74,23 @@ fun SosoPicksResponseDto.toData(): SosoPickEntity {
                 novelCover = sosoPick.novelImage
             )
         }
+    )
+}
+
+fun ExploreResultResponseDto.toData(): ExploreResultEntity {
+    return ExploreResultEntity(
+        resultCount = resultCount,
+        isLoadable = isLoadable,
+        novels = novels.map { novel ->
+            NovelEntity(
+                id = novel.novelId,
+                title = novel.novelTitle,
+                author = novel.novelAuthor,
+                image = novel.novelImage,
+                interestedCount = novel.interestedCount,
+                rating = novel.novelRating,
+                ratingCount = novel.novelRatingCount,
+            )
+        },
     )
 }
