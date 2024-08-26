@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.databinding.DialogLoginRequestBinding
-import com.teamwss.websoso.ui.common.base.BindingDialogFragment
 import com.teamwss.websoso.ui.login.LoginActivity
 
 class LoginRequestDialogFragment :
-    BindingDialogFragment<DialogLoginRequestBinding>(R.layout.dialog_login_request) {
+    BaseDialogFragment<DialogLoginRequestBinding>(R.layout.dialog_login_request) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -9,9 +9,11 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.FragmentHomeBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
+import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +37,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setupViewPager()
         setupObserver()
         setupDotsIndicator()
+        onPostInterestNovelClick()
+        onSettingInterestClick()
     }
 
     private fun bindViewModel() {
@@ -109,6 +113,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun navigateToFeedDetail(feedId: Long) {
         startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+    }
+
+    private fun onPostInterestNovelClick() {
+        binding.clHomeInterestFeed.setOnClickListener {
+            if (homeViewModel.uiState.value?.isLogin == true) {
+                startActivity(NormalExploreActivity.getIntent(requireContext()))
+            } else {
+                showLoginRequestDialog()
+            }
+        }
+    }
+
+    private fun onSettingInterestClick() {
+        binding.clHomeRecommendNovel.setOnClickListener {
+            if (homeViewModel.uiState.value?.isLogin == true) {
+                //TODO 프로필 수정으로 이동
+            } else {
+                showLoginRequestDialog()
+            }
+        }
+    }
+
+    private fun showLoginRequestDialog() {
+        val dialog = LoginRequestDialogFragment.newInstance()
+        dialog.show(parentFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
     companion object {
