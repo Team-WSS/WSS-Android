@@ -55,7 +55,7 @@ class FeedDetailActivity :
         private const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
 
-        fun getIntent(id: Long, context: Context): Intent =
-            Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, id) }
+        fun getIntent(context: Context, feedId: Long): Intent =
+            Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
     }
 }
