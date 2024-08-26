@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.withdraw.second
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,14 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
     val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
 
     val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
+
+    val withdrawEtcReasonCount: MediatorLiveData<Int> = MediatorLiveData()
+
+    init {
+        withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
+            withdrawEtcReasonCount.value = reason.length
+        }
+    }
 
     fun updateWithdrawReason(reason: String) {
         _withdrawReason.value = reason

@@ -266,6 +266,7 @@
                 android:id="@+id/tv_withdraw_etc_text_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{String.valueOf(withdrawSecondViewModel.withdrawEtcReasonCount)}"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintBottom_toBottomOf="@id/tv_withdraw_etc_text_max_count"
