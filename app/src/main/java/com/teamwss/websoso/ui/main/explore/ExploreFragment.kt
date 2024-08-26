@@ -36,7 +36,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private fun onNormalSearchButtonClick() {
         binding.clExploreNormalSearch.setOnClickListener {
-            val intent = NormalExploreActivity.from(requireContext())
+            val intent = NormalExploreActivity.getIntent(requireContext())
             startActivity(intent)
         }
     }
