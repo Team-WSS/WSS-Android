@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:checked="@{changeUserInfoViewModel.isMaleButtonSelected}"
+                android:checked="@{changeUserInfoViewModel.uiState.isMaleButtonSelected}"
                 android:onClick="@{() -> changeUserInfoViewModel.updateUserGender(true)}"
                 android:text="@string/change_user_info_male" />
 
@@ -81,7 +81,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:checked="@{changeUserInfoViewModel.isFemaleButtonSelected}"
+                android:checked="@{changeUserInfoViewModel.uiState.isFemaleButtonSelected}"
                 android:onClick="@{() -> changeUserInfoViewModel.updateUserGender(false)}"
                 android:text="@string/change_user_info_female" />
         </LinearLayout>
@@ -122,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
-                android:text="@{String.valueOf(changeUserInfoViewModel.birthYear)}"
+                android:text="@{String.valueOf(changeUserInfoViewModel.uiState.birthYear)}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -145,7 +145,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:enabled="@{changeUserInfoViewModel.isCompleteButtonEnabled}"
+            android:enabled="@{changeUserInfoViewModel.uiState.isCompleteButtonEnabled}"
+            android:onClick="@{() -> changeUserInfoViewModel.saveUserInfo()}"
             android:padding="10dp"
             android:text="@string/change_user_info_complete"
             android:textAppearance="@style/title2"
@@ -153,5 +154,15 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_change_user_info_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_change_user_info_title" />
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wl_change_user_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

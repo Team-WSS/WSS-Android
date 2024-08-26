@@ -59,9 +59,24 @@ class ChangeUserInfoActivity :
     }
 
     private fun setupObserver() {
-        changeUserInfoViewModel.isSaveStatusComplete.observe(this) { isComplete ->
-            if (isComplete)
-                finish()
+        changeUserInfoViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.loading -> {
+                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(true)
+                    binding.wlChangeUserInfo.setErrorLayoutVisibility(false)
+                }
+
+                uiState.error -> {
+                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(false)
+                    binding.wlChangeUserInfo.setErrorLayoutVisibility(true)
+                }
+
+                else -> {
+                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(false)
+                    binding.wlChangeUserInfo.setErrorLayoutVisibility(false)
+                    if (uiState.isSaveStatusComplete) finish()
+                }
+            }
         }
     }
 
