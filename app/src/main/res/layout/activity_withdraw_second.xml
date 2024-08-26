@@ -250,7 +250,7 @@
                 android:background="@drawable/bg_common_search_selector"
                 android:gravity="top"
                 android:hint="@string/withdraw_etc_hint"
-                android:maxLength="100"
+                android:maxLength="80"
                 android:minLines="4"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="10dp"
