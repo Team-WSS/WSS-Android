@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="categoryImageUrl"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,9 +32,11 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/bg_novel_rating_date_primary_100_radius_12dp"
+                app:cornerRadius="@{10f}"
+                app:isVectorImage="@{true}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImageUrl="@{categoryImageUrl}" />
 
             <TextView
                 android:id="@+id/tv_rating_keyword"
@@ -45,7 +50,7 @@
                 app:layout_constraintTop_toTopOf="@id/iv_novel_rating_keyword"
                 tools:text="세계관" />
 
-            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_novel_rating_keyword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

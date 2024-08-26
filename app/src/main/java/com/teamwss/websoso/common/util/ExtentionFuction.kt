@@ -1,7 +1,12 @@
-package com.teamwss.websoso.util
+package com.teamwss.websoso.common.util
 
+import android.content.res.Resources
 import android.view.View
 import android.widget.ListView
+
+fun Float.toFloatScaledByPx(): Float = this * Resources.getSystem().displayMetrics.density
+
+fun Int.toIntScaledByPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun ListView.setListViewHeightBasedOnChildren() {
     val listAdapter = adapter ?: return

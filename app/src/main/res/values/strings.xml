@@ -230,6 +230,13 @@
     <string name="account_info_logout">로그아웃</string>
     <string name="account_info_withdraw">회원탈퇴</string>
 
+    <!-- 성별/나이 변경 뷰 -->
+    <string name="change_user_info_gender">성별</string>
+    <string name="change_user_info_male">남성</string>
+    <string name="change_user_info_female">여성</string>
+    <string name="change_user_info_birth_year">출생연도</string>
+    <string name="change_user_info_complete">완료</string>
+
     <!-- 프로필 공개여부 뷰 -->
     <string name="profile_disclosure_title">프로필 공개여부</string>
     <string name="profile_disclosure_complete">완료</string>

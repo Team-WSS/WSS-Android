@@ -258,7 +258,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wl_withdraw_first"
             android:layout_width="0dp"
             android:layout_height="0dp"

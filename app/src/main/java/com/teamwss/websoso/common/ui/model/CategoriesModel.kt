@@ -1,8 +1,8 @@
-package com.teamwss.websoso.ui.detailExplore.keyword.model
+package com.teamwss.websoso.common.ui.model
 
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 
-data class DetailExploreKeywordModel(
+data class CategoriesModel(
     val categories: List<CategoryModel> = emptyList(),
 ) {
     data class CategoryModel(

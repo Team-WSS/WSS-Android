@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
-import com.teamwss.websoso.ui.common.base.BindingDialogFragment
+import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.ui.feed.FeedFragment.FeedDialogClickListener
 
 class FeedReportDialogFragment :
-    BindingDialogFragment<DialogReportPopupMenuBinding>(R.layout.dialog_report_popup_menu) {
+    BaseDialogFragment<DialogReportPopupMenuBinding>(R.layout.dialog_report_popup_menu) {
     private val reportTitle: String? by lazy { arguments?.getString(TITLE) }
     private val onReportClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener

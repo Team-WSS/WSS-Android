@@ -23,9 +23,9 @@ class AccountInfoViewModel @Inject constructor(
     private fun updateUserEmail() {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchUserEmail()
-            }.onSuccess { userEmailEntity ->
-                _userEmail.value = userEmailEntity.email
+                userRepository.fetchUserInfo()
+            }.onSuccess { userInfo ->
+                _userEmail.value = userInfo.email
             }.onFailure {
                 Unit
             }

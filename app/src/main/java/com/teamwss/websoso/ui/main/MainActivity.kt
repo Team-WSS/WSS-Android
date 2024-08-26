@@ -4,14 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.WindowManager
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityMainBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.feed.FeedFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.FEED
@@ -23,20 +22,12 @@ import com.teamwss.websoso.ui.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupTranslucentOnStatusBar()
         setBottomNavigationView()
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
     }
 
     private fun setBottomNavigationView() {
