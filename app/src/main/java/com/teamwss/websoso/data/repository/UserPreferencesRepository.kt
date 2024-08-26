@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class UserPreferencesRepository @Inject constructor(
-    private val storage: DataStore<Preferences>,
+    private val userPreferenceStorage: DataStore<Preferences>,
 ) {
 
     suspend fun saveNovelDetailFirstLaunched(value: Boolean) {
-        storage.edit { preferences ->
+        userPreferenceStorage.edit { preferences ->
             preferences[KEY_NOVEL_DETAIL_FIRST_LAUNCHED] = value
         }
     }
 
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
-        return storage.data.first()[KEY_NOVEL_DETAIL_FIRST_LAUNCHED] ?: true
+        return userPreferenceStorage.data.first()[KEY_NOVEL_DETAIL_FIRST_LAUNCHED] ?: true
     }
 
     companion object {
