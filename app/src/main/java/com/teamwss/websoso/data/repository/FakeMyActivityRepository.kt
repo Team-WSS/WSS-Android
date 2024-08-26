@@ -23,7 +23,7 @@ class MyActivityRepository @Inject constructor() {
                 title = "그냥 뭐 재밌는 웹소설",
                 novelRatingCount = 500,
                 novelRating = 4.5f,
-                relevantCategories = listOf("fantasy", "adventure")
+                relevantCategories = listOf("fantasy", "wuxia")
             ),
             MyActivitiesEntity.MyActivityEntity(
                 feedId = 2,
@@ -59,7 +59,61 @@ class MyActivityRepository @Inject constructor() {
                 title = "그냥 뭐 재밌는 웹소설",
                 novelRatingCount = 300,
                 novelRating = 4.0f,
-                relevantCategories = listOf("mystery", "thriller")
+                relevantCategories = listOf("mystery", "lightNovel")
+            ),
+            MyActivitiesEntity.MyActivityEntity(
+                feedId = 4,
+                userId = 101,
+                profileImg = "https://github.com/user-attachments/assets/d4fa43d8-d90a-4ad9-bfa9-cc12fda05e1d",
+                nickname = "샐리",
+                isSpoiler = false,
+                feedContent = "판소추천해요! 완결난지는 좀 되었는데 추천합니다. scp 같은 이상현상 물품을 모아놓은 창고를 관리하는 주인공입니다. 배경은 현대아니라 판타지세계라 더 독특해요. 성좌채팅이 있어서 호불호 갈릴 수 있지만 이것도 스토리성이 있는 부분이라 후...",
+                createdDate = "2023-08-11",
+                isModified = true,
+                isLiked = false,
+                likeCount = 15,
+                commentCount = 5,
+                novelId = 1004,
+                title = "그냥 뭐 재밌는 웹소설",
+                novelRatingCount = 100,
+                novelRating = 2.5f,
+                relevantCategories = listOf("drama")
+            ),
+            MyActivitiesEntity.MyActivityEntity(
+                feedId = 4,
+                userId = 101,
+                profileImg = "https://github.com/user-attachments/assets/d4fa43d8-d90a-4ad9-bfa9-cc12fda05e1d",
+                nickname = "샐리",
+                isSpoiler = false,
+                feedContent = "판소추천해요! 완결난지는 좀 되었는데 추천합니다. scp 같은 이상현상 물품을 모아놓은 창고를 관리하는 주인공입니다. 배경은 현대아니라 판타지세계라 더 독특해요. 성좌채팅이 있어서 호불호 갈릴 수 있지만 이것도 스토리성이 있는 부분이라 후...",
+                createdDate = "2023-08-11",
+                isModified = false,
+                isLiked = false,
+                likeCount = 15,
+                commentCount = 5,
+                novelId = 1004,
+                title = "그냥 뭐 재밌는 웹소설",
+                novelRatingCount = 100,
+                novelRating = 2.5f,
+                relevantCategories = listOf("drama")
+            ),
+            MyActivitiesEntity.MyActivityEntity(
+                feedId = 4,
+                userId = 101,
+                profileImg = "https://github.com/user-attachments/assets/d4fa43d8-d90a-4ad9-bfa9-cc12fda05e1d",
+                nickname = "샐리",
+                isSpoiler = false,
+                feedContent = "판소추천해요! 완결난지는 좀 되었는데 추천합니다. scp 같은 이상현상 물품을 모아놓은 창고를 관리하는 주인공입니다. 배경은 현대아니라 판타지세계라 더 독특해요. 성좌채팅이 있어서 호불호 갈릴 수 있지만 이것도 스토리성이 있는 부분이라 후...",
+                createdDate = "2023-08-11",
+                isModified = false,
+                isLiked = false,
+                likeCount = 15,
+                commentCount = 5,
+                novelId = 1004,
+                title = "그냥 뭐 재밌는 웹소설",
+                novelRatingCount = 100,
+                novelRating = 2.5f,
+                relevantCategories = listOf("drama")
             ),
             MyActivitiesEntity.MyActivityEntity(
                 feedId = 4,
