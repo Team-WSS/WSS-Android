@@ -207,6 +207,7 @@
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
     <string name="home_popular_novel_nickname">%s 님의 한마디</string>
     <string name="home_popular_novel_feed_title_null">작품 소개</string>
+    <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>

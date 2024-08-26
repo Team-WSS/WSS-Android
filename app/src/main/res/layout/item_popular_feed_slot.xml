@@ -28,6 +28,21 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="판소추천해요! 완결난지는 좀 되었는데 추천합니다. scp 같은 이상현상 물품을 모아놓은 창고를 관리하는 주인공입니다. 배경은 현대판타지이고 우리나라세꼐...판소추천해요! 완결난지는 좀 되었는데 추천합니다." />
 
+        <TextView
+            android:id="@+id/tv_popular_feed_content_spoiler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:text="@string/home_popular_feed_spoiler"
+            android:textAppearance="@style/body3"
+            android:textColor="@color/secondary_100_FF675D"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tv_popular_feed_content"
+            app:layout_constraintEnd_toEndOf="@id/tv_popular_feed_content"
+            app:layout_constraintStart_toStartOf="@id/tv_popular_feed_content"
+            app:layout_constraintTop_toTopOf="@id/tv_popular_feed_content"
+            tools:text="스포일러가 포함된 글 보기" />
+
         <ImageView
             android:id="@+id/iv_popular_feed_like"
             android:layout_width="16dp"

@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main.home.adpater
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
 import com.teamwss.websoso.databinding.ItemPopularFeedBinding
@@ -24,6 +25,8 @@ class PopularFeedsViewHolder(
                     tvPopularFeedContent.text = feed.feesContent
                     tvPopularFeedLikeCount.text = feed.likeCount.toString()
                     tvPopularFeedCommentCount.text = feed.commentCount.toString()
+                    tvPopularFeedContentSpoiler.visibility =
+                        if (feed.isSpoiler) View.VISIBLE else View.GONE
                     root.setOnClickListener { navigateToNovelDetail(feed.feedId) }
                 }
             }
