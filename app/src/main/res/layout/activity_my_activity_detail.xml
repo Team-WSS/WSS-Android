@@ -50,11 +50,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_my_activity_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/cl_my_activity_detail_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/item_my_activity"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
