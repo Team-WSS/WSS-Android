@@ -26,7 +26,7 @@ class MyActivityViewModel @Inject constructor(private val myActivityRepository: 
     fun updateMyActivities() {
         viewModelScope.launch {
             val activities = myActivityRepository.getMyActivities()
-            _myActivity.value = activities
+            _myActivity.value = activities.take(5)
         }
     }
 
