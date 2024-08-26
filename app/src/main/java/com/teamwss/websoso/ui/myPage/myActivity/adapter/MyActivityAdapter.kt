@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.data.model.MyActivitiesEntity
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
+import com.teamwss.websoso.ui.myPage.myActivity.MyActivityViewModel
 
-class MyActivityAdapter :
+class MyActivityAdapter(private val myActivityVwModel: MyActivityViewModel) :
     ListAdapter<MyActivitiesEntity.MyActivityEntity, MyActivityViewHolder>(diffCallback) {
 
     init {
@@ -23,7 +24,9 @@ class MyActivityAdapter :
     }
 
     override fun onBindViewHolder(holder: MyActivityViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val activity = getItem(position)
+        val genreText = myActivityVwModel.translateGenres(activity.relevantCategories)
+        holder.bind(activity, genreText,myActivityVwModel)
     }
 
     companion object {
