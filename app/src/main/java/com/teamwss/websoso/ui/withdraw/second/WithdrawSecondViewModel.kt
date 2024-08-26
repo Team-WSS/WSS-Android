@@ -19,7 +19,7 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
     private val _isWithdrawButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
     val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
 
-    val etcReason: MutableLiveData<String> = MutableLiveData()
+    val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
 
     fun updateWithdrawReason(reason: String) {
         _withdrawReason.value = reason
@@ -36,7 +36,7 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
         val isWithdrawAgree: Boolean = isWithdrawCheckAgree.value == true
 
         _isWithdrawButtonEnabled.value = when {
-            withdrawReason.value == ETC_INPUT_REASON -> etcReason.value?.isNotBlank() == true && isWithdrawAgree
+            withdrawReason.value == ETC_INPUT_REASON -> withdrawEtcReason.value?.isNotBlank() == true && isWithdrawAgree
             reasonIsNotBlank && isWithdrawAgree -> true
             else -> false
         }
@@ -46,7 +46,7 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             runCatching {
                 val withdrawReason = when (withdrawReason.value) {
-                    ETC_INPUT_REASON -> etcReason.value
+                    ETC_INPUT_REASON -> withdrawEtcReason.value
                     else -> withdrawReason.value
                 }
                 // TODO: API 개발 완료 시 reason을 사용하여 회원 탈퇴 진행
