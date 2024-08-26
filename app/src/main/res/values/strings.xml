@@ -275,4 +275,8 @@
     <string name="edit_profile_introduction_hint">소개글을 적어보세요!</string>
     <string name="profile_edit_prefer_genre">선호장르</string>
     <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해 드려요</string>
+
+    <!-- 내 활동 뷰 -->
+    <string name="my_activity_score_count">%.1f (%d)</string>
+    <string name="my_activity_dot">·</string>
 </resources>
