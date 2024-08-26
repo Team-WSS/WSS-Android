@@ -60,7 +60,8 @@ class ChangeUserInfoActivity :
 
     private fun setupObserver() {
         changeUserInfoViewModel.isSaveStatusComplete.observe(this) { isComplete ->
-            if (isComplete) finish()
+            if (isComplete)
+                finish()
         }
     }
 
