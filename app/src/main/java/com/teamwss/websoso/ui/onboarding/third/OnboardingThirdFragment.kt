@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentOnboardingThirdBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.third.adapter.GenreAdapter
 import com.teamwss.websoso.ui.onboarding.third.model.Genre
@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingThirdFragment :
-    BindingFragment<FragmentOnboardingThirdBinding>(R.layout.fragment_onboarding_third) {
+    BaseFragment<FragmentOnboardingThirdBinding>(R.layout.fragment_onboarding_third) {
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

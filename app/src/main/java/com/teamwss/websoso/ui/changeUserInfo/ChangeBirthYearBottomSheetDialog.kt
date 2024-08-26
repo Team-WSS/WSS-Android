@@ -2,25 +2,27 @@ package com.teamwss.websoso.ui.changeUserInfo
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogOnboardingBirthYearBinding
-import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class ChangeBirthYearBottomSheetDialog :
-    BindingBottomSheetDialog<DialogOnboardingBirthYearBinding>(R.layout.dialog_onboarding_birth_year) {
+    BaseBottomSheetDialog<DialogOnboardingBirthYearBinding>(R.layout.dialog_onboarding_birth_year) {
+    private val changeUserInfoViewModel: ChangeUserInfoViewModel by activityViewModels()
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupDialogBehavior()
         setupNumberPicker()
         setupListeners()
+        setupObserver()
     }
 
     private fun setupDialogBehavior() {
@@ -33,13 +35,13 @@ class ChangeBirthYearBottomSheetDialog :
         numberPicker.apply {
             minValue = MIN_BIRTH_YEAR
             maxValue = MAX_BIRTH_YEAR
-            value = INIT_BIRTH_YEAR
         }
     }
 
     private fun setupListeners() {
         binding.btnOnboardingSecondBottomSheetComplete.setOnClickListener {
-            val selectedYear = binding.npOnboardingSecondBottomSheetBirthYear.value
+            val selectedYear: Int = binding.npOnboardingSecondBottomSheetBirthYear.value
+            changeUserInfoViewModel.updateBirthYear(selectedYear)
             dismiss()
         }
 
@@ -48,9 +50,16 @@ class ChangeBirthYearBottomSheetDialog :
         }
     }
 
+    private fun setupObserver() {
+        changeUserInfoViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            binding.npOnboardingSecondBottomSheetBirthYear.value =
+                uiState.birthYear ?: DEFAULT_BIRTH_YEAR
+        }
+    }
+
     companion object {
         private var MAX_BIRTH_YEAR: Int = LocalDate.now().year
         private const val MIN_BIRTH_YEAR: Int = 1900
-        private const val INIT_BIRTH_YEAR: Int = 2000
+        private const val DEFAULT_BIRTH_YEAR: Int = 2000
     }
 }

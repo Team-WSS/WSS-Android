@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="categoryImageUrl"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_50_F4F5F8"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_novel_detail_white_radius_14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_novel_rating_keyword"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:cornerRadius="@{10f}"
+                app:isVectorImage="@{true}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImageUrl="@{categoryImageUrl}" />
+
+            <TextView
+                android:id="@+id/tv_rating_keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/gray_300_52515F"
+                app:layout_constraintBottom_toBottomOf="@id/iv_novel_rating_keyword"
+                app:layout_constraintStart_toEndOf="@id/iv_novel_rating_keyword"
+                app:layout_constraintTop_toTopOf="@id/iv_novel_rating_keyword"
+                tools:text="세계관" />
+
+            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+                android:id="@+id/wcg_novel_rating_keyword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                app:chipSpacingHorizontal="6dp"
+                app:chipSpacingVertical="-10dp"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_max="78dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_novel_rating_keyword"
+                app:singleSelection="false" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_novel_rating_keyword"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="34dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/wcg_novel_rating_keyword" />
+
+            <ImageView
+                android:id="@+id/iv_novel_rating_keyword_toggle"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:paddingVertical="14dp"
+                android:src="@drawable/ic_novel_rating_toggle_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_keyword" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -190,7 +190,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_not_exist_result" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wl_normal_explore"
             android:layout_width="0dp"
             android:layout_height="0dp"

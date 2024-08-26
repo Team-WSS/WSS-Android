@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
             android:id="@+id/wcg_detail_explore_info_genre"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

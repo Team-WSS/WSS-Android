@@ -3,31 +3,33 @@ package com.teamwss.websoso.ui.changeUserInfo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
+import androidx.activity.viewModels
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityChangeUserInfoBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
-import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChangeUserInfoActivity :
-    BindingActivity<ActivityChangeUserInfoBinding>(R.layout.activity_change_user_info) {
+    BaseActivity<ActivityChangeUserInfoBinding>(R.layout.activity_change_user_info) {
+    private val changeUserInfoViewModel: ChangeUserInfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupTranslucentOnStatusBar()
-        onChangeBirthYearClickButton()
+        bindViewModel()
+        onChangeBirthYearButtonClick()
         onBackButtonClick()
+        onCompleteButtonClick()
+        setupObserver()
     }
 
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        )
+    private fun bindViewModel() {
+        binding.changeUserInfoViewModel = changeUserInfoViewModel
+        binding.lifecycleOwner = this
     }
 
-    private fun onChangeBirthYearClickButton() {
+    private fun onChangeBirthYearButtonClick() {
         binding.clChangeUserInfoBirthYear.setOnClickListener {
             showBirthYearBottomSheetDialog()
         }
@@ -37,7 +39,7 @@ class ChangeUserInfoActivity :
         val existingDialog =
             supportFragmentManager.findFragmentByTag(BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG)
         if (existingDialog == null) {
-            OnboardingBirthYearBottomSheetDialog().show(
+            ChangeBirthYearBottomSheetDialog().show(
                 supportFragmentManager,
                 BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG,
             )
@@ -47,6 +49,34 @@ class ChangeUserInfoActivity :
     private fun onBackButtonClick() {
         binding.ivChangeUserInfoBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun onCompleteButtonClick() {
+        binding.tvChangeUserInfoCompleteButton.setOnClickListener {
+            changeUserInfoViewModel.saveUserInfo()
+        }
+    }
+
+    private fun setupObserver() {
+        changeUserInfoViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.loading -> {
+                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(true)
+                    binding.wlChangeUserInfo.setErrorLayoutVisibility(false)
+                }
+
+                uiState.error -> {
+                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(false)
+                    binding.wlChangeUserInfo.setErrorLayoutVisibility(true)
+                }
+
+                else -> {
+                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(false)
+                    binding.wlChangeUserInfo.setErrorLayoutVisibility(false)
+                    if (uiState.isSaveStatusComplete) finish()
+                }
+            }
         }
     }
 

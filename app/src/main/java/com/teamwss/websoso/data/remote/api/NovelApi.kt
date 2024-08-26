@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.remote.api
 
+import PopularNovelsResponseDto
 import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
@@ -41,4 +42,7 @@ interface NovelApi {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): ExploreResultResponseDto
+
+    @GET("novels/popular")
+    suspend fun getPopularNovels(): PopularNovelsResponseDto
 }
