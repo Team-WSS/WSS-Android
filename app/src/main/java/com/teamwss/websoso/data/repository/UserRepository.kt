@@ -3,7 +3,7 @@ package com.teamwss.websoso.data.repository
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.mapper.toRemote
 import com.teamwss.websoso.data.model.BlockedUsersEntity
-import com.teamwss.websoso.data.model.UserEmailEntity
+import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.api.UserApi
@@ -13,8 +13,8 @@ class UserRepository @Inject constructor(
     private val userApi: UserApi,
 ) {
 
-    suspend fun fetchUserEmail(): UserEmailEntity {
-        return userApi.getUserEmail().toData()
+    suspend fun fetchUserInfo(): UserInfoEntity {
+        return userApi.getUserInfo().toData()
     }
 
     suspend fun fetchBlockedUsers(): BlockedUsersEntity {

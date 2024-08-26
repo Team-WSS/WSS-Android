@@ -2,7 +2,7 @@ package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
-import com.teamwss.websoso.data.remote.response.UserEmailResponseDto
+import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
 import retrofit2.http.Body
@@ -13,8 +13,8 @@ import retrofit2.http.Path
 
 interface UserApi {
 
-    @GET("users/email")
-    suspend fun getUserEmail(): UserEmailResponseDto
+    @GET("users/info")
+    suspend fun getUserInfo(): UserInfoResponseDto
 
     @GET("blocks")
     suspend fun getBlockedUser(): BlockedUsersResponseDto

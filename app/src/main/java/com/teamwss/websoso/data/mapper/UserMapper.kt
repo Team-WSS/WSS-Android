@@ -2,18 +2,20 @@ package com.teamwss.websoso.data.mapper
 
 import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
-import com.teamwss.websoso.data.model.UserEmailEntity
+import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
-import com.teamwss.websoso.data.remote.response.UserEmailResponseDto
+import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
 
-fun UserEmailResponseDto.toData(): UserEmailEntity {
-    return UserEmailEntity(
+fun UserInfoResponseDto.toData(): UserInfoEntity {
+    return UserInfoEntity(
         email = email,
+        gender = gender,
+        birthYear = birth,
     )
 }
 
