@@ -1,20 +1,16 @@
 package com.teamwss.websoso.ui.myPage.myActivity.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.data.model.MyActivitiesEntity
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
-import com.teamwss.websoso.ui.myPage.myActivity.MyActivityViewModel
+import com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel
 
 class MyActivityViewHolder(private val binding: ItemMyActivityBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(myActivity: MyActivitiesEntity.MyActivityEntity,genreText: String, myActivityViewModel: MyActivityViewModel) {
+    fun bind(myActivity: ActivityModel) {
         binding.myActivity = myActivity
-        binding.tvMyActivityCreatedDate.text = myActivityViewModel.formatDate(myActivity.createdDate)
-        binding.tvMyActivityGenre.text = genreText
         binding.executePendingBindings()
     }
 
