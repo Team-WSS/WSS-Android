@@ -7,7 +7,7 @@ import com.teamwss.websoso.databinding.ItemPopularFeedBinding
 
 class PopularFeedsViewHolder(
     private val binding: ItemPopularFeedBinding,
-    private val navigateToNovelDetail: (Long) -> Unit,
+    private val onFeedClick: (feedId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val slots by lazy {
@@ -27,7 +27,7 @@ class PopularFeedsViewHolder(
                     tvPopularFeedCommentCount.text = feed.commentCount.toString()
                     tvPopularFeedContentSpoiler.visibility =
                         if (feed.isSpoiler) View.VISIBLE else View.GONE
-                    root.setOnClickListener { navigateToNovelDetail(feed.feedId) }
+                    root.setOnClickListener { onFeedClick(feed.feedId) }
                 }
             }
         }

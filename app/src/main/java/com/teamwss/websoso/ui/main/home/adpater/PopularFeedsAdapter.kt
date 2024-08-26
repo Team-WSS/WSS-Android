@@ -8,13 +8,13 @@ import com.teamwss.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
 import com.teamwss.websoso.databinding.ItemPopularFeedBinding
 
 class PopularFeedsAdapter(
-    private val navigateToNovelDetail: (Long) -> Unit,
+    private val onFeedClick: (feedId :Long)  -> Unit,
 ) : ListAdapter<List<PopularFeedEntity>, PopularFeedsViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularFeedsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemPopularFeedBinding.inflate(inflater, parent, false)
-        return PopularFeedsViewHolder(binding, navigateToNovelDetail)
+        return PopularFeedsViewHolder(binding, onFeedClick)
     }
 
     override fun onBindViewHolder(holder: PopularFeedsViewHolder, position: Int) {
