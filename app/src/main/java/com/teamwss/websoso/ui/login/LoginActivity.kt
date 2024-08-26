@@ -44,9 +44,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     companion object {
 
-        fun from(context: Context): Intent {
-            return Intent(context, LoginActivity::class.java).apply {
-            }
-        }
+        fun getIntent(context: Context): Intent =
+            Intent(context, LoginActivity::class.java)
     }
 }
