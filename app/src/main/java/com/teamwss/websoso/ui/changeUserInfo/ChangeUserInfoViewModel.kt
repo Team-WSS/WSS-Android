@@ -51,17 +51,17 @@ class ChangeUserInfoViewModel @Inject constructor(
     }
 
     fun updateUserGender(isMaleSelected: Boolean) {
-        val updateGender = if (isMaleSelected) MALE else FEMALE
+        val updatedGender = if (isMaleSelected) MALE else FEMALE
         _uiState.value = _uiState.value?.copy(
-            gender = updateGender,
-            isMaleButtonSelected = updateGender == MALE,
-            isFemaleButtonSelected = updateGender == FEMALE,
+            gender = updatedGender,
+            isMaleButtonSelected = updatedGender == MALE,
+            isFemaleButtonSelected = updatedGender == FEMALE,
         )
         updateIsCompleteButtonEnabled()
     }
 
     fun updateBirthYear(birthYear: Int) {
-        _uiState.value = _uiState.value?.copy(birthYear = birthYear)
+        _uiState.value = uiState.value?.copy(birthYear = birthYear)
         updateIsCompleteButtonEnabled()
     }
 

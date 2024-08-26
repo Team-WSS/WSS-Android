@@ -53,13 +53,13 @@ class ChangeBirthYearBottomSheetDialog :
     private fun setupObserver() {
         changeUserInfoViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             binding.npOnboardingSecondBottomSheetBirthYear.value =
-                uiState.birthYear ?: INIT_BIRTH_YEAR
+                uiState.birthYear ?: DEFAULT_BIRTH_YEAR
         }
     }
 
     companion object {
         private var MAX_BIRTH_YEAR: Int = LocalDate.now().year
         private const val MIN_BIRTH_YEAR: Int = 1900
-        private const val INIT_BIRTH_YEAR: Int = 2000
+        private const val DEFAULT_BIRTH_YEAR: Int = 2000
     }
 }
