@@ -17,7 +17,12 @@ class OnboardingThirdFragment :
     BindingFragment<FragmentOnboardingThirdBinding>(R.layout.fragment_onboarding_third) {
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 
-    private lateinit var adapter: GenreAdapter
+    private val adapter: GenreAdapter by lazy {
+        GenreAdapter(
+            onboardingViewModel::updateGenreSelection,
+            onboardingViewModel::isGenreSelected,
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,10 +34,6 @@ class OnboardingThirdFragment :
     }
 
     private fun setupGenreAdapter() {
-        adapter = GenreAdapter(
-            onboardingViewModel::updateGenreSelection,
-            onboardingViewModel::isGenreSelected,
-        )
         binding.rvOnboardingThird.adapter = adapter
         adapter.submitList(Genre.entries.toList())
     }
