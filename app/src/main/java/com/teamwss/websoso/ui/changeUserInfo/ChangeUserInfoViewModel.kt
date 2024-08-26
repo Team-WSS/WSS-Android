@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.changeUserInfo.model.Gender
+import com.teamwss.websoso.ui.changeUserInfo.model.Gender.Companion.getOppositeGender
 import com.teamwss.websoso.ui.changeUserInfo.model.Gender.FEMALE
 import com.teamwss.websoso.ui.changeUserInfo.model.Gender.MALE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,8 +34,10 @@ class ChangeUserInfoViewModel @Inject constructor(
     val isCompleteButtonEnabled: LiveData<Boolean> get() = _isCompleteButtonEnabled
 
     private lateinit var isInitializeOfGender: Gender
-
     private var isInitializeOfBirthYear by Delegates.notNull<Int>()
+
+    private val _isSaveStatusComplete: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isSaveStatusComplete: LiveData<Boolean> get() = _isSaveStatusComplete
 
     init {
         updateUserInfo()
@@ -75,5 +78,18 @@ class ChangeUserInfoViewModel @Inject constructor(
     fun updateBirthYear(selectedYear: Int) {
         _birthYear.value = selectedYear
         updateIsCompleteButtonEnabled()
+    }
+
+    fun saveUserInfo() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.saveUserInfo(
+                    gender.value?.genderCode ?: isInitializeOfGender.getOppositeGender().genderCode,
+                    birthYear.value ?: isInitializeOfBirthYear,
+                )
+            }.onSuccess {
+                _isSaveStatusComplete.value = true
+            }
+        }
     }
 }

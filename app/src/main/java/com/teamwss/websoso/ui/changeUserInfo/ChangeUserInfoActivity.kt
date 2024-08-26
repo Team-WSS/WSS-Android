@@ -20,6 +20,8 @@ class ChangeUserInfoActivity :
         bindViewModel()
         onChangeBirthYearButtonClick()
         onBackButtonClick()
+        onCompleteButtonClick()
+        setupObserver()
     }
 
     private fun bindViewModel() {
@@ -47,6 +49,18 @@ class ChangeUserInfoActivity :
     private fun onBackButtonClick() {
         binding.ivChangeUserInfoBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun onCompleteButtonClick() {
+        binding.tvChangeUserInfoCompleteButton.setOnClickListener {
+            changeUserInfoViewModel.saveUserInfo()
+        }
+    }
+
+    private fun setupObserver() {
+        changeUserInfoViewModel.isSaveStatusComplete.observe(this) { isComplete ->
+            if (isComplete) finish()
         }
     }
 

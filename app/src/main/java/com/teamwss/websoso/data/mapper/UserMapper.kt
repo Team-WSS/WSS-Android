@@ -2,9 +2,11 @@ package com.teamwss.websoso.data.mapper
 
 import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
+import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
+import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
@@ -20,16 +22,14 @@ fun UserInfoResponseDto.toData(): UserInfoEntity {
 }
 
 fun BlockedUsersResponseDto.toData(): BlockedUsersEntity {
-    return BlockedUsersEntity(
-        blockedUsers = blocks.map { blockedUser ->
-            BlockedUserEntity(
-                blockId = blockedUser.blockId,
-                userId = blockedUser.userId,
-                nickName = blockedUser.nickName,
-                avatarImage = blockedUser.avatarImage,
-            )
-        }
-    )
+    return BlockedUsersEntity(blockedUsers = blocks.map { blockedUser ->
+        BlockedUserEntity(
+            blockId = blockedUser.blockId,
+            userId = blockedUser.userId,
+            nickName = blockedUser.nickName,
+            avatarImage = blockedUser.avatarImage,
+        )
+    })
 }
 
 fun UserNovelStatsResponseDto.toData(): UserNovelStatsEntity {
@@ -50,5 +50,12 @@ fun UserProfileStatusResponseDto.toData(): UserProfileStatusEntity {
 fun UserProfileStatusEntity.toRemote(): UserProfileStatusRequestDto {
     return UserProfileStatusRequestDto(
         isProfilePublic = isProfilePublic,
+    )
+}
+
+fun UserUpdateInfoEntity.toRemote(): UserInfoRequestDto {
+    return UserInfoRequestDto(
+        gender = gender,
+        birth = birthYear,
     )
 }

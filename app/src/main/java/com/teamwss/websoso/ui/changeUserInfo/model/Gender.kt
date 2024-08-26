@@ -8,5 +8,12 @@ enum class Gender(val genderCode: String, val displayName: String) {
 
         fun from(code: String): Gender =
             entries.find { it.genderCode == code } ?: throw IllegalArgumentException()
+
+        fun Gender.getOppositeGender(): Gender {
+            return when (this) {
+                MALE -> FEMALE
+                FEMALE -> MALE
+            }
+        }
     }
 }
