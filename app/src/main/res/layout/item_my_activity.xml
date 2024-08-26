@@ -82,7 +82,7 @@
             android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
-            android:visibility='@{myActivity.isModified ? View.VISIBLE : View.GONE}'
+            app:isVisible="@{myActivity.isModified}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_created_date"
             app:layout_constraintStart_toEndOf="@+id/tv_my_activity_created_date"
             app:layout_constraintTop_toTopOf="@+id/tv_my_activity_created_date" />
@@ -106,6 +106,7 @@
             android:text="@string/feed_spoiler_warning"
             android:textAppearance="@style/body2"
             android:textColor="@color/secondary_100_FF675D"
+            app:isVisible="@{myActivity.isSpoiler}"
             app:layout_constraintStart_toStartOf="@+id/cl_my_activity_profile"
             app:layout_constraintTop_toBottomOf="@+id/cl_my_activity_profile" />
 
@@ -121,6 +122,7 @@
             android:text="@{myActivity.feedContent}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
+            app:isVisible="@{!myActivity.isSpoiler}"
             app:layout_constraintEnd_toEndOf="@+id/iv_my_activity_more"
             app:layout_constraintStart_toStartOf="@+id/cl_my_activity_profile"
             app:layout_constraintTop_toBottomOf="@+id/tv_my_activity_spoiler_warning"
