@@ -14,7 +14,7 @@ class MyActivityFragment :
     BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myActivityAdapter: MyActivityAdapter by lazy {
-        MyActivityAdapter(myActivityViewModel)
+        MyActivityAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
