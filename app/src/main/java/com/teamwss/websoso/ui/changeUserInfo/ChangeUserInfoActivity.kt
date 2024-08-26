@@ -3,19 +3,30 @@ package com.teamwss.websoso.ui.changeUserInfo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityChangeUserInfoBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.databinding.ActivityChangeUserInfoBinding
 import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChangeUserInfoActivity :
     BaseActivity<ActivityChangeUserInfoBinding>(R.layout.activity_change_user_info) {
+    private val changeUserInfoViewModel: ChangeUserInfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        bindViewModel()
         onChangeBirthYearClickButton()
         onBackButtonClick()
+//        setupObserver()
+    }
+
+    private fun bindViewModel() {
+        binding.changeUserInfoViewModel = changeUserInfoViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun onChangeBirthYearClickButton() {
@@ -38,6 +49,11 @@ class ChangeUserInfoActivity :
     private fun onBackButtonClick() {
         binding.ivChangeUserInfoBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun setupObserver() {
+        changeUserInfoViewModel.birthYear.observe(this) { birthYear ->
         }
     }
 

@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="changeUserInfoViewModel"
+            type="com.teamwss.websoso.ui.changeUserInfo.ChangeUserInfoViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -84,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@id/ll_change_user_info_gender_chips" />
 
         <TextView
-            android:id="@+id/tv_change_user_info_birth_year"
+            android:id="@+id/tv_change_user_info_birth_year_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -103,12 +110,13 @@
             android:paddingHorizontal="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_change_user_info_birth_year">
+            app:layout_constraintTop_toBottomOf="@id/tv_change_user_info_birth_year_title">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
+                android:text="@{String.valueOf(changeUserInfoViewModel.birthYear)}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
