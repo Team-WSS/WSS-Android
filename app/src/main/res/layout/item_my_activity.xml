@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="myActivity"
+            type="com.teamwss.websoso.data.model.MyActivitiesEntity.MyActivityEntity" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,6 +29,7 @@
                 cornerRadius="@{12f}"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:src="@{myActivity.profileImg}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:maxLines="1"
-                android:text=""
+                android:text="@{myActivity.nickname}"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,14 +51,26 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/tv_my_activity_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="·"
+            android:textAppearance="@style/title2"
+            app:layout_constraintBottom_toBottomOf="@id/tv_my_activity_created_date"
+            app:layout_constraintEnd_toStartOf="@id/tv_my_activity_created_date"
+            app:layout_constraintStart_toEndOf="@id/cl_my_activity_profile"
+            app:layout_constraintTop_toTopOf="@id/tv_my_activity_created_date" />
+
+        <TextView
             android:id="@+id/tv_my_activity_created_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:layout_marginStart="6dp"
             android:textAppearance="@style/body5"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/cl_my_activity_profile"
-            app:layout_constraintStart_toEndOf="@+id/cl_my_activity_profile"
+            app:layout_constraintStart_toEndOf="@+id/tv_my_activity_dot"
             app:layout_constraintTop_toTopOf="@+id/cl_my_activity_profile" />
 
         <TextView
@@ -99,7 +116,7 @@
             android:ellipsize="end"
             android:gravity="top"
             android:maxLines="5"
-            android:text=""
+            android:text="@{myActivity.feedContent}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/iv_my_activity_more"
@@ -140,7 +157,7 @@
                 android:ellipsize="end"
                 android:ems="13"
                 android:maxLines="1"
-                android:text=""
+                android:text="@{myActivity.title}"
                 android:textAppearance="@style/title3"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_link"
@@ -164,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text=""
+                android:text='@{String.format(@string/my_activity_score_count, myActivity.novelRating != null ? myActivity.novelRating : 0.0f, myActivity.novelRatingCount != null ? myActivity.novelRatingCount : 0)}'
                 android:textAppearance="@style/label1"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_novel_name"
@@ -189,7 +206,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text=""
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@+id/cl_my_activity_novel_info"
