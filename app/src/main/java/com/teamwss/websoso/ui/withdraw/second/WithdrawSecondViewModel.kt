@@ -17,7 +17,7 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
     private val _isWithdrawCheckAgree: MutableLiveData<Boolean> = MutableLiveData(false)
     val isWithdrawCheckAgree: LiveData<Boolean> get() = _isWithdrawCheckAgree
 
-    private val _isWithdrawButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
 
     val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
@@ -28,27 +28,37 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
         withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
             withdrawEtcReasonCount.value = reason.length
         }
+
+        _isWithdrawButtonEnabled.addSource(withdrawReason) {
+            updateWithdrawButtonEnabled()
+        }
+        _isWithdrawButtonEnabled.addSource(isWithdrawCheckAgree) {
+            updateWithdrawButtonEnabled()
+        }
+        _isWithdrawButtonEnabled.addSource(withdrawEtcReason) {
+            updateWithdrawButtonEnabled()
+        }
+    }
+
+    private fun updateWithdrawButtonEnabled() {
+        val reasonIsNotBlank: Boolean = _withdrawReason.value?.isNotBlank() == true
+        val isWithdrawAgree: Boolean = _isWithdrawCheckAgree.value == true
+        val isEtcReasonValid =
+            _withdrawReason.value == ETC_INPUT_REASON && withdrawEtcReason.value?.isNotBlank() == true
+
+        _isWithdrawButtonEnabled.value = when {
+            _withdrawReason.value == ETC_INPUT_REASON -> isEtcReasonValid && isWithdrawAgree
+            reasonIsNotBlank && isWithdrawAgree -> true
+            else -> false
+        }
     }
 
     fun updateWithdrawReason(reason: String) {
         _withdrawReason.value = reason
-        updateWithdrawButtonEnabled()
     }
 
     fun updateIsWithdrawCheckAgree() {
         _isWithdrawCheckAgree.value = isWithdrawCheckAgree.value?.not()
-        updateWithdrawButtonEnabled()
-    }
-
-    fun updateWithdrawButtonEnabled() {
-        val reasonIsNotBlank: Boolean = withdrawReason.value?.isNotBlank() == true
-        val isWithdrawAgree: Boolean = isWithdrawCheckAgree.value == true
-
-        _isWithdrawButtonEnabled.value = when {
-            withdrawReason.value == ETC_INPUT_REASON -> withdrawEtcReason.value?.isNotBlank() == true && isWithdrawAgree
-            reasonIsNotBlank && isWithdrawAgree -> true
-            else -> false
-        }
     }
 
     fun saveWithdrawReason() {

@@ -81,10 +81,6 @@ class WithdrawSecondActivity :
         withdrawSecondViewModel.withdrawReason.observe(this) { reason ->
             updateWithdrawReasonCheckButtonImage(reason)
         }
-
-        withdrawSecondViewModel.withdrawEtcReason.observe(this) {
-            withdrawSecondViewModel.updateWithdrawButtonEnabled()
-        }
     }
 
     private fun updateWithdrawCheckAgreeButtonImage(isWithdrawAgree: Boolean) {
