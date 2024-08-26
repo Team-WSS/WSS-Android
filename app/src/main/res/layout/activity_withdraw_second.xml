@@ -254,7 +254,7 @@
                 android:minLines="4"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="10dp"
-                android:text="@={withdrawSecondViewModel.etcReason}"
+                android:text="@={withdrawSecondViewModel.withdrawEtcReason}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_200_AEADB3"
@@ -424,7 +424,7 @@
                     android:id="@+id/iv_withdraw_check_agree"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/img_account_info_check_unselected"
+                    android:src="@drawable/img_withdraw_second_check_button_selector"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
