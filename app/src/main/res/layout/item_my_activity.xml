@@ -8,7 +8,7 @@
 
         <variable
             name="myActivity"
-            type="com.teamwss.websoso.data.model.MyActivitiesEntity.MyActivityEntity" />
+            type="com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel" />
 
     </data>
 
@@ -67,9 +67,10 @@
             android:id="@+id/tv_my_activity_created_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:text='@{myActivity.createdDate}'
             android:textAppearance="@style/body5"
             android:textColor="@color/black"
+            android:layout_marginStart="6dp"
             app:layout_constraintBottom_toBottomOf="@+id/cl_my_activity_profile"
             app:layout_constraintStart_toEndOf="@+id/tv_my_activity_dot"
             app:layout_constraintTop_toTopOf="@+id/cl_my_activity_profile" />
@@ -210,6 +211,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:text='@{myActivity.relevantCategories}'
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@+id/cl_my_activity_novel_info"
