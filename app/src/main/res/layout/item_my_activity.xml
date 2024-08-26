@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
 
         <variable
             name="myActivity"
@@ -81,6 +82,7 @@
             android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
+            android:visibility='@{myActivity.isModified ? View.VISIBLE : View.GONE}'
             app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_created_date"
             app:layout_constraintStart_toEndOf="@+id/tv_my_activity_created_date"
             app:layout_constraintTop_toTopOf="@+id/tv_my_activity_created_date" />
@@ -241,7 +243,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
                 android:maxLines="1"
-                android:text=""
+                android:text='@{String.valueOf(myActivity.likeCount)}'
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_thumb_up"
@@ -279,7 +281,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
                 android:maxLines="1"
-                android:text=""
+                android:text='@{String.valueOf(myActivity.commentCount)}'
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_comment"
