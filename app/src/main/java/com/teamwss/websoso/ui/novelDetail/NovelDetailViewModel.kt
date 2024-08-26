@@ -10,10 +10,8 @@ import com.teamwss.websoso.data.repository.UserPreferencesRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 
 @HiltViewModel
@@ -91,15 +89,13 @@ class NovelDetailViewModel @Inject constructor(
     }
 
     fun updateIsFirstLaunched() {
-        CoroutineScope(Dispatchers.IO).launch {
-            supervisorScope {
-                runCatching {
-                    userPreferencesRepository.fetchNovelDetailFirstLaunched()
-                }.onSuccess { isFirstLaunched ->
-                    _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
-                }.onFailure {
-                    _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                userPreferencesRepository.fetchNovelDetailFirstLaunched()
+            }.onSuccess { isFirstLaunched ->
+                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
+            }.onFailure {
+                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
             }
         }
     }
