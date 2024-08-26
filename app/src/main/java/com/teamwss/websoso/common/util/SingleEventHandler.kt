@@ -1,4 +1,4 @@
-package com.teamwss.websoso.util
+package com.teamwss.websoso.common.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeKeywordRepository
-import com.teamwss.websoso.ui.common.model.CategoriesModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel

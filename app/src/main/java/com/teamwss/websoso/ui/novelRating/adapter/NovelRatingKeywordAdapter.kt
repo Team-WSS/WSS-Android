@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
-import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 
 class NovelRatingKeywordAdapter(
     private val onKeywordClick: (keyword: CategoryModel.KeywordModel, isClicked: Boolean) -> (Unit),

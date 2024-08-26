@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.common.customView
+package com.teamwss.websoso.common.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet

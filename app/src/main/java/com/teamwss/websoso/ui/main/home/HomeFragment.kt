@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.FragmentHomeBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
-import com.teamwss.websoso.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntScaledByPx
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
 
     private val popularNovelsAdapter: PopularNovelsAdapter by lazy {

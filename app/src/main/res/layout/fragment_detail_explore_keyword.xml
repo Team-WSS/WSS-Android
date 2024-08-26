@@ -90,7 +90,7 @@
             app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_keyword_search"
             tools:visibility="gone">
 
-            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_detail_explore_keyword_selected_keyword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_detail_explore_keyword_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
