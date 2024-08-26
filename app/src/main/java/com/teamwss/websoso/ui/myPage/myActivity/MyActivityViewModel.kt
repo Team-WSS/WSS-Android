@@ -49,13 +49,13 @@ class MyActivityViewModel @Inject constructor(private val myActivityRepository: 
         }
     }
 
-    fun translateGenres(relevantCategories: List<String>): String {
+    private fun translateGenres(relevantCategories: List<String>): String {
         return relevantCategories.joinToString(", ") { category ->
             Genres.fromString(category)?.korean ?: category
         }
     }
 
-    fun formatDate(inputDate: String): String {
+    private fun formatDate(inputDate: String): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val outputFormat = SimpleDateFormat("M월 d일", Locale.getDefault())
 
