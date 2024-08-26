@@ -37,7 +37,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
-                android:text="내 활동"
+                android:text="@string/my_activity_detail_title"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
