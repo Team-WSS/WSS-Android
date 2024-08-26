@@ -192,7 +192,7 @@ class NovelInfoFragment : BindingFragment<FragmentNovelInfoBinding>(R.layout.fra
                 binding.tvNovelInfoReadStatusTitle.text = getColoredText(quitCountText, listOf(coloredQuitText), color)
             }
 
-            else -> Unit
+            ReadStatus.NONE -> Unit
         }
     }
 
