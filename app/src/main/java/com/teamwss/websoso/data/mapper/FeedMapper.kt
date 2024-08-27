@@ -71,7 +71,7 @@ fun FeedDetailResponseDto.toData(): FeedEntity = FeedEntity(
         avatarImage = avatarImage,
     ),
     createdDate = createdDate,
-    id = -1,
+    id = feedId,
     content = feedContent,
     relevantCategories = relevantCategories,
     likeCount = likeCount,

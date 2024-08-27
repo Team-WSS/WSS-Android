@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class FeedDetailResponseDto(
     @SerialName("userId")
     val userId: Long,
+    @SerialName("feedId")
+    val feedId: Long,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("avatarImage")
