@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.ui.login.adapter.ImageViewPagerAdapter
 import com.teamwss.websoso.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +44,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     companion object {
 
-        fun getIntent(context: Context): Intent =
-            Intent(context, LoginActivity::class.java)
+        fun getIntent(context: Context): Intent {
+            return Intent(context, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        }
     }
 }

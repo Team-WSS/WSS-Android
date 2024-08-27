@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.common.dialog
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
@@ -22,11 +21,8 @@ class LoginRequestDialogFragment :
 
     private fun onGoToLoginButtonClick() {
         binding.btnLoginRequestGoToLogin.setOnClickListener {
-            val intent = LoginActivity.getIntent(requireContext()).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
+            val intent = LoginActivity.getIntent(requireContext())
             startActivity(intent)
-            requireActivity().finish()
         }
     }
 
