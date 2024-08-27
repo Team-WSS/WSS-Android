@@ -94,7 +94,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            updateViewVisibleByLogin(uiState.isLogin, uiState.nickname)
+            updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
             if (uiState.isLogin) updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
             when {
                 uiState.loading -> Unit
@@ -108,7 +108,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun updateViewVisibleByLogin(isLogin: Boolean, nickname: String?) {
+    private fun updateViewVisibilityByLogin(isLogin: Boolean, nickname: String?) {
         with(binding) {
             when (isLogin) {
                 true -> {
