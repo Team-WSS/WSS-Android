@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.common.util.toIntPxFromDp
+import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 
 class DetailExploreKeywordViewHolder(
@@ -30,7 +30,7 @@ class DetailExploreKeywordViewHolder(
                     layoutParams.matchConstraintMaxHeight =
                         ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toIntPxFromDp()
+                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByPx()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
