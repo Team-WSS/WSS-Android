@@ -16,11 +16,11 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
-import com.teamwss.websoso.common.util.toFloatScaledByPx
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,7 +43,6 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
         bindViewModel()
         setupPopupBinding()
         setupObserver()
-        onNovelDetailButtonClick()
         setupWebsosoLoadingLayout()
         setupViewPager()
         novelDetailViewModel.updateNovelDetail(novelId)

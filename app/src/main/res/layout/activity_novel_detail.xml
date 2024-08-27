@@ -91,9 +91,18 @@
                             app:loadImageUrl="@{novelDetailViewModel.novelDetailModel.novel.novelImage}" />
 
                         <ImageView
-                            android:id="@+id/iv_novel_detail_cover_genre"
                             android:layout_width="72dp"
                             android:layout_height="72dp"
+                            android:src="@drawable/ic_novel_detail_genre_frame"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"
+                            app:layout_constraintEnd_toEndOf="@id/iv_novel_detail_cover" />
+
+                        <ImageView
+                            android:id="@+id/iv_novel_detail_cover_genre"
+                            android:layout_width="30dp"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="6dp"
+                            android:layout_marginBottom="6dp"
                             android:scaleType="fitXY"
                             app:isVectorImage="@{true}"
                             app:layout_constraintBottom_toBottomOf="@id/iv_novel_detail_cover"

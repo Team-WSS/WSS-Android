@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter

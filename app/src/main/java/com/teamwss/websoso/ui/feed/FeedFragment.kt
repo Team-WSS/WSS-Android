@@ -27,8 +27,8 @@ import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.common.util.toFloatScaledByPx
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toFloatPxFromDp
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
