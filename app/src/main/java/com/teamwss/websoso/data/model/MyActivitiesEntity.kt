@@ -2,7 +2,7 @@ package com.teamwss.websoso.data.model
 
 data class MyActivitiesEntity(
     val isLoadable: Boolean,
-    val feeds: List<MyActivityEntity>
+    val feeds: List<MyActivityEntity>,
 ){
     data class MyActivityEntity(
         val feedId: Int,
