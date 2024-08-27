@@ -27,7 +27,8 @@ data class NovelRatingModel(
             return Triple(date[0].toInt(), date[1].toInt(), date[2].toInt())
         }
 
-        fun String.toCharmPoint(): CharmPoint = CharmPoint.entries.find { it.value == this } ?: CharmPoint.WORLDVIEW
+        fun String.toCharmPoint(): CharmPoint =
+            CharmPoint.entries.find { it.value == this } ?: CharmPoint.WORLDVIEW
     }
 }
 
@@ -98,7 +99,10 @@ data class NovelRatingKeywordsModel(
         }
     }
 
-    fun updateSelectedKeywords(keyword: CategoriesModel.CategoryModel.KeywordModel, isSelected: Boolean): NovelRatingKeywordsModel {
+    fun updateSelectedKeywords(
+        keyword: CategoriesModel.CategoryModel.KeywordModel,
+        isSelected: Boolean,
+    ): NovelRatingKeywordsModel {
         val newSelectedKeywords = currentSelectedKeywords.toMutableList().apply {
             when (isSelected) {
                 true -> add(keyword)

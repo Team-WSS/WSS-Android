@@ -9,6 +9,6 @@ data class FeedsResponseDto(
     val category: String,
     @SerialName("isLoadable")
     val isLoadable: Boolean,
-    @SerialName("feedsResponseDto")
-    val feedsResponseDto: List<FeedResponseDto>,
+    @SerialName("feeds")
+    val feeds: List<FeedResponseDto>,
 )

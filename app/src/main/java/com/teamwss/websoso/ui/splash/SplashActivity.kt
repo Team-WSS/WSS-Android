@@ -3,8 +3,8 @@ package com.teamwss.websoso.ui.splash
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -23,7 +23,7 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
     }
 
     private fun navigateToLoginActivity() {
-        startActivity(LoginActivity.from(this))
+        startActivity(LoginActivity.getIntent(this))
         finish()
     }
 }

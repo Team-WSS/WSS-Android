@@ -47,7 +47,9 @@ class NovelInfoViewModel @Inject constructor(
         uiState.value?.let { uiState ->
             _uiState.value = uiState.copy(
                 novelInfoModel = uiState.novelInfoModel.copy(
-                    unifiedReviewCount = uiState.novelInfoModel.unifiedReviewCount.formattedUnifiedReviewCount(viewHeight)
+                    unifiedReviewCount = uiState.novelInfoModel.unifiedReviewCount.formattedUnifiedReviewCount(
+                        viewHeight
+                    )
                 )
             )
         }

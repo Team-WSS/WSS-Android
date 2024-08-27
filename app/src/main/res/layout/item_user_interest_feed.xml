@@ -5,17 +5,28 @@
 
     <data>
 
+        <variable
+            name="userInterestFeed"
+            type="com.teamwss.websoso.data.model.UserInterestFeedsEntity.UserInterestFeedEntity" />
+
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="280dp"
-        android:layout_height="252dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="1dp"
         android:background="@drawable/bg_user_interest_white_radius_14dp"
+        android:elevation="1dp"
+        android:onClick="@{() -> onClick.invoke(userInterestFeed.novelId)}"
         android:paddingTop="16dp">
 
         <ImageView
             android:id="@+id/iv_user_interest_feed_novel_cover"
-            cornerRadius="@{4f}"
+            cornerRadius="@{10f}"
+            loadImageUrl="@{userInterestFeed.novelImage}"
             android:layout_width="60dp"
             android:layout_height="88dp"
             android:layout_marginStart="16dp"
@@ -26,10 +37,12 @@
         <TextView
             android:id="@+id/tv_user_interest_feed_novel_title"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:layout_marginEnd="16dp"
             android:breakStrategy="balanced"
+            android:minLines="2"
+            android:text="@{userInterestFeed.novelTitle}"
             android:textAppearance="@style/title3"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,25 +68,39 @@
                 android:id="@+id/tv_user_interest_feed_novel_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text='@{String.format(@string/home_user_interest_novel_rating_format, userInterestFeed.novelRating, userInterestFeed.novelRatingCount)}'
                 android:textAppearance="@style/body5"
                 android:textColor="@color/black"
                 tools:text="4.0 (2)" />
-
         </LinearLayout>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintBottom_toTopOf="@+id/cl_home_user_interest_feed_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_home_user_interest_feed_content"
             android:layout_width="0dp"
             android:layout_height="134dp"
+            android:layout_marginTop="119dp"
             android:background="@drawable/bg_user_interest_gray_20_bottom_radius_14dp"
             android:paddingHorizontal="20dp"
             android:paddingTop="18dp"
             android:paddingBottom="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_user_interest_feed_avatar_image"
+                cornerRadius="@{20f}"
+                isVectorImage="@{true}"
+                loadImageUrl="@{userInterestFeed.avatarImage}"
                 android:layout_width="24dp"
                 android:layout_height="22dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,6 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:text='@{String.format(@string/home_user_interest_feed_nickname_format, userInterestFeed.nickname)}'
                 android:textAppearance="@style/title3"
                 app:layout_constraintBottom_toBottomOf="@id/iv_user_interest_feed_avatar_image"
                 app:layout_constraintStart_toEndOf="@id/iv_user_interest_feed_avatar_image"
@@ -98,13 +126,15 @@
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:maxLines="3"
+                android:minLines="3"
+                android:text="@{userInterestFeed.feedContent}"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_user_interest_feed_avatar_image"
-                tools:text="상수리 나무 아래는 ㄹㅇ 아마 제 인생작이 될꺼 같네요. 소장본도 사려고요 근데 약간 여주가 답답한 스타일인데 그거 감안하면 괜차나요 장애아닌가요?" />
+                tools:text="상수리 나무 아래는..." />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

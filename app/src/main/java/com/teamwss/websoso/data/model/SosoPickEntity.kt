@@ -1,7 +1,7 @@
 package com.teamwss.websoso.data.model
 
 data class SosoPickEntity(
-    val novels: List<NovelEntity>
+    val novels: List<NovelEntity>,
 ) {
     data class NovelEntity(
         val novelId: Long,

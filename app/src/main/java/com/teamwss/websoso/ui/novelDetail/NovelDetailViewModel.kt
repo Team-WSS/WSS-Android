@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.data.repository.UserNovelRepository
+import com.teamwss.websoso.data.repository.UserPreferencesRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +17,11 @@ import javax.inject.Inject
 class NovelDetailViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val userNovelRepository: UserNovelRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
 
-    private val _novelDetail = MutableLiveData<NovelDetailModel>()
-    val novelDetail: LiveData<NovelDetailModel> get() = _novelDetail
+    private val _novelDetailModel = MutableLiveData<NovelDetailModel>()
+    val novelDetailModel: LiveData<NovelDetailModel> get() = _novelDetailModel
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
     private val _error = MutableLiveData<Boolean>(false)
@@ -32,8 +34,11 @@ class NovelDetailViewModel @Inject constructor(
                 _loading.value = true
                 novelRepository.getNovelDetail(novelId)
             }.onSuccess { novelDetail ->
-                _novelDetail.value = novelDetail.toUi(novelId)
+                _novelDetailModel.value = novelDetail.toUi(novelId)
                 _loading.value = false
+                if (novelDetailModel.value?.userNovel?.isAlreadyPartiallyRated == false && novelDetailModel.value?.userNovel?.isAlreadyAllRated == false) {
+                    checkIsFirstLaunched()
+                }
             }.onFailure {
                 _error.value = true
                 _loading.value = false
@@ -44,16 +49,21 @@ class NovelDetailViewModel @Inject constructor(
     fun updateUserInterest(novelId: Long) {
         viewModelScope.launch {
             runCatching {
-                _novelDetail.value = novelDetail.value?.copy(
-                    userNovel = novelDetail.value?.userNovel?.copy(
-                        isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
+                _novelDetailModel.value = novelDetailModel.value?.copy(
+                    userNovel = novelDetailModel.value?.userNovel?.copy(
+                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not()
+                            ?: false
                     ) ?: return@runCatching
                 )
-                novelRepository.saveUserInterest(novelId, novelDetail.value?.userNovel?.isUserNovelInterest ?: false)
+                novelRepository.saveUserInterest(
+                    novelId,
+                    novelDetailModel.value?.userNovel?.isUserNovelInterest ?: false
+                )
             }.onFailure {
-                _novelDetail.value = novelDetail.value?.copy(
-                    userNovel = novelDetail.value?.userNovel?.copy(
-                        isUserNovelInterest = novelDetail.value?.userNovel?.isUserNovelInterest?.not() ?: false
+                _novelDetailModel.value = novelDetailModel.value?.copy(
+                    userNovel = novelDetailModel.value?.userNovel?.copy(
+                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not()
+                            ?: false
                     ) ?: return@onFailure
                 )
             }
@@ -67,6 +77,32 @@ class NovelDetailViewModel @Inject constructor(
             }.onSuccess {
                 updateNovelDetail(novelId)
             }.onFailure {}
+        }
+    }
+
+    private fun checkIsFirstLaunched() {
+        viewModelScope.launch {
+            runCatching {
+                userPreferencesRepository.fetchNovelDetailFirstLaunched()
+            }.onSuccess { isFirstLaunched ->
+                _novelDetailModel.value =
+                    novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
+            }.onFailure {
+                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
+            }
+        }
+    }
+
+    fun updateIsFirstLaunched() {
+        viewModelScope.launch {
+            runCatching {
+                userPreferencesRepository.fetchNovelDetailFirstLaunched()
+            }.onSuccess { isFirstLaunched ->
+                _novelDetailModel.value =
+                    novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
+            }.onFailure {
+                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
+            }
         }
     }
 }

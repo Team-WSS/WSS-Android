@@ -5,9 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityBlockedUsersBinding
 import com.teamwss.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
-import com.teamwss.websoso.common.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

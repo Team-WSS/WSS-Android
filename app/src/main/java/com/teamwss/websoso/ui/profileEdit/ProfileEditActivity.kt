@@ -2,12 +2,13 @@ package com.teamwss.websoso.ui.profileEdit
 
 import android.os.Bundle
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.ui.profileEdit.model.Genres
 
-class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
+class ProfileEditActivity :
+    BaseActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

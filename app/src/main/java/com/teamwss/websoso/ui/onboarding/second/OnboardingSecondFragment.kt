@@ -5,8 +5,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.FragmentOnboardingSecondBinding
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.databinding.FragmentOnboardingSecondBinding
 import com.teamwss.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.model.UserModel

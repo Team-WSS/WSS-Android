@@ -3,8 +3,8 @@ package com.teamwss.websoso.ui.accountInfo
 import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.DialogLogoutBinding
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
+import com.teamwss.websoso.databinding.DialogLogoutBinding
 
 class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.dialog_logout) {
 
