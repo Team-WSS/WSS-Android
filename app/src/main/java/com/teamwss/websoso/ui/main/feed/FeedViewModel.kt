@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.feed
+package com.teamwss.websoso.ui.main.feed
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
-import com.teamwss.websoso.ui.feed.model.Category
-import com.teamwss.websoso.ui.feed.model.CategoryModel
-import com.teamwss.websoso.ui.feed.model.FeedUiState
+import com.teamwss.websoso.ui.main.feed.model.Category
+import com.teamwss.websoso.ui.main.feed.model.CategoryModel
+import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

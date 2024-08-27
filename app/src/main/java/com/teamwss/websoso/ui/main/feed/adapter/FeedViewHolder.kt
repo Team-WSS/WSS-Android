@@ -1,11 +1,11 @@
-package com.teamwss.websoso.ui.feed.adapter
+package com.teamwss.websoso.ui.main.feed.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemFeedBinding
-import com.teamwss.websoso.ui.feed.FeedItemClickListener
-import com.teamwss.websoso.ui.feed.model.FeedModel
+import com.teamwss.websoso.ui.main.feed.FeedItemClickListener
+import com.teamwss.websoso.ui.main.feed.model.FeedModel
 
 class FeedViewHolder(
     private val binding: ItemFeedBinding,

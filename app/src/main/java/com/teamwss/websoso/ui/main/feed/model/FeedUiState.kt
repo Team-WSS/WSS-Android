@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.feed.model
+package com.teamwss.websoso.ui.main.feed.model
 
 data class FeedUiState(
     val loading: Boolean = true,

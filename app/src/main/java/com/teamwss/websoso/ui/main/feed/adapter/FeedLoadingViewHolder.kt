@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.feed.adapter
+package com.teamwss.websoso.ui.main.feed.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

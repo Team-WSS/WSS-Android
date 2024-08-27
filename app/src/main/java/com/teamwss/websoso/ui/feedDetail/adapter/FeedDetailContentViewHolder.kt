@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.databinding.ItemFeedDetailHeaderBinding
-import com.teamwss.websoso.ui.feed.model.FeedModel
+import com.teamwss.websoso.ui.main.feed.model.FeedModel
 
 class FeedDetailContentViewHolder(
     private val binding: ItemFeedDetailHeaderBinding,

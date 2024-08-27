@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.feed
+package com.teamwss.websoso.ui.main.feed
 
 import android.view.View
 
