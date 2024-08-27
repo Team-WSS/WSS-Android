@@ -1,7 +1,7 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.response.CommentsResponseDto
-import com.teamwss.websoso.data.remote.response.FeedResponseDto
+import com.teamwss.websoso.data.remote.response.FeedDetailResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
 import com.teamwss.websoso.data.remote.response.PopularFeedsResponseDto
 import com.teamwss.websoso.data.remote.response.UserInterestFeedsResponseDto
@@ -23,7 +23,7 @@ interface FeedApi {
     @GET("feeds/{feedId}")
     suspend fun getFeed(
         @Path("feedId") feedId: Long,
-    ): FeedResponseDto
+    ): FeedDetailResponseDto
 
     @GET("feeds/{feedId}/comments")
     suspend fun getComments(
