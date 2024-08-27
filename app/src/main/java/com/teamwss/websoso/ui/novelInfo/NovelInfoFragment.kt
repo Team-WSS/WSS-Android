@@ -155,6 +155,8 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
                 updateGraphHeight(binding.viewNovelInfoReadStatusQuit, unifiedReviewCountModel.quitCount.graphHeight)
                 updateGraphSelection(binding.viewNovelInfoReadStatusQuit, binding.tvNovelInfoReadStatusQuitCount, binding.tvNovelInfoReadStatusQuit)
             }
+
+            else -> Unit
         }
     }
 
@@ -189,6 +191,8 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
                 val coloredQuitText = unifiedReviewCountModel.quitCount.count.toString() + getString(R.string.novel_info_user_unit)
                 binding.tvNovelInfoReadStatusTitle.text = getColoredText(quitCountText, listOf(coloredQuitText), color)
             }
+
+            ReadStatus.NONE -> Unit
         }
     }
 

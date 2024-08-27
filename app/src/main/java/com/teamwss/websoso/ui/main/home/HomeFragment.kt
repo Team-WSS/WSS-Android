@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
@@ -44,7 +44,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setupViewPager() {
         val recyclerView = binding.vpHomeTodayPopularNovel.getChildAt(0) as RecyclerView
 
-        val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntScaledByPx()
+        val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntPxFromDp()
         recyclerView.apply {
             setPadding(paddingPx, 0, paddingPx, 0)
             clipToPadding = false

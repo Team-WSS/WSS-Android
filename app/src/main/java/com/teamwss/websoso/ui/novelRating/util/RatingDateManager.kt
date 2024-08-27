@@ -22,6 +22,7 @@ class RatingDateManager {
             ReadStatus.WATCHING -> handleWatchingStatus(ratingDateModel)
             ReadStatus.WATCHED -> handleWatchedStatus(ratingDateModel)
             ReadStatus.QUIT -> handleQuitStatus(ratingDateModel)
+            ReadStatus.NONE ->  ratingDateModel
         }
 
         return novelRatingModel.copy(
@@ -72,6 +73,7 @@ class RatingDateManager {
             ReadStatus.WATCHING -> true
             ReadStatus.WATCHED -> true
             ReadStatus.QUIT -> false
+            else -> true
         }
     }
 
@@ -233,6 +235,8 @@ class RatingDateManager {
             ReadStatus.QUIT -> ratingDateModel.copy(
                 currentEndDate = ratingDateModel.currentEndDate ?: today.toFormattedDate()
             )
+
+            ReadStatus.NONE -> ratingDateModel
         }
     }
 }
