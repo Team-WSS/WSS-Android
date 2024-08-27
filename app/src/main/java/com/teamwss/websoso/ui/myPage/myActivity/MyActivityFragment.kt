@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.myPage.myActivity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -24,7 +23,7 @@ class MyActivityFragment :
 
         setupMyActivitiesAdapter()
         setUpObserve()
-        setupMyActivityMoreButton()
+        navigateToMyActivityDetail()
     }
 
     private fun setupMyActivitiesAdapter() {
@@ -39,9 +38,9 @@ class MyActivityFragment :
         }
     }
 
-    private fun setupMyActivityMoreButton() {
+    private fun navigateToMyActivityDetail() {
         binding.btnMyActivityMore.setOnClickListener {
-            val intent = Intent(requireContext(), MyActivityDetailActivity::class.java)
+            val intent = MyActivityDetailActivity.createIntentForMyActivityDetail(requireContext())
             startActivity(intent)
         }
     }

@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.myActivityDetail
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
@@ -18,12 +20,12 @@ class MyActivityDetailActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupMyActivitiesDetailAdapter()
+        setUpMyActivitiesDetailAdapter()
         setUpObserve()
-        setupBackToMyActivityButton()
+        onBackButtonClick()
     }
 
-    private fun setupMyActivitiesDetailAdapter() {
+    private fun setUpMyActivitiesDetailAdapter() {
         binding.rvMyActivityDetail.apply {
             adapter = myActivityDetailAdapter
         }
@@ -35,9 +37,15 @@ class MyActivityDetailActivity :
         }
     }
 
-    private fun setupBackToMyActivityButton() {
+    private fun onBackButtonClick() {
         binding.ivMyActivityDetailBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    companion object {
+        fun createIntentForMyActivityDetail(context: Context): Intent {
+            return Intent(context, MyActivityDetailActivity::class.java)
         }
     }
 }

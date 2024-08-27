@@ -186,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text='@{String.format(@string/my_activity_score_count, myActivity.novelRating != null ? myActivity.novelRating : 0.0f, myActivity.novelRatingCount != null ? myActivity.novelRatingCount : 0)}'
+                android:text='@{myActivity.formattedScore}'
                 android:textAppearance="@style/label1"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_novel_name"

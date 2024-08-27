@@ -17,4 +17,11 @@ data class ActivityModel(
     val novelRatingCount: Int?,
     val novelRating: Float?,
     val relevantCategories:String,
-)
+){
+    val formattedScore: String
+        get() = String.format(
+            "%s (%,d)",
+            novelRating?.takeIf { it != null } ?: 0.0f,
+            novelRatingCount?.takeIf { it != null } ?: 0
+        )
+}

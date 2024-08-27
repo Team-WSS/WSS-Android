@@ -7,15 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.MyActivityRepository
 import com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel
 import com.teamwss.websoso.ui.myPage.myActivity.model.Genres
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
-@HiltViewModel
-class MyActivityViewModel @Inject constructor(private val myActivityRepository: MyActivityRepository) :
-    ViewModel() {
+class MyActivityViewModel @Inject constructor(
+    private val myActivityRepository: MyActivityRepository
+) : ViewModel() {
     private val _myActivity = MutableLiveData<List<ActivityModel>>()
     val myActivity: LiveData<List<ActivityModel>> get() = _myActivity
 

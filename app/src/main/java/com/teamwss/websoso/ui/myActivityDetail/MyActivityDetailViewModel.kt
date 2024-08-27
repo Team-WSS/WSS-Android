@@ -14,8 +14,10 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class MyActivityDetailViewModel @Inject constructor(private val myActivityRepository: MyActivityRepository) :
-    ViewModel() {
+class MyActivityDetailViewModel @Inject constructor(
+    private val myActivityRepository: MyActivityRepository
+) : ViewModel() {
+
     private val _myActivity = MutableLiveData<List<ActivityModel>>()
     val myActivity: LiveData<List<ActivityModel>> get() = _myActivity
 
