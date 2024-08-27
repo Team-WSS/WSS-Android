@@ -30,25 +30,25 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
         }
 
         _isWithdrawButtonEnabled.addSource(withdrawReason) {
-            updateWithdrawButtonEnabled()
+            _isWithdrawButtonEnabled.value = isEnabled()
         }
         _isWithdrawButtonEnabled.addSource(isWithdrawCheckAgree) {
-            updateWithdrawButtonEnabled()
+            _isWithdrawButtonEnabled.value = isEnabled()
         }
         _isWithdrawButtonEnabled.addSource(withdrawEtcReason) {
-            updateWithdrawButtonEnabled()
+            _isWithdrawButtonEnabled.value = isEnabled()
         }
     }
 
-    private fun updateWithdrawButtonEnabled() {
-        val reasonIsNotBlank: Boolean = _withdrawReason.value?.isNotBlank() == true
+    private fun isEnabled(): Boolean {
+        val isReasonNotBlank: Boolean = _withdrawReason.value?.isNotBlank() == true
         val isWithdrawAgree: Boolean = _isWithdrawCheckAgree.value == true
         val isEtcReasonValid =
             _withdrawReason.value == ETC_INPUT_REASON && withdrawEtcReason.value?.isNotBlank() == true
 
-        _isWithdrawButtonEnabled.value = when {
+        return when {
             _withdrawReason.value == ETC_INPUT_REASON -> isEtcReasonValid && isWithdrawAgree
-            reasonIsNotBlank && isWithdrawAgree -> true
+            isReasonNotBlank && isWithdrawAgree -> true
             else -> false
         }
     }
