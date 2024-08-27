@@ -45,8 +45,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun updateView(feedDetailUiState: Success) {
-        val header = Header(feedDetailUiState.feedDetail.feed)
         val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
+        val header = Header(feedDetailUiState.feedDetail.feed.copy(commentCount = comments.size))
 
         feedDetailAdapter.submitList(listOf(header) + comments)
     }
