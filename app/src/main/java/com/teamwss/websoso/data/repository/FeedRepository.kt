@@ -5,6 +5,7 @@ import com.teamwss.websoso.data.model.CommentsEntity
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
 import com.teamwss.websoso.data.model.PopularFeedsEntity
+import com.teamwss.websoso.data.model.UserInterestFeedsEntity
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import javax.inject.Inject
@@ -60,5 +61,9 @@ class FeedRepository @Inject constructor(
 
     suspend fun fetchPopularFeeds(): PopularFeedsEntity {
         return feedApi.getPopularFeeds().toData()
+    }
+
+    suspend fun fetchUserInterestFeeds(): UserInterestFeedsEntity {
+        return feedApi.getUserInterestFeeds().toData()
     }
 }
