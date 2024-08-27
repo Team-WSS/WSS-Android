@@ -1,12 +1,8 @@
 package com.teamwss.websoso.data.mapper
 
+import com.teamwss.websoso.data.model.CategoriesEntity
 import com.teamwss.websoso.data.model.NovelRatingEntity
-import com.teamwss.websoso.data.model.NovelRatingKeywordCategoryEntity
-import com.teamwss.websoso.data.model.NovelRatingKeywordEntity
 import com.teamwss.websoso.data.remote.request.NovelRatingRequestDto
-import com.teamwss.websoso.data.remote.response.NovelRatingKeywordCategoriesResponseDto
-import com.teamwss.websoso.data.remote.response.NovelRatingKeywordCategoryResponseDto
-import com.teamwss.websoso.data.remote.response.NovelRatingKeywordResponseDto
 import com.teamwss.websoso.data.remote.response.NovelRatingResponseDto
 
 fun NovelRatingResponseDto.toData(): NovelRatingEntity =
@@ -19,7 +15,7 @@ fun NovelRatingResponseDto.toData(): NovelRatingEntity =
         charmPoints = attractivePoints,
         userKeywords =
         keywords.map { keyword ->
-            NovelRatingKeywordEntity(
+            CategoriesEntity.CategoryEntity.KeywordEntity(
                 keywordId = keyword.keywordId,
                 keywordName = keyword.keywordName,
             )
@@ -35,18 +31,4 @@ fun NovelRatingEntity.toData(): NovelRatingRequestDto =
         userNovelRating = userNovelRating,
         attractivePoints = charmPoints,
         keywordIds = userKeywords.map { it.keywordId },
-    )
-
-fun NovelRatingKeywordCategoriesResponseDto.toData(): List<NovelRatingKeywordCategoryEntity> = categories.map { it.toData() }
-
-fun NovelRatingKeywordCategoryResponseDto.toData(): NovelRatingKeywordCategoryEntity =
-    NovelRatingKeywordCategoryEntity(
-        categoryName = categoryName,
-        keywords = keywords.map { it.toData() },
-    )
-
-fun NovelRatingKeywordResponseDto.toData(): NovelRatingKeywordEntity =
-    NovelRatingKeywordEntity(
-        keywordId = keywordId,
-        keywordName = keywordName,
     )

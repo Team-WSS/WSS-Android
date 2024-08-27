@@ -109,8 +109,8 @@ class OnboardingViewModel @Inject constructor(
 
     fun updateUserGenderUiState(isManSelected: Boolean) {
         _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
-            isManButtonSelected = isManSelected,
-            isWomanButtonSelected = !isManSelected,
+            isManSelected = isManSelected,
+            isWomanSelected = !isManSelected,
         )
         updateUserGender(isManSelected)
     }

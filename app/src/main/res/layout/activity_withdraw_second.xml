@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="withdrawSecondViewModel"
+            type="com.teamwss.websoso.ui.withdraw.second.WithdrawSecondViewModel" />
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.withdraw.second.WithdrawClickListener" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +31,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="64dp"
                 android:contentDescription="@null"
+                android:onClick="@{() -> onClick.onBackButtonClick()}"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
                 android:src="@drawable/btn_setting_back"
@@ -66,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="14dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonRarelyUsingButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_withdraw_second_reason">
@@ -81,6 +94,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_rarely_using"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -98,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonInconvenientButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_rarely_using">
@@ -113,6 +128,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_inconvenient"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -130,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonWantToDeleteContentButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_inconvenient">
@@ -145,6 +162,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_want_to_delete_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -162,6 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonNotExistAnyWantedNovelButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_want_to_delete_content">
@@ -177,6 +196,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_not_exist_any_wanted_novel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -194,6 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="2dp"
+                android:onClick="@{() -> onClick.onWithdrawReasonEtcButtonClick()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_withdraw_reason_not_exist_any_wanted_novel">
@@ -209,6 +230,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_withdraw_reason_etc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -225,13 +247,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/bg_novel_rating_keyword_search_selector"
+                android:background="@drawable/bg_common_search_selector"
                 android:gravity="top"
                 android:hint="@string/withdraw_etc_hint"
                 android:maxLength="100"
                 android:minLines="4"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="10dp"
+                android:text="@={withdrawSecondViewModel.withdrawEtcReason}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_200_AEADB3"
@@ -243,6 +266,7 @@
                 android:id="@+id/tv_withdraw_etc_text_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{String.valueOf(withdrawSecondViewModel.withdrawEtcReasonCount)}"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintBottom_toBottomOf="@id/tv_withdraw_etc_text_max_count"
@@ -391,6 +415,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:onClick="@{() -> onClick.onWithdrawCheckAgreeButtonClick()}"
                 android:paddingVertical="10dp"
                 app:layout_constraintEnd_toEndOf="@id/cl_withdraw_check_re_sign_up"
                 app:layout_constraintStart_toStartOf="@id/cl_withdraw_check_re_sign_up"
@@ -400,7 +425,7 @@
                     android:id="@+id/iv_withdraw_check_agree"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/img_account_info_check_unselected"
+                    android:src="@drawable/img_withdraw_second_check_button_selector"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -426,8 +451,9 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_withdraw_check_selector"
-                android:enabled="false"
+                android:enabled="@{withdrawSecondViewModel.isWithdrawButtonEnabled}"
                 android:gravity="center"
+                android:onClick="@{() -> onClick.onWithdrawButtonClick()}"
                 android:paddingVertical="18dp"
                 android:text="@string/withdraw_button"
                 android:textAppearance="@style/title1"

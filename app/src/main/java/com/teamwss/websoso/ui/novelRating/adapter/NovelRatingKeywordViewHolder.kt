@@ -3,65 +3,74 @@ package com.teamwss.websoso.ui.novelRating.adapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ItemNovelRatingKeywordBinding
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordCategoryModel
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
+import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.common.util.toIntPxFromDp
 
 class NovelRatingKeywordViewHolder(
-    private val binding: ItemNovelRatingKeywordBinding,
-    private val onKeywordClick: (
-        keyword: NovelRatingKeywordModel,
-        isClicked: Boolean,
-    ) -> Unit,
+    private val binding: ItemCommonKeywordBinding,
+    private val onKeywordClick: (keyword: CategoryModel.KeywordModel, isClicked: Boolean) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+    var isChipSetting: Boolean = false
+        private set
 
-    fun bind(category: NovelRatingKeywordCategoryModel) {
-        binding.apply {
-            tvRatingKeyword.text = category.categoryName
-            setupWebsosoChips(category)
-            setupExpandToggleBtn()
-        }
+    init {
+        binding.setupExpandToggleBtn()
     }
 
-    private fun ItemNovelRatingKeywordBinding.setupWebsosoChips(category: NovelRatingKeywordCategoryModel) {
-        wcgNovelRatingKeyword.removeAllViews()
-        category.keywords.forEach { keyword ->
-            WebsosoChip(binding.root.context)
-                .apply {
-                    setWebsosoChipText(keyword.keywordName)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                    setWebsosoChipPaddingVertical(20f)
-                    setWebsosoChipPaddingHorizontal(12f)
-                    setWebsosoChipRadius(40f)
-                    setOnWebsosoChipClick { onKeywordClick(keyword, this.isSelected) }
-                    isSelected = keyword.isSelected
-                }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
-        }
-    }
-
-    private fun ItemNovelRatingKeywordBinding.setupExpandToggleBtn() {
+    private fun ItemCommonKeywordBinding.setupExpandToggleBtn() {
         ivNovelRatingKeywordToggle.setOnClickListener {
             ivNovelRatingKeywordToggle.isSelected = !ivNovelRatingKeywordToggle.isSelected
-            val layoutParams =
-                wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
+            val layoutParams = wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
 
             when (ivNovelRatingKeywordToggle.isSelected) {
-                true ->
-                    layoutParams.matchConstraintMaxHeight =
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+                true -> layoutParams.matchConstraintMaxHeight = ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toDp()
+                false -> layoutParams.matchConstraintMaxHeight = 78.toIntPxFromDp()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
     }
 
-    private fun Int.toDp(): Int {
-        val scale = binding.root.context.resources.displayMetrics.density
-        return (this * scale + 0.5f).toInt()
+    fun initKeywordView(category: CategoryModel) {
+        binding.apply {
+            tvRatingKeyword.text = category.categoryName
+            categoryImageUrl = category.categoryImage
+            setupWebsosoChips(category)
+        }
+        isChipSetting = true
+    }
+
+    private fun ItemCommonKeywordBinding.setupWebsosoChips(category: CategoryModel) {
+        wcgNovelRatingKeyword.removeAllViews()
+        category.keywords.forEach { keyword ->
+            WebsosoChip(binding.root.context).apply {
+                setWebsosoChipText(keyword.keywordName)
+                setWebsosoChipTextAppearance(R.style.body2)
+                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                setWebsosoChipPaddingVertical(20f)
+                setWebsosoChipPaddingHorizontal(12f)
+                setWebsosoChipRadius(40f)
+                setOnWebsosoChipClick {
+                    onKeywordClick(keyword, this.isSelected)
+                }
+                isSelected = keyword.isSelected
+            }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
+        }
+    }
+
+    fun updateChipState(category: CategoryModel) {
+        val keywordSelectionMap =
+            category.keywords.associateBy({ it.keywordName }, { it.isSelected })
+
+        (0 until binding.wcgNovelRatingKeyword.childCount)
+            .map { binding.wcgNovelRatingKeyword.getChildAt(it) }
+            .filterIsInstance<WebsosoChip>()
+            .forEach { chip ->
+                chip.isSelected = keywordSelectionMap[chip.text] ?: false
+            }
     }
 }

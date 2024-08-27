@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:checked="@{viewModel.onboardingSecondUiState.isManButtonSelected}"
+                android:checked="@{viewModel.onboardingSecondUiState.manSelected}"
                 android:onClick="@{() -> viewModel.updateUserGenderUiState(true)}"
                 android:text="@string/onboarding_second_man" />
 
@@ -75,7 +75,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:checked="@{viewModel.onboardingSecondUiState.isWomanButtonSelected}"
+                android:checked="@{viewModel.onboardingSecondUiState.womanSelected}"
                 android:onClick="@{() -> viewModel.updateUserGenderUiState(false)}"
                 android:text="@string/onboarding_second_woman" />
 

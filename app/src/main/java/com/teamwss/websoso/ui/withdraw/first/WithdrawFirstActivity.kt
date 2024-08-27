@@ -3,34 +3,25 @@ package com.teamwss.websoso.ui.withdraw.first
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityWithdrawFirstBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.withdraw.first.model.UserNovelStatsModel
 import com.teamwss.websoso.ui.withdraw.second.WithdrawSecondActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WithdrawFirstActivity :
-    BindingActivity<ActivityWithdrawFirstBinding>(R.layout.activity_withdraw_first) {
+    BaseActivity<ActivityWithdrawFirstBinding>(R.layout.activity_withdraw_first) {
     private val withdrawFirstViewModel: WithdrawFirstViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupTranslucentOnStatusBar()
         onWithdrawCheckButtonClick()
         onBackButtonClick()
         setupObserver()
-    }
-
-    private fun setupTranslucentOnStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        )
     }
 
     private fun onWithdrawCheckButtonClick() {

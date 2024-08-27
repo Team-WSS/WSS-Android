@@ -11,17 +11,17 @@ import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordModel
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
+class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
     private val novelId: Long by lazy { intent.getLongExtra(NOVEL_ID, 0) }
@@ -56,7 +56,7 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
             }
 
             override fun onSaveClick() {
-                novelRatingViewModel.updateNovelRating(novelId, intent.getBooleanExtra(IS_ALREADY_RATED, false))
+                novelRatingViewModel.updateUserNovelRating(novelId, binding.rbNovelRating.rating)
             }
 
             override fun onCancelClick() {}
@@ -88,24 +88,19 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
     private fun updateInitialReadStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val readStatus = intent.getSerializableExtra(READ_STATUS, ReadStatus::class.java)
-            if (readStatus != null) {
-                novelRatingViewModel.updateReadStatus(readStatus)
-            }
+            if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
         } else {
             val readStatus = intent.getSerializableExtra(READ_STATUS) as? ReadStatus
-            if (readStatus != null) {
-                novelRatingViewModel.updateReadStatus(readStatus)
-            }
+            if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
         }
     }
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {
         val (resId, params) = ratingDateModel.formatDisplayDate(ratingDateModel)
 
-        val underlinedText =
-            SpannableString(getString(resId, *params)).apply {
-                setSpan(UnderlineSpan(), 0, this.length, 0)
-            }
+        val underlinedText = SpannableString(getString(resId, *params)).apply {
+            setSpan(UnderlineSpan(), 0, this.length, 0)
+        }
 
         binding.tvNovelRatingDisplayDate.text = underlinedText
     }
@@ -113,18 +108,17 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
     private fun updateCharmPointChips(previousSelectedCharmPoints: List<CharmPoint>) {
         binding.wcgNovelRatingCharmPoints.forEach { view ->
             val chip = view as WebsosoChip
-            chip.isSelected =
-                previousSelectedCharmPoints.contains(
-                    charmPoints.find { charmPoint -> charmPoint.title == chip.text.toString() },
-                )
+            chip.isSelected = previousSelectedCharmPoints.contains(
+                charmPoints.find { charmPoint -> charmPoint.title == chip.text.toString() },
+            )
         }
     }
 
-    private fun updateKeywordChips(previousSelectedKeywords: List<NovelRatingKeywordModel>) {
+    private fun updateKeywordChips(selectedKeywords: List<CategoriesModel.CategoryModel.KeywordModel>) {
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
-        previousSelectedKeywords.forEach { keyword ->
-            WebsosoChip(binding.root.context)
+        selectedKeywords.forEach { keyword ->
+            WebsosoChip(this@NovelRatingActivity)
                 .apply {
                     setWebsosoChipText(keyword.keywordName)
                     setWebsosoChipTextAppearance(R.style.body2)
@@ -189,13 +183,11 @@ class NovelRatingActivity : BindingActivity<ActivityNovelRatingBinding>(R.layout
 
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
-        private const val IS_ALREADY_RATED = "IS_ALREADY_RATED"
         private const val READ_STATUS = "READ_STATUS"
 
-        fun getIntent(context: Context, novelId: Long, isAlreadyRated: Boolean, readStatus: ReadStatus?): Intent {
+        fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
-                putExtra(IS_ALREADY_RATED, isAlreadyRated)
                 putExtra(READ_STATUS, readStatus)
             }
         }

@@ -6,19 +6,25 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.FragmentHomeBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
+import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
-import com.teamwss.websoso.util.toIntScaledByPx
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
 
     private val popularNovelsAdapter: PopularNovelsAdapter by lazy {
         PopularNovelsAdapter(::navigateToNovelDetail)
+    }
+
+    private val popularFeedsAdapter: PopularFeedsAdapter by lazy {
+        PopularFeedsAdapter(::navigateToFeedDetail)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,16 +33,18 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         setupAdapter()
         setupViewPager()
         setupObserver()
+        setupDotsIndicator()
     }
 
     private fun setupAdapter() {
         binding.vpHomeTodayPopularNovel.adapter = popularNovelsAdapter
+        binding.vpHomePopularFeed.adapter = popularFeedsAdapter
     }
 
     private fun setupViewPager() {
         val recyclerView = binding.vpHomeTodayPopularNovel.getChildAt(0) as RecyclerView
 
-        val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntScaledByPx()
+        val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntPxFromDp()
         recyclerView.apply {
             setPadding(paddingPx, 0, paddingPx, 0)
             clipToPadding = false
@@ -54,13 +62,24 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
-                !uiState.loading -> popularNovelsAdapter.submitList(uiState.popularNovels)
+                !uiState.loading -> {
+                    popularNovelsAdapter.submitList(uiState.popularNovels)
+                    popularFeedsAdapter.submitList(uiState.popularFeeds)
+                }
             }
         }
     }
 
+    private fun setupDotsIndicator() {
+        binding.dotsIndicatorHome.attachTo(binding.vpHomePopularFeed)
+    }
+
     private fun navigateToNovelDetail(novelId: Long) {
         startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+    }
+
+    private fun navigateToFeedDetail(feedId: Long) {
+        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
     }
 
     companion object {

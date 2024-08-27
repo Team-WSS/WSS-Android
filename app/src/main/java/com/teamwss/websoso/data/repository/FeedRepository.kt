@@ -4,6 +4,7 @@ import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.CommentsEntity
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.model.FeedsEntity
+import com.teamwss.websoso.data.model.PopularFeedsEntity
 import com.teamwss.websoso.data.remote.api.FeedApi
 import javax.inject.Inject
 
@@ -51,5 +52,9 @@ class FeedRepository @Inject constructor(
 
     fun clearCachedFeeds() {
         if (cachedFeeds.isNotEmpty()) _cachedFeeds.clear()
+    }
+
+    suspend fun fetchPopularFeeds(): PopularFeedsEntity {
+        return feedApi.getPopularFeeds().toData()
     }
 }

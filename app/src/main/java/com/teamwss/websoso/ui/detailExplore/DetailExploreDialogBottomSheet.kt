@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
-import com.teamwss.websoso.ui.common.base.BindingBottomSheetDialog
 import com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoFragment
 import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordFragment
 import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
@@ -16,10 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailExploreDialogBottomSheet :
-    BindingBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
+    BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
     private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
     private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
-
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,13 +42,13 @@ class DetailExploreDialogBottomSheet :
     }
 
     private fun initDetailExploreFragment() {
-        childFragmentManager.beginTransaction()
-            .add(R.id.fcv_detail_explore, detailExploreInfoFragment)
-            .add(R.id.fcv_detail_explore, detailExploreKeywordFragment)
-            .hide(detailExploreKeywordFragment)
-            .commit()
+        childFragmentManager.commit {
+            add(
+                R.id.fcv_detail_explore,
+                detailExploreInfoFragment,
+            )
+        }
     }
-
 
     private fun onReplaceFragmentButtonClick() {
         binding.tvDetailExploreInfoButton.setOnClickListener {
@@ -63,14 +63,25 @@ class DetailExploreDialogBottomSheet :
     private fun switchFragment(selectedFragmentTitle: SelectedFragmentTitle) {
         val fragmentToShow = when (selectedFragmentTitle) {
             SelectedFragmentTitle.INFO -> detailExploreInfoFragment
-            SelectedFragmentTitle.KEYWORD -> detailExploreKeywordFragment
+            SelectedFragmentTitle.KEYWORD -> {
+                if (childFragmentManager.findFragmentById(R.id.fcv_detail_explore) !is DetailExploreKeywordFragment) {
+                    childFragmentManager.commit {
+                        add(R.id.fcv_detail_explore, detailExploreKeywordFragment)
+                    }
+                }
+                detailExploreKeywordFragment
+            }
         }
 
-        childFragmentManager.beginTransaction().apply {
-            hide(detailExploreInfoFragment)
-            hide(detailExploreKeywordFragment)
+        val fragmentToHide = when (selectedFragmentTitle) {
+            SelectedFragmentTitle.INFO -> detailExploreKeywordFragment
+            SelectedFragmentTitle.KEYWORD -> detailExploreInfoFragment
+        }
+
+        childFragmentManager.commit {
+            setReorderingAllowed(true)
             show(fragmentToShow)
-            commit()
+            hide(fragmentToHide)
         }
 
         updateButtonColors(selectedFragmentTitle)
