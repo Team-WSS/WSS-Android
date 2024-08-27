@@ -32,7 +32,6 @@
             android:id="@+id/tv_popular_feed_content_spoiler"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white"
             android:text="@string/home_popular_feed_spoiler"
             android:textAppearance="@style/body3"
             android:textColor="@color/secondary_100_FF675D"

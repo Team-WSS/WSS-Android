@@ -5,7 +5,7 @@ data class PopularFeedsEntity(
 ) {
     data class PopularFeedEntity(
         val feedId: Long,
-        val feesContent : String,
+        val feesContent: String,
         val likeCount: Int,
         val commentCount: Int,
         val isSpoiler: Boolean,

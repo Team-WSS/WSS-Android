@@ -13,7 +13,10 @@ import jp.wasabeef.transformers.coil.BlurTransformation
 object BindingAdapter {
 
     @JvmStatic
-    @BindingAdapter(value = ["loadImageUrl", "cornerRadius", "blurRadius", "isVectorImage", "isCircularImage"], requireAll = false)
+    @BindingAdapter(
+        value = ["loadImageUrl", "cornerRadius", "blurRadius", "isVectorImage", "isCircularImage"],
+        requireAll = false
+    )
     fun loadImageWithOptions(
         view: ImageView,
         imageUrl: String?,
@@ -35,6 +38,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter(value = ["isVisible", "isInvisibleMode"], requireAll = false)
     fun setVisibility(view: View, isVisible: Boolean, isInvisibleMode: Boolean = false) {
-        view.visibility = if (isVisible) View.VISIBLE else if (isInvisibleMode) View.INVISIBLE else View.GONE
+        view.visibility =
+            if (isVisible) View.VISIBLE else if (isInvisibleMode) View.INVISIBLE else View.GONE
     }
 }
