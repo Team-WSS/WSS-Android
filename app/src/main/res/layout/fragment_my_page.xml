@@ -124,6 +124,7 @@
                     android:layout_height="wrap_content"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:tabIndicatorColor="@color/black"
+                    app:tabBackground="@drawable/bg_my_page_gray70"
                     app:tabIndicatorFullWidth="true"
                     app:tabIndicatorHeight="2dp"
                     app:tabSelectedTextColor="@color/black"

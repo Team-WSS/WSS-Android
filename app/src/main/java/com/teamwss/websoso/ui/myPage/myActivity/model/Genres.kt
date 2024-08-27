@@ -15,8 +15,9 @@ enum class Genres(val korean: String) {
 
     companion object {
         fun from(value: String): Genres? {
-            return Genres.values()
-                .find { it.name.equals(value, ignoreCase = true) }
+            return Genres.entries.find {
+                it.name.equals(value, ignoreCase = true)
+            }
         }
     }
 }

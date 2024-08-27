@@ -25,9 +25,7 @@ class MyActivityFragment :
     }
 
     private fun setUpMyActivitiesAdapter() {
-        binding.rvMyActivity.apply {
-            adapter = myActivityAdapter
-        }
+        binding.rvMyActivity.adapter = myActivityAdapter
     }
 
     private fun setUpObserve() {

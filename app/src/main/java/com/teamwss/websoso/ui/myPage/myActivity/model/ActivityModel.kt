@@ -33,7 +33,7 @@ data class ActivityModel(
             val outputFormat = SimpleDateFormat("M월 d일", Locale.getDefault())
 
             val date = inputFormat.parse(inputDate)
-            return outputFormat.format(date!!)
+            return date?.let { outputFormat.format(it) } ?: "Invalid Date"
         }
     }
 }
