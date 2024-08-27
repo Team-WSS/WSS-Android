@@ -16,8 +16,8 @@ import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
-import com.teamwss.websoso.ui.common.base.BindingFragment
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
+import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
@@ -26,14 +26,14 @@ import com.teamwss.websoso.ui.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
-import com.teamwss.websoso.util.SingleEventHandler
-import com.teamwss.websoso.util.toFloatPxFromDp
-import com.teamwss.websoso.util.toIntPxFromDp
+import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.toFloatScaledByPx
+import com.teamwss.websoso.common.util.toIntScaledByPx
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
 @AndroidEntryPoint
-class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
+class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
@@ -181,8 +181,8 @@ class FeedFragment : BindingFragment<FragmentFeedBinding>(R.layout.fragment_feed
         // 피드 수정 뷰
     }
 
-    private fun navigateToFeedDetail(id: Long) {
-        startActivity(FeedDetailActivity.getIntent(id, requireContext()))
+    private fun navigateToFeedDetail(feedId: Long) {
+        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

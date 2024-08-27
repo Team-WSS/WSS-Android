@@ -82,14 +82,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_feed_title">
 
-            <com.teamwss.websoso.ui.common.customView.WebsosoChipGroup
+            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_feed"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:chipSpacingHorizontal="6dp"
                 app:singleSelection="true">
 
-            </com.teamwss.websoso.ui.common.customView.WebsosoChipGroup>
+            </com.teamwss.websoso.common.ui.custom.WebsosoChipGroup>
         </HorizontalScrollView>
 
         <com.simform.refresh.SSPullToRefreshLayout
@@ -122,7 +122,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.teamwss.websoso.ui.common.customView.WebsosoLoadingLayout
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_feed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

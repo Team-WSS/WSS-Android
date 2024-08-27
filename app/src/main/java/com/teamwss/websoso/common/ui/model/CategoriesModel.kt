@@ -1,6 +1,6 @@
-package com.teamwss.websoso.ui.common.model
+package com.teamwss.websoso.common.ui.model
 
-import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 
 data class CategoriesModel(
     val categories: List<CategoryModel> = emptyList(),

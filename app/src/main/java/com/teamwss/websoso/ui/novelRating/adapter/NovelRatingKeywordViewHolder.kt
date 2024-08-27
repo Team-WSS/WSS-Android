@@ -4,9 +4,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
-import com.teamwss.websoso.ui.common.customView.WebsosoChip
-import com.teamwss.websoso.ui.common.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.util.toIntPxFromDp
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.common.util.toIntScaledByPx
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemCommonKeywordBinding,

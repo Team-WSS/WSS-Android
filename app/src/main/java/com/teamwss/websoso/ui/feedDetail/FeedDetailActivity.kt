@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
-import com.teamwss.websoso.ui.common.base.BindingActivity
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FeedDetailActivity :
-    BindingActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
+    BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
     private val feedDetailAdapter: FeedDetailAdapter by lazy { FeedDetailAdapter() }
@@ -55,7 +55,7 @@ class FeedDetailActivity :
         private const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
 
-        fun getIntent(id: Long, context: Context): Intent =
-            Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, id) }
+        fun getIntent(context: Context, feedId: Long): Intent =
+            Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
     }
 }

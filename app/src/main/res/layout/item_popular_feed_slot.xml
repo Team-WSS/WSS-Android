@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/tv_popular_feed_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:minLines="3"
+            android:textAppearance="@style/body3"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="판소추천해요! 완결난지는 좀 되었는데 추천합니다. scp 같은 이상현상 물품을 모아놓은 창고를 관리하는 주인공입니다. 배경은 현대판타지이고 우리나라세꼐...판소추천해요! 완결난지는 좀 되었는데 추천합니다." />
+
+        <TextView
+            android:id="@+id/tv_popular_feed_content_spoiler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:text="@string/home_popular_feed_spoiler"
+            android:textAppearance="@style/body3"
+            android:textColor="@color/secondary_100_FF675D"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tv_popular_feed_content"
+            app:layout_constraintEnd_toEndOf="@id/tv_popular_feed_content"
+            app:layout_constraintStart_toStartOf="@id/tv_popular_feed_content"
+            app:layout_constraintTop_toTopOf="@id/tv_popular_feed_content"
+            tools:text="스포일러가 포함된 글 보기" />
+
+        <ImageView
+            android:id="@+id/iv_popular_feed_like"
+            android:layout_width="16dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/ic_popular_feed_like"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="@id/tv_popular_feed_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_popular_feed_content" />
+
+        <TextView
+            android:id="@+id/tv_popular_feed_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="@style/body4"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="@id/iv_popular_feed_like"
+            app:layout_constraintStart_toEndOf="@id/iv_popular_feed_like"
+            app:layout_constraintTop_toTopOf="@id/iv_popular_feed_like"
+            tools:text="20" />
+
+        <ImageView
+            android:id="@+id/iv_popular_feed_comment"
+            android:layout_width="16dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="18dp"
+            android:src="@drawable/ic_popular_feed_comment"
+            app:layout_constraintBottom_toBottomOf="@id/iv_popular_feed_like"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toEndOf="@id/tv_popular_feed_like_count"
+            app:layout_constraintTop_toTopOf="@id/iv_popular_feed_like" />
+
+        <TextView
+            android:id="@+id/tv_popular_feed_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="@style/body4"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="@id/iv_popular_feed_like"
+            app:layout_constraintStart_toEndOf="@id/iv_popular_feed_comment"
+            app:layout_constraintTop_toTopOf="@id/iv_popular_feed_like"
+            tools:text="20" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

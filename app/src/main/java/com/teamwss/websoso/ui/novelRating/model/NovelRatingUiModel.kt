@@ -1,7 +1,7 @@
 package com.teamwss.websoso.ui.novelRating.model
 
 import com.teamwss.websoso.R
-import com.teamwss.websoso.ui.common.model.CategoriesModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel
 import java.util.Locale
 
 data class NovelRatingModel(

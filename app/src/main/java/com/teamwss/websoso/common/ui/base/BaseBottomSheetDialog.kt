@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.common.base
+package com.teamwss.websoso.common.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,18 +7,18 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.DialogFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.teamwss.websoso.R
 
-abstract class BindingDialogFragment<B : ViewDataBinding>(
+abstract class BaseBottomSheetDialog<B : ViewDataBinding>(
     @LayoutRes private val layoutResId: Int,
-) : DialogFragment() {
+) : BottomSheetDialogFragment() {
     private var _binding: B? = null
     val binding get() = _binding ?: error("error: binding is null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.WebsosoDialogTheme)
+        setStyle(STYLE_NORMAL, R.style.WebsosoBottomSheetTheme)
     }
 
     override fun onCreateView(

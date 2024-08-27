@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.common.base
+package com.teamwss.websoso.common.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-abstract class BindingFragment<B : ViewDataBinding>(
+abstract class BaseFragment<B : ViewDataBinding>(
     @LayoutRes private val layoutResId: Int,
 ) : Fragment() {
     private var _binding: B? = null

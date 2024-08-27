@@ -1,11 +1,11 @@
-package com.teamwss.websoso.ui.common.customView
+package com.teamwss.websoso.common.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.chip.Chip
-import com.teamwss.websoso.util.toFloatPxFromDp
+import com.teamwss.websoso.common.util.toFloatScaledByPx
 
 class WebsosoChip(
     context: Context,

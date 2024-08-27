@@ -196,7 +196,7 @@
     <string name="my_library_attractive_point_fixed_text">가 매력적인 작품</string>
 
     <!-- 홈 뷰 -->
-    <string name="home_today_popular">오늘의인기작</string>
+    <string name="home_today_popular">오늘의 인기작</string>
     <string name="home_rising_feed">지금 뜨는 수다글</string>
     <string name="home_interest_feed">관심글</string>
     <string name="home_user_interest_recent_feed">관심 등록한 작품의 최근 수다예요</string>
@@ -208,6 +208,7 @@
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
     <string name="home_popular_novel_nickname">%s 님의 한마디</string>
     <string name="home_popular_novel_feed_title_null">작품 소개</string>
+    <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>
@@ -229,6 +230,13 @@
     <string name="account_info_blocked_user_list">차단유저 목록</string>
     <string name="account_info_logout">로그아웃</string>
     <string name="account_info_withdraw">회원탈퇴</string>
+
+    <!-- 성별/나이 변경 뷰 -->
+    <string name="change_user_info_gender">성별</string>
+    <string name="change_user_info_male">남성</string>
+    <string name="change_user_info_female">여성</string>
+    <string name="change_user_info_birth_year">출생연도</string>
+    <string name="change_user_info_complete">완료</string>
 
     <!-- 프로필 공개여부 뷰 -->
     <string name="profile_disclosure_title">프로필 공개여부</string>

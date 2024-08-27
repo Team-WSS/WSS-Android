@@ -3,7 +3,7 @@ package com.teamwss.websoso.ui.feed
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
-import com.teamwss.websoso.util.SingleEventHandler
+import com.teamwss.websoso.common.util.SingleEventHandler
 
 class FeedScrollListener private constructor(
     private val singleEventHandler: SingleEventHandler,
