@@ -97,8 +97,7 @@ class NormalExploreActivity :
 
     companion object {
 
-        fun from(
-            context: Context,
-        ): Intent = Intent(context, NormalExploreActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, NormalExploreActivity::class.java)
     }
 }
