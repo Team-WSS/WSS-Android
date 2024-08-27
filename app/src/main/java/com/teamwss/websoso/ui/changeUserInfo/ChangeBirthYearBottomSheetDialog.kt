@@ -53,7 +53,7 @@ class ChangeBirthYearBottomSheetDialog :
     private fun setupObserver() {
         changeUserInfoViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             binding.npOnboardingSecondBottomSheetBirthYear.value =
-                uiState.birthYear ?: DEFAULT_BIRTH_YEAR
+                uiState.birthYear
         }
     }
 

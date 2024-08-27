@@ -10,10 +10,10 @@ import androidx.activity.viewModels
 import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel
+import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
@@ -21,7 +21,8 @@ import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
+class NovelRatingActivity :
+    BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
     private val novelId: Long by lazy { intent.getLongExtra(NOVEL_ID, 0) }
@@ -81,7 +82,8 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
             if (uiState.loading) binding.wllNovelRating.setWebsosoLoadingVisibility(true)
             if (uiState.isFetchError) binding.wllNovelRating.setErrorLayoutVisibility(true)
             if (uiState.isSaveSuccess) finish()
-            if (uiState.isSaveError) Snackbar.make(binding.root, "임시 실패 메시지", Snackbar.LENGTH_SHORT).show()
+            if (uiState.isSaveError) Snackbar.make(binding.root, "임시 실패 메시지", Snackbar.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -171,7 +173,10 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
     private fun showRatingKeywordBottomSheetDialog() {
         val existingDialog = supportFragmentManager.findFragmentByTag("RatingKeywordDialog")
         if (existingDialog == null) {
-            NovelRatingKeywordBottomSheetDialog().show(supportFragmentManager, "RatingKeywordDialog")
+            NovelRatingKeywordBottomSheetDialog().show(
+                supportFragmentManager,
+                "RatingKeywordDialog"
+            )
         }
     }
 
@@ -185,7 +190,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
         private const val NOVEL_ID = "NOVEL_ID"
         private const val READ_STATUS = "READ_STATUS"
 
-        fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus?): Intent {
+        fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
                 putExtra(READ_STATUS, readStatus)

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BlockedUsersResponseDto(
     @SerialName("blocks")
-    val blocks: List<BlockedUserResponseDto>
+    val blocks: List<BlockedUserResponseDto>,
 ) {
 
     @Serializable

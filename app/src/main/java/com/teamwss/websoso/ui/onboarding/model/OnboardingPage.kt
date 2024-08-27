@@ -3,7 +3,7 @@ package com.teamwss.websoso.ui.onboarding.model
 class OnboardingPage(
     val progressPercent: Int,
     val isBackButtonVisible: Boolean,
-    val isSkipTextVisible: Boolean
+    val isSkipTextVisible: Boolean,
 ) {
     fun nextPage(): OnboardingPage {
         val currentIndex = pages.indexOf(this)

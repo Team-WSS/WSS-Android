@@ -25,13 +25,13 @@ class SosoPickAdapter(
 class SosoPickDiffCallback : DiffUtil.ItemCallback<SosoPickEntity.NovelEntity>() {
 
     override fun areItemsTheSame(
-        oldItem: SosoPickEntity.NovelEntity, newItem: SosoPickEntity.NovelEntity
+        oldItem: SosoPickEntity.NovelEntity, newItem: SosoPickEntity.NovelEntity,
     ): Boolean {
         return oldItem.novelId == newItem.novelId
     }
 
     override fun areContentsTheSame(
-        oldItem: SosoPickEntity.NovelEntity, newItem: SosoPickEntity.NovelEntity
+        oldItem: SosoPickEntity.NovelEntity, newItem: SosoPickEntity.NovelEntity,
     ): Boolean {
         return oldItem == newItem
     }
