@@ -5,9 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
 import com.teamwss.websoso.databinding.ActivityBlockedUsersBinding
 import com.teamwss.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
-import com.teamwss.websoso.common.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,6 +47,17 @@ class BlockedUsersActivity :
                 !uiState.loading -> blockedUsersAdapter.submitList(uiState.blockedUsers)
             }
         }
+
+        blockedUsersViewModel.unblockedUserNickname.observe(this) { userNickname ->
+            showSnackBar(userNickname)
+        }
+    }
+
+    private fun showSnackBar(nickName: String) {
+        WebsosoCustomSnackBar.make(binding.root)
+            .setText(getString(R.string.blocked_users_unblocked, nickName))
+            .setIcon(R.drawable.ic_blocked_user_snack_bar)
+            .show()
     }
 
     private fun onBackButtonClick() {

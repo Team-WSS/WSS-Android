@@ -222,6 +222,7 @@
     <string name="blocked_users_cancel">차단 해제</string>
     <string name="blocked_users_title">차단유저 목록</string>
     <string name="blocked_users_empty">차단한 유저가 없어요</string>
+    <string name="blocked_users_unblocked">%s님을 차단 해제했어요</string>
 
     <!-- 환경설정 - 계정정보 뷰 -->
     <string name="account_info_change_user_info">성별/나이 변경</string>
