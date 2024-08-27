@@ -7,6 +7,7 @@ import com.teamwss.websoso.data.model.FeedsEntity
 import com.teamwss.websoso.data.model.PopularFeedsEntity
 import com.teamwss.websoso.data.model.UserInterestFeedsEntity
 import com.teamwss.websoso.data.remote.api.FeedApi
+import com.teamwss.websoso.data.remote.request.CommentRequestDto
 import javax.inject.Inject
 
 class FeedRepository @Inject constructor(
@@ -28,27 +29,28 @@ class FeedRepository @Inject constructor(
 
     suspend fun fetchComments(feedId: Long): CommentsEntity = feedApi.getComments(feedId).toData()
 
+    suspend fun saveComment(feedId: Long, comment: String) {
+        feedApi.postComment(feedId, CommentRequestDto(comment))
+    }
+
     suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long) {
 
-        return when (isLikedOfLikedFeed) {
+        when (isLikedOfLikedFeed) {
             true -> feedApi.deleteLikes(selectedFeedId)
             false -> feedApi.postLikes(selectedFeedId)
         }
     }
 
     suspend fun saveRemovedFeed(feedId: Long) {
-        return feedApi.deleteFeed(feedId)
-            .also { _cachedFeeds.removeIf { it.id == feedId } }
+        feedApi.deleteFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
     }
 
     suspend fun saveSpoilerFeed(feedId: Long) {
-        return feedApi.postSpoilerFeed(feedId)
-            .also { _cachedFeeds.removeIf { it.id == feedId } }
+        feedApi.postSpoilerFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
     }
 
     suspend fun saveImpertinenceFeed(feedId: Long) {
-        return feedApi.postImpertinenceFeed(feedId)
-            .also { _cachedFeeds.removeIf { it.id == feedId } }
+        feedApi.postImpertinenceFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
     }
 
     fun clearCachedFeeds() {

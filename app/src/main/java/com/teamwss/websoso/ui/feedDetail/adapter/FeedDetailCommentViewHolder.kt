@@ -11,7 +11,7 @@ class FeedDetailCommentViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(comment: CommentModel) {
-
+        binding.comment = comment
     }
 
     companion object {

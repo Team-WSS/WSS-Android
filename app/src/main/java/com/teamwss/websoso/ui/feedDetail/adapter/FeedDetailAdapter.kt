@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.ItemType
+import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.ItemType.COMMENT
+import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.ItemType.HEADER
 
 class FeedDetailAdapter : ListAdapter<FeedDetailType, ViewHolder>(diffCallBack) {
 
@@ -15,8 +17,8 @@ class FeedDetailAdapter : ListAdapter<FeedDetailType, ViewHolder>(diffCallBack) 
     }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
-        is Header -> ItemType.HEADER.ordinal
-        is Comment -> ItemType.COMMENT.ordinal
+        is Header -> HEADER.ordinal
+        is Comment -> COMMENT.ordinal
     }
 
     override fun getItemId(position: Int): Long = when (getItem(position)) {
@@ -26,8 +28,8 @@ class FeedDetailAdapter : ListAdapter<FeedDetailType, ViewHolder>(diffCallBack) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         when (ItemType.valueOf(viewType)) {
-            ItemType.HEADER -> FeedDetailContentViewHolder.from(parent)
-            ItemType.COMMENT -> FeedDetailCommentViewHolder.from(parent)
+            HEADER -> FeedDetailContentViewHolder.from(parent)
+            COMMENT -> FeedDetailCommentViewHolder.from(parent)
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

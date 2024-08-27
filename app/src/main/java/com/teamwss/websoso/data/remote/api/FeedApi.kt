@@ -1,10 +1,12 @@
 package com.teamwss.websoso.data.remote.api
 
+import com.teamwss.websoso.data.remote.request.CommentRequestDto
 import com.teamwss.websoso.data.remote.response.CommentsResponseDto
 import com.teamwss.websoso.data.remote.response.FeedDetailResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
 import com.teamwss.websoso.data.remote.response.PopularFeedsResponseDto
 import com.teamwss.websoso.data.remote.response.UserInterestFeedsResponseDto
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -25,14 +27,20 @@ interface FeedApi {
         @Path("feedId") feedId: Long,
     ): FeedDetailResponseDto
 
+    @DELETE("feeds/{feedId}")
+    suspend fun deleteFeed(
+        @Path("feedId") feedId: Long,
+    )
+
     @GET("feeds/{feedId}/comments")
     suspend fun getComments(
         @Path("feedId") feedId: Long,
     ): CommentsResponseDto
 
-    @DELETE("feeds/{feedId}")
-    suspend fun deleteFeed(
+    @POST("feeds/{feedId}/comments")
+    suspend fun postComment(
         @Path("feedId") feedId: Long,
+        @Body commentRequestDto: CommentRequestDto,
     )
 
     @POST("feeds/{feedId}/likes")

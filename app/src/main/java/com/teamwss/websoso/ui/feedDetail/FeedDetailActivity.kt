@@ -16,8 +16,7 @@ import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Success
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FeedDetailActivity :
-    BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
+class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
     private val feedDetailAdapter: FeedDetailAdapter by lazy { FeedDetailAdapter() }
@@ -27,6 +26,7 @@ class FeedDetailActivity :
 
         setupView()
         setupObserver()
+        onCommentRegisterClick()
     }
 
     private fun setupView() {
@@ -49,6 +49,15 @@ class FeedDetailActivity :
         val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
 
         feedDetailAdapter.submitList(listOf(header) + comments)
+    }
+
+    private fun onCommentRegisterClick() {
+        binding.ivFeedDetailCommentRegister.setOnClickListener {
+            binding.etFeedDetailInput.text.run {
+                feedDetailViewModel.dispatchComment(feedId, toString())
+                clear()
+            }
+        }
     }
 
     companion object {

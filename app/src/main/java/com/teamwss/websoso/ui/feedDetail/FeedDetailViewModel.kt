@@ -40,4 +40,32 @@ class FeedDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun dispatchComment(feedId: Long, comment: String) {
+        viewModelScope.launch {
+            runCatching {
+                feedRepository.saveComment(feedId, comment)
+            }.onSuccess {
+                updateComments(feedId)
+            }.onFailure {
+                _feedDetailUiState.value = Error
+            }
+        }
+    }
+
+    private fun updateComments(feedId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                feedRepository.fetchComments(feedId)
+            }.onSuccess { comments ->
+                _feedDetailUiState.value = Success(
+                    feedDetail = (feedDetailUiState.value as Success).feedDetail.copy(
+                        comments = comments.comments.map { it.toUi() }
+                    )
+                )
+            }.onFailure {
+                _feedDetailUiState.value = Error
+            }
+        }
+    }
 }
