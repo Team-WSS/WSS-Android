@@ -10,6 +10,7 @@ import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromTag
 import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
 import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.Companion.checkNicknameValidity
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
+import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,7 @@ class ProfileEditViewModel @Inject constructor(
     private val _uiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
     val uiState: LiveData<ProfileEditUiState> get() = _uiState
 
-    fun updateProfile(nickname: String, introduction: String, avatarImageUrl: String, genrePreferences: List<String>) {
+    fun updatePreviousProfile(nickname: String, introduction: String, avatarImageUrl: String, genrePreferences: List<String>) {
         val profile = ProfileModel(
             nicknameModel = NicknameModel(nickname),
             introduction = introduction,
@@ -110,6 +111,31 @@ class ProfileEditViewModel @Inject constructor(
                         nicknameEditResult = NicknameEditResult.INVALID_NICKNAME_DUPLICATION,
                     )
                 }
+            }
+        }
+    }
+
+    fun updateProfile() {
+        if (uiState.value?.nicknameEditResult != NicknameEditResult.VALID_NICKNAME) return
+        val previousProfile = uiState.value?.previousProfile ?: return
+        val currentProfile = uiState.value?.profile ?: return
+        viewModelScope.launch {
+            runCatching {
+                userRepository.patchUserProfile(
+                    // TODO: 실제 아바타 아이디로 변경
+                    avatarId = if (previousProfile.avatarImageUrl == currentProfile.avatarImageUrl) null else 1,
+                    nickname = if (previousProfile.nicknameModel.nickname == currentProfile.nicknameModel.nickname) null else currentProfile.nicknameModel.nickname,
+                    intro = if (previousProfile.introduction == currentProfile.introduction) null else currentProfile.introduction,
+                    genrePreferences = currentProfile.genrePreferences.map { it.tag },
+                )
+            }.onSuccess {
+                _uiState.value = uiState.value?.copy(
+                    profileEditResult = ProfileEditResult.Success,
+                )
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(
+                    profileEditResult = ProfileEditResult.Loading,
+                )
             }
         }
     }

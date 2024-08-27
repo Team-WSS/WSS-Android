@@ -16,7 +16,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingTop="24dp">
 
         <ImageView
             android:id="@+id/iv_profile_edit_navigate_back"
@@ -49,6 +50,7 @@
             android:layout_marginEnd="12dp"
             android:height="44dp"
             android:gravity="center"
+            android:onClick="@{() -> viewModel.updateProfile()}"
             android:text="@string/profile_edit_finish"
             android:textAlignment="center"
             android:textAppearance="@style/title2"

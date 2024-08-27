@@ -4,4 +4,5 @@ data class ProfileEditUiState(
     val profile: ProfileModel = ProfileModel(),
     val previousProfile: ProfileModel = ProfileModel(),
     val nicknameEditResult: NicknameEditResult = NicknameEditResult.NONE,
+    val profileEditResult: ProfileEditResult = ProfileEditResult.Loading,
 )

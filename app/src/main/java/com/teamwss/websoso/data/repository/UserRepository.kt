@@ -3,6 +3,7 @@ package com.teamwss.websoso.data.repository
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.mapper.toRemote
 import com.teamwss.websoso.data.model.BlockedUsersEntity
+import com.teamwss.websoso.data.model.ProfileEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -45,5 +46,9 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchNicknameValidity(nickname: String): Boolean {
         return userApi.getNicknameValidity(nickname).isValid
+    }
+
+    suspend fun patchUserProfile(avatarId: Int?, nickname: String?, intro: String?, genrePreferences: List<String>) {
+        userApi.patchProfile(ProfileEntity(avatarId, nickname, intro, genrePreferences).toRemote())
     }
 }

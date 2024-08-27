@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.profileEdit.model
 data class ProfileModel(
     val nicknameModel: NicknameModel = NicknameModel(),
     val introduction: String = "",
+    val avatarId: Int = 0,
     val avatarImageUrl: String = "",
     val genrePreferences: List<Genre> = emptyList(),
 )
@@ -31,4 +32,10 @@ enum class NicknameEditResult(
             }
         }
     }
+}
+
+sealed interface ProfileEditResult {
+    object Loading : ProfileEditResult
+    object Success : ProfileEditResult
+    object Failure : ProfileEditResult
 }

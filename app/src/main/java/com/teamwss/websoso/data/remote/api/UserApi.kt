@@ -1,6 +1,7 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
@@ -48,4 +49,9 @@ interface UserApi {
     suspend fun getNicknameValidity(
         @Query("nickname") nickname: String,
     ): UserNicknameValidityResponseDto
+
+    @PATCH("users/my-profile")
+    suspend fun patchProfile(
+        @Body userProfileRequestDto: UserProfileRequestDto,
+    )
 }

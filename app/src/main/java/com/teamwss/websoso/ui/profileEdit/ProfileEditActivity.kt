@@ -17,6 +17,7 @@ import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
 import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
+import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,6 +34,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         setupGenreChips()
         setupNicknameEditText()
         setupIntroductionEditText()
+        // TODO: 프로필 이미지 설정 다이알로그 추가
     }
 
     private fun bindViewModel() {
@@ -46,6 +48,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             updateDuplicateCheckButton(uiState)
             updateNicknameEditTextUi(uiState)
             updateIntroductionEditTextUi(uiState.profile.introduction)
+            handleProfileEditResult(uiState.profileEditResult)
         }
     }
 
@@ -107,13 +110,21 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         )
     }
 
+    private fun handleProfileEditResult(profileEditResult: ProfileEditResult) {
+        when (profileEditResult) {
+            ProfileEditResult.Success -> finish()
+            ProfileEditResult.Failure -> Unit // TODO: 실패 처리
+            else -> return
+        }
+    }
+
     private fun initProfileInfo() {
         val nickname = intent.getStringExtra(NICKNAME) ?: ""
         val introduction = intent.getStringExtra(INTRODUCTION) ?: ""
         val avatarImageUrl = intent.getStringExtra(AVATAR_IMAGE_URL) ?: ""
         val genrePreferences = intent.getStringArrayListExtra(GENRE_PREFERENCES) ?: emptyList()
 
-        profileEditViewModel.updateProfile(nickname, introduction, avatarImageUrl, genrePreferences)
+        profileEditViewModel.updatePreviousProfile(nickname, introduction, avatarImageUrl, genrePreferences)
     }
 
     private fun setupGenreChips() {
