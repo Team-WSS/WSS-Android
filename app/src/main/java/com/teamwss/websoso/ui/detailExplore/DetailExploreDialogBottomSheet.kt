@@ -43,9 +43,10 @@ class DetailExploreDialogBottomSheet :
 
     private fun initDetailExploreFragment() {
         childFragmentManager.commit {
-            add(R.id.fcv_detail_explore, detailExploreInfoFragment)
-            add(R.id.fcv_detail_explore, detailExploreKeywordFragment)
-            hide(detailExploreKeywordFragment)
+            add(
+                R.id.fcv_detail_explore,
+                detailExploreInfoFragment,
+            )
         }
     }
 
@@ -62,7 +63,14 @@ class DetailExploreDialogBottomSheet :
     private fun switchFragment(selectedFragmentTitle: SelectedFragmentTitle) {
         val fragmentToShow = when (selectedFragmentTitle) {
             SelectedFragmentTitle.INFO -> detailExploreInfoFragment
-            SelectedFragmentTitle.KEYWORD -> detailExploreKeywordFragment
+            SelectedFragmentTitle.KEYWORD -> {
+                if (childFragmentManager.findFragmentById(R.id.fcv_detail_explore) !is DetailExploreKeywordFragment) {
+                    childFragmentManager.commit {
+                        add(R.id.fcv_detail_explore, detailExploreKeywordFragment)
+                    }
+                }
+                detailExploreKeywordFragment
+            }
         }
 
         val fragmentToHide = when (selectedFragmentTitle) {
@@ -72,8 +80,8 @@ class DetailExploreDialogBottomSheet :
 
         childFragmentManager.commit {
             setReorderingAllowed(true)
-            hide(fragmentToHide)
             show(fragmentToShow)
+            hide(fragmentToHide)
         }
 
         updateButtonColors(selectedFragmentTitle)
