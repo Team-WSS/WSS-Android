@@ -12,19 +12,20 @@ import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.toFloatScaledByPx
+import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
-import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
-import com.teamwss.websoso.common.util.toIntPxFromDp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
+class NovelDetailActivity :
+    BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
 
     private var _novelDetailMenuPopupBinding: MenuNovelDetailPopupBinding? = null
@@ -86,7 +87,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
             when (novelDetail.novel.novelTitle.isNotBlank()) {
                 true -> {
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
-                    binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
+                    binding.llNovelDetailInterest.isSelected =
+                        novelDetail.userNovel.isUserNovelInterest
                     if (novelDetail.isFirstLaunched) setupTooltipWindow()
                 }
 
@@ -108,9 +110,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
     }
 
     private fun setupTooltipBottomFramePosition() {
-        binding.ctlNovelDetail.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        binding.ctlNovelDetail.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
+                val layoutParams =
+                    binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.topMargin = binding.ctlNovelDetail.height
                 binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
                 binding.ctlNovelDetail.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -133,7 +137,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
             val popupWidth = novelDetailToolTipBinding.root.measuredWidth
 
             val xOffset = (anchorViewWidth - popupWidth) / 2
-            val yOffset = 6.toIntPxFromDp()
+            val yOffset = 6.toIntScaledByPx()
 
             showAsDropDown(binding.tgNovelDetailReadStatus, xOffset, yOffset)
 
@@ -160,11 +164,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
             WindowManager.LayoutParams.WRAP_CONTENT,
             true,
         ).apply {
-            this.elevation = 14f.toFloatPxFromDp()
+            this.elevation = 14f.toFloatScaledByPx()
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.toIntPxFromDp(),
-                POPUP_MARGIN_TOP.toIntPxFromDp(),
+                POPUP_MARGIN_END.toIntScaledByPx(),
+                POPUP_MARGIN_TOP.toIntScaledByPx(),
                 Gravity.END,
             )
         }

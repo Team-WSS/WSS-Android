@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.FragmentOnboardingFirstBinding
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.databinding.FragmentOnboardingFirstBinding
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.onboardingFirstUiModelMap

@@ -18,7 +18,7 @@ import com.teamwss.websoso.data.remote.response.UserInterestFeedsResponseDto
 fun FeedsResponseDto.toData(): FeedsEntity = FeedsEntity(
     category = category,
     isLoadable = isLoadable,
-    feeds = feedsResponseDto.map { it.toData() },
+    feeds = feeds.map { it.toData() },
 )
 
 fun FeedResponseDto.toData(): FeedEntity = FeedEntity(

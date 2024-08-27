@@ -43,6 +43,7 @@ class DetailExploreViewModel @Inject constructor() : ViewModel() {
         val isStatusChipSelected: Boolean = _selectedSeriesStatus.value.isNullOrEmpty().not()
         val isRatingChipSelected: Boolean = _selectedRating.value != null
 
-        _isInfoChipSelected.value = isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
+        _isInfoChipSelected.value =
+            isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
     }
 }

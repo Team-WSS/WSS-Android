@@ -8,7 +8,7 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.databinding.ItemRestGenreBinding
 
 class RestGenrePreferenceAdapter(
-    items: List<GenrePreferenceEntity> = emptyList()
+    items: List<GenrePreferenceEntity> = emptyList(),
 ) : BaseAdapter() {
 
     private var items: List<GenrePreferenceEntity> = items

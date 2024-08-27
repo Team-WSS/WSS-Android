@@ -12,12 +12,15 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.toFloatScaledByPx
+import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
-import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
@@ -26,9 +29,6 @@ import com.teamwss.websoso.ui.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.feed.model.CategoryModel
 import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
-import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.common.util.toFloatPxFromDp
-import com.teamwss.websoso.common.util.toIntPxFromDp
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
@@ -211,9 +211,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
                 setWebsosoChipTextAppearance(R.style.title3)
                 setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
-                setWebsosoChipRadius(18f.toFloatPxFromDp())
+                setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
+                setWebsosoChipPaddingHorizontal(8f.toFloatScaledByPx())
+                setWebsosoChipRadius(18f.toFloatScaledByPx())
                 setWebsosoChipSelected(categoryUiState.isSelected)
                 setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
@@ -238,7 +238,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         binding.sptrFeedRefresh.apply {
             setRefreshViewParams(
                 params = ViewGroup.LayoutParams(
-                    30.toIntPxFromDp(), 30.toIntPxFromDp(),
+                    30.toIntScaledByPx(), 30.toIntScaledByPx(),
                 )
             )
             setLottieAnimation("lottie_websoso_loading.json")

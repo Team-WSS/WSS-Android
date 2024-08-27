@@ -18,7 +18,8 @@ class WebsosoSearchEditText @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private val binding: LayoutSearchBinding = LayoutSearchBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding: LayoutSearchBinding =
+        LayoutSearchBinding.inflate(LayoutInflater.from(context), this, true)
 
     private var externalFocusChangeListener: OnFocusChangeListener? = null
     private var externalActionListener: TextView.OnEditorActionListener? = null
@@ -82,7 +83,8 @@ class WebsosoSearchEditText @JvmOverloads constructor(
 
     /* Hides the soft keyboard */
     private fun hideKeyboard() {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.etCommonSearch.windowToken, 0)
     }
 

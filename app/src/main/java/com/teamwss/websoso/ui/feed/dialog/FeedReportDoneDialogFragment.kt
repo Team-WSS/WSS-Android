@@ -3,8 +3,8 @@ package com.teamwss.websoso.ui.feed.dialog
 import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.DialogReportDonePopupMenuBinding
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
+import com.teamwss.websoso.databinding.DialogReportDonePopupMenuBinding
 import com.teamwss.websoso.ui.feed.FeedFragment.FeedDialogClickListener
 
 class FeedReportDoneDialogFragment :

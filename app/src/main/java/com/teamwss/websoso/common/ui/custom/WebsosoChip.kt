@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.chip.Chip
-import com.teamwss.websoso.common.util.toFloatPxFromDp
+import com.teamwss.websoso.common.util.toFloatScaledByPx
 
 class WebsosoChip(
     context: Context,
@@ -69,7 +69,7 @@ class WebsosoChip(
     color - The resource id of this chip's stroke color.
      */
     fun setWebsosoChipStrokeColor(color: Int) {
-        chipStrokeWidth = 1f.toFloatPxFromDp()
+        chipStrokeWidth = 1f.toFloatScaledByPx()
         chipStrokeColor = context.getColorStateList(color)
     }
 

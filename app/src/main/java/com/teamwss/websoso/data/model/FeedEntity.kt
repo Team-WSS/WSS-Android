@@ -24,7 +24,7 @@ data class FeedEntity(
     data class NovelEntity(
         val id: Long?,
         val title: String?,
-        val rating: Float,
-        val ratingCount: Int,
+        val rating: Float?,
+        val ratingCount: Int?,
     )
 }

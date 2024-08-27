@@ -52,7 +52,12 @@ data class NovelDetailModel(
             val end = endDate?.let { inputFormat.parse(it) }
 
             return when {
-                start != null && end != null -> "${outputFormat.format(start)} ~ ${outputFormat.format(end)}"
+                start != null && end != null -> "${outputFormat.format(start)} ~ ${
+                    outputFormat.format(
+                        end
+                    )
+                }"
+
                 start != null -> outputFormat.format(start)
                 end != null -> outputFormat.format(end)
                 else -> ""

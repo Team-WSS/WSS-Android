@@ -42,7 +42,7 @@ class DetailExploreResultAdapter(
 
             override fun areItemsTheSame(
                 oldItem: DetailExploreResultItemType,
-                newItem: DetailExploreResultItemType
+                newItem: DetailExploreResultItemType,
             ): Boolean {
                 return when {
                     oldItem is Result && newItem is Result -> oldItem.novel.id == newItem.novel.id
@@ -53,7 +53,7 @@ class DetailExploreResultAdapter(
 
             override fun areContentsTheSame(
                 oldItem: DetailExploreResultItemType,
-                newItem: DetailExploreResultItemType
+                newItem: DetailExploreResultItemType,
             ): Boolean {
                 return oldItem == newItem
             }

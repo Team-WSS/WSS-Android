@@ -22,7 +22,7 @@ class RatingDateManager {
             ReadStatus.WATCHING -> handleWatchingStatus(ratingDateModel)
             ReadStatus.WATCHED -> handleWatchedStatus(ratingDateModel)
             ReadStatus.QUIT -> handleQuitStatus(ratingDateModel)
-            ReadStatus.NONE ->  ratingDateModel
+            ReadStatus.NONE -> ratingDateModel
         }
 
         return novelRatingModel.copy(
