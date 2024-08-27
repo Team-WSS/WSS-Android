@@ -20,7 +20,7 @@ class PopularFeedsViewHolder(
 
     fun bind(feedItems: List<PopularFeedEntity>) {
         slots.forEachIndexed { index, slotBinding ->
-            slotBinding?.apply {
+            slotBinding.apply {
                 feedItems.getOrNull(index)?.let { feed ->
                     tvPopularFeedContent.text = feed.feesContent
                     tvPopularFeedLikeCount.text = feed.likeCount.toString()

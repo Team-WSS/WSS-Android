@@ -129,7 +129,7 @@ class WithdrawSecondActivity :
 
     private fun updateEtcCheckImageState(
         checkImage: ImageView,
-        isEtcSelected: Boolean
+        isEtcSelected: Boolean,
     ) {
         val imageResource = if (isEtcSelected) {
             R.drawable.img_account_info_check_selected

@@ -42,7 +42,7 @@ class NormalExploreAdapter(
 
             override fun areItemsTheSame(
                 oldItem: NormalExploreItemType,
-                newItem: NormalExploreItemType
+                newItem: NormalExploreItemType,
             ): Boolean {
                 return when {
                     oldItem is Result && newItem is Result -> oldItem.novel.id == newItem.novel.id
@@ -53,7 +53,7 @@ class NormalExploreAdapter(
 
             override fun areContentsTheSame(
                 oldItem: NormalExploreItemType,
-                newItem: NormalExploreItemType
+                newItem: NormalExploreItemType,
             ): Boolean {
                 return oldItem == newItem
             }

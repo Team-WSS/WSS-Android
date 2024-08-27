@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
@@ -134,7 +134,10 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
     private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
-                updateGraphHeight(binding.viewNovelInfoReadStatusWatching, unifiedReviewCountModel.watchingCount.graphHeight)
+                updateGraphHeight(
+                    binding.viewNovelInfoReadStatusWatching,
+                    unifiedReviewCountModel.watchingCount.graphHeight
+                )
                 updateGraphSelection(
                     binding.viewNovelInfoReadStatusWatching,
                     binding.tvNovelInfoReadStatusWatchingCount,
@@ -143,7 +146,10 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             }
 
             ReadStatus.WATCHED -> {
-                updateGraphHeight(binding.viewNovelInfoReadStatusWatched, unifiedReviewCountModel.watchedCount.graphHeight)
+                updateGraphHeight(
+                    binding.viewNovelInfoReadStatusWatched,
+                    unifiedReviewCountModel.watchedCount.graphHeight
+                )
                 updateGraphSelection(
                     binding.viewNovelInfoReadStatusWatched,
                     binding.tvNovelInfoReadStatusWatchedCount,
@@ -152,8 +158,15 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             }
 
             ReadStatus.QUIT -> {
-                updateGraphHeight(binding.viewNovelInfoReadStatusQuit, unifiedReviewCountModel.quitCount.graphHeight)
-                updateGraphSelection(binding.viewNovelInfoReadStatusQuit, binding.tvNovelInfoReadStatusQuitCount, binding.tvNovelInfoReadStatusQuit)
+                updateGraphHeight(
+                    binding.viewNovelInfoReadStatusQuit,
+                    unifiedReviewCountModel.quitCount.graphHeight
+                )
+                updateGraphSelection(
+                    binding.viewNovelInfoReadStatusQuit,
+                    binding.tvNovelInfoReadStatusQuitCount,
+                    binding.tvNovelInfoReadStatusQuit
+                )
             }
 
             else -> Unit
@@ -165,38 +178,64 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
         view.requestLayout()
     }
 
-    private fun updateGraphSelection(graphView: View, countTextView: TextView, statusTextView: TextView) {
+    private fun updateGraphSelection(
+        graphView: View,
+        countTextView: TextView,
+        statusTextView: TextView,
+    ) {
         graphView.isSelected = true
         countTextView.isSelected = true
         statusTextView.isSelected = true
     }
 
     private fun updateUsersReadStatusText(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        val color = AppCompatResources.getColorStateList(requireContext(), R.color.primary_100_6A5DFD).defaultColor
+        val color = AppCompatResources.getColorStateList(
+            requireContext(),
+            R.color.primary_100_6A5DFD
+        ).defaultColor
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
-                val watchingCountText = getString(R.string.novel_info_read_status_watching_count, unifiedReviewCountModel.watchingCount.count)
-                val coloredWatchingCountText = unifiedReviewCountModel.watchingCount.count.toString() + getString(R.string.novel_info_user_unit)
-                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchingCountText, listOf(coloredWatchingCountText), color)
+                val watchingCountText = getString(
+                    R.string.novel_info_read_status_watching_count,
+                    unifiedReviewCountModel.watchingCount.count
+                )
+                val coloredWatchingCountText =
+                    unifiedReviewCountModel.watchingCount.count.toString() + getString(R.string.novel_info_user_unit)
+                binding.tvNovelInfoReadStatusTitle.text =
+                    getColoredText(watchingCountText, listOf(coloredWatchingCountText), color)
             }
 
             ReadStatus.WATCHED -> {
-                val watchedCountText = getString(R.string.novel_info_read_status_watched_count, unifiedReviewCountModel.watchedCount.count)
-                val coloredWatchedText = unifiedReviewCountModel.watchedCount.count.toString() + getString(R.string.novel_info_user_unit)
-                binding.tvNovelInfoReadStatusTitle.text = getColoredText(watchedCountText, listOf(coloredWatchedText), color)
+                val watchedCountText = getString(
+                    R.string.novel_info_read_status_watched_count,
+                    unifiedReviewCountModel.watchedCount.count
+                )
+                val coloredWatchedText =
+                    unifiedReviewCountModel.watchedCount.count.toString() + getString(R.string.novel_info_user_unit)
+                binding.tvNovelInfoReadStatusTitle.text =
+                    getColoredText(watchedCountText, listOf(coloredWatchedText), color)
             }
 
             ReadStatus.QUIT -> {
-                val quitCountText = getString(R.string.novel_info_read_status_quit_count, unifiedReviewCountModel.quitCount.count)
-                val coloredQuitText = unifiedReviewCountModel.quitCount.count.toString() + getString(R.string.novel_info_user_unit)
-                binding.tvNovelInfoReadStatusTitle.text = getColoredText(quitCountText, listOf(coloredQuitText), color)
+                val quitCountText = getString(
+                    R.string.novel_info_read_status_quit_count,
+                    unifiedReviewCountModel.quitCount.count
+                )
+                val coloredQuitText =
+                    unifiedReviewCountModel.quitCount.count.toString() + getString(R.string.novel_info_user_unit)
+                binding.tvNovelInfoReadStatusTitle.text =
+                    getColoredText(quitCountText, listOf(coloredQuitText), color)
             }
 
             ReadStatus.NONE -> Unit
         }
     }
 
-    private fun getColoredText(text: String, wordsToColor: List<String>, color: Int): SpannableString {
+    private fun getColoredText(
+        text: String,
+        wordsToColor: List<String>,
+        color: Int,
+    ): SpannableString {
         val spannableString = SpannableString(text)
         wordsToColor.forEach { word ->
             val start = text.indexOf(word)
@@ -213,7 +252,10 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
         binding.tvNovelInfoCharmPointsBody.text = getColoredText(
             getString(R.string.novel_info_charm_points_body, charmPoints),
             listOf(charmPoints),
-            AppCompatResources.getColorStateList(requireContext(), R.color.primary_100_6A5DFD).defaultColor,
+            AppCompatResources.getColorStateList(
+                requireContext(),
+                R.color.primary_100_6A5DFD
+            ).defaultColor,
         )
     }
 

@@ -3,10 +3,10 @@ package com.teamwss.websoso.ui.novelRating.adapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.util.toIntPxFromDp
+import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 
 class NovelRatingKeywordViewHolder(
     private val binding: ItemCommonKeywordBinding,
@@ -25,7 +25,8 @@ class NovelRatingKeywordViewHolder(
             val layoutParams = wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
 
             when (ivNovelRatingKeywordToggle.isSelected) {
-                true -> layoutParams.matchConstraintMaxHeight = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                true -> layoutParams.matchConstraintMaxHeight =
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
 
                 false -> layoutParams.matchConstraintMaxHeight = 78.toIntPxFromDp()
             }

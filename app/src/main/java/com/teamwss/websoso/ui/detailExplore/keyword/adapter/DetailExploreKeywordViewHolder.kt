@@ -3,10 +3,10 @@ package com.teamwss.websoso.ui.detailExplore.keyword.adapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.util.toIntPxFromDp
+import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 
 class DetailExploreKeywordViewHolder(
     private val binding: ItemCommonKeywordBinding,

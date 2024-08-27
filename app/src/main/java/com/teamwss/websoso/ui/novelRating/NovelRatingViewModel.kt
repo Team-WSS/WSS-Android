@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.data.model.NovelRatingEntity
 import com.teamwss.websoso.data.repository.KeywordRepository
 import com.teamwss.websoso.data.repository.UserNovelRepository
-import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.ui.mapper.toData
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
@@ -49,7 +49,8 @@ class NovelRatingViewModel @Inject constructor(
 
     private fun handleSuccessfulFetchNovelRating(novelRatingEntity: NovelRatingEntity) {
         val novelRatingModel = novelRatingEntity.toUi()
-        val isEditingStartDate = ratingDateManager.updateIsEditingStartDate(novelRatingModel.uiReadStatus)
+        val isEditingStartDate =
+            ratingDateManager.updateIsEditingStartDate(novelRatingModel.uiReadStatus)
         val dayMaxValue = ratingDateManager.updateDayMaxValue(
             novelRatingModel.ratingDateModel,
             isEditingStartDate,
@@ -73,7 +74,9 @@ class NovelRatingViewModel @Inject constructor(
                 if (keyword == null && uiState.value?.keywordsModel?.categories?.isNotEmpty() == true) return@launch
                 keywordRepository.fetchKeywords(keyword)
             }.onSuccess { categories ->
-                handleSuccessfulFetchKeywordCategories(keyword, categories.categories.map { it.toUi() })
+                handleSuccessfulFetchKeywordCategories(
+                    keyword,
+                    categories.categories.map { it.toUi() })
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
@@ -83,7 +86,10 @@ class NovelRatingViewModel @Inject constructor(
         }
     }
 
-    private fun handleSuccessfulFetchKeywordCategories(keyword: String?, categories: List<CategoryModel>) {
+    private fun handleSuccessfulFetchKeywordCategories(
+        keyword: String?,
+        categories: List<CategoryModel>,
+    ) {
         val selectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
         val updatedCategories = categories.map { it }.map {
             it.copy(keywords = it.keywords.map { keyword ->
@@ -103,7 +109,8 @@ class NovelRatingViewModel @Inject constructor(
                 keywordsModel = uiState.keywordsModel.copy(
                     searchResultKeywords = updatedCategories.flatMap { it.keywords },
                     isInitialSearchKeyword = false,
-                    isSearchResultKeywordsEmpty = updatedCategories.flatMap { it.keywords }.isEmpty(),
+                    isSearchResultKeywordsEmpty = updatedCategories.flatMap { it.keywords }
+                        .isEmpty(),
                 )
             )
         }
@@ -139,7 +146,8 @@ class NovelRatingViewModel @Inject constructor(
 
     fun updateReadStatus(readStatus: ReadStatus) {
         uiState.value?.let { uiState ->
-            val updatedModel = ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
+            val updatedModel =
+                ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
             _uiState.value = uiState.copy(
                 novelRatingModel = updatedModel,
                 isEditingStartDate = ratingDateManager.updateIsEditingStartDate(readStatus),
@@ -211,7 +219,8 @@ class NovelRatingViewModel @Inject constructor(
                 true -> charmPoints.remove(charmPoint)
                 false -> charmPoints.add(charmPoint)
             }
-            val updatedNovelRatingModel = uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
+            val updatedNovelRatingModel =
+                uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
             _uiState.value = uiState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
@@ -269,8 +278,10 @@ class NovelRatingViewModel @Inject constructor(
                         startDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentStartDate?.toFormattedDate(),
                         endDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentEndDate?.toFormattedDate(),
                         userNovelRating = novelRating,
-                        charmPoints = uiState.value?.novelRatingModel?.charmPoints?.map { it.value } ?: emptyList(),
-                        userKeywords = uiState.value?.novelRatingModel?.userKeywords?.map { it.toData() } ?: emptyList(),
+                        charmPoints = uiState.value?.novelRatingModel?.charmPoints?.map { it.value }
+                            ?: emptyList(),
+                        userKeywords = uiState.value?.novelRatingModel?.userKeywords?.map { it.toData() }
+                            ?: emptyList(),
                     ),
                     isAlreadyRated = uiState.value?.isAlreadyRated ?: false,
                 )

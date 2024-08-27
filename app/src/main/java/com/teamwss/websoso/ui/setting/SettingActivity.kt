@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.teamwss.websoso.R
+import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivitySettingBinding
 import com.teamwss.websoso.ui.accountInfo.AccountInfoActivity
-import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.ui.profileDisclosure.ProfileDisclosureActivity
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {

@@ -10,7 +10,6 @@ import com.teamwss.websoso.data.repository.UserPreferencesRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,14 +51,19 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 _novelDetailModel.value = novelDetailModel.value?.copy(
                     userNovel = novelDetailModel.value?.userNovel?.copy(
-                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not() ?: false
+                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not()
+                            ?: false
                     ) ?: return@runCatching
                 )
-                novelRepository.saveUserInterest(novelId, novelDetailModel.value?.userNovel?.isUserNovelInterest ?: false)
+                novelRepository.saveUserInterest(
+                    novelId,
+                    novelDetailModel.value?.userNovel?.isUserNovelInterest ?: false
+                )
             }.onFailure {
                 _novelDetailModel.value = novelDetailModel.value?.copy(
                     userNovel = novelDetailModel.value?.userNovel?.copy(
-                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not() ?: false
+                        isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest?.not()
+                            ?: false
                     ) ?: return@onFailure
                 )
             }
@@ -81,7 +85,8 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userPreferencesRepository.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
-                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
+                _novelDetailModel.value =
+                    novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
             }.onFailure {
                 _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
             }
@@ -93,7 +98,8 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userPreferencesRepository.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
-                _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
+                _novelDetailModel.value =
+                    novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
             }.onFailure {
                 _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
             }

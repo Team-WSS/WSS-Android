@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityProfileDisclosureBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.databinding.ActivityProfileDisclosureBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -15,7 +15,8 @@ import javax.inject.Inject
 class BlockedUsersViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    private val _uiState: MutableLiveData<BlockedUsersUiState> = MutableLiveData(BlockedUsersUiState())
+    private val _uiState: MutableLiveData<BlockedUsersUiState> =
+        MutableLiveData(BlockedUsersUiState())
     val uiState: LiveData<BlockedUsersUiState> get() = _uiState
 
     private val _isBlockedUserEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData()
