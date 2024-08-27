@@ -287,4 +287,5 @@
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>
     <string name="my_activity_dot">·</string>
+    <string name="my_activity_more">활동기록 더보기</string>
 </resources>
