@@ -95,7 +95,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             updateViewVisibleByLogin(uiState.isLogin, uiState.nickname)
-            updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+            if (uiState.isLogin) updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
