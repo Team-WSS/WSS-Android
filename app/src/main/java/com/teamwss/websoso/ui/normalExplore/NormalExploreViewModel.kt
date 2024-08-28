@@ -1,10 +1,12 @@
 package com.teamwss.websoso.ui.normalExplore
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FakeNovelRepository
+import com.teamwss.websoso.domain.usecase.GetNormalExploreResultsUseCase
+import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NormalExploreViewModel @Inject constructor(
-    private val novelRepository: FakeNovelRepository,
+    private val getNormalExploreResultsUseCase: GetNormalExploreResultsUseCase,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<NormalExploreUiState> =
         MutableLiveData(NormalExploreUiState())
@@ -29,31 +31,27 @@ class NormalExploreViewModel @Inject constructor(
 
     fun updateSearchResult() {
         viewModelScope.launch {
-            _uiState.value = uiState.value?.copy(
-                loading = true,
-            )
-            runCatching {
-                novelRepository.normalExploreResultDummyData
-            }.onSuccess { results ->
-                when (results.novels.isNotEmpty()) {
-                    true -> {
-                        _uiState.value = uiState.value?.copy(
-                            loading = false,
-                            novels = results.novels,
-                        )
-                    }
+            _uiState.value = _uiState.value?.copy(loading = true)
 
-                    false -> {
-                        _uiState.value = uiState.value?.copy(
-                            loading = false,
-                        )
-                        _isNovelResultEmptyBoxVisibility.value = true
-                    }
+            runCatching {
+                val isLoadable: Boolean = uiState.value?.isLoadable == true
+                getNormalExploreResultsUseCase(searchWord.value ?: "", isLoadable)
+            }.onSuccess { results ->
+                if (results.novels.isNotEmpty()) {
+                    Log.d("moongchi", "updateSearchResult: ${results.novels}")
+                    _uiState.value = _uiState.value?.copy(
+                        loading = false,
+                        isLoadable = results.isLoadable,
+                        novels = results.novels.map { it.toUi() },
+                    )
+                } else {
+                    _uiState.value = _uiState.value?.copy(loading = false)
+                    _isNovelResultEmptyBoxVisibility.value = true
                 }
             }.onFailure {
-                _uiState.value = uiState.value?.copy(
+                _uiState.value = _uiState.value?.copy(
                     loading = false,
-                    error = true,
+                    error = true
                 )
             }
         }

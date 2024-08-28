@@ -3,10 +3,11 @@ package com.teamwss.websoso.ui.normalExplore
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
@@ -92,6 +93,8 @@ class NormalExploreActivity :
     private fun updateView(uiState: NormalExploreUiState) {
         val header = Header(uiState.novels.count())
         val results = uiState.novels.map { Result(it) }
+
+        Log.d("moongchi", "updateView: ${uiState.novels}")
         normalExploreAdapter.submitList(listOf(header) + results)
     }
 
