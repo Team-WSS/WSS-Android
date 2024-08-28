@@ -167,11 +167,11 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateCheckDuplicateNicknameBtnEnabled() {
-        val isEnable =
-            profileEditUiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && profileEditUiState.value?.nicknameEditResult == NONE
-        if (isEnable == profileEditUiState.value?.isCheckDuplicateNicknameEnabled) return
+        val nickname = profileEditUiState.value?.profile?.nicknameModel?.nickname ?: ""
+        val isCheckDuplicateNicknameBtnEnabled = nickname.isNotEmpty() && profileEditUiState.value?.nicknameEditResult == NONE
+        if (isCheckDuplicateNicknameBtnEnabled == profileEditUiState.value?.isCheckDuplicateNicknameEnabled) return
         _profileEditUiState.value = profileEditUiState.value?.copy(
-            isCheckDuplicateNicknameEnabled = isEnable,
+            isCheckDuplicateNicknameEnabled = isCheckDuplicateNicknameBtnEnabled,
         )
     }
 
@@ -228,7 +228,8 @@ class ProfileEditViewModel @Inject constructor(
 
     fun getFormattedSpanCount(): Int {
         return avatarChangeUiState.value?.avatars?.size.let { avatarCount ->
-            if (avatarCount == null || avatarCount < MAX_CHARACTER_COLUMN_COUNT) avatarCount ?: 1
+            if (avatarCount == null) return MIN_CHARACTER_COLUMN_COUNT
+            if (avatarCount < MAX_CHARACTER_COLUMN_COUNT) avatarCount
             else MAX_CHARACTER_COLUMN_COUNT
         }
     }
@@ -255,5 +256,6 @@ class ProfileEditViewModel @Inject constructor(
 
     companion object {
         private const val MAX_CHARACTER_COLUMN_COUNT = 5
+        private const val MIN_CHARACTER_COLUMN_COUNT = 1
     }
 }
