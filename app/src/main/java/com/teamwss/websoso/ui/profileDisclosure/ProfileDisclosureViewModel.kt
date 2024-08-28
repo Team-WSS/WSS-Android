@@ -74,8 +74,7 @@ class ProfileDisclosureViewModel @Inject constructor(
             runCatching {
                 val isProfilePublicValue =
                     isProfilePublic.value ?: isInitializeOfProfilePublic.not()
-                val userProfileStatusEntity = UserProfileStatusEntity(isProfilePublicValue)
-                userRepository.saveUserProfileStatus(userProfileStatusEntity)
+                userRepository.saveUserProfileStatus(isProfilePublicValue)
             }.onSuccess {
                 _uiState.value = uiState.value?.copy(
                     loading = false,

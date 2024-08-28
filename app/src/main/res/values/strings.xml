@@ -231,6 +231,7 @@
     <string name="blocked_users_cancel">차단 해제</string>
     <string name="blocked_users_title">차단유저 목록</string>
     <string name="blocked_users_empty">차단한 유저가 없어요</string>
+    <string name="blocked_users_unblocked">%s님을 차단 해제했어요</string>
 
     <!-- 환경설정 - 계정정보 뷰 -->
     <string name="account_info_change_user_info">성별/나이 변경</string>
@@ -292,4 +293,9 @@
     <string name="edit_profile_introduction_hint">소개글을 적어보세요!</string>
     <string name="profile_edit_prefer_genre">선호장르</string>
     <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해 드려요</string>
+
+    <!-- 내 활동 뷰 -->
+    <string name="my_activity_score_count">%.1f (%d)</string>
+    <string name="my_activity_dot">·</string>
+    <string name="my_activity_more">활동기록 더보기</string>
 </resources>

@@ -22,6 +22,9 @@ class BlockedUsersViewModel @Inject constructor(
     private val _isBlockedUserEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData()
     val isBlockedUserEmptyBoxVisibility: LiveData<Boolean> get() = _isBlockedUserEmptyBoxVisibility
 
+    private val _unblockedUserNickname: MutableLiveData<String> = MutableLiveData()
+    val unblockedUserNickname: LiveData<String> get() = _unblockedUserNickname
+
     init {
         updateBlockedUsers()
     }
@@ -42,6 +45,7 @@ class BlockedUsersViewModel @Inject constructor(
     }
 
     fun deleteBlockedUser(blockId: Long) {
+        val blockedUser = uiState.value?.blockedUsers?.find { it.blockId == blockId }
         viewModelScope.launch {
             runCatching {
                 userRepository.deleteBlockedUser(blockId)
@@ -50,6 +54,8 @@ class BlockedUsersViewModel @Inject constructor(
                     uiState.value?.blockedUsers ?: emptyList()
                 val updatedBlockedUsers: List<BlockedUserEntity> =
                     currentBlockedUsers.filterNot { it.blockId == blockId }
+
+                _unblockedUserNickname.value = blockedUser?.nickName
 
                 updateUiState(updatedBlockedUsers)
             }
