@@ -11,7 +11,6 @@ class MyActivityViewHolder(private val binding: ItemMyActivityBinding) :
 
     fun bind(myActivity: ActivityModel) {
         binding.myActivity = myActivity
-        binding.executePendingBindings()
     }
 
     companion object {
