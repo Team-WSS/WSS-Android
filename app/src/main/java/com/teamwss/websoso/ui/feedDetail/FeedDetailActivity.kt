@@ -18,9 +18,7 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
-import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Error
-import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Loading
-import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Success
+import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
@@ -72,11 +70,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun MenuFeedPopupBinding.setupMyComment(commentId: Long, popup: PopupWindow) {
         onFirstItemClick = {
-            val writtenComment = (feedDetailViewModel.feedDetailUiState.value as Success)
-                .feedDetail
-                .comments
-                .find { it.commentId == commentId }
-                ?.commentContent ?: ""
+            val writtenComment = feedDetailViewModel.feedDetailUiState.value?.comments?.find {
+                it.commentId == commentId
+            }?.commentContent ?: ""
 
             feedDetailViewModel.updateCommentId(commentId)
             binding.etFeedDetailInput.setText(writtenComment)
@@ -150,17 +146,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun setupObserver() {
         feedDetailViewModel.feedDetailUiState.observe(this) { feedDetailUiState ->
-            when (feedDetailUiState) {
-                is Success -> updateView(feedDetailUiState)
-                is Loading -> {}
-                is Error -> {}
+            when {
+                feedDetailUiState.loading -> {}
+                feedDetailUiState.error -> {}
+                !feedDetailUiState.loading -> updateView(feedDetailUiState)
             }
         }
     }
 
-    private fun updateView(feedDetailUiState: Success) {
-        val header = Header(feedDetailUiState.feedDetail.feed)
-        val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
+    private fun updateView(feedDetailUiState: FeedDetailUiState) {
+        val header = feedDetailUiState.feed?.let { Header(it) }
+        val comments = feedDetailUiState.comments.map { Comment(it) }
         val feedDetail = listOf(header) + comments
 
         when (feedDetailAdapter.itemCount == 0) {
@@ -176,8 +172,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         binding.ivFeedDetailCommentRegister.setOnClickListener {
             binding.etFeedDetailInput.run {
                 when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
-                    true -> feedDetailViewModel.dispatchComment(feedId, text.toString())
-                    false -> feedDetailViewModel.modifyComment(feedId, text.toString())
+                    true -> feedDetailViewModel.dispatchComment(text.toString())
+                    false -> feedDetailViewModel.modifyComment(text.toString())
                 }
                 text.clear()
                 clearFocus()
