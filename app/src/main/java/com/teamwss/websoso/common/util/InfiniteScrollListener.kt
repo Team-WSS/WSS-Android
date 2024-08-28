@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class InfiniteScrollListener private constructor(
     private val singleEventHandler: SingleEventHandler,
-    private val loadAdditionalFeeds: () -> Unit,
+    private val loadAdditionalContents: () -> Unit,
 ) : RecyclerView.OnScrollListener() {
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -17,7 +17,7 @@ class InfiniteScrollListener private constructor(
             (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
 
         if (visibleLastItemPosition in totalItemCount - 2..totalItemCount)
-            singleEventHandler.throttleFirst { loadAdditionalFeeds() }
+            singleEventHandler.throttleFirst { loadAdditionalContents() }
     }
 
     companion object {
