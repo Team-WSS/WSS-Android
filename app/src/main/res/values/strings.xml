@@ -298,4 +298,8 @@
 
     <!-- 내 활동 디테일 뷰 -->
     <string name="my_activity_detail_title">내 활동</string>
+
+    <!-- 다른 유저 페이지 뷰 -->
+    <string name="other_user_page_library">서재</string>
+    <string name="other_user_page_activity">활동</string>
 </resources>
