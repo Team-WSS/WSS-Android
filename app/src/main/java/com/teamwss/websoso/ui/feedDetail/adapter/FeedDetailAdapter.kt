@@ -27,7 +27,7 @@ class FeedDetailAdapter(
 
     override fun getItemId(position: Int): Long = when (getItem(position)) {
         is Header -> super.getItemId(position)
-        is Comment -> (getItem(position) as Comment).comment.commentId.toLong()
+        is Comment -> (getItem(position) as Comment).comment.commentId
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -38,7 +38,11 @@ class FeedDetailAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is FeedDetailContentViewHolder -> holder.bind((getItem(position) as Header).feed)
+            is FeedDetailContentViewHolder -> holder.bind(
+                (getItem(position) as Header).feed,
+                itemCount - 1,
+            )
+
             is FeedDetailCommentViewHolder -> holder.bind((getItem(position) as Comment).comment)
         }
     }

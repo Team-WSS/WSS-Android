@@ -159,11 +159,14 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         val comments = feedDetailUiState.comments.map { Comment(it) }
         val feedDetail = listOf(header) + comments
 
-        when (feedDetailAdapter.itemCount == 0) {
-            true -> feedDetailAdapter.submitList(feedDetail)
-            false -> {
-                feedDetailAdapter.submitList(feedDetail)
-                binding.rvFeedDetail.smoothScrollToPosition(feedDetailAdapter.itemCount)
+        with(feedDetailAdapter) {
+            when (itemCount == 0) {
+                true -> submitList(feedDetail)
+                false -> {
+                    submitList(feedDetail)
+                    binding.rvFeedDetail.smoothScrollToPosition(itemCount)
+                    notifyItemChanged(0)
+                }
             }
         }
     }

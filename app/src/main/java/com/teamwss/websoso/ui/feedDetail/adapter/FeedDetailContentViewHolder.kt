@@ -10,8 +10,9 @@ class FeedDetailContentViewHolder(
     private val binding: ItemFeedDetailHeaderBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(feed: FeedModel) {
+    fun bind(feed: FeedModel, commentCounts: Int) {
         binding.feed = feed
+        binding.count = commentCounts
     }
 
     companion object {
