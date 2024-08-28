@@ -53,7 +53,7 @@ fun CommentsResponseDto.toData(): CommentsEntity = CommentsEntity(
 
 fun CommentResponseDto.toData(): CommentEntity = CommentEntity(
     user = UserEntity(
-        id = userId.toLong(),
+        id = userId,
         nickname = nickname,
         avatarImage = avatarImage,
     ),

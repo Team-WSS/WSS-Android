@@ -3,10 +3,10 @@ package com.teamwss.websoso.ui.mapper
 import com.teamwss.websoso.data.model.CommentEntity
 import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.domain.model.Feed
+import com.teamwss.websoso.ui.feedDetail.model.CommentModel
 import com.teamwss.websoso.ui.main.feed.model.FeedModel
 import com.teamwss.websoso.ui.main.feed.model.FeedModel.NovelModel
 import com.teamwss.websoso.ui.main.feed.model.FeedModel.UserModel
-import com.teamwss.websoso.ui.feedDetail.model.CommentModel
 
 fun Feed.toUi(): FeedModel = FeedModel(
     user = UserModel(
