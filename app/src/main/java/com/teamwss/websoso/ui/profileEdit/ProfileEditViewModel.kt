@@ -116,10 +116,10 @@ class ProfileEditViewModel @Inject constructor(
             runCatching {
                 userRepository.saveUserProfile(
                     // TODO: 실제 아바타 아이디로 변경
-                    avatarId = if (previousProfile.avatarImageUrl == currentProfile.avatarImageUrl) null else 1,
-                    nickname = if (previousProfile.nicknameModel.nickname == currentProfile.nicknameModel.nickname) null else currentProfile.nicknameModel.nickname,
-                    intro = if (previousProfile.introduction == currentProfile.introduction) null else currentProfile.introduction,
-                    genrePreferences = currentProfile.genrePreferences.map { it.tag },
+                    avatarId = 1,
+                    nickname = (previousProfile.nicknameModel.nickname to currentProfile.nicknameModel.nickname).compareAndReturnNewOrNullValue(),
+                    intro = (previousProfile.introduction to currentProfile.introduction).compareAndReturnNewOrNullValue(),
+                    genrePreferences = currentProfile.genrePreferences.map { it.tag }
                 )
             }.onSuccess {
                 _uiState.value = uiState.value?.copy(
@@ -131,5 +131,10 @@ class ProfileEditViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun <T> Pair<T, T>.compareAndReturnNewOrNullValue(): T? {
+        val (oldValue, newValue) = this
+        return if (oldValue == newValue) null else newValue
     }
 }
