@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="myPageViewModel"
+            type="com.teamwss.websoso.ui.main.myPage.MyPageViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +41,6 @@
                         android:adjustViewBounds="true"
                         android:background="@color/primary_20_F5F7FF"
                         android:paddingTop="36dp"
-                        android:paddingBottom="30dp"
                         app:layout_collapseMode="parallax">
 
                         <ImageView
@@ -45,7 +48,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="72dp"
-                            android:src="@drawable/img_user_pofile"
+                            loadImageUrl='@{myPageViewModel.myProfile.avatarImage}'
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -54,9 +57,10 @@
                             android:id="@+id/tv_my_page_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:text='@{myPageViewModel.myProfile.nickname}'
                             android:textAppearance="@style/headline1"
                             android:textColor="@color/black"
+                            android:layout_marginTop="20dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/iv_my_page_user_profile"
@@ -66,9 +70,11 @@
                             android:id="@+id/tv_my_page_user_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:text='@{myPageViewModel.myProfile.intro}'
                             android:textAppearance="@style/body2"
                             android:textColor="@color/gray_200_AEADB3"
+                            android:layout_marginTop="4dp"
+                            android:paddingBottom="30dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_name"
