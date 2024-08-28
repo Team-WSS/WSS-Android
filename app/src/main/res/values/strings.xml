@@ -209,7 +209,6 @@
     <string name="home_post_interest_novel">관심작품 등록하기</string>
     <string name="home_user_recommend_novel_description">관심 등록한 작품의 최근 수다예요</string>
     <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해 드려요!</string>
-    <string name="home_recommend_novel_by_user_taste_description">선호장르를 기반으로 추천해 드려요</string>
     <string name="home_setting_interest_general">선호장르 설정하기</string>
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
     <string name="home_popular_novel_nickname">%s 님의 한마디</string>
@@ -218,7 +217,6 @@
     <string name="home_user_interest_feed_nickname_format">%1$s 님의 리뷰</string>
     <string name="home_user_interest_novel_rating_format">%1$.1f (%2$d)</string>
     <string name="home_nickname_interest_feed">%1$s 님의 관심글</string>
-    <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>
@@ -233,7 +231,6 @@
     <string name="blocked_users_cancel">차단 해제</string>
     <string name="blocked_users_title">차단유저 목록</string>
     <string name="blocked_users_empty">차단한 유저가 없어요</string>
-    <string name="blocked_users_unblocked">%s님을 차단 해제했어요</string>
 
     <!-- 환경설정 - 계정정보 뷰 -->
     <string name="account_info_change_user_info">성별/나이 변경</string>
