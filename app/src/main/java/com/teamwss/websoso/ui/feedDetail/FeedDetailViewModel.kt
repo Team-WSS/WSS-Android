@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.feedDetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,12 @@ class FeedDetailViewModel @Inject constructor(
 ) : ViewModel() {
     private val _feedDetailUiState: MutableLiveData<FeedDetailUiState> = MutableLiveData(Loading)
     val feedDetailUiState: LiveData<FeedDetailUiState> get() = _feedDetailUiState
+    var commentId: Long = -1
+        private set
+
+    fun updateCommentId(commentId: Long) {
+        this.commentId = commentId
+    }
 
     fun updateFeedDetail(feedId: Long) {
         viewModelScope.launch {
@@ -45,6 +52,18 @@ class FeedDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 feedRepository.saveComment(feedId, comment)
+            }.onSuccess {
+                updateComments(feedId)
+            }.onFailure {
+                _feedDetailUiState.value = Error
+            }
+        }
+    }
+
+    fun modifyComment(feedId: Long, comment: String) {
+        viewModelScope.launch {
+            runCatching {
+                feedRepository.saveModifiedComment(feedId, commentId, comment)
             }.onSuccess {
                 updateComments(feedId)
             }.onFailure {

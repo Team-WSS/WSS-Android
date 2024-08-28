@@ -72,7 +72,15 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun MenuFeedPopupBinding.setupMyComment(commentId: Long, popup: PopupWindow) {
         onFirstItemClick = {
-            // 댓글 수정
+            val writtenComment = (feedDetailViewModel.feedDetailUiState.value as Success)
+                .feedDetail
+                .comments
+                .find { it.commentId == commentId }
+                ?.commentContent ?: ""
+
+            feedDetailViewModel.updateCommentId(commentId)
+            binding.etFeedDetailInput.setText(writtenComment)
+            binding.etFeedDetailInput.requestFocus()
             popup.dismiss()
         }
         onSecondItemClick = {
@@ -134,7 +142,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun setupView() {
         feedDetailViewModel.updateFeedDetail(feedId)
-        binding.rvFeedDetail.adapter = feedDetailAdapter
+        binding.rvFeedDetail.apply {
+            adapter = feedDetailAdapter
+            itemAnimator = null
+        }
     }
 
     private fun setupObserver() {
@@ -156,9 +167,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun onCommentRegisterClick() {
         binding.ivFeedDetailCommentRegister.setOnClickListener {
-            binding.etFeedDetailInput.text.run {
-                feedDetailViewModel.dispatchComment(feedId, toString())
-                clear()
+            binding.etFeedDetailInput.run {
+                when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
+                    true -> feedDetailViewModel.dispatchComment(feedId, text.toString())
+                    false -> feedDetailViewModel.modifyComment(feedId, text.toString())
+                }
+                text.clear()
+                clearFocus()
             }
         }
     }

@@ -66,6 +66,10 @@ class FeedRepository @Inject constructor(
         feedApi.postComment(feedId, CommentRequestDto(comment))
     }
 
+    suspend fun saveModifiedComment(feedId: Long, commentId: Long, comment: String) {
+        feedApi.putComment(feedId, commentId, CommentRequestDto(comment))
+    }
+
     suspend fun deleteComment(feedId: Long, commentId: Long) {
         feedApi.deleteComment(feedId, commentId)
     }

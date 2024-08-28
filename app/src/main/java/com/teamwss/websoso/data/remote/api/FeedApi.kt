@@ -10,6 +10,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -66,6 +67,13 @@ interface FeedApi {
     @POST("feeds/{feedId}/comments")
     suspend fun postComment(
         @Path("feedId") feedId: Long,
+        @Body commentRequestDto: CommentRequestDto,
+    )
+
+    @PUT("feeds/{feedId}/comments/{commentId}")
+    suspend fun putComment(
+        @Path("feedId") feedId: Long,
+        @Path("commentId") commentId: Long,
         @Body commentRequestDto: CommentRequestDto,
     )
 
