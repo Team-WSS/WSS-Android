@@ -44,19 +44,11 @@ class FeedViewModel @Inject constructor(
         _categories.addAll(categories)
     }
 
-    fun updateSelectedCategory(category: Category) {
-        categories.forEachIndexed { index, categoryUiState ->
-            _categories[index] = when {
-                categoryUiState.isSelected -> categoryUiState.copy(isSelected = false)
-                categoryUiState.category == category -> categoryUiState.copy(isSelected = true)
-                else -> return@forEachIndexed
-            }
-        }
-        updateFeeds()
-    }
-
     fun updateFeeds() {
         feedUiState.value?.let { feedUiState ->
+            if (!feedUiState.isLoadable) return
+            else _feedUiState.value = feedUiState.copy(loading = true)
+
             viewModelScope.launch {
                 val selectedCategory: Category =
                     categories.find { it.isSelected }?.category ?: throw IllegalStateException()
@@ -65,7 +57,7 @@ class FeedViewModel @Inject constructor(
                     when (feedUiState.feeds.isNotEmpty()) {
                         true -> getFeedsUseCase(
                             selectedCategory.titleEn,
-                            feedUiState.feeds.last().id,
+                            feedUiState.feeds.maxOf { it.id }
                         )
 
                         false -> getFeedsUseCase(selectedCategory.titleEn)
@@ -88,8 +80,46 @@ class FeedViewModel @Inject constructor(
         }
     }
 
+    fun updateSelectedCategory(category: Category) {
+        categories.forEachIndexed { index, categoryUiState ->
+            _categories[index] = when {
+                categoryUiState.isSelected -> categoryUiState.copy(isSelected = false)
+                categoryUiState.category == category -> categoryUiState.copy(isSelected = true)
+                else -> return@forEachIndexed
+            }
+        }
+        updateFeedsByCategory(category)
+    }
+
+    private fun updateFeedsByCategory(category: Category) {
+        feedUiState.value?.let { feedUiState ->
+            _feedUiState.value = feedUiState.copy(loading = true)
+
+            viewModelScope.launch {
+                runCatching {
+                    getFeedsUseCase(category.titleEn)
+                }.onSuccess { feeds ->
+                    if (feeds.category != category.titleEn) throw IllegalStateException()
+                    // Return result state of error in domain layer later
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        isLoadable = feeds.isLoadable,
+                        feeds = feeds.feeds.map { it.toUi() },
+                    )
+                }.onFailure {
+                    _feedUiState.value = feedUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
     fun updateRefreshedFeeds() {
         feedUiState.value?.let { feedUiState ->
+            _feedUiState.value = feedUiState.copy(loading = true)
+
             viewModelScope.launch {
                 val selectedCategory: Category =
                     categories.find { it.isSelected }?.category ?: throw IllegalStateException()

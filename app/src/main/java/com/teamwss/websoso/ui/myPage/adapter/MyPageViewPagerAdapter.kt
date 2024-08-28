@@ -1,7 +1,6 @@
 package com.teamwss.websoso.ui.myPage.adapter
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.teamwss.websoso.ui.myPage.myActivity.MyActivityFragment
 import com.teamwss.websoso.ui.myPage.myLibrary.MyLibraryFragment

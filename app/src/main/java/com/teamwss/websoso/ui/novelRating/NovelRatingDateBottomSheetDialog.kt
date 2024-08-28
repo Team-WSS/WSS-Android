@@ -7,10 +7,11 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
+import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 
-class NovelRatingDateBottomSheetDialog : BaseBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
+class NovelRatingDateBottomSheetDialog :
+    BaseBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
     private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onViewCreated(
@@ -38,9 +39,12 @@ class NovelRatingDateBottomSheetDialog : BaseBottomSheetDialog<DialogNovelRating
                 "%02d",
             )
             initNumberPickerRange(uiState?.maxDayValue ?: MAX_DAY_VALUE)
-            binding.npRatingDateYear.value = uiState.novelRatingModel.ratingDateModel.currentStartDate?.first ?: 1
-            binding.npRatingDateMonth.value = uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
-            binding.npRatingDateDay.value = uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
+            binding.npRatingDateYear.value =
+                uiState.novelRatingModel.ratingDateModel.currentStartDate?.first ?: 1
+            binding.npRatingDateMonth.value =
+                uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
+            binding.npRatingDateDay.value =
+                uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
         }
     }
 

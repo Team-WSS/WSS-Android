@@ -5,13 +5,13 @@ import android.view.View
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
+import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
+import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

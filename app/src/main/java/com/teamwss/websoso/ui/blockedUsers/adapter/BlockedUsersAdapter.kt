@@ -3,7 +3,7 @@ package com.teamwss.websoso.ui.blockedUsers.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.data.model.BlockedUsersEntity.*
+import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
 
 class BlockedUsersAdapter(
     private val onRemoveBlockedUserClick: (blockId: Long) -> (Unit),

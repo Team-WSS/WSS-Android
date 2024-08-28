@@ -6,8 +6,8 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.DialogOnboardingBirthYearBinding
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
+import com.teamwss.websoso.databinding.DialogOnboardingBirthYearBinding
 import java.time.LocalDate
 
 class OnboardingBirthYearBottomSheetDialog :
