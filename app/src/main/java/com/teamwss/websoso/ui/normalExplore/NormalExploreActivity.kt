@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.normalExplore
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
@@ -59,6 +60,8 @@ class NormalExploreActivity :
 
         override fun onSearchButtonClick() {
             normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
+            binding.etNormalExploreSearchContent.clearFocus()
+            hideKeyboard()
         }
 
         override fun onSearchCancelButtonClick() {
@@ -68,6 +71,15 @@ class NormalExploreActivity :
         override fun onNovelInquireButtonClick() {
             // TODO 카카오톡 채널로 연결
         }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+            binding.etNormalExploreSearchContent.windowToken,
+            0,
+        )
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
