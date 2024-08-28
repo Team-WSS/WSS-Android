@@ -4,6 +4,7 @@ import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.PopularNovelsResponseDto
+import com.teamwss.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto
 import com.teamwss.websoso.data.remote.response.SosoPicksResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -45,4 +46,7 @@ interface NovelApi {
 
     @GET("novels/popular")
     suspend fun getPopularNovels(): PopularNovelsResponseDto
+
+    @GET("novels/taste")
+    suspend fun getRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteResponseDto
 }

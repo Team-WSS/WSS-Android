@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.repository.FakeUserRepository
-import com.teamwss.websoso.domain.model.AttractivePoints
+import com.teamwss.websoso.ui.myPage.myLibrary.model.AttractivePoints
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
