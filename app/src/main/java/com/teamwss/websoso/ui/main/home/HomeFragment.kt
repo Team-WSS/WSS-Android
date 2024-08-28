@@ -100,19 +100,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
-            if (uiState.isLogin) {
-                updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
-                updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
-            }
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
                 !uiState.loading -> {
+                    updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
-                    userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
-                    recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+
+                    if (uiState.isLogin) {
+                        updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+                        updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
+                        userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
+                        recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    }
                 }
             }
         }
