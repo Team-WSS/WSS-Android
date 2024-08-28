@@ -20,6 +20,10 @@ class MyPageViewModel @Inject constructor(
     private val _myProfile = MutableLiveData<MyProfileEntity>()
     val myProfile: LiveData<MyProfileEntity> get() = _myProfile
 
+    init {
+        fetchUserProfile()
+    }
+
     fun fetchUserProfile() {
         viewModelScope.launch {
             runCatching {
