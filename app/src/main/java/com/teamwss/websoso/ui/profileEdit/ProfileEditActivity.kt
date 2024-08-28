@@ -17,7 +17,8 @@ import com.teamwss.websoso.common.util.getAdaptedSerializableExtra
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
+import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.NONE
+import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
@@ -34,8 +35,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         setupObserver()
         initProfileInfo()
         setupGenreChips()
-        setupNicknameEditText()
-        setupIntroductionEditText()
+        onNicknameEditTextChange()
+        onIntroductionEditTextChange()
         // TODO: 프로필 이미지 설정 다이알로그 추가
     }
 
@@ -62,7 +63,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     }
 
     private fun updateDuplicateCheckButton(uiState: ProfileEditUiState) {
-        val isEnable = uiState.profile.nicknameModel.nickname.isNotEmpty() && uiState.nicknameEditResult == NicknameEditResult.NONE
+        val isEnable = uiState.profile.nicknameModel.nickname.isNotEmpty() && uiState.nicknameEditResult == NONE
         binding.tvProfileEditNicknameCheckDuplicate.setTextColor(
             if (isEnable) AppCompatResources.getColorStateList(this, R.color.primary_100_6A5DFD).defaultColor
             else AppCompatResources.getColorStateList(this, R.color.gray_200_AEADB3).defaultColor
@@ -82,7 +83,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         )
         binding.tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname.isNotEmpty()
         binding.tvProfileEditNicknameError.text = uiState.nicknameEditResult.message
-        val defaultState = uiState.nicknameEditResult != NicknameEditResult.VALID_NICKNAME && uiState.nicknameEditResult != NicknameEditResult.NONE
+        val defaultState = uiState.nicknameEditResult != VALID_NICKNAME && uiState.nicknameEditResult != NONE
         when {
             defaultState -> binding.viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
             uiState.profile.nicknameModel.hasFocus -> binding.viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp)
@@ -142,14 +143,14 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         }
     }
 
-    private fun setupNicknameEditText() {
+    private fun onNicknameEditTextChange() {
         with(binding.etProfileEditNickname) {
             setOnFocusChangeListener { _, hasFocus -> profileEditViewModel.updateNicknameFocus(hasFocus) }
             addTextChangedListener { profileEditViewModel.updateNickname(it.toString()) }
         }
     }
 
-    private fun setupIntroductionEditText() {
+    private fun onIntroductionEditTextChange() {
         with(binding.etProfileEditIntroduction) {
             setOnFocusChangeListener { _, hasFocus -> binding.clProfileEditIntroduction.isSelected = hasFocus }
             addTextChangedListener { profileEditViewModel.updateIntroduction(it.toString()) }
