@@ -7,11 +7,11 @@
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.feed.FeedItemClickListener" />
+            type="com.teamwss.websoso.ui.main.feed.FeedItemClickListener" />
 
         <variable
             name="feed"
-            type="com.teamwss.websoso.ui.feed.model.FeedModel" />
+            type="com.teamwss.websoso.ui.main.feed.model.FeedModel" />
 
     </data>
 

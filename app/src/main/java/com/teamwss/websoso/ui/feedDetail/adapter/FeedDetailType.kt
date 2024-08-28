@@ -1,6 +1,6 @@
 package com.teamwss.websoso.ui.feedDetail.adapter
 
-import com.teamwss.websoso.ui.feed.model.FeedModel
+import com.teamwss.websoso.ui.main.feed.model.FeedModel
 import com.teamwss.websoso.ui.feedDetail.model.CommentModel
 
 sealed interface FeedDetailType {

@@ -1,9 +1,9 @@
-package com.teamwss.websoso.ui.feed
+package com.teamwss.websoso.ui.main.feed
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
+import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 
 class FeedScrollListener private constructor(
     private val singleEventHandler: SingleEventHandler,

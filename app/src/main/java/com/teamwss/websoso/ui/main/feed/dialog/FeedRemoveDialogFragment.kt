@@ -1,11 +1,11 @@
-package com.teamwss.websoso.ui.feed.dialog
+package com.teamwss.websoso.ui.main.feed.dialog
 
 import android.os.Bundle
 import android.view.View
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
-import com.teamwss.websoso.ui.feed.FeedFragment.FeedDialogClickListener
+import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 
 class FeedRemoveDialogFragment :
     BaseDialogFragment<DialogRemovePopupMenuBinding>(R.layout.dialog_remove_popup_menu) {

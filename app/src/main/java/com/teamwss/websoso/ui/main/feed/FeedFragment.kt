@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.feed
+package com.teamwss.websoso.ui.main.feed
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,14 +21,14 @@ import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
-import com.teamwss.websoso.ui.feed.adapter.FeedAdapter
-import com.teamwss.websoso.ui.feed.adapter.FeedType.Feed
-import com.teamwss.websoso.ui.feed.adapter.FeedType.Loading
-import com.teamwss.websoso.ui.feed.dialog.FeedRemoveDialogFragment
-import com.teamwss.websoso.ui.feed.dialog.FeedReportDialogFragment
-import com.teamwss.websoso.ui.feed.model.CategoryModel
-import com.teamwss.websoso.ui.feed.model.FeedUiState
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
+import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
+import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
+import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
+import com.teamwss.websoso.ui.main.feed.model.CategoryModel
+import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
