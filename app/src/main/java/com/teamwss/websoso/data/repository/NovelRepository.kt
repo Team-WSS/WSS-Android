@@ -40,7 +40,12 @@ class NovelRepository @Inject constructor(
         page: Int,
         size: Int,
     ): ExploreResultEntity {
-        return novelApi.getNormalExploreResult(searchWord, page, size).toData()
+        val result =
+            novelApi.getNormalExploreResult(searchWord = searchWord, page = page, size = size)
+
+        return result.toData()
+            .also { _cachedNormalExploreResult.addAll(it.novels) }
+            .copy(novels = cachedNormalExploreResult)
     }
 
     fun clearCachedNormalExploreResult() {

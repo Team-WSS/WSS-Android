@@ -32,27 +32,31 @@ class NormalExploreViewModel @Inject constructor(
     fun updateSearchResult() {
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(loading = true)
-
             runCatching {
-                val isLoadable: Boolean = uiState.value?.isLoadable == true
-                getNormalExploreResultsUseCase(searchWord.value ?: "", isLoadable)
+                getNormalExploreResultsUseCase(searchWord.value ?: "")
             }.onSuccess { results ->
+                Log.d("moongchi", "updateSearchResult: ${results.novels}")
                 if (results.novels.isNotEmpty()) {
-                    Log.d("moongchi", "updateSearchResult: ${results.novels}")
                     _uiState.value = _uiState.value?.copy(
                         loading = false,
                         isLoadable = results.isLoadable,
                         novels = results.novels.map { it.toUi() },
                     )
+
+                    Log.d("moongchi", "updateSearchResult: ${results.novels}")
                 } else {
                     _uiState.value = _uiState.value?.copy(loading = false)
                     _isNovelResultEmptyBoxVisibility.value = true
+
+                    Log.d("moongchi", "updateSearchResult: ${results.novels}")
                 }
-            }.onFailure {
+            }.onFailure { it ->
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
                     error = true
                 )
+
+                Log.d("moongchi", "updateSearchResult: ${it.message}")
             }
         }
     }

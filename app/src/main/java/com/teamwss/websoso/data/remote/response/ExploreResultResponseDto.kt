@@ -22,7 +22,7 @@ data class ExploreResultResponseDto(
         val novelAuthor: String,
         @SerialName("novelImage")
         val novelImage: String,
-        @SerialName("interestedCount")
+        @SerialName("interestCount")
         val interestedCount: Long,
         @SerialName("novelRating")
         val novelRating: Float,
