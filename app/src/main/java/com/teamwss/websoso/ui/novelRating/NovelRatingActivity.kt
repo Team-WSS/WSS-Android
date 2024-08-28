@@ -2,7 +2,6 @@ package com.teamwss.websoso.ui.novelRating
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
@@ -13,6 +12,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel
+import com.teamwss.websoso.common.util.getAdaptedSerializableExtra
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
@@ -88,13 +88,8 @@ class NovelRatingActivity :
     }
 
     private fun updateInitialReadStatus() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val readStatus = intent.getSerializableExtra(READ_STATUS, ReadStatus::class.java)
-            if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
-        } else {
-            val readStatus = intent.getSerializableExtra(READ_STATUS) as? ReadStatus
-            if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
-        }
+        val readStatus = intent.getAdaptedSerializableExtra<ReadStatus>(READ_STATUS)
+        if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
     }
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {

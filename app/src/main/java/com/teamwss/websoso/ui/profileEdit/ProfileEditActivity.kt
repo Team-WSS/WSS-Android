@@ -13,12 +13,14 @@ import androidx.core.widget.addTextChangedListener
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.getAdaptedSerializableExtra
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
 import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
+import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -119,12 +121,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     }
 
     private fun initProfileInfo() {
-        val nickname = intent.getStringExtra(NICKNAME) ?: ""
-        val introduction = intent.getStringExtra(INTRODUCTION) ?: ""
-        val avatarImageUrl = intent.getStringExtra(AVATAR_IMAGE_URL) ?: ""
-        val genrePreferences = intent.getStringArrayListExtra(GENRE_PREFERENCES) ?: emptyList()
-
-        profileEditViewModel.updatePreviousProfile(nickname, introduction, avatarImageUrl, genrePreferences)
+        val profile = intent.getAdaptedSerializableExtra<ProfileModel>(PROFILE_INFO)
+        profileEditViewModel.updatePreviousProfile(profile ?: ProfileModel())
     }
 
     private fun setupGenreChips() {
@@ -159,17 +157,11 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     }
 
     companion object {
-        private const val NICKNAME = "NICKNAME"
-        private const val INTRODUCTION = "INTRODUCTION"
-        private const val AVATAR_IMAGE_URL = "AVATAR_IMAGE_URL"
-        private const val GENRE_PREFERENCES = "GENRE_PREFERENCES"
+        private const val PROFILE_INFO = "PROFILE_INFO"
 
-        fun getIntent(context: Context, nickname: String, introduction: String, avatarImageUrl: String, genrePreferences: List<String>): Intent {
+        fun getIntent(context: Context, profileModel: ProfileModel): Intent {
             return Intent(context, ProfileEditActivity::class.java).apply {
-                putExtra(NICKNAME, nickname)
-                putExtra(INTRODUCTION, introduction)
-                putExtra(AVATAR_IMAGE_URL, avatarImageUrl)
-                putStringArrayListExtra(GENRE_PREFERENCES, genrePreferences as ArrayList<String>)
+                putExtra(PROFILE_INFO, profileModel)
             }
         }
     }

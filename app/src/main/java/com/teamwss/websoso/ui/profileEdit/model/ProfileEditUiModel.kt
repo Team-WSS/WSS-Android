@@ -1,17 +1,19 @@
 package com.teamwss.websoso.ui.profileEdit.model
 
+import java.io.Serializable
+
 data class ProfileModel(
     val nicknameModel: NicknameModel = NicknameModel(),
     val introduction: String = "",
     val avatarId: Int = 0,
     val avatarImageUrl: String = "",
     val genrePreferences: List<Genre> = emptyList(),
-)
+) : Serializable
 
 data class NicknameModel(
     val nickname: String = "",
     val hasFocus: Boolean = false,
-)
+) : Serializable
 
 enum class NicknameEditResult(
     val message: String,

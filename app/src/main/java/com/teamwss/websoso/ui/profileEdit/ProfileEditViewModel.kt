@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.profileEdit.model.Genre
-import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromTag
 import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
 import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.Companion.checkNicknameValidity
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
@@ -25,13 +24,7 @@ class ProfileEditViewModel @Inject constructor(
     private val _uiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
     val uiState: LiveData<ProfileEditUiState> get() = _uiState
 
-    fun updatePreviousProfile(nickname: String, introduction: String, avatarImageUrl: String, genrePreferences: List<String>) {
-        val profile = ProfileModel(
-            nicknameModel = NicknameModel(nickname),
-            introduction = introduction,
-            avatarImageUrl = avatarImageUrl,
-            genrePreferences = genrePreferences.map { it.toGenreFromTag() },
-        )
+    fun updatePreviousProfile(profile: ProfileModel) {
         _uiState.value = uiState.value?.copy(
             profile = profile,
             previousProfile = profile,
