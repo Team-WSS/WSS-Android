@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
-            android:text="프로필 선택"
+            android:text="@string/profile_edit_avatar_title"
             android:textAppearance="@style/title1"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,5 +62,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_character_name"
             tools:text="만나서 반가워요, 밝보" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_profile_edit_character_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_character_line"
+            app:spanCount="5"
+            tools:itemCount="15"
+            tools:listitem="@layout/item_profile_edit_character" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_character_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_profile_edit_primary_100_radius_14dp"
+            android:paddingVertical="14dp"
+            android:text="@string/profile_edit_character_setting"
+            android:textAlignment="center"
+            android:textAppearance="@style/body1"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_character_grid" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_character_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="8dp"
+            android:paddingVertical="14dp"
+            android:text="@string/profile_edit_character_cancel"
+            android:textAlignment="center"
+            android:textAppearance="@style/body1"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_character_setting" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
