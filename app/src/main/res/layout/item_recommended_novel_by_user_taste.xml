@@ -5,17 +5,29 @@
 
     <data>
 
+        <variable
+            name="recommendedNovel"
+            type="com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity.RecommendedNovelByUserTasteEntity" />
+
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="300dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> onClick.invoke(recommendedNovel.novelId)}"
+        android:paddingBottom="16dp">
 
         <ImageView
             android:id="@+id/iv_taste_novel_image"
-            cornerRadius="@{14f}"
-            android:layout_width="156dp"
-            android:layout_height="230dp"
+            cornerRadius="@{30f}"
+            loadImageUrl="@{recommendedNovel.novelImage}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="4dp"
+            app:layout_constraintDimensionRatio="156:230"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -25,6 +37,7 @@
             android:id="@+id/iv_taste_novel_interest"
             android:layout_width="12dp"
             android:layout_height="0dp"
+            android:layout_marginTop="9dp"
             android:src="@drawable/ic_taste_novel_interest"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="@id/iv_taste_novel_image"
@@ -35,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:text="@{String.valueOf(recommendedNovel.interestCount)}"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="@id/iv_taste_novel_interest"
@@ -58,6 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:text='@{String.format(@string/home_recommended_novel_rating_format, recommendedNovel.novelRating, recommendedNovel.novelRatingCount)}'
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="@id/iv_taste_novel_interest"
@@ -71,8 +86,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="@color/black"
+            android:text="@{recommendedNovel.title}"
             android:textAppearance="@style/label1"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/iv_taste_novel_image"
             app:layout_constraintStart_toStartOf="@id/iv_taste_novel_image"
             app:layout_constraintTop_toBottomOf="@id/tv_taste_novel_interest_count"
@@ -82,6 +98,7 @@
             android:id="@+id/tv_taste_novel_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{recommendedNovel.author}"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@id/iv_taste_novel_image"
