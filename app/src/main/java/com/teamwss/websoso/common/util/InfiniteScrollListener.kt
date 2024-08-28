@@ -12,7 +12,7 @@ class InfiniteScrollListener private constructor(
         // if ((recyclerView.adapter as FeedAdapter).currentList.last() !is FeedType.Loading) return
         super.onScrollStateChanged(recyclerView, newState)
 
-        val totalItemCount: Int = recyclerView.adapter!!.itemCount
+        val totalItemCount: Int = recyclerView.adapter?.itemCount ?: throw IllegalStateException()
         val visibleLastItemPosition: Int =
             (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
 
