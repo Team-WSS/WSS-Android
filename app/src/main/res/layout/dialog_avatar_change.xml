@@ -8,6 +8,14 @@
         <variable
             name="viewModel"
             type="com.teamwss.websoso.ui.profileEdit.ProfileEditViewModel" />
+
+        <variable
+            name="onSaveClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onCancelClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +25,7 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <TextView
-            android:id="@+id/tv_profile_edit_character_title"
+            android:id="@+id/tv_profile_edit_avatar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
@@ -29,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lav_profile_edit_character"
+            android:id="@+id/lav_profile_edit_avatar"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="56dp"
@@ -37,10 +45,10 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_character_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_title" />
 
         <TextView
-            android:id="@+id/tv_profile_edit_character_name"
+            android:id="@+id/tv_profile_edit_avatar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -48,11 +56,11 @@
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lav_profile_edit_character"
+            app:layout_constraintTop_toBottomOf="@id/lav_profile_edit_avatar"
             tools:text="추락한 악역영애" />
 
         <TextView
-            android:id="@+id/tv_profile_edit_character_line"
+            android:id="@+id/tv_profile_edit_avatar_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -60,52 +68,54 @@
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_character_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_name"
             tools:text="만나서 반가워요, 밝보" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_profile_edit_character_grid"
+            android:id="@+id/rv_profile_edit_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:clipToPadding="false"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_character_line"
-            app:spanCount="5"
-            tools:itemCount="15"
-            tools:listitem="@layout/item_profile_edit_character" />
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_line"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_profile_edit_avatar"
+            tools:spanCount="3" />
 
         <TextView
-            android:id="@+id/tv_profile_edit_character_setting"
+            android:id="@+id/tv_profile_edit_avatar_setting"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/bg_profile_edit_primary_100_radius_14dp"
+            android:onClick="@{() -> onSaveClick.invoke()}"
             android:paddingVertical="14dp"
-            android:text="@string/profile_edit_character_setting"
+            android:text="@string/profile_edit_avatar_setting"
             android:textAlignment="center"
             android:textAppearance="@style/body1"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_character_grid" />
+            app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_avatar" />
 
         <TextView
-            android:id="@+id/tv_profile_edit_character_cancel"
+            android:id="@+id/tv_profile_edit_avatar_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="8dp"
+            android:onClick="@{() -> onCancelClick.invoke()}"
             android:paddingVertical="14dp"
-            android:text="@string/profile_edit_character_cancel"
+            android:text="@string/profile_edit_avatar_cancel"
             android:textAlignment="center"
             android:textAppearance="@style/body1"
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_character_setting" />
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_setting" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

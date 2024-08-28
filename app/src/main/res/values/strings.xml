@@ -290,6 +290,6 @@
     <string name="profile_edit_prefer_genre">선호장르</string>
     <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해 드려요</string>
     <string name="profile_edit_avatar_title">프로필 선택</string>
-    <string name="profile_edit_character_setting">대표 캐릭터 설정하기</string>
-    <string name="profile_edit_character_cancel">원래대로 유지하기</string>
+    <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
+    <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
 </resources>
