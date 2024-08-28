@@ -1,13 +1,13 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
-import com.teamwss.websoso.data.mapper.toRemote
 import com.teamwss.websoso.data.model.BlockedUsersEntity
-import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.api.UserApi
+import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -34,12 +34,11 @@ class UserRepository @Inject constructor(
         return userApi.getProfileStatus().toData()
     }
 
-    suspend fun saveUserProfileStatus(userProfileStatusEntity: UserProfileStatusEntity) {
-        userApi.patchProfileStatus(userProfileStatusEntity.toRemote())
+    suspend fun saveUserProfileStatus(isProfilePublic: Boolean) {
+        userApi.patchProfileStatus(UserProfileStatusRequestDto(isProfilePublic))
     }
 
     suspend fun saveUserInfo(gender: String, birthYear: Int) {
-        val userInfo = UserUpdateInfoEntity(gender, birthYear)
-        userApi.putUserInfo(userInfo.toRemote())
+        userApi.putUserInfo(UserInfoRequestDto(gender, birthYear))
     }
 }

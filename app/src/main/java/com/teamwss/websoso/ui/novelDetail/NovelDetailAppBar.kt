@@ -53,7 +53,7 @@ class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(c
 
     private fun calculateCurrentOffsetRatio(
         verticalOffset: Int,
-        scrollPointForColorChange: Float
+        scrollPointForColorChange: Float,
     ): Float {
         val currentOffset = abs(verticalOffset) / scrollPointForColorChange
         return min(MAX_SCROLL_OFFSET, currentOffset)

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
@@ -38,7 +38,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private fun onNormalSearchButtonClick() {
         binding.clExploreNormalSearch.setOnClickListener {
-            val intent = NormalExploreActivity.from(requireContext())
+            val intent = NormalExploreActivity.getIntent(requireContext())
             startActivity(intent)
         }
     }

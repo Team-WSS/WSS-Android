@@ -8,7 +8,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
-import com.teamwss.websoso.ui.feed.FeedScrollListener
+import com.teamwss.websoso.ui.main.feed.FeedScrollListener
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
@@ -109,8 +109,7 @@ class NormalExploreActivity :
 
     companion object {
 
-        fun from(
-            context: Context,
-        ): Intent = Intent(context, NormalExploreActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, NormalExploreActivity::class.java)
     }
 }

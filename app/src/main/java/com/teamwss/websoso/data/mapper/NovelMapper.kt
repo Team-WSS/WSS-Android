@@ -1,6 +1,5 @@
 package com.teamwss.websoso.data.mapper
 
-import PopularNovelsResponseDto
 import com.teamwss.websoso.data.model.ExploreResultEntity
 import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.data.model.NovelDetailEntity
@@ -10,6 +9,7 @@ import com.teamwss.websoso.data.model.SosoPickEntity
 import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
+import com.teamwss.websoso.data.remote.response.PopularNovelsResponseDto
 import com.teamwss.websoso.data.remote.response.SosoPicksResponseDto
 
 fun NovelDetailResponseDto.toData(): NovelDetailEntity {
@@ -99,7 +99,7 @@ fun ExploreResultResponseDto.toData(): ExploreResultEntity {
 
 fun PopularNovelsResponseDto.toData(): PopularNovelsEntity {
     return PopularNovelsEntity(
-        popularNovels = popularNovelResponseDtos.map { novel ->
+        popularNovels = popularNovels.map { novel ->
             PopularNovelsEntity.PopularNovelEntity(
                 avatarImage = novel.avatarImage,
                 feedContent = novel.feedContent,

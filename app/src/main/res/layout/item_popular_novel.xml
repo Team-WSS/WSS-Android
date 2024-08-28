@@ -59,10 +59,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_popular_novel_in_short"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="140dp"
             android:layout_marginTop="238dp"
             android:background="@drawable/bg_popular_novel_fcf8f6_bottom_radius_14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

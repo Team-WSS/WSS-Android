@@ -1,10 +1,10 @@
 package com.teamwss.websoso.data.remote.api
 
-import com.teamwss.websoso.data.remote.request.FeedsRequestDto
 import com.teamwss.websoso.data.remote.response.CommentsResponseDto
-import com.teamwss.websoso.data.remote.response.FeedResponseDto
+import com.teamwss.websoso.data.remote.response.FeedDetailResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
-import retrofit2.http.Body
+import com.teamwss.websoso.data.remote.response.PopularFeedsResponseDto
+import com.teamwss.websoso.data.remote.response.UserInterestFeedsResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -13,16 +13,17 @@ import retrofit2.http.Query
 
 interface FeedApi {
 
-    @GET("feeds?")
+    @GET("feeds")
     suspend fun getFeeds(
         @Query("category") category: String?,
-        @Body feedsRequestDto: FeedsRequestDto,
+        @Query("lastFeedId") lastFeedId: Long,
+        @Query("size") size: Int,
     ): FeedsResponseDto
 
     @GET("feeds/{feedId}")
     suspend fun getFeed(
         @Path("feedId") feedId: Long,
-    ): FeedResponseDto
+    ): FeedDetailResponseDto
 
     @GET("feeds/{feedId}/comments")
     suspend fun getComments(
@@ -53,4 +54,10 @@ interface FeedApi {
     suspend fun postImpertinenceFeed(
         @Path("feedId") feedId: Long,
     )
+
+    @GET("feeds/popular")
+    suspend fun getPopularFeeds(): PopularFeedsResponseDto
+
+    @GET("feeds/interest")
+    suspend fun getUserInterestFeeds(): UserInterestFeedsResponseDto
 }

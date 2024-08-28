@@ -97,4 +97,7 @@ dependencies {
 
     // SwipeRefreshLayout
     implementation("com.github.SimformSolutionsPvtLtd:SSPullToRefresh:1.5.2")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }
