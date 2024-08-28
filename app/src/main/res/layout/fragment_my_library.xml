@@ -6,7 +6,7 @@
     <data>
         <variable
             name="myLibraryViewModel"
-            type="com.teamwss.websoso.ui.myPage.myLibrary.MyLibraryViewModel" />
+            type="com.teamwss.websoso.ui.main.myPage.myLibrary.MyLibraryViewModel" />
 
     </data>
 

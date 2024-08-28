@@ -6,7 +6,7 @@
     <data>
         <variable
             name="myActivity"
-            type="com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel" />
+            type="com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel" />
 
     </data>
 

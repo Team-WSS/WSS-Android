@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
-import com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 
 class MyActivityDetailAdapter :
     ListAdapter<ActivityModel, MyActivityDetailViewHolder>(diffCallback) {
