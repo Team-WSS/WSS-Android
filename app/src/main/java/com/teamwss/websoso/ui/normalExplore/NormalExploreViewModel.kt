@@ -28,11 +28,11 @@ class NormalExploreViewModel @Inject constructor(
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-    fun updateSearchResult() {
+    fun updateSearchResult(isSearchButtonClick: Boolean) {
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(loading = true)
             runCatching {
-                getNormalExploreResultsUseCase(searchWord.value ?: "")
+                getNormalExploreResultsUseCase(searchWord.value ?: "", isSearchButtonClick)
             }.onSuccess { results ->
                 if (results.novels.isNotEmpty()) {
                     _uiState.value = _uiState.value?.copy(

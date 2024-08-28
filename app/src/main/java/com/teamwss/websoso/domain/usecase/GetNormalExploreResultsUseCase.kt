@@ -9,19 +9,30 @@ class GetNormalExploreResultsUseCase @Inject constructor(
     private val novelRepository: NovelRepository,
 ) {
     private var previousSearchWord: String = ""
+    private var previousPage: Int = INITIAL_PAGE
 
-    suspend operator fun invoke(searchWord: String): NormalExploreResult {
+    suspend operator fun invoke(
+        searchWord: String,
+        isSearchButtonClick: Boolean,
+    ): NormalExploreResult {
         val isSearchWordSwitched: Boolean = previousSearchWord != searchWord
 
-        if ((isSearchWordSwitched) && novelRepository.cachedNormalExploreResult.isNotEmpty())
-            novelRepository.clearCachedNormalExploreResult()
+        if (isSearchWordSwitched || isSearchButtonClick) {
+            if (isSearchWordSwitched) {
+                novelRepository.clearCachedNormalExploreResult()
+            }
+            previousPage = INITIAL_PAGE
+        } else {
+            previousPage += 1
+        }
 
         return novelRepository.fetchNormalExploreResult(
             searchWord = searchWord,
-            page = INITIAL_PAGE,
-            size = INITIAL_REQUEST_SIZE,
-        ).toDomain()
-            .also { previousSearchWord = searchWord }
+            page = previousPage,
+            size = if (isSearchWordSwitched) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
+        ).toDomain().also {
+            previousSearchWord = searchWord
+        }
     }
 
     companion object {

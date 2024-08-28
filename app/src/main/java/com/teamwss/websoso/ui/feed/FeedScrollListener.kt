@@ -14,7 +14,7 @@ class FeedScrollListener private constructor(
         // if ((recyclerView.adapter as FeedAdapter).currentList.last() !is FeedType.Loading) return
         super.onScrollStateChanged(recyclerView, newState)
 
-        val totalItemCount: Int = (recyclerView.adapter as FeedAdapter).itemCount
+        val totalItemCount: Int = recyclerView.adapter!!.itemCount
         val visibleLastItemPosition: Int =
             (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
 

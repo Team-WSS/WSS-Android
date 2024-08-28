@@ -3,11 +3,12 @@ package com.teamwss.websoso.ui.normalExplore
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
+import com.teamwss.websoso.ui.feed.FeedScrollListener
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
@@ -19,6 +20,7 @@ class NormalExploreActivity :
     BaseActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,15 @@ class NormalExploreActivity :
     private fun setupUI() {
         binding.apply {
             etNormalExploreSearchContent.requestFocus()
-            rvNormalExploreResult.adapter = normalExploreAdapter
+            rvNormalExploreResult.apply {
+                adapter = normalExploreAdapter
+                addOnScrollListener(
+                    FeedScrollListener.of(
+                        singleEventHandler = singleEventHandler,
+                        event = { normalExploreViewModel?.updateSearchResult(false) }
+                    )
+                )
+            }
             onClick = onNormalExploreButtonClick()
         }
     }
@@ -48,7 +58,7 @@ class NormalExploreActivity :
         }
 
         override fun onSearchButtonClick() {
-            normalExploreViewModel.updateSearchResult()
+            normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
         }
 
         override fun onSearchCancelButtonClick() {
@@ -94,7 +104,6 @@ class NormalExploreActivity :
         val header = Header(uiState.novelCount)
         val results = uiState.novels.map { Result(it) }
 
-        Log.d("moongchi", "updateView: ${uiState.novels}")
         normalExploreAdapter.submitList(listOf(header) + results)
     }
 
