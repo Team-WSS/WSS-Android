@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onCancelClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onAcceptClick"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_detail_white_radius_12dp"
+        android:paddingHorizontal="22dp"
+        android:paddingVertical="24dp">
+
+        <ImageView
+            android:id="@+id/iv_novel_alert"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="100dp"
+            android:src="@drawable/ic_novel_detail_warning"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_novel_alert_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/title1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_novel_alert"
+            tools:text="@string/novel_detail_remove_evaluate_alert_title" />
+
+        <TextView
+            android:id="@+id/tv_novel_alert_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_novel_alert_title"
+            tools:text="@string/novel_detail_remove_evaluate_alert_message" />
+
+        <TextView
+            android:id="@+id/tv_novel_alert_cancel"
+            android:layout_width="116dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_novel_info_gray_50_radius_8dp"
+            android:gravity="center"
+            android:onClick="@{() -> onCancelClick.invoke()}"
+            android:textAlignment="center"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_novel_alert_message"
+            tools:text="@string/novel_detail_remove_cancel" />
+
+        <TextView
+            android:id="@+id/tv_novel_alert_accept"
+            android:layout_width="116dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_novel_detail_secondary_100_radius_8dp"
+            android:gravity="center"
+            android:onClick="@{() -> onAcceptClick.invoke()}"
+            android:textAlignment="center"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_novel_alert_message"
+            tools:text="@string/novel_detail_remove_accept" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

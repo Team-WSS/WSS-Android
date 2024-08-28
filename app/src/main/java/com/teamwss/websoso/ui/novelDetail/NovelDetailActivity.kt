@@ -57,8 +57,18 @@ class NovelDetailActivity :
     private fun setupPopupBinding() {
         _novelDetailMenuPopupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
         novelDetailMenuPopupBinding.novelDetailViewModel = novelDetailViewModel
-        novelDetailMenuPopupBinding.deleteUserNovel = ::deleteUserNovel
+        novelDetailMenuPopupBinding.deleteUserNovel = ::showDeleteUserNovelAlertDialog
         novelDetailMenuPopupBinding.lifecycleOwner = this
+    }
+
+    private fun showDeleteUserNovelAlertDialog() {
+        NovelAlertDialogFragment.newInstance(
+            alertMessage = getString(R.string.novel_detail_remove_evaluate_alert_message),
+            alertTitle = getString(R.string.novel_detail_remove_evaluate_alert_title),
+            acceptButtonText = getString(R.string.novel_detail_remove_accept),
+            cancelButtonText = getString(R.string.novel_detail_remove_cancel),
+            onAcceptClick = ::deleteUserNovel,
+        ).show(supportFragmentManager, NovelAlertDialogFragment.TAG)
     }
 
     private fun deleteUserNovel() {
