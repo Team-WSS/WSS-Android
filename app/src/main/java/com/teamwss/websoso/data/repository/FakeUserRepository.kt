@@ -9,10 +9,22 @@ class FakeUserRepository @Inject constructor() {
 
     fun getGenres(): List<GenrePreferenceEntity> {
         return listOf(
-            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "로판", 10),
-            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "로맨스", 8),
+            GenrePreferenceEntity(
+                "https://cdn-icons-png.flaticon.com/512/660/660026.png",
+                "로판",
+                10
+            ),
+            GenrePreferenceEntity(
+                "https://cdn-icons-png.flaticon.com/512/660/660026.png",
+                "로맨스",
+                8
+            ),
             GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "무협", 6),
-            GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "판타지", 4),
+            GenrePreferenceEntity(
+                "https://cdn-icons-png.flaticon.com/512/660/660026.png",
+                "판타지",
+                4
+            ),
             GenrePreferenceEntity("https://cdn-icons-png.flaticon.com/512/660/660026.png", "코믹", 2)
         )
     }

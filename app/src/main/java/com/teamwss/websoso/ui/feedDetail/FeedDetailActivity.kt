@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header

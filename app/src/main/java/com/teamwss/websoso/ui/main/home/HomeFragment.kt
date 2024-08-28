@@ -9,9 +9,12 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.FragmentHomeBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
+import com.teamwss.websoso.ui.main.home.adpater.UserInterestFeedAdapter
+import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,21 +30,37 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         PopularFeedsAdapter(::navigateToFeedDetail)
     }
 
+    private val userInterestFeedAdapter: UserInterestFeedAdapter by lazy {
+        UserInterestFeedAdapter(::navigateToNovelDetail)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bindViewModel()
         setupAdapter()
-        setupViewPager()
+        setupUserInterestViewPager()
+        setupPopularNovelViewPager()
         setupObserver()
         setupDotsIndicator()
+        onPostInterestNovelClick()
+        onSettingInterestClick()
+    }
+
+    private fun bindViewModel() {
+        binding.viewModel = homeViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupAdapter() {
-        binding.vpHomeTodayPopularNovel.adapter = popularNovelsAdapter
-        binding.vpHomePopularFeed.adapter = popularFeedsAdapter
+        with(binding) {
+            vpHomeTodayPopularNovel.adapter = popularNovelsAdapter
+            vpHomePopularFeed.adapter = popularFeedsAdapter
+            vpUserInterestFeed.adapter = userInterestFeedAdapter
+        }
     }
 
-    private fun setupViewPager() {
+    private fun setupPopularNovelViewPager() {
         val recyclerView = binding.vpHomeTodayPopularNovel.getChildAt(0) as RecyclerView
 
         val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntScaledByPx()
@@ -57,15 +76,69 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         )
     }
 
+    private fun setupUserInterestViewPager() {
+        val recyclerView = binding.vpUserInterestFeed.getChildAt(0) as RecyclerView
+
+        val paddingPx = USER_INTEREST_PADDING.toIntScaledByPx()
+        recyclerView.apply {
+            setPadding(paddingPx, 0, paddingPx, 0)
+            clipToPadding = false
+        }
+
+        binding.vpUserInterestFeed.setPageTransformer(
+            MarginPageTransformer(
+                USER_INTEREST_MARGIN
+            )
+        )
+    }
+
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
+            if (uiState.isLogin) updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
                 !uiState.loading -> {
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
+                    userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                 }
+            }
+        }
+    }
+
+    private fun updateViewVisibilityByLogin(isLogin: Boolean, nickname: String?) {
+        with(binding) {
+            when (isLogin) {
+                true -> {
+                    tvHomeInterestFeed.text =
+                        getString(R.string.home_nickname_interest_feed, nickname)
+                    clHomeInterestFeed.visibility = View.GONE
+                    clHomeRecommendNovel.visibility = View.GONE
+                    clHomeUserInterestFeed.visibility = View.VISIBLE
+                    clHomeUserRecommendNovel.visibility = View.VISIBLE
+                }
+
+                false -> {
+                    tvHomeInterestFeed.text = "관심글"
+                    clHomeInterestFeed.visibility = View.VISIBLE
+                    clHomeRecommendNovel.visibility = View.VISIBLE
+                    clHomeUserInterestFeed.visibility = View.GONE
+                    clHomeUserRecommendNovel.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun updateUserInterestFeedsVisibility(isUserInterestEmpty: Boolean) {
+        with(binding) {
+            if (isUserInterestEmpty) {
+                clHomeUserInterestFeed.visibility = View.GONE
+                clHomeInterestFeed.visibility = View.VISIBLE
+            } else {
+                clHomeUserInterestFeed.visibility = View.VISIBLE
+                clHomeInterestFeed.visibility = View.GONE
             }
         }
     }
@@ -82,8 +155,36 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
     }
 
+    private fun onPostInterestNovelClick() {
+        binding.clHomeInterestFeed.setOnClickListener {
+            if (homeViewModel.uiState.value?.isLogin == true) {
+                startActivity(NormalExploreActivity.getIntent(requireContext()))
+            } else {
+                showLoginRequestDialog()
+            }
+        }
+    }
+
+    private fun onSettingInterestClick() {
+        binding.clHomeRecommendNovel.setOnClickListener {
+            if (homeViewModel.uiState.value?.isLogin == true) {
+                //TODO 프로필 수정으로 이동
+            } else {
+                showLoginRequestDialog()
+            }
+        }
+    }
+
+    private fun showLoginRequestDialog() {
+        val dialog = LoginRequestDialogFragment.newInstance()
+        dialog.show(parentFragmentManager, LoginRequestDialogFragment.TAG)
+    }
+
     companion object {
         private const val TODAY_POPULAR_NOVEL_PADDING = 20
-        private const val TODAY_POPULAR_NOVEL_MARGIN = 10
+        private const val TODAY_POPULAR_NOVEL_MARGIN = 20
+
+        private const val USER_INTEREST_PADDING = 20
+        private const val USER_INTEREST_MARGIN = 20
     }
 }

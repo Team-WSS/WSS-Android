@@ -20,11 +20,13 @@ class PopularFeedsViewHolder(
 
     fun bind(feedItems: List<PopularFeedEntity>) {
         slots.forEachIndexed { index, slotBinding ->
-            slotBinding?.apply {
+            slotBinding.apply {
                 feedItems.getOrNull(index)?.let { feed ->
                     tvPopularFeedContent.text = feed.feesContent
                     tvPopularFeedLikeCount.text = feed.likeCount.toString()
                     tvPopularFeedCommentCount.text = feed.commentCount.toString()
+                    tvPopularFeedContent.visibility =
+                        if (feed.isSpoiler) View.INVISIBLE else View.VISIBLE
                     tvPopularFeedContentSpoiler.visibility =
                         if (feed.isSpoiler) View.VISIBLE else View.GONE
                     root.setOnClickListener { onFeedClick(feed.feedId) }
