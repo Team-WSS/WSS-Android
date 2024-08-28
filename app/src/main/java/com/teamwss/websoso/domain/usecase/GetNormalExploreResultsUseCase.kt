@@ -1,5 +1,6 @@
 package com.teamwss.websoso.domain.usecase
 
+import com.teamwss.websoso.data.model.ExploreResultEntity
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.domain.mapper.toDomain
 import com.teamwss.websoso.domain.model.NormalExploreResult
@@ -15,12 +16,16 @@ class GetNormalExploreResultsUseCase @Inject constructor(
         searchWord: String,
         isSearchButtonClick: Boolean,
     ): NormalExploreResult {
-        val isSearchWordSwitched: Boolean = previousSearchWord != searchWord
+        if (isSearchButtonClick && previousSearchWord == searchWord) {
+            return ExploreResultEntity(
+                resultCount = novelRepository.cachedNormalExploreResult.size.toLong(),
+                isLoadable = novelRepository.cachedNormalExploreIsLoadable.value ?: true,
+                novels = novelRepository.cachedNormalExploreResult,
+            ).toDomain()
+        }
 
-        if (isSearchWordSwitched || isSearchButtonClick) {
-            if (isSearchWordSwitched) {
-                novelRepository.clearCachedNormalExploreResult()
-            }
+        if (isSearchButtonClick) {
+            novelRepository.clearCachedNormalExploreResult()
             previousPage = INITIAL_PAGE
         } else {
             previousPage += ADDITIONAL_PAGE_SIZE

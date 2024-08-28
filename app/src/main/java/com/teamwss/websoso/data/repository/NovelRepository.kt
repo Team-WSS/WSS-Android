@@ -1,5 +1,7 @@
 package com.teamwss.websoso.data.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.ExploreResultEntity
 import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
@@ -14,6 +16,9 @@ import javax.inject.Inject
 class NovelRepository @Inject constructor(
     private val novelApi: NovelApi,
 ) {
+    private val _cachedNormalExploreIsLoadable: MutableLiveData<Boolean> = MutableLiveData()
+    val cachedNormalExploreIsLoadable: LiveData<Boolean> get() = _cachedNormalExploreIsLoadable
+
     private val _cachedNormalExploreResult: MutableList<NovelEntity> = mutableListOf()
     val cachedNormalExploreResult: List<NovelEntity> get() = _cachedNormalExploreResult.toList()
 
@@ -45,8 +50,14 @@ class NovelRepository @Inject constructor(
             novelApi.getNormalExploreResult(searchWord = searchWord, page = page, size = size)
 
         return result.toData()
-            .also { _cachedNormalExploreResult.addAll(it.novels) }
-            .copy(novels = cachedNormalExploreResult)
+            .also {
+                _cachedNormalExploreResult.addAll(it.novels)
+                _cachedNormalExploreIsLoadable.value = result.isLoadable
+            }
+            .copy(
+                isLoadable = cachedNormalExploreIsLoadable.value ?: true,
+                novels = cachedNormalExploreResult,
+            )
     }
 
     fun clearCachedNormalExploreResult() {
