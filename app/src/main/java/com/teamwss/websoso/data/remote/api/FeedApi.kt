@@ -63,6 +63,18 @@ interface FeedApi {
         @Path("feedId") feedId: Long,
     )
 
+    @POST("feeds/{feedId}/comments/{commentId}/spoiler")
+    suspend fun postSpoilerComment(
+        @Path("feedId") feedId: Long,
+        @Path("commentId") commentId: Long,
+    )
+
+    @POST("feeds/{feedId}/comments/{commentId}/impertinence")
+    suspend fun postImpertinenceComment(
+        @Path("feedId") feedId: Long,
+        @Path("commentId") commentId: Long,
+    )
+
     @GET("feeds/popular")
     suspend fun getPopularFeeds(): PopularFeedsResponseDto
 

@@ -33,6 +33,14 @@ class FeedRepository @Inject constructor(
         feedApi.postComment(feedId, CommentRequestDto(comment))
     }
 
+    suspend fun saveSpoilerComment(feedId: Long, commentId: Long) {
+        feedApi.postSpoilerComment(feedId, commentId)
+    }
+
+    suspend fun saveImpertinenceComment(feedId: Long, commentId: Long) {
+        feedApi.postImpertinenceComment(feedId, commentId)
+    }
+
     suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long) {
 
         when (isLikedOfLikedFeed) {

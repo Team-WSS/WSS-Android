@@ -27,7 +27,6 @@ import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
 
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
@@ -94,18 +93,14 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         onFirstItemClick = {
             showDialog<DialogReportPopupMenuBinding>(
                 menuType = SPOILER_COMMENT.name,
-                event = {
-                    // 스포일러 신고
-                },
+                event = { feedDetailViewModel.updateReportedSpoilerComment(commentId) },
             )
             popup.dismiss()
         }
         onSecondItemClick = {
             showDialog<DialogReportPopupMenuBinding>(
                 menuType = IMPERTINENCE_COMMENT.name,
-                event = {
-                    // 부적절한 표현 신고
-                },
+                event = { feedDetailViewModel.updateReportedImpertinenceComment(commentId) },
             )
             popup.dismiss()
         }
@@ -129,10 +124,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
                 event = { event() },
             ).show(supportFragmentManager, FeedReportDialogFragment.TAG)
         }
-    }
-
-    fun interface FeedDialogClickListener : Serializable {
-        operator fun invoke()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

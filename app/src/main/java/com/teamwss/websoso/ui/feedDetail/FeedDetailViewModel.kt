@@ -68,4 +68,40 @@ class FeedDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateReportedSpoilerComment(commentId: Long) {
+        feedDetailUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _feedDetailUiState.value = Loading
+                runCatching {
+                    feedRepository.saveSpoilerComment(
+                        (feedUiState as Success).feedDetail.feed.id,
+                        commentId,
+                    )
+                }.onSuccess {
+                    _feedDetailUiState.value = feedUiState as Success
+                }.onFailure {
+                    _feedDetailUiState.value = Error
+                }
+            }
+        }
+    }
+
+    fun updateReportedImpertinenceComment(commentId: Long) {
+        feedDetailUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _feedDetailUiState.value = Loading
+                runCatching {
+                    feedRepository.saveImpertinenceComment(
+                        (feedUiState as Success).feedDetail.feed.id,
+                        commentId,
+                    )
+                }.onSuccess {
+                    _feedDetailUiState.value = feedUiState as Success
+                }.onFailure {
+                    _feedDetailUiState.value = Error
+                }
+            }
+        }
+    }
 }
