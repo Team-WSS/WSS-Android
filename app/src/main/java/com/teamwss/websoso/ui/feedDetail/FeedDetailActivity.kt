@@ -78,9 +78,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         onSecondItemClick = {
             showDialog<DialogRemovePopupMenuBinding>(
                 menuType = REMOVE_COMMENT.name,
-                event = {
-                    // 댓글 삭제
-                },
+                event = { feedDetailViewModel.updateRemovedComment(commentId) },
             )
             popup.dismiss()
         }

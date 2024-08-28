@@ -27,8 +27,34 @@ interface FeedApi {
         @Path("feedId") feedId: Long,
     ): FeedDetailResponseDto
 
+    @GET("feeds/popular")
+    suspend fun getPopularFeeds(): PopularFeedsResponseDto
+
+    @GET("feeds/interest")
+    suspend fun getUserInterestFeeds(): UserInterestFeedsResponseDto
+
     @DELETE("feeds/{feedId}")
     suspend fun deleteFeed(
+        @Path("feedId") feedId: Long,
+    )
+
+    @POST("feeds/{feedId}/spoiler")
+    suspend fun postSpoilerFeed(
+        @Path("feedId") feedId: Long,
+    )
+
+    @POST("feeds/{feedId}/impertinence")
+    suspend fun postImpertinenceFeed(
+        @Path("feedId") feedId: Long,
+    )
+
+    @POST("feeds/{feedId}/likes")
+    suspend fun postLikes(
+        @Path("feedId") feedId: Long,
+    )
+
+    @DELETE("feeds/{feedId}/likes")
+    suspend fun deleteLikes(
         @Path("feedId") feedId: Long,
     )
 
@@ -43,24 +69,10 @@ interface FeedApi {
         @Body commentRequestDto: CommentRequestDto,
     )
 
-    @POST("feeds/{feedId}/likes")
-    suspend fun postLikes(
+    @DELETE("feeds/{feedId}/comments/{commentId}")
+    suspend fun deleteComment(
         @Path("feedId") feedId: Long,
-    )
-
-    @DELETE("feeds/{feedId}/likes")
-    suspend fun deleteLikes(
-        @Path("feedId") feedId: Long,
-    )
-
-    @POST("feeds/{feedId}/spoiler")
-    suspend fun postSpoilerFeed(
-        @Path("feedId") feedId: Long,
-    )
-
-    @POST("feeds/{feedId}/impertinence")
-    suspend fun postImpertinenceFeed(
-        @Path("feedId") feedId: Long,
+        @Path("commentId") commentId: Long,
     )
 
     @POST("feeds/{feedId}/comments/{commentId}/spoiler")
@@ -74,10 +86,4 @@ interface FeedApi {
         @Path("feedId") feedId: Long,
         @Path("commentId") commentId: Long,
     )
-
-    @GET("feeds/popular")
-    suspend fun getPopularFeeds(): PopularFeedsResponseDto
-
-    @GET("feeds/interest")
-    suspend fun getUserInterestFeeds(): UserInterestFeedsResponseDto
 }

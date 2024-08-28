@@ -104,4 +104,28 @@ class FeedDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateRemovedComment(commentId: Long) {
+        feedDetailUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _feedDetailUiState.value = Loading
+                runCatching {
+                    feedRepository.deleteComment(
+                        (feedUiState as Success).feedDetail.feed.id,
+                        commentId,
+                    )
+                }.onSuccess {
+                    _feedDetailUiState.value = Success(
+                        feedDetail = (feedUiState as Success).feedDetail.copy(
+                            comments = feedUiState.feedDetail.comments.filter {
+                                it.commentId.toLong() != commentId
+                            }
+                        )
+                    )
+                }.onFailure {
+                    _feedDetailUiState.value = Error
+                }
+            }
+        }
+    }
 }
