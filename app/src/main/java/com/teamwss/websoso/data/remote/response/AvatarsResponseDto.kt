@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AvatarsResponseDto(
     @SerialName("avatars")
-    val avatars: List<AvatarResponseDto>
+    val avatars: List<AvatarResponseDto>,
 ) {
     @Serializable
     data class AvatarResponseDto(
