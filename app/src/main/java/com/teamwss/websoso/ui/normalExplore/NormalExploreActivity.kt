@@ -60,7 +60,7 @@ class NormalExploreActivity :
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     normalExploreViewModel?.updateSearchResult(isSearchButtonClick = true)
                         ?: throw IllegalStateException()
-                    binding.etNormalExploreSearchContent.clearFocus() // EditText 포커스 제거
+                    binding.etNormalExploreSearchContent.clearFocus()
                     hideKeyboard()
                     true
                 } else {
