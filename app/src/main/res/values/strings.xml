@@ -100,6 +100,11 @@
     <string name="feed_detail_comment_title">댓글</string>
     <string name="feed_detail_comment_dot">·</string>
     <string name="feed_detail_input">댓글을 남겨보세요</string>
+    <string name="remove_popup_menu_title_comment">내 댓글을 삭제할까요?</string>
+    <string name="remove_popup_menu_description_comment">삭제한 댓글은 되돌릴 수 없어요</string>
+    <string name="report_popup_menu_impertinence_comment">해당 댓글에 부적절한 표현이 사용되었나요?</string>
+    <string name="report_popup_menu_spoiling_comment">해당 댓글이 스포일러를 포함하고 있나요?</string>
+    <string name="report_popup_menu_description_comment">해당 댓글이 커뮤니티 가이드\n위반했는지 검토할게요.</string>
 
     <!-- 피드 팝업 매뉴 다이얼로그 뷰 -->
     <string name="report_popup_menu_cancel">취소</string>

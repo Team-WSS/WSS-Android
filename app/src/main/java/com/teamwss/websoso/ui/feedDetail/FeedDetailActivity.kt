@@ -23,6 +23,9 @@ import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Loading
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Success
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
@@ -75,6 +78,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
         onSecondItemClick = {
             showDialog<DialogRemovePopupMenuBinding>(
+                menuType = REMOVE_COMMENT.name,
                 event = {
                     // 댓글 삭제
                 },
@@ -89,7 +93,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     private fun MenuFeedPopupBinding.setupNotMyComment(commentId: Long, popup: PopupWindow) {
         onFirstItemClick = {
             showDialog<DialogReportPopupMenuBinding>(
-                title = getString(R.string.report_popup_menu_spoiling_feed),
+                menuType = SPOILER_COMMENT.name,
                 event = {
                     // 스포일러 신고
                 },
@@ -98,7 +102,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
         onSecondItemClick = {
             showDialog<DialogReportPopupMenuBinding>(
-                title = getString(R.string.report_popup_menu_impertinence_feed),
+                menuType = IMPERTINENCE_COMMENT.name,
                 event = {
                     // 부적절한 표현 신고
                 },
@@ -111,16 +115,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private inline fun <reified Dialog : ViewDataBinding> showDialog(
-        title: String? = null,
+        menuType: String? = null,
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
             DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
+                menuType = menuType ?: throw IllegalArgumentException(),
                 event = { event() },
             ).show(supportFragmentManager, FeedRemoveDialogFragment.TAG)
 
             DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
-                title = title ?: throw IllegalArgumentException(),
+                menuType = menuType ?: throw IllegalArgumentException(),
                 event = { event() },
             ).show(supportFragmentManager, FeedReportDialogFragment.TAG)
         }
