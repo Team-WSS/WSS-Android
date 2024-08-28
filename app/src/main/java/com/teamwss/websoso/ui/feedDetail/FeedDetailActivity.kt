@@ -52,7 +52,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = 2f
             showAsDropDown(view)
@@ -162,7 +162,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         val header = Header(feedDetailUiState.feedDetail.feed)
         val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
         val feedDetail = listOf(header) + comments
-
 
         when (feedDetailAdapter.itemCount == 0) {
             true -> feedDetailAdapter.submitList(feedDetail)
