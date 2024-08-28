@@ -3,10 +3,12 @@ package com.teamwss.websoso.data.mapper
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity
+import com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.teamwss.websoso.data.model.SosoPickEntity
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.PopularNovelsResponseDto
+import com.teamwss.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto
 import com.teamwss.websoso.data.remote.response.SosoPicksResponseDto
 
 fun NovelDetailResponseDto.toData(): NovelDetailEntity {
@@ -86,6 +88,22 @@ fun PopularNovelsResponseDto.toData(): PopularNovelsEntity {
                 novelId = novel.novelId,
                 novelImage = novel.novelImage,
                 title = novel.title,
+            )
+        }
+    )
+}
+
+fun RecommendedNovelsByUserTasteResponseDto.toData(): RecommendedNovelsByUserTasteEntity {
+    return RecommendedNovelsByUserTasteEntity(
+        tasteNovels = tasteNovels.map { novel ->
+            RecommendedNovelsByUserTasteEntity.RecommendedNovelByUserTasteEntity(
+                novelId = novel.novelId,
+                title = novel.title,
+                author = novel.author,
+                novelImage = novel.novelImage,
+                interestCount = novel.interestCount,
+                novelRating = novel.novelRating,
+                novelRatingCount = novel.novelRatingCount,
             )
         }
     )
