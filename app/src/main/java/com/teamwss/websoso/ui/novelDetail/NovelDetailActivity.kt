@@ -69,12 +69,12 @@ class NovelDetailActivity :
             cancelButtonText = getString(R.string.novel_detail_remove_cancel),
             onAcceptClick = ::deleteUserNovel,
         ).show(supportFragmentManager, NovelAlertDialogFragment.TAG)
+        menuPopupWindow?.dismiss()
     }
 
     private fun deleteUserNovel() {
         novelDetailViewModel.deleteUserNovel(novelId)
         binding.tgNovelDetailReadStatus.clearChecked()
-        menuPopupWindow?.dismiss()
     }
 
     private fun setupViewPager() {
