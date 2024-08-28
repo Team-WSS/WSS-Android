@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserNicknameValidityResponseDto(
     @SerialName("isValid")
-    val isValid: Boolean
+    val isValid: Boolean,
 )
