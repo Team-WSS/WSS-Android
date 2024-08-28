@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
-import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
@@ -43,10 +43,8 @@ class NormalExploreActivity :
             rvNormalExploreResult.apply {
                 adapter = normalExploreAdapter
                 addOnScrollListener(
-                    InfiniteScrollListener.of(
-                        singleEventHandler = singleEventHandler,
-                        event = { normalExploreViewModel?.updateSearchResult(false) }
-                    )
+                    InfiniteScrollListener.of(singleEventHandler = singleEventHandler,
+                        event = { normalExploreViewModel?.updateSearchResult(false) })
                 )
             }
             onClick = onNormalExploreButtonClick()
@@ -117,7 +115,6 @@ class NormalExploreActivity :
 
     companion object {
 
-        fun getIntent(context: Context): Intent =
-            Intent(context, NormalExploreActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
     }
 }

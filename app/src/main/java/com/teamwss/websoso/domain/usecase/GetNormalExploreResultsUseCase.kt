@@ -29,7 +29,7 @@ class GetNormalExploreResultsUseCase @Inject constructor(
         return novelRepository.fetchNormalExploreResult(
             searchWord = searchWord,
             page = previousPage,
-            size = if (isSearchWordSwitched) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
+            size = REQUEST_SIZE,
         ).toDomain().also {
             previousSearchWord = searchWord
         }
@@ -38,7 +38,6 @@ class GetNormalExploreResultsUseCase @Inject constructor(
     companion object {
         private const val INITIAL_PAGE = 0
         private const val ADDITIONAL_PAGE_SIZE = 1
-        private const val INITIAL_REQUEST_SIZE = 20
-        private const val ADDITIONAL_REQUEST_SIZE = 10
+        private const val REQUEST_SIZE = 20
     }
 }
