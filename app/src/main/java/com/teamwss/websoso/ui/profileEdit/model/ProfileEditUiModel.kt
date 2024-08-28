@@ -1,19 +1,22 @@
 package com.teamwss.websoso.ui.profileEdit.model
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ProfileModel(
     val nicknameModel: NicknameModel = NicknameModel(),
     val introduction: String = "",
     val avatarId: Int = 0,
     val avatarImageUrl: String = "",
     val genrePreferences: List<Genre> = emptyList(),
-) : Serializable
+) : Parcelable
 
+@Parcelize
 data class NicknameModel(
     val nickname: String = "",
     val hasFocus: Boolean = false,
-) : Serializable
+) : Parcelable
 
 enum class NicknameEditResult(
     val message: String,

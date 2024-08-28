@@ -13,7 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.util.getAdaptedSerializableExtra
+import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
@@ -122,7 +122,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     }
 
     private fun initProfileInfo() {
-        val profile = intent.getAdaptedSerializableExtra<ProfileModel>(PROFILE_INFO)
+        val profile = intent.getAdaptedParcelableExtra<ProfileModel>(PROFILE_INFO)
         profileEditViewModel.updatePreviousProfile(profile ?: ProfileModel())
     }
 
