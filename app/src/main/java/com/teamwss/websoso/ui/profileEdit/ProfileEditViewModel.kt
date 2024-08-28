@@ -127,7 +127,7 @@ class ProfileEditViewModel @Inject constructor(
                     avatarId = 1,
                     nickname = (previousProfile.nicknameModel.nickname to currentProfile.nicknameModel.nickname).compareAndReturnNewOrNullValue(),
                     intro = (previousProfile.introduction to currentProfile.introduction).compareAndReturnNewOrNullValue(),
-                    genrePreferences = currentProfile.genrePreferences.map { it.tag }
+                    genrePreferences = currentProfile.genrePreferences.map { it.tag },
                 )
             }.onSuccess {
                 _uiState.value = uiState.value?.copy(
