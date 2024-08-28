@@ -63,8 +63,8 @@ class NovelDetailActivity :
 
     private fun showDeleteUserNovelAlertDialog() {
         NovelAlertDialogFragment.newInstance(
-            alertMessage = getString(R.string.novel_detail_remove_evaluate_alert_message),
             alertTitle = getString(R.string.novel_detail_remove_evaluate_alert_title),
+            alertMessage = getString(R.string.novel_detail_remove_evaluate_alert_message),
             acceptButtonText = getString(R.string.novel_detail_remove_accept),
             cancelButtonText = getString(R.string.novel_detail_remove_cancel),
             onAcceptClick = ::deleteUserNovel,

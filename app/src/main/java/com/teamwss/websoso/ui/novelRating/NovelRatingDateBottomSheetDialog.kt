@@ -9,6 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
+import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
 
 class NovelRatingDateBottomSheetDialog :
     BaseBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
@@ -67,10 +68,20 @@ class NovelRatingDateBottomSheetDialog :
             }
 
             override fun onClearClick() {
-                novelRatingViewModel.clearCurrentDate()
+                novelRatingViewModel.cancelDateEdit()
+                showDeleteUserNovelAlertDialog()
                 dismiss()
             }
         }
+
+    private fun showDeleteUserNovelAlertDialog() {
+        NovelAlertDialogFragment.newInstance(
+            alertTitle = getString(R.string.novel_rating_date_remove_alert_title),
+            acceptButtonText = getString(R.string.novel_rating_date_remove_alert_accept),
+            cancelButtonText = getString(R.string.novel_rating_date_remove_alert_cancel),
+            onAcceptClick = { novelRatingViewModel.clearCurrentDate() },
+        ).show(parentFragmentManager, NovelAlertDialogFragment.TAG)
+    }
 
     private fun setupDialogBehavior() {
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED

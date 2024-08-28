@@ -15,8 +15,8 @@ class NovelAlertDialogFragment : BaseDialogFragment<DialogNovelAlertBinding>(R.l
 
         onAcceptButtonClick()
         onCancelButtonClick()
-        setAlertMessage()
         setAlertTitle()
+        setAlertMessage()
         setAcceptButtonText()
         setCancelButtonText()
     }
@@ -32,12 +32,16 @@ class NovelAlertDialogFragment : BaseDialogFragment<DialogNovelAlertBinding>(R.l
         binding.onCancelClick = { dismiss() }
     }
 
-    private fun setAlertMessage() {
-        binding.tvNovelAlertMessage.text = arguments?.getString(ALERT_MESSAGE)
-    }
-
     private fun setAlertTitle() {
         binding.tvNovelAlertTitle.text = arguments?.getString(ALERT_TITLE)
+    }
+
+    private fun setAlertMessage() {
+        if (binding.tvNovelAlertMessage.text.isEmpty()) {
+            binding.tvNovelAlertMessage.visibility = View.GONE
+        } else {
+            binding.tvNovelAlertMessage.visibility = View.VISIBLE
+        }
     }
 
     private fun setAcceptButtonText() {
@@ -51,21 +55,21 @@ class NovelAlertDialogFragment : BaseDialogFragment<DialogNovelAlertBinding>(R.l
     companion object {
         const val TAG = "NOVEL_ALERT_DIALOG_FRAGMENT"
 
-        const val ALERT_MESSAGE = "ALERT_MESSAGE"
-        const val ALERT_TITLE = "ALERT_TITLE"
-        const val ACCEPT_BUTTON_TEXT = "ACCEPT_BUTTON_TEXT"
-        const val CANCEL_BUTTON_TEXT = "CANCEL_BUTTON_TEXT"
+        private const val ALERT_MESSAGE = "ALERT_MESSAGE"
+        private const val ALERT_TITLE = "ALERT_TITLE"
+        private const val ACCEPT_BUTTON_TEXT = "ACCEPT_BUTTON_TEXT"
+        private const val CANCEL_BUTTON_TEXT = "CANCEL_BUTTON_TEXT"
 
         fun newInstance(
-            alertMessage: String,
             alertTitle: String,
+            alertMessage: String = "",
             acceptButtonText: String,
             cancelButtonText: String,
             onAcceptClick: () -> Unit,
         ): NovelAlertDialogFragment = NovelAlertDialogFragment().apply {
             arguments = Bundle().apply {
-                putString(ALERT_MESSAGE, alertMessage)
                 putString(ALERT_TITLE, alertTitle)
+                putString(ALERT_MESSAGE, alertMessage)
                 putString(ACCEPT_BUTTON_TEXT, acceptButtonText)
                 putString(CANCEL_BUTTON_TEXT, cancelButtonText)
             }
