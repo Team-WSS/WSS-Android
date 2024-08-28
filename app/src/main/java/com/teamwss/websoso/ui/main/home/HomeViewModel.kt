@@ -88,7 +88,7 @@ class HomeViewModel @Inject constructor(
             }.onSuccess { recommendedNovelsByUserTaste ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    recommendedNovelsByUserTaste = recommendedNovelsByUserTaste.tasteNovels
+                    recommendedNovelsByUserTaste = recommendedNovelsByUserTaste.tasteNovels,
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
