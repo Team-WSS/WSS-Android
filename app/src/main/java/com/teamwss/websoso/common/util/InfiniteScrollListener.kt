@@ -1,11 +1,9 @@
-package com.teamwss.websoso.ui.main.feed
+package com.teamwss.websoso.common.util
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 
-class FeedScrollListener private constructor(
+class InfiniteScrollListener private constructor(
     private val singleEventHandler: SingleEventHandler,
     private val loadAdditionalFeeds: () -> Unit,
 ) : RecyclerView.OnScrollListener() {
@@ -27,6 +25,6 @@ class FeedScrollListener private constructor(
         fun of(
             singleEventHandler: SingleEventHandler,
             event: () -> Unit,
-        ): FeedScrollListener = FeedScrollListener(singleEventHandler, event)
+        ): InfiniteScrollListener = InfiniteScrollListener(singleEventHandler, event)
     }
 }
