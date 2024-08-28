@@ -1,6 +1,8 @@
 package com.teamwss.websoso.ui.onboarding
 
 import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
@@ -62,5 +64,8 @@ class OnboardingActivity :
     companion object {
         private const val ANIMATION_PROPERTY_NAME = "progress"
         private const val ANIMATION_DURATION_TIME = 200L
+
+        fun getIntent(context: Context): Intent =
+            Intent(context, OnboardingActivity::class.java)
     }
 }
