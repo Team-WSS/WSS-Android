@@ -69,12 +69,12 @@ class NovelRatingDateBottomSheetDialog :
 
             override fun onClearClick() {
                 novelRatingViewModel.cancelDateEdit()
-                showDeleteUserNovelAlertDialog()
+                showClearDateInfoAlertDialog()
                 dismiss()
             }
         }
 
-    private fun showDeleteUserNovelAlertDialog() {
+    private fun showClearDateInfoAlertDialog() {
         NovelAlertDialogFragment.newInstance(
             alertTitle = getString(R.string.novel_rating_date_remove_alert_title),
             acceptButtonText = getString(R.string.novel_rating_date_remove_alert_accept),

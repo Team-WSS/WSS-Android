@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.forEach
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +15,7 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
+import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
@@ -35,6 +37,7 @@ class NovelRatingActivity :
         setupObserver()
         setupCharmPointChips()
         setupWebsosoLoadingLayout()
+        setupBackPressCallback()
     }
 
     private fun bindViewModel() {
@@ -53,7 +56,7 @@ class NovelRatingActivity :
             }
 
             override fun onNavigateBackClick() {
-                finish()
+                showCancelNovelRatingAlertDialog()
             }
 
             override fun onSaveClick() {
@@ -64,6 +67,15 @@ class NovelRatingActivity :
 
             override fun onClearClick() {}
         }
+
+    private fun showCancelNovelRatingAlertDialog() {
+        NovelAlertDialogFragment.newInstance(
+            alertTitle = getString(R.string.novel_rating_cancel_alert_title),
+            acceptButtonText = getString(R.string.novel_rating_cancel_alert_accept),
+            cancelButtonText = getString(R.string.novel_rating_cancel_alert_cancel),
+            onAcceptClick = { finish() },
+        ).show(supportFragmentManager, NovelAlertDialogFragment.TAG)
+    }
 
     private fun setupObserver() {
         var isInitialUpdate = true
@@ -184,6 +196,14 @@ class NovelRatingActivity :
         binding.wllNovelRating.setReloadButtonClickListener {
             novelRatingViewModel.updateNovelRating(novelId)
         }
+    }
+
+    private fun setupBackPressCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showCancelNovelRatingAlertDialog()
+            }
+        })
     }
 
     companion object {
