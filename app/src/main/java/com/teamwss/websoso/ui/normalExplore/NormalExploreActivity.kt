@@ -14,6 +14,7 @@ import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -72,7 +73,8 @@ class NormalExploreActivity :
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        // TODO 작품 정보 뷰로 이동
+        val intent = NovelDetailActivity.getIntent(this, novelId)
+        startActivity(intent)
     }
 
     private fun setupObserver() {
