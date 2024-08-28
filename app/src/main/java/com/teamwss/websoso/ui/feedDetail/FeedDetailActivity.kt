@@ -3,11 +3,17 @@ package com.teamwss.websoso.ui.feedDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
 import androidx.activity.viewModels
+import androidx.databinding.ViewDataBinding
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
+import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
+import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
@@ -15,16 +21,19 @@ import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Error
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Loading
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState.Success
+import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
 
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
-    private var _popupBinding: MenuFeedPopupBinding? = null
-    private val popupBinding: MenuFeedPopupBinding
-        get() = _popupBinding ?: error("error: binding is null")
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
     private val feedDetailAdapter: FeedDetailAdapter by lazy { FeedDetailAdapter(onCommentClick()) }
+    private val popupBinding: MenuFeedPopupBinding by lazy {
+        MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
+    }
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
         override fun onProfileClick(userId: Long, isMyComment: Boolean) {
@@ -32,8 +41,93 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
 
         override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {
-            // 더보기 기능 구현 
+            showMenu(view, commentId, isMyComment)
         }
+    }
+
+    private fun showMenu(view: View, commentId: Long, isMyComment: Boolean) {
+        val popupWindow: PopupWindow = PopupWindow(
+            popupBinding.root,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 2f
+            showAsDropDown(view)
+        }
+
+        bindMenuByIsMyComment(popupWindow, isMyComment, commentId)
+    }
+
+    private fun bindMenuByIsMyComment(popup: PopupWindow, isMyComment: Boolean, commentId: Long) {
+        with(popupBinding) {
+            when (isMyComment) {
+                true -> setupMyComment(commentId, popup)
+                false -> setupNotMyComment(commentId, popup)
+            }
+        }
+    }
+
+    private fun MenuFeedPopupBinding.setupMyComment(commentId: Long, popup: PopupWindow) {
+        onFirstItemClick = {
+            // 댓글 수정
+            popup.dismiss()
+        }
+        onSecondItemClick = {
+            showDialog<DialogRemovePopupMenuBinding>(
+                event = {
+                    // 댓글 삭제
+                },
+            )
+            popup.dismiss()
+        }
+        menuContentTitle = getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        tvFeedPopupFirstItem.isSelected = true
+        tvFeedPopupSecondItem.isSelected = true
+    }
+
+    private fun MenuFeedPopupBinding.setupNotMyComment(commentId: Long, popup: PopupWindow) {
+        onFirstItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                title = getString(R.string.report_popup_menu_spoiling_feed),
+                event = {
+                    // 스포일러 신고
+                },
+            )
+            popup.dismiss()
+        }
+        onSecondItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                title = getString(R.string.report_popup_menu_impertinence_feed),
+                event = {
+                    // 부적절한 표현 신고
+                },
+            )
+            popup.dismiss()
+        }
+        menuContentTitle = getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        tvFeedPopupFirstItem.isSelected = false
+        tvFeedPopupSecondItem.isSelected = false
+    }
+
+    private inline fun <reified Dialog : ViewDataBinding> showDialog(
+        title: String? = null,
+        noinline event: () -> Unit,
+    ) {
+        when (Dialog::class) {
+            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
+                event = { event() },
+            ).show(supportFragmentManager, FeedRemoveDialogFragment.TAG)
+
+            DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
+                title = title ?: throw IllegalArgumentException(),
+                event = { event() },
+            ).show(supportFragmentManager, FeedReportDialogFragment.TAG)
+        }
+    }
+
+    fun interface FeedDialogClickListener : Serializable {
+        operator fun invoke()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
