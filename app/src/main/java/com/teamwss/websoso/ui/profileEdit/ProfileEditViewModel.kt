@@ -121,7 +121,7 @@ class ProfileEditViewModel @Inject constructor(
         val currentProfile = uiState.value?.profile ?: return
         viewModelScope.launch {
             runCatching {
-                userRepository.patchUserProfile(
+                userRepository.saveUserProfile(
                     // TODO: 실제 아바타 아이디로 변경
                     avatarId = if (previousProfile.avatarImageUrl == currentProfile.avatarImageUrl) null else 1,
                     nickname = if (previousProfile.nicknameModel.nickname == currentProfile.nicknameModel.nickname) null else currentProfile.nicknameModel.nickname,

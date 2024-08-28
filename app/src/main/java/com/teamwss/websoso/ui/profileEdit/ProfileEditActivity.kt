@@ -1,8 +1,16 @@
 package com.teamwss.websoso.ui.profileEdit
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import androidx.activity.viewModels
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.forEach
+import androidx.core.widget.addTextChangedListener
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
@@ -120,7 +128,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     }
 
     private fun setupGenreChips() {
-        Genres.entries.forEach { genre ->
+        Genre.entries.forEach { genre ->
             WebsosoChip(binding.root.context)
                 .apply {
                     setWebsosoChipText(genre.krName)
