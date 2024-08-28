@@ -2,7 +2,6 @@ package com.teamwss.websoso.data.mapper
 
 import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
-import com.teamwss.websoso.data.model.ProfileEntity
 import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
@@ -62,11 +61,3 @@ fun UserUpdateInfoEntity.toRemote(): UserInfoRequestDto {
     )
 }
 
-fun ProfileEntity.toRemote(): UserProfileRequestDto {
-    return UserProfileRequestDto(
-        avatarId = avatarId,
-        nickname = nickname,
-        intro = intro,
-        genrePreferences = genrePreferences,
-    )
-}
