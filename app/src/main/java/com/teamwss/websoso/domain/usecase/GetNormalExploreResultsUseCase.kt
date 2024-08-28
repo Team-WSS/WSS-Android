@@ -16,10 +16,11 @@ class GetNormalExploreResultsUseCase @Inject constructor(
         searchWord: String,
         isSearchButtonClick: Boolean,
     ): NormalExploreResult {
+
         if (isSearchButtonClick && previousSearchWord == searchWord) {
             return ExploreResultEntity(
                 resultCount = novelRepository.cachedNormalExploreResult.size.toLong(),
-                isLoadable = novelRepository.cachedNormalExploreIsLoadable.value ?: true,
+                isLoadable = novelRepository.cachedNormalExploreIsLoadable,
                 novels = novelRepository.cachedNormalExploreResult,
             ).toDomain()
         }
