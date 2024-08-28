@@ -49,7 +49,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setupObserver()
         setupDotsIndicator()
         onPostInterestNovelClick()
-        onSettingInterestClick()
+        onSettingPreferenceGenreClick()
     }
 
     private fun bindViewModel() {
@@ -187,7 +187,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun onSettingInterestClick() {
+    private fun onSettingPreferenceGenreClick() {
         binding.clHomeRecommendNovel.setOnClickListener {
             if (homeViewModel.uiState.value?.isLogin == true) {
                 //TODO 프로필 수정으로 이동
