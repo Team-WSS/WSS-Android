@@ -32,12 +32,12 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 novelRepository.fetchPopularNovels()
             }.onSuccess { popularNovels ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     popularNovels = popularNovels.popularNovels,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true,
                 )
@@ -50,12 +50,12 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 feedRepository.fetchPopularFeeds()
             }.onSuccess { popularFeeds ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     popularFeeds = popularFeeds.popularFeeds.chunked(3),
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true,
                 )
@@ -68,12 +68,12 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 feedRepository.fetchUserInterestFeeds()
             }.onSuccess { userInterestFeeds ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     userInterestFeeds = userInterestFeeds.userInterestFeeds,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true,
                 )
@@ -86,12 +86,12 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 novelRepository.fetchRecommendedNovelsByUserTaste()
             }.onSuccess { recommendedNovelsByUserTaste ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     recommendedNovelsByUserTaste = recommendedNovelsByUserTaste.tasteNovels
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true,
                 )
