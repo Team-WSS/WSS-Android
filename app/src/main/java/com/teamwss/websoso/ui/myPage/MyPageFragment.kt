@@ -32,6 +32,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 ProfileModel(
                     nicknameModel = NicknameModel("밝보"),
                     introduction = "만나서 반가워요!",
+                    avatarId = 1,
                     avatarImageUrl = "https://mblogthumb-phinf.pstatic.net/MjAyMjA3MDdfMTgg/MDAxNjU3MTIwODE3MDU5.4sNUX1NFnBHQsQ8xrq6Fd2mrVrtyipj6H9aLuJIpyj0g.h-orck6dDWA-ErMcplHgzh-2bPPk7TEAJwxrnNr5qoQg.PNG.ssankal78/청명.png?type=w800",
                     genrePreferences = listOf(Genre.FANTASY, Genre.ROMANCE),
                 )
