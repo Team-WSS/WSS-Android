@@ -60,8 +60,8 @@ class FeedDetailViewModel @Inject constructor(
             }.onSuccess { comments ->
                 _feedDetailUiState.value = Success(
                     feedDetail = (feedDetailUiState.value as Success).feedDetail.copy(
-                        comments = comments.comments.map { it.toUi() }
-                    )
+                        comments = comments.comments.map { it.toUi() },
+                    ),
                 )
             }.onFailure {
                 _feedDetailUiState.value = Error
@@ -118,9 +118,9 @@ class FeedDetailViewModel @Inject constructor(
                     _feedDetailUiState.value = Success(
                         feedDetail = (feedUiState as Success).feedDetail.copy(
                             comments = feedUiState.feedDetail.comments.filter {
-                                it.commentId.toLong() != commentId
-                            }
-                        )
+                                it.commentId != commentId
+                            },
+                        ),
                     )
                 }.onFailure {
                     _feedDetailUiState.value = Error
