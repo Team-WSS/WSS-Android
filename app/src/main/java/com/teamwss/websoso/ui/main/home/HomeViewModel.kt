@@ -24,6 +24,7 @@ class HomeViewModel @Inject constructor(
         updatePopularNovels()
         updatePopularFeeds()
         updateUserInterestFeeds()
+        updateRecommendedNovelsByUser()
     }
 
     private fun updatePopularNovels() {
@@ -70,6 +71,24 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
                     userInterestFeeds = userInterestFeeds.userInterestFeeds,
+                )
+            }.onFailure {
+                _uiState.value = _uiState.value?.copy(
+                    loading = false,
+                    error = true,
+                )
+            }
+        }
+    }
+
+    private fun updateRecommendedNovelsByUser() {
+        viewModelScope.launch {
+            runCatching {
+                novelRepository.fetchRecommendedNovelsByUserTaste()
+            }.onSuccess { recommendedNovelsByUserTaste ->
+                _uiState.value = _uiState.value?.copy(
+                    loading = false,
+                    recommendedNovelsByUserTaste = recommendedNovelsByUserTaste.tasteNovels
                 )
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(

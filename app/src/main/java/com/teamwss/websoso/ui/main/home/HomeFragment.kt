@@ -13,6 +13,7 @@ import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
+import com.teamwss.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.teamwss.websoso.ui.main.home.adpater.UserInterestFeedAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
@@ -32,6 +33,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val userInterestFeedAdapter: UserInterestFeedAdapter by lazy {
         UserInterestFeedAdapter(::navigateToNovelDetail)
+    }
+
+    private val recommendedNovelsByUserTasteAdapter: RecommendedNovelsByUserTasteAdapter by lazy {
+        RecommendedNovelsByUserTasteAdapter(::navigateToNovelDetail)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,6 +62,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             vpHomeTodayPopularNovel.adapter = popularNovelsAdapter
             vpHomePopularFeed.adapter = popularFeedsAdapter
             vpUserInterestFeed.adapter = userInterestFeedAdapter
+            rvRecommendNovelByUserTaste.adapter = recommendedNovelsByUserTasteAdapter
         }
     }
 
@@ -95,7 +101,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
-            if (uiState.isLogin) updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+            if (uiState.isLogin) {
+                updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+                updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
+            }
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
@@ -103,6 +112,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
                     userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
+                    recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
                 }
             }
         }
@@ -139,6 +149,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             } else {
                 clHomeUserInterestFeed.visibility = View.VISIBLE
                 clHomeInterestFeed.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun updateRecommendedNovelByUserTasteVisibility(isRecommendNovelByUserTasteEmpty: Boolean) {
+        with(binding) {
+            if (isRecommendNovelByUserTasteEmpty) {
+                clHomeUserRecommendNovel.visibility = View.GONE
+                clHomeRecommendNovel.visibility = View.VISIBLE
+            } else {
+                clHomeUserRecommendNovel.visibility = View.VISIBLE
+                clHomeRecommendNovel.visibility = View.GONE
             }
         }
     }
