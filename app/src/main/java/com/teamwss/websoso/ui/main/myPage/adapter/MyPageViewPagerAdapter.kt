@@ -1,9 +1,9 @@
-package com.teamwss.websoso.ui.myPage.adapter
+package com.teamwss.websoso.ui.main.myPage.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.teamwss.websoso.ui.myPage.myActivity.MyActivityFragment
-import com.teamwss.websoso.ui.myPage.myLibrary.MyLibraryFragment
+import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
+import com.teamwss.websoso.ui.main.myPage.myLibrary.MyLibraryFragment
 
 class MyPageViewPagerAdapter(fragment: Fragment) :
     FragmentStateAdapter(fragment) {
