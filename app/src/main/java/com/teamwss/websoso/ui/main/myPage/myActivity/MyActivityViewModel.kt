@@ -1,20 +1,20 @@
-package com.teamwss.websoso.ui.myPage.myActivity
+package com.teamwss.websoso.ui.main.myPage.myActivity
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.MyActivityRepository
+import com.teamwss.websoso.data.repository.UserFeedRepository
 import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyActivityViewModel @Inject constructor(
-    private val myActivityRepository: MyActivityRepository
+    private val myActivityRepository: UserFeedRepository
 ) : ViewModel() {
 
     private val _myActivity = MutableLiveData<List<ActivityModel>>()
@@ -27,7 +27,7 @@ class MyActivityViewModel @Inject constructor(
     private fun updateMyActivities() {
         viewModelScope.launch {
             runCatching {
-                myActivityRepository.getMyActivities()
+                myActivityRepository.getUserFeed()
             }.mapCatching { activities ->
                 activities.toUi().take(5)
             }.onSuccess { mappedActivities ->
