@@ -29,6 +29,9 @@ class NormalExploreViewModel @Inject constructor(
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
     fun updateSearchResult(isSearchButtonClick: Boolean) {
+        if (_uiState.value?.isLoadable == false && !isSearchButtonClick) {
+            return
+        }
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(loading = isSearchButtonClick)
             runCatching {
@@ -54,7 +57,7 @@ class NormalExploreViewModel @Inject constructor(
 
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
-                    loading = false, error = true
+                    loading = false, error = true,
                 )
                 _isNovelResultEmptyBoxVisibility.value = false
             }
