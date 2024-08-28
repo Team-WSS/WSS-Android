@@ -8,8 +8,10 @@ sealed class NormalExploreItemType {
 
     data class Result(val novel: NovelModel) : NormalExploreItemType()
 
+    data object Loading : NormalExploreItemType()
+
     enum class ItemType {
-        HEADER, RESULT;
+        HEADER, RESULT, LOADING;
 
         companion object {
             fun valueOf(ordinal: Int): ItemType =

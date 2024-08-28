@@ -30,7 +30,7 @@ class NormalExploreViewModel @Inject constructor(
 
     fun updateSearchResult(isSearchButtonClick: Boolean) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value?.copy(loading = true)
+            _uiState.value = _uiState.value?.copy(loading = isSearchButtonClick)
             runCatching {
                 getNormalExploreResultsUseCase(searchWord.value ?: "", isSearchButtonClick)
             }.onSuccess { results ->

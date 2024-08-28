@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.ItemType
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.ItemType.HEADER
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.ItemType.LOADING
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.ItemType.RESULT
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
 
 class NormalExploreAdapter(
@@ -15,9 +17,10 @@ class NormalExploreAdapter(
 ) : ListAdapter<NormalExploreItemType, RecyclerView.ViewHolder>(diffCallBack) {
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            HEADER_POSITION -> HEADER.ordinal
-            else -> RESULT.ordinal
+        return when (getItem(position)) {
+            is Header -> HEADER.ordinal
+            is Result -> RESULT.ordinal
+            is Loading -> LOADING.ordinal
         }
     }
 
@@ -25,6 +28,7 @@ class NormalExploreAdapter(
         return when (ItemType.valueOf(viewType)) {
             HEADER -> NormalExploreHeaderViewHolder.from(parent)
             RESULT -> NormalExploreViewHolder.of(parent, novelItemClickListener)
+            LOADING -> NormalExploreLoadingViewHolder.from(parent)
         }
     }
 
@@ -32,6 +36,7 @@ class NormalExploreAdapter(
         when (holder) {
             is NormalExploreHeaderViewHolder -> holder.bind((getItem(position) as Header).novelCount)
             is NormalExploreViewHolder -> holder.bind((getItem(position) as Result).novel)
+            is NormalExploreLoadingViewHolder -> return
         }
     }
 

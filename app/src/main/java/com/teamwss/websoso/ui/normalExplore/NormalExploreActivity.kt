@@ -11,6 +11,7 @@ import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.main.feed.FeedScrollListener
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,7 +105,12 @@ class NormalExploreActivity :
         val header = Header(uiState.novelCount)
         val results = uiState.novels.map { Result(it) }
 
-        normalExploreAdapter.submitList(listOf(header) + results)
+        if (uiState.novels.isNotEmpty()) {
+            when (uiState.isLoadable) {
+                true -> normalExploreAdapter.submitList(listOf(header) + results + Loading)
+                false -> normalExploreAdapter.submitList(listOf(header) + results)
+            }
+        }
     }
 
     companion object {
