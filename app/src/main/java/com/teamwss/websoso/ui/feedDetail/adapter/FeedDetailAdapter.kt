@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.teamwss.websoso.ui.feedDetail.CommentClickListener
+import com.teamwss.websoso.ui.feedDetail.FeedDetailClickListener
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.ItemType
@@ -12,7 +13,7 @@ import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.ItemType.COMMENT
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.ItemType.HEADER
 
 class FeedDetailAdapter(
-
+    private val feedDetailClickListener: FeedDetailClickListener,
     private val commentClickListener: CommentClickListener,
 ) : ListAdapter<FeedDetailType, ViewHolder>(diffCallBack) {
 
@@ -32,7 +33,7 @@ class FeedDetailAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         when (ItemType.valueOf(viewType)) {
-            HEADER -> FeedDetailContentViewHolder.from(parent)
+            HEADER -> FeedDetailContentViewHolder.from(parent, feedDetailClickListener)
             COMMENT -> FeedDetailCommentViewHolder.from(parent, commentClickListener)
         }
 

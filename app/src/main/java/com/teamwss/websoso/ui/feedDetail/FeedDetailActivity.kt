@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.feedDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -24,15 +25,32 @@ import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
-    private val feedDetailAdapter: FeedDetailAdapter by lazy { FeedDetailAdapter(onCommentClick()) }
+    private val feedDetailAdapter: FeedDetailAdapter by lazy {
+        FeedDetailAdapter(
+            onFeedDetailClick(),
+            onCommentClick()
+        )
+    }
     private val popupBinding: MenuFeedPopupBinding by lazy {
         MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
+    }
+
+    private fun onFeedDetailClick(): FeedDetailClickListener = object : FeedDetailClickListener {
+        override fun onLikeButtonClick(view: View, feedId: Long) {
+        }
+
+        override fun onNovelInfoClick(novelId: Long) {
+        }
+
+        override fun onProfileClick(userId: Long) {
+        }
     }
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
