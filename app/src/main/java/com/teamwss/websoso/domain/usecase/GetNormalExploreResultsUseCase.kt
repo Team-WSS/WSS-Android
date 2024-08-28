@@ -23,7 +23,7 @@ class GetNormalExploreResultsUseCase @Inject constructor(
             }
             previousPage = INITIAL_PAGE
         } else {
-            previousPage += 1
+            previousPage += ADDITIONAL_PAGE_SIZE
         }
 
         return novelRepository.fetchNormalExploreResult(
@@ -37,6 +37,7 @@ class GetNormalExploreResultsUseCase @Inject constructor(
 
     companion object {
         private const val INITIAL_PAGE = 0
+        private const val ADDITIONAL_PAGE_SIZE = 1
         private const val INITIAL_REQUEST_SIZE = 20
         private const val ADDITIONAL_REQUEST_SIZE = 10
     }
