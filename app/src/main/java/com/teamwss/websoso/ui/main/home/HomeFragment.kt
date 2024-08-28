@@ -16,6 +16,7 @@ import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.teamwss.websoso.ui.main.home.adpater.UserInterestFeedAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
+import com.teamwss.websoso.ui.notice.NoticeActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,6 +51,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setupDotsIndicator()
         onPostInterestNovelClick()
         onSettingPreferenceGenreClick()
+        onNoticeButtonClick()
     }
 
     private fun bindViewModel() {
@@ -201,6 +203,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun showLoginRequestDialog() {
         val dialog = LoginRequestDialogFragment.newInstance()
         dialog.show(parentFragmentManager, LoginRequestDialogFragment.TAG)
+    }
+
+    private fun onNoticeButtonClick() {
+        binding.ivHomeNotification.setOnClickListener {
+            startActivity(NoticeActivity.getIntent(requireContext()))
+        }
     }
 
     companion object {
