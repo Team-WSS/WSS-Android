@@ -1,11 +1,11 @@
-package com.teamwss.websoso.ui.myPage.myActivity.adapter
+package com.teamwss.websoso.ui.main.myPage.myActivity.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
-import com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 
 class MyActivityAdapter() :
     ListAdapter<ActivityModel, MyActivityViewHolder>(diffCallback) {

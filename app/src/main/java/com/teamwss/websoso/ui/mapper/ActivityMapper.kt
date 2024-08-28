@@ -1,7 +1,7 @@
 package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.data.model.MyActivitiesEntity
-import com.teamwss.websoso.ui.myPage.myActivity.model.ActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 
 fun MyActivitiesEntity.MyActivityEntity.toUi(): ActivityModel =
     ActivityModel(

@@ -3,9 +3,9 @@ package com.teamwss.websoso.data.repository
 import com.teamwss.websoso.data.model.MyActivitiesEntity
 import javax.inject.Inject
 
-class MyActivityRepository @Inject constructor() {
+class UserFeedRepository @Inject constructor() {
 
-    fun getMyActivities(): List<MyActivitiesEntity.MyActivityEntity> {
+    fun getUserFeed(): List<MyActivitiesEntity.MyActivityEntity> {
         return listOf(
             MyActivitiesEntity.MyActivityEntity(
                 feedId = 1,
