@@ -3,10 +3,12 @@ package com.teamwss.websoso.ui.feedDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
+import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
@@ -17,9 +19,22 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
+    private var _popupBinding: MenuFeedPopupBinding? = null
+    private val popupBinding: MenuFeedPopupBinding
+        get() = _popupBinding ?: error("error: binding is null")
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
-    private val feedDetailAdapter: FeedDetailAdapter by lazy { FeedDetailAdapter() }
+    private val feedDetailAdapter: FeedDetailAdapter by lazy { FeedDetailAdapter(onCommentClick()) }
+
+    private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
+        override fun onProfileClick(userId: Long, isMyComment: Boolean) {
+            // if (isMyComment) 마이페이지 else 프로필 뷰
+        }
+
+        override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {
+            // 더보기 기능 구현 
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
