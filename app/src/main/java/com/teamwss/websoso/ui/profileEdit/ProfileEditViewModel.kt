@@ -7,7 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.Companion.checkNicknameValidity
+import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_DUPLICATION
+import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_LENGTH
+import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_SPECIAL_CHARACTER
+import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.NONE
+import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
@@ -23,6 +27,10 @@ class ProfileEditViewModel @Inject constructor(
 
     private val _uiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
     val uiState: LiveData<ProfileEditUiState> get() = _uiState
+
+    private val invalidLengthRegex = Regex("^\\s|\\s$")
+    private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
+    private val hangulConsonantAndVowelRegex = Regex("[ㄱ-ㅎㅏ-ㅣ]")
 
     fun updatePreviousProfile(profile: ProfileModel) {
         _uiState.value = uiState.value?.copy(
@@ -49,7 +57,7 @@ class ProfileEditViewModel @Inject constructor(
                     nickname = nickname,
                 ) ?: NicknameModel(),
             ) ?: ProfileModel(),
-            nicknameEditResult = if (uiState.value?.previousProfile?.nicknameModel?.nickname == nickname) NicknameEditResult.VALID_NICKNAME else NicknameEditResult.NONE,
+            nicknameEditResult = if (uiState.value?.previousProfile?.nicknameModel?.nickname == nickname) VALID_NICKNAME else NONE,
         )
     }
 
@@ -82,8 +90,8 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun checkNicknameValidity(nickname: String) {
-        val result = nickname.checkNicknameValidity()
-        if (result != NicknameEditResult.VALID_NICKNAME) {
+        val result = nickname.getIsNicknameValid()
+        if (result != VALID_NICKNAME) {
             _uiState.value = uiState.value?.copy(
                 nicknameEditResult = result,
             )
@@ -97,11 +105,11 @@ class ProfileEditViewModel @Inject constructor(
             }.onSuccess { isDuplicated ->
                 if (isDuplicated) {
                     _uiState.value = uiState.value?.copy(
-                        nicknameEditResult = NicknameEditResult.VALID_NICKNAME,
+                        nicknameEditResult = VALID_NICKNAME,
                     )
                 } else {
                     _uiState.value = uiState.value?.copy(
-                        nicknameEditResult = NicknameEditResult.INVALID_NICKNAME_DUPLICATION,
+                        nicknameEditResult = INVALID_NICKNAME_DUPLICATION,
                     )
                 }
             }
@@ -109,7 +117,7 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateProfile() {
-        if (uiState.value?.nicknameEditResult != NicknameEditResult.VALID_NICKNAME) return
+        if (uiState.value?.nicknameEditResult != VALID_NICKNAME) return
         val previousProfile = uiState.value?.previousProfile ?: return
         val currentProfile = uiState.value?.profile ?: return
         viewModelScope.launch {
@@ -136,5 +144,23 @@ class ProfileEditViewModel @Inject constructor(
     private fun <T> Pair<T, T>.compareAndReturnNewOrNullValue(): T? {
         val (oldValue, newValue) = this
         return if (oldValue == newValue) null else newValue
+    }
+
+    private fun String.getIsNicknameValid(): NicknameEditResult {
+        return when {
+            this.length !in 2..10 -> INVALID_NICKNAME_LENGTH
+            this.contains(invalidLengthRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
+            this.contains(specialCharacterRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
+            this.contains(hangulConsonantAndVowelRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
+            else -> VALID_NICKNAME
+        }
+    }
+
+    fun updateCheckDuplicateNicknameBtnEnabled() {
+        val isEnable = uiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && uiState.value?.nicknameEditResult == NONE
+        if (isEnable == uiState.value?.isCheckDuplicateNicknameEnabled) return
+        _uiState.value = uiState.value?.copy(
+            isCheckDuplicateNicknameEnabled = isEnable,
+        )
     }
 }

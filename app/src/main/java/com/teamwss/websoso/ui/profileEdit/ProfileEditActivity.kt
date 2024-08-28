@@ -48,10 +48,11 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     private fun setupObserver() {
         profileEditViewModel.uiState.observe(this) { uiState ->
             updateGenreChips(uiState.profile.genrePreferences)
-            updateDuplicateCheckButton(uiState)
+            updateDuplicateCheckButton(uiState.isCheckDuplicateNicknameEnabled)
             updateNicknameEditTextUi(uiState)
             updateIntroductionEditTextUi(uiState.profile.introduction)
             handleProfileEditResult(uiState.profileEditResult)
+            profileEditViewModel.updateCheckDuplicateNicknameBtnEnabled()
         }
     }
 
@@ -62,8 +63,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         }
     }
 
-    private fun updateDuplicateCheckButton(uiState: ProfileEditUiState) {
-        val isEnable = uiState.profile.nicknameModel.nickname.isNotEmpty() && uiState.nicknameEditResult == NONE
+    private fun updateDuplicateCheckButton(isEnable: Boolean) {
         binding.tvProfileEditNicknameCheckDuplicate.setTextColor(
             if (isEnable) AppCompatResources.getColorStateList(this, R.color.primary_100_6A5DFD).defaultColor
             else AppCompatResources.getColorStateList(this, R.color.gray_200_AEADB3).defaultColor
@@ -75,21 +75,21 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         binding.tvProfileEditNicknameCheckDuplicate.isEnabled = isEnable
     }
 
-    private fun updateNicknameEditTextUi(uiState: ProfileEditUiState) {
-        binding.tvProfileEditNicknameCount.text = getColoredText(
+    private fun updateNicknameEditTextUi(uiState: ProfileEditUiState) = with(binding) {
+        tvProfileEditNicknameCount.text = getColoredText(
             getString(R.string.profile_edit_nickname_max_count, uiState.profile.nicknameModel.nickname.length),
             listOf(uiState.profile.nicknameModel.nickname.length.toString()),
-            AppCompatResources.getColorStateList(this, R.color.gray_300_52515F).defaultColor
+            AppCompatResources.getColorStateList(this@ProfileEditActivity, R.color.gray_300_52515F).defaultColor
         )
-        binding.tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname.isNotEmpty()
-        binding.tvProfileEditNicknameError.text = uiState.nicknameEditResult.message
+        tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname.isNotEmpty()
+        tvProfileEditNicknameError.text = uiState.nicknameEditResult.message
         val defaultState = uiState.nicknameEditResult != VALID_NICKNAME && uiState.nicknameEditResult != NONE
         when {
-            defaultState -> binding.viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
-            uiState.profile.nicknameModel.hasFocus -> binding.viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp)
-            else -> binding.viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_gray_50_radius_12dp)
+            defaultState -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
+            uiState.profile.nicknameModel.hasFocus -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp)
+            else -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_gray_50_radius_12dp)
         }
-        binding.ivProfileEditNicknameClear.isSelected = defaultState
+        ivProfileEditNicknameClear.isSelected = defaultState
     }
 
     private fun getColoredText(text: String, wordsToColor: List<String>, color: Int): SpannableString {

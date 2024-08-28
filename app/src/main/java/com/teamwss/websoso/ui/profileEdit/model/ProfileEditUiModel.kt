@@ -23,17 +23,6 @@ enum class NicknameEditResult(
     INVALID_NICKNAME_SPECIAL_CHARACTER("사용할 수 없는 단어가 포함되어 있어요"),
     VALID_NICKNAME(""),
     NONE(""),
-    ;
-
-    companion object {
-        fun String.checkNicknameValidity(): NicknameEditResult {
-            return when {
-                this.length !in 2..10 -> INVALID_NICKNAME_LENGTH
-                this.contains(Regex("^\\s|\\s$|[^\\w가-힣-_]|[ㄱ-ㅎㅏ-ㅣ]")) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-                else -> VALID_NICKNAME
-            }
-        }
-    }
 }
 
 sealed interface ProfileEditResult {
