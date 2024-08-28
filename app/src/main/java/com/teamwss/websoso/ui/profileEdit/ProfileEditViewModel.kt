@@ -186,7 +186,6 @@ class ProfileEditViewModel @Inject constructor(
             }.onSuccess { avatars ->
                 val avatarsModel = avatars.map { it.toUi() }
                 _avatarChangeUiState.value = AvatarChangeUiState.Success(avatarsModel)
-                updateSelectedAvatar(avatarsModel.find { it.isRepresentative } ?: AvatarModel())
             }.onFailure {
                 _avatarChangeUiState.value = AvatarChangeUiState.Error
             }
