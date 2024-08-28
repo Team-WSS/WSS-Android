@@ -41,8 +41,6 @@ class NormalExploreAdapter(
     }
 
     companion object {
-        private const val HEADER_POSITION = 0
-
         private val diffCallBack = object : DiffUtil.ItemCallback<NormalExploreItemType>() {
 
             override fun areItemsTheSame(
