@@ -16,7 +16,6 @@ import javax.inject.Inject
 class MyActivityViewModel @Inject constructor(
     private val myActivityRepository: UserFeedRepository
 ) : ViewModel() {
-
     private val _myActivity = MutableLiveData<List<ActivityModel>>()
     val myActivity: LiveData<List<ActivityModel>> get() = _myActivity
 
