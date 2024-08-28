@@ -20,6 +20,6 @@ data class AvatarsResponseDto(
         @SerialName("avatarImage")
         val avatarImage: String,
         @SerialName("isRepresentative")
-        val isRepresentative: Boolean
+        val isRepresentative: Boolean,
     )
 }
