@@ -4,6 +4,7 @@ import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity
+import com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.teamwss.websoso.data.model.SosoPickEntity
 import com.teamwss.websoso.data.remote.api.NovelApi
 import javax.inject.Inject
@@ -33,5 +34,9 @@ class NovelRepository @Inject constructor(
 
     suspend fun fetchPopularNovels(): PopularNovelsEntity {
         return novelApi.getPopularNovels().toData()
+    }
+
+    suspend fun fetchRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteEntity {
+        return novelApi.getRecommendedNovelsByUserTaste().toData()
     }
 }

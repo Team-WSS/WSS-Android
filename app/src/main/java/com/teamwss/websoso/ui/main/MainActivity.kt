@@ -11,7 +11,7 @@ import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityMainBinding
-import com.teamwss.websoso.ui.feed.FeedFragment
+import com.teamwss.websoso.ui.main.feed.FeedFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.HOME

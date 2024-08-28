@@ -13,6 +13,7 @@ import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
+import com.teamwss.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.teamwss.websoso.ui.main.home.adpater.UserInterestFeedAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
@@ -34,6 +35,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         UserInterestFeedAdapter(::navigateToNovelDetail)
     }
 
+    private val recommendedNovelsByUserTasteAdapter: RecommendedNovelsByUserTasteAdapter by lazy {
+        RecommendedNovelsByUserTasteAdapter(::navigateToNovelDetail)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -44,7 +49,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setupObserver()
         setupDotsIndicator()
         onPostInterestNovelClick()
-        onSettingInterestClick()
+        onSettingPreferenceGenreClick()
     }
 
     private fun bindViewModel() {
@@ -57,6 +62,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             vpHomeTodayPopularNovel.adapter = popularNovelsAdapter
             vpHomePopularFeed.adapter = popularFeedsAdapter
             vpUserInterestFeed.adapter = userInterestFeedAdapter
+            rvRecommendNovelByUserTaste.adapter = recommendedNovelsByUserTasteAdapter
         }
     }
 
@@ -94,15 +100,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
-            if (uiState.isLogin) updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
             when {
                 uiState.loading -> Unit
                 uiState.error -> Unit
                 !uiState.loading -> {
+                    updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
-                    userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
+
+                    if (uiState.isLogin) {
+                        updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+                        updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
+                        userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
+                        recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    }
                 }
             }
         }
@@ -143,6 +154,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
+    private fun updateRecommendedNovelByUserTasteVisibility(isRecommendNovelByUserTasteEmpty: Boolean) {
+        with(binding) {
+            if (isRecommendNovelByUserTasteEmpty) {
+                clHomeUserRecommendNovel.visibility = View.GONE
+                clHomeRecommendNovel.visibility = View.VISIBLE
+            } else {
+                clHomeUserRecommendNovel.visibility = View.VISIBLE
+                clHomeRecommendNovel.visibility = View.GONE
+            }
+        }
+    }
+
     private fun setupDotsIndicator() {
         binding.dotsIndicatorHome.attachTo(binding.vpHomePopularFeed)
     }
@@ -165,7 +188,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun onSettingInterestClick() {
+    private fun onSettingPreferenceGenreClick() {
         binding.clHomeRecommendNovel.setOnClickListener {
             if (homeViewModel.uiState.value?.isLogin == true) {
                 //TODO 프로필 수정으로 이동

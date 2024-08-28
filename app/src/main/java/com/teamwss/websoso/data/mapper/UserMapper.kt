@@ -5,9 +5,6 @@ import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
-import com.teamwss.websoso.data.model.UserUpdateInfoEntity
-import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
-import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
@@ -44,18 +41,5 @@ fun UserNovelStatsResponseDto.toData(): UserNovelStatsEntity {
 fun UserProfileStatusResponseDto.toData(): UserProfileStatusEntity {
     return UserProfileStatusEntity(
         isProfilePublic = isProfilePublic,
-    )
-}
-
-fun UserProfileStatusEntity.toRemote(): UserProfileStatusRequestDto {
-    return UserProfileStatusRequestDto(
-        isProfilePublic = isProfilePublic,
-    )
-}
-
-fun UserUpdateInfoEntity.toRemote(): UserInfoRequestDto {
-    return UserInfoRequestDto(
-        gender = gender,
-        birth = birthYear,
     )
 }

@@ -14,8 +14,10 @@ enum class Genres(val korean: String) {
     ETC("기타");
 
     companion object {
-        fun fromString(value: String): Genres? {
-            return Genres.values().find { it.name.equals(value, ignoreCase = true) }
+        fun from(value: String): Genres? {
+            return Genres.entries.find {
+                it.name.equals(value, ignoreCase = true)
+            }
         }
     }
 }
