@@ -4,7 +4,7 @@ import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 
 sealed class NormalExploreItemType {
 
-    data class Header(val novelCount: Int) : NormalExploreItemType()
+    data class Header(val novelCount: Long) : NormalExploreItemType()
 
     data class Result(val novel: NovelModel) : NormalExploreItemType()
 

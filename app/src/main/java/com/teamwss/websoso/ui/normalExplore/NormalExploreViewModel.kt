@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.normalExplore
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,28 +34,29 @@ class NormalExploreViewModel @Inject constructor(
             runCatching {
                 getNormalExploreResultsUseCase(searchWord.value ?: "")
             }.onSuccess { results ->
-                Log.d("moongchi", "updateSearchResult: ${results.novels}")
                 if (results.novels.isNotEmpty()) {
                     _uiState.value = _uiState.value?.copy(
                         loading = false,
                         isLoadable = results.isLoadable,
+                        novelCount = results.resultCount,
                         novels = results.novels.map { it.toUi() },
                     )
-
-                    Log.d("moongchi", "updateSearchResult: ${results.novels}")
+                    _isNovelResultEmptyBoxVisibility.value = false
                 } else {
-                    _uiState.value = _uiState.value?.copy(loading = false)
+                    _uiState.value = _uiState.value?.copy(
+                        loading = false,
+                        isLoadable = results.isLoadable,
+                        novelCount = results.resultCount,
+                        novels = emptyList(),
+                    )
                     _isNovelResultEmptyBoxVisibility.value = true
-
-                    Log.d("moongchi", "updateSearchResult: ${results.novels}")
                 }
-            }.onFailure { it ->
-                _uiState.value = _uiState.value?.copy(
-                    loading = false,
-                    error = true
-                )
 
-                Log.d("moongchi", "updateSearchResult: ${it.message}")
+            }.onFailure {
+                _uiState.value = _uiState.value?.copy(
+                    loading = false, error = true
+                )
+                _isNovelResultEmptyBoxVisibility.value = false
             }
         }
     }

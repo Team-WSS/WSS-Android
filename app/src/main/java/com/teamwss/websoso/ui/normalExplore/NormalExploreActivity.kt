@@ -91,7 +91,7 @@ class NormalExploreActivity :
     }
 
     private fun updateView(uiState: NormalExploreUiState) {
-        val header = Header(uiState.novels.count())
+        val header = Header(uiState.novelCount)
         val results = uiState.novels.map { Result(it) }
 
         Log.d("moongchi", "updateView: ${uiState.novels}")
