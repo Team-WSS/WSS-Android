@@ -65,6 +65,7 @@
     <string name="novel_detail_remove_evaluate_warning_body">별점, 관심, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
     <string name="novel_detail_remove_reject">아니오</string>
     <string name="novel_detail_remove_accept">네</string>
+    <string name="novel_detail_tooltip">읽기 상태를 체크하여\n작품을 평가해보세요!</string>
 
     <!-- 작품 소개 -->
     <string name="novel_info_platforms_title">작품 보러가기</string>
@@ -222,6 +223,7 @@
     <string name="blocked_users_cancel">차단 해제</string>
     <string name="blocked_users_title">차단유저 목록</string>
     <string name="blocked_users_empty">차단한 유저가 없어요</string>
+    <string name="blocked_users_unblocked">%s님을 차단 해제했어요</string>
 
     <!-- 환경설정 - 계정정보 뷰 -->
     <string name="account_info_change_user_info">성별/나이 변경</string>
@@ -272,7 +274,7 @@
     <string name="withdraw_check_re_sign_up_description">계정 정보는 탈퇴 즉시 삭제되어 바로 재가입 가능하지만,\n회원가입부터 작품 평가를 다시 해야 해요.</string>
     <string name="withdraw_check_agree">위 주의사항을 모두 확인했고, 탈퇴에 동의합니다.</string>
     <string name="withdraw_button">탈퇴하기</string>
-    <string name="withdraw_max_length">/80</string>
+    <string name="withdraw_max_length">/100</string>
 
     <!-- 프로필 편집 뷰 -->
     <string name="profile_edit_finish">완료</string>
@@ -287,6 +289,7 @@
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>
     <string name="my_activity_dot">·</string>
+    <string name="my_activity_more">활동기록 더보기</string>
 
     <!-- 내 활동 디테일 뷰 -->
     <string name="my_activity_detail_title">내 활동</string>

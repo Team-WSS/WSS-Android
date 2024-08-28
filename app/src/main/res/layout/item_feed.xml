@@ -7,11 +7,11 @@
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.feed.FeedItemClickListener" />
+            type="com.teamwss.websoso.ui.main.feed.FeedItemClickListener" />
 
         <variable
             name="feed"
-            type="com.teamwss.websoso.ui.feed.model.FeedModel" />
+            type="com.teamwss.websoso.ui.main.feed.model.FeedModel" />
 
     </data>
 
@@ -130,6 +130,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
+            isVisible="@{!feed.novel.nothing}"
             android:background="@drawable/btn_feed_novel_info"
             android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -205,11 +206,13 @@
             android:id="@+id/tv_feed_genre"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
+            isVisible="@{!feed.emptyOfRelevantCategories}"
             android:text="@{feed.categories}"
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
-            app:layout_constraintStart_toStartOf="@+id/cl_feed_novel_info"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_feed_novel_info"
             tools:text="로판" />
 
@@ -217,11 +220,12 @@
             android:id="@+id/cl_feed_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="28dp"
             android:onClick="@{(cl_feed_like) -> onClick.onLikeButtonClick(cl_feed_like, feed.id)}"
             app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
-            app:layout_constraintStart_toStartOf="@+id/tv_feed_genre"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_feed_genre">
 
             <ImageView

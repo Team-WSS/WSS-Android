@@ -1,5 +1,8 @@
 package com.teamwss.websoso.ui.myPage.myActivity.model
 
+import java.text.SimpleDateFormat
+import java.util.Locale
+
 data class ActivityModel(
     val feedId: Int,
     val userId: Int,
@@ -24,4 +27,20 @@ data class ActivityModel(
             novelRating?.takeIf { it != null } ?: 0.0f,
             novelRatingCount?.takeIf { it != null } ?: 0
         )
+
+    companion object {
+        fun translateGenres(relevantCategories: List<String>): String {
+            return relevantCategories.joinToString(", ") { category ->
+                Genres.from(category)?.korean ?: category
+            }
+        }
+
+        fun formatDate(inputDate: String): String {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("M월 d일", Locale.getDefault())
+
+            val date = inputFormat.parse(inputDate)
+            return date?.let { outputFormat.format(it) } ?: "Invalid Date"
+        }
+    }
 }

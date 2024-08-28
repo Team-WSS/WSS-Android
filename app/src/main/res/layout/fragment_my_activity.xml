@@ -25,7 +25,7 @@
                 android:id="@+id/btn_my_activity_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="활동기록 더보기"
+                android:text="@string/my_activity_more"
                 android:textColor="@color/primary_100_6A5DFD"
                 android:background="@drawable/bg_my_activity_white_radius_8dp_stroke_primary100"
                 android:elevation="0dp"

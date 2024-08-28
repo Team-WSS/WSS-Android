@@ -27,7 +27,6 @@ class AccountInfoViewModel @Inject constructor(
             }.onSuccess { userInfo ->
                 _userEmail.value = userInfo.email
             }.onFailure {
-                Unit
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.teamwss.websoso.ui.mapper
 
-import com.teamwss.websoso.data.model.CategoriesEntity
 import com.teamwss.websoso.common.ui.model.CategoriesModel
+import com.teamwss.websoso.data.model.CategoriesEntity
 
 fun CategoriesEntity.CategoryEntity.toUi(): CategoriesModel.CategoryModel {
     return CategoriesModel.CategoryModel(

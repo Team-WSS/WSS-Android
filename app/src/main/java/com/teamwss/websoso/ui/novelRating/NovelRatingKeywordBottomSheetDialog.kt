@@ -9,10 +9,10 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
-import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 
@@ -106,13 +106,15 @@ class NovelRatingKeywordBottomSheetDialog :
             removeCurrentSelectedKeywordChip(keyword)
         }
 
-        currentSelectedKeywords.filterNot { it.keywordName in existingKeywords }.forEach { keyword ->
-            addCurrentSelectedKeywordChip(keyword)
-        }
+        currentSelectedKeywords.filterNot { it.keywordName in existingKeywords }
+            .forEach { keyword ->
+                addCurrentSelectedKeywordChip(keyword)
+            }
     }
 
     private fun removeCurrentSelectedKeywordChip(keyword: String) {
-        val chip = binding.wcgNovelRatingKeywordSelectedKeyword.findViewWithTag<WebsosoChip>(keyword)
+        val chip =
+            binding.wcgNovelRatingKeywordSelectedKeyword.findViewWithTag<WebsosoChip>(keyword)
         if (chip != null) binding.wcgNovelRatingKeywordSelectedKeyword.removeView(chip)
     }
 
@@ -145,7 +147,8 @@ class NovelRatingKeywordBottomSheetDialog :
     }
 
     private fun updateSearchKeywordResult(uiState: NovelRatingUiState) {
-        val previousSearchResultKeywords = binding.wcgNovelRatingKeywordSearchResult.children.toList().map { it as WebsosoChip }
+        val previousSearchResultKeywords =
+            binding.wcgNovelRatingKeywordSearchResult.children.toList().map { it as WebsosoChip }
         if (!uiState.keywordsModel.isSearchKeywordProceeding) return
         if (uiState.keywordsModel.isSearchResultKeywordsEmpty) return
         if (uiState.keywordsModel.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
@@ -158,7 +161,8 @@ class NovelRatingKeywordBottomSheetDialog :
 
     private fun updateSearchKeywordResultIsSelected(uiState: NovelRatingUiState) {
         binding.wcgNovelRatingKeywordSearchResult.forEach { chip ->
-            (chip as WebsosoChip).isSelected = uiState.keywordsModel.currentSelectedKeywords.any { it.keywordName == chip.text.toString() }
+            (chip as WebsosoChip).isSelected =
+                uiState.keywordsModel.currentSelectedKeywords.any { it.keywordName == chip.text.toString() }
         }
     }
 
@@ -176,7 +180,8 @@ class NovelRatingKeywordBottomSheetDialog :
                 setOnWebsosoChipClick {
                     novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
                 }
-                isSelected = uiState.keywordsModel.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
+                isSelected =
+                    uiState.keywordsModel.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
             }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
         }
     }

@@ -21,15 +21,13 @@ class MyActivityFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupMyActivitiesAdapter()
+        setUpMyActivitiesAdapter()
         setUpObserve()
         navigateToMyActivityDetail()
     }
 
-    private fun setupMyActivitiesAdapter() {
-        binding.rvMyActivity.apply {
-            adapter = myActivityAdapter
-        }
+    private fun setUpMyActivitiesAdapter() {
+        binding.rvMyActivity.adapter = myActivityAdapter
     }
 
     private fun setUpObserve() {
