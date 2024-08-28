@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.myPage.myLibrary
+package com.teamwss.websoso.ui.main.myPage.myLibrary
 
 import android.os.Bundle
 import android.text.SpannableString
@@ -16,7 +16,7 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
-import com.teamwss.websoso.ui.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
+import com.teamwss.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
