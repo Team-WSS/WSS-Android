@@ -17,4 +17,8 @@ class AvatarChangeViewHolder(
             onAvatarClick(avatar)
         }
     }
+
+    fun updateSelection(isRepresentative: Boolean) {
+        binding.isSelected = isRepresentative
+    }
 }

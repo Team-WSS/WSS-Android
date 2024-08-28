@@ -35,11 +35,8 @@ class ProfileEditViewModel @Inject constructor(
     private val _profileEditUiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
     val profileEditUiState: LiveData<ProfileEditUiState> get() = _profileEditUiState
 
-    private val _avatarChangeUiState = MutableLiveData<AvatarChangeUiState>(AvatarChangeUiState.Loading)
+    private val _avatarChangeUiState = MutableLiveData<AvatarChangeUiState>(AvatarChangeUiState())
     val avatarChangeUiState: LiveData<AvatarChangeUiState> get() = _avatarChangeUiState
-
-    private val _selectedAvatar = MutableLiveData<AvatarModel>()
-    val selectedAvatar: LiveData<AvatarModel> get() = _selectedAvatar
 
     private val invalidLengthRegex = Regex("^\\s|\\s$")
     private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
@@ -181,46 +178,58 @@ class ProfileEditViewModel @Inject constructor(
     fun fetchAvatars() {
         viewModelScope.launch {
             runCatching {
-                _avatarChangeUiState.value = AvatarChangeUiState.Loading
+                _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
+                    loading = true,
+                )
                 avatarRepository.fetchAvatars()
             }.onSuccess { avatars ->
                 val avatarsModel = avatars.map { it.toUi() }
-                _avatarChangeUiState.value = AvatarChangeUiState.Success(avatarsModel)
+                _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
+                    avatars = avatarsModel,
+                    loading = false,
+                )
             }.onFailure {
-                _avatarChangeUiState.value = AvatarChangeUiState.Error
+                _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
+                    error = true,
+                    loading = false,
+                )
             }
         }
     }
 
     fun updateSelectedAvatar(avatar: AvatarModel) {
-        _avatarChangeUiState.value = getCurrentAvatars().map { previousAvatar ->
-            if (previousAvatar.avatarId == avatar.avatarId) previousAvatar.copy(isRepresentative = true) else previousAvatar.copy(isRepresentative = false)
-        }.let { AvatarChangeUiState.Success(it) }
-        _selectedAvatar.value = avatar
-    }
-
-    private fun getCurrentAvatars(): List<AvatarModel> {
-        return (avatarChangeUiState.value as? AvatarChangeUiState.Success)?.avatars ?: emptyList()
+        _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
+            avatars = avatarChangeUiState.value?.avatars?.map { previousAvatar ->
+                if (previousAvatar.avatarId == avatar.avatarId) {
+                    previousAvatar.copy(isRepresentative = true)
+                } else {
+                    previousAvatar.copy(isRepresentative = false)
+                }
+            } ?: emptyList(),
+            selectedAvatar = avatar,
+        )
     }
 
     fun updateRepresentativeAvatar() {
+        val selectedAvatar = avatarChangeUiState.value?.selectedAvatar ?: return
         _profileEditUiState.value = profileEditUiState.value?.copy(
             profile = profileEditUiState.value?.profile?.copy(
-                avatarId = selectedAvatar.value?.avatarId ?: 0,
-                avatarThumbnail = selectedAvatar.value?.avatarThumbnail ?: ""
+                avatarId = selectedAvatar.avatarId,
+                avatarThumbnail = selectedAvatar.avatarThumbnail
             ) ?: ProfileModel(),
         )
     }
 
     fun getRepresentativeAvatar(): AvatarModel {
         return profileEditUiState.value?.profile?.let { profile ->
-            getCurrentAvatars().find { it.avatarId == profile.avatarId } ?: AvatarModel()
+            avatarChangeUiState.value?.avatars?.find { it.avatarId == profile.avatarId }
         } ?: AvatarModel()
     }
 
     fun getFormattedSpanCount(): Int {
-        return getCurrentAvatars().size.let {
-            if (it > MAX_CHARACTER_COLUMN_COUNT) MAX_CHARACTER_COLUMN_COUNT else it
+        return avatarChangeUiState.value?.avatars?.size.let { avatarCount ->
+            if (avatarCount == null || avatarCount < MAX_CHARACTER_COLUMN_COUNT) avatarCount ?: 1
+            else MAX_CHARACTER_COLUMN_COUNT
         }
     }
 
@@ -238,6 +247,10 @@ class ProfileEditViewModel @Inject constructor(
         val resourceName = "lottie_${avatarName}_${randomNumber}"
         val resourceId = R.raw::class.java.getField(resourceName).getInt(null)
         return if (resourceId != 0) resourceId else R.raw.lottie_sosocat_0
+    }
+
+    fun getSelectedAvatar(): AvatarModel {
+        return avatarChangeUiState.value?.selectedAvatar ?: AvatarModel()
     }
 
     companion object {

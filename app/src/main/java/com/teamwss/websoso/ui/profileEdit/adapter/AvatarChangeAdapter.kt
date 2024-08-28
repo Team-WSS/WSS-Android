@@ -24,7 +24,13 @@ class AvatarChangeAdapter(
     }
 
     override fun onBindViewHolder(holder: AvatarChangeViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val currentAvatar = getItem(position)
+        if (holder.itemView.tag == null) {
+            holder.bind(currentAvatar)
+            holder.itemView.tag = currentAvatar.avatarId
+        } else {
+            holder.updateSelection(currentAvatar.isRepresentative)
+        }
     }
 
     companion object {

@@ -11,9 +11,6 @@ import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogAvatarChangeBinding
 import com.teamwss.websoso.ui.profileEdit.adapter.AvatarChangeAdapter
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
-import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState.Error
-import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState.Loading
-import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState.Success
 
 class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBinding>(R.layout.dialog_avatar_change) {
     private val profileEditViewModel: ProfileEditViewModel by activityViewModels()
@@ -44,23 +41,25 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
     private fun setupObserver() {
         profileEditViewModel.avatarChangeUiState.observe(viewLifecycleOwner) { uiState ->
             handleAvatarChangeUiState(uiState)
-        }
-        profileEditViewModel.selectedAvatar.observe(viewLifecycleOwner) { avatar ->
-            updateAvatarAnimation(profileEditViewModel.getAvatarAnimation(avatar.avatarId))
+            updateAvatarAnimation(
+                profileEditViewModel.getAvatarAnimation(profileEditViewModel.getSelectedAvatar().avatarId)
+            )
         }
     }
 
     private fun handleAvatarChangeUiState(uiState: AvatarChangeUiState) {
-        when (uiState) {
-            is Success -> {
+        when {
+            uiState.loading -> {
+
+            }
+
+            uiState.error -> {
+
+            }
+
+            else -> {
                 setupRecyclerView()
                 avatarChangeAdapter.submitList(uiState.avatars)
-            }
-
-            Loading -> {
-            }
-
-            Error -> {
             }
         }
     }
