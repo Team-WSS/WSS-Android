@@ -1,10 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_my_activity"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_my_activity_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/my_activity_more"
+                android:textColor="@color/primary_100_6A5DFD"
+                android:background="@drawable/bg_my_activity_white_radius_8dp_stroke_primary100"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="40dp"
+                android:layout_marginHorizontal="20dp"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>
