@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.profileEdit
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,9 +35,6 @@ class ProfileEditViewModel @Inject constructor(
 
     private val _avatarChangeUiState = MutableLiveData<AvatarChangeUiState>(AvatarChangeUiState.Loading)
     val avatarChangeUiState: LiveData<AvatarChangeUiState> get() = _avatarChangeUiState
-
-    private val _avatarSpanCount = MutableLiveData<Int>()
-    val avatarSpanCount: LiveData<Int> get() = _avatarSpanCount
 
     private val invalidLengthRegex = Regex("^\\s|\\s$")
     private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
