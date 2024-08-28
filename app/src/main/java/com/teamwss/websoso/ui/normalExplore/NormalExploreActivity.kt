@@ -58,7 +58,8 @@ class NormalExploreActivity :
         binding.apply {
             etNormalExploreSearchContent.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    normalExploreViewModel?.updateSearchResult(isSearchButtonClick = true) ?: throw IllegalStateException()
+                    normalExploreViewModel?.updateSearchResult(isSearchButtonClick = true)
+                        ?: throw IllegalStateException()
                     binding.etNormalExploreSearchContent.clearFocus() // EditText 포커스 제거
                     hideKeyboard()
                     true
@@ -92,11 +93,22 @@ class NormalExploreActivity :
 
         override fun onSearchCancelButtonClick() {
             normalExploreViewModel.updateSearchWordEmpty()
+            showKeyboard()
         }
 
         override fun onNovelInquireButtonClick() {
             // TODO 카카오톡 채널로 연결
         }
+    }
+
+    private fun showKeyboard() {
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        binding.etNormalExploreSearchContent.requestFocus()
+        inputMethodManager.showSoftInput(
+            binding.etNormalExploreSearchContent,
+            InputMethodManager.SHOW_IMPLICIT,
+        )
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
@@ -144,7 +156,6 @@ class NormalExploreActivity :
 
     companion object {
 
-        fun getIntent(context: Context): Intent =
-            Intent(context, NormalExploreActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
     }
 }
