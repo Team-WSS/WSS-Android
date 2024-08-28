@@ -10,7 +10,7 @@ class AvatarChangeViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(avatar: AvatarModel) {
-        binding.imageUrl = avatar.avatarImage
+        binding.imageUrl = avatar.avatarThumbnail
         binding.isSelected = avatar.isRepresentative
 
         binding.root.setOnClickListener {

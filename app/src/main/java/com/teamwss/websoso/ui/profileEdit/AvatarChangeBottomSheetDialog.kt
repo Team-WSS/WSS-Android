@@ -10,6 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogAvatarChangeBinding
 import com.teamwss.websoso.ui.profileEdit.adapter.AvatarChangeAdapter
+import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState.Error
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState.Loading
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState.Success
@@ -25,30 +26,43 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
         binding.onCancelClick = ::onCancelClick
         binding.onSaveClick = ::onSaveClick
 
-        setupObserver()
+        bindViewModel()
         setupDialogBehavior()
+        setupObserver()
     }
 
-    private fun setupObserver() {
-        profileEditViewModel.avatarChangeUiState.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
-                is Success -> {
-                    setupRecyclerView()
-                    avatarChangeAdapter.submitList(uiState.avatars)
-                }
-
-                Loading -> {
-                }
-
-                Error -> {
-                }
-            }
-        }
+    private fun bindViewModel() {
+        binding.viewModel = profileEditViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun setupDialogBehavior() {
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
         (dialog as BottomSheetDialog).behavior.skipCollapsed = true
+    }
+
+    private fun setupObserver() {
+        profileEditViewModel.avatarChangeUiState.observe(viewLifecycleOwner) { uiState ->
+            handleAvatarChangeUiState(uiState)
+        }
+        profileEditViewModel.selectedAvatar.observe(viewLifecycleOwner) { avatar ->
+            updateAvatarAnimation(profileEditViewModel.getAvatarAnimation(avatar.avatarId))
+        }
+    }
+
+    private fun handleAvatarChangeUiState(uiState: AvatarChangeUiState) {
+        when (uiState) {
+            is Success -> {
+                setupRecyclerView()
+                avatarChangeAdapter.submitList(uiState.avatars)
+            }
+
+            Loading -> {
+            }
+
+            Error -> {
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -61,6 +75,13 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
         }
     }
 
+    private fun updateAvatarAnimation(lottieId: Int) {
+        binding.lavProfileEditAvatar.apply {
+            setAnimation(lottieId)
+            playAnimation()
+        }
+    }
+
     fun onSaveClick() {
         profileEditViewModel.updateRepresentativeAvatar()
         dismiss()
@@ -68,5 +89,10 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
     fun onCancelClick() {
         dismiss()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        profileEditViewModel.updateSelectedAvatar(profileEditViewModel.getRepresentativeAvatar())
     }
 }

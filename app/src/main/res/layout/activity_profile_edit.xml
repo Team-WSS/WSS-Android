@@ -71,11 +71,12 @@
             android:layout_marginTop="38dp"
             android:onClick="@{() -> onAvatarChangeClick.invoke()}"
             app:isCircularImage="@{true}"
+            app:isVectorImage="@{true}"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_navigate_back"
-            app:loadImageUrl="@{viewModel.profileEditUiState.profile.avatarImageUrl}"
+            app:loadImageUrl="@{viewModel.profileEditUiState.profile.avatarThumbnail}"
             tools:src="@drawable/ic_profile_edit_clear" />
 
         <ImageView

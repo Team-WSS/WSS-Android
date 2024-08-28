@@ -7,6 +7,6 @@ fun AvatarEntity.toUi() = AvatarModel(
     avatarId = avatarId,
     avatarName = avatarName,
     avatarLine = avatarLine,
-    avatarImage = avatarImage,
+    avatarThumbnail = avatarImage,
     isRepresentative = isRepresentative,
 )

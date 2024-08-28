@@ -45,13 +45,15 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_title"
+            app:lottie_autoPlay="true" />
 
         <TextView
             android:id="@+id/tv_profile_edit_avatar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
+            android:text="@{viewModel.selectedAvatar.avatarName}"
             android:textAppearance="@style/headline1"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:text="@{viewModel.selectedAvatar.avatarLine}"
             android:textAppearance="@style/title3"
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,11 +80,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:clipToPadding="false"
-            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_line"
             tools:itemCount="5"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/item_profile_edit_avatar"
             tools:spanCount="3" />
 

@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.R
 import com.teamwss.websoso.data.repository.AvatarRepository
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.profileEdit.model.Avatar
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 import com.teamwss.websoso.ui.profileEdit.model.Genre
@@ -35,6 +37,9 @@ class ProfileEditViewModel @Inject constructor(
 
     private val _avatarChangeUiState = MutableLiveData<AvatarChangeUiState>(AvatarChangeUiState.Loading)
     val avatarChangeUiState: LiveData<AvatarChangeUiState> get() = _avatarChangeUiState
+
+    private val _selectedAvatar = MutableLiveData<AvatarModel>()
+    val selectedAvatar: LiveData<AvatarModel> get() = _selectedAvatar
 
     private val invalidLengthRegex = Regex("^\\s|\\s$")
     private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
@@ -179,7 +184,9 @@ class ProfileEditViewModel @Inject constructor(
                 _avatarChangeUiState.value = AvatarChangeUiState.Loading
                 avatarRepository.fetchAvatars()
             }.onSuccess { avatars ->
-                _avatarChangeUiState.value = AvatarChangeUiState.Success(avatars.map { it.toUi() })
+                val avatarsModel = avatars.map { it.toUi() }
+                _avatarChangeUiState.value = AvatarChangeUiState.Success(avatarsModel)
+                updateSelectedAvatar(avatarsModel.find { it.isRepresentative } ?: AvatarModel())
             }.onFailure {
                 _avatarChangeUiState.value = AvatarChangeUiState.Error
             }
@@ -187,25 +194,51 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateSelectedAvatar(avatar: AvatarModel) {
-        _avatarChangeUiState.value = (avatarChangeUiState.value as? AvatarChangeUiState.Success)?.avatars?.map { previousAvatar ->
+        _avatarChangeUiState.value = getCurrentAvatars().map { previousAvatar ->
             if (previousAvatar.avatarId == avatar.avatarId) previousAvatar.copy(isRepresentative = true) else previousAvatar.copy(isRepresentative = false)
-        }.let { AvatarChangeUiState.Success(it ?: emptyList()) }
+        }.let { AvatarChangeUiState.Success(it) }
+        _selectedAvatar.value = avatar
+    }
+
+    private fun getCurrentAvatars(): List<AvatarModel> {
+        return (avatarChangeUiState.value as? AvatarChangeUiState.Success)?.avatars ?: emptyList()
     }
 
     fun updateRepresentativeAvatar() {
-        val selectedAvatar = (avatarChangeUiState.value as? AvatarChangeUiState.Success)?.avatars?.find { it.isRepresentative } ?: return
         _profileEditUiState.value = profileEditUiState.value?.copy(
             profile = profileEditUiState.value?.profile?.copy(
-                avatarId = selectedAvatar.avatarId,
-                avatarImageUrl = selectedAvatar.avatarImage
+                avatarId = selectedAvatar.value?.avatarId ?: 0,
+                avatarThumbnail = selectedAvatar.value?.avatarThumbnail ?: ""
             ) ?: ProfileModel(),
         )
     }
 
+    fun getRepresentativeAvatar(): AvatarModel {
+        return profileEditUiState.value?.profile?.let { profile ->
+            getCurrentAvatars().find { it.avatarId == profile.avatarId } ?: AvatarModel()
+        } ?: AvatarModel()
+    }
+
     fun getFormattedSpanCount(): Int {
-        return (avatarChangeUiState.value as? AvatarChangeUiState.Success)?.avatars?.size?.let {
+        return getCurrentAvatars().size.let {
             if (it > MAX_CHARACTER_COLUMN_COUNT) MAX_CHARACTER_COLUMN_COUNT else it
-        } ?: 0
+        }
+    }
+
+    fun getAvatarAnimation(avatarId: Int): Int {
+        Avatar.entries.forEach { avatar ->
+            if (avatar.avatarId == avatarId) {
+                return getLottieResourceId(avatar.avatarName)
+            }
+        }
+        return R.raw.lottie_sosocat_0
+    }
+
+    private fun getLottieResourceId(avatarName: String): Int {
+        val randomNumber = (0..1).random()
+        val resourceName = "lottie_${avatarName}_${randomNumber}"
+        val resourceId = R.raw::class.java.getField(resourceName).getInt(null)
+        return if (resourceId != 0) resourceId else R.raw.lottie_sosocat_0
     }
 
     companion object {
