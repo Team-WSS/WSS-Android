@@ -192,7 +192,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
 
         initView()
         feedViewModel.updateFeeds()
-        observeUiState()
+        setupObserver()
     }
 
     private fun initView() {
@@ -250,7 +250,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         }
     }
 
-    private fun observeUiState() {
+    private fun setupObserver() {
         feedViewModel.feedUiState.observe(viewLifecycleOwner) { feedUiState ->
             when {
                 feedUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
