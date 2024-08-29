@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.data.repository.KeywordRepository
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
+import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +22,8 @@ class DetailExploreViewModel @Inject constructor(
     private val _selectedGenres: MutableLiveData<MutableList<Genre>> =
         MutableLiveData(mutableListOf())
 
-    private val _selectedSeriesStatus: MutableLiveData<String?> = MutableLiveData()
-    val selectedStatus: LiveData<String?> get() = _selectedSeriesStatus
+    private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
+    val selectedStatus: LiveData<SeriesStatus?> get() = _selectedSeriesStatus
 
     private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
     val selectedRating: LiveData<Float?> get() = _selectedRating
@@ -59,7 +60,7 @@ class DetailExploreViewModel @Inject constructor(
 
     private fun isEnabled(): Boolean {
         val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
-        val isStatusChipSelected: Boolean = _selectedSeriesStatus.value.isNullOrEmpty().not()
+        val isStatusChipSelected: Boolean = _selectedSeriesStatus.value != null
         val isRatingChipSelected: Boolean = _selectedRating.value != null
 
         return isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
@@ -81,7 +82,7 @@ class DetailExploreViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedSeriesStatus(status: String?) {
+    fun updateSelectedSeriesStatus(status: SeriesStatus?) {
         _selectedSeriesStatus.value = status
     }
 

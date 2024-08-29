@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.detailExplore.info
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
@@ -11,6 +12,7 @@ import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.Rating
+import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,10 +63,15 @@ class DetailExploreInfoFragment :
                 when (isChecked) {
                     true -> {
                         seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
-                        detailExploreViewModel.updateSelectedSeriesStatus(chip.text.toString())
+                        
+                        val status = SeriesStatus.from(chip.text.toString())
+                        detailExploreViewModel.updateSelectedSeriesStatus(status)
                     }
 
-                    false -> detailExploreViewModel.updateSelectedSeriesStatus(null)
+                    false -> {
+                        detailExploreViewModel.updateSelectedSeriesStatus(null)
+                    }
+
                 }
             }
         }
@@ -104,11 +111,13 @@ class DetailExploreInfoFragment :
 
     private fun setupObserver() {
         detailExploreViewModel.selectedStatus.observe(viewLifecycleOwner) { selectedStatus ->
+            val selectedChip = selectedStatus?.title
+
             listOf(
                 binding.chipDetailExploreInfoStatusInSeries,
                 binding.chipDetailExploreInfoStatusComplete,
             ).forEach { chip ->
-                chip.isChecked = selectedStatus == chip.text.toString()
+                chip.isChecked = chip.text.toString() == selectedChip
             }
         }
 
