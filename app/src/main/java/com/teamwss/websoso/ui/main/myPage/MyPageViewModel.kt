@@ -9,7 +9,6 @@ import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,10 +20,10 @@ class MyPageViewModel @Inject constructor(
     val myProfile: LiveData<MyProfileEntity> get() = _myProfile
 
     init {
-        fetchUserProfile()
+        updateUserProfile()
     }
 
-    fun fetchUserProfile() {
+    private fun updateUserProfile() {
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchMyProfile()
