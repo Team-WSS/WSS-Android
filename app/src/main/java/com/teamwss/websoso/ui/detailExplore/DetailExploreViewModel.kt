@@ -50,17 +50,17 @@ class DetailExploreViewModel @Inject constructor(
 
     init {
         _isInfoChipSelected.addSource(_selectedGenres) {
-            _isInfoChipSelected.value = isEnabled()
+            _isInfoChipSelected.value = isInfoChipSelectedEnabled()
         }
         _isInfoChipSelected.addSource(_selectedSeriesStatus) {
-            _isInfoChipSelected.value = isEnabled()
+            _isInfoChipSelected.value = isInfoChipSelectedEnabled()
         }
         _isInfoChipSelected.addSource(_selectedRating) {
-            _isInfoChipSelected.value = isEnabled()
+            _isInfoChipSelected.value = isInfoChipSelectedEnabled()
         }
     }
 
-    private fun isEnabled(): Boolean {
+    private fun isInfoChipSelectedEnabled(): Boolean {
         val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
         val isStatusChipSelected: Boolean = _selectedSeriesStatus.value != null
         val isRatingChipSelected: Boolean = _selectedRating.value != null
