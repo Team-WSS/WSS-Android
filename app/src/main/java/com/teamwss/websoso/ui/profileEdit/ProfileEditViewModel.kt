@@ -11,13 +11,15 @@ import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.profileEdit.model.Avatar
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
+import com.teamwss.websoso.domain.model.NicknameValidationResult
+import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_NICKNAME_DUPLICATION
+import com.teamwss.websoso.domain.model.NicknameValidationResult.NETWORK_ERROR
+import com.teamwss.websoso.domain.model.NicknameValidationResult.NONE
+import com.teamwss.websoso.domain.model.NicknameValidationResult.UNKNOWN_ERROR
+import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
+import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME_SPELLING
+import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.ui.profileEdit.model.Genre
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_DUPLICATION
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_LENGTH
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_SPECIAL_CHARACTER
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.NONE
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
@@ -28,6 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
+    private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
     private val userRepository: UserRepository,
     private val avatarRepository: AvatarRepository,
 ) : ViewModel() {
@@ -67,7 +70,7 @@ class ProfileEditViewModel @Inject constructor(
                     nickname = nickname,
                 ) ?: NicknameModel(),
             ) ?: ProfileModel(),
-            nicknameEditResult = if (profileEditUiState.value?.previousProfile?.nicknameModel?.nickname == nickname) VALID_NICKNAME else NONE,
+            nicknameEditResult = NONE,
         )
     }
 
@@ -100,36 +103,44 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun checkNicknameValidity(nickname: String) {
-        val result = nickname.getIsNicknameValid()
-        if (result != VALID_NICKNAME) {
-            _profileEditUiState.value = profileEditUiState.value?.copy(
-                nicknameEditResult = result,
-            )
-        } else checkNicknameDuplication(nickname)
-    }
-
-    private fun checkNicknameDuplication(nickname: String) {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchNicknameValidity(nickname)
-            }.onSuccess { isDuplicated ->
-                if (isDuplicated) {
-                    _profileEditUiState.value = profileEditUiState.value?.copy(
-                        nicknameEditResult = VALID_NICKNAME,
-                    )
-                } else {
-                    _profileEditUiState.value = profileEditUiState.value?.copy(
-                        nicknameEditResult = INVALID_NICKNAME_DUPLICATION,
-                    )
-                }
+                checkNicknameValidityUseCase(nickname)
+            }.onSuccess { result ->
+                _profileEditUiState.value = profileEditUiState.value?.copy(
+                    nicknameEditResult = if (result == VALID_NICKNAME_SPELLING) {
+                        checkNicknameDuplication(nickname)
+                    } else result,
+                )
+            }.onFailure {
+                _profileEditUiState.value = profileEditUiState.value?.copy(
+                    nicknameEditResult = UNKNOWN_ERROR,
+                )
             }
         }
     }
 
+    private suspend fun checkNicknameDuplication(nickname: String): NicknameValidationResult {
+        runCatching {
+            userRepository.fetchNicknameValidity(nickname)
+        }.onSuccess { isNicknameValid ->
+            return if (isNicknameValid) VALID_NICKNAME
+            else INVALID_NICKNAME_DUPLICATION
+        }.onFailure {
+            return NETWORK_ERROR
+        }
+        return UNKNOWN_ERROR
+    }
+
     fun updateProfile() {
-        if (profileEditUiState.value?.nicknameEditResult != VALID_NICKNAME) return
+        val isInvalidNickname = profileEditUiState.value?.nicknameEditResult != VALID_NICKNAME
+        val isNicknameChanged =
+            profileEditUiState.value?.profile?.nicknameModel?.nickname != profileEditUiState.value?.previousProfile?.nicknameModel?.nickname
+        if (isInvalidNickname && isNicknameChanged) return
+
         val previousProfile = profileEditUiState.value?.previousProfile ?: return
         val currentProfile = profileEditUiState.value?.profile ?: return
+
         viewModelScope.launch {
             runCatching {
                 userRepository.saveUserProfile(
@@ -156,22 +167,12 @@ class ProfileEditViewModel @Inject constructor(
         return if (oldValue == newValue) null else newValue
     }
 
-    private fun String.getIsNicknameValid(): NicknameEditResult {
-        return when {
-            this.length !in 2..10 -> INVALID_NICKNAME_LENGTH
-            this.contains(invalidLengthRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            this.contains(specialCharacterRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            this.contains(hangulConsonantAndVowelRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            else -> VALID_NICKNAME
-        }
-    }
-
-    fun updateCheckDuplicateNicknameBtnEnabled() {
-        val nickname = profileEditUiState.value?.profile?.nicknameModel?.nickname ?: ""
-        val isCheckDuplicateNicknameBtnEnabled = nickname.isNotEmpty() && profileEditUiState.value?.nicknameEditResult == NONE
-        if (isCheckDuplicateNicknameBtnEnabled == profileEditUiState.value?.isCheckDuplicateNicknameEnabled) return
+    fun updateCheckDuplicateNicknameButtonEnabled() {
+        val isEnable =
+            profileEditUiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && profileEditUiState.value?.nicknameEditResult == NONE
+        if (isEnable == profileEditUiState.value?.isCheckDuplicateNicknameEnabled) return
         _profileEditUiState.value = profileEditUiState.value?.copy(
-            isCheckDuplicateNicknameEnabled = isCheckDuplicateNicknameBtnEnabled,
+            isCheckDuplicateNicknameEnabled = isEnable,
         )
     }
 

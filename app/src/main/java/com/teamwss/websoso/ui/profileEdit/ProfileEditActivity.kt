@@ -15,10 +15,9 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
+import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.NONE
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
@@ -53,7 +52,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             updateNicknameEditTextUi(uiState)
             updateIntroductionEditTextUi(uiState.profile.introduction)
             handleProfileEditResult(uiState.profileEditResult)
-            profileEditViewModel.updateCheckDuplicateNicknameBtnEnabled()
+            profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
         }
     }
 
@@ -83,14 +82,17 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             AppCompatResources.getColorStateList(this@ProfileEditActivity, R.color.gray_300_52515F).defaultColor
         )
         tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname.isNotEmpty()
-        tvProfileEditNicknameError.text = uiState.nicknameEditResult.message
-        val defaultState = uiState.nicknameEditResult != VALID_NICKNAME && uiState.nicknameEditResult != NONE
+        tvProfileEditNicknameResult.isSelected = uiState.nicknameEditResult == VALID_NICKNAME
+        tvProfileEditNicknameResult.text = uiState.nicknameEditResult.profileEditMessage
+
         when {
-            defaultState -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
+            uiState.defaultState -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
             uiState.profile.nicknameModel.hasFocus -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp)
+            uiState.nicknameEditResult == VALID_NICKNAME -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_primary_100_radius_12dp)
             else -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_gray_50_radius_12dp)
         }
-        ivProfileEditNicknameClear.isSelected = defaultState
+
+        ivProfileEditNicknameClear.isSelected = uiState.defaultState
     }
 
     private fun getColoredText(text: String, wordsToColor: List<String>, color: Int): SpannableString {

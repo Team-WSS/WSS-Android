@@ -18,18 +18,8 @@ data class NicknameModel(
     val hasFocus: Boolean = false,
 ) : Parcelable
 
-enum class NicknameEditResult(
-    val message: String,
-) {
-    INVALID_NICKNAME_DUPLICATION("이미 사용 중인 닉네임이에요"),
-    INVALID_NICKNAME_LENGTH("한글, 영문, 숫자 2~10자까지 입력가능해요"),
-    INVALID_NICKNAME_SPECIAL_CHARACTER("사용할 수 없는 단어가 포함되어 있어요"),
-    VALID_NICKNAME(""),
-    NONE(""),
-}
-
 sealed interface ProfileEditResult {
-    object Loading : ProfileEditResult
-    object Success : ProfileEditResult
-    object Failure : ProfileEditResult
+    data object Loading : ProfileEditResult
+    data object Success : ProfileEditResult
+    data object Failure : ProfileEditResult
 }
