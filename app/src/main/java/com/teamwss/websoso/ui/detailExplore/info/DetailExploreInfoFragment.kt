@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.detailExplore.info
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
@@ -18,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailExploreInfoFragment :
     BaseFragment<FragmentDetailExploreInfoBinding>(R.layout.fragment_detail_explore_info) {
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
-    private val detailExploreInfoViewModel: DetailExploreInfoViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,7 +29,7 @@ class DetailExploreInfoFragment :
     }
 
     private fun bindViewModel() {
-        binding.detailExploreInfoviewModel = detailExploreInfoViewModel
+        binding.detailExploreViewModel = detailExploreViewModel
         binding.lifecycleOwner = this
     }
 
@@ -47,7 +45,7 @@ class DetailExploreInfoFragment :
                 setWebsosoChipPaddingVertical(30f)
                 setWebsosoChipPaddingHorizontal(12f)
                 setWebsosoChipRadius(45f)
-                setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre.title) }
+                setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }

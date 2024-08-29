@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="detailExploreInfoviewModel"
-            type="com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoViewModel" />
+            name="detailExploreViewModel"
+            type="com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,7 +91,7 @@
             style="@style/HarryMoongChi.Chip.Choice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/detail_explore_info_rating_lowest, detailExploreInfoviewModel.ratings[0])}"
+            android:text="@{String.format(@string/detail_explore_info_rating_lowest, detailExploreViewModel.ratings[0])}"
             app:layout_constraintEnd_toStartOf="@id/chip_detail_explore_info_rating_lower"
             app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_rating"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_rating" />
@@ -102,7 +102,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@{String.format(@string/detail_explore_info_rating_lower, detailExploreInfoviewModel.ratings[1])}"
+            android:text="@{String.format(@string/detail_explore_info_rating_lower, detailExploreViewModel.ratings[1])}"
             app:layout_constraintBottom_toBottomOf="@id/chip_detail_explore_info_rating_lowest"
             app:layout_constraintEnd_toEndOf="@id/chip_detail_explore_info_status_complete"
             app:layout_constraintStart_toEndOf="@id/chip_detail_explore_info_rating_lowest"
@@ -114,7 +114,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@{String.format(@string/detail_explore_info_rating_higher, detailExploreInfoviewModel.ratings[2])}"
+            android:text="@{String.format(@string/detail_explore_info_rating_higher, detailExploreViewModel.ratings[2])}"
             app:layout_constraintEnd_toStartOf="@id/chip_detail_explore_info_rating_highest"
             app:layout_constraintStart_toStartOf="@id/chip_detail_explore_info_rating_lowest"
             app:layout_constraintTop_toBottomOf="@id/chip_detail_explore_info_rating_lowest" />
@@ -125,7 +125,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@{String.format(@string/detail_explore_info_rating_highest, detailExploreInfoviewModel.ratings[3])}"
+            android:text="@{String.format(@string/detail_explore_info_rating_highest, detailExploreViewModel.ratings[3])}"
             app:layout_constraintBottom_toBottomOf="@+id/chip_detail_explore_info_rating_higher"
             app:layout_constraintEnd_toEndOf="@id/chip_detail_explore_info_rating_lower"
             app:layout_constraintStart_toEndOf="@id/chip_detail_explore_info_rating_higher"
