@@ -42,7 +42,66 @@ class FeedDetailViewModel @Inject constructor(
                 }.onSuccess { feedDetail ->
                     _feedDetailUiState.value = feedDetail.copy(loading = false)
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateReportedSpoilerFeed() {
+        feedDetailUiState.value?.let { feedDetailUiState ->
+            viewModelScope.launch {
+                _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveSpoilerFeed(feedId)
+                }.onSuccess {
+                    _feedDetailUiState.value = feedDetailUiState.copy(loading = false)
+                }.onFailure {
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateReportedImpertinenceFeed() {
+        feedDetailUiState.value?.let { feedDetailUiState ->
+            viewModelScope.launch {
+                _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveImpertinenceFeed(feedId)
+                }.onSuccess {
+                    _feedDetailUiState.value = feedDetailUiState.copy(loading = false)
+                }.onFailure {
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateRemovedFeed() {
+        feedDetailUiState.value?.let { feedDetailUiState ->
+            viewModelScope.launch {
+                _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
+                runCatching {
+                    feedRepository.saveRemovedFeed(feedId)
+                }.onSuccess {
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                    )
+                }.onFailure {
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
                 }
             }
         }
@@ -73,12 +132,16 @@ class FeedDetailViewModel @Inject constructor(
     fun dispatchComment(comment: String) {
         feedDetailUiState.value?.let { feedDetailUiState ->
             viewModelScope.launch {
+                _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
                 runCatching {
                     feedRepository.saveComment(feedId, comment)
                 }.onSuccess {
                     updateComments(feedId)
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
                 }
             }
         }
@@ -87,12 +150,16 @@ class FeedDetailViewModel @Inject constructor(
     fun modifyComment(comment: String) {
         feedDetailUiState.value?.let { feedDetailUiState ->
             viewModelScope.launch {
+                _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
                 runCatching {
                     feedRepository.saveModifiedComment(feedId, commentId, comment)
                 }.onSuccess {
                     updateComments(feedId)
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
                 }
             }
         }
@@ -105,10 +172,14 @@ class FeedDetailViewModel @Inject constructor(
                     feedRepository.fetchComments(feedId)
                 }.onSuccess { comments ->
                     _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
                         comments = comments.comments.map { it.toUi() }
                     )
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
                 }
             }
         }
@@ -123,7 +194,10 @@ class FeedDetailViewModel @Inject constructor(
                 }.onSuccess {
                     _feedDetailUiState.value = feedDetailUiState.copy(loading = false)
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
                 }
             }
         }
@@ -138,7 +212,10 @@ class FeedDetailViewModel @Inject constructor(
                 }.onSuccess {
                     _feedDetailUiState.value = feedDetailUiState.copy(loading = false)
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
                 }
             }
         }
@@ -152,10 +229,14 @@ class FeedDetailViewModel @Inject constructor(
                     feedRepository.deleteComment(feedId, commentId)
                 }.onSuccess {
                     _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
                         comments = feedDetailUiState.comments.filter { it.commentId != commentId }
                     )
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
                 }
             }
         }

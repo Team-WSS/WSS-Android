@@ -144,7 +144,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     private fun setupRemovingFeed(feedId: Long) {
         showDialog<DialogRemovePopupMenuBinding>(
             menuType = REMOVE_FEED.name,
-            event = { },
+            event = { feedDetailViewModel.updateRemovedFeed().also { finish() } },
         )
     }
 
@@ -158,14 +158,14 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     private fun MenuFeedPopupBinding.setupNotMineByMenuType(id: Long, menuType: MenuType) {
         onFirstItemClick = {
             when (menuType) {
-                FEED -> setupReportingSpoilerFeed(id)
+                FEED -> setupReportingSpoilerFeed()
                 COMMENT -> setupReportingSpoilerComment(id)
             }
             popupMenu.dismiss()
         }
         onSecondItemClick = {
             when (menuType) {
-                FEED -> setupReportingImpertinenceFeed(id)
+                FEED -> setupReportingImpertinenceFeed()
                 COMMENT -> setupReportingImpertinenceComment(id)
             }
             popupMenu.dismiss()
@@ -175,10 +175,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         tvFeedPopupSecondItem.isSelected = false
     }
 
-    private fun setupReportingSpoilerFeed(feedId: Long) {
+    private fun setupReportingSpoilerFeed() {
         showDialog<DialogReportPopupMenuBinding>(
             menuType = SPOILER_FEED.name,
-            event = { },
+            event = { feedDetailViewModel.updateReportedSpoilerFeed() },
         )
     }
 
@@ -189,10 +189,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         )
     }
 
-    private fun setupReportingImpertinenceFeed(feedId: Long) {
+    private fun setupReportingImpertinenceFeed() {
         showDialog<DialogReportPopupMenuBinding>(
             menuType = IMPERTINENCE_FEED.name,
-            event = { },
+            event = { feedDetailViewModel.updateReportedImpertinenceFeed() },
         )
     }
 
