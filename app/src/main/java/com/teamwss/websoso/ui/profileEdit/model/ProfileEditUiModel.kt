@@ -8,7 +8,7 @@ data class ProfileModel(
     val nicknameModel: NicknameModel = NicknameModel(),
     val introduction: String = "",
     val avatarId: Int = 0,
-    val avatarImageUrl: String = "",
+    val avatarThumbnail: String = "",
     val genrePreferences: List<Genre> = emptyList(),
 ) : Parcelable
 

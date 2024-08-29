@@ -12,6 +12,14 @@
         <variable
             name="nicknameEditResult"
             type="com.teamwss.websoso.domain.model.NicknameValidationResult" />
+
+        <variable
+            name="onAvatarChangeClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onNavigateBackClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +34,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="2dp"
             android:contentDescription="@null"
+            android:onClick="@{() -> onNavigateBackClick.invoke()}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="14dp"
             android:src="@drawable/ic_profile_edit_back"
@@ -45,6 +54,7 @@
             app:layout_constraintTop_toTopOf="@id/iv_profile_edit_navigate_back" />
 
         <TextView
+            android:id="@+id/tv_profile_edit_finish"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
@@ -54,7 +64,7 @@
             android:text="@string/profile_edit_finish"
             android:textAlignment="center"
             android:textAppearance="@style/title2"
-            android:textColor="@color/primary_100_6A5DFD"
+            android:textColor="@color/bg_profile_edit_nickname_finish_selector"
             app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_navigate_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_profile_edit_navigate_back" />
@@ -65,18 +75,21 @@
             android:layout_height="0dp"
             android:layout_marginHorizontal="132dp"
             android:layout_marginTop="38dp"
+            android:onClick="@{() -> onAvatarChangeClick.invoke()}"
             app:isCircularImage="@{true}"
+            app:isVectorImage="@{true}"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_navigate_back"
-            app:loadImageUrl="@{viewModel.profileEditUiState.profile.avatarImageUrl}"
+            app:loadImageUrl="@{viewModel.profileEditUiState.profile.avatarThumbnail}"
             tools:src="@drawable/ic_profile_edit_clear" />
 
         <ImageView
             android:id="@+id/iv_profile_edit_profile_image_change"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:onClick="@{() -> onAvatarChangeClick.invoke()}"
             android:src="@drawable/ic_profile_edit_add"
             app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_profile_image"
             app:layout_constraintEnd_toEndOf="@id/iv_profile_edit_profile_image" />
@@ -171,6 +184,7 @@
             android:layout_marginTop="4dp"
             android:textAppearance="@style/label1"
             android:textColor="@color/bg_profile_edit_nickname_result_selector"
+            app:isVisible="@{viewModel.profileEditUiState.nicknameEditResult != nicknameEditResult.NONE}"
             app:layout_constraintStart_toStartOf="@id/view_profile_edit_nickname"
             app:layout_constraintTop_toBottomOf="@id/view_profile_edit_nickname"
             tools:text="이미 사용 중인 닉네임이에요" />

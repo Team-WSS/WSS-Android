@@ -11,5 +11,11 @@ data class ProfileEditUiState(
     val nicknameEditResult: NicknameValidationResult = NONE,
     val profileEditResult: ProfileEditResult = ProfileEditResult.Loading,
 ) {
-    val defaultState = this.nicknameEditResult != VALID_NICKNAME && this.nicknameEditResult != NONE
+    val defaultState = nicknameEditResult != VALID_NICKNAME && nicknameEditResult != NONE
+    val isFinishButtonEnabled = when {
+        profile == previousProfile -> false
+        nicknameEditResult == VALID_NICKNAME -> true
+        profile.nicknameModel.nickname == previousProfile.nicknameModel.nickname -> true
+        else -> false
+    }
 }

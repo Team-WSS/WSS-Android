@@ -29,6 +29,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.onAvatarChangeClick = ::showAvatarChangeBottomSheetDialog
+        profileEditViewModel.updateAvatars()
 
         bindViewModel()
         setupObserver()
@@ -36,12 +38,12 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         setupGenreChips()
         onNicknameEditTextChange()
         onIntroductionEditTextChange()
-        // TODO: 프로필 이미지 설정 다이알로그 추가
     }
 
     private fun bindViewModel() {
         binding.viewModel = profileEditViewModel
         binding.lifecycleOwner = this
+        binding.onNavigateBackClick = { finish() }
     }
 
     private fun setupObserver() {
@@ -52,6 +54,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             updateIntroductionEditTextUi(uiState.profile.introduction)
             handleProfileEditResult(uiState.profileEditResult)
             profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
+            binding.tvProfileEditFinish.isSelected = uiState.isFinishButtonEnabled
         }
     }
 
@@ -117,7 +120,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun handleProfileEditResult(profileEditResult: ProfileEditResult) {
         when (profileEditResult) {
-            ProfileEditResult.Success -> finish()
+            ProfileEditResult.Success -> finish() // TODO: 성공 메시지 추가
             ProfileEditResult.Failure -> Unit // TODO: 실패 처리
             else -> return
         }
@@ -159,8 +162,16 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         }
     }
 
+    private fun showAvatarChangeBottomSheetDialog() {
+        val existingDialog = supportFragmentManager.findFragmentByTag(PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG)
+        if (existingDialog == null) {
+            AvatarChangeBottomSheetDialog().show(supportFragmentManager, PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG)
+        }
+    }
+
     companion object {
         private const val PROFILE_INFO = "PROFILE_INFO"
+        private const val PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG = "PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG"
 
         fun getIntent(context: Context, profileModel: ProfileModel): Intent {
             return Intent(context, ProfileEditActivity::class.java).apply {
