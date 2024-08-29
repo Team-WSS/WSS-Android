@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.main.myPage.myLibrary
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,23 +15,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyLibraryViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) :
     ViewModel() {
     private val _genres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val genres: LiveData<List<GenrePreferenceEntity>> = _genres
+    val genres: LiveData<List<GenrePreferenceEntity>> get()= _genres
 
     private val _dominantGenres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val topGenres: LiveData<List<GenrePreferenceEntity>> = _dominantGenres
+    val topGenres: LiveData<List<GenrePreferenceEntity>> get()= _dominantGenres
 
     private val _restGenres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val restGenres: LiveData<List<GenrePreferenceEntity>> = _restGenres
+    val restGenres: LiveData<List<GenrePreferenceEntity>> get()= _restGenres
 
     private val _isGenreListVisible = MutableLiveData<Boolean>(false)
-    val isGenreListVisible: LiveData<Boolean> = _isGenreListVisible
+    val isGenreListVisible: LiveData<Boolean> get()= _isGenreListVisible
 
     private val _novelPreferences = MutableLiveData<NovelPreferenceEntity>()
-    val novelPreferences: LiveData<NovelPreferenceEntity> = _novelPreferences
+    val novelPreferences: LiveData<NovelPreferenceEntity> get()= _novelPreferences
 
     private val _attractivePointsText = MutableLiveData<String>()
     val attractivePointsText: LiveData<String> get() = _attractivePointsText
@@ -58,7 +57,6 @@ class MyLibraryViewModel @Inject constructor(
             }.onSuccess { novelStats ->
                 _novelStats.value = novelStats
             }.onFailure { exception ->
-                Log.e("NovelViewModel", "Failed to load novel counts", exception)
             }
         }
     }
@@ -73,7 +71,6 @@ class MyLibraryViewModel @Inject constructor(
                 _dominantGenres.value = sortedGenres.take(3)
                 _restGenres.value = sortedGenres.drop(3)
             }.onFailure { exception ->
-                Log.e("MyLibraryViewModel", "Failed to load genre preference", exception)
             }
         }
     }
@@ -94,7 +91,6 @@ class MyLibraryViewModel @Inject constructor(
                 _novelPreferences.value = novelPreferences
                 _translatedAttractivePoints.value = translateAttractivePoints(novelPreferences.attractivePoints)
             }.onFailure { exception ->
-                Log.e("MyLibraryViewModel", "Failed to load novel preferences", exception)
             }
         }
     }

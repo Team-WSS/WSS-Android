@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.main.myPage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _myProfile = MutableLiveData<MyProfileEntity>()
@@ -30,7 +29,6 @@ class MyPageViewModel @Inject constructor(
             }.onSuccess { myProfile ->
                 _myProfile.value = myProfile
             }.onFailure { exception ->
-                Log.e("MyPageViewModel", "Failed to load user profile", exception)
             }
         }
     }
