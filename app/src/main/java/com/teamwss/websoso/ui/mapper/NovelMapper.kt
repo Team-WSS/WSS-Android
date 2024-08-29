@@ -2,8 +2,8 @@ package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
-import com.teamwss.websoso.domain.model.NormalExploreResult
-import com.teamwss.websoso.domain.model.NormalExploreResult.Novel
+import com.teamwss.websoso.domain.model.ExploreResult
+import com.teamwss.websoso.domain.model.ExploreResult.Novel
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 import com.teamwss.websoso.ui.novelDetail.model.Category
@@ -73,7 +73,7 @@ fun NovelInfoEntity.ReviewCountEntity.toUi() = UnifiedReviewCountModel(
     quitCount = ReviewCountModel(ReadStatus.QUIT, quitCount),
 )
 
-fun NormalExploreResult.toUi(): NormalExploreModel {
+fun ExploreResult.toUi(): NormalExploreModel {
     return NormalExploreModel(
         resultCount = resultCount,
         isLoadable = isLoadable,
