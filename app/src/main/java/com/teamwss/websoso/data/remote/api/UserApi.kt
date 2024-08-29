@@ -1,6 +1,7 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
@@ -13,6 +14,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -58,4 +60,8 @@ interface UserApi {
         @Path("userId") userId: Long,
     ): NovelPreferenceResponseDto
 
+    @POST("users/profile")
+    suspend fun postUserProfile(
+        @Body userProfileRequestDto: UserProfileRequestDto,
+    )
 }
