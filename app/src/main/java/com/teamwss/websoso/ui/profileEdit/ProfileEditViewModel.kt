@@ -234,17 +234,18 @@ class ProfileEditViewModel @Inject constructor(
     fun getAvatarAnimation(avatarId: Int): Int {
         Avatar.entries.forEach { avatar ->
             if (avatar.avatarId == avatarId) {
-                return getLottieResourceId(avatar.avatarName)
+                return getLottieResourceId(avatar)
             }
         }
         return R.raw.lottie_sosocat_0
     }
 
-    private fun getLottieResourceId(avatarName: String): Int {
+    private fun getLottieResourceId(avatar: Avatar): Int {
         val randomNumber = (0..1).random()
-        val resourceName = "lottie_${avatarName}_${randomNumber}"
-        val resourceId = R.raw::class.java.getField(resourceName).getInt(null)
-        return if (resourceId != 0) resourceId else R.raw.lottie_sosocat_0
+        return when (randomNumber == 0) {
+            true -> avatar.firstAnimationId
+            false -> avatar.secondAnimationId
+        }
     }
 
     companion object {
