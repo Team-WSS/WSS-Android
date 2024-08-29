@@ -95,19 +95,19 @@ class NovelRatingActivity :
 
                 uiState.isFetchError -> binding.wllNovelRating.setErrorLayoutVisibility(true)
 
-                uiState.isSaveError -> {
-                    WebsosoCustomSnackBar.make(binding.root)
-                        .setText(getString(R.string.novel_rating_save_error))
-                        .setIcon(R.drawable.ic_novel_rating_alert)
-                        .show()
-                }
-
                 uiState.isSaveSuccess -> {
                     WebsosoCustomToast.make(this@NovelRatingActivity)
                         .setText(getString(R.string.novel_rating_complete))
                         .setIcon(R.drawable.ic_novel_detail_check)
                         .show()
                     finish()
+                }
+
+                uiState.isSaveError -> {
+                    WebsosoCustomSnackBar.make(binding.root)
+                        .setText(getString(R.string.novel_rating_save_error))
+                        .setIcon(R.drawable.ic_novel_rating_alert)
+                        .show()
                 }
 
                 isInitialUpdate -> {
