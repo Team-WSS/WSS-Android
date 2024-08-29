@@ -273,6 +273,12 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (feedViewModel.feedUiState.value?.feeds.isNullOrEmpty().not())
+            feedViewModel.updateRefreshedFeeds()
+    }
+
     override fun onDestroyView() {
         _popupBinding = null
         super.onDestroyView()
