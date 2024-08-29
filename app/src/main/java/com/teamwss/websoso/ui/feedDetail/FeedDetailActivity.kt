@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
@@ -110,14 +112,14 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     private fun MenuFeedPopupBinding.setupMineByMenuType(id: Long, menuType: MenuType) {
         onFirstItemClick = {
             when (menuType) {
-                FEED -> setupEditingFeed(id)
+                FEED -> setupEditingFeed()
                 COMMENT -> setupEditingComment(id)
             }
             popupMenu.dismiss()
         }
         onSecondItemClick = {
             when (menuType) {
-                FEED -> setupRemovingFeed(id)
+                FEED -> setupRemovingFeed()
                 COMMENT -> setupRemovingComment(id)
             }
             popupMenu.dismiss()
@@ -127,7 +129,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         tvFeedPopupSecondItem.isSelected = true
     }
 
-    private fun setupEditingFeed(feedId: Long) {
+    private fun setupEditingFeed() {
         // navigateToEditingFeed
     }
 
@@ -141,7 +143,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         binding.etFeedDetailInput.requestFocus()
     }
 
-    private fun setupRemovingFeed(feedId: Long) {
+    private fun setupRemovingFeed() {
         showDialog<DialogRemovePopupMenuBinding>(
             menuType = REMOVE_FEED.name,
             event = { feedDetailViewModel.updateRemovedFeed().also { finish() } },
@@ -252,6 +254,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun setupView() {
+        setupRefreshView()
         feedDetailViewModel.updateFeedDetail(feedId)
         binding.rvFeedDetail.apply {
             adapter = feedDetailAdapter
@@ -259,12 +262,24 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
     }
 
+    private fun setupRefreshView() {
+        binding.sptrFeedRefresh.apply {
+            setRefreshViewParams(ViewGroup.LayoutParams(30.toIntScaledByPx(), 30.toIntScaledByPx()))
+            setLottieAnimation(LOTTIE_IMAGE)
+            setOnRefreshListener { feedDetailViewModel.updateFeedDetail(feedId) }
+        }
+    }
+
     private fun setupObserver() {
         feedDetailViewModel.feedDetailUiState.observe(this) { feedDetailUiState ->
             when {
-                feedDetailUiState.loading -> {}
-                feedDetailUiState.error -> {}
-                !feedDetailUiState.loading -> updateView(feedDetailUiState)
+                feedDetailUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
+                feedDetailUiState.error -> binding.wllFeed.setLoadingLayoutVisibility(false)
+                !feedDetailUiState.loading -> {
+                    binding.wllFeed.setWebsosoLoadingVisibility(false)
+                    binding.sptrFeedRefresh.setRefreshing(false)
+                    updateView(feedDetailUiState)
+                }
             }
         }
     }
@@ -277,10 +292,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         with(feedDetailAdapter) {
             when (itemCount == 0) {
                 true -> submitList(feedDetail)
-                false -> {
-                    submitList(feedDetail)
+                false -> submitList(feedDetail).also {
                     binding.rvFeedDetail.smoothScrollToPosition(itemCount)
-                    notifyItemChanged(0)
                 }
             }
         }
@@ -289,6 +302,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     companion object {
         private const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
+        private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(context: Context, feedId: Long): Intent =
             Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
