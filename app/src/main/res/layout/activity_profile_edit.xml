@@ -11,7 +11,7 @@
 
         <variable
             name="nicknameEditResult"
-            type="com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult" />
+            type="com.teamwss.websoso.domain.model.NicknameValidationResult" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

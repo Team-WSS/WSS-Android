@@ -15,9 +15,10 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
+import com.teamwss.websoso.domain.model.NicknameValidationResult
+import com.teamwss.websoso.domain.model.NicknameValidationResult.Companion.getProfileEditMessage
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
@@ -81,13 +82,13 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             AppCompatResources.getColorStateList(this@ProfileEditActivity, R.color.gray_300_52515F).defaultColor
         )
         tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname.isNotEmpty()
-        tvProfileEditNicknameResult.isSelected = uiState.nicknameEditResult == NicknameEditResult.VALID_NICKNAME
-        tvProfileEditNicknameResult.text = uiState.nicknameEditResult.message
+        tvProfileEditNicknameResult.isSelected = uiState.nicknameEditResult == NicknameValidationResult.VALID_NICKNAME
+        tvProfileEditNicknameResult.text = uiState.nicknameEditResult.getProfileEditMessage()
 
         when {
             uiState.defaultState -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
             uiState.profile.nicknameModel.hasFocus -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp)
-            uiState.nicknameEditResult == NicknameEditResult.VALID_NICKNAME -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_primary_100_radius_12dp)
+            uiState.nicknameEditResult == NicknameValidationResult.VALID_NICKNAME -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_primary_100_radius_12dp)
             else -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_gray_50_radius_12dp)
         }
 

@@ -5,13 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
+import com.teamwss.websoso.domain.model.NicknameValidationResult
+import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_NICKNAME_DUPLICATION
+import com.teamwss.websoso.domain.model.NicknameValidationResult.NONE
+import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
+import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.ui.profileEdit.model.Genre
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_DUPLICATION
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_LENGTH
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.INVALID_NICKNAME_SPECIAL_CHARACTER
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.NONE
-import com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
@@ -22,15 +21,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
+    private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
     val uiState: LiveData<ProfileEditUiState> get() = _uiState
-
-    private val invalidLengthRegex = Regex("^\\s|\\s$")
-    private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
-    private val hangulConsonantAndVowelRegex = Regex("[ㄱ-ㅎㅏ-ㅣ]")
 
     fun updatePreviousProfile(profile: ProfileModel) {
         _uiState.value = uiState.value?.copy(
@@ -90,12 +86,19 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun checkNicknameValidity(nickname: String) {
-        val result = getIsNicknameValid(nickname)
-        if (result != VALID_NICKNAME) {
-            _uiState.value = uiState.value?.copy(
-                nicknameEditResult = result,
-            )
-        } else checkNicknameDuplication(nickname)
+        viewModelScope.launch {
+            runCatching {
+                checkNicknameValidityUseCase.execute(nickname)
+            }.onSuccess { result ->
+                _uiState.value = uiState.value?.copy(
+                    nicknameEditResult = result,
+                )
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(
+                    nicknameEditResult = NicknameValidationResult.UNKNOWN_ERROR,
+                )
+            }
+        }
     }
 
     private fun checkNicknameDuplication(nickname: String) {
@@ -148,16 +151,6 @@ class ProfileEditViewModel @Inject constructor(
     private fun <T> Pair<T, T>.compareAndReturnNewOrNullValue(): T? {
         val (oldValue, newValue) = this
         return if (oldValue == newValue) null else newValue
-    }
-
-    private fun getIsNicknameValid(nickname: String): NicknameEditResult {
-        return when {
-            nickname.length !in 2..10 -> INVALID_NICKNAME_LENGTH
-            nickname.contains(invalidLengthRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            nickname.contains(specialCharacterRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            nickname.contains(hangulConsonantAndVowelRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            else -> VALID_NICKNAME
-        }
     }
 
     fun updateCheckDuplicateNicknameBtnEnabled() {
