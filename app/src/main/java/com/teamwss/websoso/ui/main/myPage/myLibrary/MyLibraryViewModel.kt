@@ -16,8 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyLibraryViewModel @Inject constructor(
     private val userRepository: UserRepository,
-) :
-    ViewModel() {
+) : ViewModel() {
+
     private val _genres = MutableLiveData<List<GenrePreferenceEntity>>()
     val genres: LiveData<List<GenrePreferenceEntity>> get()= _genres
 

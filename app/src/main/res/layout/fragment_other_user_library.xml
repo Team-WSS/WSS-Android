@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toTopOf="@id/tv_other_user_library_storage_title" />
 
             <LinearLayout
-                android:id="@+id/linear_other_user_library_storage"
+                android:id="@+id/ll_other_user_library_storage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_other_user_library_storage_title">
 
                 <LinearLayout
-                    android:id="@+id/linear_other_user_library_storage_interesting"
+                    android:id="@+id/ll_other_user_library_storage_interesting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -93,7 +93,7 @@
                     android:background="@color/gray_70_DFDFE3" />
 
                 <LinearLayout
-                    android:id="@+id/linear_other_user_library_storage_watching"
+                    android:id="@+id/ll_other_user_library_storage_watching"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -123,7 +123,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_other_user_library_storage_watched"
+                    android:id="@+id/ll_other_user_library_storage_watched"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -153,7 +153,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_other_user_library_storage_quit"
+                    android:id="@+id/ll_other_user_library_storage_quit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -218,7 +218,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
-                    android:id="@+id/linear_other_user_library_dominant_genre"
+                    android:id="@+id/ll_other_user_library_dominant_genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
@@ -228,7 +228,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_other_user_library_genre_preference_title">
 
                     <LinearLayout
-                        android:id="@+id/linear_other_user_library_dominant_genre_first"
+                        android:id="@+id/ll_other_user_library_dominant_genre_first"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -265,7 +265,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linear_other_user_library_dominant_genre_second"
+                        android:id="@+id/ll_other_user_library_dominant_genre_second"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -302,7 +302,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linear_other_user_library_dominant_genre_third"
+                        android:id="@+id/ll_other_user_library_dominant_genre_third"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -347,7 +347,7 @@
                     android:layout_marginHorizontal="40dp"
                     android:layout_marginTop="32dp"
                     android:divider="@null"
-                    app:layout_constraintTop_toBottomOf="@id/linear_other_user_library_dominant_genre"
+                    app:layout_constraintTop_toBottomOf="@id/ll_other_user_library_dominant_genre"
                     tools:layout_editor_absoluteX="40dp" />
 
                 <ImageView

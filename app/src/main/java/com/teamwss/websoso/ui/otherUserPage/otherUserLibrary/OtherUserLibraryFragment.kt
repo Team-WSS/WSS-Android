@@ -16,14 +16,15 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentOtherUserLibraryBinding
+import com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OtherUserLibraryFragment :
     BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
     private val otherUserLibraryViewModel: OtherUserLibraryViewModel by viewModels()
-    private val restGenrePreferenceAdapter: com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter by lazy {
-        com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter()
+    private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
+       RestGenrePreferenceAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,11 +32,11 @@ class OtherUserLibraryFragment :
         binding.lifecycleOwner = viewLifecycleOwner
         binding.otherUserLibraryViewModel = otherUserLibraryViewModel
 
-        setupRestGenrePreferenceAdapter()
+        setUpRestGenrePreferenceAdapter()
         setUpObserve()
     }
 
-    private fun setupRestGenrePreferenceAdapter() {
+    private fun setUpRestGenrePreferenceAdapter() {
         binding.lvOtherUserLibraryRestGenre.adapter = restGenrePreferenceAdapter
     }
 
@@ -123,7 +124,6 @@ class OtherUserLibraryFragment :
     private fun createKeywordChip(data: NovelPreferenceEntity.KeywordEntity): Chip {
         return WebsosoChip(requireContext()).apply {
             text = "${data.keywordName} ${data.keywordCount}"
-            isCheckable = true
             isChecked = false
 
             setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
