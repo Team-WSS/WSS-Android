@@ -66,6 +66,7 @@ class ProfileEditViewModel @Inject constructor(
                         nickname = nickname,
                     ),
                 ),
+                nicknameEditResult = NONE,
             )
         }
     }
