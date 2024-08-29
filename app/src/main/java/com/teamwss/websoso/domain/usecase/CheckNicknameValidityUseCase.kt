@@ -2,6 +2,13 @@ package com.teamwss.websoso.domain.usecase
 
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.domain.model.NicknameValidationResult
+import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_KOREAN_CONSONANT_AND_VOWEL
+import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_LENGTH
+import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_NICKNAME_DUPLICATION
+import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_SPECIAL_CHARACTER
+import com.teamwss.websoso.domain.model.NicknameValidationResult.NETWORK_ERROR
+import com.teamwss.websoso.domain.model.NicknameValidationResult.UNKNOWN_ERROR
+import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import javax.inject.Inject
 
 class CheckNicknameValidityUseCase @Inject constructor(
@@ -16,17 +23,17 @@ class CheckNicknameValidityUseCase @Inject constructor(
         val validationResult = getIsNicknameValid(nickname)
 
         return when {
-            validationResult != NicknameValidationResult.VALID_NICKNAME -> validationResult
+            validationResult != VALID_NICKNAME -> validationResult
             else -> checkNicknameDuplication(nickname)
         }
     }
 
     private fun getIsNicknameValid(nickname: String): NicknameValidationResult {
         return when {
-            invalidLengthRegex.containsMatchIn(nickname) -> NicknameValidationResult.INVALID_LENGTH
-            specialCharacterRegex.containsMatchIn(nickname) -> NicknameValidationResult.INVALID_SPECIAL_CHARACTER
-            hangulConsonantAndVowelRegex.containsMatchIn(nickname) -> NicknameValidationResult.INVALID_KOREAN_CONSONANT_AND_VOWEL
-            else -> NicknameValidationResult.VALID_NICKNAME
+            invalidLengthRegex.containsMatchIn(nickname) -> INVALID_LENGTH
+            specialCharacterRegex.containsMatchIn(nickname) -> INVALID_SPECIAL_CHARACTER
+            hangulConsonantAndVowelRegex.containsMatchIn(nickname) -> INVALID_KOREAN_CONSONANT_AND_VOWEL
+            else -> VALID_NICKNAME
         }
     }
 
@@ -34,11 +41,11 @@ class CheckNicknameValidityUseCase @Inject constructor(
         runCatching {
             userRepository.fetchNicknameValidity(nickname)
         }.onSuccess { isNicknameValid ->
-            return if (isNicknameValid) NicknameValidationResult.VALID_NICKNAME
-            else NicknameValidationResult.INVALID_NICKNAME_DUPLICATION
+            return if (isNicknameValid) VALID_NICKNAME
+            else INVALID_NICKNAME_DUPLICATION
         }.onFailure {
-            return NicknameValidationResult.NETWORK_ERROR
+            return NETWORK_ERROR
         }
-        return NicknameValidationResult.UNKNOWN_ERROR
+        return UNKNOWN_ERROR
     }
 }
