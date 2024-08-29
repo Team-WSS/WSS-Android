@@ -114,6 +114,8 @@ class DetailExploreDialogBottomSheet :
 
     private fun onBottomSheetExitButtonClick() {
         binding.ivDetailExploreExitButton.setOnClickListener {
+            detailExploreViewModel.updateSelectedInfoValueClear()
+            detailExploreViewModel.updateSelectedKeywordValueClear()
             dismiss()
         }
     }
@@ -121,6 +123,10 @@ class DetailExploreDialogBottomSheet :
     private fun setupObserver() {
         detailExploreViewModel.isInfoChipSelected.observe(viewLifecycleOwner) { isVisible ->
             binding.ivDetailExploreInfoActiveDot.isVisible = isVisible
+        }
+
+        detailExploreViewModel.isKeywordChipSelected.observe(viewLifecycleOwner) { isVisible ->
+            binding.ivDetailExploreKeywordActiveDot.isVisible = isVisible
         }
     }
 

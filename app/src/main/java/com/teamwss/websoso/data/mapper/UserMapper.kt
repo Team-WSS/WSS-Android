@@ -2,10 +2,10 @@ package com.teamwss.websoso.data.mapper
 
 import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
-import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
+import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
@@ -47,16 +47,34 @@ fun UserProfileStatusResponseDto.toData(): UserProfileStatusEntity {
     )
 }
 
-fun UserProfileStatusEntity.toRemote(): UserProfileStatusRequestDto {
-    return UserProfileStatusRequestDto(
-        isProfilePublic = isProfilePublic,
+fun MyProfileResponseDto.toData(): MyProfileEntity {
+    return MyProfileEntity(
+        nickname = this.nickname,
+        intro = this.intro,
+        avatarImage = this.avatarImage,
+        genrePreferences = this.genrePreferences,
     )
 }
 
-fun UserUpdateInfoEntity.toRemote(): UserInfoRequestDto {
-    return UserInfoRequestDto(
-        gender = gender,
-        birth = birthYear,
+fun GenrePreferenceResponseDto.GenrePreferenceDto.toData(): GenrePreferenceEntity {
+    val koreanGenreName = Genres.from(this.genreName)?.korean ?: this.genreName
+    return GenrePreferenceEntity(
+        genreName = koreanGenreName,
+        genreImage = this.genreImage,
+        genreCount = this.genreCount,
     )
 }
 
+fun NovelPreferenceResponseDto.toData(): NovelPreferenceEntity {
+    return NovelPreferenceEntity(
+        attractivePoints = this.attractivePoints,
+        keywords = this.keywords.map { it.toData() },
+    )
+}
+
+fun NovelPreferenceResponseDto.AttractivePointKeywordDto.toData(): NovelPreferenceEntity.KeywordEntity {
+    return NovelPreferenceEntity.KeywordEntity(
+        keywordName = this.keywordName,
+        keywordCount = this.keywordCount,
+    )
+}

@@ -3,8 +3,8 @@ package com.teamwss.websoso.ui.detailExploreResult.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.databinding.ItemDetailExploreResultBinding
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 
 class DetailExploreResultViewHolder(
     private val binding: ItemDetailExploreResultBinding,
@@ -15,7 +15,7 @@ class DetailExploreResultViewHolder(
         binding.onClick = onNovelClick
     }
 
-    fun bind(result: NovelEntity) {
+    fun bind(result: NovelModel) {
         binding.novel = result
     }
 

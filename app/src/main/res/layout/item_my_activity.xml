@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="myActivity"
+            type="com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_my_activity_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_my_activity_profile"
+                cornerRadius="@{12f}"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@{myActivity.profileImg}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_my_activity_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:maxLines="1"
+                android:text="@{myActivity.nickname}"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_my_activity_profile"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="세훈군" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_my_activity_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@string/my_activity_dot"
+            android:textAppearance="@style/title2"
+            app:layout_constraintBottom_toBottomOf="@id/tv_my_activity_created_date"
+            app:layout_constraintEnd_toStartOf="@id/tv_my_activity_created_date"
+            app:layout_constraintStart_toEndOf="@id/cl_my_activity_profile"
+            app:layout_constraintTop_toTopOf="@id/tv_my_activity_created_date" />
+
+        <TextView
+            android:id="@+id/tv_my_activity_created_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{myActivity.createdDate}'
+            android:textAppearance="@style/body5"
+            android:textColor="@color/black"
+            android:layout_marginStart="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_my_activity_profile"
+            app:layout_constraintStart_toEndOf="@+id/tv_my_activity_dot"
+            app:layout_constraintTop_toTopOf="@+id/cl_my_activity_profile" />
+
+        <TextView
+            android:id="@+id/tv_my_activity_is_modified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/feed_is_modified"
+            android:textAppearance="@style/body5"
+            android:textColor="@color/gray_200_AEADB3"
+            app:isVisible="@{myActivity.isModified}"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_created_date"
+            app:layout_constraintStart_toEndOf="@+id/tv_my_activity_created_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_my_activity_created_date" />
+
+        <ImageView
+            android:id="@+id/iv_my_activity_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:padding="12dp"
+            android:src="@drawable/ic_more"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_my_activity_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cl_my_activity_profile" />
+
+        <TextView
+            android:id="@+id/tv_my_activity_spoiler_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/feed_spoiler_warning"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/secondary_100_FF675D"
+            app:isVisible="@{myActivity.isSpoiler}"
+            app:layout_constraintStart_toStartOf="@+id/cl_my_activity_profile"
+            app:layout_constraintTop_toBottomOf="@+id/cl_my_activity_profile" />
+
+        <TextView
+            android:id="@+id/tv_my_activity_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:breakStrategy="simple"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:maxLines="5"
+            android:text="@{myActivity.feedContent}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:isVisible="@{!myActivity.isSpoiler}"
+            app:layout_constraintEnd_toEndOf="@+id/iv_my_activity_more"
+            app:layout_constraintStart_toStartOf="@+id/cl_my_activity_profile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_my_activity_spoiler_warning"
+            tools:text="최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요 애매한 건 빼고 주로 무협 중에서도 회귀물로 골라봤어요 왜냐면 내가 회귀물을 좋아하기 때문에 최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요최근 잼께 봤던 무협 소설 목록 진짜들을 가 회귀물을 좋아하기 때문에 최근 잼께 봤습니다 몇글자 까지 될지 모르겠네요" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_my_activity_novel_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/btn_my_activity_novel_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_my_activity_content">
+
+            <ImageView
+                android:id="@+id/iv_my_activity_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_link"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_my_activity_novel_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="24dp"
+                android:ellipsize="end"
+                android:ems="13"
+                android:maxLines="1"
+                android:text="@{myActivity.title}"
+                android:textAppearance="@style/title3"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_link"
+                app:layout_constraintEnd_toStartOf="@+id/iv_my_activity_star"
+                app:layout_constraintStart_toEndOf="@+id/iv_my_activity_link"
+                app:layout_constraintTop_toTopOf="@+id/iv_my_activity_link"
+                tools:text="화산귀한화산귀한화산귀한화산귀한" />
+
+            <ImageView
+                android:id="@+id/iv_my_activity_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_star"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_score"
+                app:layout_constraintEnd_toStartOf="@+id/tv_my_activity_score"
+                app:layout_constraintTop_toTopOf="@+id/tv_my_activity_score" />
+
+            <TextView
+                android:id="@+id/tv_my_activity_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text='@{myActivity.formattedScore}'
+                android:textAppearance="@style/label1"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_novel_name"
+                app:layout_constraintEnd_toStartOf="@+id/iv_my_activity_navigate_right"
+                app:layout_constraintTop_toTopOf="@+id/tv_my_activity_novel_name"
+                tools:text="4.0 (523)" />
+
+            <ImageView
+                android:id="@+id/iv_my_activity_navigate_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_navigate_right"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_score"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_my_activity_score" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_my_activity_genre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text='@{myActivity.relevantCategories}'
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@+id/cl_my_activity_novel_info"
+            app:layout_constraintTop_toBottomOf="@+id/cl_my_activity_novel_info"
+            tools:text="로판" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_my_activity_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="28dp"
+            app:layout_constraintBottom_toTopOf="@+id/view_my_activity_indicator"
+            app:layout_constraintStart_toStartOf="@+id/tv_my_activity_genre"
+            app:layout_constraintTop_toBottomOf="@+id/tv_my_activity_genre">
+
+            <ImageView
+                android:id="@+id/iv_my_activity_thumb_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/btn_feed_thumb_up"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_my_activity_thumb_up_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:maxLines="1"
+                android:text='@{String.valueOf(myActivity.likeCount)}'
+                android:textAppearance="@style/body2"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_thumb_up"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_my_activity_thumb_up"
+                app:layout_constraintTop_toTopOf="@+id/iv_my_activity_thumb_up"
+                tools:text="32" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_my_activity_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_my_activity_like"
+            app:layout_constraintStart_toEndOf="@+id/cl_my_activity_like"
+            app:layout_constraintTop_toTopOf="@+id/cl_my_activity_like">
+
+            <ImageView
+                android:id="@+id/iv_my_activity_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_comment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_my_activity_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:maxLines="1"
+                android:text='@{String.valueOf(myActivity.commentCount)}'
+                android:textAppearance="@style/body2"
+                android:textColor="@color/gray_200_AEADB3"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_comment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_my_activity_comment"
+                app:layout_constraintTop_toTopOf="@+id/iv_my_activity_comment"
+                tools:text="32" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_my_activity_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

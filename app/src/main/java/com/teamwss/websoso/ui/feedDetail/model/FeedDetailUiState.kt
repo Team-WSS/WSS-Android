@@ -1,10 +1,10 @@
 package com.teamwss.websoso.ui.feedDetail.model
 
-interface FeedDetailUiState {
-    data class Success(
-        val feedDetail: FeedDetailModel,
-    ) : FeedDetailUiState
+import com.teamwss.websoso.ui.main.feed.model.FeedModel
 
-    data object Loading : FeedDetailUiState
-    data object Error : FeedDetailUiState
-}
+data class FeedDetailUiState(
+    val loading: Boolean = true,
+    val error: Boolean = false,
+    val feed: FeedModel? = null,
+    val comments: List<CommentModel> = emptyList(),
+)

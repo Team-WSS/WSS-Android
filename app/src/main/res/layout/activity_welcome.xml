@@ -52,7 +52,7 @@
             app:lottie_loop="false"
             app:lottie_rawRes="@raw/lottie_welcome" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_welcome_start"
             android:layout_width="0dp"
             android:layout_height="54dp"
@@ -64,7 +64,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

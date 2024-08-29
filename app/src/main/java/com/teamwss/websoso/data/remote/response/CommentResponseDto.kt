@@ -1,14 +1,16 @@
 package com.teamwss.websoso.data.remote.response
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CommentResponseDto(
     @SerialName("avatarImage")
     val avatarImage: String,
     @SerialName("commentContent")
     val commentContent: String,
     @SerialName("commentId")
-    val commentId: Int,
+    val commentId: Long,
     @SerialName("createdDate")
     val createdDate: String,
     @SerialName("isModified")
@@ -18,5 +20,5 @@ data class CommentResponseDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("userId")
-    val userId: Int,
+    val userId: Long,
 )

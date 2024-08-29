@@ -1,11 +1,9 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
-import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
-import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
 import retrofit2.http.Body
@@ -14,7 +12,6 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface UserApi {
 
@@ -53,5 +50,23 @@ interface UserApi {
     @PATCH("users/my-profile")
     suspend fun patchProfile(
         @Body userProfileEditRequestDto: UserProfileEditRequestDto,
+    )
+
+    @GET("users/my-profile")
+    suspend fun getMyProfile(): MyProfileResponseDto
+
+    @GET("users/{userId}/preferences/genres")
+    suspend fun getGenrePreference(
+        @Path("userId") userId: Long,
+    ): GenrePreferenceResponseDto
+
+    @GET("users/{userId}/preferences/attractive-points")
+    suspend fun getNovelPreferences(
+        @Path("userId") userId: Long,
+    ): NovelPreferenceResponseDto
+
+    @POST("users/profile")
+    suspend fun postUserProfile(
+        @Body userProfileRequestDto: UserProfileRequestDto,
     )
 }

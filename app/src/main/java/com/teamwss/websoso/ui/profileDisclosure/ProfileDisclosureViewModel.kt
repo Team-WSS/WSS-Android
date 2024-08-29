@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.profileDisclosure.model.ProfileDisclosureUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -74,8 +73,7 @@ class ProfileDisclosureViewModel @Inject constructor(
             runCatching {
                 val isProfilePublicValue =
                     isProfilePublic.value ?: isInitializeOfProfilePublic.not()
-                val userProfileStatusEntity = UserProfileStatusEntity(isProfilePublicValue)
-                userRepository.saveUserProfileStatus(userProfileStatusEntity)
+                userRepository.saveUserProfileStatus(isProfilePublicValue)
             }.onSuccess {
                 _uiState.value = uiState.value?.copy(
                     loading = false,

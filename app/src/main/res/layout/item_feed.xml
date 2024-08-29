@@ -7,11 +7,11 @@
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.feed.FeedItemClickListener" />
+            type="com.teamwss.websoso.ui.main.feed.FeedItemClickListener" />
 
         <variable
             name="feed"
-            type="com.teamwss.websoso.ui.feed.model.FeedModel" />
+            type="com.teamwss.websoso.ui.main.feed.model.FeedModel" />
 
     </data>
 
@@ -262,7 +262,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:onClick="@{() -> onClick.onCommentButtonClick(feed.novel.id)}"
+            android:onClick="@{() -> onClick.onCommentButtonClick(feed.id)}"
             app:layout_constraintBottom_toBottomOf="@+id/cl_feed_like"
             app:layout_constraintStart_toEndOf="@+id/cl_feed_like"
             app:layout_constraintTop_toTopOf="@+id/cl_feed_like">

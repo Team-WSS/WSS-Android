@@ -8,7 +8,6 @@ import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.remote.api.UserApi
-import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -35,13 +34,40 @@ class UserRepository @Inject constructor(
         return userApi.getProfileStatus().toData()
     }
 
-    suspend fun saveUserProfileStatus(userProfileStatusEntity: UserProfileStatusEntity) {
-        userApi.patchProfileStatus(userProfileStatusEntity.toRemote())
+    suspend fun saveUserProfileStatus(isProfilePublic: Boolean) {
+        userApi.patchProfileStatus(UserProfileStatusRequestDto(isProfilePublic))
     }
 
     suspend fun saveUserInfo(gender: String, birthYear: Int) {
-        val userInfo = UserUpdateInfoEntity(gender, birthYear)
-        userApi.putUserInfo(userInfo.toRemote())
+        userApi.putUserInfo(UserInfoRequestDto(gender, birthYear))
+    }
+
+    suspend fun fetchMyProfile(): MyProfileEntity {
+        return userApi.getMyProfile().toData()
+    }
+
+    suspend fun fetchGenrePreference(userId: Long): List<GenrePreferenceEntity> {
+        return userApi.getGenrePreference(userId).genrePreferences.map { it.toData() }
+    }
+
+    suspend fun fetchNovelPreferences(userId: Long): NovelPreferenceEntity {
+        return userApi.getNovelPreferences(userId).toData()
+    }
+
+    suspend fun saveUserProfile(
+        nickname: String,
+        gender: String,
+        birth: Int,
+        genrePreferences: List<String>,
+    ) {
+        userApi.postUserProfile(
+            UserProfileRequestDto(
+                nickname,
+                gender,
+                birth,
+                genrePreferences,
+            )
+        )
     }
 
     suspend fun fetchNicknameValidity(nickname: String): Boolean {

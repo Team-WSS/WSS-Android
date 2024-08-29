@@ -100,6 +100,11 @@
     <string name="feed_detail_comment_title">댓글</string>
     <string name="feed_detail_comment_dot">·</string>
     <string name="feed_detail_input">댓글을 남겨보세요</string>
+    <string name="remove_popup_menu_title_comment">내 댓글을 삭제할까요?</string>
+    <string name="remove_popup_menu_description_comment">삭제한 댓글은 되돌릴 수 없어요</string>
+    <string name="report_popup_menu_impertinence_comment">해당 댓글에 부적절한 표현이 사용되었나요?</string>
+    <string name="report_popup_menu_spoiling_comment">해당 댓글이 스포일러를 포함하고 있나요?</string>
+    <string name="report_popup_menu_description_comment">해당 댓글이 커뮤니티 가이드\n위반했는지 검토할게요.</string>
 
     <!-- 피드 팝업 매뉴 다이얼로그 뷰 -->
     <string name="report_popup_menu_cancel">취소</string>
@@ -204,6 +209,7 @@
     <string name="home_post_interest_novel">관심작품 등록하기</string>
     <string name="home_user_recommend_novel_description">관심 등록한 작품의 최근 수다예요</string>
     <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해 드려요!</string>
+    <string name="home_recommend_novel_by_user_taste_description">선호장르를 기반으로 추천해 드려요</string>
     <string name="home_setting_interest_general">선호장르 설정하기</string>
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
     <string name="home_popular_novel_nickname">%s 님의 한마디</string>
@@ -212,6 +218,7 @@
     <string name="home_user_interest_feed_nickname_format">%1$s 님의 리뷰</string>
     <string name="home_user_interest_novel_rating_format">%1$.1f (%2$d)</string>
     <string name="home_nickname_interest_feed">%1$s 님의 관심글</string>
+    <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>
@@ -226,6 +233,7 @@
     <string name="blocked_users_cancel">차단 해제</string>
     <string name="blocked_users_title">차단유저 목록</string>
     <string name="blocked_users_empty">차단한 유저가 없어요</string>
+    <string name="blocked_users_unblocked">%s님을 차단 해제했어요</string>
 
     <!-- 환경설정 - 계정정보 뷰 -->
     <string name="account_info_change_user_info">성별/나이 변경</string>
@@ -292,4 +300,39 @@
     <string name="profile_edit_avatar_title">프로필 선택</string>
     <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
     <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
+
+    <!-- 내 활동 뷰 -->
+    <string name="my_activity_score_count">%.1f (%d)</string>
+    <string name="my_activity_dot">·</string>
+    <string name="my_activity_more">활동기록 더보기</string>
+
+    <!-- 내 활동 디테일 뷰 -->
+    <string name="my_activity_detail_title">내 활동</string>
+
+    <!-- 다른 유저 페이지 뷰 -->
+    <string name="other_user_page_library">서재</string>
+    <string name="other_user_page_activity">활동</string>
+
+    <!-- 다른 유저 서재 뷰 -->
+    <string name="other_user_library_storage">보관함</string>
+    <string name="other_user_library_preference_analysis">취향 분석</string>
+    <string name="other_user_library_interesting">관심</string>
+    <string name="other_user_library_watching">보는중</string>
+    <string name="other_user_library_watched">봤어요</string>
+    <string name="other_user_library_quite">하차</string>
+    <string name="other_user_library_unknown_preference">작품 취향을 파악할 수 없어요</string>
+    <string name="other_user_library_genre_preference">장르 취향</string>
+    <string name="other_user_library_genre_count">%d편</string>
+    <string name="other_user_library_novel_preference">작품 취향</string>
+    <string name="other_user_library_attractive_point_fixed_text">가 매력적인 작품</string>
+
+    <!-- 피드 생성 뷰 -->
+    <string name="tv_create_feed_multiple_choice_guide">중복 선택 가능</string>
+    <string name="tv_create_feed_category">카테고리</string>
+    <string name="tv_create_feed_done_button">완료</string>
+    <string name="tv_create_feed_write_content">내용 작성하기</string>
+    <string name="tv_create_feed_spoiler">스포일러</string>
+    <string name="et_create_feed_content_hint">피드 작성 유의사항!\n\n욕설, 비방, 명예훼손성 표현은 사용하지 말아주세요.\n작품 내용을 담은 글은 스포일러를 체크해주세요.</string>
+    <string name="tv_create_feed_characters_count">(%d/2000)</string>
+
 </resources>
