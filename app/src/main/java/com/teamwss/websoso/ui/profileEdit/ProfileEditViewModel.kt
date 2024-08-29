@@ -12,8 +12,6 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.NONE
 import com.teamwss.websoso.domain.model.NicknameValidationResult.UNKNOWN_ERROR
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
-import com.teamwss.websoso.domain.usecase.SaveChangedProfileUseCase
-import com.teamwss.websoso.ui.mapper.toDomain
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
@@ -26,7 +24,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
-    private val saveChangedProfileUseCase: SaveChangedProfileUseCase,
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
@@ -129,7 +126,13 @@ class ProfileEditViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                saveChangedProfileUseCase(previousProfile.toDomain(), currentProfile.toDomain())
+                userRepository.saveUserProfile(
+                    // TODO: 실제 아바타 아이디로 변경
+                    avatarId = 1,
+                    nickname = (previousProfile.nicknameModel.nickname to currentProfile.nicknameModel.nickname).compareAndReturnNewOrNullValue(),
+                    intro = (previousProfile.introduction to currentProfile.introduction).compareAndReturnNewOrNullValue(),
+                    genrePreferences = currentProfile.genrePreferences.map { it.tag },
+                )
             }.onSuccess {
                 _profileEditUiState.value = profileEditUiState.value?.copy(
                     profileEditResult = ProfileEditResult.Success,
@@ -140,6 +143,11 @@ class ProfileEditViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun <T> Pair<T, T>.compareAndReturnNewOrNullValue(): T? {
+        val (oldValue, newValue) = this
+        return if (oldValue == newValue) null else newValue
     }
 
     fun updateCheckDuplicateNicknameButtonEnabled() {
