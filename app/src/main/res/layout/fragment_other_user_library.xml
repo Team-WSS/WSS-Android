@@ -1,9 +1,423 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="otherUserLibraryViewModel"
+            type="com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.OtherUserLibraryViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_other_user_library_mine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_other_user_library_storage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_other_user_library_storage_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/other_user_library_storage"
+                android:textAppearance="@style/title1"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_other_user_library_go_to_storage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_my_library_navigate_right"
+                app:layout_constraintBottom_toBottomOf="@id/tv_other_user_library_storage_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_other_user_library_storage_title" />
+
+            <LinearLayout
+                android:id="@+id/linear_other_user_library_storage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_my_library_gray50_radius_14dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingVertical="16dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_other_user_library_storage_title">
+
+                <LinearLayout
+                    android:id="@+id/linear_other_user_library_storage_interesting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_interesting_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text='@{String.valueOf(otherUserLibraryViewModel.novelStats.interestNovelCount)}'
+                        android:textAppearance="@style/title2"
+                        android:textColor="@color/black"
+                        tools:text="12" />
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_interesting_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:text="@string/other_user_library_interesting"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="38dp"
+                    android:background="@color/gray_70_DFDFE3" />
+
+                <LinearLayout
+                    android:id="@+id/linear_other_user_library_storage_watching"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_watching_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text='@{String.valueOf(otherUserLibraryViewModel.novelStats.watchingNovelCount)}'
+                        android:textAppearance="@style/title2"
+                        android:textColor="@color/black"
+                        tools:text="12" />
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_watching_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:text="@string/other_user_library_watching"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_other_user_library_storage_watched"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_watched_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text='@{String.valueOf(otherUserLibraryViewModel.novelStats.watchedNovelCount)}'
+                        android:textAppearance="@style/title2"
+                        android:textColor="@color/black"
+                        tools:text="12" />
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_watched_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:text="@string/other_user_library_watched"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_other_user_library_storage_quit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_quit_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@{String.valueOf(otherUserLibraryViewModel.novelStats.quitNovelCount)}"
+                        android:textAppearance="@style/title2"
+                        android:textColor="@color/black"
+                        tools:text="12" />
+
+                    <TextView
+                        android:id="@+id/tv_other_user_linear_storage_quit_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:text="@string/other_user_library_quite"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintTop_toBottomOf="@id/cl_other_user_library_storage" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_other_user_library_known_preference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cl_other_user_library_storage">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_other_user_library_genre_preference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="0dp">
+
+                <TextView
+                    android:id="@+id/tv_other_user_library_genre_preference_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/other_user_library_genre_preference"
+                    android:textAppearance="@style/title1"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/linear_other_user_library_dominant_genre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/tv_other_user_library_genre_preference_title">
+
+                    <LinearLayout
+                        android:id="@+id/linear_other_user_library_dominant_genre_first"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_other_user_library_dominant_genre_first_logo"
+                            android:layout_width="30dp"
+                            android:layout_height="37dp"
+                            app:loadImageUrl="@{otherUserLibraryViewModel.topGenres[0].genreImage}"
+                            tools:src="@drawable/ic_novel_detail_genre_test" />
+
+                        <TextView
+                            android:id="@+id/tv_other_user_library_dominant_genre_first_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="@{otherUserLibraryViewModel.topGenres[0].genreName}"
+                            android:textAppearance="@style/title3"
+                            android:textColor="@color/black"
+                            tools:text="로판" />
+
+                        <TextView
+                            android:id="@+id/tv_other_user_library_dominant_genre_first_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.topGenres[0].genreCount)}'
+                            android:textAppearance="@style/body5"
+                            android:textColor="@color/gray_200_AEADB3"
+                            tools:text="12편" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_other_user_library_dominant_genre_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_other_user_library_dominant_genre_second_logo"
+                            android:layout_width="30dp"
+                            android:layout_height="37dp"
+                            app:loadImageUrl="@{otherUserLibraryViewModel.topGenres[1].genreImage}"
+                            tools:src="@drawable/ic_novel_detail_genre_test" />
+
+                        <TextView
+                            android:id="@+id/tv_other_user_library_dominant_genre_second_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="@{otherUserLibraryViewModel.topGenres[1].genreName}"
+                            android:textAppearance="@style/title3"
+                            android:textColor="@color/black"
+                            tools:text="로판" />
+
+                        <TextView
+                            android:id="@+id/tv_other_user_library_dominant_genre_second_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.topGenres[1].genreCount)}'
+                            android:textAppearance="@style/body5"
+                            android:textColor="@color/gray_200_AEADB3"
+                            tools:text="12편" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_other_user_library_dominant_genre_third"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_other_user_library_dominant_genre_third_logo"
+                            android:layout_width="30dp"
+                            android:layout_height="37dp"
+                            app:loadImageUrl="@{otherUserLibraryViewModel.topGenres[2].genreImage}"
+                            tools:src="@drawable/ic_novel_detail_genre_test" />
+
+                        <TextView
+                            android:id="@+id/tv_other_user_library_dominant_genre_third_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="@{otherUserLibraryViewModel.topGenres[2].genreName}"
+                            android:textAppearance="@style/title3"
+                            android:textColor="@color/black"
+                            tools:text="로판" />
+
+                        <TextView
+                            android:id="@+id/tv_other_user_library_dominant_genre_third_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.topGenres[2].genreCount)}'
+                            android:textAppearance="@style/body5"
+                            android:textColor="@color/gray_200_AEADB3"
+                            tools:text="12편" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/lv_other_user_library_rest_genre"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="40dp"
+                    android:layout_marginTop="32dp"
+                    android:divider="@null"
+                    app:layout_constraintTop_toBottomOf="@id/linear_other_user_library_dominant_genre"
+                    tools:layout_editor_absoluteX="40dp" />
+
+                <ImageView
+                    android:id="@+id/iv_other_user_library_genre_preference_path"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:onClick="@{() -> otherUserLibraryViewModel.updateToggleGenresVisibility()}"
+                    android:padding="8dp"
+                    android:src="@{otherUserLibraryViewModel.isGenreListVisible ? @drawable/ic_my_library_upper_path : @drawable/ic_my_library_lower_path}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lv_other_user_library_rest_genre" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_other_user_library_novel_preference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                app:layout_constraintTop_toBottomOf="@id/cl_other_user_library_genre_preference">
+
+                <TextView
+                    android:id="@+id/tv_other_user_library_novel_preference_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/other_user_library_novel_preference"
+                    android:textAppearance="@style/title1"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_other_user_library_attractive_points"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_my_library_gray50_radius_12dp"
+                    android:paddingVertical="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_other_user_library_novel_preference_title">
+
+                    <TextView
+                        android:id="@+id/tv_other_user_library_attractive_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{otherUserLibraryViewModel.attractivePointsText}"
+                        android:textAppearance="@style/title2"
+                        android:textColor="@color/gray_300_52515F"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="현캐릭터,소재가 매력적인 작품" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+                    android:id="@+id/wcg_other_user_library_attractive_points"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/cl_other_user_library_attractive_points" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
