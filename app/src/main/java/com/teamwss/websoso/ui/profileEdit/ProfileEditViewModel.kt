@@ -145,7 +145,7 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    fun updateCheckDuplicateNicknameBtnEnabled() {
+    fun updateCheckDuplicateNicknameButtonEnabled() {
         val isEnable = uiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && uiState.value?.nicknameEditResult == NONE
         if (isEnable == uiState.value?.isCheckDuplicateNicknameEnabled) return
         _uiState.value = uiState.value?.copy(

@@ -52,7 +52,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             updateNicknameEditTextUi(uiState)
             updateIntroductionEditTextUi(uiState.profile.introduction)
             handleProfileEditResult(uiState.profileEditResult)
-            profileEditViewModel.updateCheckDuplicateNicknameBtnEnabled()
+            profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
         }
     }
 
