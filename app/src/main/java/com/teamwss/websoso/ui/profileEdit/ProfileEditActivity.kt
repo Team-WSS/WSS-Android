@@ -15,7 +15,6 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
-import com.teamwss.websoso.domain.model.NicknameValidationResult.Companion.getProfileEditMessage
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
@@ -83,7 +82,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         )
         tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname.isNotEmpty()
         tvProfileEditNicknameResult.isSelected = uiState.nicknameEditResult == VALID_NICKNAME
-        tvProfileEditNicknameResult.text = uiState.nicknameEditResult.getProfileEditMessage()
+        tvProfileEditNicknameResult.text = uiState.nicknameEditResult.profileEditMessage
 
         when {
             uiState.defaultState -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
