@@ -11,6 +11,7 @@ data class NovelRatingModel(
     val endDate: String? = null,
     val userNovelRating: Float = 0f,
     val charmPoints: List<CharmPoint> = emptyList(),
+    val isCharmPointExceed: Boolean = false,
     val userKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
     val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus ?: ReadStatus.WATCHING.name),
     val ratingDateModel: RatingDateModel =

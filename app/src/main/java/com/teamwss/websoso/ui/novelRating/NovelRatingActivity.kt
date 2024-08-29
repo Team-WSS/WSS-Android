@@ -83,32 +83,17 @@ class NovelRatingActivity :
 
         novelRatingViewModel.uiState.observe(this) { uiState ->
             when {
-                uiState.isSaveSuccess -> {
-                    WebsosoCustomToast.make(this@NovelRatingActivity)
-                        .setText(getString(R.string.novel_rating_complete))
-                        .setIcon(R.drawable.ic_novel_detail_check)
-                        .show()
-                    finish()
-                }
+                uiState.loading -> binding.wllNovelRating.setWebsosoLoadingVisibility(true)
 
-                isInitialUpdate && !uiState.isFetchError && !uiState.loading -> {
-                    isInitialUpdate = false
-                    binding.wllNovelRating.setWebsosoLoadingVisibility(false)
-                    updateInitialReadStatus()
-                }
-
-                !uiState.isFetchError && !uiState.loading -> {
-                    updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-                    updateCharmPointChips(uiState.novelRatingModel.charmPoints)
-                    updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
-                }
-
-                uiState.keywordsModel.isSearchKeywordExceed -> {
+                uiState.novelRatingModel.isCharmPointExceed -> {
                     WebsosoCustomSnackBar.make(binding.root)
-                        .setText(getString(R.string.novel_rating_keyword_exceed))
+                        .setText(getString(R.string.novel_rating_charm_point_exceed))
                         .setIcon(R.drawable.ic_novel_rating_alert)
                         .show()
+                    novelRatingViewModel.updateCharmPoints(uiState.novelRatingModel.charmPoints.last())
                 }
+
+                uiState.isFetchError -> binding.wllNovelRating.setErrorLayoutVisibility(true)
 
                 uiState.isSaveError -> {
                     WebsosoCustomSnackBar.make(binding.root)
@@ -117,12 +102,24 @@ class NovelRatingActivity :
                         .show()
                 }
 
-                uiState.loading -> {
-                    binding.wllNovelRating.setWebsosoLoadingVisibility(true)
+                uiState.isSaveSuccess -> {
+                    WebsosoCustomToast.make(this@NovelRatingActivity)
+                        .setText(getString(R.string.novel_rating_complete))
+                        .setIcon(R.drawable.ic_novel_detail_check)
+                        .show()
+                    finish()
+                }
+
+                isInitialUpdate -> {
+                    isInitialUpdate = false
+                    binding.wllNovelRating.setWebsosoLoadingVisibility(false)
+                    updateInitialReadStatus()
                 }
 
                 else -> {
-                    binding.wllNovelRating.setErrorLayoutVisibility(true)
+                    updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
+                    updateCharmPointChips(uiState.novelRatingModel.charmPoints)
+                    updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
                 }
             }
         }

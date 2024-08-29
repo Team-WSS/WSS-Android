@@ -151,6 +151,7 @@
     <string name="novel_rating_keyword">키워드</string>
     <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
     <string name="novel_rating_keyword_exceed">최대 20개까지 선택가능해요!</string>
+    <string name="novel_rating_charm_point_exceed">최대 3개까지 선택가능해요!</string>
 
     <!-- 온보딩 뷰 -->
     <string name="onboarding_skip">건너뛰기</string>

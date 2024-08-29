@@ -152,8 +152,7 @@ class NovelRatingKeywordBottomSheetDialog :
     private fun updateSearchKeywordResult(keywords: NovelRatingKeywordsModel) {
         val previousSearchResultKeywords =
             binding.wcgNovelRatingKeywordSearchResult.children.toList().map { it as WebsosoChip }
-        if (!keywords.isSearchKeywordProceeding) return
-        if (keywords.isSearchResultKeywordsEmpty) return
+        if (!keywords.isSearchKeywordProceeding || keywords.isSearchResultKeywordsEmpty) return
         if (keywords.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
             updateSearchKeywordResultIsSelected(keywords)
             return
