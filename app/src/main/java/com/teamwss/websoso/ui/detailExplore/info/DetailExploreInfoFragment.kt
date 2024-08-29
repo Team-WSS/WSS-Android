@@ -1,8 +1,8 @@
 package com.teamwss.websoso.ui.detailExplore.info
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
@@ -24,6 +24,7 @@ class DetailExploreInfoFragment :
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
+        onResetButtonClick()
         setupGenreChips()
         setupSeriesStatusChips()
         setupRatingChips()
@@ -33,6 +34,12 @@ class DetailExploreInfoFragment :
     private fun bindViewModel() {
         binding.detailExploreViewModel = detailExploreViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun onResetButtonClick() {
+        binding.clDetailExploreInfoResetButton.setOnClickListener {
+            detailExploreViewModel.updateResetInfo()
+        }
     }
 
     private fun setupGenreChips() {
@@ -63,7 +70,7 @@ class DetailExploreInfoFragment :
                 when (isChecked) {
                     true -> {
                         seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
-                        
+
                         val status = SeriesStatus.from(chip.text.toString())
                         detailExploreViewModel.updateSelectedSeriesStatus(status)
                     }
@@ -110,6 +117,12 @@ class DetailExploreInfoFragment :
     }
 
     private fun setupObserver() {
+        detailExploreViewModel.selectedGenres.observe(viewLifecycleOwner) { genres ->
+            if (genres.isNullOrEmpty()) binding.wcgDetailExploreInfoGenre.forEach {
+                it.isSelected = false
+            }
+        }
+
         detailExploreViewModel.selectedStatus.observe(viewLifecycleOwner) { selectedStatus ->
             val selectedChip = selectedStatus?.title
 

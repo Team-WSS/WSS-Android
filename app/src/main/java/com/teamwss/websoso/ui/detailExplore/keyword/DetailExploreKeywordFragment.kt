@@ -55,6 +55,10 @@ class DetailExploreKeywordFragment :
         override fun onDetailSearchNovelButtonClick() {
             // TODO 상세 탐색 결과 화면으로 이동
         }
+
+        override fun onKeywordResetButtonClick() {
+            detailExploreViewModel.updateResetKeyword()
+        }
     }
 
     private fun setupAdapter() {

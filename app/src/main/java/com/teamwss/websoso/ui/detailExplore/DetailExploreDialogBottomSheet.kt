@@ -114,6 +114,8 @@ class DetailExploreDialogBottomSheet :
 
     private fun onBottomSheetExitButtonClick() {
         binding.ivDetailExploreExitButton.setOnClickListener {
+            detailExploreViewModel.updateResetInfo()
+            detailExploreViewModel.updateResetKeyword()
             dismiss()
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.data.repository.KeywordRepository
@@ -21,6 +22,7 @@ class DetailExploreViewModel @Inject constructor(
 ) : ViewModel() {
     private val _selectedGenres: MutableLiveData<MutableList<Genre>> =
         MutableLiveData(mutableListOf())
+    val selectedGenres: LiveData<List<Genre>> get() = _selectedGenres.map { it.toList() }
 
     private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
     val selectedStatus: LiveData<SeriesStatus?> get() = _selectedSeriesStatus
@@ -30,10 +32,10 @@ class DetailExploreViewModel @Inject constructor(
 
     val ratings: List<Float> = listOf(3.5f, 4.0f, 4.5f, 4.8f)
 
-    private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData()
+    private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
 
-    private val _isKeywordChipSelected: MutableLiveData<Boolean> = MutableLiveData()
+    private val _isKeywordChipSelected: MutableLiveData<Boolean> = MutableLiveData(false)
     val isKeywordChipSelected: LiveData<Boolean> get() = _isKeywordChipSelected
 
     private val _uiState: MutableLiveData<DetailExploreKeywordUiState> =
@@ -64,6 +66,12 @@ class DetailExploreViewModel @Inject constructor(
         val isRatingChipSelected: Boolean = _selectedRating.value != null
 
         return isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
+    }
+
+    fun updateResetInfo() {
+        _selectedGenres.value = mutableListOf()
+        _selectedSeriesStatus.value = null
+        _selectedRating.value = null
     }
 
     fun updateSelectedGenres(genre: Genre) {
@@ -111,6 +119,22 @@ class DetailExploreViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun updateResetKeyword() {
+        val currentState = _uiState.value ?: return
+        val updatedCategories = currentState.categories
+
+        val resetCategories = updatedCategories.map { category ->
+            category.copy(
+                keywords = category.keywords.map { keyword ->
+                    keyword.copy(isSelected = false)
+                }
+            )
+        }
+
+        _uiState.value = currentState.copy(categories = resetCategories)
+        _isKeywordChipSelected.value = false
     }
 
     fun updateSearchCancelButtonVisibility() {

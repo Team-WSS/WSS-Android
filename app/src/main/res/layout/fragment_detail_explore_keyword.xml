@@ -239,6 +239,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/gray_50_F4F5F8"
+            android:onClick="@{() -> onClick.onKeywordResetButtonClick()}"
             android:paddingVertical="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_detail_explore_search_button"
