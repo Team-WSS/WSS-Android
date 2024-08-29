@@ -39,9 +39,8 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
     private fun setupObserver() {
         profileEditViewModel.avatarChangeUiState.observe(viewLifecycleOwner) { uiState ->
-            val selectedAvatarId = profileEditViewModel.avatarChangeUiState.value?.selectedAvatar?.avatarId ?: 0
             handleAvatarChangeUiState(uiState)
-            updateAvatarAnimation(profileEditViewModel.getAvatarAnimation(selectedAvatarId))
+            updateAvatarAnimation(profileEditViewModel.getAvatarAnimation(uiState.selectedAvatar.avatarId))
         }
     }
 
@@ -51,7 +50,7 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
             uiState.error -> Unit
 
-            else -> {
+            uiState.avatars.isNotEmpty() -> {
                 setupRecyclerView()
                 avatarChangeAdapter.submitList(uiState.avatars)
             }
