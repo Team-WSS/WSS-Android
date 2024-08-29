@@ -1,17 +1,25 @@
 package com.teamwss.websoso.ui.createFeed
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
 import com.teamwss.websoso.ui.createFeed.model.CreateFeedCategory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(R.layout.activity_create_feed) {
+    private val createFeedViewModel: CreateFeedViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupCategoryChips()
+
+        binding.lifecycleOwner = this
+        binding.viewModel = createFeedViewModel
     }
 
     private fun setupCategoryChips() {
@@ -25,7 +33,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(R.layout.acti
                 setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
                 setWebsosoChipPaddingHorizontal(8f.toFloatScaledByPx())
                 setWebsosoChipRadius(20f.toFloatScaledByPx())
-                setOnWebsosoChipClick {}
+                setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.ordinal) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }

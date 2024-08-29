@@ -39,6 +39,10 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.createFeed.CreateFeedActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.onboarding.OnboardingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

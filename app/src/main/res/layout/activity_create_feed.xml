@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.createFeed.CreateFeedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
