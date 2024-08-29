@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.domain.model.NicknameValidationResult
-import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_NICKNAME_DUPLICATION
 import com.teamwss.websoso.domain.model.NicknameValidationResult.NONE
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
@@ -25,7 +23,6 @@ import javax.inject.Inject
 class ProfileEditViewModel @Inject constructor(
     private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
     private val saveChangedProfileUseCase: SaveChangedProfileUseCase,
-    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _profileEditUiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
@@ -104,27 +101,10 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    private fun checkNicknameDuplication(nickname: String) {
-        viewModelScope.launch {
-            runCatching {
-                userRepository.fetchNicknameValidity(nickname)
-            }.onSuccess { isDuplicated ->
-                if (isDuplicated) {
-                    _profileEditUiState.value = profileEditUiState.value?.copy(
-                        nicknameEditResult = VALID_NICKNAME,
-                    )
-                } else {
-                    _profileEditUiState.value = profileEditUiState.value?.copy(
-                        nicknameEditResult = INVALID_NICKNAME_DUPLICATION,
-                    )
-                }
-            }
-        }
-    }
-
     fun updateProfile() {
         val isInvalidNickname = profileEditUiState.value?.nicknameEditResult != VALID_NICKNAME
-        val isNicknameChanged = profileEditUiState.value?.profile?.nicknameModel?.nickname != profileEditUiState.value?.previousProfile?.nicknameModel?.nickname
+        val isNicknameChanged =
+            profileEditUiState.value?.profile?.nicknameModel?.nickname != profileEditUiState.value?.previousProfile?.nicknameModel?.nickname
         if (isInvalidNickname && isNicknameChanged) return
 
         val previousProfile = profileEditUiState.value?.previousProfile ?: return
@@ -146,7 +126,8 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateCheckDuplicateNicknameButtonEnabled() {
-        val isEnable = profileEditUiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && profileEditUiState.value?.nicknameEditResult == NONE
+        val isEnable =
+            profileEditUiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && profileEditUiState.value?.nicknameEditResult == NONE
         if (isEnable == profileEditUiState.value?.isCheckDuplicateNicknameEnabled) return
         _profileEditUiState.value = profileEditUiState.value?.copy(
             isCheckDuplicateNicknameEnabled = isEnable,
