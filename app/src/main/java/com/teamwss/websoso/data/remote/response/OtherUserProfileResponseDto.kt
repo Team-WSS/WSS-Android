@@ -14,5 +14,5 @@ data class OtherUserProfileResponseDto(
     @SerialName("isProfilePublic")
     val isProfilePublic: Boolean,
     @SerialName("genrePreferences")
-    val genrePreferences: List<String>
+    val genrePreferences: List<String>,
 )
