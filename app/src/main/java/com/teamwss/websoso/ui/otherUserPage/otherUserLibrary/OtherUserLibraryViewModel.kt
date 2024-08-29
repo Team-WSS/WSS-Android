@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.main.myPage.myLibrary
+package com.teamwss.websoso.ui.otherUserPage.otherUserLibrary
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,24 +14,24 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyLibraryViewModel @Inject constructor(
+class OtherUserLibraryViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _genres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val genres: LiveData<List<GenrePreferenceEntity>> get()= _genres
+    val genres: LiveData<List<GenrePreferenceEntity>> get() = _genres
 
     private val _dominantGenres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val topGenres: LiveData<List<GenrePreferenceEntity>> get()= _dominantGenres
+    val topGenres: LiveData<List<GenrePreferenceEntity>> get() = _dominantGenres
 
     private val _restGenres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val restGenres: LiveData<List<GenrePreferenceEntity>> get()= _restGenres
+    val restGenres: LiveData<List<GenrePreferenceEntity>> get() = _restGenres
 
     private val _isGenreListVisible = MutableLiveData<Boolean>(false)
-    val isGenreListVisible: LiveData<Boolean> get()= _isGenreListVisible
+    val isGenreListVisible: LiveData<Boolean> get() = _isGenreListVisible
 
     private val _novelPreferences = MutableLiveData<NovelPreferenceEntity>()
-    val novelPreferences: LiveData<NovelPreferenceEntity> get()= _novelPreferences
+    val novelPreferences: LiveData<NovelPreferenceEntity> get() = _novelPreferences
 
     private val _attractivePointsText = MutableLiveData<String>()
     val attractivePointsText: LiveData<String> get() = _attractivePointsText
@@ -89,7 +89,8 @@ class MyLibraryViewModel @Inject constructor(
                 userRepository.fetchNovelPreferences(userId)
             }.onSuccess { novelPreferences ->
                 _novelPreferences.value = novelPreferences
-                _translatedAttractivePoints.value = translateAttractivePoints(novelPreferences.attractivePoints)
+                _translatedAttractivePoints.value =
+                    translateAttractivePoints(novelPreferences.attractivePoints)
             }.onFailure { exception ->
             }
         }
