@@ -29,7 +29,7 @@ class OnboardingSecondFragment :
     }
 
     private fun setupObserver() {
-        onboardingViewModel.userInfo.observe(viewLifecycleOwner) { userInfo ->
+        onboardingViewModel.userProfile.observe(viewLifecycleOwner) { userInfo ->
             updateBirthYearTextUi(userInfo)
         }
     }
