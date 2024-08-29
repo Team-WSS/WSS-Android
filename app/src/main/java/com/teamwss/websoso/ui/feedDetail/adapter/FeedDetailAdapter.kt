@@ -39,12 +39,8 @@ class FeedDetailAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is FeedDetailContentViewHolder -> holder.bind(
-                (getItem(position) as Header).feed,
-                itemCount - 1,
-            )
-
             is FeedDetailCommentViewHolder -> holder.bind((getItem(position) as Comment).comment)
+            is FeedDetailContentViewHolder -> holder.bind((getItem(position) as Header).feed)
         }
     }
 

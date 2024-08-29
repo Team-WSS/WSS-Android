@@ -31,6 +31,7 @@ class FeedDetailViewModel @Inject constructor(
         this.feedId = feedId
         feedDetailUiState.value?.let { feedDetailUiState ->
             viewModelScope.launch {
+                _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
                 runCatching {
                     val feed = async { feedRepository.fetchFeed(feedId) }
                     val comments = async { feedRepository.fetchComments(feedId) }
@@ -170,10 +171,13 @@ class FeedDetailViewModel @Inject constructor(
             viewModelScope.launch {
                 runCatching {
                     feedRepository.fetchComments(feedId)
-                }.onSuccess { comments ->
+                }.onSuccess { commentsEntity ->
+                    val comments = commentsEntity.comments.map { it.toUi() }
+
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        comments = comments.comments.map { it.toUi() }
+                        comments = comments,
+                        feed = feedDetailUiState.feed?.copy(commentCount = comments.size)
                     )
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
@@ -228,9 +232,12 @@ class FeedDetailViewModel @Inject constructor(
                 runCatching {
                     feedRepository.deleteComment(feedId, commentId)
                 }.onSuccess {
+                    val comments = feedDetailUiState.comments.filter { it.commentId != commentId }
+
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        comments = feedDetailUiState.comments.filter { it.commentId != commentId }
+                        comments = comments,
+                        feed = feedDetailUiState.feed?.copy(commentCount = comments.size),
                     )
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(

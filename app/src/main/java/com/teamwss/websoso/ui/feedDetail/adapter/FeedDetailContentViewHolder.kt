@@ -16,9 +16,8 @@ class FeedDetailContentViewHolder(
         binding.onClick = feedDetailClickListener
     }
 
-    fun bind(feed: FeedModel, commentCounts: Int) {
+    fun bind(feed: FeedModel) {
         binding.feed = feed
-        binding.count = commentCounts
         binding.clFeedLike.isSelected = feed.isLiked
     }
 
