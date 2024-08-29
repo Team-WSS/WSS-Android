@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.children
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
@@ -92,9 +93,18 @@ class DetailExploreKeywordFragment :
     private fun setupObserver() {
         detailExploreViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             detailExploreKeywordAdapter.submitList(uiState.categories)
+            setupSelectedScrollViewVisibility(uiState.categories)
             setupSelectedChips(uiState.categories)
             updateSearchKeywordResult(uiState)
         }
+    }
+
+    private fun setupSelectedScrollViewVisibility(categories: List<CategoryModel>) {
+        val hasSelectedKeywords = categories
+            .flatMap { it.keywords }
+            .any { it.isSelected }
+
+        binding.hsvRatingKeywordSelectedKeyword.isVisible = hasSelectedKeywords
     }
 
     private fun setupSelectedChips(categories: List<CategoryModel>) {
