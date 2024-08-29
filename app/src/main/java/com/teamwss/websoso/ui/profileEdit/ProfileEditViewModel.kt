@@ -18,7 +18,6 @@ import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 import com.teamwss.websoso.ui.profileEdit.model.Genre
-import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
@@ -50,50 +49,59 @@ class ProfileEditViewModel @Inject constructor(
         val genrePreferences = profileEditUiState.value?.profile?.genrePreferences?.toMutableList() ?: mutableListOf()
         if (genrePreferences.contains(selectedGenre)) genrePreferences.remove(selectedGenre)
         else genrePreferences.add(selectedGenre)
-        _profileEditUiState.value = profileEditUiState.value?.copy(
-            profile = profileEditUiState.value?.profile?.copy(
-                genrePreferences = genrePreferences,
-            ) ?: ProfileModel(),
-        )
+        _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
+            uiState.copy(
+                profile = uiState.profile.copy(
+                    genrePreferences = genrePreferences,
+                )
+            )
+        }
     }
 
     fun updateNickname(nickname: String) {
-        _profileEditUiState.value = profileEditUiState.value?.copy(
-            profile = profileEditUiState.value?.profile?.copy(
-                nicknameModel = profileEditUiState.value?.profile?.nicknameModel?.copy(
-                    nickname = nickname,
-                ) ?: NicknameModel(),
-            ) ?: ProfileModel(),
-            nicknameEditResult = NONE,
-        )
+        _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
+            uiState.copy(
+                profile = uiState.profile.copy(
+                    nicknameModel = uiState.profile.nicknameModel.copy(
+                        nickname = nickname,
+                    ),
+                ),
+            )
+        }
     }
 
     fun updateIntroduction(introduction: String) {
-        _profileEditUiState.value = profileEditUiState.value?.copy(
-            profile = profileEditUiState.value?.profile?.copy(
-                introduction = introduction,
-            ) ?: ProfileModel(),
-        )
+        _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
+            uiState.copy(
+                profile = uiState.profile.copy(
+                    introduction = introduction,
+                ),
+            )
+        }
     }
 
     fun updateNicknameFocus(hasFocus: Boolean) {
-        _profileEditUiState.value = profileEditUiState.value?.copy(
-            profile = profileEditUiState.value?.profile?.copy(
-                nicknameModel = profileEditUiState.value?.profile?.nicknameModel?.copy(
-                    hasFocus = hasFocus,
-                ) ?: NicknameModel(),
-            ) ?: ProfileModel(),
-        )
+        _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
+            uiState.copy(
+                profile = uiState.profile.copy(
+                    nicknameModel = uiState.profile.nicknameModel.copy(
+                        hasFocus = hasFocus,
+                    ),
+                ),
+            )
+        }
     }
 
     fun clearNickname() {
-        _profileEditUiState.value = profileEditUiState.value?.copy(
-            profile = profileEditUiState.value?.profile?.copy(
-                nicknameModel = profileEditUiState.value?.profile?.nicknameModel?.copy(
-                    nickname = "",
-                ) ?: NicknameModel(),
-            ) ?: ProfileModel(),
-        )
+        _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
+            uiState.copy(
+                profile = uiState.profile.copy(
+                    nicknameModel = uiState.profile.nicknameModel.copy(
+                        nickname = "",
+                    ),
+                ),
+            )
+        }
     }
 
     fun checkNicknameValidity(nickname: String) {
@@ -192,26 +200,30 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateSelectedAvatar(avatar: AvatarModel) {
-        _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
-            avatars = avatarChangeUiState.value?.avatars?.map { previousAvatar ->
-                if (previousAvatar.avatarId == avatar.avatarId) {
-                    previousAvatar.copy(isRepresentative = true)
-                } else {
-                    previousAvatar.copy(isRepresentative = false)
-                }
-            } ?: emptyList(),
-            selectedAvatar = avatar,
-        )
+        _avatarChangeUiState.value = avatarChangeUiState.value?.let { uiState ->
+            uiState.copy(
+                avatars = uiState.avatars.map { previousAvatar ->
+                    if (previousAvatar.avatarId == avatar.avatarId) {
+                        previousAvatar.copy(isRepresentative = true)
+                    } else {
+                        previousAvatar.copy(isRepresentative = false)
+                    }
+                },
+                selectedAvatar = avatar,
+            )
+        }
     }
 
     fun updateRepresentativeAvatar() {
         val selectedAvatar = avatarChangeUiState.value?.selectedAvatar ?: return
-        _profileEditUiState.value = profileEditUiState.value?.copy(
-            profile = profileEditUiState.value?.profile?.copy(
-                avatarId = selectedAvatar.avatarId,
-                avatarThumbnail = selectedAvatar.avatarThumbnail
-            ) ?: ProfileModel(),
-        )
+        _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
+            uiState.copy(
+                profile = uiState.profile.copy(
+                    avatarId = selectedAvatar.avatarId,
+                    avatarThumbnail = selectedAvatar.avatarThumbnail,
+                ),
+            )
+        }
     }
 
     fun getRepresentativeAvatar(): AvatarModel {
@@ -221,11 +233,13 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun getFormattedSpanCount(): Int {
-        return avatarChangeUiState.value?.avatars?.size.let { avatarCount ->
-            if (avatarCount == null) return MIN_CHARACTER_COLUMN_COUNT
-            if (avatarCount < MAX_CHARACTER_COLUMN_COUNT) avatarCount
-            else MAX_CHARACTER_COLUMN_COUNT
-        }
+        return avatarChangeUiState.value?.avatars?.size?.let { avatarCount ->
+            when {
+                avatarCount < MIN_CHARACTER_COLUMN_COUNT -> MIN_CHARACTER_COLUMN_COUNT
+                avatarCount < MAX_CHARACTER_COLUMN_COUNT -> avatarCount
+                else -> MAX_CHARACTER_COLUMN_COUNT
+            }
+        } ?: MIN_CHARACTER_COLUMN_COUNT
     }
 
     companion object {
