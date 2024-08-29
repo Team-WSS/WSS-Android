@@ -67,8 +67,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
             NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId)
         }
 
-        override fun onProfileClick(userId: Long) {
-            // 마이페이지 else 프로필 뷰
+        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
+            // if (isMyFeed) 마이페이지 else 프로필 뷰
         }
     }
 

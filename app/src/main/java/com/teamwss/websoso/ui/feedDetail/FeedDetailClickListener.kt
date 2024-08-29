@@ -8,5 +8,5 @@ interface FeedDetailClickListener {
 
     fun onNovelInfoClick(novelId: Long)
 
-    fun onProfileClick(userId: Long)
+    fun onProfileClick(userId: Long, isMyFeed: Boolean)
 }

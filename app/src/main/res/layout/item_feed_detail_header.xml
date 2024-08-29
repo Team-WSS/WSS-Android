@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:onClick="@{() -> onClick.onProfileClick(feed.user.id)}"
+                android:onClick="@{() -> onClick.onProfileClick(feed.user.id, feed.isMyFeed)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
