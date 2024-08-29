@@ -3,6 +3,9 @@ package com.teamwss.websoso.data.remote.api
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
+import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
+import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
+import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
@@ -41,4 +44,18 @@ interface UserApi {
     suspend fun putUserInfo(
         @Body userInfoRequestDto: UserInfoRequestDto,
     )
+
+    @GET("users/my-profile")
+    suspend fun getMyProfile(): MyProfileResponseDto
+
+    @GET("users/{userId}/preferences/genres")
+    suspend fun getGenrePreference(
+        @Path("userId") userId: Long,
+    ): GenrePreferenceResponseDto
+
+    @GET("users/{userId}/preferences/attractive-points")
+    suspend fun getNovelPreferences(
+        @Path("userId") userId: Long,
+    ): NovelPreferenceResponseDto
+
 }

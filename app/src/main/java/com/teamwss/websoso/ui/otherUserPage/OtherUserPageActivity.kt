@@ -46,7 +46,7 @@ class OtherUserPageActivity :
             tbOtherUserPage.setBackgroundColor(
                 ContextCompat.getColor(
                     this@OtherUserPageActivity,
-                    color
+                    color,
                 )
             )
             tvOtherUserPageStickyTitle.isVisible = isCollapsed
