@@ -23,12 +23,13 @@ class NormalExploreLoadingViewHolder(
 
     companion object {
 
-        fun from(parent: ViewGroup): NormalExploreLoadingViewHolder = NormalExploreLoadingViewHolder(
-            ItemFeedLoadingBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
+        fun from(parent: ViewGroup): NormalExploreLoadingViewHolder =
+            NormalExploreLoadingViewHolder(
+                ItemFeedLoadingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false,
+                )
             )
-        )
     }
 }

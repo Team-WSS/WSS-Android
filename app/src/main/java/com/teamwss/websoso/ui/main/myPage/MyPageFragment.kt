@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
@@ -14,13 +15,20 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
+    private val myPageViewModel: MyPageViewModel by viewModels()
     private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindViewModel()
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
         onSettingButtonClick()
+    }
+
+    private fun bindViewModel() {
+        binding.myPageViewModel = myPageViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun setUpViewPager() {

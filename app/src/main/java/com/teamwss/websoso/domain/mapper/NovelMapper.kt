@@ -14,7 +14,7 @@ fun ExploreResultEntity.toDomain(): NormalExploreResult {
 }
 
 fun NovelEntity.toDomain(): Novel {
-    return NormalExploreResult.Novel(
+    return Novel(
         id = id,
         title = title,
         author = author,

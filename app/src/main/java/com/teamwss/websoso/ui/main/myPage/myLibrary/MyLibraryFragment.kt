@@ -40,7 +40,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     }
 
     private fun setUpObserve() {
-        myLibraryViewModel.genres.observe(viewLifecycleOwner) { genres ->
+        myLibraryViewModel.restGenres.observe(viewLifecycleOwner) { genres ->
             restGenrePreferenceAdapter.updateRestGenrePreferenceData(genres)
         }
 
@@ -48,7 +48,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             updateRestGenrePreferenceVisibility(isVisible)
         }
 
-        myLibraryViewModel.attractivePointsText.observe(viewLifecycleOwner) { combinedText ->
+        myLibraryViewModel.translatedAttractivePoints.observe(viewLifecycleOwner) { translatedPoints ->
+            val combinedText =
+                translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text)
             applyTextColors(combinedText)
         }
 
@@ -70,12 +72,13 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
         val spannableStringBuilder = SpannableStringBuilder()
 
-        val fixedText = getString(R.string.my_library_attractive_point_fixed_text).trim()
-        val attractivePointTextLength = combinedText.indexOf(fixedText)
+        val fixedText = getString(R.string.my_library_attractive_point_fixed_text)
 
-        if (attractivePointTextLength != -1) {
+        val splitText = combinedText.split(fixedText)
+
+        if (splitText.isNotEmpty()) {
             val attractivePoints =
-                SpannableString(combinedText.substring(0, attractivePointTextLength)).apply {
+                SpannableString(splitText[0]).apply {
                     setSpan(
                         ForegroundColorSpan(primary100),
                         0,
@@ -86,7 +89,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             spannableStringBuilder.append(attractivePoints)
 
             val fixedSpannable =
-                SpannableString(combinedText.substring(attractivePointTextLength)).apply {
+                SpannableString(fixedText).apply {
                     setSpan(
                         ForegroundColorSpan(gray300),
                         0,
@@ -109,7 +112,6 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
         binding.tvMyLibraryAttractivePoints.text = spannableStringBuilder
     }
-
 
     private fun updateNovelPreferencesKeywords(novelPreferences: NovelPreferenceEntity) {
         novelPreferences.keywords.forEach { keyword ->

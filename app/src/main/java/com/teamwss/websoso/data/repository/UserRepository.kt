@@ -2,6 +2,9 @@ package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.BlockedUsersEntity
+import com.teamwss.websoso.data.model.GenrePreferenceEntity
+import com.teamwss.websoso.data.model.MyProfileEntity
+import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -40,5 +43,17 @@ class UserRepository @Inject constructor(
 
     suspend fun saveUserInfo(gender: String, birthYear: Int) {
         userApi.putUserInfo(UserInfoRequestDto(gender, birthYear))
+    }
+
+    suspend fun fetchMyProfile(): MyProfileEntity {
+        return userApi.getMyProfile().toData()
+    }
+
+    suspend fun fetchGenrePreference(userId: Long): List<GenrePreferenceEntity> {
+        return userApi.getGenrePreference(userId).genrePreferences.map { it.toData() }
+    }
+
+    suspend fun fetchNovelPreferences(userId: Long): NovelPreferenceEntity {
+        return userApi.getNovelPreferences(userId).toData()
     }
 }

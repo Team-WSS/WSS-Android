@@ -58,15 +58,22 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_feed_detail"
+        <com.simform.refresh.SSPullToRefreshLayout
+            android:id="@+id/sptr_feed_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toTopOf="@+id/cl_feed_detail_input"
-            app:layout_constraintTop_toBottomOf="@+id/cl_feed_detail_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/cl_feed_detail_toolbar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_feed_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </com.simform.refresh.SSPullToRefreshLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_detail_input"
@@ -118,6 +125,13 @@
                 app:layout_constraintTop_toTopOf="@+id/et_feed_detail_input" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wll_feed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,5 @@
 package com.teamwss.websoso.data.repository
 
-import android.util.Log
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.CommentsEntity
 import com.teamwss.websoso.data.model.FeedEntity
@@ -45,15 +44,14 @@ class FeedRepository @Inject constructor(
     }
 
     suspend fun saveSpoilerFeed(feedId: Long) {
-        feedApi.postSpoilerFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
+        feedApi.postSpoilerFeed(feedId)
     }
 
     suspend fun saveImpertinenceFeed(feedId: Long) {
-        feedApi.postImpertinenceFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
+        feedApi.postImpertinenceFeed(feedId)
     }
 
     suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long) {
-
         when (isLikedOfLikedFeed) {
             true -> feedApi.deleteLikes(selectedFeedId)
             false -> feedApi.postLikes(selectedFeedId)
