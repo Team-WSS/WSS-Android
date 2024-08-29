@@ -31,7 +31,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.onAvatarChangeClick = ::showAvatarChangeBottomSheetDialog
-        profileEditViewModel.fetchAvatars()
+        profileEditViewModel.updateAvatars()
 
         bindViewModel()
         setupObserver()

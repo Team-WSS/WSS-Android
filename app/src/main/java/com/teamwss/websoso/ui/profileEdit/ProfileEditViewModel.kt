@@ -175,7 +175,7 @@ class ProfileEditViewModel @Inject constructor(
         )
     }
 
-    fun fetchAvatars() {
+    fun updateAvatars() {
         viewModelScope.launch {
             runCatching {
                 _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
