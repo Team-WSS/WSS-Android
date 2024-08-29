@@ -70,6 +70,6 @@ class GetDetailExploreResultUseCase @Inject constructor(
     companion object {
         private const val INITIAL_PAGE = 0
         private const val ADDITIONAL_PAGE_SIZE = 1
-        private const val REQUEST_SIZE = 20
+        private const val REQUEST_SIZE = 30
     }
 }
