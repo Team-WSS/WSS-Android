@@ -1,11 +1,13 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
+import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
@@ -13,6 +15,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 

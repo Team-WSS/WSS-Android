@@ -5,11 +5,13 @@ import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
+import com.teamwss.websoso.data.model.OtherUserProfileEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import javax.inject.Inject
 
