@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.HEADER
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.LOADING
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.RESULT
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Loading
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Result
 
 class DetailExploreResultAdapter(
@@ -15,9 +17,10 @@ class DetailExploreResultAdapter(
 ) : ListAdapter<DetailExploreResultItemType, RecyclerView.ViewHolder>(diffCallBack) {
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            HEADER_POSITION -> HEADER.ordinal
-            else -> RESULT.ordinal
+        return when (getItem(position)) {
+            is Header -> HEADER.ordinal
+            is Result -> RESULT.ordinal
+            is Loading -> LOADING.ordinal
         }
     }
 
@@ -25,6 +28,7 @@ class DetailExploreResultAdapter(
         return when (ItemType.valueOf(viewType)) {
             HEADER -> DetailExploreResultHeaderViewHolder.from(parent)
             RESULT -> DetailExploreResultViewHolder.of(parent, onNovelClick)
+            LOADING -> DetailExploreLoadingViewHolder.from(parent)
         }
     }
 
@@ -32,12 +36,11 @@ class DetailExploreResultAdapter(
         when (holder) {
             is DetailExploreResultHeaderViewHolder -> holder.bind((getItem(position) as Header).novelCount)
             is DetailExploreResultViewHolder -> holder.bind((getItem(position) as Result).novel)
+            is DetailExploreLoadingViewHolder -> return
         }
     }
 
     companion object {
-        private const val HEADER_POSITION = 0
-
         private val diffCallBack = object : DiffUtil.ItemCallback<DetailExploreResultItemType>() {
 
             override fun areItemsTheSame(

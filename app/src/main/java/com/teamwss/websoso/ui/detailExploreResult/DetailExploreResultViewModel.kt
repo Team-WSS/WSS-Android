@@ -6,16 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.NovelRepository
+import com.teamwss.websoso.domain.usecase.GetDetailExploreResultUseCase
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
+import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailExploreResultViewModel @Inject constructor(
-    private val novelRepository: NovelRepository,
+    private val getDetailExploreResultUseCase: GetDetailExploreResultUseCase,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<DetailExploreResultUiState> =
         MutableLiveData(DetailExploreResultUiState())
@@ -56,31 +57,38 @@ class DetailExploreResultViewModel @Inject constructor(
         )
     }
 
-    fun updateSearchResult() {
+    fun updateSearchResult(isSearchButtonClick: Boolean) {
+        if (uiState.value?.isLoadable == false && !isSearchButtonClick) {
+            return
+        }
         viewModelScope.launch {
             runCatching {
-                novelRepository.fetchFilteredNovelResult(
-                    page = 0,
-                    size = 20,
-                    genres = arrayOf("ROMANCE"),
-                    isCompleted = null,
-                    novelRating = null,
-                    keywordIds = null,
+                getDetailExploreResultUseCase(
+                    genres = selectedGenres.value?.map { it.title }?.toTypedArray(),
+                    isCompleted = selectedStatus.value,
+                    novelRating = selectedRating.value,
+                    keywordIds = uiState.value?.selectedKeywords?.toTypedArray(),
+                    isSearchButtonClick = isSearchButtonClick,
                 )
             }.onSuccess { results ->
                 when (results.novels.isNotEmpty()) {
                     true -> {
                         _uiState.value = uiState.value?.copy(
                             loading = false,
-                            novels = results.novels,
+                            isLoadable = results.isLoadable,
+                            novels = results.novels.map { it.toUi() },
+                            novelCount = results.resultCount,
                         )
+                        _isNovelResultEmptyBoxVisibility.value = false
                     }
 
                     false -> {
                         _uiState.value = uiState.value?.copy(
                             loading = false,
+                            isLoadable = results.isLoadable,
+                            novelCount = results.resultCount,
+                            novels = emptyList(),
                         )
-
                         _isNovelResultEmptyBoxVisibility.value = true
                     }
                 }
@@ -89,6 +97,7 @@ class DetailExploreResultViewModel @Inject constructor(
                     loading = false,
                     error = true,
                 )
+                _isNovelResultEmptyBoxVisibility.value = false
             }
         }
     }

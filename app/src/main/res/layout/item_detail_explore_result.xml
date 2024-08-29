@@ -7,7 +7,7 @@
 
         <variable
             name="novel"
-            type="com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity" />
+            type="com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel" />
 
         <variable
             name="onClick"
@@ -86,7 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="1"
             android:text="@{novel.title}"
             android:textAppearance="@style/label1"
             android:textColor="@color/black"

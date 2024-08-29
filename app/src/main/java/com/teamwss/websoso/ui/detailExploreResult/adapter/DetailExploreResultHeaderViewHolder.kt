@@ -9,7 +9,7 @@ import com.teamwss.websoso.databinding.ItemDetailExploreResultHeaderBinding
 class DetailExploreResultHeaderViewHolder(private val binding: ItemDetailExploreResultHeaderBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(novelCount: Int) {
+    fun bind(novelCount: Long) {
         binding.apply {
             clDetailExploreNovelCount.isVisible = novelCount > NOVEL_COUNT_INVISIBLE_THRESHOLD
             tvDetailExploreNovelCount.text = novelCount.toString()
