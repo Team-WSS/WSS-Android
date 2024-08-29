@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.common.util.toIntScaledByPx
@@ -27,6 +28,8 @@ import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -113,30 +116,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         }
     }
 
-    private fun MenuFeedPopupBinding.setupNotMyFeed(
-        feedId: Long,
-        popup: PopupWindow,
-    ) {
-        onFirstItemClick = {
-            showDialog<DialogReportPopupMenuBinding>(
-                title = getString(R.string.report_popup_menu_spoiling_feed),
-                event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
-            )
-            popup.dismiss()
-        }
-        onSecondItemClick = {
-            showDialog<DialogReportPopupMenuBinding>(
-                title = getString(R.string.report_popup_menu_impertinence_feed),
-                event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
-            )
-            popup.dismiss()
-        }
-        menuContentTitle =
-            getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
-        tvFeedPopupFirstItem.isSelected = false
-        tvFeedPopupSecondItem.isSelected = false
-    }
-
     private fun MenuFeedPopupBinding.setupMyFeed(
         feedId: Long,
         popup: PopupWindow,
@@ -147,6 +126,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         }
         onSecondItemClick = {
             showDialog<DialogRemovePopupMenuBinding>(
+                menuType = REMOVE_FEED.name,
                 event = { feedViewModel.updateRemovedFeed(feedId) },
             )
             popup.dismiss()
@@ -157,18 +137,41 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         tvFeedPopupSecondItem.isSelected = true
     }
 
+    private fun MenuFeedPopupBinding.setupNotMyFeed(
+        feedId: Long,
+        popup: PopupWindow,
+    ) {
+        onFirstItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                menuType = ReportMenuType.SPOILER_FEED.name,
+                event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        onSecondItemClick = {
+            showDialog<DialogReportPopupMenuBinding>(
+                menuType = ReportMenuType.IMPERTINENCE_FEED.name,
+                event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
+            )
+            popup.dismiss()
+        }
+        menuContentTitle =
+            getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        tvFeedPopupFirstItem.isSelected = false
+        tvFeedPopupSecondItem.isSelected = false
+    }
+
     private inline fun <reified Dialog : ViewDataBinding> showDialog(
-        title: String? = null,
+        menuType: String,
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
             DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
-                event = { event() },
+                menuType = menuType, event = { event() },
             ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
 
             DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
-                title = title ?: throw IllegalArgumentException(),
-                event = { event() },
+                menuType = menuType, event = { event() },
             ).show(childFragmentManager, FeedReportDialogFragment.TAG)
         }
     }
@@ -225,7 +228,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             adapter = feedAdapter
             itemAnimator = null
             addOnScrollListener(
-                FeedScrollListener.of(
+                InfiniteScrollListener.of(
                     singleEventHandler = singleEventHandler,
                     event = feedViewModel::updateFeeds,
                 )

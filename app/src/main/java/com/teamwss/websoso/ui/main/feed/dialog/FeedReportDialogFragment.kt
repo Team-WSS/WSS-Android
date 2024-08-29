@@ -2,14 +2,22 @@ package com.teamwss.websoso.ui.main.feed.dialog
 
 import android.os.Bundle
 import android.view.View
-import com.teamwss.websoso.R
+import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.string.report_popup_menu_impertinence_comment
+import com.teamwss.websoso.R.string.report_popup_menu_impertinence_feed
+import com.teamwss.websoso.R.string.report_popup_menu_spoiling_comment
+import com.teamwss.websoso.R.string.report_popup_menu_spoiling_feed
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
 
 class FeedReportDialogFragment :
-    BaseDialogFragment<DialogReportPopupMenuBinding>(R.layout.dialog_report_popup_menu) {
-    private val reportTitle: String? by lazy { arguments?.getString(TITLE) }
+    BaseDialogFragment<DialogReportPopupMenuBinding>(layout.dialog_report_popup_menu) {
+    private val menuType: String? by lazy { arguments?.getString(MENU_TYPE) }
     private val onReportClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener
     }
@@ -17,29 +25,80 @@ class FeedReportDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.title = reportTitle
-        binding.onCancelClick = { dismiss() }
-        binding.onReportClick = {
+        when (menuType) {
+            SPOILER_COMMENT.name -> setupSpoilerCommentView()
+            IMPERTINENCE_COMMENT.name -> setupImpertinenceCommentView()
+            SPOILER_FEED.name -> setupSpoilerFeedView()
+            IMPERTINENCE_FEED.name -> setupImpertinenceFeedView()
+        }
+
+        binding.tvReportPopupMenuCancel.setOnClickListener { dismiss() }
+        dialog?.setCanceledOnTouchOutside(false)
+    }
+
+    private fun setupImpertinenceFeedView() {
+        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_impertinence_feed)
+        binding.tvReportPopupMenuReport.setOnClickListener {
             onReportClick()
-            FeedReportDoneDialogFragment.newInstance { dismiss() }
+            FeedReportDoneDialogFragment
+                .newInstance(IMPERTINENCE_FEED.name) { dismiss() }
                 .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
         }
-        dialog?.setCanceledOnTouchOutside(false)
+    }
+
+    private fun setupSpoilerFeedView() {
+        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_spoiling_feed)
+        binding.tvReportPopupMenuReport.setOnClickListener {
+            onReportClick()
+            FeedReportDoneDialogFragment
+                .newInstance(SPOILER_FEED.name) { dismiss() }
+                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+        }
+    }
+
+    private fun setupImpertinenceCommentView() {
+        binding.tvReportPopupMenuTitle.text = getString(
+            report_popup_menu_impertinence_comment
+        )
+        binding.tvReportPopupMenuReport.setOnClickListener {
+            onReportClick()
+            FeedReportDoneDialogFragment
+                .newInstance(IMPERTINENCE_COMMENT.name) { dismiss() }
+                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+        }
+    }
+
+    private fun setupSpoilerCommentView() {
+        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_spoiling_comment)
+        binding.tvReportPopupMenuReport.setOnClickListener {
+            onReportClick()
+            FeedReportDoneDialogFragment
+                .newInstance(IMPERTINENCE_COMMENT.name) { dismiss() }
+                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+        }
     }
 
     companion object {
         private const val EVENT = "EVENT"
-        private const val TITLE = "TITLE"
+        private const val MENU_TYPE = "MENU_TYPE"
         const val TAG = "FeedReportDialogFragment"
 
         fun newInstance(
-            title: String,
+            menuType: String,
             event: FeedDialogClickListener,
-        ): FeedReportDialogFragment = FeedReportDialogFragment().also {
-            it.arguments = Bundle().apply {
-                putString(TITLE, title)
-                putSerializable(EVENT, event)
+        ): FeedReportDialogFragment =
+            FeedReportDialogFragment().also {
+                it.arguments = Bundle().apply {
+                    putString(MENU_TYPE, menuType)
+                    putSerializable(EVENT, event)
+                }
             }
-        }
     }
+}
+
+enum class ReportMenuType {
+    SPOILER_COMMENT,
+    IMPERTINENCE_COMMENT,
+    SPOILER_FEED,
+    IMPERTINENCE_FEED,
 }

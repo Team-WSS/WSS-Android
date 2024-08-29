@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/cl_feed_detail_input"
             app:layout_constraintTop_toBottomOf="@+id/cl_feed_detail_toolbar" />
@@ -87,9 +88,9 @@
                 android:id="@+id/et_feed_detail_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_feed_detail_gray_50_radius_14dp"
                 android:gravity="top"
@@ -111,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="16dp"
                 android:src="@drawable/btn_comment_register"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/et_feed_detail_input" />
