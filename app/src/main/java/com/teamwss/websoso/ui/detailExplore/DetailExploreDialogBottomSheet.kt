@@ -115,7 +115,7 @@ class DetailExploreDialogBottomSheet :
     private fun onBottomSheetExitButtonClick() {
         binding.ivDetailExploreExitButton.setOnClickListener {
             detailExploreViewModel.updateSelectedInfoValueClear()
-            detailExploreViewModel.updateResetKeyword()
+            detailExploreViewModel.updateSelectedKeywordValueClear()
             dismiss()
         }
     }
