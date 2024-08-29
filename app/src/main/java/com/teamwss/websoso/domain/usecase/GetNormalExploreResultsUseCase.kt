@@ -3,7 +3,7 @@ package com.teamwss.websoso.domain.usecase
 import com.teamwss.websoso.data.model.ExploreResultEntity
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.domain.mapper.toDomain
-import com.teamwss.websoso.domain.model.NormalExploreResult
+import com.teamwss.websoso.domain.model.ExploreResult
 import javax.inject.Inject
 
 class GetNormalExploreResultsUseCase @Inject constructor(
@@ -15,7 +15,7 @@ class GetNormalExploreResultsUseCase @Inject constructor(
     suspend operator fun invoke(
         searchWord: String,
         isSearchButtonClick: Boolean,
-    ): NormalExploreResult {
+    ): ExploreResult {
 
         if (isSearchButtonClick && previousSearchWord == searchWord) {
             return ExploreResultEntity(
