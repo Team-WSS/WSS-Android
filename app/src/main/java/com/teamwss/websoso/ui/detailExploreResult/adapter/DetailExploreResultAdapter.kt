@@ -8,9 +8,9 @@ import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultIte
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.HEADER
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.LOADING
-import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.RESULT
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.NOVELS
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Loading
-import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Result
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Novels
 
 class DetailExploreResultAdapter(
     private val onNovelClick: (novelId: Long) -> (Unit),
@@ -19,7 +19,7 @@ class DetailExploreResultAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is Header -> HEADER.ordinal
-            is Result -> RESULT.ordinal
+            is Novels -> NOVELS.ordinal
             is Loading -> LOADING.ordinal
         }
     }
@@ -27,7 +27,7 @@ class DetailExploreResultAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (ItemType.valueOf(viewType)) {
             HEADER -> DetailExploreResultHeaderViewHolder.from(parent)
-            RESULT -> DetailExploreResultViewHolder.of(parent, onNovelClick)
+            NOVELS -> DetailExploreResultViewHolder.of(parent, onNovelClick)
             LOADING -> DetailExploreLoadingViewHolder.from(parent)
         }
     }
@@ -35,7 +35,7 @@ class DetailExploreResultAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is DetailExploreResultHeaderViewHolder -> holder.bind((getItem(position) as Header).novelCount)
-            is DetailExploreResultViewHolder -> holder.bind((getItem(position) as Result).novel)
+            is DetailExploreResultViewHolder -> holder.bind((getItem(position) as Novels).novel)
             is DetailExploreLoadingViewHolder -> return
         }
     }
@@ -48,7 +48,7 @@ class DetailExploreResultAdapter(
                 newItem: DetailExploreResultItemType,
             ): Boolean {
                 return when {
-                    oldItem is Result && newItem is Result -> oldItem.novel.id == newItem.novel.id
+                    oldItem is Novels && newItem is Novels -> oldItem.novel.id == newItem.novel.id
                     oldItem is Header && newItem is Header -> oldItem.novelCount == newItem.novelCount
                     else -> false
                 }

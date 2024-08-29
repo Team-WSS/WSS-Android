@@ -14,7 +14,7 @@ import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
-import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Result
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Novels
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -94,8 +94,8 @@ class DetailExploreResultActivity :
 
     private fun updateView(uiState: DetailExploreResultUiState) {
         val header = Header(uiState.novelCount)
-        val results = uiState.novels.map { Result(it) }
-        detailExploreResultAdapter.submitList(listOf(header) + results)
+        val novels = uiState.novels.map { Novels(it) }
+        detailExploreResultAdapter.submitList(listOf(header) + novels)
     }
 
     private fun onBackButtonClick() {

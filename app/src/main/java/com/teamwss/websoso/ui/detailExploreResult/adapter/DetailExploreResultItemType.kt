@@ -6,12 +6,12 @@ sealed class DetailExploreResultItemType {
 
     data class Header(val novelCount: Long) : DetailExploreResultItemType()
 
-    data class Result(val novel: NovelModel) : DetailExploreResultItemType()
+    data class Novels(val novel: NovelModel) : DetailExploreResultItemType()
 
     data object Loading : DetailExploreResultItemType()
 
     enum class ItemType {
-        HEADER, RESULT, LOADING;
+        HEADER, NOVELS, LOADING;
 
         companion object {
             fun valueOf(ordinal: Int): ItemType =
