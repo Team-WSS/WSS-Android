@@ -37,7 +37,6 @@
                 android:id="@+id/tv_create_feed_done_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
                 android:src="@drawable/ic_more"
@@ -173,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="12dp"
-            android:text="@{@string/tv_create_feed_characters_count(0)}"
+            android:text="@{@string/tv_create_feed_characters_count(viewModel.content.size)}"
             app:layout_constraintBottom_toBottomOf="@+id/et_create_feed_content"
             app:layout_constraintEnd_toEndOf="@+id/et_create_feed_content" />
     </androidx.constraintlayout.widget.ConstraintLayout>
