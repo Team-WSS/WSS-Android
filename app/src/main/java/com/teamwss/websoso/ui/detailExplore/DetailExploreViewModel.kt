@@ -42,12 +42,6 @@ class DetailExploreViewModel @Inject constructor(
         MutableLiveData(DetailExploreKeywordUiState())
     val uiState: LiveData<DetailExploreKeywordUiState> get() = _uiState
 
-    private val _searchWord: MutableLiveData<String> = MutableLiveData()
-    val searchWord: MutableLiveData<String> get() = _searchWord
-
-    private val _isSearchCancelButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isSearchCancelButtonVisible: LiveData<Boolean> get() = _isSearchCancelButtonVisible
-
     init {
         _isInfoChipSelected.addSource(_selectedGenres) {
             _isInfoChipSelected.value = isInfoChipSelectedEnabled()
@@ -58,6 +52,8 @@ class DetailExploreViewModel @Inject constructor(
         _isInfoChipSelected.addSource(_selectedRating) {
             _isInfoChipSelected.value = isInfoChipSelectedEnabled()
         }
+
+        updateKeyword(null)
     }
 
     private fun isInfoChipSelectedEnabled(): Boolean {
@@ -98,20 +94,34 @@ class DetailExploreViewModel @Inject constructor(
         _selectedRating.value = rating
     }
 
-    fun updateKeyword() {
+    fun updateKeyword(searchWord: String?) {
         viewModelScope.launch {
             runCatching {
-                keywordRepository.fetchKeywords(searchWord.value)
+                keywordRepository.fetchKeywords(searchWord)
             }.onSuccess { keywordsList ->
                 val categoriesModel = CategoriesModel(
                     categories = keywordsList.categories.map { it.toUi() },
                 )
 
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    categories = categoriesModel.categories,
-                )
+                when (searchWord == null) {
+                    true -> {
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                            categories = categoriesModel.categories,
+                        )
+                    }
 
+                    false -> {
+                        val results = categoriesModel.categories.flatMap { it.keywords }
+
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                            searchResultKeywords = results,
+                            isInitialSearchKeyword = false,
+                            isSearchResultKeywordsEmpty = results.isEmpty(),
+                        )
+                    }
+                }
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
@@ -135,14 +145,6 @@ class DetailExploreViewModel @Inject constructor(
         _isKeywordChipSelected.value = false
     }
 
-    fun updateSearchCancelButtonVisibility() {
-        _isSearchCancelButtonVisible.value = _searchWord.value.isNullOrEmpty().not()
-    }
-
-    fun updateSearchWordEmpty() {
-        _searchWord.value = ""
-    }
-
     fun updateClickedChipState(keywordId: Int) {
         val currentUiState = _uiState.value ?: return
 
@@ -162,5 +164,24 @@ class DetailExploreViewModel @Inject constructor(
 
         _isKeywordChipSelected.value = isAnyKeywordSelected
         _uiState.value = currentUiState.copy(categories = updatedCategories)
+    }
+
+    fun updateIsSearchKeywordProceeding(isProceeding: Boolean) {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                isSearchKeywordProceeding = isProceeding,
+            )
+        }
+    }
+
+    fun initSearchKeyword() {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                searchResultKeywords = emptyList(),
+                isSearchKeywordProceeding = false,
+                isInitialSearchKeyword = true,
+                isSearchResultKeywordsEmpty = false,
+            )
+        }
     }
 }
