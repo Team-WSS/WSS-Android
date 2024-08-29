@@ -32,6 +32,9 @@ class DetailExploreViewModel @Inject constructor(
     private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData()
     val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
 
+    private val _isKeywordChipSelected: MutableLiveData<Boolean> = MutableLiveData()
+    val isKeywordChipSelected: LiveData<Boolean> get() = _isKeywordChipSelected
+
     private val _uiState: MutableLiveData<DetailExploreKeywordUiState> =
         MutableLiveData(DetailExploreKeywordUiState())
     val uiState: LiveData<DetailExploreKeywordUiState> get() = _uiState
@@ -100,7 +103,7 @@ class DetailExploreViewModel @Inject constructor(
                 fakeKeywordRepository.fetchKeyword()
             }.onSuccess { keywordsList ->
                 val categoriesModel = CategoriesModel(
-                    categories = keywordsList.map { it.toUi() }
+                    categories = keywordsList.map { it.toUi() },
                 )
 
                 _uiState.value = _uiState.value?.copy(
@@ -130,5 +133,11 @@ class DetailExploreViewModel @Inject constructor(
             category.copy(keywords = updatedKeywords)
         }
         _uiState.value = currentUiState.copy(categories = updatedCategories)
+
+        val isAnyKeywordSelected = updatedCategories.any { category ->
+            category.keywords.any { it.isSelected }
+        }
+
+        _isKeywordChipSelected.value = isAnyKeywordSelected
     }
 }

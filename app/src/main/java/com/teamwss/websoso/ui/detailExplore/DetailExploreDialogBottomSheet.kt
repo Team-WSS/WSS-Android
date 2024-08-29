@@ -122,6 +122,10 @@ class DetailExploreDialogBottomSheet :
         detailExploreViewModel.isInfoChipSelected.observe(viewLifecycleOwner) { isVisible ->
             binding.ivDetailExploreInfoActiveDot.isVisible = isVisible
         }
+
+        detailExploreViewModel.isKeywordChipSelected.observe(viewLifecycleOwner) { isVisible ->
+            binding.ivDetailExploreKeywordActiveDot.isVisible = isVisible
+        }
     }
 
     companion object {
