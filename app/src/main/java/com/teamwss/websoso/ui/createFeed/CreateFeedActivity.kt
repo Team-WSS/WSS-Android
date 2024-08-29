@@ -31,7 +31,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(R.layout.acti
                 setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
                 setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
-                setWebsosoChipPaddingHorizontal(8f.toFloatScaledByPx())
+                setWebsosoChipPaddingHorizontal(6.7f.toFloatScaledByPx())
                 setWebsosoChipRadius(20f.toFloatScaledByPx())
                 setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.ordinal) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
