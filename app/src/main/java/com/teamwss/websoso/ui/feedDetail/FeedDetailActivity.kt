@@ -3,15 +3,17 @@ package com.teamwss.websoso.ui.feedDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
@@ -30,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
     private val feedDetailAdapter: FeedDetailAdapter by lazy {
@@ -44,12 +47,28 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun onFeedDetailClick(): FeedDetailClickListener = object : FeedDetailClickListener {
         override fun onLikeButtonClick(view: View, feedId: Long) {
+            val likeCount: Int =
+                view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString().toInt()
+            val updatedLikeCount: Int = when (view.isSelected) {
+                true -> if (likeCount > 0) likeCount - 1 else 0
+                false -> likeCount + 1
+            }
+
+            view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text =
+                updatedLikeCount.toString()
+            view.isSelected = !view.isSelected
+
+            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                feedDetailViewModel.updateLike(view.isSelected, updatedLikeCount)
+            }
         }
 
         override fun onNovelInfoClick(novelId: Long) {
+            NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId)
         }
 
         override fun onProfileClick(userId: Long) {
+            // 마이페이지 else 프로필 뷰
         }
     }
 
@@ -152,6 +171,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         setupView()
         setupObserver()
         onCommentRegisterClick()
+        binding.ivFeedDetailBackButton.setOnClickListener { finish() }
     }
 
     private fun setupView() {

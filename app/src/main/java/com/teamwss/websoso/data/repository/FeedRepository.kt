@@ -52,7 +52,6 @@ class FeedRepository @Inject constructor(
     }
 
     suspend fun saveLike(isLikedOfLikedFeed: Boolean, selectedFeedId: Long) {
-
         when (isLikedOfLikedFeed) {
             true -> feedApi.deleteLikes(selectedFeedId)
             false -> feedApi.postLikes(selectedFeedId)

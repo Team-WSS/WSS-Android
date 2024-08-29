@@ -48,6 +48,28 @@ class FeedDetailViewModel @Inject constructor(
         }
     }
 
+    fun updateLike(isLiked: Boolean, updatedLikeCount: Int) {
+        feedDetailUiState.value?.let { feedDetailUiState ->
+            val feed = feedDetailUiState.feed ?: throw IllegalArgumentException()
+            if (feed.isLiked == isLiked) return
+
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.saveLike(feed.isLiked, feedId)
+                }.onSuccess {
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        feed = feedDetailUiState.feed.copy(
+                            isLiked = isLiked,
+                            likeCount = updatedLikeCount,
+                        ),
+                    )
+                }.onFailure {
+                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                }
+            }
+        }
+    }
+
     fun dispatchComment(comment: String) {
         feedDetailUiState.value?.let { feedDetailUiState ->
             viewModelScope.launch {

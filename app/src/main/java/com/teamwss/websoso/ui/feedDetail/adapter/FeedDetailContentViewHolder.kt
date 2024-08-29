@@ -19,6 +19,7 @@ class FeedDetailContentViewHolder(
     fun bind(feed: FeedModel, commentCounts: Int) {
         binding.feed = feed
         binding.count = commentCounts
+        binding.clFeedLike.isSelected = feed.isLiked
     }
 
     companion object {
