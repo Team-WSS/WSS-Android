@@ -136,6 +136,7 @@ class NovelRatingDateBottomSheetDialog :
     }
 
     companion object {
+        const val TAG = "NOVEL_RATING_DATE_BOTTOM_SHEET_DIALOG"
         private const val MAX_YEAR_VALUE = 9999
         private const val MAX_MONTH_VALUE = 12
         private const val MAX_DAY_VALUE = 31

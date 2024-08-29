@@ -181,18 +181,18 @@ class NovelRatingActivity :
     }
 
     private fun showDatePickerBottomSheetDialog() {
-        val existingDialog = supportFragmentManager.findFragmentByTag("RatingDateDialog")
+        val existingDialog = supportFragmentManager.findFragmentByTag(NovelRatingDateBottomSheetDialog.TAG)
         if (existingDialog == null) {
-            NovelRatingDateBottomSheetDialog().show(supportFragmentManager, "RatingDateDialog")
+            NovelRatingDateBottomSheetDialog().show(supportFragmentManager, NovelRatingDateBottomSheetDialog.TAG)
         }
     }
 
     private fun showRatingKeywordBottomSheetDialog() {
-        val existingDialog = supportFragmentManager.findFragmentByTag("RatingKeywordDialog")
+        val existingDialog = supportFragmentManager.findFragmentByTag(NovelRatingKeywordBottomSheetDialog.TAG)
         if (existingDialog == null) {
             NovelRatingKeywordBottomSheetDialog().show(
                 supportFragmentManager,
-                "RatingKeywordDialog"
+                NovelRatingKeywordBottomSheetDialog.TAG,
             )
         }
     }

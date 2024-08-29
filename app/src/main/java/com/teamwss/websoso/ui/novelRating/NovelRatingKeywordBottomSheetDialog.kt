@@ -247,4 +247,8 @@ class NovelRatingKeywordBottomSheetDialog :
         initSearchKeyword()
         super.onDestroyView()
     }
+
+    companion object {
+        const val TAG = "NOVEL_RATING_KEYWORD_BOTTOM_SHEET_DIALOG"
+    }
 }
