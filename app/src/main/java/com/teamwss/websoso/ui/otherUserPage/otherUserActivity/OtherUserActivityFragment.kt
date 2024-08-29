@@ -39,6 +39,7 @@ class OtherUserActivityFragment :
     private fun navigateToMyActivityDetail() {
         binding.btnOtherUserActivityMore.setOnClickListener {
             val intent = ActivityDetailActivity.createIntentForMyActivityDetail(requireContext())
+            intent.putExtra("source", "otherUserActivity")
             startActivity(intent)
         }
     }

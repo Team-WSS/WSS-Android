@@ -39,6 +39,7 @@ class MyActivityFragment :
     private fun navigateToMyActivityDetail() {
         binding.btnMyActivityMore.setOnClickListener {
             val intent = ActivityDetailActivity.createIntentForMyActivityDetail(requireContext())
+            intent.putExtra("source", "myActivity")
             startActivity(intent)
         }
     }

@@ -20,9 +20,21 @@ class ActivityDetailActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setActivityTitle()
         setUpMyActivitiesDetailAdapter()
         setUpObserve()
         onBackButtonClick()
+    }
+
+    private fun setActivityTitle() {
+        val source = intent.getStringExtra("source")
+
+        val title = when (source) {
+            "myActivity" -> getString(R.string.my_activity_detail_title)
+            "otherUserActivity" -> getString(R.string.other_user_page_activity)
+            else -> ""
+        }
+        binding.tvActivityDetailTitle.text = title
     }
 
     private fun setUpMyActivitiesDetailAdapter() {
