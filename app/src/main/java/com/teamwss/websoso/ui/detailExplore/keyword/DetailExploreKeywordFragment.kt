@@ -170,17 +170,27 @@ class DetailExploreKeywordFragment :
     }
 
     private fun updateSearchKeywordResult(uiState: DetailExploreKeywordUiState) {
-        val previousSearchResultKeywords =
-            binding.wcgDetailExploreKeywordResult.children.toList().map { it as WebsosoChip }
-        if (!uiState.isSearchKeywordProceeding) return
-        if (uiState.isSearchResultKeywordsEmpty) return
-        if (uiState.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
-            updateSearchKeywordResultIsSelected(uiState)
-            return
+        val previousSearchResultKeywords = binding.wcgDetailExploreKeywordResult.children
+            .toList()
+            .map { it as WebsosoChip }
+
+        when {
+            !uiState.isSearchKeywordProceeding -> return
+
+            uiState.isSearchResultKeywordsEmpty -> return
+
+            uiState.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() } -> {
+                updateSearchKeywordResultIsSelected(uiState)
+                return
+            }
+
+            else -> {
+                binding.wcgDetailExploreKeywordResult.removeAllViews()
+                updateSearchKeywordResultWebsosoChips(uiState)
+            }
         }
-        binding.wcgDetailExploreKeywordResult.removeAllViews()
-        updateSearchKeywordResultWebsosoChips(uiState)
     }
+
 
     private fun updateSearchKeywordResultIsSelected(uiState: DetailExploreKeywordUiState) {
         binding.wcgDetailExploreKeywordResult.forEach { view ->
