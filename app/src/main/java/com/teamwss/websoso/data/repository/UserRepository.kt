@@ -1,13 +1,18 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
-import com.teamwss.websoso.data.mapper.toRemote
 import com.teamwss.websoso.data.model.BlockedUsersEntity
+import com.teamwss.websoso.data.model.GenrePreferenceEntity
+import com.teamwss.websoso.data.model.MyProfileEntity
+import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
-import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.remote.api.UserApi
+import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
