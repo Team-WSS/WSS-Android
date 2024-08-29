@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
 import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
@@ -61,6 +62,10 @@ class NovelRatingActivity :
 
             override fun onSaveClick() {
                 novelRatingViewModel.updateUserNovelRating(novelId, binding.rbNovelRating.rating)
+                WebsosoCustomToast.make(this@NovelRatingActivity)
+                    .setText(getString(R.string.novel_rating_complete))
+                    .setIcon(R.drawable.ic_novel_detail_check)
+                    .show()
             }
 
             override fun onCancelClick() {}
