@@ -68,9 +68,11 @@ class DetailExploreKeywordFragment :
         val novelRating = detailExploreViewModel.selectedRating.value
 
         val keywordIds = detailExploreViewModel.uiState.value?.categories
-            ?.flatMap { it.keywords }
+            ?.asSequence()
+            ?.flatMap { it.keywords.asSequence() }
             ?.filter { it.isSelected }
             ?.map { it.keywordId }
+            ?.toList()
             ?: emptyList()
 
         val intent = DetailExploreResultActivity.getIntent(
