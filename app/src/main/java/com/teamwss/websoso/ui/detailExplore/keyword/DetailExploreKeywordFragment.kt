@@ -3,7 +3,7 @@ package com.teamwss.websoso.ui.detailExplore.keyword
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.children
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
@@ -11,28 +11,29 @@ import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
 import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
+import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailExploreKeywordFragment :
     BaseFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
-    private val detailExploreKeywordViewModel: DetailExploreKeywordViewModel by viewModels()
+    private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
-        DetailExploreKeywordAdapter(detailExploreKeywordViewModel::updateClickedChipState)
+        DetailExploreKeywordAdapter(detailExploreViewModel::updateClickedChipState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        detailExploreKeywordViewModel.updateKeywords()
+        detailExploreViewModel.updateKeywords()
         bindViewModel()
         setupAdapter()
         setupObserver()
     }
 
     private fun bindViewModel() {
-        binding.detailExploreKeywordViewModel = detailExploreKeywordViewModel
+        binding.detailExploreViewModel = detailExploreViewModel
         binding.onClick = onDetailExploreKeywordButtonClick()
         binding.lifecycleOwner = this
     }
@@ -44,7 +45,7 @@ class DetailExploreKeywordFragment :
         }
 
         override fun onSearchCancelButtonClick() {
-            detailExploreKeywordViewModel.updateSearchWordEmpty()
+            detailExploreViewModel.updateSearchWordEmpty()
         }
 
         override fun onNovelInquireButtonClick() {
@@ -64,11 +65,11 @@ class DetailExploreKeywordFragment :
     }
 
     private fun setupObserver() {
-        detailExploreKeywordViewModel.searchWord.observe(viewLifecycleOwner) {
-            detailExploreKeywordViewModel.updateSearchCancelButtonVisibility()
+        detailExploreViewModel.searchWord.observe(viewLifecycleOwner) {
+            detailExploreViewModel.updateSearchCancelButtonVisibility()
         }
 
-        detailExploreKeywordViewModel.uiState.observe(viewLifecycleOwner) {
+        detailExploreViewModel.uiState.observe(viewLifecycleOwner) {
             detailExploreKeywordAdapter.submitList(it.categories)
             setupSelectedChips(it.categories)
         }
@@ -115,7 +116,7 @@ class DetailExploreKeywordFragment :
             setWebsosoChipPaddingHorizontal(12f)
             setWebsosoChipRadius(40f)
             setOnCloseIconClickListener {
-                detailExploreKeywordViewModel.updateClickedChipState(
+                detailExploreViewModel.updateClickedChipState(
                     selectedKeyword.keywordId
                 )
             }

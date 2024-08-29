@@ -10,8 +10,8 @@
             type="com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreClickListener" />
 
         <variable
-            name="detailExploreKeywordViewModel"
-            type="com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordViewModel" />
+            name="detailExploreViewModel"
+            type="com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +42,7 @@
                 android:maxLines="1"
                 android:paddingStart="16dp"
                 android:scrollHorizontally="true"
-                android:text="@={detailExploreKeywordViewModel.searchWord}"
+                android:text="@={detailExploreViewModel.searchWord}"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_200_AEADB3"
@@ -66,7 +66,7 @@
 
             <ImageView
                 android:id="@+id/iv_detail_explore_keyword_cancel_button"
-                isVisible="@{detailExploreKeywordViewModel.isSearchCancelButtonVisibility}"
+                isVisible="@{detailExploreViewModel.isSearchCancelButtonVisibility}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
