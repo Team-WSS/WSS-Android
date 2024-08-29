@@ -320,5 +320,14 @@
     <string name="other_user_library_genre_count">%d편</string>
     <string name="other_user_library_novel_preference">작품 취향</string>
     <string name="other_user_library_attractive_point_fixed_text">가 매력적인 작품</string>
-  
+
+    <!-- 피드 생성 뷰 -->
+    <string name="tv_create_feed_multiple_choice_guide">중복 선택 가능</string>
+    <string name="tv_create_feed_category">카테고리</string>
+    <string name="tv_create_feed_done_button">완료</string>
+    <string name="tv_create_feed_write_content">내용 작성하기</string>
+    <string name="tv_create_feed_spoiler">스포일러</string>
+    <string name="et_create_feed_content_hint">피드 작성 유의사항!\n\n욕설, 비방, 명예훼손성 표현은 사용하지 말아주세요.\n작품 내용을 담은 글은 스포일러를 체크해주세요.</string>
+    <string name="tv_create_feed_characters_count">(%d/2000)</string>
+
 </resources>

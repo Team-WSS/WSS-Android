@@ -5,7 +5,6 @@ import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
-import com.teamwss.websoso.data.model.OtherUserProfileEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -56,6 +55,22 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchNovelPreferences(userId: Long): NovelPreferenceEntity {
         return userApi.getNovelPreferences(userId).toData()
+    }
+
+    suspend fun saveUserProfile(
+        nickname: String,
+        gender: String,
+        birth: Int,
+        genrePreferences: List<String>,
+    ) {
+        userApi.postUserProfile(
+            UserProfileRequestDto(
+                nickname,
+                gender,
+                birth,
+                genrePreferences,
+            )
+        )
     }
 
     suspend fun fetchOtherUserProfile(userId: Long): OtherUserProfileEntity {

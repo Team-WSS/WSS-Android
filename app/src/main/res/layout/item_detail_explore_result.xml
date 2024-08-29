@@ -7,7 +7,7 @@
 
         <variable
             name="novel"
-            type="com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity" />
+            type="com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel" />
 
         <variable
             name="onClick"
@@ -24,8 +24,9 @@
             android:id="@+id/iv_detail_explore_result_cover"
             cornerRadius="@{16f}"
             loadImageUrl="@{novel.image}"
-            android:layout_width="156dp"
+            android:layout_width="0dp"
             android:layout_height="232dp"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="1"
             android:text="@{novel.title}"
             android:textAppearance="@style/label1"
             android:textColor="@color/black"

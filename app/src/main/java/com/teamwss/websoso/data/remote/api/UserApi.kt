@@ -6,7 +6,6 @@ import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
-import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
@@ -59,6 +58,10 @@ interface UserApi {
         @Path("userId") userId: Long,
     ): NovelPreferenceResponseDto
 
+    @POST("users/profile")
+    suspend fun postUserProfile(
+        @Body userProfileRequestDto: UserProfileRequestDto,
+    )
     @GET("users/profile/{userId}")
     suspend fun getOtherUserProfile(
         @Path("userId") userId: Long,

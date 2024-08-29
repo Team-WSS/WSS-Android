@@ -1,6 +1,6 @@
 package com.teamwss.websoso.domain.model
 
-data class NormalExploreResult(
+data class ExploreResult(
     val resultCount: Long,
     val isLoadable: Boolean,
     val novels: List<Novel>,

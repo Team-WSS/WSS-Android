@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.domain.usecase.GetNormalExploreResultsUseCase
+import com.teamwss.websoso.domain.usecase.GetNormalExploreResultUseCase
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NormalExploreViewModel @Inject constructor(
-    private val getNormalExploreResultsUseCase: GetNormalExploreResultsUseCase,
+    private val getNormalExploreResultUseCase: GetNormalExploreResultUseCase,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<NormalExploreUiState> =
         MutableLiveData(NormalExploreUiState())
@@ -35,7 +35,7 @@ class NormalExploreViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(loading = isSearchButtonClick)
             runCatching {
-                getNormalExploreResultsUseCase(searchWord.value ?: "", isSearchButtonClick)
+                getNormalExploreResultUseCase(searchWord.value ?: "", isSearchButtonClick)
             }.onSuccess { results ->
                 if (results.novels.isNotEmpty()) {
                     _uiState.value = _uiState.value?.copy(
