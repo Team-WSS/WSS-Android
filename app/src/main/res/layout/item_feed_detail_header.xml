@@ -12,10 +12,6 @@
         <variable
             name="feed"
             type="com.teamwss.websoso.ui.main.feed.model.FeedModel" />
-
-        <variable
-            name="count"
-            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

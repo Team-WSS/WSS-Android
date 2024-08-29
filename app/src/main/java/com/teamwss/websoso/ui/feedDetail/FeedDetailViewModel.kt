@@ -38,7 +38,7 @@ class FeedDetailViewModel @Inject constructor(
 
                     FeedDetailUiState(
                         feed = feed.await().toUi(),
-                        comments = comments.await().comments.map { it.toUi() }
+                        comments = comments.await().comments.map { it.toUi() },
                     )
                 }.onSuccess { feedDetail ->
                     _feedDetailUiState.value = feedDetail.copy(loading = false)
@@ -177,7 +177,7 @@ class FeedDetailViewModel @Inject constructor(
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
                         comments = comments,
-                        feed = feedDetailUiState.feed?.copy(commentCount = comments.size)
+                        feed = feedDetailUiState.feed?.copy(commentCount = comments.size),
                     )
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
