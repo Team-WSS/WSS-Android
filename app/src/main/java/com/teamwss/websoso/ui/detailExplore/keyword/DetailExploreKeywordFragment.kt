@@ -28,9 +28,10 @@ class DetailExploreKeywordFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        detailExploreViewModel.updateKeyword()
+        detailExploreViewModel.updateKeyword("")
         bindViewModel()
         setupAdapter()
+        setupSearchKeyword()
         setupObserver()
     }
 
@@ -41,14 +42,6 @@ class DetailExploreKeywordFragment :
     }
 
     private fun onDetailExploreKeywordButtonClick() = object : DetailExploreClickListener {
-
-        override fun onSearchButtonClick() {
-            // TODO 검색하는 버튼
-        }
-
-        override fun onSearchCancelButtonClick() {
-            detailExploreViewModel.updateSearchWordEmpty()
-        }
 
         override fun onNovelInquireButtonClick() {
             // TODO 문의하기로 이동
@@ -94,11 +87,45 @@ class DetailExploreKeywordFragment :
         }
     }
 
-    private fun setupObserver() {
-        detailExploreViewModel.searchWord.observe(viewLifecycleOwner) {
-            detailExploreViewModel.updateSearchCancelButtonVisibility()
+    private fun setupSearchKeyword() {
+        binding.wsetDetailExploreKeywordSearch.apply {
+            setWebsosoSearchHint(getString(R.string.detail_explore_search_hint))
+
+        }
+        setupWebsosoSearchEditListener()
+
+    }
+
+    private fun setupWebsosoSearchEditListener() {
+        binding.wsetDetailExploreKeywordSearch.setOnWebsosoSearchActionListener { _, _, _ ->
+            performSearch()
+            true
         }
 
+        binding.wsetDetailExploreKeywordSearch.setOnWebsosoSearchFocusChangeListener { _, isFocused ->
+            if (isFocused) detailExploreViewModel.updateIsSearchKeywordProceeding(true)
+        }
+
+        binding.wsetDetailExploreKeywordSearch.setOnWebsosoSearchClearClickListener {
+            initSearchKeyword()
+        }
+    }
+
+    private fun performSearch() {
+        val input = binding.wsetDetailExploreKeywordSearch.getWebsosoSearchText()
+        if (input.isEmpty()) {
+            initSearchKeyword()
+            return
+        }
+        detailExploreViewModel.updateKeyword(input)
+    }
+
+    private fun initSearchKeyword() {
+        binding.wsetDetailExploreKeywordSearch.clearWebsosoSearchFocus()
+        detailExploreViewModel.initSearchKeyword()
+    }
+
+    private fun setupObserver() {
         detailExploreViewModel.uiState.observe(viewLifecycleOwner) {
             detailExploreKeywordAdapter.submitList(it.categories)
             setupSelectedChips(it.categories)
