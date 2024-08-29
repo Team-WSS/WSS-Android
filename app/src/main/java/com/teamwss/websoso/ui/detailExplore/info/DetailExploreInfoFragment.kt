@@ -8,6 +8,7 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
@@ -51,9 +52,9 @@ class DetailExploreInfoFragment :
                 setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
-                setWebsosoChipPaddingVertical(30f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(45f)
+                setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
+                setWebsosoChipPaddingHorizontal(6f.toFloatScaledByPx())
+                setWebsosoChipRadius(20f.toFloatScaledByPx())
                 setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }

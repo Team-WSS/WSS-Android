@@ -10,6 +10,7 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
+import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
@@ -147,9 +148,9 @@ class DetailExploreKeywordFragment :
             setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
             setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
             setWebsosoChipBackgroundColor(R.color.white)
-            setWebsosoChipPaddingVertical(20f)
-            setWebsosoChipPaddingHorizontal(12f)
-            setWebsosoChipRadius(40f)
+            setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
+            setWebsosoChipPaddingHorizontal(6f.toFloatScaledByPx())
+            setWebsosoChipRadius(20f.toFloatScaledByPx())
             setOnCloseIconClickListener {
                 detailExploreViewModel.updateClickedChipState(
                     selectedKeyword.keywordId
