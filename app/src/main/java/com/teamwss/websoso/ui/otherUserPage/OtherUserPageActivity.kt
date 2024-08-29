@@ -24,7 +24,10 @@ class OtherUserPageActivity :
     }
 
     private fun setUpViewPager() {
-        val tabTitleItems = listOf(getText(R.string.other_user_page_library), getText(R.string.other_user_page_activity))
+        val tabTitleItems = listOf(
+            getText(R.string.other_user_page_library),
+            getText(R.string.other_user_page_activity)
+        )
         binding.vpOtherUserPage.adapter = viewPagerAdapter
 
         TabLayoutMediator(binding.tlOtherUserPage, binding.vpOtherUserPage) { tab, position ->

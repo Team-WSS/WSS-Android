@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 
-class MyActivityAdapter() :
+class MyActivityAdapter :
     ListAdapter<ActivityModel, MyActivityViewHolder>(diffCallback) {
 
     init {
@@ -31,12 +31,12 @@ class MyActivityAdapter() :
         private val diffCallback = object : DiffUtil.ItemCallback<ActivityModel>() {
             override fun areItemsTheSame(
                 oldItem: ActivityModel,
-                newItem: ActivityModel
+                newItem: ActivityModel,
             ): Boolean = oldItem.feedId == newItem.feedId
 
             override fun areContentsTheSame(
                 oldItem: ActivityModel,
-                newItem: ActivityModel
+                newItem: ActivityModel,
             ): Boolean = oldItem == newItem
         }
     }

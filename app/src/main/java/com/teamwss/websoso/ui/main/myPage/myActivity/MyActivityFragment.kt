@@ -6,8 +6,8 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
-import com.teamwss.websoso.ui.myActivityDetail.MyActivityDetailActivity
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
+import com.teamwss.websoso.ui.myActivityDetail.MyActivityDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
