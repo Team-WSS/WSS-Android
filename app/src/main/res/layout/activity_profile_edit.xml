@@ -16,6 +16,10 @@
         <variable
             name="onAvatarChangeClick"
             type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onNavigateBackClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +34,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="2dp"
             android:contentDescription="@null"
+            android:onClick="@{() -> onNavigateBackClick.invoke()}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="14dp"
             android:src="@drawable/ic_profile_edit_back"
@@ -49,6 +54,7 @@
             app:layout_constraintTop_toTopOf="@id/iv_profile_edit_navigate_back" />
 
         <TextView
+            android:id="@+id/tv_profile_edit_finish"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
@@ -58,7 +64,7 @@
             android:text="@string/profile_edit_finish"
             android:textAlignment="center"
             android:textAppearance="@style/title2"
-            android:textColor="@color/primary_100_6A5DFD"
+            android:textColor="@color/bg_profile_edit_nickname_finish_selector"
             app:layout_constraintBottom_toBottomOf="@id/iv_profile_edit_navigate_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_profile_edit_navigate_back" />

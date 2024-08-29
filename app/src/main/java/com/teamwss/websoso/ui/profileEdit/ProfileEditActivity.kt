@@ -43,6 +43,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     private fun bindViewModel() {
         binding.viewModel = profileEditViewModel
         binding.lifecycleOwner = this
+        binding.onNavigateBackClick = { finish() }
     }
 
     private fun setupObserver() {
@@ -53,6 +54,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             updateIntroductionEditTextUi(uiState.profile.introduction)
             handleProfileEditResult(uiState.profileEditResult)
             profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
+            binding.tvProfileEditFinish.isSelected = uiState.isFinishButtonEnabled
         }
     }
 
@@ -118,7 +120,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun handleProfileEditResult(profileEditResult: ProfileEditResult) {
         when (profileEditResult) {
-            ProfileEditResult.Success -> finish()
+            ProfileEditResult.Success -> finish() // TODO: 성공 메시지 추가
             ProfileEditResult.Failure -> Unit // TODO: 실패 처리
             else -> return
         }
