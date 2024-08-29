@@ -20,9 +20,6 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.onCancelClick = ::onCancelClick
-        binding.onSaveClick = ::onSaveClick
-
         bindViewModel()
         setupDialogBehavior()
         setupObserver()
@@ -31,6 +28,8 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
     private fun bindViewModel() {
         binding.viewModel = profileEditViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.onCancelClick = ::onCancelClick
+        binding.onSaveClick = ::onSaveClick
     }
 
     private fun setupDialogBehavior() {
