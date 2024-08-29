@@ -26,7 +26,7 @@ class DetailExploreKeywordFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        detailExploreViewModel.updateKeywords()
+        detailExploreViewModel.updateKeyword()
         bindViewModel()
         setupAdapter()
         setupObserver()

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.common.ui.model.CategoriesModel
-import com.teamwss.websoso.data.repository.FakeKeywordRepository
+import com.teamwss.websoso.data.repository.KeywordRepository
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
 import com.teamwss.websoso.ui.mapper.toUi
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailExploreViewModel @Inject constructor(
-    private val fakeKeywordRepository: FakeKeywordRepository,
+    private val keywordRepository: KeywordRepository,
 ) : ViewModel() {
     private val _selectedGenres: MutableLiveData<MutableList<Genre>> =
         MutableLiveData(mutableListOf())
@@ -89,26 +89,18 @@ class DetailExploreViewModel @Inject constructor(
         _selectedRating.value = rating
     }
 
-    fun updateSearchCancelButtonVisibility() {
-        _isSearchCancelButtonVisibility.value = _searchWord.value.isNullOrEmpty().not()
-    }
-
-    fun updateSearchWordEmpty() {
-        _searchWord.value = ""
-    }
-
-    fun updateKeywords() {
+    fun updateKeyword() {
         viewModelScope.launch {
             runCatching {
-                fakeKeywordRepository.fetchKeyword()
+                keywordRepository.fetchKeywords(searchWord.value)
             }.onSuccess { keywordsList ->
                 val categoriesModel = CategoriesModel(
-                    categories = keywordsList.map { it.toUi() },
+                    categories = keywordsList.categories.map { it.toUi() },
                 )
 
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
-                    categories = categoriesModel.categories
+                    categories = categoriesModel.categories,
                 )
 
             }.onFailure {
@@ -118,6 +110,14 @@ class DetailExploreViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun updateSearchCancelButtonVisibility() {
+        _isSearchCancelButtonVisibility.value = _searchWord.value.isNullOrEmpty().not()
+    }
+
+    fun updateSearchWordEmpty() {
+        _searchWord.value = ""
     }
 
     fun updateClickedChipState(keywordId: Int) {
