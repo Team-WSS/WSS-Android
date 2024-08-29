@@ -93,7 +93,7 @@
                 android:id="@+id/rv_detail_explore_keyword_list"
                 android:layout_width="0dp"
                 android:layout_height="402dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 app:isInvisibleMode="@{true}"
