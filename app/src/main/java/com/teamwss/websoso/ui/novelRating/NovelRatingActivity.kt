@@ -9,10 +9,10 @@ import android.text.style.UnderlineSpan
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.forEach
-import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
 import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
@@ -62,10 +62,6 @@ class NovelRatingActivity :
 
             override fun onSaveClick() {
                 novelRatingViewModel.updateUserNovelRating(novelId, binding.rbNovelRating.rating)
-                WebsosoCustomToast.make(this@NovelRatingActivity)
-                    .setText(getString(R.string.novel_rating_complete))
-                    .setIcon(R.drawable.ic_novel_detail_check)
-                    .show()
             }
 
             override fun onCancelClick() {}
@@ -98,9 +94,25 @@ class NovelRatingActivity :
             }
             if (uiState.loading) binding.wllNovelRating.setWebsosoLoadingVisibility(true)
             if (uiState.isFetchError) binding.wllNovelRating.setErrorLayoutVisibility(true)
-            if (uiState.isSaveSuccess) finish()
-            if (uiState.isSaveError) Snackbar.make(binding.root, "임시 실패 메시지", Snackbar.LENGTH_SHORT)
-                .show()
+            if (uiState.isSaveSuccess) {
+                WebsosoCustomToast.make(this@NovelRatingActivity)
+                    .setText(getString(R.string.novel_rating_complete))
+                    .setIcon(R.drawable.ic_novel_detail_check)
+                    .show()
+                finish()
+            }
+            if (uiState.isSaveError) {
+                WebsosoCustomSnackBar.make(binding.root)
+                    .setText(getString(R.string.novel_rating_save_error))
+                    .setIcon(R.drawable.ic_novel_rating_alert)
+                    .show()
+            }
+            if (uiState.keywordsModel.isSearchKeywordExceed) {
+                WebsosoCustomSnackBar.make(binding.root)
+                    .setText(getString(R.string.novel_rating_keyword_exceed))
+                    .setIcon(R.drawable.ic_novel_rating_alert)
+                    .show()
+            }
         }
     }
 

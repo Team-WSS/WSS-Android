@@ -88,6 +88,7 @@ data class NovelRatingKeywordsModel(
     val isInitialSearchKeyword: Boolean = true,
     val searchResultKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
     val isSearchResultKeywordsEmpty: Boolean = false,
+    val isSearchKeywordExceed: Boolean = false,
 ) {
     private fun updatedCategories(keyword: CategoriesModel.CategoryModel.KeywordModel): List<CategoriesModel.CategoryModel> {
         return categories.map { category ->
@@ -113,7 +114,8 @@ data class NovelRatingKeywordsModel(
         return this.copy(
             categories = this.updatedCategories(keyword.copy(isSelected = isSelected)),
             currentSelectedKeywords = newSelectedKeywords,
-            isCurrentSelectedKeywordsEmpty = newSelectedKeywords.isEmpty()
+            isCurrentSelectedKeywordsEmpty = newSelectedKeywords.isEmpty(),
+            isSearchKeywordExceed = newSelectedKeywords.size > 20 && isSelected,
         )
     }
 }

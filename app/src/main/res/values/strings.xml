@@ -130,6 +130,7 @@
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
     <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
     <string name="novel_rating_complete">평가 완료!</string>
+    <string name="novel_rating_save_error">다시 시도해주세요</string>
 
     <!-- 작품 평가 날짜 선택 -->
     <string name="novel_rating_date_start_date">시작 날짜</string>
@@ -149,6 +150,7 @@
     <string name="novel_rating_charm_point_title">매력포인트</string>
     <string name="novel_rating_keyword">키워드</string>
     <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
+    <string name="novel_rating_keyword_exceed">최대 20개까지 선택가능해요!</string>
 
     <!-- 온보딩 뷰 -->
     <string name="onboarding_skip">건너뛰기</string>
