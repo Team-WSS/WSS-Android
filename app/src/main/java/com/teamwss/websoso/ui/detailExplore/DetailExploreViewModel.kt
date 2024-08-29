@@ -45,8 +45,8 @@ class DetailExploreViewModel @Inject constructor(
     private val _searchWord: MutableLiveData<String> = MutableLiveData()
     val searchWord: MutableLiveData<String> get() = _searchWord
 
-    private val _isSearchCancelButtonVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isSearchCancelButtonVisibility: LiveData<Boolean> get() = _isSearchCancelButtonVisibility
+    private val _isSearchCancelButtonVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isSearchCancelButtonVisible: LiveData<Boolean> get() = _isSearchCancelButtonVisible
 
     init {
         _isInfoChipSelected.addSource(_selectedGenres) {
@@ -136,7 +136,7 @@ class DetailExploreViewModel @Inject constructor(
     }
 
     fun updateSearchCancelButtonVisibility() {
-        _isSearchCancelButtonVisibility.value = _searchWord.value.isNullOrEmpty().not()
+        _isSearchCancelButtonVisible.value = _searchWord.value.isNullOrEmpty().not()
     }
 
     fun updateSearchWordEmpty() {
