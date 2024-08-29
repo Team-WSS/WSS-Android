@@ -55,8 +55,8 @@ class DetailExploreKeywordViewHolder(
                 setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
-                setWebsosoChipPaddingHorizontal(6f.toFloatScaledByPx())
+                setWebsosoChipPaddingVertical(10f.toFloatScaledByPx())
+                setWebsosoChipPaddingHorizontal(4f.toFloatScaledByPx())
                 setWebsosoChipRadius(20f.toFloatScaledByPx())
                 setOnWebsosoChipClick {
                     onKeywordClick(keyword.keywordId)

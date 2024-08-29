@@ -308,6 +308,19 @@
     <string name="other_user_page_library">서재</string>
     <string name="other_user_page_activity">활동</string>
 
+    <!-- 다른 유저 서재 뷰 -->
+    <string name="other_user_library_storage">보관함</string>
+    <string name="other_user_library_preference_analysis">취향 분석</string>
+    <string name="other_user_library_interesting">관심</string>
+    <string name="other_user_library_watching">보는중</string>
+    <string name="other_user_library_watched">봤어요</string>
+    <string name="other_user_library_quite">하차</string>
+    <string name="other_user_library_unknown_preference">작품 취향을 파악할 수 없어요</string>
+    <string name="other_user_library_genre_preference">장르 취향</string>
+    <string name="other_user_library_genre_count">%d편</string>
+    <string name="other_user_library_novel_preference">작품 취향</string>
+    <string name="other_user_library_attractive_point_fixed_text">가 매력적인 작품</string>
+
     <!-- 피드 생성 뷰 -->
     <string name="tv_create_feed_multiple_choice_guide">중복 선택 가능</string>
     <string name="tv_create_feed_category">카테고리</string>
