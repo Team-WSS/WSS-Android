@@ -46,7 +46,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
             val existingDialog =
-                this@ExploreFragment.childFragmentManager.findFragmentByTag("DetailExploreDialogBottomSheet")
+                this@ExploreFragment.childFragmentManager.findFragmentByTag(DETAIL_BOTTOM_SHEET_TAG)
 
             if (existingDialog == null) {
                 val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
