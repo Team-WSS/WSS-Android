@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="otherUserPageViewModel"
+            type="com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,8 +48,8 @@
                             android:id="@+id/iv_other_user_page_user_profile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            loadImageUrl='@{otherUserPageViewModel.otherUserProfile.avatarImage}'
                             android:layout_marginTop="72dp"
-                            android:src="@drawable/img_user_pofile"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -54,9 +58,10 @@
                             android:id="@+id/tv_other_user_page_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:text='@{otherUserPageViewModel.otherUserProfile.nickname}'
                             android:textAppearance="@style/headline1"
                             android:textColor="@color/black"
+                            android:layout_marginTop="20dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/iv_other_user_page_user_profile"
@@ -66,9 +71,10 @@
                             android:id="@+id/tv_other_user_page_user_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:text='@{otherUserPageViewModel.otherUserProfile.intro}'
                             android:textAppearance="@style/body2"
                             android:textColor="@color/gray_200_AEADB3"
+                            android:layout_marginTop="4dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_other_user_page_user_name"
@@ -104,7 +110,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="12dp"
-                                android:text="사용자이름"
+                                android:text='@{otherUserPageViewModel.otherUserProfile.nickname}'
                                 android:textAppearance="@style/title2"
                                 android:textColor="@color/black"
                                 android:visibility="gone"
