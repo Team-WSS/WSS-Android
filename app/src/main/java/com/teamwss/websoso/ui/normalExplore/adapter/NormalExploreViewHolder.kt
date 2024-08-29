@@ -3,8 +3,8 @@ package com.teamwss.websoso.ui.normalExplore.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.databinding.ItemNormalExploreBinding
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 
 class NormalExploreViewHolder(
     private val binding: ItemNormalExploreBinding,
@@ -15,7 +15,7 @@ class NormalExploreViewHolder(
         binding.onClick = novelItemClickListener
     }
 
-    fun bind(normalExploreResult: NovelEntity) {
+    fun bind(normalExploreResult: NovelModel) {
         binding.novel = normalExploreResult
     }
 
