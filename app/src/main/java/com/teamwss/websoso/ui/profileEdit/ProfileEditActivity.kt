@@ -46,7 +46,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
     }
 
     private fun setupObserver() {
-        profileEditViewModel.uiState.observe(this) { uiState ->
+        profileEditViewModel.profileEditUiState.observe(this) { uiState ->
             updateGenreChips(uiState.profile.genrePreferences)
             updateDuplicateCheckButton(uiState.isCheckDuplicateNicknameEnabled)
             updateNicknameEditTextUi(uiState)

@@ -28,31 +28,31 @@ class ProfileEditViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
-    val uiState: LiveData<ProfileEditUiState> get() = _uiState
+    private val _profileEditUiState = MutableLiveData<ProfileEditUiState>(ProfileEditUiState())
+    val profileEditUiState: LiveData<ProfileEditUiState> get() = _profileEditUiState
 
     fun updatePreviousProfile(profile: ProfileModel) {
-        _uiState.value = uiState.value?.copy(
+        _profileEditUiState.value = profileEditUiState.value?.copy(
             profile = profile,
             previousProfile = profile,
         )
     }
 
     fun updateSelectedGenres(selectedGenre: Genre) {
-        val genrePreferences = uiState.value?.profile?.genrePreferences?.toMutableList() ?: mutableListOf()
+        val genrePreferences = profileEditUiState.value?.profile?.genrePreferences?.toMutableList() ?: mutableListOf()
         if (genrePreferences.contains(selectedGenre)) genrePreferences.remove(selectedGenre)
         else genrePreferences.add(selectedGenre)
-        _uiState.value = uiState.value?.copy(
-            profile = uiState.value?.profile?.copy(
+        _profileEditUiState.value = profileEditUiState.value?.copy(
+            profile = profileEditUiState.value?.profile?.copy(
                 genrePreferences = genrePreferences,
             ) ?: ProfileModel(),
         )
     }
 
     fun updateNickname(nickname: String) {
-        _uiState.value = uiState.value?.copy(
-            profile = uiState.value?.profile?.copy(
-                nicknameModel = uiState.value?.profile?.nicknameModel?.copy(
+        _profileEditUiState.value = profileEditUiState.value?.copy(
+            profile = profileEditUiState.value?.profile?.copy(
+                nicknameModel = profileEditUiState.value?.profile?.nicknameModel?.copy(
                     nickname = nickname,
                 ) ?: NicknameModel(),
             ) ?: ProfileModel(),
@@ -61,17 +61,17 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateIntroduction(introduction: String) {
-        _uiState.value = uiState.value?.copy(
-            profile = uiState.value?.profile?.copy(
+        _profileEditUiState.value = profileEditUiState.value?.copy(
+            profile = profileEditUiState.value?.profile?.copy(
                 introduction = introduction,
             ) ?: ProfileModel(),
         )
     }
 
     fun updateNicknameFocus(hasFocus: Boolean) {
-        _uiState.value = uiState.value?.copy(
-            profile = uiState.value?.profile?.copy(
-                nicknameModel = uiState.value?.profile?.nicknameModel?.copy(
+        _profileEditUiState.value = profileEditUiState.value?.copy(
+            profile = profileEditUiState.value?.profile?.copy(
+                nicknameModel = profileEditUiState.value?.profile?.nicknameModel?.copy(
                     hasFocus = hasFocus,
                 ) ?: NicknameModel(),
             ) ?: ProfileModel(),
@@ -79,9 +79,9 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun clearNickname() {
-        _uiState.value = uiState.value?.copy(
-            profile = uiState.value?.profile?.copy(
-                nicknameModel = uiState.value?.profile?.nicknameModel?.copy(
+        _profileEditUiState.value = profileEditUiState.value?.copy(
+            profile = profileEditUiState.value?.profile?.copy(
+                nicknameModel = profileEditUiState.value?.profile?.nicknameModel?.copy(
                     nickname = "",
                 ) ?: NicknameModel(),
             ) ?: ProfileModel(),
@@ -93,11 +93,11 @@ class ProfileEditViewModel @Inject constructor(
             runCatching {
                 checkNicknameValidityUseCase(nickname)
             }.onSuccess { result ->
-                _uiState.value = uiState.value?.copy(
+                _profileEditUiState.value = profileEditUiState.value?.copy(
                     nicknameEditResult = result,
                 )
             }.onFailure {
-                _uiState.value = uiState.value?.copy(
+                _profileEditUiState.value = profileEditUiState.value?.copy(
                     nicknameEditResult = NicknameValidationResult.UNKNOWN_ERROR,
                 )
             }
@@ -110,11 +110,11 @@ class ProfileEditViewModel @Inject constructor(
                 userRepository.fetchNicknameValidity(nickname)
             }.onSuccess { isDuplicated ->
                 if (isDuplicated) {
-                    _uiState.value = uiState.value?.copy(
+                    _profileEditUiState.value = profileEditUiState.value?.copy(
                         nicknameEditResult = VALID_NICKNAME,
                     )
                 } else {
-                    _uiState.value = uiState.value?.copy(
+                    _profileEditUiState.value = profileEditUiState.value?.copy(
                         nicknameEditResult = INVALID_NICKNAME_DUPLICATION,
                     )
                 }
@@ -123,22 +123,22 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateProfile() {
-        val isInvalidNickname = uiState.value?.nicknameEditResult != VALID_NICKNAME
-        val isNicknameChanged = uiState.value?.profile?.nicknameModel?.nickname != uiState.value?.previousProfile?.nicknameModel?.nickname
+        val isInvalidNickname = profileEditUiState.value?.nicknameEditResult != VALID_NICKNAME
+        val isNicknameChanged = profileEditUiState.value?.profile?.nicknameModel?.nickname != profileEditUiState.value?.previousProfile?.nicknameModel?.nickname
         if (isInvalidNickname && isNicknameChanged) return
 
-        val previousProfile = uiState.value?.previousProfile ?: return
-        val currentProfile = uiState.value?.profile ?: return
+        val previousProfile = profileEditUiState.value?.previousProfile ?: return
+        val currentProfile = profileEditUiState.value?.profile ?: return
 
         viewModelScope.launch {
             runCatching {
                 saveChangedProfileUseCase(previousProfile.toDomain(), currentProfile.toDomain())
             }.onSuccess {
-                _uiState.value = uiState.value?.copy(
+                _profileEditUiState.value = profileEditUiState.value?.copy(
                     profileEditResult = ProfileEditResult.Success,
                 )
             }.onFailure {
-                _uiState.value = uiState.value?.copy(
+                _profileEditUiState.value = profileEditUiState.value?.copy(
                     profileEditResult = ProfileEditResult.Loading,
                 )
             }
@@ -146,9 +146,9 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateCheckDuplicateNicknameButtonEnabled() {
-        val isEnable = uiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && uiState.value?.nicknameEditResult == NONE
-        if (isEnable == uiState.value?.isCheckDuplicateNicknameEnabled) return
-        _uiState.value = uiState.value?.copy(
+        val isEnable = profileEditUiState.value?.profile?.nicknameModel?.nickname?.isNotEmpty() == true && profileEditUiState.value?.nicknameEditResult == NONE
+        if (isEnable == profileEditUiState.value?.isCheckDuplicateNicknameEnabled) return
+        _profileEditUiState.value = profileEditUiState.value?.copy(
             isCheckDuplicateNicknameEnabled = isEnable,
         )
     }
