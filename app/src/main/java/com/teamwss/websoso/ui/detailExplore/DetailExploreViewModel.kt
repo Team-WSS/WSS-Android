@@ -101,11 +101,25 @@ class DetailExploreViewModel @Inject constructor(
                     categories = keywordsList.categories.map { it.toUi() },
                 )
 
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    categories = categoriesModel.categories,
-                )
+                when (searchWord == null) {
+                    true -> {
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                            categories = categoriesModel.categories,
+                        )
+                    }
 
+                    false -> {
+                        val results = categoriesModel.categories.flatMap { it.keywords }
+
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                            searchResultKeywords = results,
+                            isInitialSearchKeyword = false,
+                            isSearchResultKeywordsEmpty = results.isEmpty(),
+                        )
+                    }
+                }
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,

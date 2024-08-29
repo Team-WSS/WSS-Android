@@ -96,6 +96,8 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
+                app:isInvisibleMode="@{true}"
+                app:isVisible="@{!detailExploreViewModel.uiState.searchKeywordProceeding}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constrainedHeight="true"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -107,15 +109,16 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_detail_explore_keyword_result"
             android:layout_width="0dp"
-            android:layout_height="500dp"
+            android:layout_height="402dp"
             android:background="@color/white"
             android:paddingHorizontal="20dp"
-            android:visibility="gone"
+            app:isVisible="@{detailExploreViewModel.uiState.searchKeywordProceeding}"
             app:layout_constraintBottom_toTopOf="@id/cl_detail_explore_keyword_reset_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_min="384dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_detail_explore_divider">
+            app:layout_constraintTop_toBottomOf="@id/view_detail_explore_divider"
+            tools:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_detail_explore_keyword_result_title"
@@ -125,6 +128,7 @@
                 android:text="@string/detail_explore_keyword_search_result"
                 android:textAppearance="@style/title3"
                 android:textColor="@color/gray_300_52515F"
+                app:isVisible="@{!detailExploreViewModel.uiState.initialSearchKeyword}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,6 +149,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:visibility="gone"
+            app:isVisible="@{detailExploreViewModel.uiState.searchKeywordProceeding ? detailExploreViewModel.uiState.isSearchResultKeywordsEmpty : false}"
             app:layout_constraintBottom_toTopOf="@id/cl_detail_explore_keyword_reset_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_min="384dp"
