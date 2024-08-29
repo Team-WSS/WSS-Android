@@ -7,12 +7,14 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.InfiniteScrollListener
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityDetailExploreResultBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
-import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Result
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Novels
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,8 +25,8 @@ class DetailExploreResultActivity :
     private val detailExploreResultAdapter: DetailExploreResultAdapter by lazy {
         DetailExploreResultAdapter(::navigateToNovelDetail)
     }
-
     private val detailExploreResultViewModel: DetailExploreResultViewModel by viewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,7 @@ class DetailExploreResultActivity :
         val novelRating = intent.getFloatExtra("NOVEL_RATING", 0f)
         val keywordIds = intent.getIntegerArrayListExtra("KEYWORD_IDS") ?: arrayListOf()
 
-        detailExploreResultViewModel.updateSearchResult()
+        detailExploreResultViewModel.updateSearchResult(true)
         bindViewModel()
         setupAdapter()
         setupObserver()
@@ -56,9 +58,15 @@ class DetailExploreResultActivity :
                 }
             }
         }
-        binding.apply {
-            rvDetailExploreResult.layoutManager = gridLayoutManager
-            rvDetailExploreResult.adapter = detailExploreResultAdapter
+        binding.rvDetailExploreResult.apply {
+            layoutManager = gridLayoutManager
+            adapter = detailExploreResultAdapter
+            addOnScrollListener(
+                InfiniteScrollListener.of(
+                    singleEventHandler = singleEventHandler,
+                    event = { detailExploreResultViewModel.updateSearchResult(false) },
+                )
+            )
         }
     }
 
@@ -85,9 +93,9 @@ class DetailExploreResultActivity :
     }
 
     private fun updateView(uiState: DetailExploreResultUiState) {
-        val header = Header(uiState.novels.count())
-        val results = uiState.novels.map { Result(it) }
-        detailExploreResultAdapter.submitList(listOf(header) + results)
+        val header = Header(uiState.novelCount)
+        val novels = uiState.novels.map { Novels(it) }
+        detailExploreResultAdapter.submitList(listOf(header) + novels)
     }
 
     private fun onBackButtonClick() {
