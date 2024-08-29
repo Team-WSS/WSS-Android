@@ -30,7 +30,7 @@ class CheckNicknameValidityUseCase @Inject constructor(
 
     private fun getIsNicknameValid(nickname: String): NicknameValidationResult {
         return when {
-            nickname.length !in 2..10 -> INVALID_LENGTH
+            nickname.length !in NICKNAME_MIN_LENGTH..NICKNAME_MAX_LENGTH -> INVALID_LENGTH
             invalidSpacingRegex.containsMatchIn(nickname) -> INVALID_LENGTH
             specialCharacterRegex.containsMatchIn(nickname) -> INVALID_SPECIAL_CHARACTER
             koreanConsonantAndVowelRegex.containsMatchIn(nickname) -> INVALID_KOREAN_CONSONANT_AND_VOWEL
@@ -48,5 +48,10 @@ class CheckNicknameValidityUseCase @Inject constructor(
             return NETWORK_ERROR
         }
         return UNKNOWN_ERROR
+    }
+
+    companion object {
+        private const val NICKNAME_MIN_LENGTH = 2
+        private const val NICKNAME_MAX_LENGTH = 10
     }
 }
