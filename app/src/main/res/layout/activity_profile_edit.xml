@@ -178,7 +178,7 @@
             android:layout_marginTop="4dp"
             android:textAppearance="@style/label1"
             android:textColor="@color/bg_profile_edit_nickname_result_selector"
-            app:isVisible="@{viewModel.profileEditUiState.nicknameEditResult != nicknameEditResult.VALID_NICKNAME}"
+            app:isVisible="@{viewModel.profileEditUiState.nicknameEditResult != nicknameEditResult.NONE}"
             app:layout_constraintStart_toStartOf="@id/view_profile_edit_nickname"
             app:layout_constraintTop_toBottomOf="@id/view_profile_edit_nickname"
             tools:text="이미 사용 중인 닉네임이에요" />
