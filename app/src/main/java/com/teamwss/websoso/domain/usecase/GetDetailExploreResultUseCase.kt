@@ -23,7 +23,7 @@ class GetDetailExploreResultUseCase @Inject constructor(
         isSearchButtonClick: Boolean,
     ): ExploreResult {
 
-        if (isSearchButtonClick && shouldUseCache(genres, isCompleted, novelRating, keywordIds)) {
+        if (isSearchButtonClick && isCacheValid(genres, isCompleted, novelRating, keywordIds)) {
             return ExploreResultEntity(
                 resultCount = novelRepository.cachedNormalExploreResult.size.toLong(),
                 isLoadable = novelRepository.cachedDetailExploreIsLoadable,
@@ -55,7 +55,7 @@ class GetDetailExploreResultUseCase @Inject constructor(
         }
     }
 
-    private fun shouldUseCache(
+    private fun isCacheValid(
         genres: Array<String>?,
         isCompleted: Boolean?,
         novelRating: Float?,
