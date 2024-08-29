@@ -16,7 +16,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="560dp"
         android:background="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -132,7 +132,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_detail_explore_keyword_list"
                 android:layout_width="0dp"
-                android:layout_height="500dp"
+                android:layout_height="400dp"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
