@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.common.util.toIntScaledByPx
@@ -227,7 +228,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             adapter = feedAdapter
             itemAnimator = null
             addOnScrollListener(
-                FeedScrollListener.of(
+                InfiniteScrollListener.of(
                     singleEventHandler = singleEventHandler,
                     event = feedViewModel::updateFeeds,
                 )

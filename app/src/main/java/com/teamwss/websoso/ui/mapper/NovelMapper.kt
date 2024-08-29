@@ -2,6 +2,10 @@ package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
+import com.teamwss.websoso.domain.model.NormalExploreResult
+import com.teamwss.websoso.domain.model.NormalExploreResult.Novel
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 import com.teamwss.websoso.ui.novelDetail.model.Category
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
@@ -14,8 +18,7 @@ import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 
 fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
     return NovelDetailModel(
-        userNovel =
-        NovelDetailModel.UserNovelModel(
+        userNovel = NovelDetailModel.UserNovelModel(
             userNovelId = userNovel.userNovelId,
             readStatus = when (userNovel.readStatus) {
                 "WATCHING" -> ReadStatus.WATCHING
@@ -28,8 +31,7 @@ fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
             isUserNovelInterest = userNovel.isUserNovelInterest,
             userNovelRating = userNovel.userNovelRating,
         ),
-        novel =
-        NovelDetailModel.NovelModel(
+        novel = NovelDetailModel.NovelModel(
             novelId = novelId,
             novelTitle = novel.novelTitle,
             novelImage = novel.novelImage,
@@ -38,8 +40,7 @@ fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
             isNovelCompleted = novel.isNovelCompleted,
             author = novel.author,
         ),
-        userRating =
-        NovelDetailModel.UserRatingModel(
+        userRating = NovelDetailModel.UserRatingModel(
             interestCount = userRating.interestCount,
             novelRating = userRating.novelRating,
             novelRatingCount = userRating.novelRatingCount,
@@ -71,3 +72,23 @@ fun NovelInfoEntity.ReviewCountEntity.toUi() = UnifiedReviewCountModel(
     watchedCount = ReviewCountModel(ReadStatus.WATCHED, watchedCount),
     quitCount = ReviewCountModel(ReadStatus.QUIT, quitCount),
 )
+
+fun NormalExploreResult.toUi(): NormalExploreModel {
+    return NormalExploreModel(
+        resultCount = resultCount,
+        isLoadable = isLoadable,
+        novelModels = novels.map { it.toUi() },
+    )
+}
+
+fun Novel.toUi(): NovelModel {
+    return NovelModel(
+        id = id,
+        title = title,
+        author = author,
+        image = image,
+        interestedCount = interestedCount,
+        rating = rating,
+        ratingCount = ratingCount,
+    )
+}

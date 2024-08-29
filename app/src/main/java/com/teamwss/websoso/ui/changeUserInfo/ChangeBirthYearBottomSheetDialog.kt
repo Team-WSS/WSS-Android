@@ -60,6 +60,5 @@ class ChangeBirthYearBottomSheetDialog :
     companion object {
         private var MAX_BIRTH_YEAR: Int = LocalDate.now().year
         private const val MIN_BIRTH_YEAR: Int = 1900
-        private const val DEFAULT_BIRTH_YEAR: Int = 2000
     }
 }

@@ -9,6 +9,7 @@ import com.teamwss.websoso.databinding.FragmentExploreBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,7 +32,8 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        // TODO 작품 정보 뷰로 이동
+        val intent = NovelDetailActivity.getIntent(requireContext(), novelId)
+        startActivity(intent)
     }
 
     private fun onNormalSearchButtonClick() {
