@@ -14,14 +14,14 @@ import javax.inject.Inject
 class NovelRepository @Inject constructor(
     private val novelApi: NovelApi,
 ) {
-    private var _cachedNormalExploreIsLoadable: Boolean = true
-    val cachedNormalExploreIsLoadable: Boolean get() = _cachedNormalExploreIsLoadable
+    var cachedNormalExploreIsLoadable: Boolean = true
+        private set
 
     private val _cachedNormalExploreResult: MutableList<NovelEntity> = mutableListOf()
     val cachedNormalExploreResult: List<NovelEntity> get() = _cachedNormalExploreResult.toList()
 
-    private var _cachedDetailExploreIsLoadable: Boolean = true
-    val cachedDetailExploreIsLoadable: Boolean get() = _cachedDetailExploreIsLoadable
+    var cachedDetailExploreIsLoadable: Boolean = true
+        private set
 
     private val _cachedDetailExploreResult: MutableList<NovelEntity> = mutableListOf()
     val cachedDetailExploreResult: List<NovelEntity> get() = _cachedDetailExploreResult.toList()
@@ -56,7 +56,7 @@ class NovelRepository @Inject constructor(
         return result.toData()
             .also {
                 _cachedNormalExploreResult.addAll(it.novels)
-                _cachedNormalExploreIsLoadable = result.isLoadable
+                cachedNormalExploreIsLoadable = result.isLoadable
             }
             .copy(
                 isLoadable = cachedNormalExploreIsLoadable,
@@ -66,7 +66,7 @@ class NovelRepository @Inject constructor(
 
     fun clearCachedNormalExploreResult() {
         _cachedNormalExploreResult.clear()
-        _cachedNormalExploreIsLoadable = true
+        cachedNormalExploreIsLoadable = true
     }
 
     suspend fun fetchPopularNovels(): PopularNovelsEntity {
@@ -97,7 +97,7 @@ class NovelRepository @Inject constructor(
         return result.toData()
             .also {
                 _cachedDetailExploreResult.addAll(it.novels)
-                _cachedDetailExploreIsLoadable = result.isLoadable
+                cachedDetailExploreIsLoadable = result.isLoadable
             }
             .copy(
                 isLoadable = cachedDetailExploreIsLoadable,
@@ -107,6 +107,6 @@ class NovelRepository @Inject constructor(
 
     fun clearCachedDetailExploreResult() {
         _cachedDetailExploreResult.clear()
-        _cachedDetailExploreIsLoadable = true
+        cachedDetailExploreIsLoadable = true
     }
 }
