@@ -9,4 +9,6 @@ interface DetailExploreClickListener {
     fun onNovelInquireButtonClick()
 
     fun onDetailSearchNovelButtonClick()
+
+    fun onKeywordResetButtonClick()
 }
