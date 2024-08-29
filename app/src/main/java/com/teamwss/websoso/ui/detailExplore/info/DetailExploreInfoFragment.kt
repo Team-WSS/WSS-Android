@@ -38,7 +38,7 @@ class DetailExploreInfoFragment :
 
     private fun onResetButtonClick() {
         binding.clDetailExploreInfoResetButton.setOnClickListener {
-            detailExploreViewModel.updateResetInfo()
+            detailExploreViewModel.updateSelectedInfoValueClear()
         }
     }
 

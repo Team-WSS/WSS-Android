@@ -68,7 +68,7 @@ class DetailExploreViewModel @Inject constructor(
         return isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
     }
 
-    fun updateResetInfo() {
+    fun updateSelectedInfoValueClear() {
         _selectedGenres.value = mutableListOf()
         _selectedSeriesStatus.value = null
         _selectedRating.value = null
@@ -121,7 +121,7 @@ class DetailExploreViewModel @Inject constructor(
         }
     }
 
-    fun updateResetKeyword() {
+    fun updateSelectedKeywordValueClear() {
         val currentState = _uiState.value ?: return
         val updatedCategories = currentState.categories
 

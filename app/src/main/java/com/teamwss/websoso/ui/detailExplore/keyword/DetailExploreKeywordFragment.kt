@@ -58,7 +58,7 @@ class DetailExploreKeywordFragment :
         }
 
         override fun onKeywordResetButtonClick() {
-            detailExploreViewModel.updateResetKeyword()
+            detailExploreViewModel.updateSelectedKeywordValueClear()
         }
     }
 
