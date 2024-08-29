@@ -12,7 +12,6 @@
         android:id="@+id/tv_detail_explore_novel_count_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:text="@string/detail_explore_result_novel"
         android:textAppearance="@style/title2"
         android:textColor="@color/black"
