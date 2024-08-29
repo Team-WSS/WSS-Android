@@ -47,13 +47,9 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
     private fun handleAvatarChangeUiState(uiState: AvatarChangeUiState) {
         when {
-            uiState.loading -> {
+            uiState.loading -> Unit
 
-            }
-
-            uiState.error -> {
-
-            }
+            uiState.error -> Unit
 
             else -> {
                 setupRecyclerView()

@@ -7,10 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.data.repository.AvatarRepository
 import com.teamwss.websoso.data.repository.UserRepository
-import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.profileEdit.model.Avatar
-import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
-import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 import com.teamwss.websoso.domain.model.NicknameValidationResult
 import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_NICKNAME_DUPLICATION
 import com.teamwss.websoso.domain.model.NicknameValidationResult.NETWORK_ERROR
@@ -19,6 +15,10 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.UNKNOWN_ERROR
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME_SPELLING
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
+import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.profileEdit.model.Avatar
+import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
+import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
@@ -40,10 +40,6 @@ class ProfileEditViewModel @Inject constructor(
 
     private val _avatarChangeUiState = MutableLiveData<AvatarChangeUiState>(AvatarChangeUiState())
     val avatarChangeUiState: LiveData<AvatarChangeUiState> get() = _avatarChangeUiState
-
-    private val invalidLengthRegex = Regex("^\\s|\\s$")
-    private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
-    private val hangulConsonantAndVowelRegex = Regex("[ㄱ-ㅎㅏ-ㅣ]")
 
     fun updatePreviousProfile(profile: ProfileModel) {
         _profileEditUiState.value = profileEditUiState.value?.copy(
