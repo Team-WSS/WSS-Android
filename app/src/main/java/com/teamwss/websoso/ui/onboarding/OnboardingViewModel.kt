@@ -21,35 +21,35 @@ class OnboardingViewModel @Inject constructor(
     private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel() {
     private val _currentPage = MutableLiveData(OnboardingPage.FIRST)
-    val currentPage: LiveData<OnboardingPage> = _currentPage
+    val currentPage: LiveData<OnboardingPage> get() = _currentPage
 
     private val _progressBarPercent = MutableLiveData(OnboardingPage.FIRST.progressPercent)
-    val progressBarPercent: LiveData<Int> = _progressBarPercent
+    val progressBarPercent: LiveData<Int> get() = _progressBarPercent
 
     private val _isBackButtonVisible = MutableLiveData(OnboardingPage.FIRST.isBackButtonVisible)
-    val isBackButtonVisible: LiveData<Boolean> = _isBackButtonVisible
+    val isBackButtonVisible: LiveData<Boolean> get() = _isBackButtonVisible
 
     private val _isSkipTextVisible = MutableLiveData(OnboardingPage.FIRST.isSkipTextVisible)
-    val isSkipTextVisible: LiveData<Boolean> = _isSkipTextVisible
+    val isSkipTextVisible: LiveData<Boolean> get() = _isSkipTextVisible
 
     private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> =
         MutableLiveData(OnboardingFirstUiState())
-    val onboardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
+    val onboardingFirstUiState: LiveData<OnboardingFirstUiState> get() = _onboardingFirstUiState
 
     private val _onboardingSecondUiState: MutableLiveData<OnboardingSecondUiState> =
         MutableLiveData(OnboardingSecondUiState())
-    val onboardingSecondUiState: LiveData<OnboardingSecondUiState> = _onboardingSecondUiState
+    val onboardingSecondUiState: LiveData<OnboardingSecondUiState> get() = _onboardingSecondUiState
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
 
     private val _userProfile: MutableLiveData<UserModel> = MutableLiveData(UserModel())
-    val userProfile: LiveData<UserModel> = _userProfile
+    val userProfile: LiveData<UserModel> get() = _userProfile
 
     private val _selectedGenres = MutableLiveData<Set<String>>(setOf())
-    val selectedGenres: LiveData<Set<String>> = _selectedGenres
+    val selectedGenres: LiveData<Set<String>> get() = _selectedGenres
 
     private val _isUserProfileSubmit = MutableLiveData<Boolean>(false)
-    val isUserProfileSubmit: LiveData<Boolean> = _isUserProfileSubmit
+    val isUserProfileSubmit: LiveData<Boolean> get() = _isUserProfileSubmit
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
@@ -130,7 +130,7 @@ class OnboardingViewModel @Inject constructor(
 
     private fun updateSecondNextButtonUiState() {
         _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
-            isNextButtonEnable = !userProfile.value?.gender.isNullOrEmpty() && userProfile.value?.birthYear != 0
+            isNextButtonEnable = !userProfile.value?.gender.isNullOrEmpty() && userProfile.value?.birthYear != UNSELECTED_BIRTH_YEAR
         )
     }
 
@@ -162,7 +162,7 @@ class OnboardingViewModel @Inject constructor(
                         nickname = profile.nickname,
                         gender = profile.gender,
                         birth = profile.birthYear,
-                        genrePreferences = profile.genrePreferences
+                        genrePreferences = profile.genrePreferences,
                     )
                 }
             }.onSuccess {
@@ -180,5 +180,6 @@ class OnboardingViewModel @Inject constructor(
     companion object {
         private const val GENDER_MALE = "M"
         private const val GENDER_FEMALE = "F"
+        private const val UNSELECTED_BIRTH_YEAR = 0
     }
 }

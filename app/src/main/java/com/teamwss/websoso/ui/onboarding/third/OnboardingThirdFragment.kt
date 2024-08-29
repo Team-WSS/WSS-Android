@@ -31,7 +31,7 @@ class OnboardingThirdFragment :
         super.onViewCreated(view, savedInstanceState)
         setupGenreAdapter()
         setupObserver()
-        setOnboardingCompleteButtonClick()
+        onOnboardingCompleteButtonClick()
 
         binding.viewModel = onboardingViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -48,7 +48,7 @@ class OnboardingThirdFragment :
         }
     }
 
-    private fun setOnboardingCompleteButtonClick() {
+    private fun onOnboardingCompleteButtonClick() {
         binding.btnOnboardingThirdComplete.setOnClickListener {
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
                 onboardingViewModel.submitUserProfile()
