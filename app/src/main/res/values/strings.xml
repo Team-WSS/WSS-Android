@@ -307,5 +307,5 @@
     <!-- 다른 유저 페이지 뷰 -->
     <string name="other_user_page_library">서재</string>
     <string name="other_user_page_activity">활동</string>
-  
+
 </resources>
