@@ -10,6 +10,7 @@ import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import javax.inject.Inject
 
@@ -55,5 +56,21 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchNovelPreferences(userId: Long): NovelPreferenceEntity {
         return userApi.getNovelPreferences(userId).toData()
+    }
+
+    suspend fun saveUserProfile(
+        nickname: String,
+        gender: String,
+        birth: Int,
+        genrePreferences: List<String>,
+    ) {
+        userApi.postUserProfile(
+            UserProfileRequestDto(
+                nickname,
+                gender,
+                birth,
+                genrePreferences,
+            )
+        )
     }
 }
