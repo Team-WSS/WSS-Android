@@ -57,7 +57,7 @@ class ProfileEditViewModel @Inject constructor(
                     nickname = nickname,
                 ) ?: NicknameModel(),
             ) ?: ProfileModel(),
-            nicknameEditResult = if (uiState.value?.previousProfile?.nicknameModel?.nickname == nickname) VALID_NICKNAME else NONE,
+            nicknameEditResult = NONE,
         )
     }
 
@@ -90,7 +90,7 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun checkNicknameValidity(nickname: String) {
-        val result = nickname.getIsNicknameValid()
+        val result = getIsNicknameValid(nickname)
         if (result != VALID_NICKNAME) {
             _uiState.value = uiState.value?.copy(
                 nicknameEditResult = result,
@@ -117,9 +117,13 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateProfile() {
-        if (uiState.value?.nicknameEditResult != VALID_NICKNAME) return
+        val isInvalidNickname = uiState.value?.nicknameEditResult != VALID_NICKNAME
+        val isNicknameChanged = uiState.value?.profile?.nicknameModel?.nickname != uiState.value?.previousProfile?.nicknameModel?.nickname
+        if (isInvalidNickname && isNicknameChanged) return
+
         val previousProfile = uiState.value?.previousProfile ?: return
         val currentProfile = uiState.value?.profile ?: return
+
         viewModelScope.launch {
             runCatching {
                 userRepository.saveUserProfile(
@@ -146,12 +150,12 @@ class ProfileEditViewModel @Inject constructor(
         return if (oldValue == newValue) null else newValue
     }
 
-    private fun String.getIsNicknameValid(): NicknameEditResult {
+    private fun getIsNicknameValid(nickname: String): NicknameEditResult {
         return when {
-            this.length !in 2..10 -> INVALID_NICKNAME_LENGTH
-            this.contains(invalidLengthRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            this.contains(specialCharacterRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
-            this.contains(hangulConsonantAndVowelRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
+            nickname.length !in 2..10 -> INVALID_NICKNAME_LENGTH
+            nickname.contains(invalidLengthRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
+            nickname.contains(specialCharacterRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
+            nickname.contains(hangulConsonantAndVowelRegex) -> INVALID_NICKNAME_SPECIAL_CHARACTER
             else -> VALID_NICKNAME
         }
     }

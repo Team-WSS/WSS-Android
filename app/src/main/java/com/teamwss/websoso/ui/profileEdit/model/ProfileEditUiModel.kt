@@ -24,7 +24,7 @@ enum class NicknameEditResult(
     INVALID_NICKNAME_DUPLICATION("이미 사용 중인 닉네임이에요"),
     INVALID_NICKNAME_LENGTH("한글, 영문, 숫자 2~10자까지 입력가능해요"),
     INVALID_NICKNAME_SPECIAL_CHARACTER("사용할 수 없는 단어가 포함되어 있어요"),
-    VALID_NICKNAME(""),
+    VALID_NICKNAME("사용 가능한 닉네임이에요"),
     NONE(""),
 }
 
