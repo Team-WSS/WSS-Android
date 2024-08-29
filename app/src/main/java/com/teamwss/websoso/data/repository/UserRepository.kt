@@ -2,14 +2,15 @@ package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.BlockedUsersEntity
+import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
+import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
-import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -44,7 +45,15 @@ class UserRepository @Inject constructor(
         userApi.putUserInfo(UserInfoRequestDto(gender, birthYear))
     }
 
-    suspend fun fetchMyProfile(): MyProfileEntity{
+    suspend fun fetchMyProfile(): MyProfileEntity {
         return userApi.getMyProfile().toData()
+    }
+
+    suspend fun fetchGenrePreference(userId: Long): List<GenrePreferenceEntity> {
+        return userApi.getGenrePreference(userId).genrePreferences.map { it.toData() }
+    }
+
+    suspend fun fetchNovelPreferences(userId: Long): NovelPreferenceEntity {
+        return userApi.getNovelPreferences(userId).toData()
     }
 }

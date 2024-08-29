@@ -1,11 +1,11 @@
 package com.teamwss.websoso.data.model
 
 data class NovelPreferenceEntity(
-    val attractivePoint: Array<String>,
-    val keywords: Array<KeywordEntity>,
-) {
+    val attractivePoints: List<String>,
+    val keywords: List<KeywordEntity>
+){
     data class KeywordEntity(
         val keywordName: String,
-        val keywordCount: Int,
+        val keywordCount: Int
     )
 }
