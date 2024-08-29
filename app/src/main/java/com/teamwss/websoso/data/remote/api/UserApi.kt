@@ -59,7 +59,7 @@ interface UserApi {
         @Path("userId") userId: Long,
     ): NovelPreferenceResponseDto
 
-    @GET("users/{userId}")
+    @GET("users/profile/{userId}")
     suspend fun getOtherUserProfile(
         @Path("userId") userId: Long,
     ): OtherUserProfileResponseDto
