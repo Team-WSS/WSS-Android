@@ -107,13 +107,13 @@ class DetailExploreViewModel @Inject constructor(
                     categories = keywordsList.categories.map { it.toUi() },
                 )
 
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     categories = categoriesModel.categories,
                 )
 
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true,
                 )
