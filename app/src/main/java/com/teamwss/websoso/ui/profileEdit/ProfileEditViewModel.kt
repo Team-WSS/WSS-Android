@@ -10,6 +10,8 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_NICKNAM
 import com.teamwss.websoso.domain.model.NicknameValidationResult.NONE
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
+import com.teamwss.websoso.domain.usecase.SaveChangedProfileUseCase
+import com.teamwss.websoso.ui.mapper.toDomain
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
@@ -22,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
+    private val saveChangedProfileUseCase: SaveChangedProfileUseCase,
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
@@ -88,7 +91,7 @@ class ProfileEditViewModel @Inject constructor(
     fun checkNicknameValidity(nickname: String) {
         viewModelScope.launch {
             runCatching {
-                checkNicknameValidityUseCase.execute(nickname)
+                checkNicknameValidityUseCase(nickname)
             }.onSuccess { result ->
                 _uiState.value = uiState.value?.copy(
                     nicknameEditResult = result,
@@ -129,13 +132,7 @@ class ProfileEditViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                userRepository.saveUserProfile(
-                    // TODO: 실제 아바타 아이디로 변경
-                    avatarId = 1,
-                    nickname = (previousProfile.nicknameModel.nickname to currentProfile.nicknameModel.nickname).compareAndReturnNewOrNullValue(),
-                    intro = (previousProfile.introduction to currentProfile.introduction).compareAndReturnNewOrNullValue(),
-                    genrePreferences = currentProfile.genrePreferences.map { it.tag },
-                )
+                saveChangedProfileUseCase(previousProfile.toDomain(), currentProfile.toDomain())
             }.onSuccess {
                 _uiState.value = uiState.value?.copy(
                     profileEditResult = ProfileEditResult.Success,
@@ -146,11 +143,6 @@ class ProfileEditViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun <T> Pair<T, T>.compareAndReturnNewOrNullValue(): T? {
-        val (oldValue, newValue) = this
-        return if (oldValue == newValue) null else newValue
     }
 
     fun updateCheckDuplicateNicknameBtnEnabled() {

@@ -12,7 +12,7 @@ class CheckNicknameValidityUseCase @Inject constructor(
     private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
     private val hangulConsonantAndVowelRegex = Regex("[ㄱ-ㅎㅏ-ㅣ]")
 
-    suspend fun execute(nickname: String): NicknameValidationResult {
+    suspend operator fun invoke(nickname: String): NicknameValidationResult {
         val validationResult = getIsNicknameValid(nickname)
 
         return when {
