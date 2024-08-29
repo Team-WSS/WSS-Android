@@ -12,7 +12,6 @@
         <variable
             name="nicknameEditResult"
             type="com.teamwss.websoso.domain.model.NicknameValidationResult" />
-            type="com.teamwss.websoso.ui.profileEdit.model.NicknameEditResult" />
 
         <variable
             name="onAvatarChangeClick"
