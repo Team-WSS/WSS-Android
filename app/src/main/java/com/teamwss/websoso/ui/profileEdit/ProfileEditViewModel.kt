@@ -11,6 +11,7 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.NETWORK_ERROR
 import com.teamwss.websoso.domain.model.NicknameValidationResult.NONE
 import com.teamwss.websoso.domain.model.NicknameValidationResult.UNKNOWN_ERROR
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
+import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME_SPELLING
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
@@ -93,7 +94,9 @@ class ProfileEditViewModel @Inject constructor(
                 checkNicknameValidityUseCase(nickname)
             }.onSuccess { result ->
                 _profileEditUiState.value = profileEditUiState.value?.copy(
-                    nicknameEditResult = if (result == VALID_NICKNAME) checkNicknameDuplication(nickname) else result,
+                    nicknameEditResult = if (result == VALID_NICKNAME_SPELLING) {
+                        checkNicknameDuplication(nickname)
+                    } else result,
                 )
             }.onFailure {
                 _profileEditUiState.value = profileEditUiState.value?.copy(

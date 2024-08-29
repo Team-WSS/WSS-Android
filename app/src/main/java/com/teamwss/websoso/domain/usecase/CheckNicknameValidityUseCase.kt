@@ -5,7 +5,7 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_KOREAN_
 import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_LENGTH
 import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_SPACING
 import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_SPECIAL_CHARACTER
-import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
+import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME_SPELLING
 import javax.inject.Inject
 
 class CheckNicknameValidityUseCase @Inject constructor() {
@@ -16,8 +16,8 @@ class CheckNicknameValidityUseCase @Inject constructor() {
 
     operator fun invoke(nickname: String): NicknameValidationResult {
         return when {
-            nickname.isValid() != VALID_NICKNAME -> nickname.isValid()
-            else -> VALID_NICKNAME
+            nickname.isValid() != VALID_NICKNAME_SPELLING -> nickname.isValid()
+            else -> VALID_NICKNAME_SPELLING
         }
     }
 
@@ -27,7 +27,7 @@ class CheckNicknameValidityUseCase @Inject constructor() {
             invalidSpacingRegex.containsMatchIn(this) -> INVALID_SPACING
             specialCharacterRegex.containsMatchIn(this) -> INVALID_SPECIAL_CHARACTER
             koreanConsonantAndVowelRegex.containsMatchIn(this) -> INVALID_KOREAN_CONSONANT_AND_VOWEL
-            else -> VALID_NICKNAME
+            else -> VALID_NICKNAME_SPELLING
         }
     }
 
