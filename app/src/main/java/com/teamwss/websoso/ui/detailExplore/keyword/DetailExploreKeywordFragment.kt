@@ -91,11 +91,17 @@ class DetailExploreKeywordFragment :
                 .filter { it.isSelected }
                 .map { it.keywordName }.toList()
 
-        when {
-            currentChipKeywords.size > selectedKeywords.size -> removeSelectedChip((currentChipKeywords - selectedKeywords.toSet()).first())
-            currentChipKeywords.size < selectedKeywords.size -> createSelectedChip(
-                categories.findKeywordByName((selectedKeywords - currentChipKeywords.toSet()).first())
-                    ?: throw IllegalArgumentException("Keyword not found: ${(selectedKeywords - currentChipKeywords.toSet()).first()}")
+        val chipsToRemove = currentChipKeywords - selectedKeywords.toSet()
+        val chipsToAdd = selectedKeywords - currentChipKeywords.toSet()
+
+        chipsToRemove.forEach { keywordName ->
+            removeSelectedChip(keywordName)
+        }
+
+        chipsToAdd.forEach { keywordName ->
+            createSelectedChip(
+                categories.findKeywordByName(keywordName)
+                    ?: throw IllegalArgumentException("Keyword not found: $keywordName")
             )
         }
     }
