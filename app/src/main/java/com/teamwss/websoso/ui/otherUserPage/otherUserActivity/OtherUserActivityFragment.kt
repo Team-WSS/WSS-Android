@@ -7,5 +7,4 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OtherUserActivityFragment :
-    BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
-}
+    BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity)

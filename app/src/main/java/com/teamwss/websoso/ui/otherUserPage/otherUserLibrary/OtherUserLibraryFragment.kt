@@ -7,5 +7,4 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OtherUserLibraryFragment :
-    BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
-}
+    BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library)

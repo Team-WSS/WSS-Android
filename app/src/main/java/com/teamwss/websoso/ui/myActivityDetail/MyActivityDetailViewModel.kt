@@ -6,15 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserFeedRepository
-import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
+import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyActivityDetailViewModel @Inject constructor(
-    private val myActivityRepository: UserFeedRepository
+    private val myActivityRepository: UserFeedRepository,
 ) : ViewModel() {
 
     private val _myActivity = MutableLiveData<List<ActivityModel>>()
