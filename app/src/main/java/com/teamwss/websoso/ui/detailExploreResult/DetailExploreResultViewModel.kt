@@ -58,9 +58,8 @@ class DetailExploreResultViewModel @Inject constructor(
     }
 
     fun updateSearchResult(isSearchButtonClick: Boolean) {
-        if (uiState.value?.isLoadable == false && !isSearchButtonClick) {
-            return
-        }
+        if (uiState.value?.isLoadable == false && !isSearchButtonClick) return
+        
         viewModelScope.launch {
             runCatching {
                 getDetailExploreResultUseCase(
