@@ -66,7 +66,9 @@ class DetailExploreKeywordFragment :
         val novelRating = detailExploreViewModel.selectedRating.value
 
         val keywordIds = detailExploreViewModel.uiState.value?.categories?.asSequence()
-            ?.flatMap { it.keywords.asSequence() }?.filter { it.isSelected }?.map { it.keywordId }
+            ?.flatMap { it.keywords.asSequence() }
+            ?.filter { it.isSelected }
+            ?.map { it.keywordId }
             ?.toList() ?: emptyList()
 
         val intent = DetailExploreResultActivity.getIntent(
@@ -97,11 +99,15 @@ class DetailExploreKeywordFragment :
 
     private fun setupSelectedChips(categories: List<CategoryModel>) {
         val currentChipKeywords =
-            binding.wcgDetailExploreKeywordSelectedKeyword.children.filterIsInstance<WebsosoChip>()
+            binding.wcgDetailExploreKeywordSelectedKeyword.children
+                .filterIsInstance<WebsosoChip>()
                 .map { it.text.toString() }.toList()
 
         val selectedKeywords =
-            categories.asSequence().flatMap { it.keywords.asSequence() }.filter { it.isSelected }
+            categories
+                .asSequence()
+                .flatMap { it.keywords.asSequence() }
+                .filter { it.isSelected }
                 .map { it.keywordName }.toList()
 
         val chipsToRemove = currentChipKeywords - selectedKeywords.toSet()
