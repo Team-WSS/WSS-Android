@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.R
 import com.teamwss.websoso.data.repository.AvatarRepository
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.domain.model.NicknameValidationResult
@@ -16,7 +15,6 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME_SPELLING
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.profileEdit.model.Avatar
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 import com.teamwss.websoso.ui.profileEdit.model.Genre
@@ -140,8 +138,7 @@ class ProfileEditViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 userRepository.saveUserProfile(
-                    // TODO: 실제 아바타 아이디로 변경
-                    avatarId = 1,
+                    avatarId = (currentProfile.avatarId to previousProfile.avatarId).compareAndReturnNewOrNullValue(),
                     nickname = (previousProfile.nicknameModel.nickname to currentProfile.nicknameModel.nickname).compareAndReturnNewOrNullValue(),
                     intro = (previousProfile.introduction to currentProfile.introduction).compareAndReturnNewOrNullValue(),
                     genrePreferences = currentProfile.genrePreferences.map { it.tag },
@@ -228,23 +225,6 @@ class ProfileEditViewModel @Inject constructor(
             if (avatarCount == null) return MIN_CHARACTER_COLUMN_COUNT
             if (avatarCount < MAX_CHARACTER_COLUMN_COUNT) avatarCount
             else MAX_CHARACTER_COLUMN_COUNT
-        }
-    }
-
-    fun getAvatarAnimation(avatarId: Int): Int {
-        Avatar.entries.forEach { avatar ->
-            if (avatar.avatarId == avatarId) {
-                return getLottieResourceId(avatar)
-            }
-        }
-        return R.raw.lottie_sosocat_0
-    }
-
-    private fun getLottieResourceId(avatar: Avatar): Int {
-        val randomNumber = (0..1).random()
-        return when (randomNumber == 0) {
-            true -> avatar.firstAnimationId
-            false -> avatar.secondAnimationId
         }
     }
 

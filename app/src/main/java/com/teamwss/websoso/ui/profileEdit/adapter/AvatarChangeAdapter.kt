@@ -1,10 +1,8 @@
 package com.teamwss.websoso.ui.profileEdit.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.databinding.ItemProfileEditAvatarBinding
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 
 class AvatarChangeAdapter(
@@ -15,21 +13,14 @@ class AvatarChangeAdapter(
         parent: ViewGroup,
         viewType: Int,
     ): AvatarChangeViewHolder {
-        val binding = ItemProfileEditAvatarBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false,
-        )
-        return AvatarChangeViewHolder(binding, onAvatarClick)
+        return AvatarChangeViewHolder.of(parent, onAvatarClick)
     }
 
     override fun onBindViewHolder(holder: AvatarChangeViewHolder, position: Int) {
-        val currentAvatar = getItem(position)
         if (holder.itemView.tag == null) {
-            holder.bind(currentAvatar)
-            holder.itemView.tag = currentAvatar.avatarId
+            holder.setupItem(getItem(position))
         } else {
-            holder.updateSelection(currentAvatar.isRepresentative)
+            holder.updateItemSelection(getItem(position).isRepresentative)
         }
     }
 

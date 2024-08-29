@@ -10,7 +10,9 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogAvatarChangeBinding
 import com.teamwss.websoso.ui.profileEdit.adapter.AvatarChangeAdapter
+import com.teamwss.websoso.ui.profileEdit.model.Avatar.Companion.animation
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
+import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 
 class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBinding>(R.layout.dialog_avatar_change) {
     private val profileEditViewModel: ProfileEditViewModel by activityViewModels()
@@ -40,7 +42,6 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
     private fun setupObserver() {
         profileEditViewModel.avatarChangeUiState.observe(viewLifecycleOwner) { uiState ->
             handleAvatarChangeUiState(uiState)
-            updateAvatarAnimation(uiState.selectedAvatar.avatarId)
         }
     }
 
@@ -52,6 +53,7 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
             uiState.avatars.isNotEmpty() -> {
                 setupRecyclerView()
+                updateAvatarAnimation(uiState.selectedAvatar)
                 avatarChangeAdapter.submitList(uiState.avatars)
             }
         }
@@ -67,14 +69,15 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
         }
     }
 
-    private fun updateAvatarAnimation(avatarId: Int) {
+    private fun updateAvatarAnimation(avatar: AvatarModel) {
+        if (avatar.avatarId == 0) return
         binding.lavProfileEditAvatar.apply {
-            setAnimation(profileEditViewModel.getAvatarAnimation(avatarId))
+            setAnimation(avatar.animation())
             playAnimation()
         }
     }
 
-    fun onSaveClick() {
+    private fun onSaveClick() {
         profileEditViewModel.updateRepresentativeAvatar()
         dismiss()
     }
