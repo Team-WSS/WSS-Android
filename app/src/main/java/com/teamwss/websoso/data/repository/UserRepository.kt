@@ -8,7 +8,7 @@ import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.model.UserUpdateInfoEntity
 import com.teamwss.websoso.data.remote.api.UserApi
-import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -49,6 +49,6 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun saveUserProfile(avatarId: Int?, nickname: String?, intro: String?, genrePreferences: List<String>) {
-        userApi.patchProfile(UserProfileRequestDto(avatarId, nickname, intro, genrePreferences))
+        userApi.patchProfile(UserProfileEditRequestDto(avatarId, nickname, intro, genrePreferences))
     }
 }

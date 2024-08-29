@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserProfileRequestDto(
+data class UserProfileEditRequestDto(
     @SerialName("avatarId")
     val avatarId: Int?,
     @SerialName("nickname")
