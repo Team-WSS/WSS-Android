@@ -70,4 +70,24 @@ class NovelRepository @Inject constructor(
     suspend fun fetchRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteEntity {
         return novelApi.getRecommendedNovelsByUserTaste().toData()
     }
+
+    suspend fun fetchFilteredNovelResult(
+        genres: Array<String>?,
+        isCompleted: Boolean?,
+        novelRating: Float?,
+        keywordIds: Array<Int>?,
+        page: Int,
+        size: Int,
+    ): ExploreResultEntity {
+        val result = novelApi.getFilteredNovelResult(
+            genres = genres,
+            isCompleted = isCompleted,
+            novelRating = novelRating,
+            keywordIds = keywordIds,
+            page = page,
+            size = size,
+        )
+
+        return result.toData()
+    }
 }

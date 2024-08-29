@@ -49,4 +49,14 @@ interface NovelApi {
 
     @GET("novels/taste")
     suspend fun getRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteResponseDto
+
+    @GET("novels/filtered")
+    suspend fun getFilteredNovelResult(
+        @Query("genres") genres: Array<String>?,
+        @Query("isCompleted") isCompleted: Boolean?,
+        @Query("novelRating") novelRating: Float?,
+        @Query("keywordIds") keywordIds: Array<Int>?,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): ExploreResultResponseDto
 }

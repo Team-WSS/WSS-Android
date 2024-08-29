@@ -1,13 +1,12 @@
 package com.teamwss.websoso.ui.detailExploreResult
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FakeNovelRepository
+import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailExploreResultViewModel @Inject constructor(
-    private val novelRepository: FakeNovelRepository,
+    private val novelRepository: NovelRepository,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<DetailExploreResultUiState> =
         MutableLiveData(DetailExploreResultUiState())
@@ -55,22 +54,18 @@ class DetailExploreResultViewModel @Inject constructor(
         _uiState.value = uiState.value?.copy(
             selectedKeywords = keywordIds?.toList() ?: emptyList(),
         )
-        Log.d(
-            "moongchi",
-            "updateDetailExploreFilteredValue: genres=${genre?.joinToString()} isCompleted=$isCompleted novelRating=$novelRating keywordIds=${keywordIds?.joinToString()}"
-        )
     }
 
     fun updateSearchResult() {
         viewModelScope.launch {
             runCatching {
-                novelRepository.fetchDetailExploreResult(
-                    page = 1,
+                novelRepository.fetchFilteredNovelResult(
+                    page = 0,
                     size = 20,
-                    genres = listOf("로맨스"),
-                    isCompleted = false,
-                    novelRating = 4.5f,
-                    keywordIds = listOf() // TODO 이건 더미임요 서버 붙이면서 추후 제거 예정
+                    genres = arrayOf("ROMANCE"),
+                    isCompleted = null,
+                    novelRating = null,
+                    keywordIds = null,
                 )
             }.onSuccess { results ->
                 when (results.novels.isNotEmpty()) {
