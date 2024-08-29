@@ -56,7 +56,7 @@ fun MyProfileResponseDto.toData(): MyProfileEntity {
         nickname = this.nickname,
         intro = this.intro,
         avatarImage = this.avatarImage,
-        genrePreferences = this.genrePreferences
+        genrePreferences = this.genrePreferences,
     )
 }
 
@@ -65,7 +65,7 @@ fun GenrePreferenceResponseDto.GenrePreferenceDto.toData(): GenrePreferenceEntit
     return GenrePreferenceEntity(
         genreName = koreanGenreName,
         genreImage = this.genreImage,
-        genreCount = this.genreCount
+        genreCount = this.genreCount,
     )
 }
 

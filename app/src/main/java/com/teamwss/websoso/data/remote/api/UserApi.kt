@@ -50,12 +50,12 @@ interface UserApi {
 
     @GET("users/{userId}/preferences/genres")
     suspend fun getGenrePreference(
-        @Path("userId") userId: Long
+        @Path("userId") userId: Long,
     ): GenrePreferenceResponseDto
 
     @GET("users/{userId}/preferences/attractive-points")
     suspend fun getNovelPreferences(
-        @Path("userId") userId: Long
+        @Path("userId") userId: Long,
     ): NovelPreferenceResponseDto
 
 }
