@@ -126,11 +126,9 @@ class DetailExploreViewModel @Inject constructor(
         val updatedCategories = currentState.categories
 
         val resetCategories = updatedCategories.map { category ->
-            category.copy(
-                keywords = category.keywords.map { keyword ->
-                    keyword.copy(isSelected = false)
-                }
-            )
+            category.copy(keywords = category.keywords.map { keyword ->
+                keyword.copy(isSelected = false)
+            })
         }
 
         _uiState.value = currentState.copy(categories = resetCategories)
@@ -157,12 +155,12 @@ class DetailExploreViewModel @Inject constructor(
             }
             category.copy(keywords = updatedKeywords)
         }
-        _uiState.value = currentUiState.copy(categories = updatedCategories)
 
         val isAnyKeywordSelected = updatedCategories.any { category ->
             category.keywords.any { it.isSelected }
         }
 
         _isKeywordChipSelected.value = isAnyKeywordSelected
+        _uiState.value = currentUiState.copy(categories = updatedCategories)
     }
 }
