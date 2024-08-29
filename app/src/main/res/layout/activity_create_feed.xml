@@ -34,14 +34,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/iv_create_feed_done_button"
+                android:id="@+id/tv_create_feed_done_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
                 android:src="@drawable/ic_more"
-                android:text="@string/iv_create_feed_done_button"
+                android:text="@string/tv_create_feed_done_button"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/bg_create_feed_done_button_selector"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -136,6 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:background="@null"
+            android:checked="@={viewModel.isSpoiled}"
             android:thumb="@drawable/bg_create_feed_toggle_thumb"
             app:layout_constraintBottom_toBottomOf="@+id/tv_create_feed_spoiler"
             app:layout_constraintEnd_toEndOf="parent"
@@ -158,6 +159,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="32dp"
             android:scrollbars="vertical"
+            android:text="@={viewModel.content}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_200_AEADB3"

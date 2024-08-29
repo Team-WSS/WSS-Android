@@ -18,8 +18,19 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(R.layout.acti
         super.onCreate(savedInstanceState)
         setupCategoryChips()
 
+        bindViewModel()
+        setupObserver()
+    }
+
+    private fun bindViewModel() {
         binding.lifecycleOwner = this
         binding.viewModel = createFeedViewModel
+    }
+
+    private fun setupObserver() {
+        createFeedViewModel.isActivated.observe(this) { isSelected ->
+            binding.tvCreateFeedDoneButton.isSelected = isSelected
+        }
     }
 
     private fun setupCategoryChips() {

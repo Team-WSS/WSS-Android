@@ -311,7 +311,7 @@
     <!-- 피드 생성 뷰 -->
     <string name="tv_create_feed_multiple_choice_guide">중복 선택 가능</string>
     <string name="tv_create_feed_category">카테고리</string>
-    <string name="iv_create_feed_done_button">완료</string>
+    <string name="tv_create_feed_done_button">완료</string>
     <string name="tv_create_feed_write_content">내용 작성하기</string>
     <string name="tv_create_feed_spoiler">스포일러</string>
     <string name="et_create_feed_content_hint">피드 작성 유의사항!\n\n욕설, 비방, 명예훼손성 표현은 사용하지 말아주세요.\n작품 내용을 담은 글은 스포일러를 체크해주세요.</string>
