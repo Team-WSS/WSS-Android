@@ -13,6 +13,7 @@ import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeyword
 import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
+import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,12 +54,34 @@ class DetailExploreKeywordFragment :
         }
 
         override fun onDetailSearchNovelButtonClick() {
-            // TODO 상세 탐색 결과 화면으로 이동
+            navigateToDetailSearchResult()
         }
 
         override fun onKeywordResetButtonClick() {
             detailExploreViewModel.updateResetKeyword()
         }
+    }
+
+    private fun navigateToDetailSearchResult() {
+        val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
+        val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
+        val novelRating = detailExploreViewModel.selectedRating.value
+
+        val keywordIds = detailExploreViewModel.uiState.value?.categories
+            ?.flatMap { it.keywords }
+            ?.filter { it.isSelected }
+            ?.map { it.keywordId }
+            ?: emptyList()
+
+        val intent = DetailExploreResultActivity.getIntent(
+            context = requireContext(),
+            genres = selectedGenres,
+            isCompleted = isCompleted,
+            novelRating = novelRating,
+            keywordIds = keywordIds,
+        )
+
+        startActivity(intent)
     }
 
     private fun setupAdapter() {
