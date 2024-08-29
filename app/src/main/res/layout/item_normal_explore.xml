@@ -7,7 +7,7 @@
 
         <variable
             name="novel"
-            type="com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity" />
+            type="com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel" />
 
         <variable
             name="onClick"
@@ -17,6 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> onClick.invoke(novel.id)}"
         android:paddingTop="8dp">
 
         <ImageView

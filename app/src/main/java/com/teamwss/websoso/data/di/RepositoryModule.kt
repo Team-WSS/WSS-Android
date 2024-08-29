@@ -1,8 +1,10 @@
 package com.teamwss.websoso.data.di
 
 import com.teamwss.websoso.data.remote.api.FeedApi
+import com.teamwss.websoso.data.remote.api.NovelApi
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.repository.FeedRepository
+import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.data.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -21,4 +23,8 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideUserRepository(userApi: UserApi): UserRepository = UserRepository(userApi)
+
+    @Provides
+    @Singleton
+    fun provideNovelRepository(novelApi: NovelApi): NovelRepository = NovelRepository(novelApi)
 }

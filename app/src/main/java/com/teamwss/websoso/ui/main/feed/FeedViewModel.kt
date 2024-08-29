@@ -47,7 +47,6 @@ class FeedViewModel @Inject constructor(
     fun updateFeeds() {
         feedUiState.value?.let { feedUiState ->
             if (!feedUiState.isLoadable) return
-            else _feedUiState.value = feedUiState.copy(loading = true)
 
             viewModelScope.launch {
                 val selectedCategory: Category =
@@ -118,7 +117,6 @@ class FeedViewModel @Inject constructor(
 
     fun updateRefreshedFeeds() {
         feedUiState.value?.let { feedUiState ->
-            _feedUiState.value = feedUiState.copy(loading = true)
 
             viewModelScope.launch {
                 val selectedCategory: Category =

@@ -1,6 +1,8 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
+import com.teamwss.websoso.data.model.ExploreResultEntity
+import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity
@@ -12,6 +14,11 @@ import javax.inject.Inject
 class NovelRepository @Inject constructor(
     private val novelApi: NovelApi,
 ) {
+    private var _cachedNormalExploreIsLoadable: Boolean = true
+    val cachedNormalExploreIsLoadable: Boolean get() = _cachedNormalExploreIsLoadable
+
+    private val _cachedNormalExploreResult: MutableList<NovelEntity> = mutableListOf()
+    val cachedNormalExploreResult: List<NovelEntity> get() = _cachedNormalExploreResult.toList()
 
     suspend fun getNovelDetail(novelId: Long): NovelDetailEntity {
         return novelApi.getNovelDetail(novelId).toData()
@@ -30,6 +37,30 @@ class NovelRepository @Inject constructor(
 
     suspend fun fetchSosoPicks(): SosoPickEntity {
         return novelApi.getSosoPicks().toData()
+    }
+
+    suspend fun fetchNormalExploreResult(
+        searchWord: String,
+        page: Int,
+        size: Int,
+    ): ExploreResultEntity {
+        val result =
+            novelApi.getNormalExploreResult(searchWord = searchWord, page = page, size = size)
+
+        return result.toData()
+            .also {
+                _cachedNormalExploreResult.addAll(it.novels)
+                _cachedNormalExploreIsLoadable = result.isLoadable
+            }
+            .copy(
+                isLoadable = cachedNormalExploreIsLoadable,
+                novels = cachedNormalExploreResult,
+            )
+    }
+
+    fun clearCachedNormalExploreResult() {
+        _cachedNormalExploreResult.clear()
+        _cachedNormalExploreIsLoadable = true
     }
 
     suspend fun fetchPopularNovels(): PopularNovelsEntity {

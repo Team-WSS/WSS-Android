@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.notice
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
@@ -50,6 +52,13 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>(R.layout.activity_not
                     noticeAdapter.submitList(noticeUiState.notices)
                 }
             }
+        }
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent {
+            return Intent(context, NoticeActivity::class.java)
         }
     }
 }

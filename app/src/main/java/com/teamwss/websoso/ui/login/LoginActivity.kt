@@ -9,6 +9,7 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.ui.login.adapter.ImageViewPagerAdapter
 import com.teamwss.websoso.ui.main.MainActivity
+import com.teamwss.websoso.ui.onboarding.OnboardingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,6 +22,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
         setupObserver()
         onWithoutLoginButtonClick()
+        onKakaoLoginButtonClick()
     }
 
     private fun setupObserver() {
@@ -39,6 +41,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private fun onWithoutLoginButtonClick() {
         binding.tvLoginWithoutLogin.setOnClickListener {
             startActivity(MainActivity.getIntent(this))
+        }
+    }
+
+    private fun onKakaoLoginButtonClick() {
+        binding.ivLoginKakao.setOnClickListener {
+            startActivity(OnboardingActivity.getIntent(this))
         }
     }
 

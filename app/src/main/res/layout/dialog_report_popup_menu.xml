@@ -2,21 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="title"
-            type="String" />
-
-        <variable
-            name="onCancelClick"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="onReportClick"
-            type="kotlin.jvm.functions.Function0" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +29,6 @@
             android:layout_marginEnd="20dp"
             android:gravity="center"
             android:maxLines="2"
-            android:text="@{title}"
             android:textAlignment="center"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
@@ -62,7 +46,6 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_novel_info_gray_50_radius_8dp"
             android:gravity="center"
-            android:onClick="@{()->onCancelClick.invoke()}"
             android:paddingHorizontal="48dp"
             android:paddingVertical="12dp"
             android:text="@string/report_popup_menu_cancel"
@@ -82,7 +65,6 @@
             android:layout_marginEnd="20dp"
             android:background="@drawable/bg_novel_info_primary_100_radius_8dp"
             android:gravity="center"
-            android:onClick="@{() -> onReportClick.invoke()}"
             android:paddingHorizontal="48dp"
             android:paddingVertical="12dp"
             android:text="@string/report_popup_menu_report"
