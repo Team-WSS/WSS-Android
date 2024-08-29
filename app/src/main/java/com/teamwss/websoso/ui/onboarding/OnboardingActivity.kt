@@ -51,13 +51,9 @@ class OnboardingActivity :
         }
 
         viewModel.isUserProfileSubmit.observe(this) { isUserProfileSubmit ->
-            when (isUserProfileSubmit) {
-                true -> {
-                    startActivity(WelcomeActivity.getIntent(this))
-                    finish()
-                }
-
-                false -> Unit
+            if (isUserProfileSubmit) {
+                startActivity(WelcomeActivity.getIntent(this))
+                finish()
             }
         }
     }
