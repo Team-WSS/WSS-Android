@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.detailExplore
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
@@ -20,33 +21,50 @@ class DetailExploreViewModel @Inject constructor() : ViewModel() {
 
     val ratings: List<Float> = listOf(3.5f, 4.0f, 4.5f, 4.8f)
 
-    private val _isInfoChipSelected: MutableLiveData<Boolean> = MutableLiveData()
+    private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData()
     val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
 
-    fun updateSelectedGenres(genre: Genre) {
-        when (_selectedGenres.value?.contains(genre) ?: emptyList<Genre>()) {
-            true -> _selectedGenres.value?.removeAll(listOf(genre))
-            false -> _selectedGenres.value?.add(genre)
+    init {
+        _isInfoChipSelected.addSource(_selectedGenres) {
+            _isInfoChipSelected.value = isEnabled()
         }
-        updateIsInfoChipSelected()
+        _isInfoChipSelected.addSource(_selectedSeriesStatus) {
+            _isInfoChipSelected.value = isEnabled()
+        }
+        _isInfoChipSelected.addSource(_selectedRating) {
+            _isInfoChipSelected.value = isEnabled()
+        }
+    }
+
+    fun updateSelectedGenres(genre: Genre) {
+        val currentGenres = _selectedGenres.value?.toMutableList() ?: mutableListOf()
+
+        _selectedGenres.value = when (currentGenres.contains(genre)) {
+            true -> {
+                currentGenres.remove(genre)
+                currentGenres
+            }
+
+            false -> {
+                currentGenres.add(genre)
+                currentGenres
+            }
+        }
     }
 
     fun updateSelectedSeriesStatus(status: String?) {
         _selectedSeriesStatus.value = status
-        updateIsInfoChipSelected()
     }
 
     fun updateSelectedRating(rating: Float?) {
         _selectedRating.value = rating
-        updateIsInfoChipSelected()
     }
 
-    private fun updateIsInfoChipSelected() {
-        val isGenreChipSelected: Boolean = _selectedGenres.value?.isEmpty()?.not() ?: false
+    private fun isEnabled(): Boolean {
+        val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
         val isStatusChipSelected: Boolean = _selectedSeriesStatus.value.isNullOrEmpty().not()
         val isRatingChipSelected: Boolean = _selectedRating.value != null
 
-        _isInfoChipSelected.value =
-            isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
+        return isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
     }
 }
