@@ -32,6 +32,7 @@
             <ImageView
                 android:id="@+id/iv_feed_profile"
                 cornerRadius="@{12f}"
+                isVectorImage="@{true}"
                 loadImageUrl="@{feed.user.avatarImage}"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
@@ -125,12 +126,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_novel_info"
+            isVisible="@{!feed.novel.nothing}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            isVisible="@{!feed.novel.nothing}"
             android:background="@drawable/btn_feed_novel_info"
             android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -204,11 +205,11 @@
 
         <TextView
             android:id="@+id/tv_feed_genre"
+            isVisible="@{!feed.emptyOfRelevantCategories}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            isVisible="@{!feed.emptyOfRelevantCategories}"
             android:text="@{feed.categories}"
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
