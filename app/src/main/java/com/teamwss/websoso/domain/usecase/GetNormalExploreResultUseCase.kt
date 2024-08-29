@@ -6,7 +6,7 @@ import com.teamwss.websoso.domain.mapper.toDomain
 import com.teamwss.websoso.domain.model.ExploreResult
 import javax.inject.Inject
 
-class GetNormalExploreResultsUseCase @Inject constructor(
+class GetNormalExploreResultUseCase @Inject constructor(
     private val novelRepository: NovelRepository,
 ) {
     private var previousSearchWord: String = ""
