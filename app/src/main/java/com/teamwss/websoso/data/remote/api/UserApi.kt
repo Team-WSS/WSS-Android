@@ -6,6 +6,7 @@ import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
+import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
@@ -57,5 +58,10 @@ interface UserApi {
     suspend fun getNovelPreferences(
         @Path("userId") userId: Long,
     ): NovelPreferenceResponseDto
+
+    @GET("users/{userId}")
+    suspend fun getOtherUserProfile(
+        @Path("userId") userId: Long,
+    ): OtherUserProfileResponseDto
 
 }
