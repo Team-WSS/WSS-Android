@@ -39,7 +39,7 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
     private fun setupObserver() {
         profileEditViewModel.avatarChangeUiState.observe(viewLifecycleOwner) { uiState ->
-            val selectedAvatarId = profileEditViewModel.getSelectedAvatar().avatarId
+            val selectedAvatarId = profileEditViewModel.avatarChangeUiState.value?.selectedAvatar?.avatarId ?: 0
             handleAvatarChangeUiState(uiState)
             updateAvatarAnimation(profileEditViewModel.getAvatarAnimation(selectedAvatarId))
         }

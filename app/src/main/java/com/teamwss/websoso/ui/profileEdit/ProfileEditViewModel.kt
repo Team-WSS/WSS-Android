@@ -247,10 +247,6 @@ class ProfileEditViewModel @Inject constructor(
         return if (resourceId != 0) resourceId else R.raw.lottie_sosocat_0
     }
 
-    fun getSelectedAvatar(): AvatarModel {
-        return avatarChangeUiState.value?.selectedAvatar ?: AvatarModel()
-    }
-
     companion object {
         private const val MAX_CHARACTER_COLUMN_COUNT = 5
         private const val MIN_CHARACTER_COLUMN_COUNT = 1
