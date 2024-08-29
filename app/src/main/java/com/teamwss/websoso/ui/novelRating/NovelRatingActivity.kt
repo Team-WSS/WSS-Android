@@ -82,36 +82,48 @@ class NovelRatingActivity :
         var isInitialUpdate = true
 
         novelRatingViewModel.uiState.observe(this) { uiState ->
-            if (isInitialUpdate && !uiState.isFetchError && !uiState.loading) {
-                isInitialUpdate = false
-                binding.wllNovelRating.setWebsosoLoadingVisibility(false)
-                updateInitialReadStatus()
-            }
-            if (!uiState.isFetchError && !uiState.loading) {
-                updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-                updateCharmPointChips(uiState.novelRatingModel.charmPoints)
-                updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
-            }
-            if (uiState.loading) binding.wllNovelRating.setWebsosoLoadingVisibility(true)
-            if (uiState.isFetchError) binding.wllNovelRating.setErrorLayoutVisibility(true)
-            if (uiState.isSaveSuccess) {
-                WebsosoCustomToast.make(this@NovelRatingActivity)
-                    .setText(getString(R.string.novel_rating_complete))
-                    .setIcon(R.drawable.ic_novel_detail_check)
-                    .show()
-                finish()
-            }
-            if (uiState.isSaveError) {
-                WebsosoCustomSnackBar.make(binding.root)
-                    .setText(getString(R.string.novel_rating_save_error))
-                    .setIcon(R.drawable.ic_novel_rating_alert)
-                    .show()
-            }
-            if (uiState.keywordsModel.isSearchKeywordExceed) {
-                WebsosoCustomSnackBar.make(binding.root)
-                    .setText(getString(R.string.novel_rating_keyword_exceed))
-                    .setIcon(R.drawable.ic_novel_rating_alert)
-                    .show()
+            when {
+                uiState.isSaveSuccess -> {
+                    WebsosoCustomToast.make(this@NovelRatingActivity)
+                        .setText(getString(R.string.novel_rating_complete))
+                        .setIcon(R.drawable.ic_novel_detail_check)
+                        .show()
+                    finish()
+                }
+
+                isInitialUpdate && !uiState.isFetchError && !uiState.loading -> {
+                    isInitialUpdate = false
+                    binding.wllNovelRating.setWebsosoLoadingVisibility(false)
+                    updateInitialReadStatus()
+                }
+
+                !uiState.isFetchError && !uiState.loading -> {
+                    updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
+                    updateCharmPointChips(uiState.novelRatingModel.charmPoints)
+                    updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
+                }
+
+                uiState.keywordsModel.isSearchKeywordExceed -> {
+                    WebsosoCustomSnackBar.make(binding.root)
+                        .setText(getString(R.string.novel_rating_keyword_exceed))
+                        .setIcon(R.drawable.ic_novel_rating_alert)
+                        .show()
+                }
+
+                uiState.isSaveError -> {
+                    WebsosoCustomSnackBar.make(binding.root)
+                        .setText(getString(R.string.novel_rating_save_error))
+                        .setIcon(R.drawable.ic_novel_rating_alert)
+                        .show()
+                }
+
+                uiState.loading -> {
+                    binding.wllNovelRating.setWebsosoLoadingVisibility(true)
+                }
+
+                else -> {
+                    binding.wllNovelRating.setErrorLayoutVisibility(true)
+                }
             }
         }
     }
