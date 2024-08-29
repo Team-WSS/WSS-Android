@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.detailExplore.keyword
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
@@ -30,12 +31,12 @@ class DetailExploreKeywordFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        detailExploreViewModel.updateKeyword(null)
         bindViewModel()
         setupAdapter()
         setupObserver()
         setupSearchKeyword()
         setupWebsosoSearchEditListener()
+        setupBackButtonListener()
     }
 
     private fun bindViewModel() {
@@ -236,6 +237,20 @@ class DetailExploreKeywordFragment :
     private fun initSearchKeyword() {
         binding.wsetDetailExploreKeywordSearch.clearWebsosoSearchFocus()
         detailExploreViewModel.initSearchKeyword()
+    }
+
+    private fun setupBackButtonListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.wsetDetailExploreKeywordSearch.hasFocus()) {
+                        initSearchKeyword()
+                    } else {
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+            })
     }
 
     override fun onDestroyView() {

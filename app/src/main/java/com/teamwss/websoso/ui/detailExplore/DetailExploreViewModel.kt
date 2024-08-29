@@ -52,6 +52,8 @@ class DetailExploreViewModel @Inject constructor(
         _isInfoChipSelected.addSource(_selectedRating) {
             _isInfoChipSelected.value = isInfoChipSelectedEnabled()
         }
+
+        updateKeyword(null)
     }
 
     private fun isInfoChipSelectedEnabled(): Boolean {
