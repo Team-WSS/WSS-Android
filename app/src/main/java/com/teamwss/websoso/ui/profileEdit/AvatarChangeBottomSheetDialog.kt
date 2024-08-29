@@ -40,7 +40,7 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
     private fun setupObserver() {
         profileEditViewModel.avatarChangeUiState.observe(viewLifecycleOwner) { uiState ->
             handleAvatarChangeUiState(uiState)
-            updateAvatarAnimation(profileEditViewModel.getAvatarAnimation(uiState.selectedAvatar.avatarId))
+            updateAvatarAnimation(uiState.selectedAvatar.avatarId)
         }
     }
 
@@ -67,9 +67,9 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
         }
     }
 
-    private fun updateAvatarAnimation(lottieId: Int) {
+    private fun updateAvatarAnimation(avatarId: Int) {
         binding.lavProfileEditAvatar.apply {
-            setAnimation(lottieId)
+            setAnimation(profileEditViewModel.getAvatarAnimation(avatarId))
             playAnimation()
         }
     }
