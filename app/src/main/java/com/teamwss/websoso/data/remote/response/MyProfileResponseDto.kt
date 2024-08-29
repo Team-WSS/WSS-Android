@@ -12,5 +12,5 @@ data class MyProfileResponseDto(
     @SerialName("avatarImage")
     val avatarImage: String,
     @SerialName("genrePreferences")
-    val genrePreferences: List<String>
+    val genrePreferences: List<String>,
 )

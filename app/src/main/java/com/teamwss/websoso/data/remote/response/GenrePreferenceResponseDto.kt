@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GenrePreferenceResponseDto(
     @SerialName("genrePreferences")
-    val genrePreferences: List<GenrePreferenceDto>
+    val genrePreferences: List<GenrePreferenceDto>,
 )
 @Serializable
 data class GenrePreferenceDto(
@@ -16,14 +16,14 @@ data class GenrePreferenceDto(
     @SerialName("genreImage")
     val genreImage: String,
     @SerialName("genreCount")
-    val genreCount: Int
+    val genreCount: Int,
 ){
     fun toData(): GenrePreferenceEntity {
-        val koreanGenreName = Genres.from(genreName)?.korean ?: genreName // 한글로 변환
+        val koreanGenreName = Genres.from(genreName)?.korean ?: genreName
         return GenrePreferenceEntity(
             genreName = koreanGenreName,
             genreImage = genreImage,
-            genreCount = genreCount
+            genreCount = genreCount,
         )
     }
 }

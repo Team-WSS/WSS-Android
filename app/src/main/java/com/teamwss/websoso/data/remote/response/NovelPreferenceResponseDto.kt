@@ -8,7 +8,7 @@ data class NovelPreferenceResponseDto(
     @SerialName("attractivePoints")
     val attractivePoints: List<String>,
     @SerialName("keywords")
-    val keywords: List<AttractivePointKeywordDto>
+    val keywords: List<AttractivePointKeywordDto>,
 )
 
 @Serializable
@@ -16,5 +16,5 @@ data class AttractivePointKeywordDto(
     @SerialName("keywordName")
     val keywordName: String,
     @SerialName("keywordCount")
-    val keywordCount: Int
+    val keywordCount: Int,
 )

@@ -64,7 +64,7 @@ fun GenrePreferenceDto.toData(): GenrePreferenceEntity {
     return GenrePreferenceEntity(
         genreName = this.genreName,
         genreImage = this.genreImage,
-        genreCount = this.genreCount
+        genreCount = this.genreCount,
     )
 }
 
@@ -78,7 +78,7 @@ fun NovelPreferenceResponseDto.toData(): NovelPreferenceEntity {
 fun AttractivePointKeywordDto.toData(): NovelPreferenceEntity.KeywordEntity {
     return NovelPreferenceEntity.KeywordEntity(
         keywordName = this.keywordName,
-        keywordCount = this.keywordCount
+        keywordCount = this.keywordCount,
     )
 }
 
