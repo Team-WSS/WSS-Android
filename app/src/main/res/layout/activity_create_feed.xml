@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="12dp"
-            android:text="@{@string/tv_create_feed_characters_count(viewModel.content.size)}"
+            android:text="@{@string/tv_create_feed_characters_count(0)}"
             app:layout_constraintBottom_toBottomOf="@+id/et_create_feed_content"
             app:layout_constraintEnd_toEndOf="@+id/et_create_feed_content" />
     </androidx.constraintlayout.widget.ConstraintLayout>
