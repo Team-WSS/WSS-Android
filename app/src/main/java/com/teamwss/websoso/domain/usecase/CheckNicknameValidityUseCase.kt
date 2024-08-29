@@ -15,7 +15,7 @@ class CheckNicknameValidityUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ) {
 
-    private val invalidLengthRegex = Regex("^\\s|\\s$")
+    private val invalidSpacingRegex = Regex("^\\s|\\s$")
     private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
     private val hangulConsonantAndVowelRegex = Regex("[ㄱ-ㅎㅏ-ㅣ]")
 
@@ -30,7 +30,7 @@ class CheckNicknameValidityUseCase @Inject constructor(
 
     private fun getIsNicknameValid(nickname: String): NicknameValidationResult {
         return when {
-            invalidLengthRegex.containsMatchIn(nickname) -> INVALID_LENGTH
+            invalidSpacingRegex.containsMatchIn(nickname) -> INVALID_LENGTH
             specialCharacterRegex.containsMatchIn(nickname) -> INVALID_SPECIAL_CHARACTER
             hangulConsonantAndVowelRegex.containsMatchIn(nickname) -> INVALID_KOREAN_CONSONANT_AND_VOWEL
             else -> VALID_NICKNAME
