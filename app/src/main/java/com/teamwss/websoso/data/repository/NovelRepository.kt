@@ -20,6 +20,12 @@ class NovelRepository @Inject constructor(
     private val _cachedNormalExploreResult: MutableList<NovelEntity> = mutableListOf()
     val cachedNormalExploreResult: List<NovelEntity> get() = _cachedNormalExploreResult.toList()
 
+    private var _cachedDetailExploreIsLoadable: Boolean = true
+    val cachedDetailExploreIsLoadable: Boolean get() = _cachedDetailExploreIsLoadable
+
+    private val _cachedDetailExploreResult: MutableList<NovelEntity> = mutableListOf()
+    val cachedDetailExploreResult: List<NovelEntity> get() = _cachedDetailExploreResult.toList()
+
     suspend fun getNovelDetail(novelId: Long): NovelDetailEntity {
         return novelApi.getNovelDetail(novelId).toData()
     }
@@ -89,5 +95,18 @@ class NovelRepository @Inject constructor(
         )
 
         return result.toData()
+            .also {
+                _cachedDetailExploreResult.addAll(it.novels)
+                _cachedDetailExploreIsLoadable = result.isLoadable
+            }
+            .copy(
+                isLoadable = cachedDetailExploreIsLoadable,
+                novels = cachedDetailExploreResult,
+            )
+    }
+
+    fun clearCachedDetailExploreResult() {
+        _cachedDetailExploreResult.clear()
+        _cachedDetailExploreIsLoadable = true
     }
 }
