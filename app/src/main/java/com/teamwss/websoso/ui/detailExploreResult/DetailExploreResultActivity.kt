@@ -62,8 +62,10 @@ class DetailExploreResultActivity :
             layoutManager = gridLayoutManager
             adapter = detailExploreResultAdapter
             addOnScrollListener(
-                InfiniteScrollListener.of(singleEventHandler = singleEventHandler,
-                    event = { detailExploreResultViewModel.updateSearchResult(false) })
+                InfiniteScrollListener.of(
+                    singleEventHandler = singleEventHandler,
+                    event = { detailExploreResultViewModel.updateSearchResult(false) },
+                )
             )
         }
     }
