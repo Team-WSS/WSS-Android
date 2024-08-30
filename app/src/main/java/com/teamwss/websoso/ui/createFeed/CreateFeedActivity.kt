@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.createFeed
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_stroke_selector
@@ -26,6 +27,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
         setupCategoryChips()
 
         setupView()
+        onCreateFeedClick()
         bindViewModel()
         setupObserver()
     }
@@ -37,6 +39,13 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
             setWebsosoSearchHintTextColor(gray_200_AEADB3)
             setWebsosoSearchTextAppearance(body4)
             setWebsosoOnClickListener { showSearchNovelDialog() }
+        }
+    }
+
+    private fun onCreateFeedClick() {
+        binding.ivCreateFeedRemoveButton.setOnClickListener {
+            binding.clCreateFeedNovelInfo.visibility = View.INVISIBLE
+            createFeedViewModel.updateSelectedNovelClear()
         }
     }
 
@@ -57,6 +66,13 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
     private fun setupObserver() {
         createFeedViewModel.isActivated.observe(this) { isSelected ->
             binding.tvCreateFeedDoneButton.isSelected = isSelected
+            binding.tvCreateFeedDoneButton.isEnabled = isSelected
+        }
+        createFeedViewModel.selectedNovelTitle.observe(this) { novelTitle ->
+            if (novelTitle.isNullOrBlank().not()) {
+                binding.clCreateFeedNovelInfo.visibility = View.VISIBLE
+                binding.tvCreateFeedNovelName.text = novelTitle
+            }
         }
     }
 

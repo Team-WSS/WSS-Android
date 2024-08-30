@@ -64,6 +64,10 @@ class CreateFeedSearchNovelBottomSheetDialog :
             createFeedViewModel.updateSearchedNovels(binding.wsetCreateFeedSearchNovel.getWebsosoSearchText())
             true
         }
+        binding.tvCreateFeedSearchNovelConnectButton.setOnClickListener {
+            createFeedViewModel.updateSelectedNovel()
+            dismiss()
+        }
     }
 
     private fun setupObserver() {
@@ -75,6 +79,13 @@ class CreateFeedSearchNovelBottomSheetDialog :
     }
 
     private fun updateView(uiState: SearchNovelUiState) {
+        val hasSelected = uiState.novels.any { it.isSelected }
+
+        when (hasSelected) {
+            true -> binding.tvCreateFeedSearchNovelConnectButton.visibility = View.VISIBLE
+            false -> binding.tvCreateFeedSearchNovelConnectButton.visibility = View.INVISIBLE
+        }
+
         when (uiState.novels.isEmpty()) {
             true -> {
                 binding.rvCreateFeedSearchNovelResult.visibility = View.INVISIBLE

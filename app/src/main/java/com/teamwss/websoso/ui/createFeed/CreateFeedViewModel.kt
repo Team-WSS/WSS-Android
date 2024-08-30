@@ -20,6 +20,8 @@ class CreateFeedViewModel @Inject constructor(
         SearchNovelUiState()
     )
     val searchNovelUiState: LiveData<SearchNovelUiState> get() = _searchNovelUiState
+    private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
+    val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
     private val selectedCategories: MutableList<Int> = mutableListOf()
     val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -96,11 +98,27 @@ class CreateFeedViewModel @Inject constructor(
     fun updateSelectedNovel(novelId: Long) {
         searchNovelUiState.value?.let { searchNovelUiState ->
             val novels = searchNovelUiState.novels.map { novel ->
-                if (novel.id == novelId) novel.copy(isSelected = true) else novel
+                if (novel.id == novelId) novel.copy(isSelected = !novel.isSelected)
+                else novel.copy(isSelected = false)
             }
-            _searchNovelUiState.value = searchNovelUiState.copy(
-                novels = novels,
-            )
+            _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
+        }
+    }
+
+    fun updateSelectedNovel() {
+        searchNovelUiState.value?.let { searchNovelUiState ->
+            val novelTitle = searchNovelUiState.novels.find { it.isSelected }?.title ?: ""
+            _selectedNovelTitle.value = novelTitle
+        }
+    }
+
+    fun updateSelectedNovelClear() {
+        searchNovelUiState.value?.let { searchNovelUiState ->
+            val novels = searchNovelUiState.novels.map { novel ->
+                novel.copy(isSelected = false)
+            }
+            _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
+            _selectedNovelTitle.value = ""
         }
     }
 }
