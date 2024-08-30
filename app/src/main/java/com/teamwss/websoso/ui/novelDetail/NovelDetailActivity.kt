@@ -87,8 +87,7 @@ class NovelDetailActivity :
             when (novelDetail.novel.novelTitle.isNotBlank()) {
                 true -> {
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
-                    binding.llNovelDetailInterest.isSelected =
-                        novelDetail.userNovel.isUserNovelInterest
+                    binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
                     if (novelDetail.isFirstLaunched) setupTooltipWindow()
                 }
 
