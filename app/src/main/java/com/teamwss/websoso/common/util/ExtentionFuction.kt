@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
+import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.widget.ListView
@@ -63,5 +64,14 @@ inline fun <reified T : Parcelable> Intent.getAdaptedParcelableExtra(key: String
     } else {
         @Suppress("DEPRECATION")
         getParcelableExtra(key) as? T
+    }
+}
+
+inline fun <reified T : Parcelable> Bundle.getAdaptedParcelable(key: String): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelable(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getParcelable(key) as? T
     }
 }

@@ -17,6 +17,7 @@ import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.showWebsosoToast
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
+import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
@@ -70,12 +71,16 @@ class NovelRatingActivity :
         }
 
     private fun showCancelNovelRatingAlertDialog() {
-        NovelAlertDialogFragment.newInstance(
-            alertTitle = getString(R.string.novel_rating_cancel_alert_title),
+        val novelAlertModel = NovelAlertModel(
+            title = getString(R.string.novel_rating_cancel_alert_title),
             acceptButtonText = getString(R.string.novel_rating_cancel_alert_accept),
             cancelButtonText = getString(R.string.novel_rating_cancel_alert_cancel),
             onAcceptClick = { finish() },
-        ).show(supportFragmentManager, NovelAlertDialogFragment.TAG)
+        )
+
+        NovelAlertDialogFragment
+            .newInstance(novelAlertModel)
+            .show(supportFragmentManager, NovelAlertDialogFragment.TAG)
     }
 
     private fun setupObserver() {

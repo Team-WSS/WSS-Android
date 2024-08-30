@@ -20,6 +20,7 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
+import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,13 +64,16 @@ class NovelDetailActivity :
     }
 
     private fun showDeleteUserNovelAlertDialog() {
-        NovelAlertDialogFragment.newInstance(
-            alertTitle = getString(R.string.novel_detail_remove_evaluate_alert_title),
-            alertMessage = getString(R.string.novel_detail_remove_evaluate_alert_message),
+        val novelAlertModel = NovelAlertModel(
+            title = getString(R.string.novel_detail_remove_evaluate_alert_title),
+            message = getString(R.string.novel_detail_remove_evaluate_alert_message),
             acceptButtonText = getString(R.string.novel_detail_remove_accept),
             cancelButtonText = getString(R.string.novel_detail_remove_cancel),
-            onAcceptClick = ::deleteUserNovel,
-        ).show(supportFragmentManager, NovelAlertDialogFragment.TAG)
+            onAcceptClick = { deleteUserNovel() },
+        )
+        NovelAlertDialogFragment
+            .newInstance(novelAlertModel)
+            .show(supportFragmentManager, NovelAlertDialogFragment.TAG)
         menuPopupWindow?.dismiss()
     }
 
