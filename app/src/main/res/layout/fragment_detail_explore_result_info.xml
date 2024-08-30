@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="detailExploreResultViewModel"
+            type="com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_detail_explore_info_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingVertical="10dp"
+            android:text="@string/detail_explore_info_genre"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+            android:id="@+id/wcg_detail_explore_info_genre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_genre"
+            app:singleSelection="false" />
+
+        <TextView
+            android:id="@+id/tv_detail_explore_info_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:paddingVertical="10dp"
+            android:text="@string/detail_explore_info_status"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_genre"
+            app:layout_constraintTop_toBottomOf="@id/wcg_detail_explore_info_genre" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_detail_explore_info_status_in_series"
+            style="@style/HarryMoongChi.Chip.Choice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/detail_explore_info_status_in_series"
+            app:layout_constraintEnd_toStartOf="@id/chip_detail_explore_info_status_complete"
+            app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_status" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_detail_explore_info_status_complete"
+            style="@style/HarryMoongChi.Chip.Choice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="20dp"
+            android:checkable="true"
+            android:text="@string/detail_explore_info_status_complete"
+            app:layout_constraintBottom_toBottomOf="@id/chip_detail_explore_info_status_in_series"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/chip_detail_explore_info_status_in_series"
+            app:layout_constraintTop_toTopOf="@id/chip_detail_explore_info_status_in_series" />
+
+        <TextView
+            android:id="@+id/tv_detail_explore_info_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:paddingVertical="10dp"
+            android:text="@string/detail_explore_info_rating"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_genre"
+            app:layout_constraintTop_toBottomOf="@id/chip_detail_explore_info_status_in_series" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_detail_explore_info_rating_lowest"
+            style="@style/HarryMoongChi.Chip.Choice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{String.format(@string/detail_explore_info_rating_lowest, detailExploreResultViewModel.ratings[0])}"
+            app:layout_constraintEnd_toStartOf="@id/chip_detail_explore_info_rating_lower"
+            app:layout_constraintStart_toStartOf="@id/tv_detail_explore_info_rating"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_explore_info_rating" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_detail_explore_info_rating_lower"
+            style="@style/HarryMoongChi.Chip.Choice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@{String.format(@string/detail_explore_info_rating_lower, detailExploreResultViewModel.ratings[1])}"
+            app:layout_constraintBottom_toBottomOf="@id/chip_detail_explore_info_rating_lowest"
+            app:layout_constraintEnd_toEndOf="@id/chip_detail_explore_info_status_complete"
+            app:layout_constraintStart_toEndOf="@id/chip_detail_explore_info_rating_lowest"
+            app:layout_constraintTop_toTopOf="@id/chip_detail_explore_info_rating_lowest" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_detail_explore_info_rating_higher"
+            style="@style/HarryMoongChi.Chip.Choice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@{String.format(@string/detail_explore_info_rating_higher, detailExploreResultViewModel.ratings[2])}"
+            app:layout_constraintEnd_toStartOf="@id/chip_detail_explore_info_rating_highest"
+            app:layout_constraintStart_toStartOf="@id/chip_detail_explore_info_rating_lowest"
+            app:layout_constraintTop_toBottomOf="@id/chip_detail_explore_info_rating_lowest" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_detail_explore_info_rating_highest"
+            style="@style/HarryMoongChi.Chip.Choice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@{String.format(@string/detail_explore_info_rating_highest, detailExploreResultViewModel.ratings[3])}"
+            app:layout_constraintBottom_toBottomOf="@+id/chip_detail_explore_info_rating_higher"
+            app:layout_constraintEnd_toEndOf="@id/chip_detail_explore_info_rating_lower"
+            app:layout_constraintStart_toEndOf="@id/chip_detail_explore_info_rating_higher"
+            app:layout_constraintTop_toTopOf="@id/chip_detail_explore_info_rating_higher" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_detail_explore_info_reset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:background="@color/gray_50_F4F5F8"
+            android:paddingVertical="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chip_detail_explore_info_rating_highest">
+
+            <ImageView
+                android:id="@+id/iv_detail_explore_info_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_detail_explore_reset"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="36dp"
+                android:text="@string/detail_explore_reset"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/gray_300_52515F"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_explore_info_reset"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_detail_explore_info_reset"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_explore_info_reset" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_detail_explore_search_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/primary_100_6A5DFD"
+            android:gravity="center"
+            android:text="@string/detail_explore_search_novel"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/cl_detail_explore_info_reset_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cl_detail_explore_info_reset_button"
+            app:layout_constraintTop_toTopOf="@id/cl_detail_explore_info_reset_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -117,10 +117,6 @@ class DetailExploreResultActivity :
                 else -> return@observe
             }
         }
-
-        detailExploreResultViewModel.isInfoChipSelected.observe(this) {
-            Log.d("moongchi", "setupObserver: $it")
-        }
     }
 
     private fun updateView(uiState: DetailExploreResultUiState) {

@@ -10,13 +10,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
-import com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoFragment
 import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordFragment
 import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
 
 class DetailExploreResultDialogBottomSheet :
     BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
-    private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
+    private val detailExploreResultInfoFragment: DetailExploreResultInfoFragment by lazy { DetailExploreResultInfoFragment() }
     private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
 
@@ -43,7 +42,7 @@ class DetailExploreResultDialogBottomSheet :
         childFragmentManager.commit {
             add(
                 R.id.fcv_detail_explore,
-                detailExploreInfoFragment,
+                detailExploreResultInfoFragment,
             )
         }
     }
@@ -60,7 +59,7 @@ class DetailExploreResultDialogBottomSheet :
 
     private fun switchFragment(selectedFragmentTitle: SelectedFragmentTitle) {
         val fragmentToShow = when (selectedFragmentTitle) {
-            SelectedFragmentTitle.INFO -> detailExploreInfoFragment
+            SelectedFragmentTitle.INFO -> detailExploreResultInfoFragment
             SelectedFragmentTitle.KEYWORD -> {
                 if (childFragmentManager.findFragmentById(R.id.fcv_detail_explore) !is DetailExploreKeywordFragment) {
                     childFragmentManager.commit {
@@ -73,7 +72,7 @@ class DetailExploreResultDialogBottomSheet :
 
         val fragmentToHide = when (selectedFragmentTitle) {
             SelectedFragmentTitle.INFO -> detailExploreKeywordFragment
-            SelectedFragmentTitle.KEYWORD -> detailExploreInfoFragment
+            SelectedFragmentTitle.KEYWORD -> detailExploreResultInfoFragment
         }
 
         childFragmentManager.commit {

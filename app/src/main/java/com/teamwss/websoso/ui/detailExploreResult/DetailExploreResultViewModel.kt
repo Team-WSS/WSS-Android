@@ -8,6 +8,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.domain.usecase.GetDetailExploreResultUseCase
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
+import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import com.teamwss.websoso.ui.mapper.toUi
@@ -158,5 +159,35 @@ class DetailExploreResultViewModel @Inject constructor(
                 _isNovelResultEmptyBoxVisibility.value = false
             }
         }
+    }
+
+    fun updateSelectedInfoValueClear() {
+        _selectedGenres.value = mutableListOf()
+        _selectedSeriesStatus.value = null
+        _selectedRating.value = null
+    }
+
+    fun updateSelectedGenres(genre: Genre) {
+        val currentGenres = _selectedGenres.value?.toMutableList() ?: mutableListOf()
+
+        _selectedGenres.value = when (currentGenres.contains(genre)) {
+            true -> {
+                currentGenres.remove(genre)
+                currentGenres
+            }
+
+            false -> {
+                currentGenres.add(genre)
+                currentGenres
+            }
+        }
+    }
+
+    fun updateSelectedSeriesStatus(status: SeriesStatus?) {
+        _selectedSeriesStatus.value = status?.isCompleted
+    }
+
+    fun updateSelectedRating(rating: Float?) {
+        _selectedRating.value = rating
     }
 }
