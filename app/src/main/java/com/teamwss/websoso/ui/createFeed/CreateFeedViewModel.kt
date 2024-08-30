@@ -5,7 +5,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.domain.usecase.GetSearchedNovelsUseCase
+import com.teamwss.websoso.ui.createFeed.model.CreateFeedCategory
 import com.teamwss.websoso.ui.createFeed.model.SearchNovelUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateFeedViewModel @Inject constructor(
     private val getSearchedNovelsUseCase: GetSearchedNovelsUseCase,
+    private val feedRepository: FeedRepository,
 ) : ViewModel() {
     private val _searchNovelUiState: MutableLiveData<SearchNovelUiState> = MutableLiveData(
         SearchNovelUiState()
@@ -22,6 +25,7 @@ class CreateFeedViewModel @Inject constructor(
     val searchNovelUiState: LiveData<SearchNovelUiState> get() = _searchNovelUiState
     private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
     val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
+    private var novelId: Long? = null
     private val selectedCategories: MutableList<Int> = mutableListOf()
     val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -30,6 +34,21 @@ class CreateFeedViewModel @Inject constructor(
 
     init {
         isActivated.addSource(content) { updateIsActivated() }
+    }
+
+    fun dispatchFeed() {
+        viewModelScope.launch {
+            runCatching {
+                feedRepository.postFeed(
+                    relevantCategories = selectedCategories.map {
+                        CreateFeedCategory.from(it).titleKr
+                    },
+                    feedContent = content.value ?: "",
+                    novelId = novelId,
+                    isSpoiler = isSpoiled.value ?: false,
+                )
+            }.onSuccess { }.onFailure { }
+        }
     }
 
     fun updateSelectedCategory(categoryId: Int) {
@@ -107,8 +126,9 @@ class CreateFeedViewModel @Inject constructor(
 
     fun updateSelectedNovel() {
         searchNovelUiState.value?.let { searchNovelUiState ->
-            val novelTitle = searchNovelUiState.novels.find { it.isSelected }?.title ?: ""
-            _selectedNovelTitle.value = novelTitle
+            val novel = searchNovelUiState.novels.find { it.isSelected }
+            _selectedNovelTitle.value = novel?.title ?: ""
+            novelId = novel?.id
         }
     }
 

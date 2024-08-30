@@ -47,6 +47,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
             binding.clCreateFeedNovelInfo.visibility = View.INVISIBLE
             createFeedViewModel.updateSelectedNovelClear()
         }
+        binding.tvCreateFeedDoneButton.setOnClickListener {
+            createFeedViewModel.dispatchFeed()
+        }
+        binding.ivCreateFeedBackButton.setOnClickListener { finish() }
     }
 
     private fun showSearchNovelDialog() {
