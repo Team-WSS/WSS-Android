@@ -138,7 +138,7 @@
             tools:listitem="@layout/item_normal_explore" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_normal_explore_result_not_exist"
+            android:id="@+id/cl_create_feed_result_not_exist"
             isVisible="@{normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

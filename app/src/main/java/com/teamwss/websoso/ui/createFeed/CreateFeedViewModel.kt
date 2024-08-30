@@ -68,6 +68,30 @@ class CreateFeedViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateSearchedNovels() {
+        searchNovelUiState.value?.let { searchNovelUiState ->
+            if (!searchNovelUiState.isLoadable) return
+
+            viewModelScope.launch {
+                runCatching {
+                    getSearchedNovelsUseCase()
+                }.onSuccess { result ->
+                    _searchNovelUiState.value = searchNovelUiState.copy(
+                        loading = false,
+                        isLoadable = result.isLoadable,
+                        novelCount = result.resultCount,
+                        novels = result.novels.map { it.toUi() },
+                    )
+                }.onFailure {
+                    _searchNovelUiState.value = searchNovelUiState.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
 }
 
 data class SearchNovelUiState(

@@ -42,19 +42,11 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
     }
 
     private fun showSearchNovelDialog() {
-        when (::searchNovelDialog.isInitialized) {
-            true -> searchNovelDialog.show(
+        CreateFeedSearchNovelBottomSheetDialog.newInstance().also {
+            it.show(
                 supportFragmentManager,
-                CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG
+                CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG,
             )
-
-            false -> searchNovelDialog =
-                CreateFeedSearchNovelBottomSheetDialog.newInstance().also {
-                    it.show(
-                        supportFragmentManager,
-                        CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG
-                    )
-                }
         }
     }
 

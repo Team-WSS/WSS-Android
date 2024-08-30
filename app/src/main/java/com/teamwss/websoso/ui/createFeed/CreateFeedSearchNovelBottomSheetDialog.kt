@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.createFeed
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -49,9 +50,7 @@ class CreateFeedSearchNovelBottomSheetDialog :
             addOnScrollListener(
                 InfiniteScrollListener.of(
                     singleEventHandler = singleEventHandler,
-                    event = {
-                        // 더보기 로직
-                    },
+                    event = { createFeedViewModel.updateSearchedNovels() },
                 )
             )
         }
@@ -68,9 +67,25 @@ class CreateFeedSearchNovelBottomSheetDialog :
     private fun setupObserver() {
         createFeedViewModel.searchNovelUiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                !uiState.loading -> updateNovels(uiState)
+                !uiState.loading -> updateView(uiState)
             }
         }
+    }
+
+    private fun updateView(uiState: SearchNovelUiState) {
+        Log.d("123123", uiState.novels.count().toString())
+        when (uiState.novels.isEmpty()) {
+            true -> {
+                binding.rvCreateFeedSearchNovelResult.visibility = View.INVISIBLE
+                binding.clCreateFeedResultNotExist.visibility = View.VISIBLE
+            }
+
+            false -> {
+                binding.rvCreateFeedSearchNovelResult.visibility = View.VISIBLE
+                binding.clCreateFeedResultNotExist.visibility = View.INVISIBLE
+            }
+        }
+        updateNovels(uiState)
     }
 
     private fun updateNovels(uiState: SearchNovelUiState) {

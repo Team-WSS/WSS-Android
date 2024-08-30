@@ -13,7 +13,6 @@ class SearchedNovelViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(novel: NovelModel) {
-        Log.d("123123", novel.toString())
         binding.novel = novel
     }
 
