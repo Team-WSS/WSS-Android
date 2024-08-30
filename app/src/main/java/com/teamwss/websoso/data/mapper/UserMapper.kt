@@ -82,4 +82,3 @@ fun NovelPreferenceResponseDto.AttractivePointKeywordDto.toData(): NovelPreferen
         keywordCount = this.keywordCount,
     )
 }
-
