@@ -24,7 +24,7 @@
             <View
                 android:id="@+id/view_novel_feed_background"
                 android:layout_width="match_parent"
-                android:layout_height="1200dp"
+                android:layout_height="0dp"
                 android:background="@color/white"
                 app:layout_constraintTop_toTopOf="parent" />
 
