@@ -1,7 +1,6 @@
 package com.teamwss.websoso.ui.createFeed
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -14,13 +13,16 @@ import com.teamwss.websoso.databinding.DialogCreateFeedSearchNovelBinding
 import com.teamwss.websoso.ui.createFeed.adapter.SearchNovelAdapter
 import com.teamwss.websoso.ui.createFeed.adapter.SearchNovelItemType.Loading
 import com.teamwss.websoso.ui.createFeed.adapter.SearchNovelItemType.Novels
+import com.teamwss.websoso.ui.createFeed.model.SearchNovelUiState
 
 class CreateFeedSearchNovelBottomSheetDialog :
     BaseBottomSheetDialog<DialogCreateFeedSearchNovelBinding>(dialog_create_feed_search_novel) {
     private val createFeedViewModel: CreateFeedViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private val searchNovelAdapter: SearchNovelAdapter by lazy {
-        SearchNovelAdapter {}
+    private val searchNovelAdapter: SearchNovelAdapter by lazy { SearchNovelAdapter(::onNovelClick) }
+
+    private fun onNovelClick(novelId: Long) {
+        createFeedViewModel.updateSelectedNovel(novelId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +75,6 @@ class CreateFeedSearchNovelBottomSheetDialog :
     }
 
     private fun updateView(uiState: SearchNovelUiState) {
-        Log.d("123123", uiState.novels.count().toString())
         when (uiState.novels.isEmpty()) {
             true -> {
                 binding.rvCreateFeedSearchNovelResult.visibility = View.INVISIBLE

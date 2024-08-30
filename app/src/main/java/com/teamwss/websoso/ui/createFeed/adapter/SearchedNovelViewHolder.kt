@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.createFeed.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,8 +11,13 @@ class SearchedNovelViewHolder(
     onNovelClick: (novelId: Long) -> (Unit),
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    init {
+        binding.onClick = onNovelClick
+    }
+
     fun bind(novel: NovelModel) {
         binding.novel = novel
+        binding.ivCreateFeedSearchNovelSelected.isActivated = novel.isSelected
     }
 
     companion object {

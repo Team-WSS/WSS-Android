@@ -20,7 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activity_create_feed) {
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
-    private lateinit var searchNovelDialog: CreateFeedSearchNovelBottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

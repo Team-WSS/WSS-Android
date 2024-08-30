@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.domain.usecase.GetSearchedNovelsUseCase
+import com.teamwss.websoso.ui.createFeed.model.SearchNovelUiState
 import com.teamwss.websoso.ui.mapper.toUi
-import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -92,12 +92,15 @@ class CreateFeedViewModel @Inject constructor(
             }
         }
     }
-}
 
-data class SearchNovelUiState(
-    val loading: Boolean = true,
-    val error: Boolean = false,
-    val isLoadable: Boolean = true,
-    val novelCount: Long = 0,
-    val novels: List<NovelModel> = emptyList(),
-)
+    fun updateSelectedNovel(novelId: Long) {
+        searchNovelUiState.value?.let { searchNovelUiState ->
+            val novels = searchNovelUiState.novels.map { novel ->
+                if (novel.id == novelId) novel.copy(isSelected = true) else novel
+            }
+            _searchNovelUiState.value = searchNovelUiState.copy(
+                novels = novels,
+            )
+        }
+    }
+}
