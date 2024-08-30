@@ -13,12 +13,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
+import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,14 +59,32 @@ class NovelDetailActivity :
     private fun setupPopupBinding() {
         _novelDetailMenuPopupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
         novelDetailMenuPopupBinding.novelDetailViewModel = novelDetailViewModel
-        novelDetailMenuPopupBinding.deleteUserNovel = ::deleteUserNovel
+        novelDetailMenuPopupBinding.deleteUserNovel = ::showDeleteUserNovelAlertDialog
         novelDetailMenuPopupBinding.lifecycleOwner = this
+    }
+
+    private fun showDeleteUserNovelAlertDialog() {
+        val novelAlertModel = NovelAlertModel(
+            title = getString(R.string.novel_detail_remove_evaluate_alert_title),
+            message = getString(R.string.novel_detail_remove_evaluate_alert_message),
+            acceptButtonText = getString(R.string.novel_detail_remove_accept),
+            cancelButtonText = getString(R.string.novel_detail_remove_cancel),
+            onAcceptClick = { deleteUserNovel() },
+        )
+        NovelAlertDialogFragment
+            .newInstance(novelAlertModel)
+            .show(supportFragmentManager, NovelAlertDialogFragment.TAG)
+        menuPopupWindow?.dismiss()
     }
 
     private fun deleteUserNovel() {
         novelDetailViewModel.deleteUserNovel(novelId)
         binding.tgNovelDetailReadStatus.clearChecked()
-        menuPopupWindow?.dismiss()
+        showWebsosoSnackBar(
+            view = binding.root,
+            message = getString(R.string.novel_detail_remove_result),
+            icon = R.drawable.ic_novel_detail_check,
+        )
     }
 
     private fun setupViewPager() {

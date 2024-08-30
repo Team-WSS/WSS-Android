@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="340dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="10dp"
         android:background="@drawable/bg_snack_bar_gray_cc_394258_radius_4dp"
         android:paddingHorizontal="16dp"
         android:paddingVertical="14dp">
 
         <ImageView
-            android:id="@+id/ivCustomSnackBar"
+            android:id="@+id/iv_custom_snack_bar"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:contentDescription="@null"
@@ -22,8 +23,8 @@
             tools:src="@drawable/img_account_info_check_selected" />
 
         <TextView
-            android:id="@+id/tvCustomSnackBar"
-            android:layout_width="0dp"
+            android:id="@+id/tv_custom_snack_bar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:ellipsize="end"
@@ -31,8 +32,7 @@
             android:textAppearance="@style/body1"
             android:textColor="@color/gray_50_F4F5F8"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivCustomSnackBar"
+            app:layout_constraintStart_toEndOf="@+id/iv_custom_snack_bar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="메모를 저장했어요" />
     </androidx.constraintlayout.widget.ConstraintLayout>

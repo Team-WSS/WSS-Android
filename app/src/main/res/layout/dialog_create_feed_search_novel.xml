@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_detail_explore_white_radius_top_16dp">
+
+        <ImageView
+            android:id="@+id/iv_create_feed_search_novel_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_onboarding_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_search_novel_connect_novel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/tv_create_feed_connect_novel"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_create_feed_search_novel_close" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_search_novel_connect_novel_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/tv_create_feed_search_novel_connect_novel_description"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@+id/tv_create_feed_search_novel_connect_novel"
+            app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_search_novel_connect_novel" />
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoSearchEditText
+            android:id="@+id/wset_create_feed_search_novel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="20dp"
+            android:paddingVertical="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_search_novel_connect_novel_description" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_create_feed_search_novel_result"
+            android:layout_width="0dp"
+            android:layout_height="440dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wset_create_feed_search_novel"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_search_novel" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_search_novel_connect_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_100_6A5DFD"
+            android:gravity="center"
+            android:paddingVertical="18dp"
+            android:text="@string/tv_create_feed_search_novel_connect_button"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/white"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
