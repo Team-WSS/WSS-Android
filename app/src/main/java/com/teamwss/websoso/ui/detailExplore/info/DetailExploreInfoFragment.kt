@@ -14,6 +14,8 @@ import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.Rating
 import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
+import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity
+import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +28,7 @@ class DetailExploreInfoFragment :
 
         bindViewModel()
         onResetButtonClick()
+        onDetailSearchNovelButtonClick()
         setupGenreChips()
         setupSeriesStatusChips()
         setupRatingChips()
@@ -40,6 +43,31 @@ class DetailExploreInfoFragment :
     private fun onResetButtonClick() {
         binding.clDetailExploreInfoResetButton.setOnClickListener {
             detailExploreViewModel.updateSelectedInfoValueClear()
+        }
+    }
+
+    private fun onDetailSearchNovelButtonClick() {
+        binding.tvDetailExploreSearchButton.setOnClickListener {
+            val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
+            val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
+            val novelRating = detailExploreViewModel.selectedRating.value
+
+            val keywordIds = detailExploreViewModel.uiState.value?.categories?.asSequence()
+                ?.flatMap { it.keywords.asSequence() }
+                ?.filter { it.isSelected }
+                ?.map { it.keywordId }
+                ?.toList() ?: emptyList()
+
+            val intent = DetailExploreResultActivity.getIntent(
+                context = requireContext(), DetailExploreFilteredModel(
+                    genres = selectedGenres,
+                    isCompleted = isCompleted,
+                    novelRating = novelRating,
+                    keywordIds = keywordIds,
+                )
+            )
+
+            startActivity(intent)
         }
     }
 
