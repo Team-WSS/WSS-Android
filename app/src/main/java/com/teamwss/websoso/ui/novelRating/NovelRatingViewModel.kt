@@ -220,7 +220,10 @@ class NovelRatingViewModel @Inject constructor(
                 false -> charmPoints.add(charmPoint)
             }
             val updatedNovelRatingModel =
-                uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
+                uiState.novelRatingModel.copy(
+                    charmPoints = charmPoints.toList(),
+                    isCharmPointExceed = charmPoints.size > MAX_CHARM_POINT_COUNT,
+                )
             _uiState.value = uiState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
@@ -324,5 +327,9 @@ class NovelRatingViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    companion object {
+        private const val MAX_CHARM_POINT_COUNT = 3
     }
 }
