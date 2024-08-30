@@ -53,10 +53,10 @@ interface NovelApi {
 
     @GET("novels/filtered")
     suspend fun getFilteredNovelResult(
-        @Query("genres") genres: Array<String>?,
+        @Query("genres") genres: List<String>?,
         @Query("isCompleted") isCompleted: Boolean?,
         @Query("novelRating") novelRating: Float?,
-        @Query("keywordIds") keywordIds: Array<Int>?,
+        @Query("keywordIds") keywordIds: List<Int>?,
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): ExploreResultResponseDto
