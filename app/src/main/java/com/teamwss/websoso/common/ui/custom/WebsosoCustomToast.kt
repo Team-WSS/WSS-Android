@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Toast
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.CustomSnackBarBinding
 
 class WebsosoCustomToast(
@@ -17,7 +17,7 @@ class WebsosoCustomToast(
         val inflater = LayoutInflater.from(context)
         binding = CustomSnackBarBinding.inflate(inflater)
 
-        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER, 0, 16.toIntScaledByPx())
+        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER, 0, 16.toIntPxFromDp())
         toast.duration = Toast.LENGTH_SHORT
         toast.view = binding.root
     }

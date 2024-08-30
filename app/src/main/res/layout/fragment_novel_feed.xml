@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="onWriteClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -15,31 +19,48 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="8dp">
+            android:layout_height="match_parent">
 
             <View
-                android:layout_width="0dp"
-                android:layout_height="644dp"
+                android:id="@+id/view_novel_feed_background"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.simform.refresh.SSPullToRefreshLayout
+                android:id="@+id/sptr_novel_feed_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/view_novel_feed_background"
+                app:layout_constraintTop_toTopOf="@id/view_novel_feed_background">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_novel_feed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_feed" />
+            </com.simform.refresh.SSPullToRefreshLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_novel_info_none"
+                android:id="@+id/cl_novel_feed_none"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:background="@color/white"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/iv_novel_info_none"
+                    android:id="@+id/iv_novel_feed_none"
                     android:layout_width="0dp"
                     android:layout_height="160dp"
                     android:layout_marginTop="40dp"
@@ -49,19 +70,37 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_novel_info_none_body"
+                    android:id="@+id/tv_novel_feed_none_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="평가가 아직 없어요\n최초로 남겨보세요!"
+                    android:text="@string/novel_info_review_none"
                     android:textAlignment="center"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_AEADB3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_novel_info_none" />
-
+                    app:layout_constraintTop_toBottomOf="@id/iv_novel_feed_none" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/iv_feed_write_floating_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="44dp"
+                android:elevation="40dp"
+                android:onClick="@{()->onWriteClick.invoke()}"
+                android:src="@drawable/bg_floating_write_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+                android:id="@+id/wll_novel_feed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="100dp"
+                tools:visibility="gone" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

@@ -4,6 +4,7 @@ import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.ExploreResultEntity
 import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.data.model.NovelDetailEntity
+import com.teamwss.websoso.data.model.NovelFeedsEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity
 import com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity
@@ -108,5 +109,9 @@ class NovelRepository @Inject constructor(
     fun clearCachedDetailExploreResult() {
         _cachedDetailExploreResult.clear()
         cachedDetailExploreIsLoadable = true
+    }
+
+    suspend fun fetchNovelFeeds(novelId: Long, lastFeedId: Long, size: Int): NovelFeedsEntity {
+        return novelApi.getNovelFeeds(novelId, lastFeedId, size).toData()
     }
 }

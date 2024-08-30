@@ -12,9 +12,9 @@ import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
 import java.io.Serializable
 
-fun Float.toFloatScaledByPx(): Float = this * Resources.getSystem().displayMetrics.density
+fun Float.toFloatPxFromDp(): Float = this * Resources.getSystem().displayMetrics.density
 
-fun Int.toIntScaledByPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+fun Int.toIntPxFromDp(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun ListView.setListViewHeightBasedOnChildren() {
     val listAdapter = adapter ?: return
