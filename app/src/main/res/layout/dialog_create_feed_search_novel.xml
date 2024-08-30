@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@drawable/bg_detail_explore_white_radius_top_16dp">
 
         <ImageView
             android:id="@+id/iv_create_feed_search_novel_close"
