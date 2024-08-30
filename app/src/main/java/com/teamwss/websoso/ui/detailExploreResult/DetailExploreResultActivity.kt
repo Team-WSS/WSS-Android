@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
@@ -98,6 +99,22 @@ class DetailExploreResultActivity :
                     binding.wlDetailExploreResult.setErrorLayoutVisibility(false)
                     updateView(uiState)
                 }
+            }
+        }
+
+        detailExploreResultViewModel.appliedFiltersMessage.observe(this) { filteredMessage ->
+            when (filteredMessage?.isNotEmpty()) {
+                true -> {
+                    binding.tvDetailExploreResultFilter.text = filteredMessage
+                    binding.tvDetailExploreResultFilterDescription.isVisible = true
+                }
+
+                false -> {
+                    binding.tvDetailExploreResultFilter.text = filteredMessage
+                    binding.tvDetailExploreResultFilterDescription.isVisible = false
+                }
+
+                else -> return@observe
             }
         }
     }

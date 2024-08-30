@@ -23,9 +23,9 @@ class DetailExploreResultViewModel @Inject constructor(
         MutableLiveData(DetailExploreResultUiState())
     val uiState: LiveData<DetailExploreResultUiState> get() = _uiState
 
-    private val _selectedGenres: MutableLiveData<MutableList<Genre>> =
+    private val _selectedGenres: MutableLiveData<MutableList<Genre>?> =
         MutableLiveData(mutableListOf())
-    val selectedGenres: LiveData<List<Genre>> get() = _selectedGenres.map { it.toList() }
+    val selectedGenres: LiveData<List<Genre>?> get() = _selectedGenres.map { it?.toList() }
 
     private val _selectedSeriesStatus: MutableLiveData<Boolean?> = MutableLiveData()
     val selectedStatus: LiveData<Boolean?> get() = _selectedSeriesStatus
@@ -34,6 +34,13 @@ class DetailExploreResultViewModel @Inject constructor(
     val selectedRating: LiveData<Float?> get() = _selectedRating
 
     val ratings: List<Float> = listOf(3.5f, 4.0f, 4.5f, 4.8f)
+
+    private val _selectedKeywordIds: MutableLiveData<MutableList<Int>?> =
+        MutableLiveData(mutableListOf())
+    val selectedKeywordIds: LiveData<List<Int>?> get() = _selectedKeywordIds.map { it?.toList() }
+
+    private val _appliedFiltersMessage: MediatorLiveData<String?> = MediatorLiveData()
+    val appliedFiltersMessage: LiveData<String?> get() = _appliedFiltersMessage
 
     private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
@@ -44,13 +51,46 @@ class DetailExploreResultViewModel @Inject constructor(
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
+    init {
+        _appliedFiltersMessage.apply {
+            addSource(_selectedGenres) { updateMessage() }
+            addSource(_selectedSeriesStatus) { updateMessage() }
+            addSource(_selectedRating) { updateMessage() }
+            addSource(_selectedKeywordIds) { updateMessage() }
+        }
+    }
+
+    private fun updateMessage() {
+        val appliedFilters = mutableListOf<String>()
+
+        _selectedGenres.value?.let { genres ->
+            if (genres.isNotEmpty()) {
+                appliedFilters.add("장르")
+            }
+        }
+
+        _selectedSeriesStatus.value?.let { status ->
+            appliedFilters.add("연재상태")
+        }
+
+        _selectedRating.value?.let { rating ->
+            appliedFilters.add("별점")
+        }
+
+        _selectedKeywordIds.value?.let { keywords ->
+            if (keywords.isNotEmpty()) {
+                appliedFilters.add("키워드")
+            }
+        }
+
+        _appliedFiltersMessage.value = appliedFilters.joinToString(", ")
+    }
+
     fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
         _selectedGenres.value = detailExploreFilteredModel.genres?.toMutableList()
         _selectedSeriesStatus.value = detailExploreFilteredModel.isCompleted
         _selectedRating.value = detailExploreFilteredModel.novelRating
-        _uiState.value = uiState.value?.copy(
-            selectedKeywords = detailExploreFilteredModel.keywordIds?.toList() ?: emptyList(),
-        )
+        _selectedKeywordIds.value = detailExploreFilteredModel.keywordIds?.toMutableList()
 
         updateSearchResult(true)
     }
@@ -61,10 +101,10 @@ class DetailExploreResultViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 getDetailExploreResultUseCase(
-                    genres = selectedGenres.value?.map { it.toString() },
+                    genres = selectedGenres.value?.map { it.titleEn },
                     isCompleted = selectedStatus.value,
                     novelRating = selectedRating.value,
-                    keywordIds = uiState.value?.selectedKeywords,
+                    keywordIds = selectedKeywordIds.value,
                     isSearchButtonClick = isSearchButtonClick,
                 )
             }.onSuccess { results ->
