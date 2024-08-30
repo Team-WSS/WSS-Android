@@ -64,8 +64,7 @@ class NovelRatingKeywordViewHolder(
     }
 
     fun updateChipState(category: CategoryModel) {
-        val keywordSelectionMap =
-            category.keywords.associateBy({ it.keywordName }, { it.isSelected })
+        val keywordSelectionMap = category.keywords.associateBy({ it.keywordName }, { it.isSelected })
 
         (0 until binding.wcgNovelRatingKeyword.childCount)
             .map { binding.wcgNovelRatingKeyword.getChildAt(it) }
