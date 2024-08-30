@@ -12,6 +12,7 @@ class CreateFeedViewModel @Inject constructor() : ViewModel() {
     val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
     val content: MutableLiveData<String> = MutableLiveData("")
+    val novelTitle: MutableLiveData<String> = MutableLiveData("")
 
     init {
         isActivated.addSource(content) { updateIsActivated() }
