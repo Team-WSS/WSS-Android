@@ -45,7 +45,7 @@ class DetailExploreResultViewModel @Inject constructor(
     private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
 
-    private val _isKeywordChipSelected: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isKeywordChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isKeywordChipSelected: LiveData<Boolean> get() = _isKeywordChipSelected
 
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -58,6 +58,14 @@ class DetailExploreResultViewModel @Inject constructor(
             addSource(_selectedRating) { updateMessage() }
             addSource(_selectedKeywordIds) { updateMessage() }
         }
+
+        _isInfoChipSelected.apply {
+            addSource(_selectedGenres) { isInfoChipSelectedEnabled() }
+            addSource(_selectedSeriesStatus) { isInfoChipSelectedEnabled() }
+            addSource(_selectedRating) { isInfoChipSelectedEnabled() }
+        }
+
+        _isKeywordChipSelected.addSource(_selectedKeywordIds) { isKeywordChipSelectedEnabled() }
     }
 
     private fun updateMessage() {
@@ -84,6 +92,19 @@ class DetailExploreResultViewModel @Inject constructor(
         }
 
         _appliedFiltersMessage.value = appliedFilters.joinToString(", ")
+    }
+
+    private fun isInfoChipSelectedEnabled() {
+        val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
+        val isStatusChipSelected: Boolean = _selectedSeriesStatus.value != null
+        val isRatingChipSelected: Boolean = _selectedRating.value != null
+
+        _isInfoChipSelected.value =
+            isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
+    }
+
+    private fun isKeywordChipSelectedEnabled() {
+        _isKeywordChipSelected.value = selectedKeywordIds.value?.isNotEmpty()
     }
 
     fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {

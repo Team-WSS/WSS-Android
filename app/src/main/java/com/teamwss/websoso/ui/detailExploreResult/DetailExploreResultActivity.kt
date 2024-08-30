@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.detailExploreResult
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,7 +13,6 @@ import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.databinding.ActivityDetailExploreResultBinding
-import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Novels
@@ -117,6 +117,10 @@ class DetailExploreResultActivity :
                 else -> return@observe
             }
         }
+
+        detailExploreResultViewModel.isInfoChipSelected.observe(this) {
+            Log.d("moongchi", "setupObserver: $it")
+        }
     }
 
     private fun updateView(uiState: DetailExploreResultUiState) {
@@ -133,8 +137,11 @@ class DetailExploreResultActivity :
 
     private fun onEditFilterItemButtonClick() {
         binding.clDetailExploreResultFilterButton.setOnClickListener {
-            val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
-            detailExploreBottomSheet.show(supportFragmentManager, DETAIL_EXPLORE_BOTTOM_SHEET_TAG)
+            val detailExploreBottomSheet = DetailExploreResultDialogBottomSheet.newInstance()
+            detailExploreBottomSheet.show(
+                supportFragmentManager,
+                DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
+            )
         }
     }
 
@@ -148,7 +155,8 @@ class DetailExploreResultActivity :
         private const val HEADER_POSITION = 0
         private const val FULL_SPAN = 2
         private const val HALF_SPAN = 1
-        private const val DETAIL_EXPLORE_BOTTOM_SHEET_TAG = "DetailExploreDialogBottomSheet"
+        private const val DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG =
+            "DetailExploreResultDialogBottomSheet"
         private const val DETAIL_EXPLORE_FILTERED_INFO = "DetailExploreFilteredInfo"
 
         fun getIntent(
