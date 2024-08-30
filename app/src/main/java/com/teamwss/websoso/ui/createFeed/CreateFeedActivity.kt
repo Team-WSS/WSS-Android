@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.createFeed
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -94,5 +96,9 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
                 setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.ordinal) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
     }
 }

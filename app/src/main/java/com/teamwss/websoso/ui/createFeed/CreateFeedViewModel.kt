@@ -41,7 +41,7 @@ class CreateFeedViewModel @Inject constructor(
             runCatching {
                 feedRepository.postFeed(
                     relevantCategories = selectedCategories.map {
-                        CreateFeedCategory.from(it).titleKr
+                        CreateFeedCategory.from(it).titleEn
                     },
                     feedContent = content.value ?: "",
                     novelId = novelId,
