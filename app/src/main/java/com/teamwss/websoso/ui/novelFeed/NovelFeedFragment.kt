@@ -189,7 +189,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
 
         initView()
         novelFeedViewModel.updateFeeds(novelId)
-        observeUiState()
+        setupObserver()
     }
 
     private fun initView() {
@@ -238,7 +238,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         backgroundView.layoutParams = layoutParams
     }
 
-    private fun observeUiState() {
+    private fun setupObserver() {
         novelFeedViewModel.feedUiState.observe(viewLifecycleOwner) { novelFeedUiState ->
             when {
                 novelFeedUiState.loading -> binding.wllNovelFeed.setWebsosoLoadingVisibility(true)
