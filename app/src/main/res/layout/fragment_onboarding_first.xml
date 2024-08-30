@@ -86,7 +86,6 @@
             android:background="@drawable/selector_onboarding_first_duplication_check_button_background"
             android:elevation="0dp"
             android:enabled="@{viewModel.onboardingFirstUiState.isDuplicationCheckButtonEnable}"
-            android:onClick="@{() -> viewModel.checkDuplicationNickname()}"
             android:text="@string/onboarding_first_duplicate_check"
             android:textAppearance="@style/body2"
             android:textColor="@drawable/selector_onboarding_first_duplication_check_button_text_color"
