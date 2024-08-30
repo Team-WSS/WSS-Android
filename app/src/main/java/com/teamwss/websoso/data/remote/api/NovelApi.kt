@@ -2,6 +2,7 @@ package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
+import com.teamwss.websoso.data.remote.response.NovelFeedResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.PopularNovelsResponseDto
 import com.teamwss.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto

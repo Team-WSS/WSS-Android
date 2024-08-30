@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.util.toFloatScaledByPx
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
 import com.teamwss.websoso.ui.createFeed.model.CreateFeedCategory
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,9 +41,9 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(R.layout.acti
                 setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
-                setWebsosoChipPaddingHorizontal(6.7f.toFloatScaledByPx())
-                setWebsosoChipRadius(20f.toFloatScaledByPx())
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(6.7f.toFloatPxFromDp())
+                setWebsosoChipRadius(20f.toFloatPxFromDp())
                 setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.ordinal) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }

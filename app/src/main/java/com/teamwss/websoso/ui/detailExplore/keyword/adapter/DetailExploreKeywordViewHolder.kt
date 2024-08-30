@@ -6,6 +6,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.util.toFloatPxFromDp
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 
 class DetailExploreKeywordViewHolder(

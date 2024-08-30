@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
@@ -264,7 +264,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun setupRefreshView() {
         binding.sptrFeedRefresh.apply {
-            setRefreshViewParams(ViewGroup.LayoutParams(30.toIntScaledByPx(), 30.toIntScaledByPx()))
+            setRefreshViewParams(ViewGroup.LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
             setLottieAnimation(LOTTIE_IMAGE)
             setOnRefreshListener { feedDetailViewModel.updateFeedDetail(feedId) }
         }

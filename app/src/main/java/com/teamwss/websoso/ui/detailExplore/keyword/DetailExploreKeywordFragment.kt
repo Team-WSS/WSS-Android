@@ -13,7 +13,7 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
-import com.teamwss.websoso.common.util.toFloatScaledByPx
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
@@ -151,9 +151,9 @@ class DetailExploreKeywordFragment :
             setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
             setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
             setWebsosoChipBackgroundColor(R.color.white)
-            setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
-            setWebsosoChipPaddingHorizontal(4f.toFloatScaledByPx())
-            setWebsosoChipRadius(20f.toFloatScaledByPx())
+            setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+            setWebsosoChipPaddingHorizontal(4f.toFloatPxFromDp())
+            setWebsosoChipRadius(20f.toFloatPxFromDp())
             setOnCloseIconClickListener {
                 detailExploreViewModel.updateClickedChipState(
                     selectedKeyword.keywordId
@@ -217,9 +217,9 @@ class DetailExploreKeywordFragment :
                 setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
-                setWebsosoChipPaddingHorizontal(6f.toFloatScaledByPx())
-                setWebsosoChipRadius(20f.toFloatScaledByPx())
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                setWebsosoChipRadius(20f.toFloatPxFromDp())
                 setOnWebsosoChipClick {
                     detailExploreViewModel.updateClickedChipState(keyword.keywordId)
                 }
