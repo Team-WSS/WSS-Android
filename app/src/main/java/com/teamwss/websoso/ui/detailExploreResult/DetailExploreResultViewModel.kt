@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.common.ui.model.CategoriesModel
+import com.teamwss.websoso.data.repository.KeywordRepository
 import com.teamwss.websoso.domain.usecase.GetDetailExploreResultUseCase
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailExploreResultViewModel @Inject constructor(
     private val getDetailExploreResultUseCase: GetDetailExploreResultUseCase,
+    private val keywordRepository: KeywordRepository,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<DetailExploreResultUiState> =
         MutableLiveData(DetailExploreResultUiState())
@@ -67,6 +70,7 @@ class DetailExploreResultViewModel @Inject constructor(
         }
 
         _isKeywordChipSelected.addSource(_selectedKeywordIds) { isKeywordChipSelectedEnabled() }
+        updateKeyword(null)
     }
 
     private fun updateMessage() {
@@ -114,8 +118,24 @@ class DetailExploreResultViewModel @Inject constructor(
         _selectedRating.value = detailExploreFilteredModel.novelRating
         _selectedKeywordIds.value = detailExploreFilteredModel.keywordIds?.toMutableList()
 
+        val currentUiState = _uiState.value ?: return
+        val selectedKeywordIds = _selectedKeywordIds.value.orEmpty()
+
+        val updatedCategories = currentUiState.categories.map { category ->
+            val updatedKeywords = category.keywords.map { existingKeyword ->
+                if (selectedKeywordIds.contains(existingKeyword.keywordId)) {
+                    existingKeyword.copy(isSelected = !existingKeyword.isSelected)
+                } else {
+                    existingKeyword
+                }
+            }
+            category.copy(keywords = updatedKeywords)
+        }
+
         updateSearchResult(true)
+        _uiState.value = currentUiState.copy(categories = updatedCategories)
     }
+
 
     fun updateSearchResult(isSearchButtonClick: Boolean) {
         if (uiState.value?.isLoadable == false && !isSearchButtonClick) return
@@ -189,5 +209,109 @@ class DetailExploreResultViewModel @Inject constructor(
 
     fun updateSelectedRating(rating: Float?) {
         _selectedRating.value = rating
+    }
+
+    fun updateKeyword(searchWord: String?) {
+        viewModelScope.launch {
+            runCatching {
+                keywordRepository.fetchKeywords(searchWord)
+            }.onSuccess { keywordsList ->
+                val categoriesModel = CategoriesModel(
+                    categories = keywordsList.categories.map { it.toUi() }
+                )
+
+                val selectedKeywordIds = selectedKeywordIds.value.orEmpty()
+
+                val updatedCategories = categoriesModel.categories.map { category ->
+                    val updatedKeywords = category.keywords.map { keyword ->
+                        if (selectedKeywordIds.contains(keyword.keywordId)) {
+                            keyword.copy(isSelected = true)
+                        } else {
+                            keyword
+                        }
+                    }
+                    category.copy(keywords = updatedKeywords)
+                }
+
+                _uiState.value = when (searchWord) {
+                    null -> {
+                        uiState.value?.copy(
+                            loading = false,
+                            categories = updatedCategories,
+                        )
+                    }
+
+                    else -> {
+                        val results = updatedCategories.flatMap { it.keywords }
+                        uiState.value?.copy(
+                            loading = false,
+                            searchResultKeywords = results,
+                            isInitialSearchKeyword = false,
+                            isSearchResultKeywordsEmpty = results.isEmpty(),
+                        )
+                    }
+                }
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = true
+                )
+            }
+        }
+    }
+
+    fun updateClickedChipState(keywordId: Int) {
+        val currentUiState = _uiState.value ?: return
+
+        val updatedCategories = currentUiState.categories.map { category ->
+            val updatedKeywords = category.keywords.map { existingKeyword ->
+                when (existingKeyword.keywordId == keywordId) {
+                    true -> existingKeyword.copy(isSelected = !existingKeyword.isSelected)
+                    false -> existingKeyword
+                }
+            }
+            category.copy(keywords = updatedKeywords)
+        }
+
+        val isAnyKeywordSelected = updatedCategories.any { category ->
+            category.keywords.any { it.isSelected }
+        }
+
+        _isKeywordChipSelected.value = isAnyKeywordSelected
+        _uiState.value = currentUiState.copy(categories = updatedCategories)
+    }
+
+    fun updateSelectedKeywordValueClear() {
+        val currentState = _uiState.value ?: return
+        val updatedCategories = currentState.categories
+
+        val resetCategories = updatedCategories.map { category ->
+            category.copy(keywords = category.keywords.map { keyword ->
+                keyword.copy(isSelected = false)
+            })
+        }
+
+        _selectedKeywordIds.value = mutableListOf()
+        _uiState.value = currentState.copy(categories = resetCategories)
+        _isKeywordChipSelected.value = false
+    }
+
+    fun updateIsSearchKeywordProceeding(isProceeding: Boolean) {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                isSearchKeywordProceeding = isProceeding,
+            )
+        }
+    }
+
+    fun initSearchKeyword() {
+        uiState.value?.let { uiState ->
+            _uiState.value = uiState.copy(
+                searchResultKeywords = emptyList(),
+                isSearchKeywordProceeding = false,
+                isInitialSearchKeyword = true,
+                isSearchResultKeywordsEmpty = false,
+            )
+        }
     }
 }

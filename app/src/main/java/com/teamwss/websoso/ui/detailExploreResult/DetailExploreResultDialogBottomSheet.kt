@@ -16,7 +16,7 @@ import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
 class DetailExploreResultDialogBottomSheet :
     BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
     private val detailExploreResultInfoFragment: DetailExploreResultInfoFragment by lazy { DetailExploreResultInfoFragment() }
-    private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
+    private val detailExploreResultKeywordFragment: DetailExploreResultKeywordFragment by lazy { DetailExploreResultKeywordFragment() }
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,17 +61,17 @@ class DetailExploreResultDialogBottomSheet :
         val fragmentToShow = when (selectedFragmentTitle) {
             SelectedFragmentTitle.INFO -> detailExploreResultInfoFragment
             SelectedFragmentTitle.KEYWORD -> {
-                if (childFragmentManager.findFragmentById(R.id.fcv_detail_explore) !is DetailExploreKeywordFragment) {
+                if (childFragmentManager.findFragmentById(R.id.fcv_detail_explore) !is DetailExploreResultKeywordFragment) {
                     childFragmentManager.commit {
-                        add(R.id.fcv_detail_explore, detailExploreKeywordFragment)
+                        add(R.id.fcv_detail_explore, detailExploreResultKeywordFragment)
                     }
                 }
-                detailExploreKeywordFragment
+                detailExploreResultKeywordFragment
             }
         }
 
         val fragmentToHide = when (selectedFragmentTitle) {
-            SelectedFragmentTitle.INFO -> detailExploreKeywordFragment
+            SelectedFragmentTitle.INFO -> detailExploreResultKeywordFragment
             SelectedFragmentTitle.KEYWORD -> detailExploreResultInfoFragment
         }
 
