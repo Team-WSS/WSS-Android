@@ -15,12 +15,25 @@ class CreateFeedSearchNovelBottomSheetDialog :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupBottomSheet()
+        setupView()
         binding.viewModel = createFeedViewModel
+
         binding.ivCreateFeedSearchNovelClose.setOnClickListener { dismiss() }
+        binding.wsetCreateFeedSearchNovel.setOnWebsosoSearchActionListener { _, _, _ ->
+            createFeedViewModel.updateSearchedNovels(binding.wsetCreateFeedSearchNovel.getWebsosoSearchText())
+            true
+        }
+
+        createFeedViewModel.searchNovelUiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                !uiState.loading -> {
+
+                }
+            }
+        }
     }
 
-    private fun setupBottomSheet() {
+    private fun setupView() {
         (dialog as BottomSheetDialog).apply {
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
             behavior.isDraggable = false
