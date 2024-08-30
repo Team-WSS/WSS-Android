@@ -8,6 +8,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.domain.usecase.GetDetailExploreResultUseCase
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
+import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,27 +44,24 @@ class DetailExploreResultViewModel @Inject constructor(
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-    fun updateDetailExploreFilteredValue(
-        genre: Array<Genre>?,
-        isCompleted: Boolean?,
-        novelRating: Float?,
-        keywordIds: Array<Int>?
-    ) {
-        _selectedGenres.value = genre?.toMutableList()
-        _selectedSeriesStatus.value = isCompleted
-        _selectedRating.value = novelRating
+    fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
+        _selectedGenres.value = detailExploreFilteredModel.genres?.toMutableList()
+        _selectedSeriesStatus.value = detailExploreFilteredModel.isCompleted
+        _selectedRating.value = detailExploreFilteredModel.novelRating
         _uiState.value = uiState.value?.copy(
-            selectedKeywords = keywordIds?.toList() ?: emptyList(),
+            selectedKeywords = detailExploreFilteredModel.keywordIds?.toList() ?: emptyList(),
         )
+
+        updateSearchResult(true)
     }
 
     fun updateSearchResult(isSearchButtonClick: Boolean) {
         if (uiState.value?.isLoadable == false && !isSearchButtonClick) return
-        
+
         viewModelScope.launch {
             runCatching {
                 getDetailExploreResultUseCase(
-                    genres = selectedGenres.value?.map { it.title }?.toTypedArray(),
+                    genres = selectedGenres.value?.map { it.toString() }?.toTypedArray(),
                     isCompleted = selectedStatus.value,
                     novelRating = selectedRating.value,
                     keywordIds = uiState.value?.selectedKeywords?.toTypedArray(),

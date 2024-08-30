@@ -19,6 +19,7 @@ import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
 import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
 import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity
+import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,11 +74,12 @@ class DetailExploreKeywordFragment :
             ?.toList() ?: emptyList()
 
         val intent = DetailExploreResultActivity.getIntent(
-            context = requireContext(),
-            genres = selectedGenres,
-            isCompleted = isCompleted,
-            novelRating = novelRating,
-            keywordIds = keywordIds,
+            context = requireContext(), DetailExploreFilteredModel(
+                genres = selectedGenres,
+                isCompleted = isCompleted,
+                novelRating = novelRating,
+                keywordIds = keywordIds,
+            )
         )
 
         startActivity(intent)
@@ -100,24 +102,18 @@ class DetailExploreKeywordFragment :
     }
 
     private fun setupSelectedScrollViewVisibility(categories: List<CategoryModel>) {
-        val hasSelectedKeywords = categories
-            .flatMap { it.keywords }
-            .any { it.isSelected }
+        val hasSelectedKeywords = categories.flatMap { it.keywords }.any { it.isSelected }
 
         binding.hsvRatingKeywordSelectedKeyword.isVisible = hasSelectedKeywords
     }
 
     private fun setupSelectedChips(categories: List<CategoryModel>) {
         val currentChipKeywords =
-            binding.wcgDetailExploreKeywordSelectedKeyword.children
-                .filterIsInstance<WebsosoChip>()
+            binding.wcgDetailExploreKeywordSelectedKeyword.children.filterIsInstance<WebsosoChip>()
                 .map { it.text.toString() }.toList()
 
         val selectedKeywords =
-            categories
-                .asSequence()
-                .flatMap { it.keywords.asSequence() }
-                .filter { it.isSelected }
+            categories.asSequence().flatMap { it.keywords.asSequence() }.filter { it.isSelected }
                 .map { it.keywordName }.toList()
 
         val chipsToRemove = currentChipKeywords - selectedKeywords.toSet()
@@ -170,9 +166,8 @@ class DetailExploreKeywordFragment :
     }
 
     private fun updateSearchKeywordResult(uiState: DetailExploreKeywordUiState) {
-        val previousSearchResultKeywords = binding.wcgDetailExploreKeywordResult.children
-            .toList()
-            .map { it as WebsosoChip }
+        val previousSearchResultKeywords =
+            binding.wcgDetailExploreKeywordResult.children.toList().map { it as WebsosoChip }
 
         when {
             !uiState.isSearchKeywordProceeding -> return
@@ -196,11 +191,9 @@ class DetailExploreKeywordFragment :
         binding.wcgDetailExploreKeywordResult.forEach { view ->
             val chip = view as? WebsosoChip ?: return@forEach
 
-            val isSelected = uiState.categories
-                .asSequence()
-                .flatMap { it.keywords }
-                .filter { it.isSelected }
-                .any { it.keywordName == chip.text.toString() }
+            val isSelected =
+                uiState.categories.asSequence().flatMap { it.keywords }.filter { it.isSelected }
+                    .any { it.keywordName == chip.text.toString() }
 
             chip.isSelected = isSelected
         }
@@ -266,8 +259,7 @@ class DetailExploreKeywordFragment :
     }
 
     private fun setupBackButtonListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (binding.wsetDetailExploreKeywordSearch.hasFocus()) {
