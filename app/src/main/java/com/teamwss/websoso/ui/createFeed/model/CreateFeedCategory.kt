@@ -21,5 +21,9 @@ enum class CreateFeedCategory(
         fun from(title: String): CreateFeedCategory = CreateFeedCategory.entries.find { category ->
             title == category.titleKr
         } ?: throw IllegalArgumentException()
+
+        fun from(index: Int): CreateFeedCategory = CreateFeedCategory.entries.find { category ->
+            index == category.ordinal
+        } ?: throw IllegalArgumentException()
     }
 }

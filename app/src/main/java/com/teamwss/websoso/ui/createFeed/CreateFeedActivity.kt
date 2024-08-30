@@ -1,6 +1,9 @@
 package com.teamwss.websoso.ui.createFeed
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_stroke_selector
@@ -20,13 +23,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activity_create_feed) {
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
-    private lateinit var searchNovelDialog: CreateFeedSearchNovelBottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupCategoryChips()
 
         setupView()
+        onCreateFeedClick()
         bindViewModel()
         setupObserver()
     }
@@ -41,20 +44,23 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
         }
     }
 
-    private fun showSearchNovelDialog() {
-        when (::searchNovelDialog.isInitialized) {
-            true -> searchNovelDialog.show(
-                supportFragmentManager,
-                CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG
-            )
+    private fun onCreateFeedClick() {
+        binding.ivCreateFeedRemoveButton.setOnClickListener {
+            binding.clCreateFeedNovelInfo.visibility = View.INVISIBLE
+            createFeedViewModel.updateSelectedNovelClear()
+        }
+        binding.tvCreateFeedDoneButton.setOnClickListener {
+            createFeedViewModel.dispatchFeed()
+        }
+        binding.ivCreateFeedBackButton.setOnClickListener { finish() }
+    }
 
-            false -> searchNovelDialog =
-                CreateFeedSearchNovelBottomSheetDialog.newInstance().also {
-                    it.show(
-                        supportFragmentManager,
-                        CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG
-                    )
-                }
+    private fun showSearchNovelDialog() {
+        CreateFeedSearchNovelBottomSheetDialog.newInstance().also {
+            it.show(
+                supportFragmentManager,
+                CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG,
+            )
         }
     }
 
@@ -66,6 +72,13 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
     private fun setupObserver() {
         createFeedViewModel.isActivated.observe(this) { isSelected ->
             binding.tvCreateFeedDoneButton.isSelected = isSelected
+            binding.tvCreateFeedDoneButton.isEnabled = isSelected
+        }
+        createFeedViewModel.selectedNovelTitle.observe(this) { novelTitle ->
+            if (novelTitle.isNullOrBlank().not()) {
+                binding.clCreateFeedNovelInfo.visibility = View.VISIBLE
+                binding.tvCreateFeedNovelName.text = novelTitle
+            }
         }
     }
 
@@ -83,5 +96,9 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
                 setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.ordinal) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
     }
 }

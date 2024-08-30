@@ -45,6 +45,7 @@
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="10dp"
                     android:src="@drawable/ic_more"
+                    android:enabled="false"
                     android:text="@string/tv_create_feed_done_button"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/bg_create_feed_done_button_selector"

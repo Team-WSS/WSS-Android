@@ -13,5 +13,6 @@ data class NormalExploreModel(
         val interestedCount: Long,
         val rating: Float,
         val ratingCount: Long,
+        val isSelected: Boolean = false,
     )
 }
