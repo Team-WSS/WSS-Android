@@ -146,6 +146,16 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         binding.etCommonSearch.hint = hint
     }
 
+    /* sets touch mode of the field's focusable */
+    fun setWebsosoFocusableInTouchMode(isFocusable: Boolean) {
+        binding.etCommonSearch.setFocusableInTouchMode(isFocusable)
+    }
+
+    /* sets touch mode of the field's focusable */
+    fun setWebsosoOnClickListener(event: () -> Unit) {
+        binding.etCommonSearch.setOnClickListener { event() }
+    }
+
     /* Retrieves the text from the search input field */
     fun getWebsosoSearchText(): String {
         return binding.etCommonSearch.text.toString()

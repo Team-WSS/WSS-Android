@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp">
+
+        <ImageView
+            android:id="@+id/iv_create_feed_search_novel_poster"
+            cornerRadius="@{10f}"
+            android:layout_width="78dp"
+            android:layout_height="104dp"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/img_normal_explore_test_cover" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_search_novel_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="52dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/title3"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_create_feed_search_novel_poster"
+            app:layout_constraintEnd_toStartOf="@+id/iv_create_feed_search_novel_selected"
+            app:layout_constraintStart_toEndOf="@id/iv_create_feed_search_novel_poster"
+            app:layout_constraintTop_toTopOf="@id/iv_create_feed_search_novel_poster"
+            tools:hint="정호씨에게 편지를 받는 101가지 방법" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_search_novel_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:maxLines="1"
+            android:textAppearance="@style/body5"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@+id/tv_create_feed_search_novel_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_search_novel_title"
+            tools:hint="손명지" />
+
+        <ImageView
+            android:id="@+id/iv_create_feed_search_novel_selected"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:padding="10dp"
+            android:src="@drawable/img_withdraw_second_check_button_selector"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

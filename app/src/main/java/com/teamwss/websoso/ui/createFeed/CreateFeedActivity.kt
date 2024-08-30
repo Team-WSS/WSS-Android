@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activity_create_feed) {
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
+    private lateinit var searchNovelDialog: CreateFeedSearchNovelBottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +33,28 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
 
     private fun setupView() {
         binding.wsetCreateFeedSearchNovel.apply {
+            setWebsosoFocusableInTouchMode(false)
             setWebsosoSearchHint(getString(wset_create_feed_search_novel))
             setWebsosoSearchHintTextColor(gray_200_AEADB3)
             setWebsosoSearchTextAppearance(body4)
-            setOnClickListener {
-                // 바텀시트
-            }
+            setWebsosoOnClickListener { showSearchNovelDialog() }
+        }
+    }
+
+    private fun showSearchNovelDialog() {
+        when (::searchNovelDialog.isInitialized) {
+            true -> searchNovelDialog.show(
+                supportFragmentManager,
+                CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG
+            )
+
+            false -> searchNovelDialog =
+                CreateFeedSearchNovelBottomSheetDialog.newInstance().also {
+                    it.show(
+                        supportFragmentManager,
+                        CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG
+                    )
+                }
         }
     }
 
