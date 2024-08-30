@@ -1,34 +1,29 @@
-package com.teamwss.websoso.ui.detailExplore.info
+package com.teamwss.websoso.ui.detailExploreResult
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.toFloatPxFromDp
-import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
-import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
+import com.teamwss.websoso.databinding.FragmentDetailExploreResultInfoBinding
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.Rating
 import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
-import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity
-import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreInfoFragment :
-    BaseFragment<FragmentDetailExploreInfoBinding>(R.layout.fragment_detail_explore_info) {
-    private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
+class DetailExploreResultInfoFragment :
+    BaseFragment<FragmentDetailExploreResultInfoBinding>(R.layout.fragment_detail_explore_result_info) {
+    private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
         onResetButtonClick()
-        onDetailSearchNovelButtonClick()
         setupGenreChips()
         setupSeriesStatusChips()
         setupRatingChips()
@@ -36,38 +31,13 @@ class DetailExploreInfoFragment :
     }
 
     private fun bindViewModel() {
-        binding.detailExploreViewModel = detailExploreViewModel
+        binding.detailExploreResultViewModel = detailExploreResultViewModel
         binding.lifecycleOwner = this
     }
 
     private fun onResetButtonClick() {
         binding.clDetailExploreInfoResetButton.setOnClickListener {
-            detailExploreViewModel.updateSelectedInfoValueClear()
-        }
-    }
-
-    private fun onDetailSearchNovelButtonClick() {
-        binding.tvDetailExploreSearchButton.setOnClickListener {
-            val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
-            val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
-            val novelRating = detailExploreViewModel.selectedRating.value
-
-            val keywordIds = detailExploreViewModel.uiState.value?.categories?.asSequence()
-                ?.flatMap { it.keywords.asSequence() }
-                ?.filter { it.isSelected }
-                ?.map { it.keywordId }
-                ?.toList() ?: emptyList()
-
-            val intent = DetailExploreResultActivity.getIntent(
-                context = requireContext(), DetailExploreFilteredModel(
-                    genres = selectedGenres,
-                    isCompleted = isCompleted,
-                    novelRating = novelRating,
-                    keywordIds = keywordIds,
-                )
-            )
-
-            startActivity(intent)
+            detailExploreResultViewModel.updateSelectedInfoValueClear()
         }
     }
 
@@ -83,7 +53,7 @@ class DetailExploreInfoFragment :
                 setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                 setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                 setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre) }
+                setOnWebsosoChipClick { detailExploreResultViewModel.updateSelectedGenres(genre) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
@@ -99,15 +69,13 @@ class DetailExploreInfoFragment :
                 when (isChecked) {
                     true -> {
                         seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
-
                         val status = SeriesStatus.from(chip.text.toString())
-                        detailExploreViewModel.updateSelectedSeriesStatus(status)
+                        detailExploreResultViewModel.updateSelectedSeriesStatus(status)
                     }
 
                     false -> {
-                        detailExploreViewModel.updateSelectedSeriesStatus(null)
+                        detailExploreResultViewModel.updateSelectedSeriesStatus(null)
                     }
-
                 }
             }
         }
@@ -130,10 +98,10 @@ class DetailExploreInfoFragment :
                             Rating.entries.find {
                                 chip.text.toString().contains(it.value.toString())
                             }
-                        detailExploreViewModel.updateSelectedRating(ratingValue?.value)
+                        detailExploreResultViewModel.updateSelectedRating(ratingValue?.value)
                     }
 
-                    false -> detailExploreViewModel.updateSelectedRating(null)
+                    false -> detailExploreResultViewModel.updateSelectedRating(null)
                 }
             }
         }
@@ -141,19 +109,21 @@ class DetailExploreInfoFragment :
 
     private fun setupChipCheckListener(chip: Chip, onCheckedChange: (Boolean) -> Unit) {
         chip.setOnCheckedChangeListener(null)
-        chip.isChecked = false
         chip.setOnCheckedChangeListener { _, isChecked -> onCheckedChange(isChecked) }
     }
 
     private fun setupObserver() {
-        detailExploreViewModel.selectedGenres.observe(viewLifecycleOwner) { genres ->
-            if (genres.isNullOrEmpty()) binding.wcgDetailExploreInfoGenre.forEach {
-                it.isSelected = false
-            }
+        detailExploreResultViewModel.selectedGenres.observe(viewLifecycleOwner) { genres ->
+            (0 until binding.wcgDetailExploreInfoGenre.childCount)
+                .map { binding.wcgDetailExploreInfoGenre.getChildAt(it) }
+                .filterIsInstance<WebsosoChip>()
+                .forEach { chip ->
+                    chip.isSelected = genres?.any { it.titleKr == chip.text } == true
+                }
         }
 
-        detailExploreViewModel.selectedStatus.observe(viewLifecycleOwner) { selectedStatus ->
-            val selectedChip = selectedStatus?.title
+        detailExploreResultViewModel.isNovelCompleted.observe(viewLifecycleOwner) { selectedStatus ->
+            val selectedChip = SeriesStatus.fromIsCompleted(selectedStatus == true).title
 
             listOf(
                 binding.chipDetailExploreInfoStatusInSeries,
@@ -163,7 +133,7 @@ class DetailExploreInfoFragment :
             }
         }
 
-        detailExploreViewModel.selectedRating.observe(viewLifecycleOwner) { selectedRating ->
+        detailExploreResultViewModel.selectedRating.observe(viewLifecycleOwner) { selectedRating ->
             listOf(
                 binding.chipDetailExploreInfoRatingLowest,
                 binding.chipDetailExploreInfoRatingLower,

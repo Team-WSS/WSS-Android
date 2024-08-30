@@ -14,8 +14,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
-import com.teamwss.websoso.common.util.toFloatScaledByPx
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toFloatPxFromDp
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
@@ -156,7 +156,7 @@ class NovelDetailActivity :
             val popupWidth = novelDetailToolTipBinding.root.measuredWidth
 
             val xOffset = (anchorViewWidth - popupWidth) / 2
-            val yOffset = 6.toIntScaledByPx()
+            val yOffset = 6.toIntPxFromDp()
 
             showAsDropDown(binding.tgNovelDetailReadStatus, xOffset, yOffset)
 
@@ -183,11 +183,11 @@ class NovelDetailActivity :
             WindowManager.LayoutParams.WRAP_CONTENT,
             true,
         ).apply {
-            this.elevation = 14f.toFloatScaledByPx()
+            this.elevation = 14f.toFloatPxFromDp()
             showAsDropDown(
                 binding.ivNovelDetailMenu,
-                POPUP_MARGIN_END.toIntScaledByPx(),
-                POPUP_MARGIN_TOP.toIntScaledByPx(),
+                POPUP_MARGIN_END.toIntPxFromDp(),
+                POPUP_MARGIN_TOP.toIntPxFromDp(),
                 Gravity.END,
             )
         }

@@ -9,5 +9,11 @@ enum class SeriesStatus(val title: String, val isCompleted: Boolean) {
         fun from(title: String): SeriesStatus {
             return entries.find { it.title == title } ?: throw IllegalArgumentException()
         }
+
+        fun fromIsCompleted(isCompleted: Boolean): SeriesStatus {
+            return entries.find { it.isCompleted == isCompleted } ?: throw IllegalArgumentException(
+                "Unknown isCompleted value: $isCompleted"
+            )
+        }
     }
 }
