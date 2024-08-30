@@ -45,8 +45,16 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
-            val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
-            detailExploreBottomSheet.show(this@ExploreFragment.childFragmentManager, tag)
+            val existingDialog =
+                this@ExploreFragment.childFragmentManager.findFragmentByTag(DETAIL_BOTTOM_SHEET_TAG)
+
+            if (existingDialog == null) {
+                val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
+                detailExploreBottomSheet.show(
+                    this@ExploreFragment.childFragmentManager,
+                    DETAIL_BOTTOM_SHEET_TAG,
+                )
+            }
         }
     }
 
@@ -62,5 +70,9 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private fun loading() {
         // TODO 로딩 뷰
+    }
+
+    companion object {
+        private const val DETAIL_BOTTOM_SHEET_TAG = "DetailExploreDialogBottomSheet"
     }
 }

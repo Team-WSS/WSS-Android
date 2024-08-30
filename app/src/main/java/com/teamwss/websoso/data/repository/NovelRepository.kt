@@ -15,11 +15,17 @@ import javax.inject.Inject
 class NovelRepository @Inject constructor(
     private val novelApi: NovelApi,
 ) {
-    private var _cachedNormalExploreIsLoadable: Boolean = true
-    val cachedNormalExploreIsLoadable: Boolean get() = _cachedNormalExploreIsLoadable
+    var cachedNormalExploreIsLoadable: Boolean = true
+        private set
 
     private val _cachedNormalExploreResult: MutableList<NovelEntity> = mutableListOf()
     val cachedNormalExploreResult: List<NovelEntity> get() = _cachedNormalExploreResult.toList()
+
+    var cachedDetailExploreIsLoadable: Boolean = true
+        private set
+
+    private val _cachedDetailExploreResult: MutableList<NovelEntity> = mutableListOf()
+    val cachedDetailExploreResult: List<NovelEntity> get() = _cachedDetailExploreResult.toList()
 
     suspend fun getNovelDetail(novelId: Long): NovelDetailEntity {
         return novelApi.getNovelDetail(novelId).toData()
@@ -51,7 +57,7 @@ class NovelRepository @Inject constructor(
         return result.toData()
             .also {
                 _cachedNormalExploreResult.addAll(it.novels)
-                _cachedNormalExploreIsLoadable = result.isLoadable
+                cachedNormalExploreIsLoadable = result.isLoadable
             }
             .copy(
                 isLoadable = cachedNormalExploreIsLoadable,
@@ -61,7 +67,7 @@ class NovelRepository @Inject constructor(
 
     fun clearCachedNormalExploreResult() {
         _cachedNormalExploreResult.clear()
-        _cachedNormalExploreIsLoadable = true
+        cachedNormalExploreIsLoadable = true
     }
 
     suspend fun fetchPopularNovels(): PopularNovelsEntity {
@@ -70,6 +76,39 @@ class NovelRepository @Inject constructor(
 
     suspend fun fetchRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteEntity {
         return novelApi.getRecommendedNovelsByUserTaste().toData()
+    }
+
+    suspend fun fetchFilteredNovelResult(
+        genres: Array<String>?,
+        isCompleted: Boolean?,
+        novelRating: Float?,
+        keywordIds: Array<Int>?,
+        page: Int,
+        size: Int,
+    ): ExploreResultEntity {
+        val result = novelApi.getFilteredNovelResult(
+            genres = genres,
+            isCompleted = isCompleted,
+            novelRating = novelRating,
+            keywordIds = keywordIds,
+            page = page,
+            size = size,
+        )
+
+        return result.toData()
+            .also {
+                _cachedDetailExploreResult.addAll(it.novels)
+                cachedDetailExploreIsLoadable = result.isLoadable
+            }
+            .copy(
+                isLoadable = cachedDetailExploreIsLoadable,
+                novels = cachedDetailExploreResult,
+            )
+    }
+
+    fun clearCachedDetailExploreResult() {
+        _cachedDetailExploreResult.clear()
+        cachedDetailExploreIsLoadable = true
     }
 
     suspend fun fetchNovelFeeds(novelId: Long, lastFeedId: Long, size: Int): NovelFeedsEntity {

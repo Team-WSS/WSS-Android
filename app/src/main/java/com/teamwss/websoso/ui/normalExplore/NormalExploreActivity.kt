@@ -14,7 +14,7 @@ import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
-import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Result
+import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Novels
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -144,12 +144,12 @@ class NormalExploreActivity :
 
     private fun updateView(uiState: NormalExploreUiState) {
         val header = Header(uiState.novelCount)
-        val results = uiState.novels.map { Result(it) }
+        val novels = uiState.novels.map { Novels(it) }
 
         if (uiState.novels.isNotEmpty()) {
             when (uiState.isLoadable) {
-                true -> normalExploreAdapter.submitList(listOf(header) + results + Loading)
-                false -> normalExploreAdapter.submitList(listOf(header) + results)
+                true -> normalExploreAdapter.submitList(listOf(header) + novels + Loading)
+                false -> normalExploreAdapter.submitList(listOf(header) + novels)
             }
         }
     }

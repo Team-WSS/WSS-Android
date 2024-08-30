@@ -11,14 +11,14 @@ import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityMainBinding
-import com.teamwss.websoso.ui.main.feed.FeedFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.HOME
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.teamwss.websoso.ui.main.explore.ExploreFragment
+import com.teamwss.websoso.ui.main.feed.FeedFragment
 import com.teamwss.websoso.ui.main.home.HomeFragment
-import com.teamwss.websoso.ui.main.myPage.MyPageFragment
+import com.teamwss.websoso.ui.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

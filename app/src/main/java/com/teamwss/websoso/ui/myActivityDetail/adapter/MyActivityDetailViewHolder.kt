@@ -13,6 +13,7 @@ class MyActivityDetailViewHolder(private val binding: ItemMyActivityBinding) :
         binding.myActivity = myActivity
         binding.executePendingBindings()
     }
+
     companion object {
         fun from(parent: ViewGroup): MyActivityDetailViewHolder {
             val binding =
