@@ -131,14 +131,29 @@ class WebsosoSearchEditText @JvmOverloads constructor(
         externalClearClickListener = onWebsosoSearchClearClickListener
     }
 
-    /* Sets the text in the search input field when a recent search term is selected */
-    fun setWebsosoSearchText(text: String) {
-        binding.etCommonSearch.setText(text)
+    /* Sets the color of the hint text */
+    fun setWebsosoSearchHintTextColor(color: Int) {
+        binding.etCommonSearch.setHintTextColor(color)
+    }
+
+    /* Sets the appearance of the text */
+    fun setWebsosoSearchTextAppearance(style: Int) {
+        binding.etCommonSearch.setTextAppearance(style)
     }
 
     /* Sets the hint in the search input field */
     fun setWebsosoSearchHint(hint: String) {
         binding.etCommonSearch.hint = hint
+    }
+
+    /* sets touch mode of the field's focusable */
+    fun setWebsosoFocusableInTouchMode(isFocusable: Boolean) {
+        binding.etCommonSearch.setFocusableInTouchMode(isFocusable)
+    }
+
+    /* sets touch mode of the field's focusable */
+    fun setWebsosoOnClickListener(event: () -> Unit) {
+        binding.etCommonSearch.setOnClickListener { event() }
     }
 
     /* Retrieves the text from the search input field */
