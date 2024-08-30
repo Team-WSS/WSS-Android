@@ -47,7 +47,7 @@ class DetailExploreInfoFragment :
         val genres = Genre.entries
         genres.forEach { genre ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(genre.title)
+                setWebsosoChipText(genre.titleKr)
                 setWebsosoChipTextAppearance(R.style.body2)
                 setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)

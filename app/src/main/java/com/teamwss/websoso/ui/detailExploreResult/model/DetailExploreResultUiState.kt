@@ -10,7 +10,6 @@ data class DetailExploreResultUiState(
     val novels: List<NormalExploreModel.NovelModel> = emptyList(),
     val novelCount: Long = 0,
     val categories: List<CategoryModel> = emptyList(),
-    val selectedKeywords: List<Int> = emptyList(),
     val isSearchKeywordProceeding: Boolean = false,
     val isInitialSearchKeyword: Boolean = true,
     val isSearchResultKeywordsEmpty: Boolean = false,
