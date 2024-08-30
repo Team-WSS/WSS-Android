@@ -78,10 +78,10 @@ class NovelRepository @Inject constructor(
     }
 
     suspend fun fetchFilteredNovelResult(
-        genres: Array<String>?,
+        genres: List<String>?,
         isCompleted: Boolean?,
         novelRating: Float?,
-        keywordIds: Array<Int>?,
+        keywordIds: List<Int>?,
         page: Int,
         size: Int,
     ): ExploreResultEntity {

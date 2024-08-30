@@ -61,10 +61,10 @@ class DetailExploreResultViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 getDetailExploreResultUseCase(
-                    genres = selectedGenres.value?.map { it.toString() }?.toTypedArray(),
+                    genres = selectedGenres.value?.map { it.toString() },
                     isCompleted = selectedStatus.value,
                     novelRating = selectedRating.value,
-                    keywordIds = uiState.value?.selectedKeywords?.toTypedArray(),
+                    keywordIds = uiState.value?.selectedKeywords,
                     isSearchButtonClick = isSearchButtonClick,
                 )
             }.onSuccess { results ->
