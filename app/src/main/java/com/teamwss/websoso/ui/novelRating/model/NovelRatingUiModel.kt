@@ -116,7 +116,11 @@ data class NovelRatingKeywordsModel(
             categories = this.updatedCategories(keyword.copy(isSelected = isSelected)),
             currentSelectedKeywords = newSelectedKeywords,
             isCurrentSelectedKeywordsEmpty = newSelectedKeywords.isEmpty(),
-            isSearchKeywordExceed = newSelectedKeywords.size > 20 && isSelected,
+            isSearchKeywordExceed = newSelectedKeywords.size > MAX_KEYWORD_COUNT && isSelected,
         )
+    }
+
+    companion object {
+        private const val MAX_KEYWORD_COUNT = 5
     }
 }
