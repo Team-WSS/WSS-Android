@@ -69,7 +69,6 @@ class DetailExploreResultInfoFragment :
                 when (isChecked) {
                     true -> {
                         seriesStatusChips.filter { it != chip }.forEach { it.isChecked = false }
-
                         val status = SeriesStatus.from(chip.text.toString())
                         detailExploreResultViewModel.updateSelectedSeriesStatus(status)
                     }
@@ -77,7 +76,6 @@ class DetailExploreResultInfoFragment :
                     false -> {
                         detailExploreResultViewModel.updateSelectedSeriesStatus(null)
                     }
-
                 }
             }
         }
@@ -111,7 +109,6 @@ class DetailExploreResultInfoFragment :
 
     private fun setupChipCheckListener(chip: Chip, onCheckedChange: (Boolean) -> Unit) {
         chip.setOnCheckedChangeListener(null)
-        chip.isChecked = false
         chip.setOnCheckedChangeListener { _, isChecked -> onCheckedChange(isChecked) }
     }
 
@@ -125,7 +122,7 @@ class DetailExploreResultInfoFragment :
                 }
         }
 
-        detailExploreResultViewModel.selectedStatus.observe(viewLifecycleOwner) { selectedStatus ->
+        detailExploreResultViewModel.isNovelCompleted.observe(viewLifecycleOwner) { selectedStatus ->
             val selectedChip = SeriesStatus.fromIsCompleted(selectedStatus == true).title
 
             listOf(

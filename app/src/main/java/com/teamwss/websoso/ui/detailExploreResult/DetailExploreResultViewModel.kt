@@ -31,8 +31,11 @@ class DetailExploreResultViewModel @Inject constructor(
         MutableLiveData(mutableListOf())
     val selectedGenres: LiveData<List<Genre>?> get() = _selectedGenres.map { it?.toList() }
 
-    private val _selectedSeriesStatus: MutableLiveData<Boolean?> = MutableLiveData()
-    val selectedStatus: LiveData<Boolean?> get() = _selectedSeriesStatus
+    private val _isNovelCompleted: MutableLiveData<Boolean?> = MutableLiveData()
+    val isNovelCompleted: LiveData<Boolean?> get() = _isNovelCompleted
+
+    private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
+    val selectedStatus: LiveData<SeriesStatus?> get() = _selectedSeriesStatus
 
     private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
     val selectedRating: LiveData<Float?> get() = _selectedRating
@@ -58,14 +61,14 @@ class DetailExploreResultViewModel @Inject constructor(
     init {
         _appliedFiltersMessage.apply {
             addSource(_selectedGenres) { updateMessage() }
-            addSource(_selectedSeriesStatus) { updateMessage() }
+            addSource(_isNovelCompleted) { updateMessage() }
             addSource(_selectedRating) { updateMessage() }
             addSource(_selectedKeywordIds) { updateMessage() }
         }
 
         _isInfoChipSelected.apply {
             addSource(_selectedGenres) { isInfoChipSelectedEnabled() }
-            addSource(_selectedSeriesStatus) { isInfoChipSelectedEnabled() }
+            addSource(_isNovelCompleted) { isInfoChipSelectedEnabled() }
             addSource(_selectedRating) { isInfoChipSelectedEnabled() }
         }
 
@@ -82,7 +85,7 @@ class DetailExploreResultViewModel @Inject constructor(
             }
         }
 
-        _selectedSeriesStatus.value?.let { status ->
+        _isNovelCompleted.value?.let { status ->
             appliedFilters.add("연재상태")
         }
 
@@ -101,7 +104,7 @@ class DetailExploreResultViewModel @Inject constructor(
 
     private fun isInfoChipSelectedEnabled() {
         val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
-        val isStatusChipSelected: Boolean = _selectedSeriesStatus.value != null
+        val isStatusChipSelected: Boolean = _isNovelCompleted.value != null
         val isRatingChipSelected: Boolean = _selectedRating.value != null
 
         _isInfoChipSelected.value =
@@ -114,7 +117,7 @@ class DetailExploreResultViewModel @Inject constructor(
 
     fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
         _selectedGenres.value = detailExploreFilteredModel.genres?.toMutableList()
-        _selectedSeriesStatus.value = detailExploreFilteredModel.isCompleted
+        _isNovelCompleted.value = detailExploreFilteredModel.isCompleted
         _selectedRating.value = detailExploreFilteredModel.novelRating
         _selectedKeywordIds.value = detailExploreFilteredModel.keywordIds?.toMutableList()
 
@@ -144,7 +147,7 @@ class DetailExploreResultViewModel @Inject constructor(
             runCatching {
                 getDetailExploreResultUseCase(
                     genres = selectedGenres.value?.map { it.titleEn },
-                    isCompleted = selectedStatus.value,
+                    isCompleted = isNovelCompleted.value,
                     novelRating = selectedRating.value,
                     keywordIds = selectedKeywordIds.value,
                     isSearchButtonClick = isSearchButtonClick,
@@ -183,7 +186,7 @@ class DetailExploreResultViewModel @Inject constructor(
 
     fun updateSelectedInfoValueClear() {
         _selectedGenres.value = mutableListOf()
-        _selectedSeriesStatus.value = null
+        _isNovelCompleted.value = null
         _selectedRating.value = null
     }
 
@@ -204,7 +207,7 @@ class DetailExploreResultViewModel @Inject constructor(
     }
 
     fun updateSelectedSeriesStatus(status: SeriesStatus?) {
-        _selectedSeriesStatus.value = status?.isCompleted
+        _selectedSeriesStatus.value = status
     }
 
     fun updateSelectedRating(rating: Float?) {

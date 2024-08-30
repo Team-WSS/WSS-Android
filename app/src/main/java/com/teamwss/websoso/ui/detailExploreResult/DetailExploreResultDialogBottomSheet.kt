@@ -10,7 +10,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
-import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordFragment
 import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
 
 class DetailExploreResultDialogBottomSheet :

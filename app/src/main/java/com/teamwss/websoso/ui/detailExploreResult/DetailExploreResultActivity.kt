@@ -132,10 +132,11 @@ class DetailExploreResultActivity :
 
     private fun onEditFilterItemButtonClick() {
         binding.clDetailExploreResultFilterButton.setOnClickListener {
-            val detailExploreBottomSheet = DetailExploreResultDialogBottomSheet.newInstance()
-            detailExploreBottomSheet.show(
+            val detailExploreResultDialogBottomSheet =
+                DetailExploreResultDialogBottomSheet.newInstance()
+            detailExploreResultDialogBottomSheet.show(
                 supportFragmentManager,
-                DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
+                DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG,
             )
         }
     }
