@@ -2,11 +2,9 @@
 
     <style name="Base.Theme.Websoso" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:includeFontPadding">false</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="actionBarItemBackground">@color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@android:color/transparent</item>
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">0</item>
     </style>
