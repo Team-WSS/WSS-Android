@@ -261,6 +261,12 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (novelFeedViewModel.feedUiState.value?.feeds.isNullOrEmpty().not())
+            novelFeedViewModel.updateRefreshedFeeds(novelId)
+    }
+
     override fun onDestroyView() {
         _popupBinding = null
         super.onDestroyView()
