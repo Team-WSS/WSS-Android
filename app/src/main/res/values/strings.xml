@@ -345,5 +345,9 @@
     <string name="tv_create_feed_spoiler">스포일러</string>
     <string name="et_create_feed_content_hint">피드 작성 유의사항!\n\n욕설, 비방, 명예훼손성 표현은 사용하지 말아주세요.\n작품 내용을 담은 글은 스포일러를 체크해주세요.</string>
     <string name="tv_create_feed_characters_count">(%d/2000)</string>
+    <string name="tv_create_feed_connect_novel">작품 연결하기</string>
+    <string name="wset_create_feed_search_novel">작품 제목, 작가를 검색하세요</string>
+    <string name="tv_create_feed_search_novel_connect_novel_description">작성 중인 글과 관련된 웹소설을 선택하세요</string>
+    <string name="tv_create_feed_search_novel_connect_button">해당 작품 연결</string>
 
 </resources>
