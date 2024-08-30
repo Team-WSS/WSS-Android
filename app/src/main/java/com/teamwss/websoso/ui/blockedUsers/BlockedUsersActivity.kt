@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivityBlockedUsersBinding
 import com.teamwss.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,10 +54,11 @@ class BlockedUsersActivity :
     }
 
     private fun showSnackBar(nickName: String) {
-        WebsosoCustomSnackBar.make(binding.root)
-            .setText(getString(R.string.blocked_users_unblocked, nickName))
-            .setIcon(R.drawable.ic_blocked_user_snack_bar)
-            .show()
+        showWebsosoSnackBar(
+            view = binding.root,
+            message = getString(R.string.blocked_users_unblocked, nickName),
+            icon = R.drawable.ic_blocked_user_snack_bar,
+        )
     }
 
     private fun onBackButtonClick() {

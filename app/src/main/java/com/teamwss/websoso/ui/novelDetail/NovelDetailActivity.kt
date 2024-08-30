@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
@@ -76,10 +76,11 @@ class NovelDetailActivity :
     private fun deleteUserNovel() {
         novelDetailViewModel.deleteUserNovel(novelId)
         binding.tgNovelDetailReadStatus.clearChecked()
-        WebsosoCustomSnackBar.make(binding.root)
-            .setText(getString(R.string.novel_detail_remove_result))
-            .setIcon(R.drawable.ic_novel_detail_check)
-            .show()
+        showWebsosoSnackBar(
+            view = binding.root,
+            message = getString(R.string.novel_detail_remove_result),
+            icon = R.drawable.ic_novel_detail_check,
+        )
     }
 
     private fun setupViewPager() {
