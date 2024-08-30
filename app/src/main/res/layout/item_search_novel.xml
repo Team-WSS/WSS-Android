@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="novel"
+            type="com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,6 +18,7 @@
         <ImageView
             android:id="@+id/iv_create_feed_search_novel_poster"
             cornerRadius="@{10f}"
+            loadImageUrl="@{novel.image}"
             android:layout_width="78dp"
             android:layout_height="104dp"
             android:contentDescription="@null"
@@ -26,9 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="52dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{novel.title}"
             android:textAppearance="@style/title3"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/iv_create_feed_search_novel_poster"
@@ -39,12 +49,15 @@
 
         <TextView
             android:id="@+id/tv_create_feed_search_novel_author"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{novel.author}"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintEnd_toEndOf="@+id/tv_create_feed_search_novel_title"
             app:layout_constraintStart_toStartOf="@+id/tv_create_feed_search_novel_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_search_novel_title"
             tools:hint="손명지" />
@@ -55,7 +68,7 @@
             android:layout_height="24dp"
             android:layout_marginEnd="10dp"
             android:padding="10dp"
-            android:src="@drawable/img_withdraw_second_check_button_selector"
+            android:background="@drawable/img_withdraw_second_check_button_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
