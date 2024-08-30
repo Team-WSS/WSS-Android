@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.AvatarRepository
 import com.teamwss.websoso.data.repository.UserRepository
-import com.teamwss.websoso.domain.model.NicknameValidationResult
 import com.teamwss.websoso.domain.model.NicknameValidationResult.INVALID_NICKNAME_DUPLICATION
 import com.teamwss.websoso.domain.model.NicknameValidationResult.NETWORK_ERROR
 import com.teamwss.websoso.domain.model.NicknameValidationResult.NONE
@@ -110,11 +109,12 @@ class ProfileEditViewModel @Inject constructor(
             runCatching {
                 checkNicknameValidityUseCase(nickname)
             }.onSuccess { result ->
-                _profileEditUiState.value = profileEditUiState.value?.copy(
-                    nicknameEditResult = if (result == VALID_NICKNAME_SPELLING) {
-                        checkNicknameDuplication(nickname)
-                    } else result,
-                )
+                when (result) {
+                    VALID_NICKNAME_SPELLING -> checkNicknameDuplication(nickname)
+                    else -> _profileEditUiState.value = profileEditUiState.value?.copy(
+                        nicknameEditResult = result,
+                    )
+                }
             }.onFailure {
                 _profileEditUiState.value = profileEditUiState.value?.copy(
                     nicknameEditResult = UNKNOWN_ERROR,
@@ -123,16 +123,27 @@ class ProfileEditViewModel @Inject constructor(
         }
     }
 
-    private suspend fun checkNicknameDuplication(nickname: String): NicknameValidationResult {
-        runCatching {
-            userRepository.fetchNicknameValidity(nickname)
-        }.onSuccess { isNicknameValid ->
-            return if (isNicknameValid) VALID_NICKNAME
-            else INVALID_NICKNAME_DUPLICATION
-        }.onFailure {
-            return NETWORK_ERROR
+    private fun checkNicknameDuplication(nickname: String) {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchNicknameValidity(nickname)
+            }.onSuccess { isNicknameValid ->
+                _profileEditUiState.value = profileEditUiState.value.let { uiState ->
+                    uiState?.copy(
+                        nicknameEditResult = when (isNicknameValid) {
+                            true -> VALID_NICKNAME
+                            false -> INVALID_NICKNAME_DUPLICATION
+                        },
+                    )
+                }
+            }.onFailure {
+                _profileEditUiState.value = profileEditUiState.value.let { uiState ->
+                    uiState?.copy(
+                        nicknameEditResult = NETWORK_ERROR,
+                    )
+                }
+            }
         }
-        return UNKNOWN_ERROR
     }
 
     fun updateProfile() {
