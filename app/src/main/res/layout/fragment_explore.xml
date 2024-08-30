@@ -218,7 +218,7 @@
                 android:orientation="horizontal"
                 android:overScrollMode="never"
                 android:paddingStart="20dp"
-                android:paddingEnd="34dp"
+                android:paddingEnd="14dp"
                 android:paddingBottom="40dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
