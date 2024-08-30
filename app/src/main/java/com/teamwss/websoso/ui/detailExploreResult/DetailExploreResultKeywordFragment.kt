@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.detailExplore.keyword
+package com.teamwss.websoso.ui.detailExploreResult
 
 import android.os.Bundle
 import android.view.View
@@ -14,20 +14,18 @@ import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
 import com.teamwss.websoso.common.util.toFloatScaledByPx
-import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
-import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
+import com.teamwss.websoso.databinding.FragmentDetailExploreResultKeywordBinding
+import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreClickListener
 import com.teamwss.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
-import com.teamwss.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
-import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity
-import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
+import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreKeywordFragment :
-    BaseFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
-    private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
+class DetailExploreResultKeywordFragment :
+    BaseFragment<FragmentDetailExploreResultKeywordBinding>(R.layout.fragment_detail_explore_result_keyword) {
+    private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
-        DetailExploreKeywordAdapter(detailExploreViewModel::updateClickedChipState)
+        DetailExploreKeywordAdapter(detailExploreResultViewModel::updateClickedChipState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +40,7 @@ class DetailExploreKeywordFragment :
     }
 
     private fun bindViewModel() {
-        binding.detailExploreViewModel = detailExploreViewModel
+        binding.detailExploreResultViewModel = detailExploreResultViewModel
         binding.onClick = onDetailExploreKeywordButtonClick()
         binding.lifecycleOwner = viewLifecycleOwner
     }
@@ -54,35 +52,12 @@ class DetailExploreKeywordFragment :
         }
 
         override fun onDetailSearchNovelButtonClick() {
-            navigateToDetailSearchResult()
+            detailExploreResultViewModel.updateSearchResult(true)
         }
 
         override fun onKeywordResetButtonClick() {
-            detailExploreViewModel.updateSelectedKeywordValueClear()
+            detailExploreResultViewModel.updateSelectedKeywordValueClear()
         }
-    }
-
-    private fun navigateToDetailSearchResult() {
-        val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
-        val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
-        val novelRating = detailExploreViewModel.selectedRating.value
-
-        val keywordIds = detailExploreViewModel.uiState.value?.categories?.asSequence()
-            ?.flatMap { it.keywords.asSequence() }
-            ?.filter { it.isSelected }
-            ?.map { it.keywordId }
-            ?.toList() ?: emptyList()
-
-        val intent = DetailExploreResultActivity.getIntent(
-            context = requireContext(), DetailExploreFilteredModel(
-                genres = selectedGenres,
-                isCompleted = isCompleted,
-                novelRating = novelRating,
-                keywordIds = keywordIds,
-            )
-        )
-
-        startActivity(intent)
     }
 
     private fun setupAdapter() {
@@ -93,7 +68,7 @@ class DetailExploreKeywordFragment :
     }
 
     private fun setupObserver() {
-        detailExploreViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        detailExploreResultViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             detailExploreKeywordAdapter.submitList(uiState.categories)
             setupSelectedScrollViewVisibility(uiState.categories)
             setupSelectedChips(uiState.categories)
@@ -151,7 +126,7 @@ class DetailExploreKeywordFragment :
             setWebsosoChipPaddingHorizontal(4f.toFloatScaledByPx())
             setWebsosoChipRadius(20f.toFloatScaledByPx())
             setOnCloseIconClickListener {
-                detailExploreViewModel.updateClickedChipState(
+                detailExploreResultViewModel.updateClickedChipState(
                     selectedKeyword.keywordId
                 )
             }
@@ -165,7 +140,7 @@ class DetailExploreKeywordFragment :
         }
     }
 
-    private fun updateSearchKeywordResult(uiState: DetailExploreKeywordUiState) {
+    private fun updateSearchKeywordResult(uiState: DetailExploreResultUiState) {
         val previousSearchResultKeywords =
             binding.wcgDetailExploreKeywordResult.children.toList().map { it as WebsosoChip }
 
@@ -187,7 +162,7 @@ class DetailExploreKeywordFragment :
     }
 
 
-    private fun updateSearchKeywordResultIsSelected(uiState: DetailExploreKeywordUiState) {
+    private fun updateSearchKeywordResultIsSelected(uiState: DetailExploreResultUiState) {
         binding.wcgDetailExploreKeywordResult.forEach { view ->
             val chip = view as? WebsosoChip ?: return@forEach
 
@@ -199,7 +174,7 @@ class DetailExploreKeywordFragment :
         }
     }
 
-    private fun updateSearchKeywordResultWebsosoChips(uiState: DetailExploreKeywordUiState) {
+    private fun updateSearchKeywordResultWebsosoChips(uiState: DetailExploreResultUiState) {
         uiState.searchResultKeywords.forEach { keyword ->
             val isSelected = uiState.categories.asSequence().flatMap { it.keywords }
                 .any { it.keywordId == keyword.keywordId && it.isSelected }
@@ -214,7 +189,7 @@ class DetailExploreKeywordFragment :
                 setWebsosoChipPaddingHorizontal(6f.toFloatScaledByPx())
                 setWebsosoChipRadius(20f.toFloatScaledByPx())
                 setOnWebsosoChipClick {
-                    detailExploreViewModel.updateClickedChipState(keyword.keywordId)
+                    detailExploreResultViewModel.updateClickedChipState(keyword.keywordId)
                 }
                 this.isSelected = isSelected
             }.also { websosoChip ->
@@ -236,7 +211,7 @@ class DetailExploreKeywordFragment :
         }
 
         binding.wsetDetailExploreKeywordSearch.setOnWebsosoSearchFocusChangeListener { _, isFocused ->
-            if (isFocused) detailExploreViewModel.updateIsSearchKeywordProceeding(true)
+            if (isFocused) detailExploreResultViewModel.updateIsSearchKeywordProceeding(true)
         }
 
         binding.wsetDetailExploreKeywordSearch.setOnWebsosoSearchClearClickListener {
@@ -250,12 +225,12 @@ class DetailExploreKeywordFragment :
             initSearchKeyword()
             return
         }
-        detailExploreViewModel.updateKeyword(input)
+        detailExploreResultViewModel.updateKeyword(input)
     }
 
     private fun initSearchKeyword() {
         binding.wsetDetailExploreKeywordSearch.clearWebsosoSearchFocus()
-        detailExploreViewModel.initSearchKeyword()
+        detailExploreResultViewModel.initSearchKeyword()
     }
 
     private fun setupBackButtonListener() {
