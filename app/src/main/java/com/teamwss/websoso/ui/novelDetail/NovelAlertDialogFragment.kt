@@ -2,6 +2,8 @@ package com.teamwss.websoso.ui.novelDetail
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.databinding.DialogNovelAlertBinding
@@ -15,10 +17,8 @@ class NovelAlertDialogFragment : BaseDialogFragment<DialogNovelAlertBinding>(R.l
 
         onAcceptButtonClick()
         onCancelButtonClick()
-        setAlertTitle()
-        setAlertMessage()
-        setAcceptButtonText()
-        setCancelButtonText()
+        setupView()
+        updateAlertMessageVisibility()
     }
 
     private fun onAcceptButtonClick() {
@@ -32,24 +32,21 @@ class NovelAlertDialogFragment : BaseDialogFragment<DialogNovelAlertBinding>(R.l
         binding.onCancelClick = { dismiss() }
     }
 
-    private fun setAlertTitle() {
-        binding.tvNovelAlertTitle.text = arguments?.getString(ALERT_TITLE)
-    }
-
-    private fun setAlertMessage() {
-        if (binding.tvNovelAlertMessage.text.isEmpty()) {
-            binding.tvNovelAlertMessage.visibility = View.GONE
-        } else {
-            binding.tvNovelAlertMessage.visibility = View.VISIBLE
+    private fun setupView() {
+        with(binding) {
+            tvNovelAlertTitle.text = arguments?.getString(ALERT_TITLE)
+            tvNovelAlertAccept.text = arguments?.getString(ACCEPT_BUTTON_TEXT)
+            tvNovelAlertCancel.text = arguments?.getString(CANCEL_BUTTON_TEXT)
         }
     }
 
-    private fun setAcceptButtonText() {
-        binding.tvNovelAlertAccept.text = arguments?.getString(ACCEPT_BUTTON_TEXT)
-    }
-
-    private fun setCancelButtonText() {
-        binding.tvNovelAlertCancel.text = arguments?.getString(CANCEL_BUTTON_TEXT)
+    private fun updateAlertMessageVisibility() {
+        with(binding.tvNovelAlertMessage) {
+            visibility = when (binding.tvNovelAlertMessage.text.isEmpty()) {
+                true -> GONE
+                false -> VISIBLE
+            }
+        }
     }
 
     companion object {
