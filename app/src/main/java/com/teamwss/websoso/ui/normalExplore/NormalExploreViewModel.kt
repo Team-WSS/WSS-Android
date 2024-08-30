@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FakeNovelRepository
+import com.teamwss.websoso.domain.usecase.GetNormalExploreResultUseCase
+import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NormalExploreViewModel @Inject constructor(
-    private val novelRepository: FakeNovelRepository,
+    private val getNormalExploreResultUseCase: GetNormalExploreResultUseCase,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<NormalExploreUiState> =
         MutableLiveData(NormalExploreUiState())
@@ -27,34 +28,38 @@ class NormalExploreViewModel @Inject constructor(
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-    fun updateSearchResult() {
+    fun updateSearchResult(isSearchButtonClick: Boolean) {
+        if (_uiState.value?.isLoadable == false && !isSearchButtonClick) {
+            return
+        }
         viewModelScope.launch {
-            _uiState.value = uiState.value?.copy(
-                loading = true,
-            )
+            _uiState.value = _uiState.value?.copy(loading = isSearchButtonClick)
             runCatching {
-                novelRepository.normalExploreResultDummyData
+                getNormalExploreResultUseCase(searchWord.value ?: "", isSearchButtonClick)
             }.onSuccess { results ->
-                when (results.novels.isNotEmpty()) {
-                    true -> {
-                        _uiState.value = uiState.value?.copy(
-                            loading = false,
-                            novels = results.novels,
-                        )
-                    }
-
-                    false -> {
-                        _uiState.value = uiState.value?.copy(
-                            loading = false,
-                        )
-                        _isNovelResultEmptyBoxVisibility.value = true
-                    }
+                if (results.novels.isNotEmpty()) {
+                    _uiState.value = _uiState.value?.copy(
+                        loading = false,
+                        isLoadable = results.isLoadable,
+                        novelCount = results.resultCount,
+                        novels = results.novels.map { it.toUi() },
+                    )
+                    _isNovelResultEmptyBoxVisibility.value = false
+                } else {
+                    _uiState.value = _uiState.value?.copy(
+                        loading = false,
+                        isLoadable = results.isLoadable,
+                        novelCount = results.resultCount,
+                        novels = emptyList(),
+                    )
+                    _isNovelResultEmptyBoxVisibility.value = true
                 }
+
             }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
+                _uiState.value = _uiState.value?.copy(
+                    loading = false, error = true,
                 )
+                _isNovelResultEmptyBoxVisibility.value = false
             }
         }
     }

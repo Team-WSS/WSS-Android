@@ -19,8 +19,8 @@ data class ActivityModel(
     val title: String,
     val novelRatingCount: Int?,
     val novelRating: Float?,
-    val relevantCategories:String,
-){
+    val relevantCategories: String,
+) {
     val formattedScore: String
         get() = String.format(
             "%s (%,d)",

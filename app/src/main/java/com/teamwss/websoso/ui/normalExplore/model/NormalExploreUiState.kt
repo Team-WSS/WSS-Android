@@ -1,9 +1,11 @@
 package com.teamwss.websoso.ui.normalExplore.model
 
-import com.teamwss.websoso.data.model.ExploreResultEntity
+import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 
 data class NormalExploreUiState(
     val loading: Boolean = false,
     val error: Boolean = false,
-    val novels: List<ExploreResultEntity.NovelEntity> = emptyList(),
+    val isLoadable: Boolean = true,
+    val novelCount: Long = 0,
+    val novels: List<NovelModel> = emptyList(),
 )

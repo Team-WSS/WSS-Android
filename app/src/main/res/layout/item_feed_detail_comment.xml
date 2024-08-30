@@ -8,6 +8,10 @@
         <variable
             name="comment"
             type="com.teamwss.websoso.ui.feedDetail.model.CommentModel" />
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.feedDetail.CommentClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +27,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="4dp"
+            android:onClick="@{() -> onClick.onProfileClick(comment.user.id,comment.isMyComment)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_feed_user_name"
             tools:src="@drawable/img_load_fail" />
@@ -34,6 +39,7 @@
             android:layout_marginStart="14dp"
             android:maxLength="10"
             android:maxLines="1"
+            android:onClick="@{() -> onClick.onProfileClick(comment.user.id,comment.isMyComment)}"
             android:text="@{comment.user.nickname}"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
@@ -68,10 +74,10 @@
 
         <TextView
             android:id="@+id/tv_feed_detail_is_modified"
+            isVisible="@{comment.modified}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            isVisible="@{comment.modified}"
             android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
@@ -99,6 +105,7 @@
             android:id="@+id/iv_feed_detail_more_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{(iv_feed_detail_more_button) -> onClick.onMoreButtonClick(iv_feed_detail_more_button, comment.commentId, comment.isMyComment)}"
             android:src="@drawable/ic_more"
             app:layout_constraintBottom_toBottomOf="@id/tv_feed_user_name"
             app:layout_constraintEnd_toEndOf="parent"

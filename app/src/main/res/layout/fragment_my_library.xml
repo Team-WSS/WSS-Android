@@ -46,7 +46,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <LinearLayout
-                android:id="@+id/linear_my_library_storage"
+                android:id="@+id/ll_my_library_storage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_my_library_storage_title">
 
                 <LinearLayout
-                    android:id="@+id/linear_my_library_storage_interesting"
+                    android:id="@+id/ll_my_library_storage_interesting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -70,7 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@{}"
+                        android:text='@{String.valueOf(myLibraryViewModel.novelStats.interestNovelCount)}'
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12"/>
@@ -93,7 +93,7 @@
                     android:background="@color/gray_70_DFDFE3"/>
 
                 <LinearLayout
-                    android:id="@+id/linear_my_library_storage_watching"
+                    android:id="@+id/ll_my_library_storage_watching"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@{}"
+                        android:text='@{String.valueOf(myLibraryViewModel.novelStats.watchingNovelCount)}'
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12"/>
@@ -123,7 +123,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_my_library_storage_watched"
+                    android:id="@+id/ll_my_library_storage_watched"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -135,7 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@{}"
+                        android:text='@{String.valueOf(myLibraryViewModel.novelStats.watchedNovelCount)}'
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12"/>
@@ -153,7 +153,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linear_my_library_storage_quit"
+                    android:id="@+id/ll_my_library_storage_quit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -165,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@{}"
+                        android:text="@{String.valueOf(myLibraryViewModel.novelStats.quitNovelCount)}"
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12"/>
@@ -261,7 +261,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
-                    android:id="@+id/linear_my_library_dominant_genre"
+                    android:id="@+id/ll_my_library_dominant_genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
@@ -271,7 +271,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_my_library_genre_preference_title">
 
                     <LinearLayout
-                        android:id="@+id/linear_my_library_dominant_genre_first"
+                        android:id="@+id/ll_my_library_dominant_genre_first"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -282,7 +282,7 @@
                             android:id="@+id/iv_my_library_dominant_genre_first_logo"
                             android:layout_width="30dp"
                             android:layout_height="37dp"
-                            android:src="@drawable/ic_novel_detail_genre_test"
+                            app:loadImageUrl="@{myLibraryViewModel.topGenres[0].genreImage}"
                             tools:src="@drawable/ic_novel_detail_genre_test" />
 
                         <TextView
@@ -290,7 +290,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="@{}"
+                            android:text="@{myLibraryViewModel.topGenres[0].genreName}"
                             android:textAppearance="@style/title3"
                             android:textColor="@color/black"
                             tools:text="로판" />
@@ -300,7 +300,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="@{@string/my_library_genre_count}"
+                            android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.topGenres[0].genreCount)}'
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             tools:text="12편" />
@@ -308,7 +308,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linear_my_library_dominant_genre_second"
+                        android:id="@+id/ll_my_library_dominant_genre_second"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -319,7 +319,7 @@
                             android:id="@+id/iv_my_library_dominant_genre_second_logo"
                             android:layout_width="30dp"
                             android:layout_height="37dp"
-                            android:src="@drawable/ic_novel_detail_genre_test"
+                            app:loadImageUrl="@{myLibraryViewModel.topGenres[1].genreImage}"
                             tools:src="@drawable/ic_novel_detail_genre_test" />
 
                         <TextView
@@ -327,7 +327,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="@{}"
+                            android:text="@{myLibraryViewModel.topGenres[1].genreName}"
                             android:textAppearance="@style/title3"
                             android:textColor="@color/black"
                             tools:text="로판" />
@@ -337,7 +337,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="@{@string/my_library_genre_count}"
+                            android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.topGenres[1].genreCount)}'
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             tools:text="12편" />
@@ -345,7 +345,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linear_my_library_dominant_genre_third"
+                        android:id="@+id/ll_my_library_dominant_genre_third"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -356,7 +356,7 @@
                             android:id="@+id/iv_my_library_dominant_genre_third_logo"
                             android:layout_width="30dp"
                             android:layout_height="37dp"
-                            android:src="@drawable/ic_novel_detail_genre_test"
+                            app:loadImageUrl="@{myLibraryViewModel.topGenres[2].genreImage}"
                             tools:src="@drawable/ic_novel_detail_genre_test" />
 
                         <TextView
@@ -364,7 +364,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="@{}"
+                            android:text="@{myLibraryViewModel.topGenres[2].genreName}"
                             android:textAppearance="@style/title3"
                             android:textColor="@color/black"
                             tools:text="로판" />
@@ -374,7 +374,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="@{@string/my_library_genre_count}"
+                            android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.topGenres[2].genreCount)}'
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             tools:text="12편" />
@@ -390,7 +390,7 @@
                     android:layout_marginHorizontal="40dp"
                     android:layout_marginTop="32dp"
                     android:divider="@null"
-                    app:layout_constraintTop_toBottomOf="@id/linear_my_library_dominant_genre"
+                    app:layout_constraintTop_toBottomOf="@id/ll_my_library_dominant_genre"
                     tools:layout_editor_absoluteX="40dp" />
 
                 <ImageView

@@ -47,7 +47,6 @@ class FeedViewModel @Inject constructor(
     fun updateFeeds() {
         feedUiState.value?.let { feedUiState ->
             if (!feedUiState.isLoadable) return
-            else _feedUiState.value = feedUiState.copy(loading = true)
 
             viewModelScope.launch {
                 val selectedCategory: Category =
@@ -118,7 +117,6 @@ class FeedViewModel @Inject constructor(
 
     fun updateRefreshedFeeds() {
         feedUiState.value?.let { feedUiState ->
-            _feedUiState.value = feedUiState.copy(loading = true)
 
             viewModelScope.launch {
                 val selectedCategory: Category =
@@ -185,10 +183,7 @@ class FeedViewModel @Inject constructor(
                 runCatching {
                     feedRepository.saveSpoilerFeed(feedId)
                 }.onSuccess {
-                    _feedUiState.value = feedUiState.copy(
-                        loading = false,
-                        feeds = feedUiState.feeds.filter { it.id != feedId }
-                    )
+                    _feedUiState.value = feedUiState.copy(loading = false)
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
@@ -206,10 +201,7 @@ class FeedViewModel @Inject constructor(
                 runCatching {
                     feedRepository.saveImpertinenceFeed(feedId)
                 }.onSuccess {
-                    _feedUiState.value = feedUiState.copy(
-                        loading = false,
-                        feeds = feedUiState.feeds.filter { it.id != feedId }
-                    )
+                    _feedUiState.value = feedUiState.copy(loading = false)
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
                         loading = false,

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.common.util.toFloatScaledByPx
 import com.teamwss.websoso.common.util.toIntScaledByPx
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 
@@ -54,9 +55,9 @@ class DetailExploreKeywordViewHolder(
                 setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
+                setWebsosoChipPaddingVertical(10f.toFloatScaledByPx())
+                setWebsosoChipPaddingHorizontal(4f.toFloatScaledByPx())
+                setWebsosoChipRadius(20f.toFloatScaledByPx())
                 setOnWebsosoChipClick {
                     onKeywordClick(keyword.keywordId)
                 }

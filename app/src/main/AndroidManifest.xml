@@ -39,12 +39,17 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.createFeed.CreateFeedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.onboarding.OnboardingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.notice.NoticeActivity"
@@ -100,6 +105,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.myActivityDetail.MyActivityDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.otherUserPage.OtherUserPageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>

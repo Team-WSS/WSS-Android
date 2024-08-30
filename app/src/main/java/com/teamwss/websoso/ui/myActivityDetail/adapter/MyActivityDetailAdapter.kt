@@ -31,12 +31,12 @@ class MyActivityDetailAdapter :
         private val diffCallback = object : DiffUtil.ItemCallback<ActivityModel>() {
             override fun areItemsTheSame(
                 oldItem: ActivityModel,
-                newItem: ActivityModel
+                newItem: ActivityModel,
             ): Boolean = oldItem.feedId == newItem.feedId
 
             override fun areContentsTheSame(
                 oldItem: ActivityModel,
-                newItem: ActivityModel
+                newItem: ActivityModel,
             ): Boolean = oldItem == newItem
         }
     }

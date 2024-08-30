@@ -1,6 +1,8 @@
 package com.teamwss.websoso.data.repository
 
 import com.teamwss.websoso.data.mapper.toData
+import com.teamwss.websoso.data.model.ExploreResultEntity
+import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity
@@ -12,6 +14,17 @@ import javax.inject.Inject
 class NovelRepository @Inject constructor(
     private val novelApi: NovelApi,
 ) {
+    var cachedNormalExploreIsLoadable: Boolean = true
+        private set
+
+    private val _cachedNormalExploreResult: MutableList<NovelEntity> = mutableListOf()
+    val cachedNormalExploreResult: List<NovelEntity> get() = _cachedNormalExploreResult.toList()
+
+    var cachedDetailExploreIsLoadable: Boolean = true
+        private set
+
+    private val _cachedDetailExploreResult: MutableList<NovelEntity> = mutableListOf()
+    val cachedDetailExploreResult: List<NovelEntity> get() = _cachedDetailExploreResult.toList()
 
     suspend fun getNovelDetail(novelId: Long): NovelDetailEntity {
         return novelApi.getNovelDetail(novelId).toData()
@@ -32,11 +45,68 @@ class NovelRepository @Inject constructor(
         return novelApi.getSosoPicks().toData()
     }
 
+    suspend fun fetchNormalExploreResult(
+        searchWord: String,
+        page: Int,
+        size: Int,
+    ): ExploreResultEntity {
+        val result =
+            novelApi.getNormalExploreResult(searchWord = searchWord, page = page, size = size)
+
+        return result.toData()
+            .also {
+                _cachedNormalExploreResult.addAll(it.novels)
+                cachedNormalExploreIsLoadable = result.isLoadable
+            }
+            .copy(
+                isLoadable = cachedNormalExploreIsLoadable,
+                novels = cachedNormalExploreResult,
+            )
+    }
+
+    fun clearCachedNormalExploreResult() {
+        _cachedNormalExploreResult.clear()
+        cachedNormalExploreIsLoadable = true
+    }
+
     suspend fun fetchPopularNovels(): PopularNovelsEntity {
         return novelApi.getPopularNovels().toData()
     }
 
     suspend fun fetchRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteEntity {
         return novelApi.getRecommendedNovelsByUserTaste().toData()
+    }
+
+    suspend fun fetchFilteredNovelResult(
+        genres: Array<String>?,
+        isCompleted: Boolean?,
+        novelRating: Float?,
+        keywordIds: Array<Int>?,
+        page: Int,
+        size: Int,
+    ): ExploreResultEntity {
+        val result = novelApi.getFilteredNovelResult(
+            genres = genres,
+            isCompleted = isCompleted,
+            novelRating = novelRating,
+            keywordIds = keywordIds,
+            page = page,
+            size = size,
+        )
+
+        return result.toData()
+            .also {
+                _cachedDetailExploreResult.addAll(it.novels)
+                cachedDetailExploreIsLoadable = result.isLoadable
+            }
+            .copy(
+                isLoadable = cachedDetailExploreIsLoadable,
+                novels = cachedDetailExploreResult,
+            )
+    }
+
+    fun clearCachedDetailExploreResult() {
+        _cachedDetailExploreResult.clear()
+        cachedDetailExploreIsLoadable = true
     }
 }

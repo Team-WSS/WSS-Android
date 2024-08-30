@@ -10,7 +10,7 @@ data class CommentResponseDto(
     @SerialName("commentContent")
     val commentContent: String,
     @SerialName("commentId")
-    val commentId: Int,
+    val commentId: Long,
     @SerialName("createdDate")
     val createdDate: String,
     @SerialName("isModified")
@@ -20,5 +20,5 @@ data class CommentResponseDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("userId")
-    val userId: Int,
+    val userId: Long,
 )

@@ -19,7 +19,7 @@ import com.teamwss.websoso.data.remote.response.UserInterestFeedsResponseDto
 fun FeedsResponseDto.toData(): FeedsEntity = FeedsEntity(
     category = category,
     isLoadable = isLoadable,
-    feeds = feeds.map { it.toData() },
+    feeds = feeds.map { it.toData() }
 )
 
 fun FeedResponseDto.toData(): FeedEntity = FeedEntity(
@@ -53,7 +53,7 @@ fun CommentsResponseDto.toData(): CommentsEntity = CommentsEntity(
 
 fun CommentResponseDto.toData(): CommentEntity = CommentEntity(
     user = UserEntity(
-        id = userId.toLong(),
+        id = userId,
         nickname = nickname,
         avatarImage = avatarImage,
     ),

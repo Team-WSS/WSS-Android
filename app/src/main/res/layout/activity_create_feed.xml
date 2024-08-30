@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.teamwss.websoso.ui.createFeed.CreateFeedViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="24dp"
+        tools:context=".ui.createFeed.CreateFeedActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_create_feed_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_create_feed_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:padding="10dp"
+                android:src="@drawable/btn_explore_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_create_feed_done_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:src="@drawable/ic_more"
+                android:text="@string/tv_create_feed_done_button"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/bg_create_feed_done_button_selector"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_create_feed_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/tv_create_feed_category"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_create_feed_toolbar" />
+
+        <ImageView
+            android:id="@+id/iv_create_feed_star_essential"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_star_essential"
+            app:layout_constraintStart_toEndOf="@+id/tv_create_feed_category"
+            app:layout_constraintTop_toTopOf="@+id/tv_create_feed_category" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_multiple_choice_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@string/tv_create_feed_multiple_choice_guide"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_create_feed_category"
+            app:layout_constraintStart_toEndOf="@+id/iv_create_feed_star_essential"
+            app:layout_constraintTop_toTopOf="@+id/tv_create_feed_category" />
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+            android:id="@+id/wcg_detail_explore_info_genre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            app:chipSpacingHorizontal="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_category"
+            app:singleSelection="false" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_write_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="44dp"
+            android:text="@string/tv_create_feed_write_content"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wcg_detail_explore_info_genre" />
+
+        <ImageView
+            android:id="@+id/iv_create_feed_star_essential2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_star_essential"
+            app:layout_constraintStart_toEndOf="@+id/tv_create_feed_write_content"
+            app:layout_constraintTop_toTopOf="@+id/tv_create_feed_write_content" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_spoiler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/tv_create_feed_spoiler"
+            android:textAppearance="@style/body4"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_create_feed_write_content"
+            app:layout_constraintEnd_toStartOf="@+id/sc_create_feed_toggle"
+            app:layout_constraintTop_toTopOf="@+id/tv_create_feed_write_content" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_create_feed_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:checked="@={viewModel.isSpoiled}"
+            android:thumb="@drawable/bg_create_feed_toggle_thumb"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_create_feed_spoiler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_create_feed_spoiler"
+            app:track="@drawable/bg_create_feed_toggle" />
+
+        <EditText
+            android:id="@+id/et_create_feed_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_create_feed_edit_text_radius_14dp"
+            android:gravity="top"
+            android:hint="@string/et_create_feed_content_hint"
+            android:maxLength="2000"
+            android:maxLines="16"
+            android:minLines="16"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="32dp"
+            android:scrollbars="vertical"
+            android:text="@={viewModel.content}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_200_AEADB3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sc_create_feed_toggle" />
+
+        <TextView
+            android:id="@+id/tv_create_feed_characters_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="12dp"
+            android:text=""
+            app:layout_constraintBottom_toBottomOf="@+id/et_create_feed_content"
+            app:layout_constraintEnd_toEndOf="@+id/et_create_feed_content" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

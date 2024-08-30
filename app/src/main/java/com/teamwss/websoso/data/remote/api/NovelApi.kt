@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.remote.api
 
+import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.PopularNovelsResponseDto
@@ -9,6 +10,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface NovelApi {
 
@@ -35,9 +37,26 @@ interface NovelApi {
     @GET("soso-picks")
     suspend fun getSosoPicks(): SosoPicksResponseDto
 
+    @GET("novels")
+    suspend fun getNormalExploreResult(
+        @Query("query") searchWord: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): ExploreResultResponseDto
+
     @GET("novels/popular")
     suspend fun getPopularNovels(): PopularNovelsResponseDto
 
     @GET("novels/taste")
     suspend fun getRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteResponseDto
+
+    @GET("novels/filtered")
+    suspend fun getFilteredNovelResult(
+        @Query("genres") genres: Array<String>?,
+        @Query("isCompleted") isCompleted: Boolean?,
+        @Query("novelRating") novelRating: Float?,
+        @Query("keywordIds") keywordIds: Array<Int>?,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): ExploreResultResponseDto
 }
