@@ -15,7 +15,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentNovelFeedBinding
@@ -221,7 +221,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         binding.sptrNovelFeedRefresh.apply {
             setRefreshViewParams(
                 params = ViewGroup.LayoutParams(
-                    30.toIntScaledByPx(), 30.toIntScaledByPx(),
+                    30.toIntPxFromDp(), 30.toIntPxFromDp(),
                 )
             )
             setLottieAnimation("lottie_websoso_loading.json")
@@ -234,7 +234,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     private fun setupBackgorundView() {
         val backgroundView = binding.viewNovelFeedBackground
         val layoutParams = backgroundView.layoutParams
-        layoutParams.height = (resources.displayMetrics.heightPixels - 54.toIntScaledByPx())
+        layoutParams.height = (resources.displayMetrics.heightPixels - 54.toIntPxFromDp())
         backgroundView.layoutParams = layoutParams
     }
 
