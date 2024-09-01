@@ -67,8 +67,8 @@
 
             <ImageView
                 android:id="@+id/iv_blocked_users_empty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="166dp"
+                android:layout_height="160dp"
                 android:src="@drawable/img_my_library_empty_cat"
                 app:layout_constraintBottom_toTopOf="@id/tv_blocked_users_empty"
                 app:layout_constraintEnd_toEndOf="parent"

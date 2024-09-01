@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.normalExplore
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -97,7 +98,8 @@ class NormalExploreActivity :
         }
 
         override fun onNovelInquireButtonClick() {
-            // TODO 카카오톡 채널로 연결
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(KAKAO_INQUIRE_URL))
+            startActivity(intent)
         }
     }
 
@@ -155,6 +157,7 @@ class NormalExploreActivity :
     }
 
     companion object {
+        private const val KAKAO_INQUIRE_URL = "http://pf.kakao.com/_kHxlWG"
 
         fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
     }
