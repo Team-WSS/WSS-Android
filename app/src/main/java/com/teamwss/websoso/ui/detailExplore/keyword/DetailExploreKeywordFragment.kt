@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.detailExplore.keyword
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -50,7 +52,8 @@ class DetailExploreKeywordFragment :
     private fun onDetailExploreKeywordButtonClick() = object : DetailExploreClickListener {
 
         override fun onNovelInquireButtonClick() {
-            // TODO 문의하기로 이동
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(KAKAO_INQUIRE_URL))
+            startActivity(intent)
         }
 
         override fun onDetailSearchNovelButtonClick() {
@@ -274,5 +277,9 @@ class DetailExploreKeywordFragment :
     override fun onDestroyView() {
         initSearchKeyword()
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val KAKAO_INQUIRE_URL = "http://pf.kakao.com/_kHxlWG"
     }
 }

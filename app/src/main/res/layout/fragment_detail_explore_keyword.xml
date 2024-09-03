@@ -148,6 +148,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:onClick="@{() -> onClick.onNovelInquireButtonClick()}"
             android:visibility="gone"
             app:isVisible="@{detailExploreViewModel.uiState.searchKeywordProceeding ? detailExploreViewModel.uiState.isSearchResultKeywordsEmpty : false}"
             app:layout_constraintBottom_toTopOf="@id/cl_detail_explore_keyword_reset_button"
