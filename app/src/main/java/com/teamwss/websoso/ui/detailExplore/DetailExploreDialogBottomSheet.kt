@@ -53,6 +53,7 @@ class DetailExploreDialogBottomSheet :
     private fun onReplaceFragmentButtonClick() {
         binding.tvDetailExploreInfoButton.setOnClickListener {
             switchFragment(SelectedFragmentTitle.INFO)
+            detailExploreViewModel.updateIsSearchKeywordProceeding(false)
         }
 
         binding.tvDetailExploreKeywordButton.setOnClickListener {
