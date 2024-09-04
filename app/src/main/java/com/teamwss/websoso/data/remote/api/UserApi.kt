@@ -7,6 +7,7 @@ import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
+import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
@@ -16,6 +17,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface UserApi {
 
@@ -64,4 +66,10 @@ interface UserApi {
         @Path("userId") userId: Long,
     ): OtherUserProfileResponseDto
 
+    @GET("users/{userId}/feeds")
+    suspend fun getUserFeeds(
+        @Path("userId") userId: Long,
+        @Query("lastFeedId") lastFeedId: Long,
+        @Query("size") size: Int,
+    ): UserFeedsResponseDto
 }
