@@ -50,7 +50,7 @@
     <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
 
     <!-- 상세 탐색 결과 뷰 -->
-    <string name="detail_explore_result_filter_description">가 적용됐어요</string>
+    <string name="detail_explore_result_filter_description">\u00A0적용</string>
     <string name="detail_explore_result_novel">작품</string>
     <string name="detail_explore_result_not_exist">해당하는 작품이 없어요\n검색의 범위를 더 넓혀보세요</string>
 
