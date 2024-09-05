@@ -157,7 +157,6 @@ class DetailExploreResultActivity :
     private fun navigateToNovelDetail(novelId: Long) {
         val intent = NovelDetailActivity.getIntent(this, novelId)
         startActivity(intent)
-        finish()
     }
 
     companion object {
