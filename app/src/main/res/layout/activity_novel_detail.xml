@@ -429,7 +429,8 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_primary_100_radius_14dp"
                                 android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
-                                android:gravity="center">
+                                android:gravity="center"
+                                android:onClick="@{() -> onClick.onNovelFeedWriteClick()}">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -624,6 +625,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_novel_feed_write_floating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="44dp"
+            android:contentDescription="@{null}"
+            android:elevation="40dp"
+            android:foreground="@drawable/bg_floating_write_button"
+            android:onClick="@{() -> onClick.onNovelFeedWriteClick()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_novel_detail"

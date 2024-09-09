@@ -111,7 +111,7 @@
         </com.simform.refresh.SSPullToRefreshLayout>
 
         <ImageView
-            android:id="@+id/iv_feed_write_floating_button"
+            android:id="@+id/fab_novel_feed_write_floating_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"

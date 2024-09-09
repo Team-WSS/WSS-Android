@@ -10,4 +10,6 @@ interface NovelDetailClickListener {
     fun onNavigateToNovelRatingClick(readStatus: ReadStatus)
 
     fun onNovelCoverClick(novelImageUrl: String)
+
+    fun onNovelFeedWriteClick()
 }

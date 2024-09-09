@@ -3,12 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="onWriteClick"
-            type="kotlin.jvm.functions.Function0" />
-    </data>
+    <data />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_novel_feed"
@@ -82,18 +77,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_novel_feed_none" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageView
-                android:id="@+id/iv_feed_write_floating_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="44dp"
-                android:elevation="40dp"
-                android:onClick="@{()->onWriteClick.invoke()}"
-                android:src="@drawable/bg_floating_write_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
 
             <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
                 android:id="@+id/wll_novel_feed"
