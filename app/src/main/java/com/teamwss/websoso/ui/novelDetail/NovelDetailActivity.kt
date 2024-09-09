@@ -37,7 +37,7 @@ class NovelDetailActivity :
     }
     private var menuPopupWindow: PopupWindow? = null
     private var tooltipPopupWindow: PopupWindow? = null
-    private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 1L) } // TODO: 1L -> 0L
+    private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

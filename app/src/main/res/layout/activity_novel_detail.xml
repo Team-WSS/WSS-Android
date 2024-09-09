@@ -512,7 +512,21 @@
                                 android:src="@drawable/ic_novel_detail_navigate_back"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tv_novel_detail_app_bar_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{novelDetailViewModel.novelDetailModel.novel.novelTitle}"
+                                android:textAppearance="@style/title2"
+                                android:textColor="@color/black"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="당신의 이해를 돕기 위하여" />
 
                             <ImageView
                                 android:id="@+id/iv_novel_detail_menu"
@@ -524,7 +538,8 @@
                                 android:src="@drawable/ic_novel_detail_menu"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/black" />
 
                             <View
                                 android:layout_width="0dp"
