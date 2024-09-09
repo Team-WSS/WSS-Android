@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onExitClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="coverImageUrl"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        tools:background="@color/black">
+
+        <ImageView
+            android:id="@+id/iv_novel_rating_exit"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="10dp"
+            android:onClick="@{() -> onExitClick.invoke()}"
+            android:src="@drawable/ic_novel_rating_exit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="50dp"
+            android:scaleType="fitCenter"
+            app:cornerRadius="@{30f}"
+            app:layout_constraintDimensionRatio="144:200"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_novel_rating_exit"
+            app:loadImageUrl="@{coverImageUrl}"
+            tools:background="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

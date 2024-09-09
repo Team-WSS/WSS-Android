@@ -205,6 +205,11 @@ class NovelDetailActivity :
         override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
             navigateToNovelRating(readStatus)
         }
+
+        override fun onNovelCoverClick(novelImageUrl: String) {
+            NovelDetailCoverDialogFragment.newInstance(novelImageUrl)
+                .show(supportFragmentManager, NovelDetailCoverDialogFragment.TAG)
+        }
     }
 
     private fun navigateToNovelRating(readStatus: ReadStatus) {

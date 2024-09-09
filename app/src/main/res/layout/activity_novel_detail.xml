@@ -82,6 +82,7 @@
                             android:layout_height="217dp"
                             android:layout_marginHorizontal="108dp"
                             android:layout_marginTop="68dp"
+                            android:onClick="@{() -> onClick.onNovelCoverClick(novelDetailViewModel.novelDetailModel.novel.novelImage)}"
                             android:scaleType="fitCenter"
                             app:cornerRadius="@{30f}"
                             app:layout_constraintDimensionRatio="144:200"
