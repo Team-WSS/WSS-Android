@@ -121,7 +121,7 @@ class NovelDetailActivity :
     private fun setupViewPager() {
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
         setupTabLayout()
-        setupWriteNovelFeedButton()
+        setupOnPageChangeCallback()
     }
 
     private fun setupTabLayout() {
@@ -134,15 +134,19 @@ class NovelDetailActivity :
         }.attach()
     }
 
-    private fun setupWriteNovelFeedButton() {
+    private fun setupOnPageChangeCallback() {
         binding.vpNovelDetail.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                binding.fabNovelFeedWriteFloatingButton.visibility = when (position) {
-                    FEED_FRAGMENT_PAGE -> View.VISIBLE
-                    else -> View.GONE
-                }
+                updateNovelFeedWriteButtonVisibility(position)
             }
         })
+    }
+
+    private fun updateNovelFeedWriteButtonVisibility(position: Int) {
+        binding.fabNovelFeedWriteFloatingButton.visibility = when (position) {
+            FEED_FRAGMENT_PAGE -> View.VISIBLE
+            else -> View.GONE
+        }
     }
 
     private fun setupActivityResultLauncher() {
