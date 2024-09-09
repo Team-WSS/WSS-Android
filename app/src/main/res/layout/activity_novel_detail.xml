@@ -51,30 +51,36 @@
 
                         <ImageView
                             android:layout_width="0dp"
-                            android:layout_height="644dp"
+                            android:layout_height="0dp"
                             android:scaleType="centerCrop"
                             app:blurRadius="@{4}"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:loadImageUrl="@{novelDetailViewModel.novelDetailModel.novel.novelImage}" />
 
                         <View
-                            android:id="@+id/view_novel_detail_cover_background"
+                            android:id="@+id/view_novel_detail_cover_background_top"
                             android:layout_width="0dp"
-                            android:layout_height="248dp"
+                            android:layout_height="0dp"
                             android:background="@drawable/bg_novel_detail_cover_background"
+                            app:layout_constraintBottom_toTopOf="@id/view_novel_detail_cover_background_bottom"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_weight="124" />
 
                         <View
+                            android:id="@+id/view_novel_detail_cover_background_bottom"
                             android:layout_width="0dp"
-                            android:layout_height="396dp"
+                            android:layout_height="0dp"
                             android:background="@color/gray_50_F4F5F8"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_cover_background" />
+                            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_cover_background_top"
+                            app:layout_constraintVertical_weight="198" />
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover"

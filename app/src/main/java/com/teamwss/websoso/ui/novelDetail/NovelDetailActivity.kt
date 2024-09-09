@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class NovelDetailActivity :
     BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
+    private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
 
     private var _novelDetailMenuPopupBinding: MenuNovelDetailPopupBinding? = null
     private val novelDetailMenuPopupBinding get() = _novelDetailMenuPopupBinding ?: error("")
@@ -40,6 +43,8 @@ class NovelDetailActivity :
     private var tooltipPopupWindow: PopupWindow? = null
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
+    private lateinit var novelRatingLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,6 +54,7 @@ class NovelDetailActivity :
         setupObserver()
         setupWebsosoLoadingLayout()
         setupViewPager()
+        setupActivityResultLauncher()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
@@ -80,7 +86,10 @@ class NovelDetailActivity :
 
     private fun deleteUserNovel() {
         novelDetailViewModel.deleteUserNovel(novelId)
+        novelInfoViewModel.updateNovelInfo(novelId)
+
         binding.tgNovelDetailReadStatus.clearChecked()
+
         showWebsosoSnackBar(
             view = binding.root,
             message = getString(R.string.novel_detail_remove_result),
@@ -101,6 +110,14 @@ class NovelDetailActivity :
                 else -> throw IllegalArgumentException()
             }
         }.attach()
+    }
+
+    private fun setupActivityResultLauncher() {
+        novelRatingLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                novelInfoViewModel.updateNovelInfo(novelId)
+            }
+        }
     }
 
     private fun setupObserver() {
@@ -219,7 +236,7 @@ class NovelDetailActivity :
             novelId = novelId,
             readStatus = readStatus,
         )
-        startActivity(intent)
+        novelRatingLauncher.launch(intent)
     }
 
     override fun onResume() {
