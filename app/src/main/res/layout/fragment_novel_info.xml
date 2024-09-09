@@ -146,7 +146,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:paddingTop="44dp"
                 android:paddingBottom="70dp"
                 app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.userReviewExist}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -158,8 +157,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="44dp"
                     android:text="@string/novel_info_rating_title"
                     android:textAppearance="@style/title1"
+                    app:isVisible="@{novelInfoViewModel.uiState.isKeywordsExist || novelInfoViewModel.uiState.novelInfoModel.isAttractivePointsExist}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -170,6 +171,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_novel_info_gray_50_radius_12dp"
+                    app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.isAttractivePointsExist}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_novel_info_charm_points_title" />
@@ -179,6 +181,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/body2"
+                    app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.isAttractivePointsExist}"
                     app:layout_constraintBottom_toBottomOf="@id/view_novel_info_reviews_background"
                     app:layout_constraintEnd_toEndOf="@id/view_novel_info_reviews_background"
                     app:layout_constraintStart_toStartOf="@id/view_novel_info_reviews_background"
@@ -209,6 +212,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="40dp"
                     android:background="@color/gray_50_F4F5F8"
+                    app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.isAttractivePointsExist}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/hsv_novel_info_keyword" />

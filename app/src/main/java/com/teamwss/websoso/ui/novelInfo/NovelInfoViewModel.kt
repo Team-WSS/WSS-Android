@@ -32,6 +32,7 @@ class NovelInfoViewModel @Inject constructor(
                     novelInfoModel = novelInfo.toUi(),
                     platforms = PlatformsModel.formatPlatforms(novelInfo.platforms),
                     keywords = novelInfo.keywords.map { it.toUi() },
+                    isKeywordsExist = novelInfo.keywords.isNotEmpty(),
                     loading = false,
                 )
             }.onFailure {
