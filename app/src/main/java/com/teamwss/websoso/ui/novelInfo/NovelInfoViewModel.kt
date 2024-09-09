@@ -34,6 +34,7 @@ class NovelInfoViewModel @Inject constructor(
                     keywords = novelInfo.keywords.map { it.toUi() },
                     isKeywordsExist = novelInfo.keywords.isNotEmpty(),
                     loading = false,
+                    error = false,
                 )
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
