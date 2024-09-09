@@ -21,33 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="644dp"
-            android:scaleType="centerCrop"
-            app:blurRadius="@{4}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:loadImageUrl="@{novelDetailViewModel.novelDetailModel.novel.novelImage}" />
-
-        <View
-            android:id="@+id/view_novel_detail_cover_background"
-            android:layout_width="0dp"
-            android:layout_height="248dp"
-            android:background="@drawable/bg_novel_detail_cover_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="396dp"
-            android:background="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_cover_background" />
-
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/cl_novel_detail"
             android:layout_width="0dp"
@@ -74,14 +47,41 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_novel_detail_header"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="68dp">
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="644dp"
+                            android:scaleType="centerCrop"
+                            app:blurRadius="@{4}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:loadImageUrl="@{novelDetailViewModel.novelDetailModel.novel.novelImage}" />
+
+                        <View
+                            android:id="@+id/view_novel_detail_cover_background"
+                            android:layout_width="0dp"
+                            android:layout_height="248dp"
+                            android:background="@drawable/bg_novel_detail_cover_background"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="396dp"
+                            android:background="@color/gray_50_F4F5F8"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_cover_background" />
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover"
                             android:layout_width="0dp"
                             android:layout_height="217dp"
                             android:layout_marginHorizontal="108dp"
+                            android:layout_marginTop="68dp"
                             android:scaleType="fitCenter"
                             app:cornerRadius="@{30f}"
                             app:layout_constraintDimensionRatio="144:200"
