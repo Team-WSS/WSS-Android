@@ -310,8 +310,9 @@
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_novel_detail_watching"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="100dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:backgroundTint="@color/transparent"
                                     android:checked="@{novelDetailViewModel.novelDetailModel.userNovel.readStatus == ReadStatus.WATCHING}"
                                     android:clickable="false"
@@ -327,8 +328,9 @@
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_novel_detail_watched"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="100dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:backgroundTint="@color/transparent"
                                     android:checked="@{novelDetailViewModel.novelDetailModel.userNovel.readStatus == ReadStatus.WATCHED}"
                                     android:clickable="false"
@@ -344,8 +346,9 @@
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_novel_detail_quit"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="100dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:backgroundTint="@color/transparent"
                                     android:checked="@{novelDetailViewModel.novelDetailModel.userNovel.readStatus == ReadStatus.QUIT}"
                                     android:clickable="false"
