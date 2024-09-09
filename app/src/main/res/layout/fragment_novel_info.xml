@@ -388,17 +388,18 @@
                 android:paddingHorizontal="20dp"
                 android:paddingTop="44dp"
                 android:paddingBottom="70dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:isVisible="@{!novelInfoViewModel.uiState.novelInfoModel.userReviewExist}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider">
+                app:layout_constraintTop_toBottomOf="@id/view_novel_info_platforms_divider"
+                tools:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_novel_info_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="작품 정보"
+                    android:text="@string/novel_info_rating_title"
                     android:textAppearance="@style/title1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

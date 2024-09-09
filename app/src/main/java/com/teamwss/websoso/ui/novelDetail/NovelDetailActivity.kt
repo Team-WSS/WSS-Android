@@ -21,6 +21,7 @@ import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
+import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
