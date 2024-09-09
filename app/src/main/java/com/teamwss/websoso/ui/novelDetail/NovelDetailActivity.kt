@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.novelDetail
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -66,8 +67,15 @@ class NovelDetailActivity :
     private fun setupPopupBinding() {
         _novelDetailMenuPopupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
         novelDetailMenuPopupBinding.novelDetailViewModel = novelDetailViewModel
+        novelDetailMenuPopupBinding.reportError = ::reportError
         novelDetailMenuPopupBinding.deleteUserNovel = ::showDeleteUserNovelAlertDialog
         novelDetailMenuPopupBinding.lifecycleOwner = this
+    }
+
+    private fun reportError() {
+        val reportUrl = getString(R.string.novel_detail_report_url)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reportUrl))
+        startActivity(intent)
     }
 
     private fun showDeleteUserNovelAlertDialog() {
