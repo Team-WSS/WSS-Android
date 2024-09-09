@@ -401,8 +401,8 @@
                                 android:onClick="@{() -> novelDetailViewModel.updateUserInterest(novelDetailViewModel.novelDetailModel.novel.novelId)}">
 
                                 <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="14dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:src="@drawable/ic_novel_detail_interest_selector" />
 
                                 <TextView
