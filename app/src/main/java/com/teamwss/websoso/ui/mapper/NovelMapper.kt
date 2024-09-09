@@ -35,7 +35,7 @@ fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
             novelId = novelId,
             novelTitle = novel.novelTitle,
             novelImage = novel.novelImage,
-            novelGenres = novel.novelGenres.map { Category.from(it) },
+            novelGenres = novel.novelGenres,
             novelGenreImage = novel.novelGenreImage,
             isNovelCompleted = novel.isNovelCompleted,
             author = novel.author,
