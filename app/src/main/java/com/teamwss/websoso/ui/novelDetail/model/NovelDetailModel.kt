@@ -34,6 +34,7 @@ data class NovelDetailModel(
         val isNovelCompletedText: String = if (isNovelCompleted) "완결작" else "연재중",
         val author: String,
         val formattedNovelDetailSummary: String = "$formattedNovelGenres ・ $isNovelCompletedText ・ $author",
+        val isNovelNotBlank: Boolean = novelTitle.isNotBlank() && novelImage.isNotBlank() && author.isNotBlank(),
     )
 
     data class UserRatingModel(

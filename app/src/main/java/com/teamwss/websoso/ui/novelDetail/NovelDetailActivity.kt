@@ -104,7 +104,7 @@ class NovelDetailActivity :
 
     private fun setupObserver() {
         novelDetailViewModel.novelDetailModel.observe(this) { novelDetail ->
-            when (novelDetail.novel.novelTitle.isNotBlank()) {
+            when (novelDetail.novel.isNovelNotBlank) {
                 true -> {
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
                     binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest

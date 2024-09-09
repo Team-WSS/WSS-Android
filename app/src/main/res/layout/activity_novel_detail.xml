@@ -296,6 +296,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
                                 android:divider="@color/gray_70_DFDFE3"
+                                android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                                 android:gravity="center"
                                 android:paddingBottom="12dp"
                                 android:showDividers="middle"
@@ -391,6 +392,7 @@
                                 android:layout_marginEnd="4dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_interest_selector"
+                                android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                                 android:gravity="center"
                                 android:onClick="@{() -> novelDetailViewModel.updateUserInterest(novelDetailViewModel.novelDetailModel.novel.novelId)}">
 
@@ -416,6 +418,7 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_primary_100_radius_14dp"
+                                android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                                 android:gravity="center">
 
                                 <ImageView
@@ -569,6 +572,7 @@
                 android:id="@+id/vp_novel_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:isVisible="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -600,6 +604,7 @@
             android:id="@+id/wll_novel_detail"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
