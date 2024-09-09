@@ -77,8 +77,8 @@ class NovelDetailActivity :
     }
 
     private fun reportError() {
-        val reportUrl = getString(R.string.novel_detail_report_url)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reportUrl))
+        val reportErrorUrl = getString(R.string.novel_detail_report_url)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reportErrorUrl))
         startActivity(intent)
     }
 
