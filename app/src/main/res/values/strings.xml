@@ -58,7 +58,7 @@
     <string name="novel_detail_review">나도 한마디</string>
     <string name="novel_detail_interest">관심</string>
     <string name="novel_detail_info">정보</string>
-    <string name="novel_detail_feed">피드</string>
+    <string name="novel_detail_feed">수다</string>
     <string name="novel_detail_report_error">오류 제보</string>
     <string name="novel_detail_remove_evaluate">평가 삭제</string>
     <string name="novel_detail_remove_evaluate_alert_title">평가를 모두 삭제할까요?</string>
@@ -85,6 +85,9 @@
     <string name="novel_info_read_status_quit_count">%d명이 작품을\n하차했어요</string>
     <string name="novel_info_user_unit">명</string>
     <string name="novel_info_charm_points_body">%s가 매력적인 작품이에요</string>
+
+    <!-- 작품 피드 -->
+    <string name="novel_feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>
