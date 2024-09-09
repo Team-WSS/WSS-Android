@@ -31,7 +31,7 @@ fun NovelDetailResponseDto.toData(): NovelDetailEntity {
         NovelDetailEntity.NovelEntity(
             novelTitle = novelTitle,
             novelImage = novelImage,
-            novelGenres = novelGenres.split(","),
+            novelGenres = novelGenres.split("/"),
             novelGenreImage = novelGenreImage,
             isNovelCompleted = isNovelCompleted,
             author = author,
