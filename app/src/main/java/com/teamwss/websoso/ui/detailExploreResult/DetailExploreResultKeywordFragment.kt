@@ -56,6 +56,11 @@ class DetailExploreResultKeywordFragment :
 
         override fun onDetailSearchNovelButtonClick() {
             detailExploreResultViewModel.updateSearchResult(true)
+
+            val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(
+                DetailExploreResultActivity.DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
+            ) as? DetailExploreResultDialogBottomSheet
+            bottomSheet?.dismiss()
         }
 
         override fun onKeywordResetButtonClick() {
@@ -237,7 +242,8 @@ class DetailExploreResultKeywordFragment :
     }
 
     private fun setupBackButtonListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (binding.wsetDetailExploreKeywordSearch.hasFocus()) {

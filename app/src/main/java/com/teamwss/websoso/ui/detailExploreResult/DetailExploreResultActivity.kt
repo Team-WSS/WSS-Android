@@ -162,7 +162,7 @@ class DetailExploreResultActivity :
     companion object {
         private const val FULL_SPAN = 2
         private const val HALF_SPAN = 1
-        private const val DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG =
+        const val DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG =
             "DetailExploreResultDialogBottomSheet"
         private const val DETAIL_EXPLORE_FILTERED_INFO = "DetailExploreFilteredInfo"
 
