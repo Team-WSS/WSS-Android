@@ -1,14 +1,11 @@
 package com.teamwss.websoso.ui.mapper
 
-import com.teamwss.websoso.data.model.MyActivitiesEntity
+import com.teamwss.websoso.data.model.UserFeedsEntity
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 
-fun MyActivitiesEntity.MyActivityEntity.toUi(): ActivityModel =
+fun UserFeedsEntity.UserFeedEntity.toUi(): ActivityModel =
     ActivityModel(
         feedId = feedId,
-        userId = userId,
-        profileImg = profileImg,
-        nickname = nickname,
         isSpoiler = isSpoiler,
         feedContent = feedContent,
         createdDate = ActivityModel.formatDate(createdDate),
@@ -23,7 +20,7 @@ fun MyActivitiesEntity.MyActivityEntity.toUi(): ActivityModel =
         relevantCategories = ActivityModel.translateGenres(relevantCategories)
     )
 
-fun List<MyActivitiesEntity.MyActivityEntity>.toUi(): List<ActivityModel> {
+fun List<UserFeedsEntity.UserFeedEntity>.toUi(): List<ActivityModel> {
     return map { it.toUi() }
 }
 
