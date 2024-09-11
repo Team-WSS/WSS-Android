@@ -21,20 +21,20 @@ class MyActivityDetailViewModel @Inject constructor(
     val myActivity: LiveData<List<ActivityModel>> get() = _myActivity
 
     init {
-        updateMyActivities()
+//        updateMyActivities()
     }
 
-    private fun updateMyActivities() {
-        viewModelScope.launch {
-            runCatching {
-                myActivityRepository.getUserFeed()
-            }.mapCatching { activities ->
-                activities.toUi().take(5)
-            }.onSuccess { mappedActivities ->
-                _myActivity.value = mappedActivities
-            }.onFailure { exception ->
-                Log.e("MyActivityViewModel", "Failed to load activities", exception)
-            }
-        }
-    }
+//    private fun updateMyActivities() {
+//        viewModelScope.launch {
+//            runCatching {
+//                myActivityRepository.getUserFeed()
+//            }.mapCatching { activities ->
+//                activities.toUi().take(5)
+//            }.onSuccess { mappedActivities ->
+//                _myActivity.value = mappedActivities
+//            }.onFailure { exception ->
+//                Log.e("MyActivityViewModel", "Failed to load activities", exception)
+//            }
+//        }
+//    }
 }
