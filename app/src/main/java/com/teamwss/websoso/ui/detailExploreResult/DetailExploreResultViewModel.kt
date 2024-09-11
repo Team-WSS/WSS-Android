@@ -84,25 +84,25 @@ class DetailExploreResultViewModel @Inject constructor(
 
         _selectedGenres.value?.let { genres ->
             if (genres.isNotEmpty()) {
-                appliedFilters.add("장르")
+                appliedFilters.add(GENRES_LABEL)
             }
         }
 
-        _isNovelCompleted.value?.let { status ->
-            appliedFilters.add("연재상태")
+        _isNovelCompleted.value?.let {
+            appliedFilters.add(NOVEL_COMPLETED_LABEL)
         }
 
-        _selectedRating.value?.let { rating ->
-            appliedFilters.add("별점")
+        _selectedRating.value?.let {
+            appliedFilters.add(RATING_LABEL)
         }
 
         _selectedKeywordIds.value?.let { keywords ->
             if (keywords.isNotEmpty()) {
-                appliedFilters.add("키워드")
+                appliedFilters.add(KEYWORDS_LABEL)
             }
         }
 
-        _appliedFiltersMessage.value = appliedFilters.joinToString(", ")
+        _appliedFiltersMessage.value = appliedFilters.joinToString(FILTER_SEPARATOR)
     }
 
     private fun isInfoChipSelectedEnabled() {
@@ -330,5 +330,13 @@ class DetailExploreResultViewModel @Inject constructor(
         _isBottomSheetOpen.value = isOpen
 
         if (!isOpen) updateMessage()
+    }
+
+    companion object {
+        private const val GENRES_LABEL = "장르"
+        private const val NOVEL_COMPLETED_LABEL = "연재상태"
+        private const val RATING_LABEL = "별점"
+        private const val KEYWORDS_LABEL = "키워드"
+        private const val FILTER_SEPARATOR = ", "
     }
 }
