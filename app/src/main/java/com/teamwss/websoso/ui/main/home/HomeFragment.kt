@@ -45,8 +45,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
         bindViewModel()
         setupAdapter()
+        setupItemDecoration()
         setupUserInterestViewPager()
-        setupPopularNovelViewPager()
         setupObserver()
         setupDotsIndicator()
         onPostInterestNovelClick()
@@ -61,27 +61,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setupAdapter() {
         with(binding) {
-            vpHomeTodayPopularNovel.adapter = popularNovelsAdapter
+            rvHomeTodayPopularNovel.adapter = popularNovelsAdapter
             vpHomePopularFeed.adapter = popularFeedsAdapter
             vpUserInterestFeed.adapter = userInterestFeedAdapter
             rvRecommendNovelByUserTaste.adapter = recommendedNovelsByUserTasteAdapter
         }
     }
 
-    private fun setupPopularNovelViewPager() {
-        val recyclerView = binding.vpHomeTodayPopularNovel.getChildAt(0) as RecyclerView
-
-        val paddingPx = TODAY_POPULAR_NOVEL_PADDING.toIntPxFromDp()
-        recyclerView.apply {
-            setPadding(paddingPx, 0, paddingPx, 0)
-            clipToPadding = false
+    private fun setupItemDecoration() {
+        with(binding) {
+            rvHomeTodayPopularNovel.addItemDecoration(HomeCustomItemDecoration(TODAY_POPULAR_NOVEL_MARGIN))
         }
-
-        binding.vpHomeTodayPopularNovel.setPageTransformer(
-            MarginPageTransformer(
-                TODAY_POPULAR_NOVEL_MARGIN
-            )
-        )
     }
 
     private fun setupUserInterestViewPager() {
@@ -212,8 +202,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     companion object {
-        private const val TODAY_POPULAR_NOVEL_PADDING = 20
-        private const val TODAY_POPULAR_NOVEL_MARGIN = 20
+        private const val TODAY_POPULAR_NOVEL_MARGIN = 15
 
         private const val USER_INTEREST_PADDING = 20
         private const val USER_INTEREST_MARGIN = 20

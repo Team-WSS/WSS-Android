@@ -16,7 +16,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
         android:background="@drawable/bg_popular_novel_gradient_radius_14dp"
         android:onClick="@{() -> onClick.invoke(popularNovel.novelId)}">
 
