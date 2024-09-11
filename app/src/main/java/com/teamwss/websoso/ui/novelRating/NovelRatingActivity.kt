@@ -241,6 +241,12 @@ class NovelRatingActivity :
         private const val NOVEL_ID = "NOVEL_ID"
         private const val READ_STATUS = "READ_STATUS"
 
+        fun getIntent(context: Context, novelId: Long): Intent {
+            return Intent(context, NovelRatingActivity::class.java).apply {
+                putExtra(NOVEL_ID, novelId)
+            }
+        }
+
         fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
