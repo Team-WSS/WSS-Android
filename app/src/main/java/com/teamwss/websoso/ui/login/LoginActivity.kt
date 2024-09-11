@@ -79,7 +79,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     }
 
     companion object {
-        private const val PAGE_SCROLL_DELAY = 3500L
+        private const val PAGE_SCROLL_DELAY = 2000L
 
         fun getIntent(context: Context): Intent {
             return Intent(context, LoginActivity::class.java).apply {
