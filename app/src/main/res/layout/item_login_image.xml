@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/iv_login_image_item"
             android:layout_width="360dp"
-            android:layout_height="514dp"
+            android:layout_height="428dp"
             android:scaleType="centerCrop"
             app:imageResource="@{imageRes}"
             app:layout_constraintBottom_toBottomOf="parent"
