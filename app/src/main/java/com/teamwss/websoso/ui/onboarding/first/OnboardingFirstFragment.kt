@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.onboarding.first
 
 import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
@@ -39,8 +40,12 @@ class OnboardingFirstFragment :
     }
 
     private fun hideKeyboard() {
-        view?.setOnClickListener {
-            it.hideKeyboard()
+        view?.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                v.hideKeyboard()
+                v.clearFocus()
+            }
+            false
         }
     }
 
