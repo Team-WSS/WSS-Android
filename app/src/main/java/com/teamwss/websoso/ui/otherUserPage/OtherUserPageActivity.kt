@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.otherUserPage
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
@@ -13,14 +14,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OtherUserPageActivity :
     BaseActivity<ActivityOtherUserPageBinding>(R.layout.activity_other_user_page) {
+    private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
     private val viewPagerAdapter: OtherUserPageViewPagerAdapter by lazy {
         OtherUserPageViewPagerAdapter(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        bindViewModel()
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
+    }
+
+    private fun bindViewModel() {
+        binding.otherUserPageViewModel = otherUserPageViewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setUpViewPager() {
