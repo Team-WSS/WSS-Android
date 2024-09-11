@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.view.hideKeyboard
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.FragmentOnboardingFirstBinding
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
@@ -25,6 +26,7 @@ class OnboardingFirstFragment :
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
+        hideKeyboard()
         setupFocusChangeListener()
         observeInputTypeChanges()
         observeInputNicknameChanges()
@@ -34,6 +36,12 @@ class OnboardingFirstFragment :
     private fun bindViewModel() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+    }
+
+    private fun hideKeyboard() {
+        view?.setOnClickListener {
+            it.hideKeyboard()
+        }
     }
 
     private fun setupFocusChangeListener() {
