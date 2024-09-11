@@ -76,7 +76,7 @@ class MyLibraryViewModel @Inject constructor(
     }
 
     private fun getUserId(): Long {
-        return 1L
+        return 2L
     }
 
     fun updateToggleGenresVisibility() {
