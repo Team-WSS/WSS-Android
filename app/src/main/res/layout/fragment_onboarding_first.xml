@@ -63,6 +63,7 @@
                     android:hint="닉네임"
                     android:maxLength="10"
                     android:text="@={viewModel.currentNicknameInput}"
+                    android:textAppearance="@style/body2"
                     android:textColorHint="@color/gray_200_AEADB3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/iv_onboarding_first_nickname_input_clear"
