@@ -35,7 +35,6 @@ class DetailExploreResultViewModel @Inject constructor(
     val isNovelCompleted: LiveData<Boolean?> get() = _isNovelCompleted
 
     private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
-    val selectedStatus: LiveData<SeriesStatus?> get() = _selectedSeriesStatus
 
     private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
     val selectedRating: LiveData<Float?> get() = _selectedRating
@@ -208,6 +207,7 @@ class DetailExploreResultViewModel @Inject constructor(
 
     fun updateSelectedSeriesStatus(status: SeriesStatus?) {
         _selectedSeriesStatus.value = status
+        _isNovelCompleted.value = status?.isCompleted
     }
 
     fun updateSelectedRating(rating: Float?) {
@@ -219,9 +219,8 @@ class DetailExploreResultViewModel @Inject constructor(
             runCatching {
                 keywordRepository.fetchKeywords(searchWord)
             }.onSuccess { keywordsList ->
-                val categoriesModel = CategoriesModel(
-                    categories = keywordsList.categories.map { it.toUi() }
-                )
+                val categoriesModel =
+                    CategoriesModel(categories = keywordsList.categories.map { it.toUi() })
 
                 val selectedKeywordIds = selectedKeywordIds.value.orEmpty()
 
@@ -257,7 +256,7 @@ class DetailExploreResultViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = true
+                    error = true,
                 )
             }
         }
@@ -276,10 +275,15 @@ class DetailExploreResultViewModel @Inject constructor(
             category.copy(keywords = updatedKeywords)
         }
 
+        val selectedKeywordIds = updatedCategories.flatMap { category ->
+            category.keywords.filter { it.isSelected }.map { it.keywordId }
+        }
+
         val isAnyKeywordSelected = updatedCategories.any { category ->
             category.keywords.any { it.isSelected }
         }
 
+        _selectedKeywordIds.value = selectedKeywordIds.toMutableList()
         _isKeywordChipSelected.value = isAnyKeywordSelected
         _uiState.value = currentUiState.copy(categories = updatedCategories)
     }
