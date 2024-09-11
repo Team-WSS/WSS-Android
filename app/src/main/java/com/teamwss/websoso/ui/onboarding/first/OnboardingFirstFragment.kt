@@ -25,6 +25,7 @@ class OnboardingFirstFragment :
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
+        setupFocusChangeListener()
         observeInputTypeChanges()
         observeInputNicknameChanges()
         onNicknameDuplicationCheckButtonClick()
@@ -33,6 +34,14 @@ class OnboardingFirstFragment :
     private fun bindViewModel() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+    }
+
+    private fun setupFocusChangeListener() {
+        binding.etOnboardingFirstNickname.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                viewModel.updateNicknameInputType(NicknameInputType.TYPING)
+            }
+        }
     }
 
     private fun observeInputNicknameChanges() {
