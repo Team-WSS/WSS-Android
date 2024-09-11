@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main.explore
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,7 @@ class ExploreViewModel @Inject constructor(
         updateSosoPicks()
     }
 
-    private fun updateSosoPicks() {
+    fun updateSosoPicks() {
         viewModelScope.launch {
             runCatching {
                 novelRepository.fetchSosoPicks()
