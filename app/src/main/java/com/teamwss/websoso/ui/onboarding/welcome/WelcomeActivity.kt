@@ -12,7 +12,14 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(R.layout.activity_w
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val nickname = intent.getStringExtra(NICKNAME_KEY) ?: "웹소소"
+
+        setWelcomeUserTextView(nickname)
         onCompleteButtonClick()
+    }
+
+    private fun setWelcomeUserTextView(nickname: String) {
+        binding.tvWelcomeHelloUser.text = getString(R.string.welcome_hello_user, nickname)
     }
 
     private fun onCompleteButtonClick() {
@@ -23,8 +30,11 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(R.layout.activity_w
     }
 
     companion object {
+        private const val NICKNAME_KEY = "nickname"
 
-        fun getIntent(context: Context): Intent =
-            Intent(context, WelcomeActivity::class.java)
+        fun getIntent(context: Context, nickname: String): Intent =
+            Intent(context, WelcomeActivity::class.java).apply {
+                putExtra(NICKNAME_KEY, nickname)
+            }
     }
 }
