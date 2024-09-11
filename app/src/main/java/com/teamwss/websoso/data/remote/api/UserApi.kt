@@ -62,6 +62,11 @@ interface UserApi {
         @Body userProfileEditRequestDto: UserProfileEditRequestDto,
     )
 
+    @POST("users/profile")
+    suspend fun postUserProfile(
+        @Body userProfileRequestDto: UserProfileRequestDto,
+    )
+
     @GET("users/my-profile")
     suspend fun getMyProfile(): MyProfileResponseDto
 
