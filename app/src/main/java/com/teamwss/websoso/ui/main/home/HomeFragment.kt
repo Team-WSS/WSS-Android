@@ -46,7 +46,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         bindViewModel()
         setupAdapter()
         setupItemDecoration()
-        setupUserInterestViewPager()
         setupObserver()
         setupDotsIndicator()
         onPostInterestNovelClick()
@@ -63,7 +62,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         with(binding) {
             rvHomeTodayPopularNovel.adapter = popularNovelsAdapter
             vpHomePopularFeed.adapter = popularFeedsAdapter
-            vpUserInterestFeed.adapter = userInterestFeedAdapter
+            rvUserInterestFeed.adapter = userInterestFeedAdapter
             rvRecommendNovelByUserTaste.adapter = recommendedNovelsByUserTasteAdapter
         }
     }
@@ -71,23 +70,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setupItemDecoration() {
         with(binding) {
             rvHomeTodayPopularNovel.addItemDecoration(HomeCustomItemDecoration(TODAY_POPULAR_NOVEL_MARGIN))
+            rvUserInterestFeed.addItemDecoration(HomeCustomItemDecoration(USER_INTEREST_MARGIN))
         }
-    }
-
-    private fun setupUserInterestViewPager() {
-        val recyclerView = binding.vpUserInterestFeed.getChildAt(0) as RecyclerView
-
-        val paddingPx = USER_INTEREST_PADDING.toIntPxFromDp()
-        recyclerView.apply {
-            setPadding(paddingPx, 0, paddingPx, 0)
-            clipToPadding = false
-        }
-
-        binding.vpUserInterestFeed.setPageTransformer(
-            MarginPageTransformer(
-                USER_INTEREST_MARGIN
-            )
-        )
     }
 
     private fun setupObserver() {
@@ -203,8 +187,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     companion object {
         private const val TODAY_POPULAR_NOVEL_MARGIN = 15
-
-        private const val USER_INTEREST_PADDING = 20
-        private const val USER_INTEREST_MARGIN = 20
+        private const val USER_INTEREST_MARGIN = 14
     }
 }

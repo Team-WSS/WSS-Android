@@ -32,11 +32,6 @@ class PopularNovelsViewHolder(
             avatarImage = avatarImage,
         )
         binding.popularNovel = updatedPopularNovel
-
-        val params = binding.root.layoutParams as RecyclerView.LayoutParams
-        params.width = (itemView.context.resources.displayMetrics.widthPixels * 0.83).toInt()
-        binding.root.layoutParams = params
-        binding.executePendingBindings()
     }
 
     companion object {
