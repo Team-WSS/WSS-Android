@@ -125,11 +125,7 @@ class NovelRatingActivity :
             icon = R.drawable.ic_novel_detail_check,
         )
 
-        val resultIntent = Intent().apply {
-            putExtra("ratingResult", true)
-        }
-        setResult(RESULT_OK, resultIntent)
-
+        setResult(RESULT_OK)
         finish()
     }
 

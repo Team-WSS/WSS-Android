@@ -30,10 +30,6 @@ import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NovelDetailActivity :
@@ -50,7 +46,13 @@ class NovelDetailActivity :
     private var tooltipPopupWindow: PopupWindow? = null
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
-    private lateinit var novelRatingLauncher: ActivityResultLauncher<Intent>
+    private val novelRatingLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +63,6 @@ class NovelDetailActivity :
         setupObserver()
         setupWebsosoLoadingLayout()
         setupViewPager()
-        setupActivityResultLauncher()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
 
@@ -79,8 +80,8 @@ class NovelDetailActivity :
     }
 
     private fun reportError() {
-        val reportUrl = getString(R.string.novel_detail_report_url)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reportUrl))
+        val reportErrorUrl = getString(R.string.novel_detail_report_url)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reportErrorUrl))
         startActivity(intent)
     }
 
@@ -100,7 +101,7 @@ class NovelDetailActivity :
 
     private fun deleteUserNovel() {
         novelDetailViewModel.deleteUserNovel(novelId)
-        updateNovelInfoAfterDelay()
+        novelInfoViewModel.updateNovelInfoWithDelay(novelId)
 
         binding.tgNovelDetailReadStatus.clearChecked()
 
@@ -109,13 +110,6 @@ class NovelDetailActivity :
             message = getString(R.string.novel_detail_remove_result),
             icon = R.drawable.ic_novel_detail_check,
         )
-    }
-
-    private fun updateNovelInfoAfterDelay() {
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(UPDATE_TASK_DELAY)
-            novelInfoViewModel.updateNovelInfo(novelId)
-        }
     }
 
     private fun setupViewPager() {
@@ -294,8 +288,6 @@ class NovelDetailActivity :
 
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
-
-        private const val UPDATE_TASK_DELAY = 2000L
 
         fun getIntent(context: Context, novelId: Long): Intent {
             return Intent(context, NovelDetailActivity::class.java).apply {
