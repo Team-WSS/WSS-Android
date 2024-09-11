@@ -130,7 +130,7 @@
     <string name="novel_rating_read_status_watching">보는 중</string>
     <string name="novel_rating_read_status_watched">봤어요</string>
     <string name="novel_rating_read_status_quit">하차</string>
-    <string name="novel_rating_charm_points">세계관,소재,캐릭터,관계,분위기</string>
+    <string name="novel_rating_charm_points">세계관,분위기,소재,캐릭터,관계</string>
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
     <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
