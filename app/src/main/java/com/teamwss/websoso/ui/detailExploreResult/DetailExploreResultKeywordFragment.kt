@@ -50,7 +50,8 @@ class DetailExploreResultKeywordFragment :
     private fun onDetailExploreKeywordButtonClick() = object : DetailExploreClickListener {
 
         override fun onNovelInquireButtonClick() {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(KAKAO_INQUIRE_URL))
+            val inquireUrl = getString(R.string.inquire_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
             startActivity(intent)
         }
 
@@ -260,9 +261,5 @@ class DetailExploreResultKeywordFragment :
     override fun onDestroyView() {
         initSearchKeyword()
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val KAKAO_INQUIRE_URL = "http://pf.kakao.com/_kHxlWG"
     }
 }

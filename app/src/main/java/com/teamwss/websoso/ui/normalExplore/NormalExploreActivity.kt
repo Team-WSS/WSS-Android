@@ -98,7 +98,8 @@ class NormalExploreActivity :
         }
 
         override fun onNovelInquireButtonClick() {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(KAKAO_INQUIRE_URL))
+            val inquireUrl = getString(R.string.inquire_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
             startActivity(intent)
         }
     }
@@ -157,7 +158,6 @@ class NormalExploreActivity :
     }
 
     companion object {
-        private const val KAKAO_INQUIRE_URL = "http://pf.kakao.com/_kHxlWG"
 
         fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
     }
