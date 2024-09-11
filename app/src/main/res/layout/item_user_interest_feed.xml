@@ -106,7 +106,7 @@
                 android:layout_height="22dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@mipmap/ic_launcher" />
+                tools:src="@mipmap/ic_wss_logo" />
 
             <TextView
                 android:id="@+id/tv_user_interest_nickname_review"
