@@ -10,6 +10,7 @@ import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel.Companion.DEFAUL
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiState
 import com.teamwss.websoso.ui.novelInfo.model.PlatformsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,6 +43,13 @@ class NovelInfoViewModel @Inject constructor(
                     error = true,
                 )
             }
+        }
+    }
+
+    fun updateNovelInfoWithDelay(novelId: Long) {
+        viewModelScope.launch {
+            delay(UPDATE_TASK_DELAY)
+            updateNovelInfo(novelId)
         }
     }
 
@@ -87,5 +95,9 @@ class NovelInfoViewModel @Inject constructor(
             )
             _uiState.value = currentState.copy(expandTextModel = updatedExpandTextUiModel)
         }
+    }
+
+    companion object {
+        private const val UPDATE_TASK_DELAY = 2000L
     }
 }
