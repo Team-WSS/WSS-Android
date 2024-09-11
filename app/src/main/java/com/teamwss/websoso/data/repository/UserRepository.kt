@@ -62,7 +62,8 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchOtherUserProfile(userId: Long): OtherUserProfileEntity {
         return userApi.getOtherUserProfile(userId).toData()
-        
+    }
+
     suspend fun saveUserProfile(
         nickname: String,
         gender: String,
