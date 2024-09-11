@@ -35,30 +35,15 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/img_normal_explore_test_cover" />
 
-        <TextView
-            android:id="@+id/tv_user_interest_feed_novel_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="16dp"
-            android:breakStrategy="balanced"
-            android:minLines="2"
-            android:text="@{userInterestFeed.novelTitle}"
-            android:textAppearance="@style/title3"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_user_interest_feed_novel_cover"
-            app:layout_constraintTop_toTopOf="@id/iv_user_interest_feed_novel_cover"
-            tools:text="신데렐라는 이 멧밭쥐가 데려갑니다" />
-
         <LinearLayout
+            android:id="@+id/li_user_interest_rating"
             android:layout_width="70dp"
             android:layout_height="26dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="14dp"
             android:background="@drawable/bg_user_interest_gray_50_radius_4dp"
             android:gravity="center"
-            app:layout_constraintStart_toStartOf="@id/tv_user_interest_feed_novel_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_interest_feed_novel_title">
+            app:layout_constraintStart_toEndOf="@id/iv_user_interest_feed_novel_cover"
+            app:layout_constraintTop_toTopOf="@id/iv_user_interest_feed_novel_cover">
 
             <ImageView
                 android:layout_width="12dp"
@@ -75,6 +60,22 @@
                 tools:text="4.0 (2)" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_user_interest_feed_novel_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="10dp"
+            android:breakStrategy="balanced"
+            android:minLines="2"
+            android:text="@{userInterestFeed.novelTitle}"
+            android:textAppearance="@style/title3"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/li_user_interest_rating"
+            app:layout_constraintTop_toBottomOf="@id/li_user_interest_rating"
+            tools:text="신데렐라는 이 멧밭쥐가 데려갑니다" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
@@ -82,7 +83,6 @@
             app:layout_constraintBottom_toTopOf="@+id/cl_home_user_interest_feed_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_home_user_interest_feed_content"
