@@ -11,6 +11,8 @@ import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import javax.inject.Inject
 
@@ -60,5 +62,28 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchOtherUserProfile(userId: Long): OtherUserProfileEntity {
         return userApi.getOtherUserProfile(userId).toData()
+        
+    suspend fun saveUserProfile(
+        nickname: String,
+        gender: String,
+        birth: Int,
+        genrePreferences: List<String>,
+    ) {
+        userApi.postUserProfile(
+            UserProfileRequestDto(
+                nickname,
+                gender,
+                birth,
+                genrePreferences,
+            )
+        )
+    }
+
+    suspend fun fetchNicknameValidity(nickname: String): Boolean {
+        return userApi.getNicknameValidity(nickname).isValid
+    }
+
+    suspend fun saveUserProfile(avatarId: Int?, nickname: String?, intro: String?, genrePreferences: List<String>) {
+        userApi.patchProfile(UserProfileEditRequestDto(avatarId, nickname, intro, genrePreferences))
     }
 }

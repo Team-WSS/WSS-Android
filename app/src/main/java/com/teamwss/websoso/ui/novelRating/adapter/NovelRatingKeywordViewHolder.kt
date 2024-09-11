@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
 
 class NovelRatingKeywordViewHolder(
@@ -28,7 +28,7 @@ class NovelRatingKeywordViewHolder(
                 true -> layoutParams.matchConstraintMaxHeight =
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toIntScaledByPx()
+                false -> layoutParams.matchConstraintMaxHeight = 78.toIntPxFromDp()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
@@ -64,8 +64,7 @@ class NovelRatingKeywordViewHolder(
     }
 
     fun updateChipState(category: CategoryModel) {
-        val keywordSelectionMap =
-            category.keywords.associateBy({ it.keywordName }, { it.isSelected })
+        val keywordSelectionMap = category.keywords.associateBy({ it.keywordName }, { it.isSelected })
 
         (0 until binding.wcgNovelRatingKeyword.childCount)
             .map { binding.wcgNovelRatingKeyword.getChildAt(it) }

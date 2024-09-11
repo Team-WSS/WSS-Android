@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.main.myPage
+package com.teamwss.websoso.ui.myPage
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
+import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
+import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
+import com.teamwss.websoso.ui.profileEdit.model.Genre
+import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
+import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
 import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +29,21 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
         onSettingButtonClick()
+
+        binding.ivMyPageUserProfile.setOnClickListener {
+            val intent = ProfileEditActivity.getIntent(
+                requireContext(),
+                ProfileModel(
+                    nicknameModel = NicknameModel(myPageViewModel.myProfile.value?.nickname ?: "밝보"),
+                    introduction = myPageViewModel.myProfile.value?.intro ?: "ㅎㅇ",
+                    avatarId = 0,
+                    avatarThumbnail = myPageViewModel.myProfile.value?.avatarImage
+                        ?: "https://mblogthumb-phinf.pstatic.net/MjAyMjA3MDdfMTgg/MDAxNjU3MTIwODE3MDU5.4sNUX1NFnBHQsQ8xrq6Fd2mrVrtyipj6H9aLuJIpyj0g.h-orck6dDWA-ErMcplHgzh-2bPPk7TEAJwxrnNr5qoQg.PNG.ssankal78/청명.png?type=w800",
+                    genrePreferences = listOf(Genre.FANTASY, Genre.ROMANCE),
+                )
+            )
+            startActivity(intent)
+        }
     }
 
     private fun bindViewModel() {

@@ -5,24 +5,28 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityOnboardingBinding
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
+import com.teamwss.websoso.ui.onboarding.welcome.WelcomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingActivity :
     BaseActivity<ActivityOnboardingBinding>(R.layout.activity_onboarding) {
     private val viewModel: OnboardingViewModel by viewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         bindViewModel()
         setupViewPager()
-        observeCurrentPageChanges()
-        observeProgressBarChanges()
+        setupObserver()
+        onSkipGeneralButtonClick()
     }
 
     private fun bindViewModel() {
@@ -34,18 +38,23 @@ class OnboardingActivity :
         binding.vpOnboarding.adapter = OnboardingPagerAdapter(this)
     }
 
-    private fun observeCurrentPageChanges() {
+    private fun setupObserver() {
         viewModel.currentPage.observe(this) { page ->
             val pageIndex = OnboardingPage.pages.indexOf(page)
             if (binding.vpOnboarding.currentItem != pageIndex) {
                 binding.vpOnboarding.setCurrentItem(pageIndex, true)
             }
         }
-    }
 
-    private fun observeProgressBarChanges() {
         viewModel.progressBarPercent.observe(this) { percent ->
             animateProgressBar(percent)
+        }
+
+        viewModel.isUserProfileSubmit.observe(this) { isUserProfileSubmit ->
+            if (isUserProfileSubmit) {
+                startActivity(WelcomeActivity.getIntent(this))
+                finish()
+            }
         }
     }
 
@@ -58,6 +67,15 @@ class OnboardingActivity :
         ).run {
             duration = ANIMATION_DURATION_TIME
             start()
+        }
+    }
+
+    private fun onSkipGeneralButtonClick() {
+        binding.tvOnboardingSkipGeneral.setOnClickListener {
+            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                viewModel.clearGenreSelection()
+                viewModel.submitUserProfile()
+            }
         }
     }
 

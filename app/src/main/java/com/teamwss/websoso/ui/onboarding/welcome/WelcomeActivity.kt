@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.onboarding.welcome
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
@@ -16,6 +18,13 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(R.layout.activity_w
     private fun onCompleteButtonClick() {
         binding.btnWelcomeStart.setOnClickListener {
             startActivity(MainActivity.getIntent(this))
+            finish()
         }
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent =
+            Intent(context, WelcomeActivity::class.java)
     }
 }

@@ -8,6 +8,7 @@ import com.teamwss.websoso.data.model.PopularFeedsEntity
 import com.teamwss.websoso.data.model.UserInterestFeedsEntity
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.request.CommentRequestDto
+import com.teamwss.websoso.data.remote.request.FeedRequestDto
 import javax.inject.Inject
 
 class FeedRepository @Inject constructor(
@@ -28,6 +29,22 @@ class FeedRepository @Inject constructor(
         ).toData()
             .also { _cachedFeeds.addAll(it.feeds) }
             .copy(feeds = cachedFeeds)
+
+    suspend fun postFeed(
+        relevantCategories: List<String>,
+        feedContent: String,
+        novelId: Long?,
+        isSpoiler: Boolean,
+    ) {
+        feedApi.postFeed(
+            FeedRequestDto(
+                relevantCategories = relevantCategories,
+                feedContent = feedContent,
+                novelId = novelId,
+                isSpoiler = isSpoiler,
+            )
+        )
+    }
 
     suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
 

@@ -1,6 +1,8 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
+import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
@@ -8,14 +10,17 @@ import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
+import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface UserApi {
 
@@ -46,6 +51,16 @@ interface UserApi {
         @Body userInfoRequestDto: UserInfoRequestDto,
     )
 
+    @GET("users/nickname/check")
+    suspend fun getNicknameValidity(
+        @Query("nickname") nickname: String,
+    ): UserNicknameValidityResponseDto
+
+    @PATCH("users/my-profile")
+    suspend fun patchProfile(
+        @Body userProfileEditRequestDto: UserProfileEditRequestDto,
+    )
+
     @GET("users/my-profile")
     suspend fun getMyProfile(): MyProfileResponseDto
 
@@ -64,4 +79,8 @@ interface UserApi {
         @Path("userId") userId: Long,
     ): OtherUserProfileResponseDto
 
+    @POST("users/profile")
+    suspend fun postUserProfile(
+        @Body userProfileRequestDto: UserProfileRequestDto,
+    )
 }

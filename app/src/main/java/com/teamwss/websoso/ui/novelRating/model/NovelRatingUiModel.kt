@@ -11,6 +11,7 @@ data class NovelRatingModel(
     val endDate: String? = null,
     val userNovelRating: Float = 0f,
     val charmPoints: List<CharmPoint> = emptyList(),
+    val isCharmPointExceed: Boolean = false,
     val userKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
     val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus ?: ReadStatus.WATCHING.name),
     val ratingDateModel: RatingDateModel =
@@ -88,6 +89,7 @@ data class NovelRatingKeywordsModel(
     val isInitialSearchKeyword: Boolean = true,
     val searchResultKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
     val isSearchResultKeywordsEmpty: Boolean = false,
+    val isSearchKeywordExceed: Boolean = false,
 ) {
     private fun updatedCategories(keyword: CategoriesModel.CategoryModel.KeywordModel): List<CategoriesModel.CategoryModel> {
         return categories.map { category ->
@@ -113,7 +115,12 @@ data class NovelRatingKeywordsModel(
         return this.copy(
             categories = this.updatedCategories(keyword.copy(isSelected = isSelected)),
             currentSelectedKeywords = newSelectedKeywords,
-            isCurrentSelectedKeywordsEmpty = newSelectedKeywords.isEmpty()
+            isCurrentSelectedKeywordsEmpty = newSelectedKeywords.isEmpty(),
+            isSearchKeywordExceed = newSelectedKeywords.size > MAX_KEYWORD_COUNT && isSelected,
         )
+    }
+
+    companion object {
+        private const val MAX_KEYWORD_COUNT = 5
     }
 }

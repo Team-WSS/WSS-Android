@@ -2,6 +2,7 @@ package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
+import com.teamwss.websoso.data.remote.response.NovelFeedResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.PopularNovelsResponseDto
 import com.teamwss.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto
@@ -49,4 +50,21 @@ interface NovelApi {
 
     @GET("novels/taste")
     suspend fun getRecommendedNovelsByUserTaste(): RecommendedNovelsByUserTasteResponseDto
+
+    @GET("novels/filtered")
+    suspend fun getFilteredNovelResult(
+        @Query("genres") genres: List<String>?,
+        @Query("isCompleted") isCompleted: Boolean?,
+        @Query("novelRating") novelRating: Float?,
+        @Query("keywordIds") keywordIds: List<Int>?,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): ExploreResultResponseDto
+
+    @GET("novels/{novelId}/feeds")
+    suspend fun getNovelFeeds(
+        @Path("novelId") novelId: Long,
+        @Query("lastFeedId") lastFeedId: Long,
+        @Query("size") size: Int,
+    ): NovelFeedResponseDto
 }

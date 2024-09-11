@@ -3,6 +3,10 @@ package com.teamwss.websoso.ui.onboarding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.repository.UserRepository
+import com.teamwss.websoso.domain.model.NicknameValidationResult
+import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
@@ -10,39 +14,45 @@ import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 import com.teamwss.websoso.ui.onboarding.model.UserModel
 import com.teamwss.websoso.ui.onboarding.second.model.OnboardingSecondUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
+    private val userRepository: UserRepository,
     private val validateNicknameUseCase: ValidateNicknameUseCase,
+    private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
 ) : ViewModel() {
     private val _currentPage = MutableLiveData(OnboardingPage.FIRST)
-    val currentPage: LiveData<OnboardingPage> = _currentPage
+    val currentPage: LiveData<OnboardingPage> get() = _currentPage
 
     private val _progressBarPercent = MutableLiveData(OnboardingPage.FIRST.progressPercent)
-    val progressBarPercent: LiveData<Int> = _progressBarPercent
+    val progressBarPercent: LiveData<Int> get() = _progressBarPercent
 
     private val _isBackButtonVisible = MutableLiveData(OnboardingPage.FIRST.isBackButtonVisible)
-    val isBackButtonVisible: LiveData<Boolean> = _isBackButtonVisible
+    val isBackButtonVisible: LiveData<Boolean> get() = _isBackButtonVisible
 
     private val _isSkipTextVisible = MutableLiveData(OnboardingPage.FIRST.isSkipTextVisible)
-    val isSkipTextVisible: LiveData<Boolean> = _isSkipTextVisible
+    val isSkipTextVisible: LiveData<Boolean> get() = _isSkipTextVisible
 
     private val _onboardingFirstUiState: MutableLiveData<OnboardingFirstUiState> =
         MutableLiveData(OnboardingFirstUiState())
-    val onboardingFirstUiState: LiveData<OnboardingFirstUiState> = _onboardingFirstUiState
+    val onboardingFirstUiState: LiveData<OnboardingFirstUiState> get() = _onboardingFirstUiState
 
     private val _onboardingSecondUiState: MutableLiveData<OnboardingSecondUiState> =
         MutableLiveData(OnboardingSecondUiState())
-    val onboardingSecondUiState: LiveData<OnboardingSecondUiState> = _onboardingSecondUiState
+    val onboardingSecondUiState: LiveData<OnboardingSecondUiState> get() = _onboardingSecondUiState
 
     val currentNicknameInput: MutableLiveData<String> = MutableLiveData("")
 
-    private val _userInfo: MutableLiveData<UserModel> = MutableLiveData(UserModel())
-    val userInfo: LiveData<UserModel> = _userInfo
+    private val _userProfile: MutableLiveData<UserModel> = MutableLiveData(UserModel())
+    val userProfile: LiveData<UserModel> get() = _userProfile
 
     private val _selectedGenres = MutableLiveData<Set<String>>(setOf())
-    val selectedGenres: LiveData<Set<String>> = _selectedGenres
+    val selectedGenres: LiveData<Set<String>> get() = _selectedGenres
+
+    private val _isUserProfileSubmit = MutableLiveData<Boolean>(false)
+    val isUserProfileSubmit: LiveData<Boolean> get() = _isUserProfileSubmit
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
@@ -57,8 +67,58 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun checkDuplicationNickname() {
-        updateOnBoardingFirstUiState(NicknameInputType.COMPLETE, "사용 가능한 닉네임 입니다")
+    fun dispatchNicknameValidity() {
+        val nickname = currentNicknameInput.value ?: ""
+        viewModelScope.launch {
+            runCatching {
+                checkNicknameValidityUseCase(nickname)
+            }.onSuccess { result ->
+                when (result) {
+                    NicknameValidationResult.VALID_NICKNAME_SPELLING -> dispatchNicknameDuplication(
+                        nickname
+                    )
+
+                    else -> updateOnBoardingFirstUiState(
+                        NicknameInputType.ERROR,
+                        result.profileEditMessage
+                    )
+                }
+            }.onFailure {
+                updateOnBoardingFirstUiState(
+                    NicknameInputType.ERROR,
+                    NicknameValidationResult.UNKNOWN_ERROR.profileEditMessage
+                )
+            }
+        }
+    }
+
+    private fun dispatchNicknameDuplication(nickname: String) {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchNicknameValidity(nickname)
+            }.onSuccess { isNicknameValid ->
+                when (isNicknameValid) {
+                    true -> {
+                        updateOnBoardingFirstUiState(
+                            NicknameInputType.COMPLETE,
+                            NicknameValidationResult.VALID_NICKNAME.profileEditMessage
+                        )
+                    }
+
+                    false -> {
+                        updateOnBoardingFirstUiState(
+                            NicknameInputType.ERROR,
+                            NicknameValidationResult.INVALID_NICKNAME_DUPLICATION.profileEditMessage
+                        )
+                    }
+                }
+            }.onFailure {
+                updateOnBoardingFirstUiState(
+                    NicknameInputType.ERROR,
+                    NicknameValidationResult.NETWORK_ERROR.profileEditMessage
+                )
+            }
+        }
     }
 
     private fun updateOnBoardingFirstUiState(type: NicknameInputType, message: String) {
@@ -103,7 +163,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun updateUserBirthYear(birthYear: Int) {
-        _userInfo.value = userInfo.value?.copy(birthYear = birthYear)
+        _userProfile.value = userProfile.value?.copy(birthYear = birthYear)
         updateSecondNextButtonUiState()
     }
 
@@ -116,13 +176,14 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun updateUserGender(isManSelected: Boolean) {
-        _userInfo.value = userInfo.value?.copy(gender = if (isManSelected) "Man" else "Woman")
+        _userProfile.value =
+            userProfile.value?.copy(gender = if (isManSelected) GENDER_MALE else GENDER_FEMALE)
         updateSecondNextButtonUiState()
     }
 
     private fun updateSecondNextButtonUiState() {
         _onboardingSecondUiState.value = onboardingSecondUiState.value?.copy(
-            isNextButtonEnable = !userInfo.value?.gender.isNullOrEmpty() && userInfo.value?.birthYear != 0
+            isNextButtonEnable = !userProfile.value?.gender.isNullOrEmpty() && userProfile.value?.birthYear != UNSELECTED_BIRTH_YEAR
         )
     }
 
@@ -133,9 +194,45 @@ class OnboardingViewModel @Inject constructor(
             false -> currentSelected.add(genreTag)
         }
         _selectedGenres.value = currentSelected
+
+        _userProfile.value = _userProfile.value?.copy(
+            genrePreferences = currentSelected.toList()
+        )
     }
 
     fun isGenreSelected(genreTag: String): Boolean {
         return _selectedGenres.value?.contains(genreTag) ?: false
+    }
+
+    fun submitUserProfile() {
+        viewModelScope.launch {
+            runCatching {
+                _userProfile.value = userProfile.value?.copy(
+                    nickname = currentNicknameInput.value.orEmpty(),
+                )
+                userProfile.value?.let { profile ->
+                    userRepository.saveUserProfile(
+                        nickname = profile.nickname,
+                        gender = profile.gender,
+                        birth = profile.birthYear,
+                        genrePreferences = profile.genrePreferences,
+                    )
+                }
+            }.onSuccess {
+                _isUserProfileSubmit.value = true
+            }.onFailure { exception ->
+                exception.printStackTrace()
+            }
+        }
+    }
+
+    fun clearGenreSelection() {
+        _selectedGenres.value = setOf()
+    }
+
+    companion object {
+        private const val GENDER_MALE = "M"
+        private const val GENDER_FEMALE = "F"
+        private const val UNSELECTED_BIRTH_YEAR = 0
     }
 }
