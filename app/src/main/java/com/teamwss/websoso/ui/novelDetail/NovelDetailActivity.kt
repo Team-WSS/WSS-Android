@@ -143,14 +143,6 @@ class NovelDetailActivity :
         }
     }
 
-    private fun setupActivityResultLauncher() {
-        novelRatingLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                updateNovelInfoAfterDelay()
-            }
-        }
-    }
-
     private fun setupObserver() {
         novelDetailViewModel.novelDetailModel.observe(this) { novelDetail ->
             when (novelDetail.novel.isNovelNotBlank) {
