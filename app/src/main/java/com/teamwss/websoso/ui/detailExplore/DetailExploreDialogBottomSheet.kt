@@ -131,6 +131,13 @@ class DetailExploreDialogBottomSheet :
         }
     }
 
+    override fun onPause() {
+        detailExploreViewModel.updateSelectedInfoValueClear()
+        detailExploreViewModel.updateSelectedKeywordValueClear()
+        dismiss()
+        super.onPause()
+    }
+
     companion object {
 
         fun newInstance(): DetailExploreDialogBottomSheet {
