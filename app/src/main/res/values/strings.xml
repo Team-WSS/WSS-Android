@@ -84,7 +84,7 @@
     <string name="novel_info_read_status_watched_count">%d명이 작품을\n같이 봤어요</string>
     <string name="novel_info_read_status_quit_count">%d명이 작품을\n하차했어요</string>
     <string name="novel_info_user_unit">명</string>
-    <string name="novel_info_charm_points_body">%s가 매력적인 작품이에요</string>
+    <string name="novel_info_charm_points_body">%s(이)가 매력적인 작품이에요</string>
 
     <!-- 작품 피드 -->
     <string name="novel_feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
