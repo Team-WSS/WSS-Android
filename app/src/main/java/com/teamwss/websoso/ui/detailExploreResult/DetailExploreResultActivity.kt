@@ -151,6 +151,8 @@ class DetailExploreResultActivity :
                 supportFragmentManager,
                 DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG,
             )
+
+            detailExploreResultViewModel.updateIsBottomSheetOpen(true)
         }
     }
 

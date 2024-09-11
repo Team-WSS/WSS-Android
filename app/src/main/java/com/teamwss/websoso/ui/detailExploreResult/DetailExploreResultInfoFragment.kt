@@ -49,6 +49,8 @@ class DetailExploreResultInfoFragment :
 
             val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG) as? DetailExploreResultDialogBottomSheet
             bottomSheet?.dismiss()
+
+            detailExploreResultViewModel.updateIsBottomSheetOpen(false)
         }
     }
 

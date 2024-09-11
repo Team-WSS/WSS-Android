@@ -61,6 +61,8 @@ class DetailExploreResultKeywordFragment :
                 DetailExploreResultActivity.DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
             ) as? DetailExploreResultDialogBottomSheet
             bottomSheet?.dismiss()
+
+            detailExploreResultViewModel.updateIsBottomSheetOpen(false)
         }
 
         override fun onKeywordResetButtonClick() {

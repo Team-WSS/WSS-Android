@@ -57,6 +57,8 @@ class DetailExploreResultViewModel @Inject constructor(
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
+    private val _isBottomSheetOpen = MutableLiveData(false)
+
     init {
         _appliedFiltersMessage.apply {
             addSource(_selectedGenres) { updateMessage() }
@@ -76,6 +78,8 @@ class DetailExploreResultViewModel @Inject constructor(
     }
 
     private fun updateMessage() {
+        if (_isBottomSheetOpen.value == true) return
+
         val appliedFilters = mutableListOf<String>()
 
         _selectedGenres.value?.let { genres ->
@@ -320,5 +324,11 @@ class DetailExploreResultViewModel @Inject constructor(
                 isSearchResultKeywordsEmpty = false,
             )
         }
+    }
+
+    fun updateIsBottomSheetOpen(isOpen: Boolean) {
+        _isBottomSheetOpen.value = isOpen
+
+        if (!isOpen) updateMessage()
     }
 }
