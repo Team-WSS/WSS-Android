@@ -276,8 +276,7 @@ class NovelRatingViewModel @Inject constructor(
                 userNovelRepository.saveNovelRating(
                     novelRatingEntity = NovelRatingEntity(
                         novelId = novelId,
-                        readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name
-                            ?: throw IllegalArgumentException("readStatus must not be null"),
+                        readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name,
                         startDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentStartDate?.toFormattedDate(),
                         endDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentEndDate?.toFormattedDate(),
                         userNovelRating = novelRating,

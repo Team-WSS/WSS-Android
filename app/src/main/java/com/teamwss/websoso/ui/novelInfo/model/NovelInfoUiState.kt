@@ -7,4 +7,5 @@ data class NovelInfoUiState(
     val expandTextModel: ExpandTextUiModel = ExpandTextUiModel(),
     val loading: Boolean = false,
     val error: Boolean = false,
+    val isKeywordsExist: Boolean = false,
 )

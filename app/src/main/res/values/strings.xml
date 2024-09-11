@@ -58,7 +58,7 @@
     <string name="novel_detail_review">나도 한마디</string>
     <string name="novel_detail_interest">관심</string>
     <string name="novel_detail_info">정보</string>
-    <string name="novel_detail_feed">피드</string>
+    <string name="novel_detail_feed">수다</string>
     <string name="novel_detail_report_error">오류 제보</string>
     <string name="novel_detail_remove_evaluate">평가 삭제</string>
     <string name="novel_detail_remove_evaluate_alert_title">평가를 모두 삭제할까요?</string>
@@ -67,6 +67,7 @@
     <string name="novel_detail_remove_accept">삭제</string>
     <string name="novel_detail_remove_result">평가를 모두 삭제했어요</string>
     <string name="novel_detail_tooltip">읽기 상태를 체크하여\n작품을 평가해보세요!</string>
+    <string name="novel_detail_report_url">http://pf.kakao.com/_kHxlWG</string>
 
     <!-- 작품 소개 -->
     <string name="novel_info_platforms_title">작품 보러가기</string>
@@ -83,7 +84,10 @@
     <string name="novel_info_read_status_watched_count">%d명이 작품을\n같이 봤어요</string>
     <string name="novel_info_read_status_quit_count">%d명이 작품을\n하차했어요</string>
     <string name="novel_info_user_unit">명</string>
-    <string name="novel_info_charm_points_body">%s가 매력적인 작품이에요</string>
+    <string name="novel_info_charm_points_body">%s(이)가 매력적인 작품이에요</string>
+
+    <!-- 작품 피드 -->
+    <string name="novel_feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>

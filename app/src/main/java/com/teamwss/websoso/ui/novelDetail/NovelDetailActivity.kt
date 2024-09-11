@@ -2,14 +2,18 @@ package com.teamwss.websoso.ui.novelDetail
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
@@ -19,8 +23,10 @@ import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
+import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class NovelDetailActivity :
     BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
+    private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
 
     private var _novelDetailMenuPopupBinding: MenuNovelDetailPopupBinding? = null
     private val novelDetailMenuPopupBinding get() = _novelDetailMenuPopupBinding ?: error("")
@@ -37,7 +44,15 @@ class NovelDetailActivity :
     }
     private var menuPopupWindow: PopupWindow? = null
     private var tooltipPopupWindow: PopupWindow? = null
-    private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 1L) } // TODO: 1L -> 0L
+    private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
+
+    private val novelRatingLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +74,15 @@ class NovelDetailActivity :
     private fun setupPopupBinding() {
         _novelDetailMenuPopupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
         novelDetailMenuPopupBinding.novelDetailViewModel = novelDetailViewModel
+        novelDetailMenuPopupBinding.reportError = ::reportError
         novelDetailMenuPopupBinding.deleteUserNovel = ::showDeleteUserNovelAlertDialog
         novelDetailMenuPopupBinding.lifecycleOwner = this
+    }
+
+    private fun reportError() {
+        val reportErrorUrl = getString(R.string.novel_detail_report_url)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reportErrorUrl))
+        startActivity(intent)
     }
 
     private fun showDeleteUserNovelAlertDialog() {
@@ -79,7 +101,10 @@ class NovelDetailActivity :
 
     private fun deleteUserNovel() {
         novelDetailViewModel.deleteUserNovel(novelId)
+        novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+
         binding.tgNovelDetailReadStatus.clearChecked()
+
         showWebsosoSnackBar(
             view = binding.root,
             message = getString(R.string.novel_detail_remove_result),
@@ -90,6 +115,7 @@ class NovelDetailActivity :
     private fun setupViewPager() {
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
         setupTabLayout()
+        setupOnPageChangeCallback()
     }
 
     private fun setupTabLayout() {
@@ -102,9 +128,24 @@ class NovelDetailActivity :
         }.attach()
     }
 
+    private fun setupOnPageChangeCallback() {
+        binding.vpNovelDetail.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                updateNovelFeedWriteButtonVisibility(position)
+            }
+        })
+    }
+
+    private fun updateNovelFeedWriteButtonVisibility(position: Int) {
+        binding.fabNovelFeedWriteFloatingButton.visibility = when (position) {
+            FEED_FRAGMENT_PAGE -> View.VISIBLE
+            else -> View.GONE
+        }
+    }
+
     private fun setupObserver() {
         novelDetailViewModel.novelDetailModel.observe(this) { novelDetail ->
-            when (novelDetail.novel.novelTitle.isNotBlank()) {
+            when (novelDetail.novel.isNovelNotBlank) {
                 true -> {
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
                     binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
@@ -205,6 +246,16 @@ class NovelDetailActivity :
         override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
             navigateToNovelRating(readStatus)
         }
+
+        override fun onNovelCoverClick(novelImageUrl: String) {
+            NovelDetailCoverDialogFragment.newInstance(novelImageUrl)
+                .show(supportFragmentManager, NovelDetailCoverDialogFragment.TAG)
+        }
+
+        override fun onNovelFeedWriteClick() {
+            val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, novelId)
+            startActivity(intent)
+        }
     }
 
     private fun navigateToNovelRating(readStatus: ReadStatus) {
@@ -213,7 +264,7 @@ class NovelDetailActivity :
             novelId = novelId,
             readStatus = readStatus,
         )
-        startActivity(intent)
+        novelRatingLauncher.launch(intent)
     }
 
     override fun onResume() {
