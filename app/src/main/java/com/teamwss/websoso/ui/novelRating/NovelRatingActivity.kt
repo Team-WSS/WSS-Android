@@ -15,6 +15,7 @@ import com.teamwss.websoso.common.ui.model.CategoriesModel
 import com.teamwss.websoso.common.util.getAdaptedSerializableExtra
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.showWebsosoToast
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityNovelRatingBinding
 import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
@@ -170,16 +171,16 @@ class NovelRatingActivity :
                     setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
                     setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
                     setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
-                    setWebsosoChipPaddingVertical(20f)
-                    setWebsosoChipPaddingHorizontal(12f)
-                    setWebsosoChipRadius(40f)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
                     setOnCloseIconClickListener {
                         novelRatingViewModel.updateSelectedKeywords(keyword, false)
                     }
                     setWebsosoChipCloseIconVisibility(true)
                     setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
-                    setWebsosoChipCloseIconSize(20f)
-                    setWebsosoChipCloseIconEndPadding(18f)
+                    setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
+                    setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
                     setCloseIconTintResource(R.color.primary_100_6A5DFD)
                 }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
         }
@@ -194,9 +195,9 @@ class NovelRatingActivity :
                     setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
                     setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
                     setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                    setWebsosoChipPaddingVertical(20f)
-                    setWebsosoChipPaddingHorizontal(12f)
-                    setWebsosoChipRadius(40f)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
                     setOnWebsosoChipClick { handleCharmPointClick(charmPoint) }
                 }.also { websosoChip -> binding.wcgNovelRatingCharmPoints.addChip(websosoChip) }
         }

@@ -28,7 +28,7 @@ class NovelRatingKeywordViewHolder(
                 true -> layoutParams.matchConstraintMaxHeight =
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toIntPxFromDp()
+                false -> layoutParams.matchConstraintMaxHeight = 92.toIntPxFromDp()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
