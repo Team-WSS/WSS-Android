@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
@@ -22,6 +23,7 @@ import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
@@ -113,6 +115,7 @@ class NovelDetailActivity :
     private fun setupViewPager() {
         binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
         setupTabLayout()
+        setupOnPageChangeCallback()
     }
 
     private fun setupTabLayout() {
@@ -123,6 +126,21 @@ class NovelDetailActivity :
                 else -> throw IllegalArgumentException()
             }
         }.attach()
+    }
+
+    private fun setupOnPageChangeCallback() {
+        binding.vpNovelDetail.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                updateNovelFeedWriteButtonVisibility(position)
+            }
+        })
+    }
+
+    private fun updateNovelFeedWriteButtonVisibility(position: Int) {
+        binding.fabNovelFeedWriteFloatingButton.visibility = when (position) {
+            FEED_FRAGMENT_PAGE -> View.VISIBLE
+            else -> View.GONE
+        }
     }
 
     private fun setupObserver() {
@@ -232,6 +250,11 @@ class NovelDetailActivity :
         override fun onNovelCoverClick(novelImageUrl: String) {
             NovelDetailCoverDialogFragment.newInstance(novelImageUrl)
                 .show(supportFragmentManager, NovelDetailCoverDialogFragment.TAG)
+        }
+
+        override fun onNovelFeedWriteClick() {
+            val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, novelId)
+            startActivity(intent)
         }
     }
 
