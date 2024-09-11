@@ -136,10 +136,8 @@ class DetailExploreResultInfoFragment :
         }
 
         detailExploreResultViewModel.isNovelCompleted.observe(viewLifecycleOwner) { selectedStatus ->
-            val selectedChip = if (selectedStatus == null) {
-                null
-            } else {
-                SeriesStatus.fromIsCompleted(selectedStatus).title
+            val selectedChip = selectedStatus?.let {
+                SeriesStatus.fromIsCompleted(it).title
             }
 
             listOf(
