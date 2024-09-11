@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.di
 
+import com.teamwss.websoso.data.remote.api.AvatarApi
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.api.KeywordApi
 import com.teamwss.websoso.data.remote.api.NoticeApi
@@ -41,4 +42,8 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideKeywordApi(retrofit: Retrofit): KeywordApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideAvatarApi(retrofit: Retrofit): AvatarApi = retrofit.create()
 }

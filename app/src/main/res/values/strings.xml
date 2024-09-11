@@ -61,10 +61,11 @@
     <string name="novel_detail_feed">피드</string>
     <string name="novel_detail_report_error">오류 제보</string>
     <string name="novel_detail_remove_evaluate">평가 삭제</string>
-    <string name="novel_detail_remove_evaluate_warning_title">평가를 모두 삭제할까요?</string>
-    <string name="novel_detail_remove_evaluate_warning_body">별점, 관심, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
-    <string name="novel_detail_remove_reject">아니오</string>
-    <string name="novel_detail_remove_accept">네</string>
+    <string name="novel_detail_remove_evaluate_alert_title">평가를 모두 삭제할까요?</string>
+    <string name="novel_detail_remove_evaluate_alert_message">별점, 관심, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
+    <string name="novel_detail_remove_cancel">취소</string>
+    <string name="novel_detail_remove_accept">삭제</string>
+    <string name="novel_detail_remove_result">평가를 모두 삭제했어요</string>
     <string name="novel_detail_tooltip">읽기 상태를 체크하여\n작품을 평가해보세요!</string>
 
     <!-- 작품 소개 -->
@@ -130,6 +131,11 @@
     <string name="novel_rating_read_status_watched">봤어요</string>
     <string name="novel_rating_read_status_quit">하차</string>
     <string name="novel_rating_charm_points">세계관,소재,캐릭터,관계,분위기</string>
+    <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
+    <string name="novel_rating_cancel_alert_accept">그만하기</string>
+    <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
+    <string name="novel_rating_complete">평가 완료!</string>
+    <string name="novel_rating_save_error">다시 시도해주세요</string>
 
     <!-- 작품 평가 날짜 선택 -->
     <string name="novel_rating_date_start_date">시작 날짜</string>
@@ -137,6 +143,9 @@
     <string name="novel_rating_date_complete">완료</string>
     <string name="novel_rating_date_remove">본 날짜 없애기</string>
     <string name="novel_rating_current_date">%04d-%02d-%02d</string>
+    <string name="novel_rating_date_remove_alert_title">날짜 정보를 삭제할까요?</string>
+    <string name="novel_rating_date_remove_alert_accept">삭제</string>
+    <string name="novel_rating_date_remove_alert_cancel">취소</string>
 
     <!-- 작품 평가 키워드 -->
     <string name="novel_rating_keyword_title">키워드 선택</string>
@@ -146,6 +155,8 @@
     <string name="novel_rating_charm_point_title">매력포인트</string>
     <string name="novel_rating_keyword">키워드</string>
     <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
+    <string name="novel_rating_keyword_exceed">최대 20개까지 선택가능해요!</string>
+    <string name="novel_rating_charm_point_exceed">최대 3개까지 선택가능해요!</string>
 
     <!-- 온보딩 뷰 -->
     <string name="onboarding_skip">건너뛰기</string>
@@ -290,11 +301,16 @@
     <string name="profile_edit_finish">완료</string>
     <string name="profile_edit_title">프로필 편집</string>
     <string name="profile_edit_nickname">닉네임</string>
+    <string name="profile_edit_nickname_max_count">%d/10</string>
     <string name="profile_edit_duplicate">중복확인</string>
     <string name="profile_edit_introduction">소개</string>
     <string name="edit_profile_introduction_hint">소개글을 적어보세요!</string>
+    <string name="profile_edit_introduction_max_count">%d/60</string>
     <string name="profile_edit_prefer_genre">선호장르</string>
     <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해 드려요</string>
+    <string name="profile_edit_avatar_title">프로필 선택</string>
+    <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
+    <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
 
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>
@@ -320,5 +336,18 @@
     <string name="other_user_library_genre_count">%d편</string>
     <string name="other_user_library_novel_preference">작품 취향</string>
     <string name="other_user_library_attractive_point_fixed_text">가 매력적인 작품</string>
-  
+
+    <!-- 피드 생성 뷰 -->
+    <string name="tv_create_feed_multiple_choice_guide">중복 선택 가능</string>
+    <string name="tv_create_feed_category">카테고리</string>
+    <string name="tv_create_feed_done_button">완료</string>
+    <string name="tv_create_feed_write_content">내용 작성하기</string>
+    <string name="tv_create_feed_spoiler">스포일러</string>
+    <string name="et_create_feed_content_hint">피드 작성 유의사항!\n\n욕설, 비방, 명예훼손성 표현은 사용하지 말아주세요.\n작품 내용을 담은 글은 스포일러를 체크해주세요.</string>
+    <string name="tv_create_feed_characters_count">(%d/2000)</string>
+    <string name="tv_create_feed_connect_novel">작품 연결하기</string>
+    <string name="wset_create_feed_search_novel">작품 제목, 작가를 검색하세요</string>
+    <string name="tv_create_feed_search_novel_connect_novel_description">작성 중인 글과 관련된 웹소설을 선택하세요</string>
+    <string name="tv_create_feed_search_novel_connect_button">해당 작품 연결</string>
+
 </resources>
