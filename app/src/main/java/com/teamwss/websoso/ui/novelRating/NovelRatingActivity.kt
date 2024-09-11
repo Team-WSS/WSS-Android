@@ -135,7 +135,9 @@ class NovelRatingActivity :
 
     private fun updateInitialReadStatus() {
         val readStatus = intent.getAdaptedSerializableExtra<ReadStatus>(READ_STATUS)
-        if (readStatus != null) novelRatingViewModel.updateReadStatus(readStatus)
+        readStatus.let {
+            novelRatingViewModel.updateReadStatus(it ?: return)
+        }
     }
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {

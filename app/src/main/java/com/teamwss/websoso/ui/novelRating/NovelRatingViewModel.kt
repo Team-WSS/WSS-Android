@@ -145,6 +145,7 @@ class NovelRatingViewModel @Inject constructor(
     }
 
     fun updateReadStatus(readStatus: ReadStatus) {
+        if (readStatus == ReadStatus.NONE) return
         uiState.value?.let { uiState ->
             val updatedModel =
                 ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
