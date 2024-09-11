@@ -248,7 +248,6 @@
                 android:id="@+id/ll_novel_rating_appbar"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginTop="24dp"
                 android:gravity="center_vertical">
 
                 <ImageView
