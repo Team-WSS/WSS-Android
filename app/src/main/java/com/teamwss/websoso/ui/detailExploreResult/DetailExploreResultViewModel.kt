@@ -326,10 +326,10 @@ class DetailExploreResultViewModel @Inject constructor(
         }
     }
 
-    fun updateIsBottomSheetOpen(isOpen: Boolean) {
-        _isBottomSheetOpen.value = isOpen
+    fun updateIsBottomSheetOpen(isBottomSheetOpen: Boolean) {
+        _isBottomSheetOpen.value = isBottomSheetOpen
 
-        if (!isOpen) updateMessage()
+        if (!isBottomSheetOpen) updateMessage()
     }
 
     companion object {
