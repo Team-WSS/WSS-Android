@@ -20,7 +20,7 @@
             android:layout_width="92dp"
             android:layout_height="30dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="62dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/ic_home_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
