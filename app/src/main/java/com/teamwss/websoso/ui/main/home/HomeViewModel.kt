@@ -21,6 +21,10 @@ class HomeViewModel @Inject constructor(
     val uiState: LiveData<HomeUiState> get() = _uiState
 
     init {
+        updateHomeData()
+    }
+
+    fun updateHomeData(){
         updatePopularNovels()
         updatePopularFeeds()
         updateUserInterestFeeds()
