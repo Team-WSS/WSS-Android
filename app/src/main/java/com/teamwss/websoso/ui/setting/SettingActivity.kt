@@ -36,7 +36,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
         }
 
         override fun onWebsosoOfficialButtonClick() {
-            // TODO 웹소소 공식 계정으로 연결
+            val officialUrl = getString(R.string.websoso_official)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(officialUrl))
+            startActivity(intent)
         }
 
         override fun onInquireAndFeedbackButtonClick() {
