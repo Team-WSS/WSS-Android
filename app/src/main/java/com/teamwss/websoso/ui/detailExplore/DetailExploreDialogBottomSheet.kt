@@ -53,6 +53,7 @@ class DetailExploreDialogBottomSheet :
     private fun onReplaceFragmentButtonClick() {
         binding.tvDetailExploreInfoButton.setOnClickListener {
             switchFragment(SelectedFragmentTitle.INFO)
+            detailExploreViewModel.updateIsSearchKeywordProceeding(false)
         }
 
         binding.tvDetailExploreKeywordButton.setOnClickListener {
@@ -128,6 +129,13 @@ class DetailExploreDialogBottomSheet :
         detailExploreViewModel.isKeywordChipSelected.observe(viewLifecycleOwner) { isVisible ->
             binding.ivDetailExploreKeywordActiveDot.isVisible = isVisible
         }
+    }
+
+    override fun onPause() {
+        detailExploreViewModel.updateSelectedInfoValueClear()
+        detailExploreViewModel.updateSelectedKeywordValueClear()
+        dismiss()
+        super.onPause()
     }
 
     companion object {

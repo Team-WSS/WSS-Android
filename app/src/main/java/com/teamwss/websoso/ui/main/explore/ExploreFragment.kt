@@ -23,6 +23,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         initSosoPickAdapter()
         onNormalSearchButtonClick()
         onDetailExploreButtonClick()
+        onReloadPageButtonClick()
         setupObserveUiState()
     }
 
@@ -58,18 +59,24 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         }
     }
 
-    private fun setupObserveUiState() {
-        exploreViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                uiState.loading -> loading()
-                uiState.error -> throw IllegalStateException()
-                !uiState.loading -> sosoPickAdapter.submitList(uiState.sosoPicks)
-            }
+    private fun onReloadPageButtonClick() {
+        binding.wllExplore.setReloadButtonClickListener {
+            binding.wllExplore.setErrorLayoutVisibility(false)
+            exploreViewModel.updateSosoPicks()
         }
     }
 
-    private fun loading() {
-        // TODO 로딩 뷰
+    private fun setupObserveUiState() {
+        exploreViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.loading -> binding.wllExplore.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllExplore.setLoadingLayoutVisibility(false)
+                !uiState.loading -> {
+                    binding.wllExplore.setWebsosoLoadingVisibility(false)
+                    sosoPickAdapter.submitList(uiState.sosoPicks)
+                }
+            }
+        }
     }
 
     companion object {

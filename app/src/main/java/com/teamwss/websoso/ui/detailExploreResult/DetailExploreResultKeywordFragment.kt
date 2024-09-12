@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.detailExploreResult
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -48,11 +50,20 @@ class DetailExploreResultKeywordFragment :
     private fun onDetailExploreKeywordButtonClick() = object : DetailExploreClickListener {
 
         override fun onNovelInquireButtonClick() {
-            // TODO 문의하기로 이동
+            val inquireUrl = getString(R.string.inquire_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+            startActivity(intent)
         }
 
         override fun onDetailSearchNovelButtonClick() {
             detailExploreResultViewModel.updateSearchResult(true)
+
+            val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(
+                DetailExploreResultActivity.DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
+            ) as? DetailExploreResultDialogBottomSheet
+            bottomSheet?.dismiss()
+
+            detailExploreResultViewModel.updateIsBottomSheetOpen(false)
         }
 
         override fun onKeywordResetButtonClick() {
@@ -234,7 +245,8 @@ class DetailExploreResultKeywordFragment :
     }
 
     private fun setupBackButtonListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (binding.wsetDetailExploreKeywordSearch.hasFocus()) {
