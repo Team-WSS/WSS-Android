@@ -6,7 +6,7 @@ enum class CreateFeedCategory(
 ) {
     ROMANCE_FANTASY("로판", "romanceFantasy"),
     ROMANCE("로맨스", "romance"),
-    BOYS_LOVE("BL", "bl"),
+    BOYS_LOVE("BL", "BL"),
     FANTASY("판타지", "fantasy"),
     MODERN_FANTASY("현판", "modernFantasy"),
     WUXIA("무협", "wuxia"),

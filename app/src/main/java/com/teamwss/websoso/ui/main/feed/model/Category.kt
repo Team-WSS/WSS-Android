@@ -7,7 +7,7 @@ enum class Category(
     ALL("전체", "all"),
     ROMANCE("로맨스", "romance"),
     ROMANCE_FANTASY("로판", "romanceFantasy"),
-    BOYS_LOVE("BL", "bl"),
+    BOYS_LOVE("BL", "BL"),
     FANTASY("판타지", "fantasy"),
     MODERN_FANTASY("현판", "modernFantasy"),
     WUXIA("무협", "wuxia"),
