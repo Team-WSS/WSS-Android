@@ -101,7 +101,6 @@ class CreateFeedSearchNovelBottomSheetDialog :
     }
 
     private fun updateNovels(uiState: SearchNovelUiState) {
-        //binding.clFeedNone.isVisible = feedUiState.feeds.isEmpty()
         val novels = uiState.novels.map { Novels(it) }
         when (uiState.isLoadable) {
             true -> searchNovelAdapter.submitList(novels + Loading)

@@ -17,7 +17,8 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
-import com.teamwss.websoso.ui.createFeed.model.CreateFeedCategory
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,12 +27,13 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupCategoryChips()
+
 
         setupView()
         onCreateFeedClick()
         bindViewModel()
         setupObserver()
+        createFeedViewModel.categories.setupCategoryChips()
     }
 
     private fun setupView() {
@@ -60,7 +62,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
             finish()
         }
         binding.ivCreateFeedBackButton.setOnClickListener {
-            val isEmptyCategory = createFeedViewModel.selectedCategories.isEmpty()
+            val isEmptyCategory = createFeedViewModel.categories.any { it.isSelected }
             val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
             val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
@@ -91,31 +93,31 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
         }
     }
 
-    private fun setupCategoryChips() {
-        CreateFeedCategory.entries.forEach { category ->
-            WebsosoChip(this).apply {
-                setWebsosoChipText(category.titleKr)
+    private fun List<CategoryModel>.setupCategoryChips() {
+        forEach { category ->
+            WebsosoChip(this@CreateFeedActivity).apply {
+                setWebsosoChipText(category.category.titleKr)
                 setWebsosoChipTextAppearance(body2)
                 setWebsosoChipTextColor(bg_detail_explore_chip_text_selector)
                 setWebsosoChipStrokeColor(bg_detail_explore_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(bg_detail_explore_chip_background_selector)
                 setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                 setWebsosoChipPaddingHorizontal(6.7f.toFloatPxFromDp())
+                setWebsosoChipSelected(category.isSelected)
                 setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.ordinal) }
+                setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.titleEn) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
 
     companion object {
-        private const val NOVEL_ID = "NOVEL_ID"
+        private const val FEED = "FEED"
 
         fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
 
-        fun getIntent(context: Context, novelId: Long): Intent {
-            return Intent(context, CreateFeedActivity::class.java).apply {
-                putExtra(NOVEL_ID, novelId)
+        fun getIntent(context: Context, editFeedModel: EditFeedModel): Intent =
+            Intent(context, CreateFeedActivity::class.java).apply {
+                putExtra(FEED, editFeedModel)
             }
-        }
     }
 }

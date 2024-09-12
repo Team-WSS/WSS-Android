@@ -24,6 +24,7 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
@@ -93,8 +94,7 @@ class NovelDetailActivity :
             cancelButtonText = getString(R.string.novel_detail_remove_cancel),
             onAcceptClick = { deleteUserNovel() },
         )
-        NovelAlertDialogFragment
-            .newInstance(novelAlertModel)
+        NovelAlertDialogFragment.newInstance(novelAlertModel)
             .show(supportFragmentManager, NovelAlertDialogFragment.TAG)
         menuPopupWindow?.dismiss()
     }
@@ -129,7 +129,8 @@ class NovelDetailActivity :
     }
 
     private fun setupOnPageChangeCallback() {
-        binding.vpNovelDetail.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.vpNovelDetail.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 updateNovelFeedWriteButtonVisibility(position)
             }
@@ -148,7 +149,8 @@ class NovelDetailActivity :
             when (novelDetail.novel.isNovelNotBlank) {
                 true -> {
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
-                    binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
+                    binding.llNovelDetailInterest.isSelected =
+                        novelDetail.userNovel.isUserNovelInterest
                     if (novelDetail.isFirstLaunched) setupTooltipWindow()
                 }
 
@@ -253,7 +255,10 @@ class NovelDetailActivity :
         }
 
         override fun onNovelFeedWriteClick() {
-            val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, novelId)
+            val editFeedModel = EditFeedModel(
+                novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
+            )
+            val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
             startActivity(intent)
         }
     }

@@ -2,11 +2,12 @@ package com.teamwss.websoso.ui.createFeed
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import com.teamwss.websoso.R.layout.dialog_remove_popup_menu
+import com.teamwss.websoso.R.string.tv_remove_popup_menu_stop_creating
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
-import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 
 class CreatingFeedDialogFragment :
     BaseDialogFragment<DialogRemovePopupMenuBinding>(dialog_remove_popup_menu) {
@@ -17,6 +18,8 @@ class CreatingFeedDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvRemovePopupMenuTitle.visibility = GONE
+        binding.tvRemovePopupMenuDescription.text = getString(tv_remove_popup_menu_stop_creating)
         binding.tvRemovePopupMenuCancel.setOnClickListener { dismiss() }
         binding.tvRemovePopupMenuRemove.setOnClickListener {
             dismiss()
@@ -29,8 +32,8 @@ class CreatingFeedDialogFragment :
         private const val EVENT = "EVENT"
         const val TAG = "FeedRemoveDialogFragment"
 
-        fun newInstance(event: FeedDialogClickListener): FeedRemoveDialogFragment =
-            FeedRemoveDialogFragment().also {
+        fun newInstance(event: FeedDialogClickListener): CreatingFeedDialogFragment =
+            CreatingFeedDialogFragment().also {
                 it.arguments = Bundle().apply {
                     putSerializable(EVENT, event)
                 }

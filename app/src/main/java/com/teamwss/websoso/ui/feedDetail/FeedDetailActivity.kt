@@ -21,11 +21,13 @@ import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
@@ -130,7 +132,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun setupEditingFeed() {
-        // navigateToEditingFeed
+        val feedContent =
+            feedDetailViewModel.feedDetailUiState.value?.feed?.let { feed ->
+                EditFeedModel(
+                    novelId = feed.novel.id,
+                    novelTitle = feed.novel.title,
+                    feedContent = feed.content,
+                    feedCategory = feed.relevantCategories,
+                )
+            } ?: throw IllegalArgumentException()
+
+        startActivity(CreateFeedActivity.getIntent(this, feedContent))
     }
 
     private fun setupEditingComment(commentId: Long) {
