@@ -127,7 +127,10 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
                 finish()
             }
 
-            ProfileEditResult.Failure -> Unit // TODO: 실패 처리
+            ProfileEditResult.Failure -> {
+                showWebsosoToast(this, getString(R.string.novel_rating_save_error), R.drawable.ic_novel_rating_alert)
+            }
+
             else -> return
         }
     }
