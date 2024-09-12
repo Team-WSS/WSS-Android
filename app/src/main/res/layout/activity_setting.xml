@@ -16,13 +16,13 @@
 
         <ImageView
             android:id="@+id/iv_setting_back_button"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="2dp"
             android:contentDescription="@null"
             android:onClick="@{() -> onClick.onBackButtonClick()}"
-            android:padding="14dp"
+            android:padding="10dp"
             android:src="@drawable/btn_setting_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,11 +43,10 @@
             android:id="@+id/cl_setting_account_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:onClick="@{() -> onClick.onUserAccountInfoButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_setting_title">
+            app:layout_constraintTop_toBottomOf="@id/iv_setting_back_button">
 
             <TextView
                 android:layout_width="wrap_content"

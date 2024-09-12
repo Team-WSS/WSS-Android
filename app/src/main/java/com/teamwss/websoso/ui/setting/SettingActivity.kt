@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.setting
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
@@ -35,11 +36,15 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
         }
 
         override fun onWebsosoOfficialButtonClick() {
-            // TODO 웹소소 공식 계정으로 연결
+            val officialUrl = getString(R.string.websoso_official)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(officialUrl))
+            startActivity(intent)
         }
 
         override fun onInquireAndFeedbackButtonClick() {
-            // TODO 문의하기 / 피드백으로 연결
+            val inquireUrl = getString(R.string.inquire_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+            startActivity(intent)
         }
 
         override fun onAppRatingButtonClick() {

@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.novelRating
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -14,6 +16,7 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel
@@ -71,6 +74,16 @@ class NovelRatingKeywordBottomSheetDialog :
             novelRatingViewModel.clearEditingKeyword()
             dismiss()
         }
+
+        override fun onReportKeywordClick() {
+            navigateToReportKeyword()
+        }
+    }
+
+    private fun navigateToReportKeyword() {
+        val inquireUrl = getString(R.string.inquire_link)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+        startActivity(intent)
     }
 
     private fun setupDialogBehavior() {
@@ -128,16 +141,16 @@ class NovelRatingKeywordBottomSheetDialog :
             setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
             setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
             setWebsosoChipBackgroundColor(R.color.white)
-            setWebsosoChipPaddingVertical(20f)
-            setWebsosoChipPaddingHorizontal(12f)
-            setWebsosoChipRadius(40f)
+            setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+            setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+            setWebsosoChipRadius(20f.toFloatPxFromDp())
             setOnCloseIconClickListener {
                 novelRatingViewModel.updateSelectedKeywords(keyword = keyword, isSelected = false)
             }
             setWebsosoChipCloseIconVisibility(true)
             setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
-            setWebsosoChipCloseIconSize(20f)
-            setWebsosoChipCloseIconEndPadding(18f)
+            setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
+            setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
             setCloseIconTintResource(R.color.primary_100_6A5DFD)
             tag = keyword.keywordName
         }.also { websosoChip ->
@@ -176,9 +189,9 @@ class NovelRatingKeywordBottomSheetDialog :
                 setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                setWebsosoChipRadius(20f.toFloatPxFromDp())
                 setOnWebsosoChipClick {
                     novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
                 }

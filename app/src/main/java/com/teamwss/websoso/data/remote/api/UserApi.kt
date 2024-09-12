@@ -9,7 +9,6 @@ import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
-import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
@@ -62,11 +61,6 @@ interface UserApi {
         @Body userProfileEditRequestDto: UserProfileEditRequestDto,
     )
 
-    @POST("users/profile")
-    suspend fun postUserProfile(
-        @Body userProfileRequestDto: UserProfileRequestDto,
-    )
-
     @GET("users/my-profile")
     suspend fun getMyProfile(): MyProfileResponseDto
 
@@ -80,15 +74,13 @@ interface UserApi {
         @Path("userId") userId: Long,
     ): NovelPreferenceResponseDto
 
-    @GET("users/{userId}")
+    @GET("users/profile/{userId}")
     suspend fun getOtherUserProfile(
         @Path("userId") userId: Long,
     ): OtherUserProfileResponseDto
 
-    @GET("users/{userId}/feeds")
-    suspend fun getUserFeeds(
-        @Path("userId") userId: Long,
-        @Query("lastFeedId") lastFeedId: Long,
-        @Query("size") size: Int,
-    ): UserFeedsResponseDto
+    @POST("users/profile")
+    suspend fun postUserProfile(
+        @Body userProfileRequestDto: UserProfileRequestDto,
+    )
 }

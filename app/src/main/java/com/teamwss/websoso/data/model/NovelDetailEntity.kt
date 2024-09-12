@@ -17,7 +17,7 @@ data class NovelDetailEntity(
     data class NovelEntity(
         val novelTitle: String,
         val novelImage: String,
-        val novelGenres: List<String>,
+        val novelGenres: String,
         val novelGenreImage: String,
         val isNovelCompleted: Boolean,
         val author: String,

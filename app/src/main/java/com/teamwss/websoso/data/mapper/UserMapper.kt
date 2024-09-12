@@ -6,7 +6,6 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
-import com.teamwss.websoso.data.model.UserFeedsEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -15,7 +14,6 @@ import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
-import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
@@ -96,28 +94,3 @@ fun OtherUserProfileResponseDto.toData(): OtherUserProfileEntity {
         genrePreferences = this.genrePreferences,
     )
 }
-
-fun UserFeedsResponseDto.toData(): UserFeedsEntity {
-    return UserFeedsEntity(
-        isLoadable = this.isLoadable,
-        feeds = this.feeds.map { feed ->
-            UserFeedsEntity.UserFeedEntity(
-                feedId = feed.feedId,
-                isSpoiler = feed.isSpoiler,
-                feedContent = feed.feedContent,
-                createdDate = feed.createdDate,
-                isModified = feed.isModified,
-                isLiked = feed.isLiked,
-                likeCount = feed.likeCount,
-                commentCount = feed.commentCount,
-                novelId = feed.novelId,
-                title = feed.title,
-                novelRatingCount = feed.novelRatingCount,
-                novelRating = feed.novelRating,
-                relevantCategories = feed.relevantCategories
-            )
-        }
-    )
-}
-
-

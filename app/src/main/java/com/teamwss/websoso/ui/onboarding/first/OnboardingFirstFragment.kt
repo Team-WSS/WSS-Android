@@ -1,14 +1,14 @@
 package com.teamwss.websoso.ui.onboarding.first
 
-import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.hideKeyboard
 import com.teamwss.websoso.databinding.FragmentOnboardingFirstBinding
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
@@ -25,6 +25,8 @@ class OnboardingFirstFragment :
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
+        hideKeyboard()
+        setupFocusChangeListener()
         observeInputTypeChanges()
         observeInputNicknameChanges()
         onNicknameDuplicationCheckButtonClick()
@@ -33,6 +35,24 @@ class OnboardingFirstFragment :
     private fun bindViewModel() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+    }
+
+    private fun hideKeyboard() {
+        view?.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                v.hideKeyboard()
+                v.clearFocus()
+            }
+            false
+        }
+    }
+
+    private fun setupFocusChangeListener() {
+        binding.etOnboardingFirstNickname.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                viewModel.updateNicknameInputType(NicknameInputType.TYPING)
+            }
+        }
     }
 
     private fun observeInputNicknameChanges() {

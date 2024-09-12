@@ -99,6 +99,14 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
     }
 
     companion object {
+        private const val NOVEL_ID = "NOVEL_ID"
+
         fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
+
+        fun getIntent(context: Context, novelId: Long): Intent {
+            return Intent(context, CreateFeedActivity::class.java).apply {
+                putExtra(NOVEL_ID, novelId)
+            }
+        }
     }
 }

@@ -35,7 +35,6 @@ class DetailExploreResultViewModel @Inject constructor(
     val isNovelCompleted: LiveData<Boolean?> get() = _isNovelCompleted
 
     private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
-    val selectedStatus: LiveData<SeriesStatus?> get() = _selectedSeriesStatus
 
     private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
     val selectedRating: LiveData<Float?> get() = _selectedRating
@@ -58,6 +57,8 @@ class DetailExploreResultViewModel @Inject constructor(
     private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
     val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
+    private val _isBottomSheetOpen = MutableLiveData(false)
+
     init {
         _appliedFiltersMessage.apply {
             addSource(_selectedGenres) { updateMessage() }
@@ -77,29 +78,31 @@ class DetailExploreResultViewModel @Inject constructor(
     }
 
     private fun updateMessage() {
+        if (_isBottomSheetOpen.value == true) return
+
         val appliedFilters = mutableListOf<String>()
 
         _selectedGenres.value?.let { genres ->
             if (genres.isNotEmpty()) {
-                appliedFilters.add("장르")
+                appliedFilters.add(GENRES_LABEL)
             }
         }
 
-        _isNovelCompleted.value?.let { status ->
-            appliedFilters.add("연재상태")
+        _isNovelCompleted.value?.let {
+            appliedFilters.add(NOVEL_COMPLETED_LABEL)
         }
 
-        _selectedRating.value?.let { rating ->
-            appliedFilters.add("별점")
+        _selectedRating.value?.let {
+            appliedFilters.add(RATING_LABEL)
         }
 
         _selectedKeywordIds.value?.let { keywords ->
             if (keywords.isNotEmpty()) {
-                appliedFilters.add("키워드")
+                appliedFilters.add(KEYWORDS_LABEL)
             }
         }
 
-        _appliedFiltersMessage.value = appliedFilters.joinToString(", ")
+        _appliedFiltersMessage.value = appliedFilters.joinToString(FILTER_SEPARATOR)
     }
 
     private fun isInfoChipSelectedEnabled() {
@@ -208,6 +211,7 @@ class DetailExploreResultViewModel @Inject constructor(
 
     fun updateSelectedSeriesStatus(status: SeriesStatus?) {
         _selectedSeriesStatus.value = status
+        _isNovelCompleted.value = status?.isCompleted
     }
 
     fun updateSelectedRating(rating: Float?) {
@@ -219,9 +223,8 @@ class DetailExploreResultViewModel @Inject constructor(
             runCatching {
                 keywordRepository.fetchKeywords(searchWord)
             }.onSuccess { keywordsList ->
-                val categoriesModel = CategoriesModel(
-                    categories = keywordsList.categories.map { it.toUi() }
-                )
+                val categoriesModel =
+                    CategoriesModel(categories = keywordsList.categories.map { it.toUi() })
 
                 val selectedKeywordIds = selectedKeywordIds.value.orEmpty()
 
@@ -257,7 +260,7 @@ class DetailExploreResultViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = true
+                    error = true,
                 )
             }
         }
@@ -276,10 +279,15 @@ class DetailExploreResultViewModel @Inject constructor(
             category.copy(keywords = updatedKeywords)
         }
 
+        val selectedKeywordIds = updatedCategories.flatMap { category ->
+            category.keywords.filter { it.isSelected }.map { it.keywordId }
+        }
+
         val isAnyKeywordSelected = updatedCategories.any { category ->
             category.keywords.any { it.isSelected }
         }
 
+        _selectedKeywordIds.value = selectedKeywordIds.toMutableList()
         _isKeywordChipSelected.value = isAnyKeywordSelected
         _uiState.value = currentUiState.copy(categories = updatedCategories)
     }
@@ -316,5 +324,19 @@ class DetailExploreResultViewModel @Inject constructor(
                 isSearchResultKeywordsEmpty = false,
             )
         }
+    }
+
+    fun updateIsBottomSheetOpen(isBottomSheetOpen: Boolean) {
+        _isBottomSheetOpen.value = isBottomSheetOpen
+
+        if (!isBottomSheetOpen) updateMessage()
+    }
+
+    companion object {
+        private const val GENRES_LABEL = "장르"
+        private const val NOVEL_COMPLETED_LABEL = "연재상태"
+        private const val RATING_LABEL = "별점"
+        private const val KEYWORDS_LABEL = "키워드"
+        private const val FILTER_SEPARATOR = ", "
     }
 }

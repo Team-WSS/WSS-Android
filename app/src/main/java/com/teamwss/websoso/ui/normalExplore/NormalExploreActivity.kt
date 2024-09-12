@@ -98,7 +98,8 @@ class NormalExploreActivity :
         }
 
         override fun onNovelInquireButtonClick() {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(KAKAO_INQUIRE_URL))
+            val inquireUrl = getString(R.string.inquire_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
             startActivity(intent)
         }
     }
@@ -122,18 +123,18 @@ class NormalExploreActivity :
         normalExploreViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> {
-                    binding.wlNormalExplore.setWebsosoLoadingVisibility(true)
-                    binding.wlNormalExplore.setErrorLayoutVisibility(false)
+                    binding.wllNormalExplore.setWebsosoLoadingVisibility(true)
+                    binding.wllNormalExplore.setErrorLayoutVisibility(false)
                 }
 
                 uiState.error -> {
-                    binding.wlNormalExplore.setWebsosoLoadingVisibility(false)
-                    binding.wlNormalExplore.setErrorLayoutVisibility(true)
+                    binding.wllNormalExplore.setWebsosoLoadingVisibility(false)
+                    binding.wllNormalExplore.setErrorLayoutVisibility(true)
                 }
 
                 else -> {
-                    binding.wlNormalExplore.setWebsosoLoadingVisibility(false)
-                    binding.wlNormalExplore.setErrorLayoutVisibility(false)
+                    binding.wllNormalExplore.setWebsosoLoadingVisibility(false)
+                    binding.wllNormalExplore.setErrorLayoutVisibility(false)
                     updateView(uiState)
                 }
             }
@@ -157,7 +158,6 @@ class NormalExploreActivity :
     }
 
     companion object {
-        private const val KAKAO_INQUIRE_URL = "http://pf.kakao.com/_kHxlWG"
 
         fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
     }

@@ -50,7 +50,7 @@
     <string name="detail_explore_keyword_inquire_keyword">키워드 문의하러 가기</string>
 
     <!-- 상세 탐색 결과 뷰 -->
-    <string name="detail_explore_result_filter_description">가 적용됐어요</string>
+    <string name="detail_explore_result_filter_description">\u00A0적용</string>
     <string name="detail_explore_result_novel">작품</string>
     <string name="detail_explore_result_not_exist">해당하는 작품이 없어요\n검색의 범위를 더 넓혀보세요</string>
 
@@ -58,7 +58,7 @@
     <string name="novel_detail_review">나도 한마디</string>
     <string name="novel_detail_interest">관심</string>
     <string name="novel_detail_info">정보</string>
-    <string name="novel_detail_feed">피드</string>
+    <string name="novel_detail_feed">수다</string>
     <string name="novel_detail_report_error">오류 제보</string>
     <string name="novel_detail_remove_evaluate">평가 삭제</string>
     <string name="novel_detail_remove_evaluate_alert_title">평가를 모두 삭제할까요?</string>
@@ -83,7 +83,10 @@
     <string name="novel_info_read_status_watched_count">%d명이 작품을\n같이 봤어요</string>
     <string name="novel_info_read_status_quit_count">%d명이 작품을\n하차했어요</string>
     <string name="novel_info_user_unit">명</string>
-    <string name="novel_info_charm_points_body">%s가 매력적인 작품이에요</string>
+    <string name="novel_info_charm_points_body">%s(이)가 매력적인 작품이에요</string>
+
+    <!-- 작품 피드 -->
+    <string name="novel_feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
 
     <!-- 피드 뷰 -->
     <string name="feed_score_count">%.1f (%d)</string>
@@ -130,12 +133,14 @@
     <string name="novel_rating_read_status_watching">보는 중</string>
     <string name="novel_rating_read_status_watched">봤어요</string>
     <string name="novel_rating_read_status_quit">하차</string>
-    <string name="novel_rating_charm_points">세계관,소재,캐릭터,관계,분위기</string>
+    <string name="novel_rating_charm_points">세계관,분위기,소재,캐릭터,관계</string>
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
     <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
     <string name="novel_rating_complete">평가 완료!</string>
     <string name="novel_rating_save_error">다시 시도해주세요</string>
+    <string name="novel_rating_keyword_none">해당 키워드는\n아직 등록되지 않았어요..</string>
+    <string name="novel_rating_keyword_report">키워드 문의하러 가기</string>
 
     <!-- 작품 평가 날짜 선택 -->
     <string name="novel_rating_date_start_date">시작 날짜</string>
@@ -175,8 +180,8 @@
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
 
     <!-- 환영 뷰 -->
-    <string name="welcome_welcome_websoso">웹소소에 오신 것을 환영해요!</string>
-    <string name="welcome_lets_falling_websoso">웹소소와 함께 웹소설에 빠져봐요</string>
+    <string name="welcome_welcome_websoso">웹소소와 계약 완료!</string>
+    <string name="welcome_hello_user">%s 님, 만나서 반가워요!</string>
     <string name="welcome_start">시작하기</string>
 
     <!-- 로그인 요청 다이얼로그 -->
@@ -311,6 +316,7 @@
     <string name="profile_edit_avatar_title">프로필 선택</string>
     <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
     <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
+    <string name="profile_edit_success">프로필 정보를 수정했어요!</string>
 
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>

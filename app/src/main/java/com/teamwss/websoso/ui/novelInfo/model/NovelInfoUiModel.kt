@@ -9,6 +9,7 @@ data class NovelInfoUiModel(
     val novelDescription: String = "",
     val attractivePoints: List<CharmPoint> = emptyList(),
     val unifiedReviewCount: UnifiedReviewCountModel = UnifiedReviewCountModel(),
+    val isAttractivePointsExist: Boolean = attractivePoints.isNotEmpty(),
     val isUserReviewExist: Boolean = (unifiedReviewCount.watchingCount.count + unifiedReviewCount.watchedCount.count + unifiedReviewCount.quitCount.count) > 0,
 ) {
 

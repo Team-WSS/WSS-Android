@@ -130,8 +130,14 @@ class OnboardingViewModel @Inject constructor(
         )
     }
 
+    fun updateNicknameInputType(nicknameInputType: NicknameInputType) {
+        updateOnBoardingFirstUiState(nicknameInputType, "")
+    }
+
     fun clearInputNickname() {
-        currentNicknameInput.value = ""
+        if (onboardingFirstUiState.value?.nicknameInputType != NicknameInputType.COMPLETE) {
+            currentNicknameInput.value = ""
+        }
     }
 
     fun goToNextPage() {

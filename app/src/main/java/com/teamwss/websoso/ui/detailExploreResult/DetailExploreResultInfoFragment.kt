@@ -12,6 +12,7 @@ import com.teamwss.websoso.databinding.FragmentDetailExploreResultInfoBinding
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.Rating
 import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
+import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity.Companion.DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,6 +25,7 @@ class DetailExploreResultInfoFragment :
 
         bindViewModel()
         onResetButtonClick()
+        onDetailSearchNovelButtonClick()
         setupGenreChips()
         setupSeriesStatusChips()
         setupRatingChips()
@@ -38,6 +40,17 @@ class DetailExploreResultInfoFragment :
     private fun onResetButtonClick() {
         binding.clDetailExploreInfoResetButton.setOnClickListener {
             detailExploreResultViewModel.updateSelectedInfoValueClear()
+        }
+    }
+
+    private fun onDetailSearchNovelButtonClick() {
+        binding.tvDetailExploreSearchButton.setOnClickListener {
+            detailExploreResultViewModel.updateSearchResult(isSearchButtonClick = true)
+
+            val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG) as? DetailExploreResultDialogBottomSheet
+            bottomSheet?.dismiss()
+
+            detailExploreResultViewModel.updateIsBottomSheetOpen(false)
         }
     }
 
@@ -123,7 +136,9 @@ class DetailExploreResultInfoFragment :
         }
 
         detailExploreResultViewModel.isNovelCompleted.observe(viewLifecycleOwner) { selectedStatus ->
-            val selectedChip = SeriesStatus.fromIsCompleted(selectedStatus == true).title
+            val selectedChip = selectedStatus?.let {
+                SeriesStatus.fromIsCompleted(it).title
+            }
 
             listOf(
                 binding.chipDetailExploreInfoStatusInSeries,

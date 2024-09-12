@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ListView
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
@@ -33,6 +34,11 @@ fun ListView.setListViewHeightBasedOnChildren() {
     params.height = totalHeight + (dividerHeight * (listAdapter.count - 1))
     layoutParams = params
     requestLayout()
+}
+
+fun View.hideKeyboard() {
+    val inputMethodManager : InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
 fun showWebsosoSnackBar(view: View, message: String, icon: Int) {
