@@ -135,7 +135,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun clearInputNickname() {
-        if(onboardingFirstUiState.value?.nicknameInputType != NicknameInputType.COMPLETE){
+        if (onboardingFirstUiState.value?.nicknameInputType != NicknameInputType.COMPLETE) {
             currentNicknameInput.value = ""
         }
     }
