@@ -11,8 +11,6 @@ import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
-import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
-import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,16 +25,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
         onSettingButtonClick()
-
-        binding.ivMyPageUserProfile.setOnClickListener {
-            val intent = ProfileEditActivity.getIntent(
-                requireContext(),
-                nickname = myPageViewModel.myProfile.value?.nickname ?: "밝보",
-                introduction = myPageViewModel.myProfile.value?.intro ?: "ㅎㅇ",
-                genrePreferences = listOf(Genre.FANTASY, Genre.ROMANCE),
-            )
-            startActivity(intent)
-        }
     }
 
     private fun bindViewModel() {
