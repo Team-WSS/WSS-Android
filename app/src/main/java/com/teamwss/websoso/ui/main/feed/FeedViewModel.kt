@@ -1,12 +1,11 @@
 package com.teamwss.websoso.ui.main.feed
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.data.repository.FeedRepository
+import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.main.feed.model.Category
 import com.teamwss.websoso.ui.main.feed.model.CategoryModel
@@ -21,7 +20,7 @@ import javax.inject.Inject
 class FeedViewModel @Inject constructor(
     private val getFeedsUseCase: GetFeedsUseCase,
     private val feedRepository: FeedRepository,
-    fakeUserRepository: FakeUserRepository,
+    userRepository: UserRepository,
 ) : ViewModel() {
     private val _categories: MutableList<CategoryModel> = mutableListOf()
     val categories: List<CategoryModel> get() = _categories.toList()
@@ -30,9 +29,9 @@ class FeedViewModel @Inject constructor(
     val feedUiState: LiveData<FeedUiState> get() = _feedUiState
 
     init {
-        val categories: List<CategoryModel> = when (fakeUserRepository.gender) {
-            "MALE" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
-            "FEMALE" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
+        val categories: List<CategoryModel> = when (userRepository.userGender) {
+            "M" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
+            "F" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
             else -> throw IllegalArgumentException()
         }.split(",")
             .map {
@@ -119,7 +118,6 @@ class FeedViewModel @Inject constructor(
 
     fun updateRefreshedFeeds() {
         feedUiState.value?.let { feedUiState ->
-
             viewModelScope.launch {
                 val selectedCategory: Category =
                     categories.find { it.isSelected }?.category ?: throw IllegalStateException()
