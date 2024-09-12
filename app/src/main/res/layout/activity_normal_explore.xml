@@ -40,17 +40,17 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="?attr/actionBarSize">
+                    android:paddingTop="4dp">
 
                     <ImageView
                         android:id="@+id/iv_normal_explore_back_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="6dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@null"
                         android:onClick="@{() -> onClick.onBackButtonClick()}"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:src="@drawable/btn_explore_back"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
