@@ -101,16 +101,19 @@ fun PopularFeedsResponseDto.toData(): PopularFeedsEntity {
 }
 
 fun UserInterestFeedsResponseDto.toData(): UserInterestFeedsEntity {
-    return UserInterestFeedsEntity(userInterestFeeds = userInterestFeeds.map { feed ->
-        UserInterestFeedsEntity.UserInterestFeedEntity(
-            avatarImage = feed.avatarImage,
-            feedContent = feed.feedContent,
-            nickname = feed.nickname,
-            novelId = feed.novelId,
-            novelImage = feed.novelImage,
-            novelRating = feed.novelRating,
-            novelRatingCount = feed.novelRatingCount,
-            novelTitle = feed.novelTitle,
-        )
-    })
+    return UserInterestFeedsEntity(
+        userInterestFeeds = userInterestFeeds.map { feed ->
+            UserInterestFeedsEntity.UserInterestFeedEntity(
+                avatarImage = feed.avatarImage,
+                feedContent = feed.feedContent,
+                nickname = feed.nickname,
+                novelId = feed.novelId,
+                novelImage = feed.novelImage,
+                novelRating = feed.novelRating,
+                novelRatingCount = feed.novelRatingCount,
+                novelTitle = feed.novelTitle,
+            )
+        },
+        message = message,
+    )
 }
