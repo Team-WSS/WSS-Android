@@ -1,16 +1,14 @@
 package com.teamwss.websoso.ui.onboarding.first
 
-import android.content.Context
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.ui.view.hideKeyboard
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.hideKeyboard
 import com.teamwss.websoso.databinding.FragmentOnboardingFirstBinding
 import com.teamwss.websoso.ui.onboarding.OnboardingViewModel
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
