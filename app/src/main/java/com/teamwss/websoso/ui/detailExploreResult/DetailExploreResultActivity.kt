@@ -14,6 +14,10 @@ import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.databinding.ActivityDetailExploreResultBinding
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.HEADER
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.LOADING
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.ItemType.NOVELS
+import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Loading
 import com.teamwss.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Novels
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
@@ -62,12 +66,15 @@ class DetailExploreResultActivity :
         val gridLayoutManager = GridLayoutManager(this, 2)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return when (position) {
-                    HEADER_POSITION -> FULL_SPAN
+                return when (detailExploreResultAdapter.getItemViewType(position)) {
+                    HEADER.ordinal -> FULL_SPAN
+                    NOVELS.ordinal -> HALF_SPAN
+                    LOADING.ordinal -> FULL_SPAN
                     else -> HALF_SPAN
                 }
             }
         }
+
         binding.rvDetailExploreResult.apply {
             layoutManager = gridLayoutManager
             adapter = detailExploreResultAdapter
@@ -121,7 +128,13 @@ class DetailExploreResultActivity :
     private fun updateView(uiState: DetailExploreResultUiState) {
         val header = Header(uiState.novelCount)
         val novels = uiState.novels.map { Novels(it) }
-        detailExploreResultAdapter.submitList(listOf(header) + novels)
+
+        if (uiState.novels.isNotEmpty()) {
+            when (uiState.isLoadable) {
+                true -> detailExploreResultAdapter.submitList(listOf(header) + novels + Loading)
+                false -> detailExploreResultAdapter.submitList(listOf(header) + novels)
+            }
+        }
     }
 
     private fun onBackButtonClick() {
@@ -138,20 +151,20 @@ class DetailExploreResultActivity :
                 supportFragmentManager,
                 DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG,
             )
+
+            detailExploreResultViewModel.updateIsBottomSheetOpen(true)
         }
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
         val intent = NovelDetailActivity.getIntent(this, novelId)
         startActivity(intent)
-        finish()
     }
 
     companion object {
-        private const val HEADER_POSITION = 0
         private const val FULL_SPAN = 2
         private const val HALF_SPAN = 1
-        private const val DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG =
+        const val DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG =
             "DetailExploreResultDialogBottomSheet"
         private const val DETAIL_EXPLORE_FILTERED_INFO = "DetailExploreFilteredInfo"
 

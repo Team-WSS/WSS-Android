@@ -31,7 +31,7 @@ class DetailExploreKeywordViewHolder(
                     layoutParams.matchConstraintMaxHeight =
                         ConstraintLayout.LayoutParams.WRAP_CONTENT
 
-                false -> layoutParams.matchConstraintMaxHeight = 78.toIntPxFromDp()
+                false -> layoutParams.matchConstraintMaxHeight = 92.toIntPxFromDp()
             }
             wcgNovelRatingKeyword.layoutParams = layoutParams
         }
@@ -55,8 +55,8 @@ class DetailExploreKeywordViewHolder(
                 setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(10f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(4f.toFloatPxFromDp())
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                 setWebsosoChipRadius(20f.toFloatPxFromDp())
                 setOnWebsosoChipClick {
                     onKeywordClick(keyword.keywordId)
