@@ -200,6 +200,32 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_no_associated_feed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_home_white_stroke_gray_70_radius_14dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="20dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_home_interest_feed">
+
+                    <TextView
+                        android:id="@+id/tv_home_no_associated_feed"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="아직 관심 등록한 작품과 관련된 글이 없어요"
+                        android:textAppearance="@style/body2"
+                        android:textColor="@color/gray_200_AEADB3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
                     android:id="@+id/tv_home_recommend_novel"
                     android:layout_width="wrap_content"
@@ -208,7 +234,7 @@
                     android:text="@string/home_recommend_novel"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="@id/vp_home_popular_feed"
-                    app:layout_constraintTop_toBottomOf="@id/cl_home_interest_feed" />
+                    app:layout_constraintTop_toBottomOf="@id/cl_home_no_associated_feed" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_user_recommend_novel"

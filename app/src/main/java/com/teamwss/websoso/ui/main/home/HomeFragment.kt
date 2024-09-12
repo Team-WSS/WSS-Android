@@ -126,11 +126,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun updateUserInterestFeedsVisibility(isUserInterestEmpty: Boolean) {
         with(binding) {
             if (isUserInterestEmpty) {
-                clHomeUserInterestFeed.visibility = View.GONE
-                clHomeInterestFeed.visibility = View.VISIBLE
+                when(homeViewModel.uiState.value?.isInterestNovel){
+                    true -> {
+                        clHomeUserInterestFeed.visibility = View.GONE
+                        clHomeInterestFeed.visibility = View.GONE
+                        clHomeNoAssociatedFeed.visibility =View.VISIBLE
+                    }
+                    false -> {
+                        clHomeUserInterestFeed.visibility = View.GONE
+                        clHomeInterestFeed.visibility = View.VISIBLE
+                        clHomeNoAssociatedFeed.visibility =View.GONE
+                    }
+                    else -> Unit
+                }
             } else {
                 clHomeUserInterestFeed.visibility = View.VISIBLE
                 clHomeInterestFeed.visibility = View.GONE
+                clHomeNoAssociatedFeed.visibility =View.GONE
             }
         }
     }
