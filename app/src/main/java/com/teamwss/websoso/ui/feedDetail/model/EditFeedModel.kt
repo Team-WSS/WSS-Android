@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class EditFeedModel(
+    val feedId: Long = -1,
     val novelId: Long?,
     val novelTitle: String?,
     val feedContent: String = "",

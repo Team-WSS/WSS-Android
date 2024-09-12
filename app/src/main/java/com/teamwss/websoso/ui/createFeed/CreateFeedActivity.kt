@@ -15,6 +15,7 @@ import com.teamwss.websoso.R.style.body2
 import com.teamwss.websoso.R.style.body4
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
 import com.teamwss.websoso.ui.createFeed.model.CreatedFeedCategoryModel
@@ -58,7 +59,13 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
             createFeedViewModel.updateSelectedNovelClear()
         }
         binding.tvCreateFeedDoneButton.setOnClickListener {
-            createFeedViewModel.dispatchFeed()
+            val editFeedModel = intent.getAdaptedParcelableExtra<EditFeedModel>(FEED)
+            when {
+                editFeedModel == null -> createFeedViewModel.createFeed()
+                editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
+                else -> createFeedViewModel.editFeed(editFeedModel.feedId)
+            }
+
             finish()
         }
         binding.ivCreateFeedBackButton.setOnClickListener {

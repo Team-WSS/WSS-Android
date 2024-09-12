@@ -30,13 +30,31 @@ class FeedRepository @Inject constructor(
             .also { _cachedFeeds.addAll(it.feeds) }
             .copy(feeds = cachedFeeds)
 
-    suspend fun postFeed(
+    suspend fun saveFeed(
         relevantCategories: List<String>,
         feedContent: String,
         novelId: Long?,
         isSpoiler: Boolean,
     ) {
         feedApi.postFeed(
+            FeedRequestDto(
+                relevantCategories = relevantCategories,
+                feedContent = feedContent,
+                novelId = novelId,
+                isSpoiler = isSpoiler,
+            )
+        )
+    }
+
+    suspend fun saveEditedFeed(
+        feedId: Long,
+        relevantCategories: List<String>,
+        feedContent: String,
+        novelId: Long?,
+        isSpoiler: Boolean,
+    ) {
+        feedApi.putFeed(
+            feedId,
             FeedRequestDto(
                 relevantCategories = relevantCategories,
                 feedContent = feedContent,

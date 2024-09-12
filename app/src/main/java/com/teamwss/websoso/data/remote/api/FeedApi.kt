@@ -29,6 +29,12 @@ interface FeedApi {
         @Body feedRequestDto: FeedRequestDto,
     )
 
+    @PUT("feeds/{feedId}")
+    suspend fun putFeed(
+        @Path("feedId") feedId: Long,
+        @Body feedRequestDto: FeedRequestDto,
+    )
+
     @GET("feeds/{feedId}")
     suspend fun getFeed(
         @Path("feedId") feedId: Long,

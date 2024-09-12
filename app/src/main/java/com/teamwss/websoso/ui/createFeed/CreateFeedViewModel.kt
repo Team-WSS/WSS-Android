@@ -61,13 +61,28 @@ class CreateFeedViewModel @Inject constructor(
                 categories.any { it.isSelected }
     }
 
-    fun dispatchFeed() {
+    fun createFeed() {
         viewModelScope.launch {
             runCatching {
-                feedRepository.postFeed(
+                feedRepository.saveFeed(
                     relevantCategories = categories.filter { it.isSelected }
                         .map { it.category.titleEn },
-                    feedContent = content.value ?: "",
+                    feedContent = content.value.orEmpty(),
+                    novelId = novelId,
+                    isSpoiler = isSpoiled.value ?: false,
+                )
+            }.onSuccess { }.onFailure { }
+        }
+    }
+
+    fun editFeed(feedId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                feedRepository.saveEditedFeed(
+                    feedId = feedId,
+                    relevantCategories = categories.filter { it.isSelected }
+                        .map { it.category.titleEn },
+                    feedContent = content.value.orEmpty(),
                     novelId = novelId,
                     isSpoiler = isSpoiled.value ?: false,
                 )

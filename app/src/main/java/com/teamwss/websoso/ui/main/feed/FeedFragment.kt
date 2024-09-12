@@ -24,6 +24,7 @@ import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
@@ -132,8 +133,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             )
             popup.dismiss()
         }
-        menuContentTitle =
-            getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        menuContentTitle = getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
@@ -156,8 +156,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             )
             popup.dismiss()
         }
-        menuContentTitle =
-            getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        menuContentTitle = getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -182,7 +181,18 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     }
 
     private fun navigateToFeedEdit(feedId: Long) {
-        TODO()// 피드 수정 뷰
+        val feedContent =
+            feedViewModel.feedUiState.value?.feeds?.find { it.id == feedId }?.let { feed ->
+                EditFeedModel(
+                    feedId = feed.id,
+                    novelId = feed.novel.id,
+                    novelTitle = feed.novel.title,
+                    feedContent = feed.content,
+                    feedCategory = feed.relevantCategories,
+                )
+            } ?: throw IllegalArgumentException()
+
+        startActivity(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
@@ -277,8 +287,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
 
     override fun onResume() {
         super.onResume()
-        if (feedViewModel.feedUiState.value?.feeds.isNullOrEmpty().not())
-            feedViewModel.updateRefreshedFeeds()
+        if (feedViewModel.feedUiState.value?.feeds.isNullOrEmpty()
+                .not()
+        ) feedViewModel.updateRefreshedFeeds()
     }
 
     override fun onDestroyView() {

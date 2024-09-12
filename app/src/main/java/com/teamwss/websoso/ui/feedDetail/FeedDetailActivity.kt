@@ -135,6 +135,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         val feedContent =
             feedDetailViewModel.feedDetailUiState.value?.feed?.let { feed ->
                 EditFeedModel(
+                    feedId = feed.id,
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
                     feedContent = feed.content,
