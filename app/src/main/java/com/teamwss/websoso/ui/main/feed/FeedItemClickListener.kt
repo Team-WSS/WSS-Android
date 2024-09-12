@@ -4,7 +4,7 @@ import android.view.View
 
 interface FeedItemClickListener {
 
-    fun onProfileClick(id: Long)
+    fun onProfileClick(userId: Long)
 
     fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean)
 

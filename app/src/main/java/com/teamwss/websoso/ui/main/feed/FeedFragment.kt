@@ -63,8 +63,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(id: Long) {
-            // ProfileActivity.from(context, id)
+        override fun onProfileClick(userId: Long) {
+            navigateToOtherUserPage(userId)
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -99,6 +99,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         override fun onCommentButtonClick(feedId: Long) {
             navigateToFeedDetail(feedId)
         }
+    }
+
+    private fun navigateToOtherUserPage(userId: Long) {
+        // OtherUserPageActivity.getIntent(requireContext(), userId)
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
