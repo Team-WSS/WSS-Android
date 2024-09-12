@@ -246,11 +246,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
                 setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
                 setWebsosoChipRadius(18f.toFloatPxFromDp())
                 setWebsosoChipSelected(categoryUiState.isSelected)
-                setOnWebsosoChipClick {
-                    singleEventHandler.throttleFirst {
-                        feedViewModel.updateSelectedCategory(categoryUiState.category)
-                    }
-                }
+                setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
