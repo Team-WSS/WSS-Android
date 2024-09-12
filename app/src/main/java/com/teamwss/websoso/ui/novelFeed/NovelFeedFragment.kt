@@ -66,9 +66,9 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             navigateToFeedDetail(id)
         }
 
-        override fun onNovelInfoClick(id: Long) {
-            if (id == novelId) return
-            startActivity(NovelDetailActivity.getIntent(requireContext(), id))
+        override fun onNovelInfoClick(novelId: Long) {
+            if (novelId == this@NovelFeedFragment.novelId) return
+            startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {

@@ -38,6 +38,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
@@ -74,8 +75,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             navigateToFeedDetail(id)
         }
 
-        override fun onNovelInfoClick(id: Long) {
-            // navigateToNovelDetail(id)
+        override fun onNovelInfoClick(novelId: Long) {
+            navigateToNovelDetail(novelId)
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
@@ -202,6 +203,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
 
     private fun navigateToFeedDetail(feedId: Long) {
         startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+    }
+
+    private fun navigateToNovelDetail(novelId: Long) {
+        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

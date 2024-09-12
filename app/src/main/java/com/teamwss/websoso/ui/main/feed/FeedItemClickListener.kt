@@ -10,7 +10,7 @@ interface FeedItemClickListener {
 
     fun onContentClick(id: Long)
 
-    fun onNovelInfoClick(id: Long)
+    fun onNovelInfoClick(novelId: Long)
 
     fun onLikeButtonClick(view: View, id: Long)
 
