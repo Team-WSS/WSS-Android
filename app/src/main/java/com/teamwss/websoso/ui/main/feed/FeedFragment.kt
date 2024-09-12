@@ -177,11 +177,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     ) {
         when (Dialog::class) {
             DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
-                menuType = menuType, event = { singleEventHandler.throttleFirst { event() } },
+                menuType = menuType, event = { event() },
             ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
 
             DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
-                menuType = menuType, event = { singleEventHandler.throttleFirst { event() } },
+                menuType = menuType, event = { event() },
             ).show(childFragmentManager, FeedReportDialogFragment.TAG)
         }
     }
