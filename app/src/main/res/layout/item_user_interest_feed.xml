@@ -26,7 +26,7 @@
 
         <ImageView
             android:id="@+id/iv_user_interest_feed_novel_cover"
-            cornerRadius="@{10f}"
+            cornerRadius="@{4f}"
             loadImageUrl="@{userInterestFeed.novelImage}"
             android:layout_width="60dp"
             android:layout_height="88dp"
