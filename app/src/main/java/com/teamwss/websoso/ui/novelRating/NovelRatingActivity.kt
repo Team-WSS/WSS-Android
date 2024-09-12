@@ -70,6 +70,8 @@ class NovelRatingActivity :
             override fun onCancelClick() {}
 
             override fun onClearClick() {}
+
+            override fun onReportKeywordClick() {}
         }
 
     private fun showCancelNovelRatingAlertDialog() {

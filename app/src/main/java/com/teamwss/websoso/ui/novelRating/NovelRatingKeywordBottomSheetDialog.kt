@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.novelRating
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -72,6 +74,16 @@ class NovelRatingKeywordBottomSheetDialog :
             novelRatingViewModel.clearEditingKeyword()
             dismiss()
         }
+
+        override fun onReportKeywordClick() {
+            navigateToReportKeyword()
+        }
+    }
+
+    private fun navigateToReportKeyword() {
+        val inquireUrl = getString(R.string.inquire_link)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+        startActivity(intent)
     }
 
     private fun setupDialogBehavior() {

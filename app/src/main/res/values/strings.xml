@@ -67,7 +67,6 @@
     <string name="novel_detail_remove_accept">삭제</string>
     <string name="novel_detail_remove_result">평가를 모두 삭제했어요</string>
     <string name="novel_detail_tooltip">읽기 상태를 체크하여\n작품을 평가해보세요!</string>
-    <string name="novel_detail_report_url">http://pf.kakao.com/_kHxlWG</string>
 
     <!-- 작품 소개 -->
     <string name="novel_info_platforms_title">작품 보러가기</string>
@@ -353,5 +352,7 @@
     <string name="wset_create_feed_search_novel">작품 제목, 작가를 검색하세요</string>
     <string name="tv_create_feed_search_novel_connect_novel_description">작성 중인 글과 관련된 웹소설을 선택하세요</string>
     <string name="tv_create_feed_search_novel_connect_button">해당 작품 연결</string>
+    <string name="novel_rating_keyword_none">해당 키워드는\n아직 등록되지 않았어요..</string>
+    <string name="novel_rating_keyword_report">키워드 문의하러 가기</string>
 
 </resources>

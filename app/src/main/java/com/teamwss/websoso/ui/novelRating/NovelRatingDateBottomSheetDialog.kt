@@ -75,6 +75,8 @@ class NovelRatingDateBottomSheetDialog :
                 showClearDateInfoAlertDialog()
                 dismiss()
             }
+
+            override fun onReportKeywordClick() {}
         }
 
     private fun showClearDateInfoAlertDialog() {
