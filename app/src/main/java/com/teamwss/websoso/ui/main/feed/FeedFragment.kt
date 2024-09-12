@@ -290,6 +290,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         when (feedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
+        }.apply {
+            binding.rvFeed.smoothScrollToPosition(0)
         }
     }
 
