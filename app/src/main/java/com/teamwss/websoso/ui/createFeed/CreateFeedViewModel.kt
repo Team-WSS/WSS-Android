@@ -50,8 +50,7 @@ class CreateFeedViewModel @Inject constructor(
             _selectedNovelTitle.value = feed.novelTitle.orEmpty()
             content.value = feed.feedContent
             _categories.addAll(createCategories(feed.feedCategory))
-        }
-        _categories.addAll(createCategories())
+        } ?: _categories.addAll(createCategories())
 
         isActivated.addSource(content) { updateIsActivated() }
     }

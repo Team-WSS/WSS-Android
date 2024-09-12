@@ -28,8 +28,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
+        
         setupView()
         onCreateFeedClick()
         bindViewModel()
