@@ -62,8 +62,8 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             showMenu(view, feedId, isMyFeed)
         }
 
-        override fun onContentClick(id: Long) {
-            navigateToFeedDetail(id)
+        override fun onContentClick(feedId: Long) {
+            navigateToFeedDetail(feedId)
         }
 
         override fun onNovelInfoClick(novelId: Long) {
@@ -86,10 +86,6 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
                 novelFeedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
             }
-        }
-
-        override fun onCommentButtonClick(feedId: Long) {
-            navigateToFeedDetail(feedId)
         }
     }
 

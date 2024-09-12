@@ -64,19 +64,19 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
         override fun onProfileClick(userId: Long) {
-            navigateToOtherUserPage(userId)
+            singleEventHandler.throttleFirst(300) { navigateToOtherUserPage(userId) }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
-            showMenu(view, feedId, isMyFeed)
+            singleEventHandler.throttleFirst { showMenu(view, feedId, isMyFeed) }
         }
 
-        override fun onContentClick(id: Long) {
-            navigateToFeedDetail(id)
+        override fun onContentClick(feedId: Long) {
+            singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId) }
         }
 
         override fun onNovelInfoClick(novelId: Long) {
-            navigateToNovelDetail(novelId)
+            singleEventHandler.throttleFirst(300) { navigateToNovelDetail(novelId) }
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
@@ -95,14 +95,12 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
                 feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
             }
         }
-
-        override fun onCommentButtonClick(feedId: Long) {
-            navigateToFeedDetail(feedId)
-        }
     }
 
     private fun navigateToOtherUserPage(userId: Long) {
-        // OtherUserPageActivity.getIntent(requireContext(), userId)
+//        singleEventHandler.throttleFirst(300) {
+//            OtherUserPageActivity.getIntent(requireContext(), userId)
+//        }
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -128,43 +126,45 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         }
     }
 
-    private fun MenuFeedPopupBinding.setupMyFeed(
-        feedId: Long,
-        popup: PopupWindow,
-    ) {
+    private fun MenuFeedPopupBinding.setupMyFeed(feedId: Long, popup: PopupWindow) {
         onFirstItemClick = {
-            navigateToFeedEdit(feedId)
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                navigateToFeedEdit(feedId)
+                popup.dismiss()
+            }
         }
         onSecondItemClick = {
-            showDialog<DialogRemovePopupMenuBinding>(
-                menuType = REMOVE_FEED.name,
-                event = { feedViewModel.updateRemovedFeed(feedId) },
-            )
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                showDialog<DialogRemovePopupMenuBinding>(
+                    menuType = REMOVE_FEED.name,
+                    event = { feedViewModel.updateRemovedFeed(feedId) },
+                )
+                popup.dismiss()
+            }
         }
         menuContentTitle = getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
 
-    private fun MenuFeedPopupBinding.setupNotMyFeed(
-        feedId: Long,
-        popup: PopupWindow,
-    ) {
+    private fun MenuFeedPopupBinding.setupNotMyFeed(feedId: Long, popup: PopupWindow) {
         onFirstItemClick = {
-            showDialog<DialogReportPopupMenuBinding>(
-                menuType = ReportMenuType.SPOILER_FEED.name,
-                event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
-            )
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                showDialog<DialogReportPopupMenuBinding>(
+                    menuType = ReportMenuType.SPOILER_FEED.name,
+                    event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
+                )
+                popup.dismiss()
+            }
         }
         onSecondItemClick = {
-            showDialog<DialogReportPopupMenuBinding>(
-                menuType = ReportMenuType.IMPERTINENCE_FEED.name,
-                event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
-            )
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                showDialog<DialogReportPopupMenuBinding>(
+                    menuType = ReportMenuType.IMPERTINENCE_FEED.name,
+                    event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
+                )
+                popup.dismiss()
+            }
         }
         menuContentTitle = getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
@@ -177,11 +177,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     ) {
         when (Dialog::class) {
             DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
-                menuType = menuType, event = { event() },
+                menuType = menuType, event = { singleEventHandler.throttleFirst { event() } },
             ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
 
             DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
-                menuType = menuType, event = { event() },
+                menuType = menuType, event = { singleEventHandler.throttleFirst { event() } },
             ).show(childFragmentManager, FeedReportDialogFragment.TAG)
         }
     }
@@ -225,7 +225,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     }
 
     private fun initView() {
-        binding.onWriteClick = ::navigateToFeedWriting
+        binding.onWriteClick = { singleEventHandler.throttleFirst { navigateToFeedWriting() } }
         feedViewModel.categories.setUpChips()
         setupAdapter()
         setupRefreshView()
@@ -246,7 +246,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
                 setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
                 setWebsosoChipRadius(18f.toFloatPxFromDp())
                 setWebsosoChipSelected(categoryUiState.isSelected)
-                setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
+                setOnWebsosoChipClick {
+                    singleEventHandler.throttleFirst {
+                        feedViewModel.updateSelectedCategory(categoryUiState.category)
+                    }
+                }
             }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
@@ -267,14 +271,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
 
     private fun setupRefreshView() {
         binding.sptrFeedRefresh.apply {
-            setRefreshViewParams(
-                params = ViewGroup.LayoutParams(
-                    30.toIntPxFromDp(), 30.toIntPxFromDp(),
+            singleEventHandler.throttleFirst {
+                setRefreshViewParams(
+                    params = ViewGroup.LayoutParams(
+                        30.toIntPxFromDp(), 30.toIntPxFromDp(),
+                    )
                 )
-            )
-            setLottieAnimation("lottie_websoso_loading.json")
-            setOnRefreshListener {
-                feedViewModel.updateRefreshedFeeds()
+                setLottieAnimation("lottie_websoso_loading.json")
+                setOnRefreshListener {
+                    feedViewModel.updateRefreshedFeeds()
+                }
             }
         }
     }
