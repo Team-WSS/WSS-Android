@@ -51,18 +51,18 @@ class ProfileDisclosureActivity :
         profileDisclosureViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> {
-                    binding.wlProfileDisclosure.setWebsosoLoadingVisibility(true)
-                    binding.wlProfileDisclosure.setErrorLayoutVisibility(false)
+                    binding.wllProfileDisclosure.setWebsosoLoadingVisibility(true)
+                    binding.wllProfileDisclosure.setErrorLayoutVisibility(false)
                 }
 
                 uiState.error -> {
-                    binding.wlProfileDisclosure.setWebsosoLoadingVisibility(false)
-                    binding.wlProfileDisclosure.setErrorLayoutVisibility(true)
+                    binding.wllProfileDisclosure.setWebsosoLoadingVisibility(false)
+                    binding.wllProfileDisclosure.setErrorLayoutVisibility(true)
                 }
 
                 else -> {
-                    binding.wlProfileDisclosure.setWebsosoLoadingVisibility(false)
-                    binding.wlProfileDisclosure.setErrorLayoutVisibility(false)
+                    binding.wllProfileDisclosure.setWebsosoLoadingVisibility(false)
+                    binding.wllProfileDisclosure.setErrorLayoutVisibility(false)
                 }
             }
         }

@@ -22,7 +22,7 @@
 
         <ImageView
             android:id="@+id/iv_normal_explore_result_cover"
-            cornerRadius="@{20f}"
+            cornerRadius="@{8f}"
             loadImageUrl="@{novel.image}"
             android:layout_width="78dp"
             android:layout_height="104dp"
