@@ -41,18 +41,18 @@ class WithdrawFirstActivity :
         withdrawFirstViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> {
-                    binding.wlWithdrawFirst.setWebsosoLoadingVisibility(true)
-                    binding.wlWithdrawFirst.setErrorLayoutVisibility(false)
+                    binding.wllWithdrawFirst.setWebsosoLoadingVisibility(true)
+                    binding.wllWithdrawFirst.setErrorLayoutVisibility(false)
                 }
 
                 uiState.error -> {
-                    binding.wlWithdrawFirst.setWebsosoLoadingVisibility(false)
-                    binding.wlWithdrawFirst.setErrorLayoutVisibility(true)
+                    binding.wllWithdrawFirst.setWebsosoLoadingVisibility(false)
+                    binding.wllWithdrawFirst.setErrorLayoutVisibility(true)
                 }
 
                 else -> {
-                    binding.wlWithdrawFirst.setWebsosoLoadingVisibility(false)
-                    binding.wlWithdrawFirst.setErrorLayoutVisibility(false)
+                    binding.wllWithdrawFirst.setWebsosoLoadingVisibility(false)
+                    binding.wllWithdrawFirst.setErrorLayoutVisibility(false)
                     updateUserNovelStats(uiState.userNovelStats)
                 }
             }

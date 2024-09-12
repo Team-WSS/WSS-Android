@@ -62,18 +62,18 @@ class ChangeUserInfoActivity :
         changeUserInfoViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> {
-                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(true)
-                    binding.wlChangeUserInfo.setErrorLayoutVisibility(false)
+                    binding.wllChangeUserInfo.setWebsosoLoadingVisibility(true)
+                    binding.wllChangeUserInfo.setErrorLayoutVisibility(false)
                 }
 
                 uiState.error -> {
-                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(false)
-                    binding.wlChangeUserInfo.setErrorLayoutVisibility(true)
+                    binding.wllChangeUserInfo.setWebsosoLoadingVisibility(false)
+                    binding.wllChangeUserInfo.setErrorLayoutVisibility(true)
                 }
 
                 else -> {
-                    binding.wlChangeUserInfo.setWebsosoLoadingVisibility(false)
-                    binding.wlChangeUserInfo.setErrorLayoutVisibility(false)
+                    binding.wllChangeUserInfo.setWebsosoLoadingVisibility(false)
+                    binding.wllChangeUserInfo.setErrorLayoutVisibility(false)
                     if (uiState.isSaveStatusComplete) finish()
                 }
             }
