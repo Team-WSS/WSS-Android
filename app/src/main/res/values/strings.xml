@@ -315,6 +315,7 @@
     <string name="profile_edit_avatar_title">프로필 선택</string>
     <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
     <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
+    <string name="profile_edit_success">프로필 정보를 수정했어요!</string>
 
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>
