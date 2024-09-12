@@ -12,11 +12,10 @@
             android:id="@+id/iv_withdraw_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             android:contentDescription="@null"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
+            android:padding="10dp"
             android:src="@drawable/btn_setting_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,11 +37,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="46dp"
             android:text="@string/withdraw_title"
             android:textAppearance="@style/headline1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_withdraw_title" />
+            app:layout_constraintTop_toBottomOf="@id/iv_withdraw_back_button" />
 
         <TextView
             android:id="@+id/tv_withdraw_first_description"
