@@ -15,6 +15,7 @@ import com.teamwss.websoso.R.style.body2
 import com.teamwss.websoso.R.style.body4
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
@@ -25,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activity_create_feed) {
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,29 +59,35 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
             binding.clCreateFeedNovelInfo.visibility = View.INVISIBLE
             createFeedViewModel.updateSelectedNovelClear()
         }
+
         binding.tvCreateFeedDoneButton.setOnClickListener {
-            val editFeedModel = intent.getAdaptedParcelableExtra<EditFeedModel>(FEED)
+            singleEventHandler.throttleFirst {
+                val editFeedModel = intent.getAdaptedParcelableExtra<EditFeedModel>(FEED)
 
-            when {
-                editFeedModel == null -> createFeedViewModel.createFeed()
-                editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
-                else -> createFeedViewModel.editFeed(editFeedModel.feedId)
+                when {
+                    editFeedModel == null -> createFeedViewModel.createFeed()
+                    editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
+                    else -> createFeedViewModel.editFeed(editFeedModel.feedId)
+                }
+
+                setResult(RESULT_OK)
+                if (!isFinishing) finish()
             }
-
-            setResult(RESULT_OK)
-            if (!isFinishing) finish()
         }
-        binding.ivCreateFeedBackButton.setOnClickListener {
-            val isEmptyCategory = createFeedViewModel.categories.any { it.isSelected }
-            val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
-            val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
-            if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
-                CreatingFeedDialogFragment.newInstance(event = ::finish)
-                    .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
-                return@setOnClickListener
+        binding.ivCreateFeedBackButton.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                val isEmptyCategory = createFeedViewModel.categories.any { it.isSelected }
+                val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
+                val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
+
+                if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
+                    CreatingFeedDialogFragment.newInstance(event = ::finish)
+                        .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
+                    return@throttleFirst
+                }
+                if (!isFinishing) finish()
             }
-            if (!isFinishing) finish()
         }
     }
 
