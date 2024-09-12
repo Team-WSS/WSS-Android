@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main.feed
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,9 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
@@ -45,6 +49,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -192,7 +197,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
                 )
             } ?: throw IllegalArgumentException()
 
-        startActivity(CreateFeedActivity.getIntent(requireContext(), feedContent))
+        activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
@@ -202,6 +207,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) feedViewModel.updateRefreshedFeeds()
+        }
         initView()
         feedViewModel.updateFeeds()
         setupObserver()
@@ -215,7 +223,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     }
 
     private fun navigateToFeedWriting() {
-        startActivity(CreateFeedActivity.getIntent(requireContext()))
+        activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext()))
     }
 
     private fun List<CategoryModel>.setUpChips() {
@@ -283,13 +291,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (feedViewModel.feedUiState.value?.feeds.isNullOrEmpty()
-                .not()
-        ) feedViewModel.updateRefreshedFeeds()
     }
 
     override fun onDestroyView() {

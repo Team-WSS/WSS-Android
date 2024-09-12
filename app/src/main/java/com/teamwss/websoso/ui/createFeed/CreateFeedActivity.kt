@@ -66,7 +66,8 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
                 else -> createFeedViewModel.editFeed(editFeedModel.feedId)
             }
 
-            finish()
+            setResult(RESULT_OK)
+            if (!isFinishing) finish()
         }
         binding.ivCreateFeedBackButton.setOnClickListener {
             val isEmptyCategory = createFeedViewModel.categories.any { it.isSelected }
@@ -78,7 +79,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
                     .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
                 return@setOnClickListener
             }
-            finish()
+            if (!isFinishing) finish()
         }
     }
 

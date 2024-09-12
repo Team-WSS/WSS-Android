@@ -259,7 +259,7 @@ class NovelDetailActivity :
                 novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
             )
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
-            startActivity(intent)
+            novelRatingLauncher.launch(intent)
         }
     }
 

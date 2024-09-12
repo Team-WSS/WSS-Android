@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
@@ -53,6 +55,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         )
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
     private val popupBinding: MenuFeedPopupBinding by lazy {
         MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
     }
@@ -143,13 +146,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
                 )
             } ?: throw IllegalArgumentException()
 
-        startActivity(CreateFeedActivity.getIntent(this, feedContent))
+        activityResultCallback.launch(CreateFeedActivity.getIntent(this, feedContent))
     }
 
     private fun setupEditingComment(commentId: Long) {
         val writtenComment = feedDetailViewModel.feedDetailUiState.value?.comments?.find {
             it.commentId == commentId
-        }?.commentContent ?: ""
+        }?.commentContent.orEmpty()
 
         feedDetailViewModel.updateCommentId(commentId)
         binding.etFeedDetailInput.setText(writtenComment)
@@ -238,6 +241,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) feedDetailViewModel.updateFeedDetail(feedId)
+        }
         setupView()
         setupObserver()
         onFeedDetailClick()

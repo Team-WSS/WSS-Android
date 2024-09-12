@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main.feed
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -121,7 +123,7 @@ class FeedViewModel @Inject constructor(
             viewModelScope.launch {
                 val selectedCategory: Category =
                     categories.find { it.isSelected }?.category ?: throw IllegalStateException()
-
+                delay(300)
                 runCatching {
                     getFeedsUseCase(selectedCategory.titleEn)
                 }.onSuccess { feeds ->
