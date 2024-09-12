@@ -75,14 +75,14 @@ class NovelDetailActivity :
     private fun setupPopupBinding() {
         _novelDetailMenuPopupBinding = MenuNovelDetailPopupBinding.inflate(layoutInflater)
         novelDetailMenuPopupBinding.novelDetailViewModel = novelDetailViewModel
-        novelDetailMenuPopupBinding.reportError = ::reportError
+        novelDetailMenuPopupBinding.reportError = ::navigateToReportError
         novelDetailMenuPopupBinding.deleteUserNovel = ::showDeleteUserNovelAlertDialog
         novelDetailMenuPopupBinding.lifecycleOwner = this
     }
 
-    private fun reportError() {
-        val reportErrorUrl = getString(R.string.novel_detail_report_url)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(reportErrorUrl))
+    private fun navigateToReportError() {
+        val inquireUrl = getString(R.string.inquire_link)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
 

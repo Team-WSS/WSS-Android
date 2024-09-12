@@ -67,7 +67,6 @@
     <string name="novel_detail_remove_accept">삭제</string>
     <string name="novel_detail_remove_result">평가를 모두 삭제했어요</string>
     <string name="novel_detail_tooltip">읽기 상태를 체크하여\n작품을 평가해보세요!</string>
-    <string name="novel_detail_report_url">http://pf.kakao.com/_kHxlWG</string>
 
     <!-- 작품 소개 -->
     <string name="novel_info_platforms_title">작품 보러가기</string>
@@ -134,12 +133,14 @@
     <string name="novel_rating_read_status_watching">보는 중</string>
     <string name="novel_rating_read_status_watched">봤어요</string>
     <string name="novel_rating_read_status_quit">하차</string>
-    <string name="novel_rating_charm_points">세계관,소재,캐릭터,관계,분위기</string>
+    <string name="novel_rating_charm_points">세계관,분위기,소재,캐릭터,관계</string>
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
     <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
     <string name="novel_rating_complete">평가 완료!</string>
     <string name="novel_rating_save_error">다시 시도해주세요</string>
+    <string name="novel_rating_keyword_none">해당 키워드는\n아직 등록되지 않았어요..</string>
+    <string name="novel_rating_keyword_report">키워드 문의하러 가기</string>
 
     <!-- 작품 평가 날짜 선택 -->
     <string name="novel_rating_date_start_date">시작 날짜</string>
@@ -315,6 +316,7 @@
     <string name="profile_edit_avatar_title">프로필 선택</string>
     <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
     <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
+    <string name="profile_edit_success">프로필 정보를 수정했어요!</string>
 
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>

@@ -20,7 +20,7 @@
 
         <ImageView
             android:id="@+id/iv_blocked_user_avatar"
-            cornerRadius="@{20f}"
+            cornerRadius="@{14f}"
             isVectorImage="@{true}"
             loadImageUrl="@{blockedUser.avatarImage}"
             android:layout_width="50dp"

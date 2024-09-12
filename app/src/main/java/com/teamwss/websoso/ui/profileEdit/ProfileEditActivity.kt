@@ -14,10 +14,12 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
+import com.teamwss.websoso.common.util.showWebsosoToast
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
+import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
@@ -48,13 +50,13 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun setupObserver() {
         profileEditViewModel.profileEditUiState.observe(this) { uiState ->
+            profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
             updateGenreChips(uiState.profile.genrePreferences)
-            updateDuplicateCheckButton(uiState.isCheckDuplicateNicknameEnabled)
             updateNicknameEditTextUi(uiState)
             updateIntroductionEditTextUi(uiState.profile.introduction)
+            updateFinishButtonStatus(uiState.isFinishButtonEnabled)
+            updateDuplicateCheckButtonStatus(uiState.isCheckDuplicateNicknameEnabled)
             handleProfileEditResult(uiState.profileEditResult)
-            profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
-            binding.tvProfileEditFinish.isSelected = uiState.isFinishButtonEnabled
         }
     }
 
@@ -65,7 +67,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         }
     }
 
-    private fun updateDuplicateCheckButton(isEnable: Boolean) {
+    private fun updateDuplicateCheckButtonStatus(isEnable: Boolean) {
         binding.tvProfileEditNicknameCheckDuplicate.setTextColor(
             if (isEnable) AppCompatResources.getColorStateList(this, R.color.primary_100_6A5DFD).defaultColor
             else AppCompatResources.getColorStateList(this, R.color.gray_200_AEADB3).defaultColor
@@ -120,9 +122,23 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun handleProfileEditResult(profileEditResult: ProfileEditResult) {
         when (profileEditResult) {
-            ProfileEditResult.Success -> finish() // TODO: 성공 메시지 추가
-            ProfileEditResult.Failure -> Unit // TODO: 실패 처리
+            ProfileEditResult.Success -> {
+                showWebsosoToast(this, getString(R.string.profile_edit_success), R.drawable.ic_novel_detail_check)
+                finish()
+            }
+
+            ProfileEditResult.Failure -> {
+                showWebsosoToast(this, getString(R.string.novel_rating_save_error), R.drawable.ic_novel_rating_alert)
+            }
+
             else -> return
+        }
+    }
+
+    private fun updateFinishButtonStatus(isEnable: Boolean) {
+        with(binding.tvProfileEditFinish) {
+            isSelected = isEnable
+            isEnabled = isEnable
         }
     }
 
@@ -173,9 +189,21 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         private const val PROFILE_INFO = "PROFILE_INFO"
         private const val PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG = "PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG"
 
-        fun getIntent(context: Context, profileModel: ProfileModel): Intent {
+        fun getIntent(
+            context: Context,
+            nickname: String,
+            introduction: String,
+            genrePreferences: List<Genre>,
+        ): Intent {
             return Intent(context, ProfileEditActivity::class.java).apply {
-                putExtra(PROFILE_INFO, profileModel)
+                putExtra(
+                    PROFILE_INFO,
+                    ProfileModel(
+                        nicknameModel = NicknameModel(nickname),
+                        introduction = introduction,
+                        genrePreferences = genrePreferences,
+                    )
+                )
             }
         }
     }

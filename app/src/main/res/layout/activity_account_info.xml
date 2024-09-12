@@ -19,11 +19,10 @@
             android:id="@+id/iv_account_info_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             android:contentDescription="@null"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
+            android:padding="10dp"
             android:src="@drawable/btn_setting_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,10 +43,9 @@
             android:id="@+id/cl_account_info_change_user_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_account_info_title">
+            app:layout_constraintTop_toBottomOf="@id/iv_account_info_back_button">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -69,6 +67,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view_account_info_change_user_info_underline"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/gray_50_F4F5F8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,6 +114,16 @@
                 app:layout_constraintStart_toStartOf="@id/tv_account_info_email_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_account_info_email_title"
                 tools:text="sonmyungj1zz@gmail.com" />
+
+            <View
+                android:id="@+id/view_account_info_email_underline"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/gray_50_F4F5F8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

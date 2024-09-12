@@ -28,7 +28,7 @@ object BindingAdapter {
         view.load(imageUrl) {
             crossfade(true)
             if (isVectorImage == true) decoderFactory(SvgDecoder.Factory())
-            if (cornerRadius != null) transformations(RoundedCornersTransformation(cornerRadius))
+            if (cornerRadius != null) transformations(RoundedCornersTransformation(cornerRadius.toFloatPxFromDp()))
             if (blurRadius != null) transformations(BlurTransformation(view.context, blurRadius))
             if (isCircularImage == true) transformations(CircleCropTransformation())
             error(R.drawable.img_loading_thumbnail)

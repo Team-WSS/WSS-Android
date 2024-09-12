@@ -91,18 +91,18 @@ class DetailExploreResultActivity :
         detailExploreResultViewModel.uiState.observe(this) { uiState ->
             when {
                 uiState.loading -> {
-                    binding.wlDetailExploreResult.setWebsosoLoadingVisibility(true)
-                    binding.wlDetailExploreResult.setErrorLayoutVisibility(false)
+                    binding.wllDetailExploreResult.setWebsosoLoadingVisibility(true)
+                    binding.wllDetailExploreResult.setErrorLayoutVisibility(false)
                 }
 
                 uiState.error -> {
-                    binding.wlDetailExploreResult.setWebsosoLoadingVisibility(false)
-                    binding.wlDetailExploreResult.setErrorLayoutVisibility(true)
+                    binding.wllDetailExploreResult.setWebsosoLoadingVisibility(false)
+                    binding.wllDetailExploreResult.setErrorLayoutVisibility(true)
                 }
 
                 else -> {
-                    binding.wlDetailExploreResult.setWebsosoLoadingVisibility(false)
-                    binding.wlDetailExploreResult.setErrorLayoutVisibility(false)
+                    binding.wllDetailExploreResult.setWebsosoLoadingVisibility(false)
+                    binding.wllDetailExploreResult.setErrorLayoutVisibility(false)
                     updateView(uiState)
                 }
             }

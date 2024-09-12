@@ -105,6 +105,8 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun checkNicknameValidity(nickname: String) {
+        if (isNicknameChanged(nickname)) return
+
         viewModelScope.launch {
             runCatching {
                 checkNicknameValidityUseCase(nickname)
@@ -120,6 +122,20 @@ class ProfileEditViewModel @Inject constructor(
                     nicknameEditResult = UNKNOWN_ERROR,
                 )
             }
+        }
+    }
+
+    private fun isNicknameChanged(nickname: String): Boolean {
+        return when (nickname == profileEditUiState.value.let {
+            it?.previousProfile?.nicknameModel?.nickname
+        }) {
+            true -> {
+                _profileEditUiState.value = profileEditUiState.value?.copy(
+                    nicknameEditResult = VALID_NICKNAME,
+                )
+                true
+            }
+            false -> false
         }
     }
 
@@ -147,18 +163,17 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateProfile() {
-        val isInvalidNickname = profileEditUiState.value?.nicknameEditResult != VALID_NICKNAME
-        val isNicknameChanged =
-            profileEditUiState.value?.profile?.nicknameModel?.nickname != profileEditUiState.value?.previousProfile?.nicknameModel?.nickname
-        if (isInvalidNickname && isNicknameChanged) return
-
         val previousProfile = profileEditUiState.value?.previousProfile ?: return
         val currentProfile = profileEditUiState.value?.profile ?: return
+
+        val isInvalidNickname = profileEditUiState.value?.nicknameEditResult != VALID_NICKNAME
+        val isNicknameChanged = currentProfile.nicknameModel.nickname != previousProfile.nicknameModel.nickname
+        if (isInvalidNickname && isNicknameChanged) return
 
         viewModelScope.launch {
             runCatching {
                 userRepository.saveUserProfile(
-                    avatarId = (currentProfile.avatarId to previousProfile.avatarId).compareAndReturnNewOrNullValue(),
+                    avatarId = (previousProfile.avatarId to currentProfile.avatarId).compareAndReturnNewOrNullValue(),
                     nickname = (previousProfile.nicknameModel.nickname to currentProfile.nicknameModel.nickname).compareAndReturnNewOrNullValue(),
                     intro = (previousProfile.introduction to currentProfile.introduction).compareAndReturnNewOrNullValue(),
                     genrePreferences = currentProfile.genrePreferences.map { it.tag },
@@ -201,6 +216,12 @@ class ProfileEditViewModel @Inject constructor(
                 _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
                     avatars = avatarsModel,
                     loading = false,
+                )
+                updatePreviousProfile(
+                    profileEditUiState.value?.profile?.copy(
+                        avatarId = avatarsModel.find { it.isRepresentative }?.avatarId ?: 0,
+                        avatarThumbnail = avatarsModel.find { it.isRepresentative }?.avatarThumbnail ?: "",
+                    ) ?: ProfileModel()
                 )
             }.onFailure {
                 _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
