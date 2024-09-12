@@ -21,7 +21,7 @@
 
         <ImageView
             android:id="@+id/iv_explore_soso_pick_novel_cover"
-            cornerRadius="@{16f}"
+            cornerRadius="@{8f}"
             loadImageUrl="@{sosoPick.novelCover}"
             android:layout_width="120dp"
             android:layout_height="180dp"
