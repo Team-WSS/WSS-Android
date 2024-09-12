@@ -44,7 +44,9 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
             setWebsosoSearchHint(getString(wset_create_feed_search_novel))
             setWebsosoSearchHintTextColor(gray_200_AEADB3)
             setWebsosoSearchTextAppearance(body4)
-            setWebsosoOnClickListener { showSearchNovelDialog() }
+            setWebsosoOnClickListener {
+                singleEventHandler.throttleFirst { showSearchNovelDialog() }
+            }
         }
     }
 

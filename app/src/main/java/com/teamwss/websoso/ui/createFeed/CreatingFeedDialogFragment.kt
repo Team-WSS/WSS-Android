@@ -6,11 +6,13 @@ import android.view.View.GONE
 import com.teamwss.websoso.R.layout.dialog_remove_popup_menu
 import com.teamwss.websoso.R.string.tv_remove_popup_menu_stop_creating
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 
 class CreatingFeedDialogFragment :
     BaseDialogFragment<DialogRemovePopupMenuBinding>(dialog_remove_popup_menu) {
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val onRemoveClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener
     }
@@ -22,8 +24,10 @@ class CreatingFeedDialogFragment :
         binding.tvRemovePopupMenuDescription.text = getString(tv_remove_popup_menu_stop_creating)
         binding.tvRemovePopupMenuCancel.setOnClickListener { dismiss() }
         binding.tvRemovePopupMenuRemove.setOnClickListener {
-            dismiss()
-            onRemoveClick()
+            singleEventHandler.throttleFirst {
+                dismiss()
+                onRemoveClick()
+            }
         }
         dialog?.setCanceledOnTouchOutside(false)
     }
