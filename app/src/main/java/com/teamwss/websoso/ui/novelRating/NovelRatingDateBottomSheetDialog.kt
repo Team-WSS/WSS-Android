@@ -11,6 +11,7 @@ import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
 import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
+import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 
 class NovelRatingDateBottomSheetDialog :
     BaseBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
@@ -47,6 +48,7 @@ class NovelRatingDateBottomSheetDialog :
                 uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
             binding.npRatingDateDay.value =
                 uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
+            initNumberPickerValue(uiState.novelRatingModel.ratingDateModel, uiState.isEditingStartDate)
         }
     }
 
@@ -73,6 +75,8 @@ class NovelRatingDateBottomSheetDialog :
                 showClearDateInfoAlertDialog()
                 dismiss()
             }
+
+            override fun onReportKeywordClick() {}
         }
 
     private fun showClearDateInfoAlertDialog() {
@@ -106,6 +110,24 @@ class NovelRatingDateBottomSheetDialog :
                 maxDayValue,
                 "%02d",
             )
+        }
+    }
+
+    private fun initNumberPickerValue(ratingDateModel: RatingDateModel, isEditingStartDate: Boolean) {
+        with(binding) {
+            when (isEditingStartDate) {
+                true -> {
+                    npRatingDateYear.value = ratingDateModel.currentStartDate?.first ?: 1
+                    npRatingDateMonth.value = ratingDateModel.currentStartDate?.second ?: 1
+                    npRatingDateDay.value = ratingDateModel.currentStartDate?.third ?: 1
+                }
+
+                false -> {
+                    npRatingDateYear.value = ratingDateModel.currentEndDate?.first ?: 1
+                    npRatingDateMonth.value = ratingDateModel.currentEndDate?.second ?: 1
+                    npRatingDateDay.value = ratingDateModel.currentEndDate?.third ?: 1
+                }
+            }
         }
     }
 

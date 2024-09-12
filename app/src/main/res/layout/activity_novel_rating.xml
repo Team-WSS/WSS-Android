@@ -112,7 +112,7 @@
                     android:id="@+id/divider_novel_rating_add_date"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="30dp"
                     app:dividerColor="@color/gray_50_F4F5F8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -123,13 +123,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
+                    android:minHeight="30dp"
                     android:numStars="5"
                     android:onRatingChanged="@{(view, rating, fromUser) -> viewModel.updateRatingValue(rating)}"
-                    android:progressBackgroundTint="@color/gray_70_DFDFE3"
-                    android:progressTint="@color/secondary_50_FFAA8F"
+                    android:progressDrawable="@drawable/ic_novel_rating_star_selector"
                     android:rating="@{viewModel.uiState.novelRatingModel.userNovelRating}"
-                    android:secondaryProgressTint="@color/secondary_50_FFAA8F"
-                    android:stepSize="0.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_add_date" />
@@ -138,7 +136,7 @@
                     android:id="@+id/divider_novel_rating_rating"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="26dp"
+                    android:layout_marginTop="32dp"
                     app:dividerColor="@color/gray_50_F4F5F8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -250,7 +248,6 @@
                 android:id="@+id/ll_novel_rating_appbar"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginTop="24dp"
                 android:gravity="center_vertical">
 
                 <ImageView
