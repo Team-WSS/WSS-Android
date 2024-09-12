@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="해당 키워드는\n아직 등록되지 않았어요.."
+                android:text="@string/novel_rating_keyword_none"
                 android:textAlignment="center"
                 android:textAppearance="@style/body1"
                 android:textColor="@color/gray_200_AEADB3"
@@ -179,9 +179,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:background="@drawable/bg_novel_rating_primary_50_radius_14dp"
+                android:onClick="@{() -> onClick.onReportKeywordClick()}"
                 android:paddingHorizontal="26dp"
                 android:paddingVertical="18dp"
-                android:text="키워드 문의하러 가기"
+                android:text="@string/novel_rating_keyword_report"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/primary_100_6A5DFD"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -193,6 +194,8 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             app:dividerColor="@color/gray_50_F4F5F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/rv_rating_keyword_list" />
 
         <LinearLayout

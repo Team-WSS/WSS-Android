@@ -12,4 +12,6 @@ interface NovelRatingClickListener {
     fun onCancelClick()
 
     fun onClearClick()
+
+    fun onReportKeywordClick()
 }
