@@ -9,7 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
-    private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
+    private val novelInfoViewModel by activityViewModels<NovelInfoViewModel>()
     private val novelId: Long by lazy { arguments?.getLong(NOVEL_ID) ?: 0L }
 
     override fun onViewCreated(

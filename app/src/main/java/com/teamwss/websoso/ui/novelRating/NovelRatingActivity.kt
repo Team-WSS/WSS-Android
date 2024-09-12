@@ -21,6 +21,7 @@ import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint
 import com.teamwss.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
 import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,47 +92,61 @@ class NovelRatingActivity :
             when {
                 uiState.loading -> binding.wllNovelRating.setWebsosoLoadingVisibility(true)
 
-                uiState.novelRatingModel.isCharmPointExceed -> {
-                    showWebsosoSnackBar(
-                        view = binding.root,
-                        message = getString(R.string.novel_rating_charm_point_exceed),
-                        icon = R.drawable.ic_novel_rating_alert,
-                    )
-                    novelRatingViewModel.updateCharmPoints(uiState.novelRatingModel.charmPoints.last())
-                }
+                uiState.novelRatingModel.isCharmPointExceed -> handleCharmPointError(uiState)
 
                 uiState.isFetchError -> binding.wllNovelRating.setErrorLayoutVisibility(true)
 
-                uiState.isSaveSuccess -> {
-                    showWebsosoToast(
-                        context = this@NovelRatingActivity,
-                        message = getString(R.string.novel_rating_complete),
-                        icon = R.drawable.ic_novel_detail_check,
-                    )
-                    finish()
-                }
+                uiState.isSaveSuccess -> handleRatingSuccess()
 
-                uiState.isSaveError -> {
-                    showWebsosoSnackBar(
-                        view = binding.root,
-                        message = getString(R.string.novel_rating_save_error),
-                        icon = R.drawable.ic_novel_rating_alert,
-                    )
-                }
+                uiState.isSaveError -> handleRatingError()
 
                 isInitialUpdate -> {
                     isInitialUpdate = false
-                    binding.wllNovelRating.setWebsosoLoadingVisibility(false)
-                    updateInitialReadStatus()
+                    initView()
                 }
 
-                else -> {
-                    updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-                    updateCharmPointChips(uiState.novelRatingModel.charmPoints)
-                    updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
-                }
+                else -> updateView(uiState)
             }
         }
+    }
+
+    private fun handleCharmPointError(uiState: NovelRatingUiState) {
+        showWebsosoSnackBar(
+            view = binding.root,
+            message = getString(R.string.novel_rating_charm_point_exceed),
+            icon = R.drawable.ic_novel_rating_alert,
+        )
+        novelRatingViewModel.updateCharmPoints(uiState.novelRatingModel.charmPoints.last())
+    }
+
+    private fun handleRatingSuccess() {
+        showWebsosoToast(
+            context = this@NovelRatingActivity,
+            message = getString(R.string.novel_rating_complete),
+            icon = R.drawable.ic_novel_detail_check,
+        )
+
+        setResult(RESULT_OK)
+        finish()
+    }
+
+    private fun handleRatingError() {
+        showWebsosoSnackBar(
+            view = binding.root,
+            message = getString(R.string.novel_rating_save_error),
+            icon = R.drawable.ic_novel_rating_alert,
+        )
+    }
+
+    private fun initView() {
+        binding.wllNovelRating.setWebsosoLoadingVisibility(false)
+        updateInitialReadStatus()
+    }
+
+    private fun updateView(uiState: NovelRatingUiState) {
+        updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
+        updateCharmPointChips(uiState.novelRatingModel.charmPoints)
+        updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
     }
 
     private fun updateInitialReadStatus() {

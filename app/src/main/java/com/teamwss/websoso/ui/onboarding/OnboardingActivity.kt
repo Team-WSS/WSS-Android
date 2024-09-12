@@ -52,7 +52,8 @@ class OnboardingActivity :
 
         viewModel.isUserProfileSubmit.observe(this) { isUserProfileSubmit ->
             if (isUserProfileSubmit) {
-                startActivity(WelcomeActivity.getIntent(this))
+                val nickname = viewModel.currentNicknameInput.value ?: "웹소소"
+                startActivity(WelcomeActivity.getIntent(this, nickname))
                 finish()
             }
         }

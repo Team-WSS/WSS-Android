@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.detailExplore.keyword
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -50,7 +52,9 @@ class DetailExploreKeywordFragment :
     private fun onDetailExploreKeywordButtonClick() = object : DetailExploreClickListener {
 
         override fun onNovelInquireButtonClick() {
-            // TODO 문의하기로 이동
+            val inquireUrl = getString(R.string.inquire_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+            startActivity(intent)
         }
 
         override fun onDetailSearchNovelButtonClick() {
@@ -148,7 +152,7 @@ class DetailExploreKeywordFragment :
             setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
             setWebsosoChipBackgroundColor(R.color.white)
             setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-            setWebsosoChipPaddingHorizontal(4f.toFloatPxFromDp())
+            setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
             setWebsosoChipRadius(20f.toFloatPxFromDp())
             setOnCloseIconClickListener {
                 detailExploreViewModel.updateClickedChipState(
@@ -157,8 +161,8 @@ class DetailExploreKeywordFragment :
             }
             setWebsosoChipCloseIconVisibility(true)
             setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
-            setWebsosoChipCloseIconSize(20f)
-            setWebsosoChipCloseIconEndPadding(18f)
+            setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
+            setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
             setCloseIconTintResource(R.color.primary_100_6A5DFD)
         }.also { websosoChip ->
             binding.wcgDetailExploreKeywordSelectedKeyword.addChip(websosoChip)

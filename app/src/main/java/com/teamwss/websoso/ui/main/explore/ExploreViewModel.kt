@@ -21,7 +21,7 @@ class ExploreViewModel @Inject constructor(
         updateSosoPicks()
     }
 
-    private fun updateSosoPicks() {
+    fun updateSosoPicks() {
         viewModelScope.launch {
             runCatching {
                 novelRepository.fetchSosoPicks()

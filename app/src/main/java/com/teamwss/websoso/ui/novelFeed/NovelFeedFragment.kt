@@ -193,14 +193,9 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     }
 
     private fun initView() {
-        binding.onWriteClick = ::navigateToFeedWriting
         setupAdapter()
         setupRefreshView()
         setupBackgorundView()
-    }
-
-    private fun navigateToFeedWriting() {
-        // TODO: 피드 작성 뷰
     }
 
     private fun setupAdapter() {

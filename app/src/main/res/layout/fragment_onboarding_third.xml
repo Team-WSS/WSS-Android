@@ -57,7 +57,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="54dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/selector_onboarding_next_button_background"
             android:enabled="@{!viewModel.selectedGenres.empty}"
             android:text="완료"

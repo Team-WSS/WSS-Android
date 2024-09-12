@@ -21,33 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="644dp"
-            android:scaleType="centerCrop"
-            app:blurRadius="@{4}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:loadImageUrl="@{novelDetailViewModel.novelDetailModel.novel.novelImage}" />
-
-        <View
-            android:id="@+id/view_novel_detail_cover_background"
-            android:layout_width="0dp"
-            android:layout_height="248dp"
-            android:background="@drawable/bg_novel_detail_cover_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="396dp"
-            android:background="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_cover_background" />
-
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/cl_novel_detail"
             android:layout_width="0dp"
@@ -74,14 +47,48 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_novel_detail_header"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="68dp">
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleType="centerCrop"
+                            app:blurRadius="@{4}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:loadImageUrl="@{novelDetailViewModel.novelDetailModel.novel.novelImage}" />
+
+                        <View
+                            android:id="@+id/view_novel_detail_cover_background_top"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/bg_novel_detail_cover_background"
+                            app:layout_constraintBottom_toTopOf="@id/view_novel_detail_cover_background_bottom"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_weight="124" />
+
+                        <View
+                            android:id="@+id/view_novel_detail_cover_background_bottom"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@color/gray_50_F4F5F8"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/view_novel_detail_cover_background_top"
+                            app:layout_constraintVertical_weight="198" />
 
                         <ImageView
                             android:id="@+id/iv_novel_detail_cover"
                             android:layout_width="0dp"
                             android:layout_height="217dp"
                             android:layout_marginHorizontal="108dp"
+                            android:layout_marginTop="68dp"
+                            android:onClick="@{() -> onClick.onNovelCoverClick(novelDetailViewModel.novelDetailModel.novel.novelImage)}"
                             android:scaleType="fitCenter"
                             app:cornerRadius="@{30f}"
                             app:layout_constraintDimensionRatio="144:200"
@@ -296,6 +303,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
                                 android:divider="@color/gray_70_DFDFE3"
+                                android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                                 android:gravity="center"
                                 android:paddingBottom="12dp"
                                 android:showDividers="middle"
@@ -309,8 +317,9 @@
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_novel_detail_watching"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="100dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:backgroundTint="@color/transparent"
                                     android:checked="@{novelDetailViewModel.novelDetailModel.userNovel.readStatus == ReadStatus.WATCHING}"
                                     android:clickable="false"
@@ -326,8 +335,9 @@
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_novel_detail_watched"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="100dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:backgroundTint="@color/transparent"
                                     android:checked="@{novelDetailViewModel.novelDetailModel.userNovel.readStatus == ReadStatus.WATCHED}"
                                     android:clickable="false"
@@ -343,8 +353,9 @@
                                 <com.google.android.material.button.MaterialButton
                                     android:id="@+id/btn_novel_detail_quit"
                                     style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                                    android:layout_width="100dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:backgroundTint="@color/transparent"
                                     android:checked="@{novelDetailViewModel.novelDetailModel.userNovel.readStatus == ReadStatus.QUIT}"
                                     android:clickable="false"
@@ -391,12 +402,13 @@
                                 android:layout_marginEnd="4dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_interest_selector"
+                                android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                                 android:gravity="center"
                                 android:onClick="@{() -> novelDetailViewModel.updateUserInterest(novelDetailViewModel.novelDetailModel.novel.novelId)}">
 
                                 <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="14dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:src="@drawable/ic_novel_detail_interest_selector" />
 
                                 <TextView
@@ -416,7 +428,9 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/bg_novel_detail_primary_100_radius_14dp"
-                                android:gravity="center">
+                                android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
+                                android:gravity="center"
+                                android:onClick="@{() -> onClick.onNovelFeedWriteClick()}">
 
                                 <ImageView
                                     android:layout_width="20dp"
@@ -491,7 +505,6 @@
                             android:id="@+id/ll_novel_detail_appbar"
                             android:layout_width="match_parent"
                             android:layout_height="44dp"
-                            android:layout_marginTop="24dp"
                             android:gravity="center_vertical">
 
                             <ImageView
@@ -505,7 +518,21 @@
                                 android:src="@drawable/ic_novel_detail_navigate_back"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/black" />
+
+                            <TextView
+                                android:id="@+id/tv_novel_detail_app_bar_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{novelDetailViewModel.novelDetailModel.novel.novelTitle}"
+                                android:textAppearance="@style/title2"
+                                android:textColor="@color/black"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="당신의 이해를 돕기 위하여" />
 
                             <ImageView
                                 android:id="@+id/iv_novel_detail_menu"
@@ -517,7 +544,8 @@
                                 android:src="@drawable/ic_novel_detail_menu"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/black" />
 
                             <View
                                 android:layout_width="0dp"
@@ -569,6 +597,7 @@
                 android:id="@+id/vp_novel_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:isVisible="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -595,6 +624,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_novel_feed_write_floating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="44dp"
+            android:contentDescription="@{null}"
+            android:elevation="40dp"
+            android:foreground="@drawable/bg_floating_write_button"
+            android:onClick="@{() -> onClick.onNovelFeedWriteClick()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_novel_detail"
