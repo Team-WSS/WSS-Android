@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.createFeed
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,10 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.domain.usecase.GetSearchedNovelsUseCase
 import com.teamwss.websoso.ui.createFeed.model.CreateFeedCategory
+import com.teamwss.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.teamwss.websoso.ui.createFeed.model.SearchNovelUiState
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.feed.model.Category
-import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,8 +26,8 @@ class CreateFeedViewModel @Inject constructor(
     private val _searchNovelUiState: MutableLiveData<SearchNovelUiState> =
         MutableLiveData(SearchNovelUiState())
     val searchNovelUiState: LiveData<SearchNovelUiState> get() = _searchNovelUiState
-    private val _categories: MutableList<CategoryModel> = mutableListOf()
-    val categories: List<CategoryModel> get() = _categories.toList()
+    private val _categories: MutableList<CreatedFeedCategoryModel> = mutableListOf()
+    val categories: List<CreatedFeedCategoryModel> get() = _categories.toList()
     private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
     val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
     val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
@@ -39,19 +37,21 @@ class CreateFeedViewModel @Inject constructor(
     private var searchedText = ""
 
     init {
-        savedStateHandle.get<EditFeedModel>("FEED")?.let { feed ->
-            val categories = CreateFeedCategory.entries.map { category ->
-                CategoryModel(
-                    category = Category.from(category.titleKr),
-                    isSelected = feed.feedCategory.contains(category.titleKr),
+        fun createCategories(feedCategory: List<String>? = null): List<CreatedFeedCategoryModel> =
+            CreateFeedCategory.entries.map { category ->
+                CreatedFeedCategoryModel(
+                    category = category,
+                    isSelected = feedCategory?.contains(category.titleKr) == true
                 )
             }
+
+        savedStateHandle.get<EditFeedModel>("FEED")?.let { feed ->
             novelId = feed.novelId
             _selectedNovelTitle.value = feed.novelTitle.orEmpty()
             content.value = feed.feedContent
-
-            _categories.addAll(categories)
+            _categories.addAll(createCategories(feed.feedCategory))
         }
+        _categories.addAll(createCategories())
 
         isActivated.addSource(content) { updateIsActivated() }
     }

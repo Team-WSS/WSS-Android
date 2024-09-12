@@ -17,8 +17,8 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
+import com.teamwss.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,7 +66,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
             val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
             val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
-            if (!isEmptyCategory || !isBlankContent || !isSelectedNovel) {
+            if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
                 CreatingFeedDialogFragment.newInstance(event = ::finish)
                     .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
                 return@setOnClickListener
@@ -93,7 +93,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
         }
     }
 
-    private fun List<CategoryModel>.setupCategoryChips() {
+    private fun List<CreatedFeedCategoryModel>.setupCategoryChips() {
         forEach { category ->
             WebsosoChip(this@CreateFeedActivity).apply {
                 setWebsosoChipText(category.category.titleKr)
