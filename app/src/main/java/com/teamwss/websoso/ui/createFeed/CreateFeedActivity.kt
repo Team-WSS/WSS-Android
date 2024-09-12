@@ -28,7 +28,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         setupView()
         onCreateFeedClick()
         bindViewModel()
@@ -59,6 +59,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
         }
         binding.tvCreateFeedDoneButton.setOnClickListener {
             val editFeedModel = intent.getAdaptedParcelableExtra<EditFeedModel>(FEED)
+
             when {
                 editFeedModel == null -> createFeedViewModel.createFeed()
                 editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
