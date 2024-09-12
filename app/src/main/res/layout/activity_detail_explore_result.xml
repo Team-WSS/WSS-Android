@@ -134,7 +134,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
-            android:id="@+id/wl_detail_explore_result"
+            android:id="@+id/wll_detail_explore_result"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
