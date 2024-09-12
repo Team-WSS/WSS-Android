@@ -99,6 +99,8 @@
     <string name="feed_is_modified">(수정됨)</string>
     <string name="feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
     <string name="feed_removed_feed_snackbar">해당 글은 삭제된 글이에요</string>
+    <string name="feed_no_more_title">더 이상 게시글이 없어요</string>
+    <string name="feed_no_more_content">새로운 수다를 시작해볼까요?</string>
 
     <!-- 피드 상세 뷰 -->
     <string name="feed_detail_title">수다글</string>

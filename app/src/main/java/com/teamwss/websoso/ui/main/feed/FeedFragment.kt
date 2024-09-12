@@ -39,6 +39,7 @@ import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
+import com.teamwss.websoso.ui.main.feed.adapter.FeedType.NoMore
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
@@ -314,7 +315,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
         val feeds = feedUiState.feeds.map { Feed(it) }
         when (feedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
-            false -> feedAdapter.submitList(feeds)
+            false -> feedAdapter.submitList(feeds + NoMore)
         }.apply {
             binding.rvFeed.smoothScrollToPosition(0)
         }
