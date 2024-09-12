@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
@@ -282,6 +283,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
             adapter = feedDetailAdapter
             itemAnimator = null
         }
+        binding.ivFeedDetailMyProfileImage.load(
+            feedDetailViewModel.feedDetailUiState.value?.feed?.user?.avatarImage
+        )
     }
 
     private fun setupRefreshView() {
