@@ -44,6 +44,12 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
         }
     }
 
+    private fun showSearchNovelDialog() {
+        CreateFeedSearchNovelBottomSheetDialog.apply {
+            newInstance().show(supportFragmentManager, CREATE_FEED_SEARCH_NOVEL_TAG)
+        }
+    }
+
     private fun onCreateFeedClick() {
         binding.ivCreateFeedRemoveButton.setOnClickListener {
             binding.clCreateFeedNovelInfo.visibility = View.INVISIBLE
@@ -51,16 +57,19 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
         }
         binding.tvCreateFeedDoneButton.setOnClickListener {
             createFeedViewModel.dispatchFeed()
+            finish()
         }
-        binding.ivCreateFeedBackButton.setOnClickListener { finish() }
-    }
+        binding.ivCreateFeedBackButton.setOnClickListener {
+            val isEmptyCategory = createFeedViewModel.selectedCategories.isEmpty()
+            val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
+            val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
-    private fun showSearchNovelDialog() {
-        CreateFeedSearchNovelBottomSheetDialog.newInstance().also {
-            it.show(
-                supportFragmentManager,
-                CreateFeedSearchNovelBottomSheetDialog.CREATE_FEED_SEARCH_NOVEL_TAG,
-            )
+            if (!isEmptyCategory || !isBlankContent || !isSelectedNovel) {
+                CreatingFeedDialogFragment.newInstance(event = ::finish)
+                    .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
+                return@setOnClickListener
+            }
+            finish()
         }
     }
 

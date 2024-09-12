@@ -19,28 +19,32 @@ class CreateFeedViewModel @Inject constructor(
     private val getSearchedNovelsUseCase: GetSearchedNovelsUseCase,
     private val feedRepository: FeedRepository,
 ) : ViewModel() {
-    private val _searchNovelUiState: MutableLiveData<SearchNovelUiState> = MutableLiveData(
-        SearchNovelUiState()
-    )
+    private val _searchNovelUiState: MutableLiveData<SearchNovelUiState> =
+        MutableLiveData(SearchNovelUiState())
     val searchNovelUiState: LiveData<SearchNovelUiState> get() = _searchNovelUiState
     private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
     val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
-    private var novelId: Long? = null
-    private val selectedCategories: MutableList<Int> = mutableListOf()
     val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
     val content: MutableLiveData<String> = MutableLiveData("")
+    private var novelId: Long? = null
+    private val _selectedCategories: MutableList<Int> = mutableListOf()
+    val selectedCategories: List<Int> get() = _selectedCategories.toList()
     private var searchedText = ""
 
     init {
         isActivated.addSource(content) { updateIsActivated() }
     }
 
+    private fun updateIsActivated() {
+        isActivated.value = content.value.isNullOrEmpty().not() && _selectedCategories.isNotEmpty()
+    }
+
     fun dispatchFeed() {
         viewModelScope.launch {
             runCatching {
                 feedRepository.postFeed(
-                    relevantCategories = selectedCategories.map {
+                    relevantCategories = _selectedCategories.map {
                         CreateFeedCategory.from(it).titleEn
                     },
                     feedContent = content.value ?: "",
@@ -52,16 +56,12 @@ class CreateFeedViewModel @Inject constructor(
     }
 
     fun updateSelectedCategory(categoryId: Int) {
-        when (selectedCategories.contains(categoryId)) {
-            true -> selectedCategories.remove(categoryId)
-            false -> selectedCategories.add(categoryId)
+        when (_selectedCategories.contains(categoryId)) {
+            true -> _selectedCategories.remove(categoryId)
+            false -> _selectedCategories.add(categoryId)
         }
 
         updateIsActivated()
-    }
-
-    private fun updateIsActivated() {
-        isActivated.value = content.value.isNullOrEmpty().not() && selectedCategories.isNotEmpty()
     }
 
     fun updateSearchedNovels(typingText: String) {
