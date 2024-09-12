@@ -15,7 +15,7 @@ class ValidateNicknameUseCase @Inject constructor() {
         val errorMessage: String,
         val validator: (String) -> Boolean,
     ) {
-        START_OR_END_WITH_BLANK("공백으로 시작하거나 끝날 수 없어요", { it.trim() == it }),
+        START_OR_END_WITH_BLANK("공백과 띄어쓰기는 포함될 수 없어요", { it.trim() == it }),
         INVALID_LENGTH_OR_CHAR(
             "한글, 영문, 숫자 2~10자까지 입력 가능해요",
             { "^[\\w가-힣-]{2,10}$".toRegex().matches(it) }),

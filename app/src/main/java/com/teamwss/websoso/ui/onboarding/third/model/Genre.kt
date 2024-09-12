@@ -3,7 +3,7 @@ package com.teamwss.websoso.ui.onboarding.third.model
 import com.teamwss.websoso.R
 
 enum class Genre(val displayName: String, val tag: String, val drawableRes: Int) {
-    ROMANCE("로멘스", "romance", R.drawable.ic_onboarding_romance),
+    ROMANCE("로맨스", "romance", R.drawable.ic_onboarding_romance),
     ROMANCE_FANTASY("로판", "romanceFantasy", R.drawable.ic_onboarding_romance_fantasy),
     BL("BL", "BL", R.drawable.ic_onboarding_bl),
     FANTASY("판타지", "fantasy", R.drawable.ic_onboarding_fantasy),

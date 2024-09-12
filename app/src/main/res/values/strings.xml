@@ -179,8 +179,8 @@
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
 
     <!-- 환영 뷰 -->
-    <string name="welcome_welcome_websoso">웹소소에 오신 것을 환영해요!</string>
-    <string name="welcome_lets_falling_websoso">웹소소와 함께 웹소설에 빠져봐요</string>
+    <string name="welcome_welcome_websoso">웹소소와 계약 완료!</string>
+    <string name="welcome_hello_user">%s 님, 만나서 반가워요!</string>
     <string name="welcome_start">시작하기</string>
 
     <!-- 로그인 요청 다이얼로그 -->
