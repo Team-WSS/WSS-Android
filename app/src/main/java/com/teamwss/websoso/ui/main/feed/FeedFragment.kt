@@ -10,16 +10,23 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
+import com.teamwss.websoso.R.color
+import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
+import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
+import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
+import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
@@ -43,7 +50,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
 @AndroidEntryPoint
-class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
+class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
@@ -142,7 +149,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
                 popup.dismiss()
             }
         }
-        menuContentTitle = getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        menuContentTitle = getString(feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
@@ -166,7 +173,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
                 popup.dismiss()
             }
         }
-        menuContentTitle = getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        menuContentTitle = getString(feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -206,7 +213,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+        activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
@@ -217,7 +224,14 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         super.onViewCreated(view, savedInstanceState)
 
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) feedViewModel.updateRefreshedFeeds()
+            when (result.resultCode) {
+                REFRESH -> feedViewModel.updateRefreshedFeeds()
+                SHOW_SNACK_BAR -> showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(feed_removed_feed_snackbar),
+                    icon = ic_blocked_user_snack_bar,
+                )
+            }
         }
         initView()
         feedViewModel.updateFeeds()
@@ -239,9 +253,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         forEach { categoryUiState ->
             WebsosoChip(requireContext()).apply {
                 setWebsosoChipText(categoryUiState.category.titleKr)
-                setWebsosoChipTextAppearance(R.style.title3)
-                setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
+                setWebsosoChipTextAppearance(style.title3)
+                setWebsosoChipTextColor(color.bg_feed_chip_text_selector)
+                setWebsosoChipBackgroundColor(color.bg_feed_chip_background_selector)
                 setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                 setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
                 setWebsosoChipRadius(18f.toFloatPxFromDp())
@@ -309,5 +323,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     override fun onDestroyView() {
         _popupBinding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val REFRESH = 200
+        private const val SHOW_SNACK_BAR = 400
     }
 }

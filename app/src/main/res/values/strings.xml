@@ -98,6 +98,7 @@
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
     <string name="feed_is_modified">(수정됨)</string>
     <string name="feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
+    <string name="feed_removed_feed_snackbar">해당 글은 삭제된 글이에요</string>
 
     <!-- 피드 상세 뷰 -->
     <string name="feed_detail_title">수다글</string>

@@ -120,6 +120,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
 
     companion object {
         private const val FEED = "FEED"
+        private const val RESULT_OK = 200
 
         fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
 
