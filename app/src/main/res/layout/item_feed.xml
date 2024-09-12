@@ -17,7 +17,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> onClick.onContentClick(feed.id)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_profile"
@@ -115,7 +116,6 @@
             android:ellipsize="end"
             android:gravity="top"
             android:maxLines="5"
-            android:onClick="@{() -> onClick.onContentClick(feed.id)}"
             android:text="@{feed.content}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
