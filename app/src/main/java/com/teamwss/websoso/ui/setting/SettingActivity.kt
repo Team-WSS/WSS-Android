@@ -47,10 +47,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
             startActivity(intent)
         }
 
-        override fun onAppRatingButtonClick() {
-            // TODO 별점 남기기로 이동
-        }
-
         override fun onTermsOfUseButtonClick() {
             // TODO 서비스 이용약관으로 이동
         }
