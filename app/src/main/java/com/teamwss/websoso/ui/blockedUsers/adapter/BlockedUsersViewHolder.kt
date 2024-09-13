@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.blockedUsers.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.data.model.BlockedUsersEntity.BlockedUserEntity
 import com.teamwss.websoso.databinding.ItemBlockedUserBinding
 
@@ -16,7 +17,13 @@ class BlockedUsersViewHolder(
     }
 
     fun bind(blockedUser: BlockedUserEntity) {
-        binding.blockedUser = blockedUser
+        val imageUrl: String = itemView.getS3ImageUrl(blockedUser.avatarImage)
+
+        val updatedCategory = blockedUser.copy(
+            avatarImage = imageUrl,
+        )
+
+        binding.blockedUser = updatedCategory
     }
 
     companion object {

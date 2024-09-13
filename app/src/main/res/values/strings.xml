@@ -238,6 +238,7 @@
     <string name="home_user_interest_novel_rating_format">%1$.1f (%2$d)</string>
     <string name="home_nickname_interest_feed">%1$s 님의 관심글</string>
     <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
+    <string name="home_no_associated_feed">아직 관심 등록한 작품과 관련된 글이 없어요</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>

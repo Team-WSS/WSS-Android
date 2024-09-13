@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.model.UserInterestFeedMessage
+import com.teamwss.websoso.data.model.UserInterestFeedMessage.*
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.ui.main.home.model.HomeUiState
@@ -21,6 +23,10 @@ class HomeViewModel @Inject constructor(
     val uiState: LiveData<HomeUiState> get() = _uiState
 
     init {
+        updateHomeData()
+    }
+
+    fun updateHomeData() {
         updatePopularNovels()
         updatePopularFeeds()
         updateUserInterestFeeds()
@@ -68,8 +74,16 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 feedRepository.fetchUserInterestFeeds()
             }.onSuccess { userInterestFeeds ->
+                val isInterestNovel =
+                    when (UserInterestFeedMessage.fromMessage(userInterestFeeds.message)) {
+                        NO_ASSOCIATED_FEEDS -> true
+                        NO_INTEREST_NOVELS -> false
+                        else -> true
+                    }
+
                 _uiState.value = uiState.value?.copy(
                     loading = false,
+                    isInterestNovel = isInterestNovel,
                     userInterestFeeds = userInterestFeeds.userInterestFeeds,
                 )
             }.onFailure {
@@ -99,4 +113,3 @@ class HomeViewModel @Inject constructor(
         }
     }
 }
-

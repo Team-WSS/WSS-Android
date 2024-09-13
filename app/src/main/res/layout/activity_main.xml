@@ -33,7 +33,6 @@
             android:id="@+id/bnv_main"
             android:layout_width="match_parent"
             android:layout_height="58dp"
-            android:layout_marginBottom="?attr/actionBarSize"
             android:elevation="0dp"
             android:outlineProvider="none"
             app:elevation="0dp"

@@ -22,7 +22,9 @@ class CreateFeedSearchNovelBottomSheetDialog :
     private val searchNovelAdapter: SearchNovelAdapter by lazy { SearchNovelAdapter(::onNovelClick) }
 
     private fun onNovelClick(novelId: Long) {
-        createFeedViewModel.updateSelectedNovel(novelId)
+        singleEventHandler.throttleFirst(300) {
+            createFeedViewModel.updateSelectedNovel(novelId)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,12 +63,16 @@ class CreateFeedSearchNovelBottomSheetDialog :
     private fun onSearchNovelClick() {
         binding.ivCreateFeedSearchNovelClose.setOnClickListener { dismiss() }
         binding.wsetCreateFeedSearchNovel.setOnWebsosoSearchActionListener { _, _, _ ->
-            createFeedViewModel.updateSearchedNovels(binding.wsetCreateFeedSearchNovel.getWebsosoSearchText())
+            singleEventHandler.throttleFirst {
+                createFeedViewModel.updateSearchedNovels(binding.wsetCreateFeedSearchNovel.getWebsosoSearchText())
+            }
             true
         }
         binding.tvCreateFeedSearchNovelConnectButton.setOnClickListener {
-            createFeedViewModel.updateSelectedNovel()
-            dismiss()
+            singleEventHandler.throttleFirst {
+                createFeedViewModel.updateSelectedNovel()
+                dismiss()
+            }
         }
     }
 
