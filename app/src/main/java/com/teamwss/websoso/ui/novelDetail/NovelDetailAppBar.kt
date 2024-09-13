@@ -57,7 +57,10 @@ class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(c
         val currentOffset = abs(verticalOffset) / scrollPointForColorChange
 
         return if (currentOffset > SCROLL_START_THRESHOLD) {
-            min(MAX_SCROLL_OFFSET, (currentOffset - SCROLL_START_THRESHOLD) / (1 - SCROLL_START_THRESHOLD))
+            min(
+                MAX_SCROLL_OFFSET,
+                (currentOffset - SCROLL_START_THRESHOLD) / (1 - SCROLL_START_THRESHOLD)
+            )
         } else 0f
     }
 

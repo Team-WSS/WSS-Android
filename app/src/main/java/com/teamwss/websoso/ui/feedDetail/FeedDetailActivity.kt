@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
@@ -21,11 +23,13 @@ import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
@@ -51,6 +55,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         )
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
     private val popupBinding: MenuFeedPopupBinding by lazy {
         MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
     }
@@ -130,13 +135,24 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun setupEditingFeed() {
-        // navigateToEditingFeed
+        val feedContent =
+            feedDetailViewModel.feedDetailUiState.value?.feed?.let { feed ->
+                EditFeedModel(
+                    feedId = feed.id,
+                    novelId = feed.novel.id,
+                    novelTitle = feed.novel.title,
+                    feedContent = feed.content,
+                    feedCategory = feed.relevantCategories,
+                )
+            } ?: throw IllegalArgumentException()
+
+        activityResultCallback.launch(CreateFeedActivity.getIntent(this, feedContent))
     }
 
     private fun setupEditingComment(commentId: Long) {
         val writtenComment = feedDetailViewModel.feedDetailUiState.value?.comments?.find {
             it.commentId == commentId
-        }?.commentContent ?: ""
+        }?.commentContent.orEmpty()
 
         feedDetailViewModel.updateCommentId(commentId)
         binding.etFeedDetailInput.setText(writtenComment)
@@ -225,6 +241,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) feedDetailViewModel.updateFeedDetail(feedId)
+        }
         setupView()
         setupObserver()
         onFeedDetailClick()

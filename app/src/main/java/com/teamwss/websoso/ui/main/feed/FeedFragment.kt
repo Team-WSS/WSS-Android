@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main.feed
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +8,18 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
+import com.teamwss.websoso.R.color
+import com.teamwss.websoso.R.layout.fragment_feed
+import com.teamwss.websoso.R.string
+import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.InfiniteScrollListener
@@ -24,6 +32,7 @@ import com.teamwss.websoso.databinding.FragmentFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
@@ -37,13 +46,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
 @AndroidEntryPoint
-class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
+class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -132,8 +142,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             )
             popup.dismiss()
         }
-        menuContentTitle =
-            getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        menuContentTitle = getString(string.feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
@@ -156,8 +165,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             )
             popup.dismiss()
         }
-        menuContentTitle =
-            getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        menuContentTitle = getString(string.feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -182,7 +190,18 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     }
 
     private fun navigateToFeedEdit(feedId: Long) {
-        // 피드 수정 뷰
+        val feedContent =
+            feedViewModel.feedUiState.value?.feeds?.find { it.id == feedId }?.let { feed ->
+                EditFeedModel(
+                    feedId = feed.id,
+                    novelId = feed.novel.id,
+                    novelTitle = feed.novel.title,
+                    feedContent = feed.content,
+                    feedCategory = feed.relevantCategories,
+                )
+            } ?: throw IllegalArgumentException()
+
+        activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
@@ -192,6 +211,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) feedViewModel.updateRefreshedFeeds()
+        }
         initView()
         feedViewModel.updateFeeds()
         setupObserver()
@@ -205,16 +227,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     }
 
     private fun navigateToFeedWriting() {
-        startActivity(CreateFeedActivity.getIntent(requireContext()))
+        activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext()))
     }
 
     private fun List<CategoryModel>.setUpChips() {
         forEach { categoryUiState ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(categoryUiState.category.titleKr)
-                setWebsosoChipTextAppearance(R.style.title3)
-                setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
+                setWebsosoChipText(categoryUiState.category.krTitle)
+                setWebsosoChipTextAppearance(style.title3)
+                setWebsosoChipTextColor(color.bg_feed_chip_text_selector)
+                setWebsosoChipBackgroundColor(color.bg_feed_chip_background_selector)
                 setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                 setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
                 setWebsosoChipRadius(18f.toFloatPxFromDp())
@@ -272,13 +294,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
         when (feedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
+        }.apply {
+            binding.rvFeed.smoothScrollToPosition(0)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (feedViewModel.feedUiState.value?.feeds.isNullOrEmpty().not())
-            feedViewModel.updateRefreshedFeeds()
     }
 
     override fun onDestroyView() {

@@ -84,7 +84,12 @@ class UserRepository @Inject constructor(
         return userApi.getNicknameValidity(nickname).isValid
     }
 
-    suspend fun saveUserProfile(avatarId: Int?, nickname: String?, intro: String?, genrePreferences: List<String>) {
+    suspend fun saveUserProfile(
+        avatarId: Int?,
+        nickname: String?,
+        intro: String?,
+        genrePreferences: List<String>,
+    ) {
         userApi.patchProfile(UserProfileEditRequestDto(avatarId, nickname, intro, genrePreferences))
     }
 }

@@ -12,6 +12,7 @@ import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -55,14 +56,14 @@ class FeedViewModel @Inject constructor(
                 runCatching {
                     when (feedUiState.feeds.isNotEmpty()) {
                         true -> getFeedsUseCase(
-                            selectedCategory.titleEn,
+                            selectedCategory.enTitle,
                             feedUiState.feeds.maxOf { it.id }
                         )
 
-                        false -> getFeedsUseCase(selectedCategory.titleEn)
+                        false -> getFeedsUseCase(selectedCategory.enTitle)
                     }
                 }.onSuccess { feeds ->
-                    if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
+                    if (feeds.category != selectedCategory.enTitle) throw IllegalStateException()
                     // Return result state of error in domain layer later
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
@@ -96,9 +97,9 @@ class FeedViewModel @Inject constructor(
 
             viewModelScope.launch {
                 runCatching {
-                    getFeedsUseCase(category.titleEn)
+                    getFeedsUseCase(category.enTitle)
                 }.onSuccess { feeds ->
-                    if (feeds.category != category.titleEn) throw IllegalStateException()
+                    if (feeds.category != category.enTitle) throw IllegalStateException()
                     // Return result state of error in domain layer later
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
@@ -121,11 +122,11 @@ class FeedViewModel @Inject constructor(
             viewModelScope.launch {
                 val selectedCategory: Category =
                     categories.find { it.isSelected }?.category ?: throw IllegalStateException()
-
+                delay(300)
                 runCatching {
-                    getFeedsUseCase(selectedCategory.titleEn)
+                    getFeedsUseCase(selectedCategory.enTitle)
                 }.onSuccess { feeds ->
-                    if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
+                    if (feeds.category != selectedCategory.enTitle) throw IllegalStateException()
                     // Return result state of error in domain layer later
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
