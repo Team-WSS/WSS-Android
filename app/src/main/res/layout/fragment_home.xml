@@ -218,7 +218,7 @@
                         android:id="@+id/tv_home_no_associated_feed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="아직 관심 등록한 작품과 관련된 글이 없어요"
+                        android:text="@string/home_no_associated_feed"
                         android:textAppearance="@style/body2"
                         android:textColor="@color/gray_200_AEADB3"
                         app:layout_constraintEnd_toEndOf="parent"
