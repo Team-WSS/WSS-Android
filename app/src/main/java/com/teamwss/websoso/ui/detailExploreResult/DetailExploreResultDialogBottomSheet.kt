@@ -12,6 +12,7 @@ import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
 import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
+import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle.*
 
 class DetailExploreResultDialogBottomSheet :
     BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
@@ -51,21 +52,21 @@ class DetailExploreResultDialogBottomSheet :
     private fun onReplaceFragmentButtonClick() {
         binding.tvDetailExploreInfoButton.setOnClickListener {
             singleEventHandler.throttleFirst {
-                switchFragment(SelectedFragmentTitle.INFO)
+                switchFragment(INFO)
             }
         }
 
         binding.tvDetailExploreKeywordButton.setOnClickListener {
             singleEventHandler.throttleFirst {
-                switchFragment(SelectedFragmentTitle.KEYWORD)
+                switchFragment(KEYWORD)
             }
         }
     }
 
     private fun switchFragment(selectedFragmentTitle: SelectedFragmentTitle) {
         val fragmentToShow = when (selectedFragmentTitle) {
-            SelectedFragmentTitle.INFO -> detailExploreResultInfoFragment
-            SelectedFragmentTitle.KEYWORD -> {
+            INFO -> detailExploreResultInfoFragment
+            KEYWORD -> {
                 if (childFragmentManager.findFragmentById(R.id.fcv_detail_explore) !is DetailExploreResultKeywordFragment) {
                     childFragmentManager.commit {
                         add(R.id.fcv_detail_explore, detailExploreResultKeywordFragment)
@@ -76,8 +77,8 @@ class DetailExploreResultDialogBottomSheet :
         }
 
         val fragmentToHide = when (selectedFragmentTitle) {
-            SelectedFragmentTitle.INFO -> detailExploreResultKeywordFragment
-            SelectedFragmentTitle.KEYWORD -> detailExploreResultInfoFragment
+            INFO -> detailExploreResultKeywordFragment
+            KEYWORD -> detailExploreResultInfoFragment
         }
 
         childFragmentManager.commit {
@@ -94,7 +95,7 @@ class DetailExploreResultDialogBottomSheet :
         val defaultColor = requireContext().getColor(R.color.gray_200_AEADB3)
 
         when (selectedFragmentTitle) {
-            SelectedFragmentTitle.INFO -> {
+            INFO -> {
                 binding.apply {
                     tvDetailExploreInfoButton.setTextColor(selectedColor)
                     tvDetailExploreKeywordButton.setTextColor(defaultColor)
@@ -103,7 +104,7 @@ class DetailExploreResultDialogBottomSheet :
                 }
             }
 
-            SelectedFragmentTitle.KEYWORD -> {
+            KEYWORD -> {
                 binding.apply {
                     tvDetailExploreKeywordButton.setTextColor(selectedColor)
                     tvDetailExploreInfoButton.setTextColor(defaultColor)
