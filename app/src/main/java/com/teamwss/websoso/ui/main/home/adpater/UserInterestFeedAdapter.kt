@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.main.home.adpater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.data.model.UserInterestFeedsEntity.UserInterestFeedEntity
 
 class UserInterestFeedAdapter(
@@ -15,6 +16,10 @@ class UserInterestFeedAdapter(
 
     override fun onBindViewHolder(holder: UserInterestFeedViewHolder, position: Int) {
         holder.bind(getItem(position))
+
+        val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
+        params.width = (holder.itemView.context.resources.displayMetrics.widthPixels * 0.8).toInt()
+        holder.itemView.layoutParams = params
     }
 
     companion object {
