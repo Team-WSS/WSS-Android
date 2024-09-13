@@ -3,11 +3,8 @@ package com.teamwss.websoso.ui.main.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
@@ -69,7 +66,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun setupItemDecoration() {
         with(binding) {
-            rvHomeTodayPopularNovel.addItemDecoration(HomeCustomItemDecoration(TODAY_POPULAR_NOVEL_MARGIN))
+            rvHomeTodayPopularNovel.addItemDecoration(
+                HomeCustomItemDecoration(
+                    TODAY_POPULAR_NOVEL_MARGIN
+                )
+            )
             rvUserInterestFeed.addItemDecoration(HomeCustomItemDecoration(USER_INTEREST_MARGIN))
         }
     }
@@ -121,23 +122,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun updateUserInterestFeedsVisibility(isUserInterestEmpty: Boolean) {
         with(binding) {
             if (isUserInterestEmpty) {
-                when(homeViewModel.uiState.value?.isInterestNovel){
+                when (homeViewModel.uiState.value?.isInterestNovel) {
                     true -> {
                         clHomeUserInterestFeed.visibility = View.GONE
                         clHomeInterestFeed.visibility = View.GONE
-                        clHomeNoAssociatedFeed.visibility =View.VISIBLE
+                        clHomeNoAssociatedFeed.visibility = View.VISIBLE
                     }
+
                     false -> {
                         clHomeUserInterestFeed.visibility = View.GONE
                         clHomeInterestFeed.visibility = View.VISIBLE
-                        clHomeNoAssociatedFeed.visibility =View.GONE
+                        clHomeNoAssociatedFeed.visibility = View.GONE
                     }
+
                     else -> Unit
                 }
             } else {
                 clHomeUserInterestFeed.visibility = View.VISIBLE
                 clHomeInterestFeed.visibility = View.GONE
-                clHomeNoAssociatedFeed.visibility =View.GONE
+                clHomeNoAssociatedFeed.visibility = View.GONE
             }
         }
     }
