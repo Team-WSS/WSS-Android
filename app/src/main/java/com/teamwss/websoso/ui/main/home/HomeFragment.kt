@@ -53,11 +53,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         onNoticeButtonClick()
     }
 
-    override fun onResume() {
-        super.onResume()
-        homeViewModel.updateHomeData()
-    }
-
     private fun bindViewModel() {
         binding.viewModel = homeViewModel
         binding.lifecycleOwner = this
@@ -200,6 +195,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.ivHomeNotification.setOnClickListener {
             startActivity(NoticeActivity.getIntent(requireContext()))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.updateHomeData()
     }
 
     companion object {
