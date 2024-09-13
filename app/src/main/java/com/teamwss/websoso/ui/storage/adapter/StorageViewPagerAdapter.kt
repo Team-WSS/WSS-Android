@@ -3,18 +3,14 @@ package com.teamwss.websoso.ui.storage.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamwss.websoso.data.repository.FakeStorageRepository
+import com.teamwss.websoso.data.model.StorageEntity
 import com.teamwss.websoso.databinding.ItemStorageBinding
+import com.teamwss.websoso.ui.storage.model.StorageTab
 
 class StorageViewPagerAdapter(
-    repository: FakeStorageRepository,
+    private val novelsMap: Map<StorageTab, List<StorageEntity.UserNovel>>,
     private val navigateToExplore: () -> Unit
 ) : RecyclerView.Adapter<StorageViewPagerViewHolder>() {
-
-    private val interestNovels = repository.getInterestNovels()
-    private val watchingNovels = repository.getWatchingNovels()
-    private val watchedNovels = repository.getWatchedNovels()
-    private val quittingNovels = repository.getQuittingNovels()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StorageViewPagerViewHolder {
         val binding =
@@ -23,17 +19,11 @@ class StorageViewPagerAdapter(
     }
 
     override fun onBindViewHolder(holder: StorageViewPagerViewHolder, position: Int) {
-        when (position) {
-            0 -> holder.bind(interestNovels)
-            1 -> holder.bind(watchingNovels)
-            2 -> holder.bind(watchedNovels)
-            3 -> holder.bind(quittingNovels)
-        }
+        val tab = StorageTab.fromPosition(position)
+        holder.bind(novelsMap[tab] ?: emptyList())
     }
 
     override fun getItemCount(): Int {
         return 4
     }
 }
-
-
