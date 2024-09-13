@@ -33,7 +33,6 @@
             <ImageView
                 android:id="@+id/iv_feed_profile"
                 cornerRadius="@{12f}"
-                isVectorImage="@{true}"
                 loadImageUrl="@{feed.user.avatarImage}"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
