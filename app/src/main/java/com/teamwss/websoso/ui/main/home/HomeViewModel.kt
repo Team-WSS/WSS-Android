@@ -83,12 +83,12 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = uiState.value?.copy(
                     loading = false,
                     isInterestNovel = isInterestNovel,
-                    userInterestFeeds = userInterestFeeds.userInterestFeeds
+                    userInterestFeeds = userInterestFeeds.userInterestFeeds,
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = true
+                    error = true,
                 )
             }
         }
