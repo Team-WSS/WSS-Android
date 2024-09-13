@@ -47,7 +47,7 @@
 
         <ImageView
             android:id="@+id/iv_popular_novel_novel_cover"
-            cornerRadius="@{8.7f}"
+            cornerRadius="@{9f}"
             loadImageUrl="@{popularNovel.novelImage}"
             android:layout_width="128dp"
             android:layout_height="188dp"
