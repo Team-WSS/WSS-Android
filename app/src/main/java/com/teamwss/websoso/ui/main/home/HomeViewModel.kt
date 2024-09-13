@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.UserInterestFeedMessage
+import com.teamwss.websoso.data.model.UserInterestFeedMessage.*
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.ui.main.home.model.HomeUiState
@@ -75,8 +76,8 @@ class HomeViewModel @Inject constructor(
             }.onSuccess { userInterestFeeds ->
                 val isInterestNovel =
                     when (UserInterestFeedMessage.fromMessage(userInterestFeeds.message)) {
-                        UserInterestFeedMessage.NO_ASSOCIATED_FEEDS -> true
-                        UserInterestFeedMessage.NO_INTEREST_NOVELS -> false
+                        NO_ASSOCIATED_FEEDS -> true
+                        NO_INTEREST_NOVELS -> false
                         else -> true
                     }
 
