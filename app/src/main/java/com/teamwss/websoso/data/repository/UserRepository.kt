@@ -19,6 +19,8 @@ import javax.inject.Inject
 class UserRepository @Inject constructor(
     private val userApi: UserApi,
 ) {
+    var userGender: String = "M"
+        private set
 
     suspend fun fetchUserInfo(): UserInfoEntity {
         return userApi.getUserInfo().toData()
@@ -77,7 +79,9 @@ class UserRepository @Inject constructor(
                 birth,
                 genrePreferences,
             )
-        )
+        ).also {
+            userGender = gender
+        }
     }
 
     suspend fun fetchNicknameValidity(nickname: String): Boolean {

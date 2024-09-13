@@ -50,8 +50,9 @@ class NovelDetailActivity :
     private val novelRatingLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+        when (result.resultCode) {
+            RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+            REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
         }
     }
 
@@ -282,7 +283,7 @@ class NovelDetailActivity :
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
-
+        private const val REFRESH = 200
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
 

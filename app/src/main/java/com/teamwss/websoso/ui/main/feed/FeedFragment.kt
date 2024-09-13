@@ -10,20 +10,23 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.color
-import com.teamwss.websoso.R.layout.fragment_feed
-import com.teamwss.websoso.R.string
+import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
+import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
+import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
 import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
@@ -36,17 +39,19 @@ import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
+import com.teamwss.websoso.ui.main.feed.adapter.FeedType.NoMore
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
 @AndroidEntryPoint
-class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
+class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
@@ -66,20 +71,20 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(id: Long) {
-            // ProfileActivity.from(context, id)
+        override fun onProfileClick(userId: Long) {
+            singleEventHandler.throttleFirst(300) { navigateToOtherUserPage(userId) }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
-            showMenu(view, feedId, isMyFeed)
+            singleEventHandler.throttleFirst { showMenu(view, feedId, isMyFeed) }
         }
 
-        override fun onContentClick(id: Long) {
-            navigateToFeedDetail(id)
+        override fun onContentClick(feedId: Long) {
+            singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId) }
         }
 
-        override fun onNovelInfoClick(id: Long) {
-            // navigateToNovelDetail(id)
+        override fun onNovelInfoClick(novelId: Long) {
+            singleEventHandler.throttleFirst(300) { navigateToNovelDetail(novelId) }
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
@@ -98,10 +103,12 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
             }
         }
+    }
 
-        override fun onCommentButtonClick(feedId: Long) {
-            navigateToFeedDetail(feedId)
-        }
+    private fun navigateToOtherUserPage(userId: Long) {
+//        singleEventHandler.throttleFirst(300) {
+//            OtherUserPageActivity.getIntent(requireContext(), userId)
+//        }
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -127,45 +134,47 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
     }
 
-    private fun MenuFeedPopupBinding.setupMyFeed(
-        feedId: Long,
-        popup: PopupWindow,
-    ) {
+    private fun MenuFeedPopupBinding.setupMyFeed(feedId: Long, popup: PopupWindow) {
         onFirstItemClick = {
-            navigateToFeedEdit(feedId)
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                navigateToFeedEdit(feedId)
+                popup.dismiss()
+            }
         }
         onSecondItemClick = {
-            showDialog<DialogRemovePopupMenuBinding>(
-                menuType = REMOVE_FEED.name,
-                event = { feedViewModel.updateRemovedFeed(feedId) },
-            )
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                showDialog<DialogRemovePopupMenuBinding>(
+                    menuType = REMOVE_FEED.name,
+                    event = { feedViewModel.updateRemovedFeed(feedId) },
+                )
+                popup.dismiss()
+            }
         }
-        menuContentTitle = getString(string.feed_popup_menu_content_isMyFeed).split(",")
+        menuContentTitle = getString(feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
 
-    private fun MenuFeedPopupBinding.setupNotMyFeed(
-        feedId: Long,
-        popup: PopupWindow,
-    ) {
+    private fun MenuFeedPopupBinding.setupNotMyFeed(feedId: Long, popup: PopupWindow) {
         onFirstItemClick = {
-            showDialog<DialogReportPopupMenuBinding>(
-                menuType = ReportMenuType.SPOILER_FEED.name,
-                event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
-            )
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                showDialog<DialogReportPopupMenuBinding>(
+                    menuType = ReportMenuType.SPOILER_FEED.name,
+                    event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
+                )
+                popup.dismiss()
+            }
         }
         onSecondItemClick = {
-            showDialog<DialogReportPopupMenuBinding>(
-                menuType = ReportMenuType.IMPERTINENCE_FEED.name,
-                event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
-            )
-            popup.dismiss()
+            singleEventHandler.throttleFirst {
+                showDialog<DialogReportPopupMenuBinding>(
+                    menuType = ReportMenuType.IMPERTINENCE_FEED.name,
+                    event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
+                )
+                popup.dismiss()
+            }
         }
-        menuContentTitle = getString(string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        menuContentTitle = getString(feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -205,14 +214,25 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+        activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
+    }
+
+    private fun navigateToNovelDetail(novelId: Long) {
+        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) feedViewModel.updateRefreshedFeeds()
+            when (result.resultCode) {
+                REFRESH -> feedViewModel.updateRefreshedFeeds()
+                SHOW_SNACK_BAR -> showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(feed_removed_feed_snackbar),
+                    icon = ic_blocked_user_snack_bar,
+                )
+            }
         }
         initView()
         feedViewModel.updateFeeds()
@@ -220,7 +240,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun initView() {
-        binding.onWriteClick = ::navigateToFeedWriting
+        binding.onWriteClick = { singleEventHandler.throttleFirst { navigateToFeedWriting() } }
         feedViewModel.categories.setUpChips()
         setupAdapter()
         setupRefreshView()
@@ -262,14 +282,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun setupRefreshView() {
         binding.sptrFeedRefresh.apply {
-            setRefreshViewParams(
-                params = ViewGroup.LayoutParams(
-                    30.toIntPxFromDp(), 30.toIntPxFromDp(),
+            singleEventHandler.throttleFirst {
+                setRefreshViewParams(
+                    params = ViewGroup.LayoutParams(
+                        30.toIntPxFromDp(), 30.toIntPxFromDp(),
+                    )
                 )
-            )
-            setLottieAnimation("lottie_websoso_loading.json")
-            setOnRefreshListener {
-                feedViewModel.updateRefreshedFeeds()
+                setLottieAnimation("lottie_websoso_loading.json")
+                setOnRefreshListener {
+                    feedViewModel.updateRefreshedFeeds()
+                }
             }
         }
     }
@@ -293,7 +315,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         val feeds = feedUiState.feeds.map { Feed(it) }
         when (feedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
-            false -> feedAdapter.submitList(feeds)
+            false -> feedAdapter.submitList(feeds + NoMore)
         }.apply {
             binding.rvFeed.smoothScrollToPosition(0)
         }
@@ -302,5 +324,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     override fun onDestroyView() {
         _popupBinding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        private const val REFRESH = 200
+        private const val SHOW_SNACK_BAR = 400
     }
 }
