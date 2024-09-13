@@ -22,7 +22,7 @@ enum class UserInterestFeedMessage(val message: String) {
 
     companion object {
         fun fromMessage(message: String): UserInterestFeedMessage? {
-            return values().find { it.message == message }
+            return entries.find { it.message == message }
         }
     }
 }
