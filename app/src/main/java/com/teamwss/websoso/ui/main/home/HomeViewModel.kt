@@ -94,7 +94,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     private fun updateRecommendedNovelsByUser() {
         viewModelScope.launch {
             runCatching {
@@ -113,4 +112,3 @@ class HomeViewModel @Inject constructor(
         }
     }
 }
-
