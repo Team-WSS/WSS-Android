@@ -14,7 +14,8 @@ import com.teamwss.websoso.ui.profileEdit.model.Avatar.Companion.animation
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 
-class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBinding>(R.layout.dialog_avatar_change) {
+class AvatarChangeBottomSheetDialog :
+    BaseBottomSheetDialog<DialogAvatarChangeBinding>(R.layout.dialog_avatar_change) {
     private val profileEditViewModel: ProfileEditViewModel by activityViewModels()
     private val avatarChangeAdapter: AvatarChangeAdapter by lazy {
         AvatarChangeAdapter { avatarModel -> profileEditViewModel.updateSelectedAvatar(avatarModel) }

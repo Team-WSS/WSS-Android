@@ -16,6 +16,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
+import com.teamwss.websoso.R.color
+import com.teamwss.websoso.R.layout.fragment_feed
+import com.teamwss.websoso.R.string
+import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.InfiniteScrollListener
@@ -42,7 +46,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
 @AndroidEntryPoint
-class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
+class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
@@ -138,7 +142,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             )
             popup.dismiss()
         }
-        menuContentTitle = getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        menuContentTitle = getString(string.feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
@@ -161,7 +165,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
             )
             popup.dismiss()
         }
-        menuContentTitle = getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        menuContentTitle = getString(string.feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -229,10 +233,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(R.layout.fragment_feed) {
     private fun List<CategoryModel>.setUpChips() {
         forEach { categoryUiState ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(categoryUiState.category.titleKr)
-                setWebsosoChipTextAppearance(R.style.title3)
-                setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
+                setWebsosoChipText(categoryUiState.category.krTitle)
+                setWebsosoChipTextAppearance(style.title3)
+                setWebsosoChipTextColor(color.bg_feed_chip_text_selector)
+                setWebsosoChipBackgroundColor(color.bg_feed_chip_background_selector)
                 setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                 setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
                 setWebsosoChipRadius(18f.toFloatPxFromDp())

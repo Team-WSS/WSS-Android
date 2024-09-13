@@ -7,7 +7,8 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.databinding.DialogNovelDetailCoverBinding
 
-class NovelDetailCoverDialogFragment : BaseDialogFragment<DialogNovelDetailCoverBinding>(R.layout.dialog_novel_detail_cover) {
+class NovelDetailCoverDialogFragment :
+    BaseDialogFragment<DialogNovelDetailCoverBinding>(R.layout.dialog_novel_detail_cover) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

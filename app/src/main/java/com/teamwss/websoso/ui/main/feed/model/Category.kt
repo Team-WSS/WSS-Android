@@ -1,8 +1,8 @@
 package com.teamwss.websoso.ui.main.feed.model
 
 enum class Category(
-    val titleKr: String,
-    val titleEn: String,
+    val krTitle: String,
+    val enTitle: String,
 ) {
     ALL("전체", "all"),
     ROMANCE("로맨스", "romance"),
@@ -20,7 +20,7 @@ enum class Category(
     companion object {
 
         fun from(title: String): Category = Category.entries.find { category ->
-            title == category.titleKr
+            title == category.krTitle
         } ?: throw IllegalArgumentException()
     }
 }

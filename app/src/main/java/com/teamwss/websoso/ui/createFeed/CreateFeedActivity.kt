@@ -9,7 +9,7 @@ import com.teamwss.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_text_selector
 import com.teamwss.websoso.R.color.gray_200_AEADB3
-import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.layout.activity_create_feed
 import com.teamwss.websoso.R.string.wset_create_feed_search_novel
 import com.teamwss.websoso.R.style.body2
 import com.teamwss.websoso.R.style.body4
@@ -24,7 +24,7 @@ import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activity_create_feed) {
+class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_create_feed) {
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -114,7 +114,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
     private fun List<CreatedFeedCategoryModel>.setupCategoryChips() {
         forEach { category ->
             WebsosoChip(this@CreateFeedActivity).apply {
-                setWebsosoChipText(category.category.titleKr)
+                setWebsosoChipText(category.category.krTitle)
                 setWebsosoChipTextAppearance(body2)
                 setWebsosoChipTextColor(bg_detail_explore_chip_text_selector)
                 setWebsosoChipStrokeColor(bg_detail_explore_chip_stroke_selector)
@@ -123,7 +123,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(layout.activi
                 setWebsosoChipPaddingHorizontal(6.7f.toFloatPxFromDp())
                 setWebsosoChipSelected(category.isSelected)
                 setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.titleEn) }
+                setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.enTitle) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }

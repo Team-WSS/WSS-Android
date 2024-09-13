@@ -10,7 +10,8 @@ import com.teamwss.websoso.common.util.getAdaptedParcelable
 import com.teamwss.websoso.databinding.DialogNovelAlertBinding
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 
-class NovelAlertDialogFragment : BaseDialogFragment<DialogNovelAlertBinding>(R.layout.dialog_novel_alert) {
+class NovelAlertDialogFragment :
+    BaseDialogFragment<DialogNovelAlertBinding>(R.layout.dialog_novel_alert) {
 
     private lateinit var novelAlertModel: NovelAlertModel
 
