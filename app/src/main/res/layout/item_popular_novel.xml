@@ -69,7 +69,6 @@
 
             <ImageView
                 android:id="@+id/iv_popular_novel_avatar"
-                isVectorImage="@{true}"
                 cornerRadius="@{8f}"
                 loadImageUrl="@{popularNovel.avatarImage}"
                 android:layout_width="24dp"

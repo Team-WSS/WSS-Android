@@ -1,9 +1,11 @@
 package com.teamwss.websoso.ui.main.home.adpater
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 import com.teamwss.websoso.databinding.ItemPopularNovelBinding
 
@@ -18,7 +20,7 @@ class PopularNovelsViewHolder(
 
     fun bind(popularNovel: PopularNovelEntity) {
         val nickname: String = popularNovel.nickname ?: "작품 설명"
-        val avatarImage: String = popularNovel.avatarImage ?: ""
+        val avatarImage = itemView.getS3ImageUrl(popularNovel.avatarImage ?: "")
         if (popularNovel.avatarImage.isNullOrEmpty()) {
             with(binding) {
                 ivPopularNovelAvatar.visibility = View.INVISIBLE
