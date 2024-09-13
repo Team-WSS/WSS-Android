@@ -21,6 +21,7 @@ android {
         versionName = "1.0"
 
         buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
+        buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
