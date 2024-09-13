@@ -17,6 +17,7 @@ import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
 import com.teamwss.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
+import com.teamwss.websoso.ui.storage.StorageActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +34,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
         setupRestGenrePreferenceAdapter()
         setUpObserve()
+        navigateToStorageActivity()
     }
 
     private fun setupRestGenrePreferenceAdapter() {
@@ -129,6 +131,13 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
             setTextAppearance(R.style.body2)
+        }
+    }
+
+    private fun navigateToStorageActivity() {
+        binding.ivMyLibraryGoToStorage.setOnClickListener {
+            val intent = StorageActivity.createIntentForStorageActivity(requireContext())
+            startActivity(intent)
         }
     }
 }
