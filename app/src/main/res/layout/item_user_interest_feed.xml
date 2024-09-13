@@ -36,7 +36,7 @@
             tools:src="@drawable/img_normal_explore_test_cover" />
 
         <LinearLayout
-            android:id="@+id/li_user_interest_rating"
+            android:id="@+id/ll_user_interest_rating"
             android:layout_width="70dp"
             android:layout_height="26dp"
             android:layout_marginStart="14dp"
@@ -72,8 +72,8 @@
             android:textAppearance="@style/title3"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/li_user_interest_rating"
-            app:layout_constraintTop_toBottomOf="@id/li_user_interest_rating"
+            app:layout_constraintStart_toStartOf="@id/ll_user_interest_rating"
+            app:layout_constraintTop_toBottomOf="@id/ll_user_interest_rating"
             tools:text="신데렐라는 이 멧밭쥐가 데려갑니다" />
 
         <View
