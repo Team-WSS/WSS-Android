@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.main.home.adpater
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,7 @@ class UserInterestFeedViewHolder(
 
     fun bind(userInterestFeed: UserInterestFeedEntity) {
         val updateUserInterestFeed = userInterestFeed.copy(
-            avatarImage =  itemView.getS3ImageUrl(userInterestFeed.avatarImage ?: ""),
+            avatarImage = itemView.getS3ImageUrl(userInterestFeed.avatarImage ?: ""),
         )
         binding.userInterestFeed = updateUserInterestFeed
     }
