@@ -55,7 +55,7 @@ class DetailExploreInfoFragment :
                 val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
                 val novelRating = detailExploreViewModel.selectedRating.value
 
-                val keywordIds = detailExploreViewModel.uiState.value?.categories?.asSequence()
+                val keywordIds = detailExploreViewModel.uiState.value?.categories
                     ?.flatMap { it.keywords.asSequence() }
                     ?.filter { it.isSelected }
                     ?.map { it.keywordId }
