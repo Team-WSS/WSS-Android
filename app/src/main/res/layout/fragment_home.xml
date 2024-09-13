@@ -20,7 +20,7 @@
             android:layout_width="92dp"
             android:layout_height="30dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="62dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/ic_home_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,19 +54,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="30dp"
                     android:text="@string/home_today_popular"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vp_home_today_popular_novel"
-                    android:layout_width="match_parent"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_home_today_popular_novel"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:minHeight="376dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_today_popular_novel" />
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_today_popular_novel"
+                    tools:listitem="@layout/item_popular_novel" />
 
                 <ImageView
                     android:id="@+id/iv_home_hot"
@@ -76,7 +80,7 @@
                     android:layout_marginTop="62dp"
                     android:src="@drawable/ic_home_hot"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/vp_home_today_popular_novel" />
+                    app:layout_constraintTop_toBottomOf="@id/rv_home_today_popular_novel" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -142,14 +146,17 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/vp_user_interest_feed"
-                        android:layout_width="match_parent"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_user_interest_feed"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_home_user_interest_feed_description" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_home_user_interest_feed_description"
+                        tools:listitem="@layout/item_user_interest_feed" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -193,6 +200,32 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_no_associated_feed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_home_white_stroke_gray_70_radius_14dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="20dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_home_interest_feed">
+
+                    <TextView
+                        android:id="@+id/tv_home_no_associated_feed"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_no_associated_feed"
+                        android:textAppearance="@style/body2"
+                        android:textColor="@color/gray_200_AEADB3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
                     android:id="@+id/tv_home_recommend_novel"
                     android:layout_width="wrap_content"
@@ -201,7 +234,7 @@
                     android:text="@string/home_recommend_novel"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="@id/vp_home_popular_feed"
-                    app:layout_constraintTop_toBottomOf="@id/cl_home_interest_feed" />
+                    app:layout_constraintTop_toBottomOf="@id/cl_home_no_associated_feed" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_user_recommend_novel"
