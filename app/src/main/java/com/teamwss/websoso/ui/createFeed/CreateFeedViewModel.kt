@@ -41,7 +41,7 @@ class CreateFeedViewModel @Inject constructor(
             CreateFeedCategory.entries.map { category ->
                 CreatedFeedCategoryModel(
                     category = category,
-                    isSelected = feedCategory?.contains(category.titleKr) == true
+                    isSelected = feedCategory?.contains(category.krTitle) == true,
                 )
             }
 
@@ -65,7 +65,7 @@ class CreateFeedViewModel @Inject constructor(
             runCatching {
                 feedRepository.saveFeed(
                     relevantCategories = categories.filter { it.isSelected }
-                        .map { it.category.titleEn },
+                        .map { it.category.enTitle },
                     feedContent = content.value.orEmpty(),
                     novelId = novelId,
                     isSpoiler = isSpoiled.value ?: false,
@@ -80,7 +80,7 @@ class CreateFeedViewModel @Inject constructor(
                 feedRepository.saveEditedFeed(
                     feedId = feedId,
                     relevantCategories = categories.filter { it.isSelected }
-                        .map { it.category.titleEn },
+                        .map { it.category.enTitle },
                     feedContent = content.value.orEmpty(),
                     novelId = novelId,
                     isSpoiler = isSpoiled.value ?: false,
@@ -91,9 +91,10 @@ class CreateFeedViewModel @Inject constructor(
 
     fun updateSelectedCategory(category: String) {
         categories.forEachIndexed { index, categoryModel ->
-            _categories[index] = if (categoryModel.category.titleEn == category) categoryModel.copy(
-                isSelected = !categoryModel.isSelected,
-            ) else return@forEachIndexed
+            _categories[index] = when (categoryModel.category.enTitle == category) {
+                true -> categoryModel.copy(isSelected = !categoryModel.isSelected)
+                false -> return@forEachIndexed
+            }
         }
 
         updateIsActivated()

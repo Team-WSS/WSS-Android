@@ -17,7 +17,8 @@ class NovelFeedViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val feedRepository: FeedRepository,
 ) : ViewModel() {
-    private val _feedUiState: MutableLiveData<NovelFeedUiState> = MutableLiveData(NovelFeedUiState())
+    private val _feedUiState: MutableLiveData<NovelFeedUiState> =
+        MutableLiveData(NovelFeedUiState())
     val feedUiState: LiveData<NovelFeedUiState> get() = _feedUiState
 
     fun updateFeeds(novelId: Long) {

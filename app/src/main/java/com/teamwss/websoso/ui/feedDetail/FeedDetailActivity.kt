@@ -336,7 +336,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
         private const val REFRESH = 200
         private const val RESULT_OK = 200
-        private const val RESULT_FAIL = 200
+        private const val RESULT_FAIL = 400
 
         fun getIntent(context: Context, feedId: Long): Intent =
             Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }

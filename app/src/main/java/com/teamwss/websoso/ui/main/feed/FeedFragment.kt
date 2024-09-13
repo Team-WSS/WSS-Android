@@ -253,7 +253,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
     private fun List<CategoryModel>.setUpChips() {
         forEach { categoryUiState ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(categoryUiState.category.titleKr)
+                setWebsosoChipText(categoryUiState.category.krTitle)
                 setWebsosoChipTextAppearance(style.title3)
                 setWebsosoChipTextColor(color.bg_feed_chip_text_selector)
                 setWebsosoChipBackgroundColor(color.bg_feed_chip_background_selector)

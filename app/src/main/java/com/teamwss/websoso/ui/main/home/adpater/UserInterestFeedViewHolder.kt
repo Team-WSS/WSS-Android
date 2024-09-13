@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.main.home.adpater
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.data.model.UserInterestFeedsEntity.UserInterestFeedEntity
 import com.teamwss.websoso.databinding.ItemUserInterestFeedBinding
 
@@ -16,7 +17,10 @@ class UserInterestFeedViewHolder(
     }
 
     fun bind(userInterestFeed: UserInterestFeedEntity) {
-        binding.userInterestFeed = userInterestFeed
+        val updateUserInterestFeed = userInterestFeed.copy(
+            avatarImage = itemView.getS3ImageUrl(userInterestFeed.avatarImage ?: ""),
+        )
+        binding.userInterestFeed = updateUserInterestFeed
     }
 
     companion object {

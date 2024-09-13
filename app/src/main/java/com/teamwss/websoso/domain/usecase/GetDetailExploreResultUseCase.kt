@@ -59,7 +59,7 @@ class GetDetailExploreResultUseCase @Inject constructor(
         genres: List<String>?,
         isCompleted: Boolean?,
         novelRating: Float?,
-        keywordIds: List<Int>?
+        keywordIds: List<Int>?,
     ): Boolean {
         return genres?.equals(previousGenres) == true
                 && isCompleted == previousIsCompleted

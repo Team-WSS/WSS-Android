@@ -13,11 +13,13 @@ enum class Genre(val krName: String, val tag: String) {
 
     companion object {
         fun String.toGenreFromTag(): Genre {
-            return entries.find { it.tag == this } ?: throw IllegalArgumentException("Invalid genre tag")
+            return entries.find { it.tag == this }
+                ?: throw IllegalArgumentException("Invalid genre tag")
         }
 
         fun String.toGenreFromKr(): Genre {
-            return entries.find { it.krName == this } ?: throw IllegalArgumentException("Invalid genre krName")
+            return entries.find { it.krName == this }
+                ?: throw IllegalArgumentException("Invalid genre krName")
         }
 
         fun Genre.toTag(): String {
