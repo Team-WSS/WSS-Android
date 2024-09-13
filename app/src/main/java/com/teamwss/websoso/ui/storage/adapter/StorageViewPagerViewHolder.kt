@@ -20,9 +20,7 @@ class StorageViewPagerViewHolder(
         }
 
         binding.btnStorageGoToSearchNovel.setOnClickListener {
-            navigateToExplore()  // 전달받은 함수를 호출하여 탐색 프래그먼트로 이동
+            navigateToExplore()
         }
     }
 }
-
-
