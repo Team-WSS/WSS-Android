@@ -39,7 +39,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
-                android:text="보관함"
+                android:text="@string/storage_storage"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -67,25 +67,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
-                android:text="관심" />
+                android:text="@string/storage_interesting" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
-                android:text="보는중" />
+                android:text="@string/storage_watching" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
-                android:text="봤어요" />
+                android:text="@string/storage_watched" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
-                android:text="하차" />
+                android:text="@string/storage_quitting" />
 
         </com.google.android.material.tabs.TabLayout>
 
