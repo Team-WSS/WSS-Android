@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.data.repository.UserNovelRepository
-import com.teamwss.websoso.data.repository.UserPreferencesRepository
+import com.teamwss.websoso.data.datasource.UserDataSource
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class NovelDetailViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val userNovelRepository: UserNovelRepository,
-    private val userPreferencesRepository: UserPreferencesRepository,
+    private val userDataSource: UserDataSource,
 ) : ViewModel() {
 
     private val _novelDetailModel = MutableLiveData<NovelDetailModel>()
@@ -83,7 +83,7 @@ class NovelDetailViewModel @Inject constructor(
     private fun checkIsFirstLaunched() {
         viewModelScope.launch {
             runCatching {
-                userPreferencesRepository.fetchNovelDetailFirstLaunched()
+                userDataSource.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
                 _novelDetailModel.value =
                     novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
@@ -96,7 +96,7 @@ class NovelDetailViewModel @Inject constructor(
     fun updateIsFirstLaunched() {
         viewModelScope.launch {
             runCatching {
-                userPreferencesRepository.saveNovelDetailFirstLaunched(false)
+                userDataSource.saveNovelDetailFirstLaunched(false)
             }.onSuccess {
                 _novelDetailModel.value =
                     novelDetailModel.value?.copy(isFirstLaunched = false)

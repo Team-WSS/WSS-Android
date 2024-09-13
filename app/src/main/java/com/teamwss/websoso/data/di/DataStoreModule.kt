@@ -19,17 +19,28 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
-    @Singleton
-    @Provides
-    fun provideUserPreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+    private fun Context.createDataStore(preferencesName: String): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
                 produceNewData = { emptyPreferences() }
             ),
-            migrations = listOf(SharedPreferencesMigration(context, USER_PREFERENCES)),
-            produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES) },
+            migrations = listOf(SharedPreferencesMigration(this, preferencesName)),
+            produceFile = { this.preferencesDataStoreFile(preferencesName) }
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideUserDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return context.createDataStore(USER_PREFERENCES)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDensityDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return context.createDataStore(DENSITY_PREFERENCES)
+    }
+
     private const val USER_PREFERENCES = "com.teamwss.websoso.user_preferences"
+    private const val DENSITY_PREFERENCES = "com.teamwss.websoso.density_preferences"
 }
