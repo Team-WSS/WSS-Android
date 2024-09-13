@@ -7,6 +7,7 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.FragmentDetailExploreResultInfoBinding
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
@@ -19,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailExploreResultInfoFragment :
     BaseFragment<FragmentDetailExploreResultInfoBinding>(R.layout.fragment_detail_explore_result_info) {
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,14 +47,16 @@ class DetailExploreResultInfoFragment :
 
     private fun onDetailSearchNovelButtonClick() {
         binding.tvDetailExploreSearchButton.setOnClickListener {
-            detailExploreResultViewModel.updateSearchResult(isSearchButtonClick = true)
+            singleEventHandler.throttleFirst {
+                detailExploreResultViewModel.updateSearchResult(isSearchButtonClick = true)
 
-            val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(
-                DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
-            ) as? DetailExploreResultDialogBottomSheet
-            bottomSheet?.dismiss()
+                val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(
+                    DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
+                ) as? DetailExploreResultDialogBottomSheet
+                bottomSheet?.dismiss()
 
-            detailExploreResultViewModel.updateIsBottomSheetOpen(false)
+                detailExploreResultViewModel.updateIsBottomSheetOpen(false)
+            }
         }
     }
 

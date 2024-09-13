@@ -9,6 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
 import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
 
@@ -17,6 +18,7 @@ class DetailExploreResultDialogBottomSheet :
     private val detailExploreResultInfoFragment: DetailExploreResultInfoFragment by lazy { DetailExploreResultInfoFragment() }
     private val detailExploreResultKeywordFragment: DetailExploreResultKeywordFragment by lazy { DetailExploreResultKeywordFragment() }
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,11 +50,15 @@ class DetailExploreResultDialogBottomSheet :
 
     private fun onReplaceFragmentButtonClick() {
         binding.tvDetailExploreInfoButton.setOnClickListener {
-            switchFragment(SelectedFragmentTitle.INFO)
+            singleEventHandler.throttleFirst {
+                switchFragment(SelectedFragmentTitle.INFO)
+            }
         }
 
         binding.tvDetailExploreKeywordButton.setOnClickListener {
-            switchFragment(SelectedFragmentTitle.KEYWORD)
+            singleEventHandler.throttleFirst {
+                switchFragment(SelectedFragmentTitle.KEYWORD)
+            }
         }
     }
 
