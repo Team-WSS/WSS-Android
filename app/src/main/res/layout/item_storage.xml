@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="hasData"
+            type="Boolean" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_storage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            app:isVisible="@{hasData}"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_storage_novel" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_storage_null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:isVisible="@{!hasData}"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_storage_null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_storage_null"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@id/tv_storage_null"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_storage_null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="보관함이 비어있어요"
+                android:textAppearance="@style/body1"
+                android:textColor="@color/gray_200_AEADB3"
+                android:layout_marginBottom="45dp"
+                app:layout_constraintBottom_toTopOf="@id/btn_storage_go_to_search_novel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_storage_go_to_search_novel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="웹소설 찾으러 가기"
+                android:textAppearance="@style/title1"
+                android:textColor="@color/primary_100_6A5DFD"
+                android:background="@drawable/bg_storage_primary50_radius_12dp"
+                android:layout_marginHorizontal="90dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
