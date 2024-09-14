@@ -196,7 +196,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun onNoticeButtonClick() {
         binding.ivHomeNotification.setOnClickListener {
-            startActivity(NoticeActivity.getIntent(requireContext()))
+            if (homeViewModel.uiState.value?.isLogin == true) {
+                startActivity(NoticeActivity.getIntent(requireContext()))
+            } else {
+                showLoginRequestDialog()
+            }
         }
     }
 
