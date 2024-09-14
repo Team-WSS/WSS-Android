@@ -2,12 +2,14 @@ package com.teamwss.websoso.ui.main.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.teamwss.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
@@ -20,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val popularNovelsAdapter: PopularNovelsAdapter by lazy {
         PopularNovelsAdapter(::navigateToNovelDetail)
@@ -81,15 +84,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 uiState.loading -> Unit
                 uiState.error -> Unit
                 !uiState.loading -> {
-                    updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
 
-                    if (uiState.isLogin) {
-                        updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
-                        updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
-                        userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
-                        recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    mainViewModel.mainUiState.value?.let { mainUiState ->
+                        if (mainUiState.isLogin) {
+                            updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+                            updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
+                            userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
+                            recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                        }
                     }
                 }
             }
@@ -171,7 +175,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun onPostInterestNovelClick() {
         binding.clHomeInterestFeed.setOnClickListener {
-            if (homeViewModel.uiState.value?.isLogin == true) {
+            if (mainViewModel.mainUiState.value?.isLogin == true) {
                 startActivity(NormalExploreActivity.getIntent(requireContext()))
             } else {
                 showLoginRequestDialog()
@@ -181,7 +185,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun onSettingPreferenceGenreClick() {
         binding.clHomeRecommendNovel.setOnClickListener {
-            if (homeViewModel.uiState.value?.isLogin == true) {
+            if (mainViewModel.mainUiState.value?.isLogin == true) {
                 //TODO 프로필 수정으로 이동
             } else {
                 showLoginRequestDialog()
@@ -196,7 +200,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun onNoticeButtonClick() {
         binding.ivHomeNotification.setOnClickListener {
-            if (homeViewModel.uiState.value?.isLogin == true) {
+            if (mainViewModel.mainUiState.value?.isLogin == true) {
                 startActivity(NoticeActivity.getIntent(requireContext()))
             } else {
                 showLoginRequestDialog()
