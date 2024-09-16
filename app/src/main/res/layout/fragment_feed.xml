@@ -13,7 +13,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="24dp"
         tools:context=".ui.main.feed.FeedFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             android:text="@string/feed_title"
             android:textAppearance="@style/headline1"
             android:textColor="@color/black"

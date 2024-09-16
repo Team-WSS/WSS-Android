@@ -33,7 +33,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 app:cornerRadius="@{10f}"
-                app:isVectorImage="@{true}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:loadImageUrl="@{categoryImageUrl}" />

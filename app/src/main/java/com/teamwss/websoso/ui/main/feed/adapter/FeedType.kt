@@ -10,8 +10,10 @@ sealed interface FeedType {
 
     data object Loading : FeedType
 
+    data object NoMore : FeedType
+
     enum class ItemType {
-        FEED, LOADING;
+        FEED, LOADING, NO_MORE;
 
         companion object {
 

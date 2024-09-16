@@ -195,7 +195,8 @@ class NovelRatingKeywordBottomSheetDialog :
                 setOnWebsosoChipClick {
                     novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
                 }
-                isSelected = keywords.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
+                isSelected =
+                    keywords.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
             }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
         }
     }

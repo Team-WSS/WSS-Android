@@ -45,7 +45,8 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun updateSelectedGenres(selectedGenre: Genre) {
-        val genrePreferences = profileEditUiState.value?.profile?.genrePreferences?.toMutableList() ?: mutableListOf()
+        val genrePreferences =
+            profileEditUiState.value?.profile?.genrePreferences?.toMutableList() ?: mutableListOf()
         if (genrePreferences.contains(selectedGenre)) genrePreferences.remove(selectedGenre)
         else genrePreferences.add(selectedGenre)
         _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
@@ -135,6 +136,7 @@ class ProfileEditViewModel @Inject constructor(
                 )
                 true
             }
+
             false -> false
         }
     }
@@ -167,7 +169,8 @@ class ProfileEditViewModel @Inject constructor(
         val currentProfile = profileEditUiState.value?.profile ?: return
 
         val isInvalidNickname = profileEditUiState.value?.nicknameEditResult != VALID_NICKNAME
-        val isNicknameChanged = currentProfile.nicknameModel.nickname != previousProfile.nicknameModel.nickname
+        val isNicknameChanged =
+            currentProfile.nicknameModel.nickname != previousProfile.nicknameModel.nickname
         if (isInvalidNickname && isNicknameChanged) return
 
         viewModelScope.launch {
@@ -220,7 +223,8 @@ class ProfileEditViewModel @Inject constructor(
                 updatePreviousProfile(
                     profileEditUiState.value?.profile?.copy(
                         avatarId = avatarsModel.find { it.isRepresentative }?.avatarId ?: 0,
-                        avatarThumbnail = avatarsModel.find { it.isRepresentative }?.avatarThumbnail ?: "",
+                        avatarThumbnail = avatarsModel.find { it.isRepresentative }?.avatarThumbnail
+                            ?: "",
                     ) ?: ProfileModel()
                 )
             }.onFailure {

@@ -8,6 +8,7 @@ import com.teamwss.websoso.R.string.remove_popup_menu_description_comment
 import com.teamwss.websoso.R.string.remove_popup_menu_title
 import com.teamwss.websoso.R.string.remove_popup_menu_title_comment
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
@@ -15,6 +16,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 
 class FeedRemoveDialogFragment :
     BaseDialogFragment<DialogRemovePopupMenuBinding>(layout.dialog_remove_popup_menu) {
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val menuType: String? by lazy { arguments?.getString(MENU_TYPE) }
     private val onRemoveClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener
@@ -30,8 +32,10 @@ class FeedRemoveDialogFragment :
 
         binding.tvRemovePopupMenuCancel.setOnClickListener { dismiss() }
         binding.tvRemovePopupMenuRemove.setOnClickListener {
-            onRemoveClick()
-            dismiss()
+            singleEventHandler.throttleFirst {
+                onRemoveClick()
+                dismiss()
+            }
         }
         dialog?.setCanceledOnTouchOutside(false)
     }

@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.ui.main.feed.FeedItemClickListener
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
+import com.teamwss.websoso.ui.main.feed.adapter.FeedType.ItemType
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.ItemType.FEED
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.ItemType.LOADING
+import com.teamwss.websoso.ui.main.feed.adapter.FeedType.ItemType.NO_MORE
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
+import com.teamwss.websoso.ui.main.feed.adapter.FeedType.NoMore
 
 class FeedAdapter(
     private val feedItemClickListener: FeedItemClickListener,
@@ -21,23 +24,25 @@ class FeedAdapter(
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is Feed -> FEED.ordinal
         is Loading -> LOADING.ordinal
+        is NoMore -> NO_MORE.ordinal
     }
 
     override fun getItemId(position: Int): Long = when (getItem(position)) {
         is Feed -> (getItem(position) as Feed).feed.id
-        is Loading -> super.getItemId(position)
+        else -> super.getItemId(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        when (FeedType.ItemType.valueOf(viewType)) {
+        when (ItemType.valueOf(viewType)) {
             FEED -> FeedViewHolder.of(parent, feedItemClickListener)
             LOADING -> FeedLoadingViewHolder.from(parent)
+            NO_MORE -> FeedNoMoreViewHolder.from(parent)
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is FeedViewHolder -> holder.bind((getItem(position) as Feed).feed)
-            is FeedLoadingViewHolder -> return
+            else -> return
         }
     }
 

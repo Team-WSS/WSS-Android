@@ -9,6 +9,7 @@ import android.os.Parcelable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ListView
+import com.teamwss.websoso.BuildConfig
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
 import java.io.Serializable
@@ -36,8 +37,21 @@ fun ListView.setListViewHeightBasedOnChildren() {
     requestLayout()
 }
 
+fun View.getS3ImageUrl(imageName: String): String {
+    val baseUrl = BuildConfig.S3_BASE_URL
+    val scale = when {
+        context.resources.displayMetrics.density >= 4.0 -> 4
+        context.resources.displayMetrics.density >= 3.0 -> 3
+        context.resources.displayMetrics.density >= 2.0 -> 2
+        else -> 1
+    }
+
+    return "$baseUrl$imageName@${scale}x.png"
+}
+
 fun View.hideKeyboard() {
-    val inputMethodManager : InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputMethodManager: InputMethodManager =
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 

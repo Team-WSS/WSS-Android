@@ -24,6 +24,7 @@ import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
@@ -49,8 +50,9 @@ class NovelDetailActivity :
     private val novelRatingLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+        when (result.resultCode) {
+            RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+            REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
         }
     }
 
@@ -93,8 +95,7 @@ class NovelDetailActivity :
             cancelButtonText = getString(R.string.novel_detail_remove_cancel),
             onAcceptClick = { deleteUserNovel() },
         )
-        NovelAlertDialogFragment
-            .newInstance(novelAlertModel)
+        NovelAlertDialogFragment.newInstance(novelAlertModel)
             .show(supportFragmentManager, NovelAlertDialogFragment.TAG)
         menuPopupWindow?.dismiss()
     }
@@ -129,7 +130,8 @@ class NovelDetailActivity :
     }
 
     private fun setupOnPageChangeCallback() {
-        binding.vpNovelDetail.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.vpNovelDetail.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 updateNovelFeedWriteButtonVisibility(position)
             }
@@ -148,7 +150,8 @@ class NovelDetailActivity :
             when (novelDetail.novel.isNovelNotBlank) {
                 true -> {
                     binding.wllNovelDetail.setWebsosoLoadingVisibility(false)
-                    binding.llNovelDetailInterest.isSelected = novelDetail.userNovel.isUserNovelInterest
+                    binding.llNovelDetailInterest.isSelected =
+                        novelDetail.userNovel.isUserNovelInterest
                     if (novelDetail.isFirstLaunched) setupTooltipWindow()
                 }
 
@@ -253,8 +256,11 @@ class NovelDetailActivity :
         }
 
         override fun onNovelFeedWriteClick() {
-            val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, novelId)
-            startActivity(intent)
+            val editFeedModel = EditFeedModel(
+                novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
+            )
+            val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
+            novelRatingLauncher.launch(intent)
         }
     }
 
@@ -277,7 +283,7 @@ class NovelDetailActivity :
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
-
+        private const val REFRESH = 200
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
 

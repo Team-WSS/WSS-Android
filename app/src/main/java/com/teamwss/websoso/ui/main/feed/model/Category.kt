@@ -1,13 +1,13 @@
 package com.teamwss.websoso.ui.main.feed.model
 
 enum class Category(
-    val titleKr: String,
-    val titleEn: String,
+    val krTitle: String,
+    val enTitle: String,
 ) {
     ALL("전체", "all"),
     ROMANCE("로맨스", "romance"),
     ROMANCE_FANTASY("로판", "romanceFantasy"),
-    BOYS_LOVE("BL", "bl"),
+    BOYS_LOVE("BL", "BL"),
     FANTASY("판타지", "fantasy"),
     MODERN_FANTASY("현판", "modernFantasy"),
     WUXIA("무협", "wuxia"),
@@ -20,7 +20,7 @@ enum class Category(
     companion object {
 
         fun from(title: String): Category = Category.entries.find { category ->
-            title == category.titleKr
+            title == category.krTitle
         } ?: throw IllegalArgumentException()
     }
 }

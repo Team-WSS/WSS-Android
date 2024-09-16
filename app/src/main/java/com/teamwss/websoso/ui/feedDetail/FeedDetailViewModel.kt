@@ -9,6 +9,7 @@ import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +32,7 @@ class FeedDetailViewModel @Inject constructor(
         this.feedId = feedId
         feedDetailUiState.value?.let { feedDetailUiState ->
             viewModelScope.launch {
+                delay(300)
                 _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
                 runCatching {
                     val feed = async { feedRepository.fetchFeed(feedId) }
