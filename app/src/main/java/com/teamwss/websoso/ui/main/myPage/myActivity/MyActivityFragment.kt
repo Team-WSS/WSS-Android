@@ -23,7 +23,7 @@ class MyActivityFragment :
 
         setUpMyActivitiesAdapter()
         setUpObserve()
-        navigateToMyActivityDetail()
+        onMyActivityDetailButtonClick()
     }
 
     private fun setUpMyActivitiesAdapter() {
@@ -36,11 +36,16 @@ class MyActivityFragment :
         }
     }
 
-    private fun navigateToMyActivityDetail() {
+    private fun onMyActivityDetailButtonClick() {
         binding.btnMyActivityMore.setOnClickListener {
-            val intent = ActivityDetailActivity.createIntentForMyActivityDetail(requireContext())
-            intent.putExtra("source", "myActivity")
+            val intent = ActivityDetailActivity.getIntent(requireContext())
+            intent.putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
             startActivity(intent)
         }
+    }
+
+    companion object {
+        const val EXTRA_SOURCE = "source"
+        const val SOURCE_MY_ACTIVITY = "myActivity"
     }
 }

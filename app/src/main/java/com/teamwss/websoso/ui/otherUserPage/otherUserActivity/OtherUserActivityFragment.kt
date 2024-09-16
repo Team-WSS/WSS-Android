@@ -22,26 +22,31 @@ class OtherUserActivityFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setUpMyActivitiesAdapter()
-        setUpObserve()
-        navigateToMyActivityDetail()
+        setupObserve()
+        onActivityDetailButtonClick()
     }
 
     private fun setUpMyActivitiesAdapter() {
         binding.rvOtherUserActivity.adapter = otherUserActivityAdapter
     }
 
-    private fun setUpObserve() {
+    private fun setupObserve() {
         otherUserActivityViewModel.otherUserActivity.observe(viewLifecycleOwner) { activities ->
             otherUserActivityAdapter.submitList(activities)
         }
     }
 
-    private fun navigateToMyActivityDetail() {
+    private fun onActivityDetailButtonClick() {
         binding.btnOtherUserActivityMore.setOnClickListener {
-            val intent = ActivityDetailActivity.createIntentForMyActivityDetail(requireContext())
-            intent.putExtra("source", "otherUserActivity")
+            val intent = ActivityDetailActivity.getIntent(requireContext())
+            intent.putExtra(EXTRA_SOURCE, SOURCE_OTHER_USER_ACTIVITY)
             startActivity(intent)
         }
+    }
+
+    companion object {
+        const val EXTRA_SOURCE = "source"
+        const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
     }
 }
 

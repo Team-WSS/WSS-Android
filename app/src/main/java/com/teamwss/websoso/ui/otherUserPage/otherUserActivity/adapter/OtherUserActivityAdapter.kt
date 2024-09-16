@@ -1,10 +1,8 @@
 package com.teamwss.websoso.ui.otherUserPage.otherUserActivity.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.databinding.ItemMyActivityBinding
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 
 class OtherUserActivityAdapter :
@@ -17,14 +15,11 @@ class OtherUserActivityAdapter :
     override fun getItemId(position: Int): Long = getItem(position).feedId.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherUserActivityViewHolder {
-        val binding =
-            ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return OtherUserActivityViewHolder(binding)
+        return OtherUserActivityViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: OtherUserActivityViewHolder, position: Int) {
-        val activity = getItem(position)
-        holder.bind(activity)
+        holder.bind(getItem(position))
     }
 
     companion object {

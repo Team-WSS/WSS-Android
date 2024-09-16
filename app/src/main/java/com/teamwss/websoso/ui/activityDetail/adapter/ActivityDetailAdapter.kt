@@ -1,10 +1,8 @@
 package com.teamwss.websoso.ui.activityDetail.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.databinding.ItemMyActivityBinding
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 
 class ActivityDetailAdapter :
@@ -17,9 +15,7 @@ class ActivityDetailAdapter :
     override fun getItemId(position: Int): Long = getItem(position).feedId.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityDetailViewHolder {
-        val binding =
-            ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ActivityDetailViewHolder(binding)
+        return ActivityDetailViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ActivityDetailViewHolder, position: Int) {

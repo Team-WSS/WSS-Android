@@ -9,8 +9,8 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
 class OtherUserActivityViewHolder(private val binding: ItemMyActivityBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(myActivity: ActivityModel) {
-        binding.myActivity = myActivity
+    fun bind(activity: ActivityModel) {
+        binding.activity = activity
     }
 
     companion object {

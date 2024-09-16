@@ -8,6 +8,8 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
+import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
+import com.teamwss.websoso.ui.otherUserPage.otherUserActivity.OtherUserActivityFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,23 +23,26 @@ class ActivityDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setActivityTitle()
-        setUpMyActivitiesDetailAdapter()
+        setupMyActivitiesDetailAdapter()
         setUpObserve()
         onBackButtonClick()
     }
 
     private fun setActivityTitle() {
-        val source = intent.getStringExtra("source")
+        val source = intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE)
 
-        val title = when (source) {
-            "myActivity" -> getString(R.string.my_activity_detail_title)
-            "otherUserActivity" -> getString(R.string.other_user_page_activity)
-            else -> ""
+        var title = ""
+
+        when (source) {
+            MyActivityFragment.SOURCE_MY_ACTIVITY -> title = getString(R.string.my_activity_detail_title)
+            OtherUserActivityFragment.SOURCE_OTHER_USER_ACTIVITY -> title = getString(R.string.other_user_page_activity)
+            "" -> title = ""
         }
+
         binding.tvActivityDetailTitle.text = title
     }
 
-    private fun setUpMyActivitiesDetailAdapter() {
+    private fun setupMyActivitiesDetailAdapter() {
         binding.rvActivityDetail.apply {
             adapter = activityDetailAdapter
         }
@@ -56,7 +61,7 @@ class ActivityDetailActivity :
     }
 
     companion object {
-        fun createIntentForMyActivityDetail(context: Context): Intent {
+        fun getIntent(context: Context): Intent {
             return Intent(context, ActivityDetailActivity::class.java)
         }
     }
