@@ -1,14 +1,11 @@
 package com.teamwss.websoso.data.model
 
-data class MyActivitiesEntity(
+data class UserFeedsEntity(
     val isLoadable: Boolean,
-    val feeds: List<MyActivityEntity>,
+    val feeds: List<UserFeedEntity>,
 ) {
-    data class MyActivityEntity(
+    data class UserFeedEntity(
         val feedId: Int,
-        val userId: Int,
-        val profileImg: String,
-        val nickname: String,
         val isSpoiler: Boolean,
         val feedContent: String,
         val createdDate: String,
