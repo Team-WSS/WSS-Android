@@ -20,7 +20,7 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupViewPagerAndTabLayout()
-        setupBackButton()
+        onBackButtonClick()
     }
 
     private fun setupViewPagerAndTabLayout() {
@@ -36,7 +36,7 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
         }.attach()
     }
 
-    private fun setupBackButton() {
+    private fun onBackButtonClick() {
         binding.ivStorageDetailBackButton.setOnClickListener {
             finish()
         }
@@ -49,7 +49,7 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
     }
 
     companion object {
-        fun createIntentForStorageActivity(context: Context): Intent {
+        fun getIntent(context: Context): Intent {
             return Intent(context, StorageActivity::class.java)
         }
     }

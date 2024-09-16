@@ -13,5 +13,8 @@ data class StorageEntity(
         val novelRating: Double,
         val title: String,
         val userNovelId: Int,
-    )
+    ){
+        val isRatingVisible: Boolean
+            get() = novelRating != 0.0
+    }
 }

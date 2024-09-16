@@ -8,7 +8,7 @@ enum class StorageTab(val position: Int, val title: String) {
 
     companion object {
         fun fromPosition(position: Int): StorageTab {
-            return values().find { it.position == position }
+            return entries.find { it.position == position }
                 ?: throw IllegalArgumentException("Invalid position: $position")
         }
     }

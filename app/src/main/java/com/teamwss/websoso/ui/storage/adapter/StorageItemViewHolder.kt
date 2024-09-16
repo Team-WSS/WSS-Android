@@ -9,8 +9,7 @@ class StorageItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(novel: StorageEntity.UserNovel) {
-        val isRatingVisible = novel.novelRating != 0.0
         binding.novel = novel
-        binding.isRatingVisible = isRatingVisible
+        binding.isRatingVisible = novel.isRatingVisible
     }
 }

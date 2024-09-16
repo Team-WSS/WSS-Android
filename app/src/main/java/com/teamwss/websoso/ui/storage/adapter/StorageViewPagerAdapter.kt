@@ -9,7 +9,7 @@ import com.teamwss.websoso.ui.storage.model.StorageTab
 
 class StorageViewPagerAdapter(
     private val novelsMap: Map<StorageTab, List<StorageEntity.UserNovel>>,
-    private val navigateToExplore: () -> Unit
+    private val navigateToExplore: () -> Unit,
 ) : RecyclerView.Adapter<StorageViewPagerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StorageViewPagerViewHolder {
@@ -24,6 +24,10 @@ class StorageViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 4
+        return ITEM_COUNT
+    }
+
+    companion object {
+        private const val ITEM_COUNT = 4
     }
 }

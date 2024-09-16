@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.main.myPage.model.MyProfileModel
+import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,22 +33,10 @@ class MyPageViewModel @Inject constructor(
                 userRepository.fetchMyProfile()
             }.onSuccess { myProfileEntity ->
                 _myProfile.value = myProfileEntity
-                _myProfileModel.value = myProfileEntity.toModel()
+                _myProfileModel.value = myProfileEntity.toUi()
             }.onFailure { exception ->
 
             }
         }
-    }
-
-    private fun MyProfileEntity.toModel(): MyProfileModel {
-        return MyProfileModel(
-            nickname = this.nickname,
-            avatarImage = this.avatarImage,
-            userId = getUserId()
-        )
-    }
-
-    private fun getUserId(): Long {
-        return 2L
     }
 }

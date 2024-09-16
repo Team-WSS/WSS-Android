@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.myPage
+package com.teamwss.websoso.ui.main.myPage
 
 import android.os.Bundle
 import android.view.View
@@ -9,10 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
-import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
-import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
-import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 

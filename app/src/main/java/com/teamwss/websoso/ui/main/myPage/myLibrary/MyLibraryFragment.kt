@@ -34,7 +34,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
         setupRestGenrePreferenceAdapter()
         setUpObserve()
-        navigateToStorageActivity()
+        onStorageButtonClick()
     }
 
     private fun setupRestGenrePreferenceAdapter() {
@@ -134,9 +134,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         }
     }
 
-    private fun navigateToStorageActivity() {
+    private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
-            val intent = StorageActivity.createIntentForStorageActivity(requireContext())
+            val intent = StorageActivity.getIntent(requireContext())
             startActivity(intent)
         }
     }
