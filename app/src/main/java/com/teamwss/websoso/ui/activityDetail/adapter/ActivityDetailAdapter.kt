@@ -19,8 +19,7 @@ class ActivityDetailAdapter :
     }
 
     override fun onBindViewHolder(holder: ActivityDetailViewHolder, position: Int) {
-        val activity = getItem(position)
-        holder.bind(activity)
+        holder.bind(getItem(position))
     }
 
     companion object {

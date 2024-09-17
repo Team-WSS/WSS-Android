@@ -28,12 +28,16 @@ class OtherUserActivityViewModel @Inject constructor(
             runCatching {
                 otherUserActivityRepository.getUserFeed()
             }.mapCatching { activities ->
-                activities.toUi().take(5)
+                activities.toUi().take(ACTIVITY_COUNT)
             }.onSuccess { mappedActivities ->
                 _otherUserActivity.value = mappedActivities
             }.onFailure { exception ->
-                Log.e("MyActivityViewModel", "Failed to load activities", exception)
+
             }
         }
+    }
+
+    companion object{
+        const val ACTIVITY_COUNT = 5
     }
 }
