@@ -29,16 +29,14 @@ class ActivityDetailActivity :
     }
 
     private fun setActivityTitle() {
-        val source = intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE)
+        val source: String? = intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE)
 
-        var title = ""
+        var title: String = ""
 
         when (source) {
             MyActivityFragment.SOURCE_MY_ACTIVITY -> title = getString(R.string.my_activity_detail_title)
             OtherUserActivityFragment.SOURCE_OTHER_USER_ACTIVITY -> title = getString(R.string.other_user_page_activity)
-            "" -> title = ""
         }
-
         binding.tvActivityDetailTitle.text = title
     }
 
