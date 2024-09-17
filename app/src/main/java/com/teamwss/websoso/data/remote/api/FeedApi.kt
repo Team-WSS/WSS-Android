@@ -1,6 +1,7 @@
 package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.remote.request.CommentRequestDto
+import com.teamwss.websoso.data.remote.request.FeedRequestDto
 import com.teamwss.websoso.data.remote.response.CommentsResponseDto
 import com.teamwss.websoso.data.remote.response.FeedDetailResponseDto
 import com.teamwss.websoso.data.remote.response.FeedsResponseDto
@@ -22,6 +23,17 @@ interface FeedApi {
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
     ): FeedsResponseDto
+
+    @POST("feeds")
+    suspend fun postFeed(
+        @Body feedRequestDto: FeedRequestDto,
+    )
+
+    @PUT("feeds/{feedId}")
+    suspend fun putFeed(
+        @Path("feedId") feedId: Long,
+        @Body feedRequestDto: FeedRequestDto,
+    )
 
     @GET("feeds/{feedId}")
     suspend fun getFeed(

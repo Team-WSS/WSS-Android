@@ -8,6 +8,10 @@
             name="activity"
             type="com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel" />
 
+        <variable
+            name="userProfile"
+            type="com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +32,7 @@
                 cornerRadius="@{12f}"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@{activity.profileImg}"
+                loadImageUrl="@{userProfile.avatarImage}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

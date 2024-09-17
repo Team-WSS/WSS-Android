@@ -17,7 +17,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> onClick.onContentClick(feed.id)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_profile"
@@ -44,7 +45,7 @@
                 android:id="@+id/tv_feed_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="14dp"
                 android:maxLines="1"
                 android:text="@{feed.user.nickname}"
                 android:textAppearance="@style/title2"
@@ -93,7 +94,7 @@
 
         <TextView
             android:id="@+id/tv_feed_spoiler_warning"
-            isVisible="@{!feed.spoiler}"
+            isVisible="@{feed.spoiler}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -106,7 +107,7 @@
 
         <TextView
             android:id="@+id/tv_feed_content"
-            isVisible="@{feed.spoiler}"
+            isVisible="@{!feed.spoiler}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -114,7 +115,6 @@
             android:ellipsize="end"
             android:gravity="top"
             android:maxLines="5"
-            android:onClick="@{() -> onClick.onContentClick(feed.id)}"
             android:text="@{feed.content}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
@@ -125,12 +125,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_novel_info"
+            isVisible="@{!feed.novel.nothing}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            isVisible="@{!feed.novel.nothing}"
             android:background="@drawable/btn_feed_novel_info"
             android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -204,11 +204,11 @@
 
         <TextView
             android:id="@+id/tv_feed_genre"
+            isVisible="@{!feed.emptyOfRelevantCategories}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            isVisible="@{!feed.emptyOfRelevantCategories}"
             android:text="@{feed.categories}"
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
@@ -262,7 +262,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:onClick="@{() -> onClick.onCommentButtonClick(feed.id)}"
             app:layout_constraintBottom_toBottomOf="@+id/cl_feed_like"
             app:layout_constraintStart_toEndOf="@+id/cl_feed_like"
             app:layout_constraintTop_toTopOf="@+id/cl_feed_like">

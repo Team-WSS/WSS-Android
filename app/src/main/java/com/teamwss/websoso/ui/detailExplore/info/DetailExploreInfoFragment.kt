@@ -8,12 +8,14 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.util.toFloatScaledByPx
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.Rating
 import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
+import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity
+import com.teamwss.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +28,7 @@ class DetailExploreInfoFragment :
 
         bindViewModel()
         onResetButtonClick()
+        onDetailSearchNovelButtonClick()
         setupGenreChips()
         setupSeriesStatusChips()
         setupRatingChips()
@@ -43,18 +46,43 @@ class DetailExploreInfoFragment :
         }
     }
 
+    private fun onDetailSearchNovelButtonClick() {
+        binding.tvDetailExploreSearchButton.setOnClickListener {
+            val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
+            val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
+            val novelRating = detailExploreViewModel.selectedRating.value
+
+            val keywordIds = detailExploreViewModel.uiState.value?.categories?.asSequence()
+                ?.flatMap { it.keywords.asSequence() }
+                ?.filter { it.isSelected }
+                ?.map { it.keywordId }
+                ?.toList() ?: emptyList()
+
+            val intent = DetailExploreResultActivity.getIntent(
+                context = requireContext(), DetailExploreFilteredModel(
+                    genres = selectedGenres,
+                    isCompleted = isCompleted,
+                    novelRating = novelRating,
+                    keywordIds = keywordIds,
+                )
+            )
+
+            startActivity(intent)
+        }
+    }
+
     private fun setupGenreChips() {
         val genres = Genre.entries
         genres.forEach { genre ->
             WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(genre.title)
+                setWebsosoChipText(genre.titleKr)
                 setWebsosoChipTextAppearance(R.style.body2)
                 setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatScaledByPx())
-                setWebsosoChipPaddingHorizontal(6f.toFloatScaledByPx())
-                setWebsosoChipRadius(20f.toFloatScaledByPx())
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                setWebsosoChipRadius(20f.toFloatPxFromDp())
                 setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre) }
             }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }

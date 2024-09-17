@@ -9,6 +9,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.databinding.DialogNovelRatingDateBinding
+import com.teamwss.websoso.ui.novelDetail.NovelAlertDialogFragment
+import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
+import com.teamwss.websoso.ui.novelRating.model.RatingDateModel
 
 class NovelRatingDateBottomSheetDialog :
     BaseBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
@@ -45,6 +48,10 @@ class NovelRatingDateBottomSheetDialog :
                 uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
             binding.npRatingDateDay.value =
                 uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
+            initNumberPickerValue(
+                uiState.novelRatingModel.ratingDateModel,
+                uiState.isEditingStartDate
+            )
         }
     }
 
@@ -67,10 +74,27 @@ class NovelRatingDateBottomSheetDialog :
             }
 
             override fun onClearClick() {
-                novelRatingViewModel.clearCurrentDate()
+                novelRatingViewModel.cancelDateEdit()
+                showClearDateInfoAlertDialog()
                 dismiss()
             }
+
+            override fun onReportKeywordClick() {}
         }
+
+    private fun showClearDateInfoAlertDialog() {
+        val novelAlertModel = NovelAlertModel(
+            title = getString(R.string.novel_rating_date_remove_alert_title),
+            acceptButtonText = getString(R.string.novel_rating_date_remove_alert_accept),
+            cancelButtonText = getString(R.string.novel_rating_date_remove_alert_cancel),
+            onAcceptClick = { novelRatingViewModel.clearCurrentDate() },
+        )
+
+        NovelAlertDialogFragment
+            .newInstance(novelAlertModel)
+            .show(parentFragmentManager, NovelAlertDialogFragment.TAG)
+
+    }
 
     private fun setupDialogBehavior() {
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -89,6 +113,27 @@ class NovelRatingDateBottomSheetDialog :
                 maxDayValue,
                 "%02d",
             )
+        }
+    }
+
+    private fun initNumberPickerValue(
+        ratingDateModel: RatingDateModel,
+        isEditingStartDate: Boolean,
+    ) {
+        with(binding) {
+            when (isEditingStartDate) {
+                true -> {
+                    npRatingDateYear.value = ratingDateModel.currentStartDate?.first ?: 1
+                    npRatingDateMonth.value = ratingDateModel.currentStartDate?.second ?: 1
+                    npRatingDateDay.value = ratingDateModel.currentStartDate?.third ?: 1
+                }
+
+                false -> {
+                    npRatingDateYear.value = ratingDateModel.currentEndDate?.first ?: 1
+                    npRatingDateMonth.value = ratingDateModel.currentEndDate?.second ?: 1
+                    npRatingDateDay.value = ratingDateModel.currentEndDate?.third ?: 1
+                }
+            }
         }
     }
 
@@ -125,6 +170,7 @@ class NovelRatingDateBottomSheetDialog :
     }
 
     companion object {
+        const val TAG = "NOVEL_RATING_DATE_BOTTOM_SHEET_DIALOG"
         private const val MAX_YEAR_VALUE = 9999
         private const val MAX_MONTH_VALUE = 12
         private const val MAX_DAY_VALUE = 31

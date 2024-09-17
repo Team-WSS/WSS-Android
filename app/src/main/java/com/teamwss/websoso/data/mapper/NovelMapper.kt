@@ -3,12 +3,14 @@ package com.teamwss.websoso.data.mapper
 import com.teamwss.websoso.data.model.ExploreResultEntity
 import com.teamwss.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.teamwss.websoso.data.model.NovelDetailEntity
+import com.teamwss.websoso.data.model.NovelFeedsEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity
 import com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.teamwss.websoso.data.model.SosoPickEntity
 import com.teamwss.websoso.data.remote.response.ExploreResultResponseDto
 import com.teamwss.websoso.data.remote.response.NovelDetailResponseDto
+import com.teamwss.websoso.data.remote.response.NovelFeedResponseDto
 import com.teamwss.websoso.data.remote.response.NovelInfoResponseDto
 import com.teamwss.websoso.data.remote.response.PopularNovelsResponseDto
 import com.teamwss.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto
@@ -29,7 +31,7 @@ fun NovelDetailResponseDto.toData(): NovelDetailEntity {
         NovelDetailEntity.NovelEntity(
             novelTitle = novelTitle,
             novelImage = novelImage,
-            novelGenres = novelGenres.split(","),
+            novelGenres = novelGenres,
             novelGenreImage = novelGenreImage,
             isNovelCompleted = isNovelCompleted,
             author = author,
@@ -127,5 +129,14 @@ fun RecommendedNovelsByUserTasteResponseDto.toData(): RecommendedNovelsByUserTas
                 novelRatingCount = novel.novelRatingCount,
             )
         }
+    )
+}
+
+fun NovelFeedResponseDto.toData(): NovelFeedsEntity {
+    return NovelFeedsEntity(
+        isLoadable = isLoadable,
+        feeds = feeds.map { feed ->
+            feed.toData()
+        },
     )
 }

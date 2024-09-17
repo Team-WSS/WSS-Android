@@ -6,7 +6,6 @@ import com.teamwss.websoso.domain.model.ExploreResult
 import com.teamwss.websoso.domain.model.ExploreResult.Novel
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
-import com.teamwss.websoso.ui.novelDetail.model.Category
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiModel
@@ -35,7 +34,7 @@ fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
             novelId = novelId,
             novelTitle = novel.novelTitle,
             novelImage = novel.novelImage,
-            novelGenres = novel.novelGenres.map { Category.from(it) },
+            novelGenres = novel.novelGenres,
             novelGenreImage = novel.novelGenreImage,
             isNovelCompleted = novel.isNovelCompleted,
             author = novel.author,
@@ -53,6 +52,7 @@ fun NovelInfoEntity.toUi() = NovelInfoUiModel(
     novelDescription = novelDescription,
     attractivePoints = attractivePoints.map { it.toCharmPoint() },
     unifiedReviewCount = reviewCount.toUi(),
+    isAttractivePointsExist = attractivePoints.isNotEmpty(),
 )
 
 fun NovelInfoEntity.PlatformEntity.toUi() = PlatformModel(

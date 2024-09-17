@@ -27,13 +27,13 @@ data class NovelDetailModel(
         val novelId: Long,
         val novelTitle: String,
         val novelImage: String,
-        val novelGenres: List<Category>,
-        val formattedNovelGenres: String = novelGenres.joinToString(separator = "/") { it.titleKr },
+        val novelGenres: String,
         val novelGenreImage: String,
         val isNovelCompleted: Boolean,
         val isNovelCompletedText: String = if (isNovelCompleted) "완결작" else "연재중",
         val author: String,
-        val formattedNovelDetailSummary: String = "$formattedNovelGenres ・ $isNovelCompletedText ・ $author",
+        val formattedNovelDetailSummary: String = "$novelGenres ・ $isNovelCompletedText ・ $author",
+        val isNovelNotBlank: Boolean = novelTitle.isNotBlank() && novelImage.isNotBlank() && author.isNotBlank(),
     )
 
     data class UserRatingModel(

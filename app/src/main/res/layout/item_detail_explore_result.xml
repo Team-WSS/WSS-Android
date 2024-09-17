@@ -18,11 +18,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:onClick="@{() -> onClick.invoke(novel.id)}"
         android:paddingBottom="18dp">
 
         <ImageView
             android:id="@+id/iv_detail_explore_result_cover"
-            cornerRadius="@{16f}"
+            cornerRadius="@{14f}"
             loadImageUrl="@{novel.image}"
             android:layout_width="0dp"
             android:layout_height="232dp"

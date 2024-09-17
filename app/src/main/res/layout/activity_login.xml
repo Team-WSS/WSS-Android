@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/dotsIndicator_login"
+            app:layout_constraintBottom_toTopOf="@id/iv_login_kakao"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/bg_login_white_radius_14dp_stroke_primary100_1dp"
             android:gravity="center"
             android:padding="10dp"

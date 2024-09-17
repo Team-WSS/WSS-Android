@@ -24,7 +24,7 @@ class OtherUserLibraryFragment :
     BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
     private val otherUserLibraryViewModel: OtherUserLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
-       RestGenrePreferenceAdapter()
+        RestGenrePreferenceAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

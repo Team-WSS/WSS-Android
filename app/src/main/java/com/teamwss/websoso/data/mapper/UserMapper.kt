@@ -94,4 +94,3 @@ fun OtherUserProfileResponseDto.toData(): OtherUserProfileEntity {
         genrePreferences = this.genrePreferences,
     )
 }
-

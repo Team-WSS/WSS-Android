@@ -9,6 +9,10 @@
             type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
 
         <variable
+            name="reportError"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
             name="deleteUserNovel"
             type="kotlin.jvm.functions.Function0" />
     </data>
@@ -24,7 +28,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
             android:gravity="center"
-            android:onClick="@{() -> null}"
+            android:onClick="@{() -> reportError.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
             android:text="@string/novel_detail_report_error"

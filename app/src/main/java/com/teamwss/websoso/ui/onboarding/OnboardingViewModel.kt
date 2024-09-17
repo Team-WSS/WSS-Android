@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
+import com.teamwss.websoso.domain.model.NicknameValidationResult
+import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val validateNicknameUseCase: ValidateNicknameUseCase,
+    private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
 ) : ViewModel() {
     private val _currentPage = MutableLiveData(OnboardingPage.FIRST)
     val currentPage: LiveData<OnboardingPage> get() = _currentPage
@@ -64,8 +67,58 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun checkDuplicationNickname() {
-        updateOnBoardingFirstUiState(NicknameInputType.COMPLETE, "사용 가능한 닉네임 입니다")
+    fun dispatchNicknameValidity() {
+        val nickname = currentNicknameInput.value ?: ""
+        viewModelScope.launch {
+            runCatching {
+                checkNicknameValidityUseCase(nickname)
+            }.onSuccess { result ->
+                when (result) {
+                    NicknameValidationResult.VALID_NICKNAME_SPELLING -> dispatchNicknameDuplication(
+                        nickname
+                    )
+
+                    else -> updateOnBoardingFirstUiState(
+                        NicknameInputType.ERROR,
+                        result.profileEditMessage
+                    )
+                }
+            }.onFailure {
+                updateOnBoardingFirstUiState(
+                    NicknameInputType.ERROR,
+                    NicknameValidationResult.UNKNOWN_ERROR.profileEditMessage
+                )
+            }
+        }
+    }
+
+    private fun dispatchNicknameDuplication(nickname: String) {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchNicknameValidity(nickname)
+            }.onSuccess { isNicknameValid ->
+                when (isNicknameValid) {
+                    true -> {
+                        updateOnBoardingFirstUiState(
+                            NicknameInputType.COMPLETE,
+                            NicknameValidationResult.VALID_NICKNAME.profileEditMessage
+                        )
+                    }
+
+                    false -> {
+                        updateOnBoardingFirstUiState(
+                            NicknameInputType.ERROR,
+                            NicknameValidationResult.INVALID_NICKNAME_DUPLICATION.profileEditMessage
+                        )
+                    }
+                }
+            }.onFailure {
+                updateOnBoardingFirstUiState(
+                    NicknameInputType.ERROR,
+                    NicknameValidationResult.NETWORK_ERROR.profileEditMessage
+                )
+            }
+        }
     }
 
     private fun updateOnBoardingFirstUiState(type: NicknameInputType, message: String) {
@@ -77,8 +130,14 @@ class OnboardingViewModel @Inject constructor(
         )
     }
 
+    fun updateNicknameInputType(nicknameInputType: NicknameInputType) {
+        updateOnBoardingFirstUiState(nicknameInputType, "")
+    }
+
     fun clearInputNickname() {
-        currentNicknameInput.value = ""
+        if (onboardingFirstUiState.value?.nicknameInputType != NicknameInputType.COMPLETE) {
+            currentNicknameInput.value = ""
+        }
     }
 
     fun goToNextPage() {

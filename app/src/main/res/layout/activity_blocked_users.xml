@@ -19,11 +19,10 @@
             android:id="@+id/iv_blocked_users_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             android:contentDescription="@null"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
+            android:padding="10dp"
             android:src="@drawable/btn_setting_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,14 +44,13 @@
             isVisible="@{!blockedUserViewModel.isBlockedUserEmptyBoxVisibility}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_blocked_users_title"
+            app:layout_constraintTop_toBottomOf="@id/iv_blocked_users_back_button"
             tools:listitem="@layout/item_blocked_user" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,8 +65,8 @@
 
             <ImageView
                 android:id="@+id/iv_blocked_users_empty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="166dp"
+                android:layout_height="160dp"
                 android:src="@drawable/img_my_library_empty_cat"
                 app:layout_constraintBottom_toTopOf="@id/tv_blocked_users_empty"
                 app:layout_constraintEnd_toEndOf="parent"

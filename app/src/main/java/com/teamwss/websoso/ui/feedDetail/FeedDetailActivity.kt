@@ -10,22 +10,26 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.common.util.toIntScaledByPx
+import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
@@ -51,6 +55,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         )
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
     private val popupBinding: MenuFeedPopupBinding by lazy {
         MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
     }
@@ -130,13 +135,24 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun setupEditingFeed() {
-        // navigateToEditingFeed
+        val feedContent =
+            feedDetailViewModel.feedDetailUiState.value?.feed?.let { feed ->
+                EditFeedModel(
+                    feedId = feed.id,
+                    novelId = feed.novel.id,
+                    novelTitle = feed.novel.title,
+                    feedContent = feed.content,
+                    feedCategory = feed.relevantCategories,
+                )
+            } ?: throw IllegalArgumentException()
+
+        activityResultCallback.launch(CreateFeedActivity.getIntent(this, feedContent))
     }
 
     private fun setupEditingComment(commentId: Long) {
         val writtenComment = feedDetailViewModel.feedDetailUiState.value?.comments?.find {
             it.commentId == commentId
-        }?.commentContent ?: ""
+        }?.commentContent.orEmpty()
 
         feedDetailViewModel.updateCommentId(commentId)
         binding.etFeedDetailInput.setText(writtenComment)
@@ -225,13 +241,19 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode == REFRESH) feedDetailViewModel.updateFeedDetail(feedId)
+        }
         setupView()
         setupObserver()
         onFeedDetailClick()
     }
 
     private fun onFeedDetailClick() {
-        binding.ivFeedDetailBackButton.setOnClickListener { finish() }
+        binding.ivFeedDetailBackButton.setOnClickListener {
+            setResult(RESULT_OK)
+            if (!isFinishing) finish()
+        }
 
         binding.ivFeedDetailMoreButton.setOnClickListener {
             val isMyFeed = feedDetailViewModel.feedDetailUiState.value?.feed?.isMyFeed
@@ -264,7 +286,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun setupRefreshView() {
         binding.sptrFeedRefresh.apply {
-            setRefreshViewParams(ViewGroup.LayoutParams(30.toIntScaledByPx(), 30.toIntScaledByPx()))
+            setRefreshViewParams(ViewGroup.LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
             setLottieAnimation(LOTTIE_IMAGE)
             setOnRefreshListener { feedDetailViewModel.updateFeedDetail(feedId) }
         }
@@ -274,7 +296,12 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         feedDetailViewModel.feedDetailUiState.observe(this) { feedDetailUiState ->
             when {
                 feedDetailUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
-                feedDetailUiState.error -> binding.wllFeed.setLoadingLayoutVisibility(false)
+                feedDetailUiState.error -> {
+                    binding.wllFeed.setLoadingLayoutVisibility(false)
+                    setResult(RESULT_FAIL)
+                    if (!isFinishing) finish()
+                }
+
                 !feedDetailUiState.loading -> {
                     binding.wllFeed.setWebsosoLoadingVisibility(false)
                     binding.sptrFeedRefresh.setRefreshing(false)
@@ -303,6 +330,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         private const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
+        private const val REFRESH = 200
+        private const val RESULT_OK = 200
+        private const val RESULT_FAIL = 400
 
         fun getIntent(context: Context, feedId: Long): Intent =
             Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }

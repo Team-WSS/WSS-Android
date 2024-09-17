@@ -18,12 +18,11 @@
             android:id="@+id/iv_setting_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             android:contentDescription="@null"
             android:onClick="@{() -> onClick.onBackButtonClick()}"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
+            android:padding="10dp"
             android:src="@drawable/btn_setting_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,11 +43,10 @@
             android:id="@+id/cl_setting_account_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:onClick="@{() -> onClick.onUserAccountInfoButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_setting_title">
+            app:layout_constraintTop_toBottomOf="@id/iv_setting_back_button">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -202,53 +200,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_setting_app_rating"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> onClick.onAppRatingButtonClick()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_setting_inquire_and_feedback">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="20dp"
-                android:layout_marginStart="20dp"
-                android:text="@string/setting_app_rating"
-                android:textAppearance="@style/body2"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@id/view_setting_app_rating_underline"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/btn_setting_right"
-                app:layout_constraintBottom_toTopOf="@id/view_setting_app_rating_underline"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/view_setting_app_rating_underline"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@color/gray_50_F4F5F8"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_setting_terms_of_use"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{() -> onClick.onTermsOfUseButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_setting_app_rating">
+            app:layout_constraintTop_toBottomOf="@id/cl_setting_inquire_and_feedback">
 
             <TextView
                 android:layout_width="wrap_content"

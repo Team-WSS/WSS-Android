@@ -9,17 +9,17 @@ import javax.inject.Inject
 class GetDetailExploreResultUseCase @Inject constructor(
     private val novelRepository: NovelRepository,
 ) {
-    private var previousGenres: Array<String>? = null
+    private var previousGenres: List<String>? = null
     private var previousIsCompleted: Boolean? = null
     private var previousNovelRating: Float? = null
-    private var previousKeywordIds: Array<Int>? = null
+    private var previousKeywordIds: List<Int>? = null
     private var previousPage: Int = INITIAL_PAGE
 
     suspend operator fun invoke(
-        genres: Array<String>?,
+        genres: List<String>?,
         isCompleted: Boolean?,
         novelRating: Float?,
-        keywordIds: Array<Int>?,
+        keywordIds: List<Int>?,
         isSearchButtonClick: Boolean,
     ): ExploreResult {
 
@@ -56,15 +56,15 @@ class GetDetailExploreResultUseCase @Inject constructor(
     }
 
     private fun isCacheValid(
-        genres: Array<String>?,
+        genres: List<String>?,
         isCompleted: Boolean?,
         novelRating: Float?,
-        keywordIds: Array<Int>?
+        keywordIds: List<Int>?,
     ): Boolean {
-        return genres.contentEquals(previousGenres)
+        return genres?.equals(previousGenres) == true
                 && isCompleted == previousIsCompleted
                 && novelRating == previousNovelRating
-                && keywordIds.contentEquals(previousKeywordIds)
+                && keywordIds?.equals(previousKeywordIds) == true
     }
 
     companion object {

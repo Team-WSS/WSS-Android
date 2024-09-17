@@ -10,6 +10,7 @@ import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel.Companion.DEFAUL
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiState
 import com.teamwss.websoso.ui.novelInfo.model.PlatformsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +33,9 @@ class NovelInfoViewModel @Inject constructor(
                     novelInfoModel = novelInfo.toUi(),
                     platforms = PlatformsModel.formatPlatforms(novelInfo.platforms),
                     keywords = novelInfo.keywords.map { it.toUi() },
+                    isKeywordsExist = novelInfo.keywords.isNotEmpty(),
                     loading = false,
+                    error = false,
                 )
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
@@ -40,6 +43,13 @@ class NovelInfoViewModel @Inject constructor(
                     error = true,
                 )
             }
+        }
+    }
+
+    fun updateNovelInfoWithDelay(novelId: Long) {
+        viewModelScope.launch {
+            delay(UPDATE_TASK_DELAY)
+            updateNovelInfo(novelId)
         }
     }
 
@@ -85,5 +95,9 @@ class NovelInfoViewModel @Inject constructor(
             )
             _uiState.value = currentState.copy(expandTextModel = updatedExpandTextUiModel)
         }
+    }
+
+    companion object {
+        private const val UPDATE_TASK_DELAY = 2000L
     }
 }

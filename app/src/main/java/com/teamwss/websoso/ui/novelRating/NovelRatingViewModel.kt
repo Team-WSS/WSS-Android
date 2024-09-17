@@ -145,6 +145,7 @@ class NovelRatingViewModel @Inject constructor(
     }
 
     fun updateReadStatus(readStatus: ReadStatus) {
+        if (readStatus == ReadStatus.NONE) return
         uiState.value?.let { uiState ->
             val updatedModel =
                 ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
@@ -220,7 +221,10 @@ class NovelRatingViewModel @Inject constructor(
                 false -> charmPoints.add(charmPoint)
             }
             val updatedNovelRatingModel =
-                uiState.novelRatingModel.copy(charmPoints = charmPoints.toList())
+                uiState.novelRatingModel.copy(
+                    charmPoints = charmPoints.toList(),
+                    isCharmPointExceed = charmPoints.size > MAX_CHARM_POINT_COUNT,
+                )
             _uiState.value = uiState.copy(novelRatingModel = updatedNovelRatingModel)
         }
     }
@@ -273,8 +277,7 @@ class NovelRatingViewModel @Inject constructor(
                 userNovelRepository.saveNovelRating(
                     novelRatingEntity = NovelRatingEntity(
                         novelId = novelId,
-                        readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name
-                            ?: throw IllegalArgumentException("readStatus must not be null"),
+                        readStatus = uiState.value?.novelRatingModel?.uiReadStatus?.name,
                         startDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentStartDate?.toFormattedDate(),
                         endDate = uiState.value?.novelRatingModel?.ratingDateModel?.currentEndDate?.toFormattedDate(),
                         userNovelRating = novelRating,
@@ -324,5 +327,9 @@ class NovelRatingViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    companion object {
+        private const val MAX_CHARM_POINT_COUNT = 3
     }
 }

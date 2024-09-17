@@ -1,5 +1,7 @@
 package com.teamwss.websoso.ui.novelRating
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -11,10 +13,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.teamwss.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
-import com.teamwss.websoso.ui.novelRating.model.NovelRatingUiState
+import com.teamwss.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 
 class NovelRatingKeywordBottomSheetDialog :
     BaseBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
@@ -69,6 +74,16 @@ class NovelRatingKeywordBottomSheetDialog :
             novelRatingViewModel.clearEditingKeyword()
             dismiss()
         }
+
+        override fun onReportKeywordClick() {
+            navigateToReportKeyword()
+        }
+    }
+
+    private fun navigateToReportKeyword() {
+        val inquireUrl = getString(R.string.inquire_link)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+        startActivity(intent)
     }
 
     private fun setupDialogBehavior() {
@@ -87,8 +102,9 @@ class NovelRatingKeywordBottomSheetDialog :
     private fun setupObserver() {
         novelRatingViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             updateCurrentSelectedKeywordsHeader(uiState.keywordsModel.currentSelectedKeywords)
-            updateKeywordRecyclerView(uiState)
-            updateSearchKeywordResult(uiState)
+            updateKeywordRecyclerView(uiState.keywordsModel.categories)
+            updateSearchKeywordResult(uiState.keywordsModel)
+            checkSelectedKeywordExceedMaxCount(uiState.keywordsModel)
         }
     }
 
@@ -125,16 +141,16 @@ class NovelRatingKeywordBottomSheetDialog :
             setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
             setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
             setWebsosoChipBackgroundColor(R.color.white)
-            setWebsosoChipPaddingVertical(20f)
-            setWebsosoChipPaddingHorizontal(12f)
-            setWebsosoChipRadius(40f)
+            setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+            setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+            setWebsosoChipRadius(20f.toFloatPxFromDp())
             setOnCloseIconClickListener {
                 novelRatingViewModel.updateSelectedKeywords(keyword = keyword, isSelected = false)
             }
             setWebsosoChipCloseIconVisibility(true)
             setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
-            setWebsosoChipCloseIconSize(20f)
-            setWebsosoChipCloseIconEndPadding(18f)
+            setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
+            setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
             setCloseIconTintResource(R.color.primary_100_6A5DFD)
             tag = keyword.keywordName
         }.also { websosoChip ->
@@ -142,47 +158,64 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateKeywordRecyclerView(uiState: NovelRatingUiState) {
-        novelRatingKeywordAdapter.submitList(uiState.keywordsModel.categories)
+    private fun updateKeywordRecyclerView(category: List<CategoryModel>) {
+        novelRatingKeywordAdapter.submitList(category)
     }
 
-    private fun updateSearchKeywordResult(uiState: NovelRatingUiState) {
+    private fun updateSearchKeywordResult(keywords: NovelRatingKeywordsModel) {
         val previousSearchResultKeywords =
             binding.wcgNovelRatingKeywordSearchResult.children.toList().map { it as WebsosoChip }
-        if (!uiState.keywordsModel.isSearchKeywordProceeding) return
-        if (uiState.keywordsModel.isSearchResultKeywordsEmpty) return
-        if (uiState.keywordsModel.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
-            updateSearchKeywordResultIsSelected(uiState)
+        if (!keywords.isSearchKeywordProceeding || keywords.isSearchResultKeywordsEmpty) return
+        if (keywords.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
+            updateSearchKeywordResultIsSelected(keywords)
             return
         }
         binding.wcgNovelRatingKeywordSearchResult.removeAllViews()
-        updateSearchKeywordResultWebsosoChips(uiState)
+        updateSearchKeywordResultWebsosoChips(keywords)
     }
 
-    private fun updateSearchKeywordResultIsSelected(uiState: NovelRatingUiState) {
+    private fun updateSearchKeywordResultIsSelected(keywords: NovelRatingKeywordsModel) {
         binding.wcgNovelRatingKeywordSearchResult.forEach { chip ->
             (chip as WebsosoChip).isSelected =
-                uiState.keywordsModel.currentSelectedKeywords.any { it.keywordName == chip.text.toString() }
+                keywords.currentSelectedKeywords.any { it.keywordName == chip.text.toString() }
         }
     }
 
-    private fun updateSearchKeywordResultWebsosoChips(uiState: NovelRatingUiState) {
-        uiState.keywordsModel.searchResultKeywords.forEach { keyword ->
+    private fun updateSearchKeywordResultWebsosoChips(keywords: NovelRatingKeywordsModel) {
+        keywords.searchResultKeywords.forEach { keyword ->
             WebsosoChip(binding.root.context).apply {
                 setWebsosoChipText(keyword.keywordName)
                 setWebsosoChipTextAppearance(R.style.body2)
                 setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
                 setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
                 setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                setWebsosoChipRadius(20f.toFloatPxFromDp())
                 setOnWebsosoChipClick {
                     novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
                 }
                 isSelected =
-                    uiState.keywordsModel.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
+                    keywords.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
             }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
+        }
+    }
+
+    private fun checkSelectedKeywordExceedMaxCount(keywords: NovelRatingKeywordsModel) {
+        if (keywords.isSearchKeywordExceed) {
+            WebsosoCustomToast.make(requireContext())
+                .setText(getString(R.string.novel_rating_keyword_exceed))
+                .setIcon(R.drawable.ic_novel_rating_alert)
+                .show()
+            novelRatingViewModel.updateSelectedKeywords(
+                keyword = keywords.currentSelectedKeywords.last(),
+                isSelected = false,
+            )
+            novelRatingKeywordAdapter.notifyItemChanged(keywords.categories.indexOfFirst { category ->
+                category.keywords.find { keyword ->
+                    keyword.keywordId == keywords.currentSelectedKeywords.last().keywordId
+                } != null
+            })
         }
     }
 
@@ -246,5 +279,9 @@ class NovelRatingKeywordBottomSheetDialog :
         novelRatingViewModel.cancelEditingKeyword()
         initSearchKeyword()
         super.onDestroyView()
+    }
+
+    companion object {
+        const val TAG = "NOVEL_RATING_KEYWORD_BOTTOM_SHEET_DIALOG"
     }
 }

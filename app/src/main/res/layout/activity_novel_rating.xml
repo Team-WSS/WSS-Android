@@ -20,204 +20,218 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/tg_novel_rating_read_status"
+        <ScrollView
             android:layout_width="0dp"
-            android:layout_height="78dp"
-            android:layout_marginTop="48dp"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_novel_rating"
-            app:selectionRequired="true"
-            app:singleSelection="true">
+            app:layout_constraintTop_toBottomOf="@id/tb_novel_rating">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_novel_rating_watching"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/transparent"
-                android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHING}"
-                android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHING)}"
-                android:paddingTop="10dp"
-                android:text="@string/novel_rating_read_status_watching"
-                android:textAppearance="@style/body5"
-                android:textColor="@color/bg_novel_detail_rating_read_status_selector"
-                app:icon="@drawable/ic_novel_rating_watching"
-                app:iconGravity="top"
-                app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_novel_rating_watched"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/transparent"
-                android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
-                android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHED)}"
-                android:paddingTop="10dp"
-                android:text="@string/novel_rating_read_status_watched"
-                android:textAppearance="@style/body5"
-                android:textColor="@color/bg_novel_detail_rating_read_status_selector"
-                app:icon="@drawable/ic_novel_rating_watched"
-                app:iconGravity="top"
-                app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/tg_novel_rating_read_status"
+                    android:layout_width="0dp"
+                    android:layout_height="78dp"
+                    android:layout_marginTop="48dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_novel_rating_quit"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/transparent"
-                android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.QUIT}"
-                android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.QUIT)}"
-                android:paddingTop="10dp"
-                android:text="@string/novel_rating_read_status_quit"
-                android:textAppearance="@style/body5"
-                android:textColor="@color/bg_novel_detail_rating_read_status_selector"
-                app:icon="@drawable/ic_novel_rating_quit"
-                app:iconGravity="top"
-                app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_novel_rating_watching"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/transparent"
+                        android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHING}"
+                        android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHING)}"
+                        android:paddingTop="10dp"
+                        android:text="@string/novel_rating_read_status_watching"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/bg_novel_detail_rating_read_status_selector"
+                        app:icon="@drawable/ic_novel_rating_watching"
+                        app:iconGravity="top"
+                        app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
 
-        <TextView
-            android:id="@+id/tv_novel_rating_display_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:onClick="@{() -> onClick.onDateEditClick()}"
-            android:textAppearance="@style/label1"
-            android:textColor="@color/gray_200_AEADB3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tg_novel_rating_read_status"
-            tools:text="@string/novel_rating_add_date" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_novel_rating_watched"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/transparent"
+                        android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.WATCHED}"
+                        android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.WATCHED)}"
+                        android:paddingTop="10dp"
+                        android:text="@string/novel_rating_read_status_watched"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/bg_novel_detail_rating_read_status_selector"
+                        app:icon="@drawable/ic_novel_rating_watched"
+                        app:iconGravity="top"
+                        app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_novel_rating_add_date"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="18dp"
-            app:dividerColor="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_display_date" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_novel_rating_quit"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/transparent"
+                        android:checked="@{viewModel.uiState.novelRatingModel.uiReadStatus == ReadStatus.QUIT}"
+                        android:onClick="@{() -> viewModel.updateReadStatus(ReadStatus.QUIT)}"
+                        android:paddingTop="10dp"
+                        android:text="@string/novel_rating_read_status_quit"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/bg_novel_detail_rating_read_status_selector"
+                        app:icon="@drawable/ic_novel_rating_quit"
+                        app:iconGravity="top"
+                        app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
-        <RatingBar
-            android:id="@+id/rb_novel_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:numStars="5"
-            android:onRatingChanged="@{(view, rating, fromUser) -> viewModel.updateRatingValue(rating)}"
-            android:progressBackgroundTint="@color/gray_70_DFDFE3"
-            android:progressTint="@color/secondary_50_FFAA8F"
-            android:rating="@{viewModel.uiState.novelRatingModel.userNovelRating}"
-            android:secondaryProgressTint="@color/secondary_50_FFAA8F"
-            android:stepSize="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_add_date" />
+                <TextView
+                    android:id="@+id/tv_novel_rating_display_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:onClick="@{() -> onClick.onDateEditClick()}"
+                    android:textAppearance="@style/label1"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tg_novel_rating_read_status"
+                    tools:text="@string/novel_rating_add_date" />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_novel_rating_rating"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="26dp"
-            app:dividerColor="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rb_novel_rating" />
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_novel_rating_add_date"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="30dp"
+                    app:dividerColor="@color/gray_50_F4F5F8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_display_date" />
 
-        <TextView
-            android:id="@+id/tv_novel_rating_charm_point"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/novel_rating_charm_point_title"
-            android:textAppearance="@style/body1"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_rating" />
+                <RatingBar
+                    android:id="@+id/rb_novel_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:minHeight="30dp"
+                    android:numStars="5"
+                    android:onRatingChanged="@{(view, rating, fromUser) -> viewModel.updateRatingValue(rating)}"
+                    android:progressDrawable="@drawable/ic_novel_rating_star_selector"
+                    android:rating="@{viewModel.uiState.novelRatingModel.userNovelRating}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_add_date" />
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
-            android:id="@+id/wcg_novel_rating_charm_points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="14dp"
-            app:chipSpacing="6dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_charm_point"
-            app:singleSelection="false" />
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_novel_rating_rating"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    app:dividerColor="@color/gray_50_F4F5F8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rb_novel_rating" />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider_novel_rating_charm_point"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="32dp"
-            app:dividerColor="@color/gray_50_F4F5F8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/wcg_novel_rating_charm_points" />
+                <TextView
+                    android:id="@+id/tv_novel_rating_charm_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/novel_rating_charm_point_title"
+                    android:textAppearance="@style/body1"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_rating" />
 
-        <TextView
-            android:id="@+id/tv_novel_rating_keyword_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/novel_rating_keyword"
-            android:textAppearance="@style/body1"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_charm_point" />
+                <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+                    android:id="@+id/wcg_novel_rating_charm_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginTop="14dp"
+                    app:chipSpacing="6dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_charm_point"
+                    app:singleSelection="false" />
 
-        <TextView
-            android:id="@+id/tv_novel_rating_keyword_button"
-            android:layout_width="0dp"
-            android:layout_height="42dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="14dp"
-            android:background="@drawable/bg_novel_rating_gray_50_radius_14dp"
-            android:gravity="center"
-            android:onClick="@{() -> onClick.onKeywordEditClick()}"
-            android:text="@string/novel_rating_keyword_button"
-            android:textAppearance="@style/label1"
-            android:textColor="@color/gray_200_AEADB3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_keyword_title" />
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_novel_rating_charm_point"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    app:dividerColor="@color/gray_50_F4F5F8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wcg_novel_rating_charm_points" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_common_search"
-            app:layout_constraintBottom_toBottomOf="@id/tv_novel_rating_keyword_button"
-            app:layout_constraintEnd_toEndOf="@id/tv_novel_rating_keyword_button"
-            app:layout_constraintTop_toTopOf="@id/tv_novel_rating_keyword_button"
-            app:tint="@color/gray_300_52515F" />
+                <TextView
+                    android:id="@+id/tv_novel_rating_keyword_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/novel_rating_keyword"
+                    android:textAppearance="@style/body1"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_charm_point" />
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
-            android:id="@+id/wcg_novel_rating_keywords"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="22dp"
-            android:gravity="center"
-            android:paddingHorizontal="24dp"
-            app:chipSpacing="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_keyword_button"
-            app:singleSelection="false" />
+                <TextView
+                    android:id="@+id/tv_novel_rating_keyword_button"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/bg_novel_rating_gray_50_radius_14dp"
+                    android:gravity="center"
+                    android:onClick="@{() -> onClick.onKeywordEditClick()}"
+                    android:text="@string/novel_rating_keyword_button"
+                    android:textAppearance="@style/label1"
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_keyword_title" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_common_search"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_novel_rating_keyword_button"
+                    app:layout_constraintEnd_toEndOf="@id/tv_novel_rating_keyword_button"
+                    app:layout_constraintTop_toTopOf="@id/tv_novel_rating_keyword_button"
+                    app:tint="@color/gray_300_52515F" />
+
+                <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+                    android:id="@+id/wcg_novel_rating_keywords"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginBottom="104dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="24dp"
+                    app:chipSpacing="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_keyword_button"
+                    app:singleSelection="false" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_novel_rating"
@@ -234,7 +248,6 @@
                 android:id="@+id/ll_novel_rating_appbar"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:layout_marginTop="24dp"
                 android:gravity="center_vertical">
 
                 <ImageView
@@ -255,6 +268,7 @@
                     android:id="@+id/tv_novel_rating_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{viewModel.uiState.novelRatingModel.novelTitle}"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
