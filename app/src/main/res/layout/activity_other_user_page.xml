@@ -86,7 +86,7 @@
                         android:id="@+id/tb_other_user_page"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="20dp"
                         app:contentInsetStart="0dp"
                         app:layout_collapseMode="pin">
 
