@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:maxLines="1"
-                android:text="@{activity.nickname}"
+                android:text="@{userProfile.nickname}"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
