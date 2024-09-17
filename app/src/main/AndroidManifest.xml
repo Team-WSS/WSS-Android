@@ -104,7 +104,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.myActivityDetail.MyActivityDetailActivity"
+            android:name=".ui.activityDetail.ActivityDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

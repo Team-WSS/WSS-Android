@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="myActivity"
+            name="activity"
             type="com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel" />
 
         <variable
@@ -32,7 +32,6 @@
                 cornerRadius="@{12f}"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                isVectorImage="@{true}"
                 loadImageUrl="@{userProfile.avatarImage}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:maxLines="1"
-
+                android:text="@{userProfile.nickname}"
                 android:textAppearance="@style/title2"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +69,7 @@
             android:id="@+id/tv_my_activity_created_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{myActivity.createdDate}'
+            android:text='@{activity.createdDate}'
             android:textAppearance="@style/body5"
             android:textColor="@color/black"
             android:layout_marginStart="6dp"
@@ -86,7 +85,7 @@
             android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
-            app:isVisible="@{myActivity.isModified}"
+            app:isVisible="@{activity.isModified}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_created_date"
             app:layout_constraintStart_toEndOf="@+id/tv_my_activity_created_date"
             app:layout_constraintTop_toTopOf="@+id/tv_my_activity_created_date" />
@@ -110,7 +109,7 @@
             android:text="@string/feed_spoiler_warning"
             android:textAppearance="@style/body2"
             android:textColor="@color/secondary_100_FF675D"
-            app:isVisible="@{myActivity.isSpoiler}"
+            app:isVisible="@{activity.isSpoiler}"
             app:layout_constraintStart_toStartOf="@+id/cl_my_activity_profile"
             app:layout_constraintTop_toBottomOf="@+id/cl_my_activity_profile" />
 
@@ -123,10 +122,10 @@
             android:ellipsize="end"
             android:gravity="top"
             android:maxLines="5"
-            android:text="@{myActivity.feedContent}"
+            android:text="@{activity.feedContent}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:isVisible="@{!myActivity.isSpoiler}"
+            app:isVisible="@{!activity.isSpoiler}"
             app:layout_constraintEnd_toEndOf="@+id/iv_my_activity_more"
             app:layout_constraintStart_toStartOf="@+id/cl_my_activity_profile"
             app:layout_constraintTop_toBottomOf="@+id/tv_my_activity_spoiler_warning"
@@ -165,7 +164,7 @@
                 android:ellipsize="end"
                 android:ems="13"
                 android:maxLines="1"
-                android:text="@{myActivity.title}"
+                android:text="@{activity.title}"
                 android:textAppearance="@style/title3"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_link"
@@ -189,7 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text='@{myActivity.formattedScore}'
+                android:text='@{activity.formattedScore}'
                 android:textAppearance="@style/label1"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_novel_name"
@@ -214,7 +213,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text='@{myActivity.relevantCategories}'
+            android:text='@{activity.relevantCategories}'
             android:textAppearance="@style/body2"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@+id/cl_my_activity_novel_info"
@@ -250,7 +249,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
                 android:maxLines="1"
-                android:text='@{String.valueOf(myActivity.likeCount)}'
+                android:text='@{String.valueOf(activity.likeCount)}'
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_thumb_up"
@@ -288,7 +287,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
                 android:maxLines="1"
-                android:text='@{String.valueOf(myActivity.commentCount)}'
+                android:text='@{String.valueOf(activity.commentCount)}'
                 android:textAppearance="@style/body2"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_comment"
