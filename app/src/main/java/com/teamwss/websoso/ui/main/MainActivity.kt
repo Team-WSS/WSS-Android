@@ -12,6 +12,7 @@ import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityMainBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.HOME
@@ -44,7 +45,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             HOME -> replaceFragment<HomeFragment>()
             EXPLORE -> replaceFragment<ExploreFragment>()
             FEED -> replaceFragment<FeedFragment>()
-            MY_PAGE -> replaceFragment<MyPageFragment>()
+            MY_PAGE -> {
+                if (mainViewModel.mainUiState.value?.isLogin == true) {
+                    replaceFragment<MyPageFragment>()
+                } else {
+                    showLoginRequestDialog()
+                }
+            }
         }
         return true
     }
@@ -68,6 +75,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 fragmentView.resId == id
             } ?: throw IllegalArgumentException()
         }
+    }
+
+    private fun showLoginRequestDialog() {
+        val dialog = LoginRequestDialogFragment.newInstance()
+        dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
     companion object {

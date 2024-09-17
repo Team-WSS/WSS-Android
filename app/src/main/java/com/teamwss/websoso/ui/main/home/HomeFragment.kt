@@ -94,6 +94,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
                         }
+                        updateViewVisibilityByLogin(mainUiState.isLogin, uiState.nickname)
                     }
                 }
             }
