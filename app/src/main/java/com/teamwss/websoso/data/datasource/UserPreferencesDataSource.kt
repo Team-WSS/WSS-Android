@@ -48,4 +48,11 @@ class UserPreferencesDataSource @Inject constructor(
     suspend fun fetchRefreshToken(): String {
         return dataStore.data.first()[PreferencesKey.REFRESH_TOKEN_KEY] ?: ""
     }
+
+    suspend fun clearTokens() {
+        dataStore.edit { preferences ->
+            preferences.remove(PreferencesKey.ACCESS_TOKEN_KEY)
+            preferences.remove(PreferencesKey.REFRESH_TOKEN_KEY)
+        }
+    }
 }
