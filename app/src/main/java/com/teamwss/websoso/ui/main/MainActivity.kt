@@ -20,7 +20,7 @@ import com.teamwss.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.teamwss.websoso.ui.main.explore.ExploreFragment
 import com.teamwss.websoso.ui.main.feed.FeedFragment
 import com.teamwss.websoso.ui.main.home.HomeFragment
-import com.teamwss.websoso.ui.myPage.MyPageFragment
+import com.teamwss.websoso.ui.main.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +31,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         setBottomNavigationView()
+        handleExploreNavigation()
     }
 
     private fun setBottomNavigationView() {
@@ -38,6 +39,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         replaceFragment<HomeFragment>()
 
         binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
+
+        val navigateToExplore = intent.getBooleanExtra("navigateToExplore", false)
+        if (navigateToExplore) {
+            binding.bnvMain.selectedItemId = R.id.menu_explore
+            replaceFragment<ExploreFragment>()
+        }
     }
 
     private fun replaceFragment(item: MenuItem): Boolean {
@@ -80,6 +87,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private fun showLoginRequestDialog() {
         val dialog = LoginRequestDialogFragment.newInstance()
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
+    }
+
+    private fun handleExploreNavigation() {
+        val navigateToExplore = intent.getBooleanExtra("navigateToExplore", false)
+        if (navigateToExplore) {
+            selectExploreFragment()
+        }
+    }
+
+    private fun selectExploreFragment() {
+        binding.bnvMain.selectedItemId = R.id.menu_explore
+        replaceFragment<ExploreFragment>()
     }
 
     companion object {
