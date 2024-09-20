@@ -87,14 +87,18 @@ class NormalExploreActivity :
         }
 
         override fun onSearchButtonClick() {
-            normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
-            binding.etNormalExploreSearchContent.clearFocus()
-            hideKeyboard()
+            singleEventHandler.throttleFirst {
+                normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
+                binding.etNormalExploreSearchContent.clearFocus()
+                hideKeyboard()
+            }
         }
 
         override fun onSearchCancelButtonClick() {
-            normalExploreViewModel.updateSearchWordEmpty()
-            showKeyboard()
+            singleEventHandler.throttleFirst {
+                normalExploreViewModel.updateSearchWordEmpty()
+                showKeyboard()
+            }
         }
 
         override fun onNovelInquireButtonClick() {
@@ -115,8 +119,10 @@ class NormalExploreActivity :
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        val intent = NovelDetailActivity.getIntent(this, novelId)
-        startActivity(intent)
+        singleEventHandler.throttleFirst {
+            val intent = NovelDetailActivity.getIntent(this, novelId)
+            startActivity(intent)
+        }
     }
 
     private fun setupObserver() {

@@ -145,14 +145,16 @@ class DetailExploreResultActivity :
 
     private fun onEditFilterItemButtonClick() {
         binding.clDetailExploreResultFilterButton.setOnClickListener {
-            val detailExploreResultDialogBottomSheet =
-                DetailExploreResultDialogBottomSheet.newInstance()
-            detailExploreResultDialogBottomSheet.show(
-                supportFragmentManager,
-                DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG,
-            )
+            singleEventHandler.throttleFirst {
+                val detailExploreResultDialogBottomSheet =
+                    DetailExploreResultDialogBottomSheet.newInstance()
+                detailExploreResultDialogBottomSheet.show(
+                    supportFragmentManager,
+                    DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG,
+                )
 
-            detailExploreResultViewModel.updateIsBottomSheetOpen(true)
+                detailExploreResultViewModel.updateIsBottomSheetOpen(true)
+            }
         }
     }
 
