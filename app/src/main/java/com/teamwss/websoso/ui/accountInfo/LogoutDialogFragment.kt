@@ -22,7 +22,7 @@ class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.di
     }
 
     private fun onLogoutButtonClick() {
-        // TODO 로그아웃 후 로그인 화면으로 이동
+        // TODO 로그아웃 후 로그인 화면으로 이동(쓰로틀 적용하기)
     }
 
     companion object {

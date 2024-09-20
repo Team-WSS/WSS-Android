@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivityBlockedUsersBinding
 import com.teamwss.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
@@ -15,11 +16,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class BlockedUsersActivity :
     BaseActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
     private val blockedUsersAdapter: BlockedUsersAdapter by lazy {
-        BlockedUsersAdapter(
-            blockedUsersViewModel::deleteBlockedUser,
-        )
+        BlockedUsersAdapter(::onUnblockedUserButtonClick)
     }
     private val blockedUsersViewModel: BlockedUsersViewModel by viewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +65,10 @@ class BlockedUsersActivity :
         binding.ivBlockedUsersBackButton.setOnClickListener {
             finish()
         }
+    }
+
+    private fun onUnblockedUserButtonClick(blockId: Long) {
+        singleEventHandler.throttleFirst { blockedUsersViewModel.deleteBlockedUser(blockId) }
     }
 
     companion object {

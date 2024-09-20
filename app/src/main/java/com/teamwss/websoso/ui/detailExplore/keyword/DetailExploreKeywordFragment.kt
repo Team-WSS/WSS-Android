@@ -15,6 +15,7 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
@@ -28,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailExploreKeywordFragment :
     BaseFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
         DetailExploreKeywordAdapter(detailExploreViewModel::updateClickedChipState)
     }
@@ -58,7 +60,9 @@ class DetailExploreKeywordFragment :
         }
 
         override fun onDetailSearchNovelButtonClick() {
-            navigateToDetailSearchResult()
+            singleEventHandler.throttleFirst {
+                navigateToDetailSearchResult()
+            }
         }
 
         override fun onKeywordResetButtonClick() {
