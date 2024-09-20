@@ -13,7 +13,6 @@ import com.teamwss.websoso.databinding.FragmentDetailExploreResultInfoBinding
 import com.teamwss.websoso.ui.detailExplore.info.model.Genre
 import com.teamwss.websoso.ui.detailExplore.info.model.Rating
 import com.teamwss.websoso.ui.detailExplore.info.model.SeriesStatus
-import com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultActivity.Companion.DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,10 +49,7 @@ class DetailExploreResultInfoFragment :
             singleEventHandler.throttleFirst {
                 detailExploreResultViewModel.updateSearchResult(isSearchButtonClick = true)
 
-                val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(
-                    DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
-                ) as? DetailExploreResultDialogBottomSheet
-                bottomSheet?.dismiss()
+                (parentFragment as? DetailExploreResultDialogBottomSheet)?.dismiss()
 
                 detailExploreResultViewModel.updateIsBottomSheetOpen(false)
             }

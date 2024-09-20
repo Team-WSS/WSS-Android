@@ -61,10 +61,7 @@ class DetailExploreResultKeywordFragment :
             singleEventHandler.throttleFirst {
                 detailExploreResultViewModel.updateSearchResult(true)
 
-                val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(
-                    DetailExploreResultActivity.DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
-                ) as? DetailExploreResultDialogBottomSheet
-                bottomSheet?.dismiss()
+                (parentFragment as? DetailExploreResultDialogBottomSheet)?.dismiss()
 
                 detailExploreResultViewModel.updateIsBottomSheetOpen(false)
             }

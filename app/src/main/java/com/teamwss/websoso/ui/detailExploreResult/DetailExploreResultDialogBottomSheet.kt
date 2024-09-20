@@ -12,7 +12,8 @@ import com.teamwss.websoso.common.ui.base.BaseBottomSheetDialog
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.DialogDetailExploreBinding
 import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
-import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle.*
+import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle.INFO
+import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle.KEYWORD
 
 class DetailExploreResultDialogBottomSheet :
     BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
