@@ -18,7 +18,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="24dp"
             tools:context=".ui.createFeed.CreateFeedActivity">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,6 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
+                    android:layout_marginTop="8dp"
                     android:padding="10dp"
                     android:src="@drawable/btn_explore_back"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -42,16 +42,16 @@
                     android:id="@+id/tv_create_feed_done_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="10dp"
                     android:src="@drawable/ic_more"
-                    android:enabled="false"
                     android:text="@string/tv_create_feed_done_button"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/bg_create_feed_done_button_selector"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_create_feed_back_button"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/iv_create_feed_back_button" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -39,14 +39,14 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="4dp">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/iv_normal_explore_back_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
+                        android:layout_marginTop="8dp"
                         android:contentDescription="@null"
                         android:onClick="@{() -> onClick.onBackButtonClick()}"
                         android:padding="10dp"
@@ -58,6 +58,7 @@
                         android:id="@+id/cl_normal_explore_search_bar"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/bg_explore_stroke_gray70_radius_14dp"
                         android:paddingStart="16dp"
