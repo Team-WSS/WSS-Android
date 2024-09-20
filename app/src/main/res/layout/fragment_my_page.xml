@@ -49,6 +49,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="72dp"
                             loadImageUrl='@{myPageViewModel.myProfile.avatarImage}'
+                            app:isCircularImage="@{true}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -86,7 +87,7 @@
                         android:id="@+id/tb_my_page"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="20dp"
                         app:contentInsetStart="0dp"
                         app:layout_collapseMode="pin">
 

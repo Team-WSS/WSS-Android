@@ -38,5 +38,4 @@ class OtherUserPageViewModel @Inject constructor(
     private fun getUserId(): Long {
         return 1L
     }
-
 }
