@@ -173,17 +173,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        startActivityLauncher.launch(NovelDetailActivity.getIntent(requireContext(), novelId, SOURCE_HOME))
+        startActivityLauncher.launch(
+            NovelDetailActivity.getIntent(
+                requireContext(),
+                novelId,
+                SOURCE_HOME
+            )
+        )
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        startActivityLauncher.launch(FeedDetailActivity.getIntent(requireContext(), feedId, SOURCE_HOME))
+        startActivityLauncher.launch(
+            FeedDetailActivity.getIntent(
+                requireContext(),
+                feedId,
+                SOURCE_HOME
+            )
+        )
     }
 
     private fun onPostInterestNovelClick() {
         binding.clHomeInterestFeed.setOnClickListener {
             if (mainViewModel.mainUiState.value?.isLogin == true) {
-                startActivity(NormalExploreActivity.getIntent(requireContext()))
+                startActivityLauncher.launch(
+                    NormalExploreActivity.getIntent(
+                        requireContext(),
+                        SOURCE_HOME
+                    )
+                )
             } else {
                 showLoginRequestDialog()
             }
