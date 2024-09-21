@@ -1,5 +1,10 @@
 package com.teamwss.websoso.data.repository
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
@@ -14,10 +19,12 @@ import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val userApi: UserApi,
+    private val dataStore: DataStore<Preferences>,
 ) {
 
     suspend fun fetchUserInfo(): UserInfoEntity {
@@ -86,5 +93,48 @@ class UserRepository @Inject constructor(
 
     suspend fun saveUserProfile(avatarId: Int?, nickname: String?, intro: String?, genrePreferences: List<String>) {
         userApi.patchProfile(UserProfileEditRequestDto(avatarId, nickname, intro, genrePreferences))
+    }
+
+    suspend fun saveNovelDetailFirstLaunched(value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] = value
+        }
+    }
+
+    suspend fun fetchNovelDetailFirstLaunched(): Boolean {
+        return dataStore.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
+    }
+
+    suspend fun saveAccessToken(value: String) {
+        dataStore.edit { preferences ->
+            preferences[ACCESS_TOKEN_KEY] = value
+        }
+    }
+
+    suspend fun fetchAccessToken(): String {
+        return dataStore.data.first()[ACCESS_TOKEN_KEY].orEmpty()
+    }
+
+    suspend fun saveRefreshToken(value: String) {
+        dataStore.edit { preferences ->
+            preferences[REFRESH_TOKEN_KEY] = value
+        }
+    }
+
+    suspend fun fetchRefreshToken(): String {
+        return dataStore.data.first()[REFRESH_TOKEN_KEY].orEmpty()
+    }
+
+    suspend fun clearTokens() {
+        dataStore.edit { preferences ->
+            preferences.remove(ACCESS_TOKEN_KEY)
+            preferences.remove(REFRESH_TOKEN_KEY)
+        }
+    }
+
+    companion object {
+        val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
+        val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN")
+        val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
     }
 }

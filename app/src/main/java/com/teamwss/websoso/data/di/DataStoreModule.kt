@@ -9,7 +9,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -18,7 +17,6 @@ object DataStoreModule {
 
     @Singleton
     @Provides
-    @Named("userPreferencesDataStore")
     fun provideUserPreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return context.createDataStore(USER_PREFERENCES)
     }
