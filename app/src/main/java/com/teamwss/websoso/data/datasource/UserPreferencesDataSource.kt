@@ -36,7 +36,7 @@ class UserPreferencesDataSource @Inject constructor(
     }
 
     suspend fun fetchAccessToken(): String {
-        return dataStore.data.first()[PreferencesKey.ACCESS_TOKEN_KEY] ?: ""
+        return dataStore.data.first()[PreferencesKey.ACCESS_TOKEN_KEY].orEmpty()
     }
 
     suspend fun saveRefreshToken(value: String) {
@@ -46,7 +46,7 @@ class UserPreferencesDataSource @Inject constructor(
     }
 
     suspend fun fetchRefreshToken(): String {
-        return dataStore.data.first()[PreferencesKey.REFRESH_TOKEN_KEY] ?: ""
+        return dataStore.data.first()[PreferencesKey.REFRESH_TOKEN_KEY].orEmpty()
     }
 
     suspend fun clearTokens() {
