@@ -59,7 +59,7 @@ class NovelDetailActivity :
         }
     }
 
-    private val fromView by lazy { intent.getStringExtra(FROM_VIEW_NAME) }
+    private val fromViewName by lazy { intent.getStringExtra(FROM_VIEW_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -283,7 +283,7 @@ class NovelDetailActivity :
     }
 
     private fun handleBackPressed() {
-        if (fromView == HomeFragment.SOURCE_HOME) {
+        if (fromViewName == HomeFragment.SOURCE_HOME) {
             setResult(Activity.RESULT_OK)
         }
         finish()

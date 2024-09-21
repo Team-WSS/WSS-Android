@@ -177,7 +177,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+        startActivityLauncher.launch(FeedDetailActivity.getIntent(requireContext(), feedId, SOURCE_HOME))
     }
 
     private fun onPostInterestNovelClick() {
