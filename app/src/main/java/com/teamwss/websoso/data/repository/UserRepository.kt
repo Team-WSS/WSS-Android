@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val userApi: UserApi,
-    private val dataStore: DataStore<Preferences>,
+    private val userStorage: DataStore<Preferences>,
 ) {
 
     suspend fun fetchUserInfo(): UserInfoEntity {
@@ -96,37 +96,37 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun saveNovelDetailFirstLaunched(value: Boolean) {
-        dataStore.edit { preferences ->
+        userStorage.edit { preferences ->
             preferences[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] = value
         }
     }
 
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
-        return dataStore.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
+        return userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
     }
 
     suspend fun saveAccessToken(value: String) {
-        dataStore.edit { preferences ->
+        userStorage.edit { preferences ->
             preferences[ACCESS_TOKEN_KEY] = value
         }
     }
 
     suspend fun fetchAccessToken(): String {
-        return dataStore.data.first()[ACCESS_TOKEN_KEY].orEmpty()
+        return userStorage.data.first()[ACCESS_TOKEN_KEY].orEmpty()
     }
 
     suspend fun saveRefreshToken(value: String) {
-        dataStore.edit { preferences ->
+        userStorage.edit { preferences ->
             preferences[REFRESH_TOKEN_KEY] = value
         }
     }
 
     suspend fun fetchRefreshToken(): String {
-        return dataStore.data.first()[REFRESH_TOKEN_KEY].orEmpty()
+        return userStorage.data.first()[REFRESH_TOKEN_KEY].orEmpty()
     }
 
     suspend fun clearTokens() {
-        dataStore.edit { preferences ->
+        userStorage.edit { preferences ->
             preferences.remove(ACCESS_TOKEN_KEY)
             preferences.remove(REFRESH_TOKEN_KEY)
         }
