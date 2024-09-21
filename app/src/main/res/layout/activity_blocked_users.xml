@@ -20,24 +20,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="2dp"
             android:contentDescription="@null"
             android:padding="10dp"
             android:src="@drawable/btn_setting_back"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/tv_blocked_users_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_blocked_users_title"/>
 
         <TextView
             android:id="@+id/tv_blocked_users_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
             android:text="@string/blocked_users_title"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/iv_blocked_users_back_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_blocked_users_back_button" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_blocked_users"
@@ -50,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_blocked_users_back_button"
+            app:layout_constraintTop_toBottomOf="@id/tv_blocked_users_title"
             tools:listitem="@layout/item_blocked_user" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -13,24 +13,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="2dp"
             android:contentDescription="@null"
             android:padding="10dp"
             android:src="@drawable/btn_setting_back"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_withdraw_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/tv_withdraw_title" />
 
         <TextView
             android:id="@+id/tv_withdraw_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="@string/account_info_withdraw"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/iv_withdraw_back_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_withdraw_back_button" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_withdraw_first_title"
