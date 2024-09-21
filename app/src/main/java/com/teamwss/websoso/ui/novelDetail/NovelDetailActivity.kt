@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelDetail
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -25,6 +27,7 @@ import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.home.HomeFragment
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
@@ -56,6 +59,8 @@ class NovelDetailActivity :
         }
     }
 
+    private val fromView by lazy { intent.getStringExtra(FROM_VIEW_NAME) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,6 +71,9 @@ class NovelDetailActivity :
         setupWebsosoLoadingLayout()
         setupViewPager()
         novelDetailViewModel.updateNovelDetail(novelId)
+        onBackPressedDispatcher.addCallback(this) {
+            handleBackPressed()
+        }
     }
 
     private fun bindViewModel() {
@@ -239,6 +247,7 @@ class NovelDetailActivity :
 
     private fun onNovelDetailButtonClick() = object : NovelDetailClickListener {
         override fun onNavigateBackClick() {
+            setResult(Activity.RESULT_OK)
             finish()
         }
 
@@ -273,6 +282,13 @@ class NovelDetailActivity :
         novelRatingLauncher.launch(intent)
     }
 
+    private fun handleBackPressed() {
+        if (fromView == HomeFragment.SOURCE_HOME) {
+            setResult(Activity.RESULT_OK)
+        }
+        finish()
+    }
+
     override fun onResume() {
         super.onResume()
         binding.tgNovelDetailReadStatus.clearChecked()
@@ -283,6 +299,7 @@ class NovelDetailActivity :
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
+        private const val FROM_VIEW_NAME = "FROM_VIEW_NAME"
         private const val REFRESH = 200
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
@@ -290,6 +307,13 @@ class NovelDetailActivity :
         fun getIntent(context: Context, novelId: Long): Intent {
             return Intent(context, NovelDetailActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
+            }
+        }
+
+        fun getIntent(context: Context, novelId: Long, fromViewName: String): Intent {
+            return Intent(context, NovelDetailActivity::class.java).apply {
+                putExtra(NOVEL_ID, novelId)
+                putExtra(FROM_VIEW_NAME, fromViewName)
             }
         }
     }

@@ -1,7 +1,9 @@
 package com.teamwss.websoso.ui.main.home
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
@@ -38,6 +40,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val recommendedNovelsByUserTasteAdapter: RecommendedNovelsByUserTasteAdapter by lazy {
         RecommendedNovelsByUserTasteAdapter(::navigateToNovelDetail)
+    }
+
+    private val startActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            homeViewModel.updateHomeData()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,17 +117,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 true -> {
                     tvHomeInterestFeed.text =
                         getString(R.string.home_nickname_interest_feed, nickname)
-                    clHomeInterestFeed.visibility = View.GONE
                     clHomeRecommendNovel.visibility = View.GONE
-                    clHomeUserInterestFeed.visibility = View.VISIBLE
                     clHomeUserRecommendNovel.visibility = View.VISIBLE
                 }
 
                 false -> {
                     tvHomeInterestFeed.text = "관심글"
-                    clHomeInterestFeed.visibility = View.VISIBLE
                     clHomeRecommendNovel.visibility = View.VISIBLE
-                    clHomeUserInterestFeed.visibility = View.GONE
                     clHomeUserRecommendNovel.visibility = View.GONE
                 }
             }
@@ -167,7 +173,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+        startActivityLauncher.launch(NovelDetailActivity.getIntent(requireContext(), novelId, SOURCE_HOME))
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
@@ -209,13 +215,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        homeViewModel.updateHomeData()
-    }
-
     companion object {
         private const val TODAY_POPULAR_NOVEL_MARGIN = 15
         private const val USER_INTEREST_MARGIN = 14
+
+        const val SOURCE_HOME = "Home"
     }
 }
