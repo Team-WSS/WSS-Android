@@ -604,16 +604,6 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <View
-            android:layout_width="0dp"
-            android:layout_height="68dp"
-            android:background="@color/black_60_99000000"
-            app:isVisible="@{novelDetailViewModel.novelDetailModel.isFirstLaunched}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
-
-        <View
             android:id="@+id/view_novel_detail_tooltip_frame_bottom"
             android:layout_width="0dp"
             android:layout_height="0dp"

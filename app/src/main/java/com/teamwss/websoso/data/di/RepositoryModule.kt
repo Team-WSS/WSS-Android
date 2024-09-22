@@ -1,5 +1,7 @@
 package com.teamwss.websoso.data.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.api.NovelApi
 import com.teamwss.websoso.data.remote.api.UserApi
@@ -22,7 +24,10 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(userApi: UserApi): UserRepository = UserRepository(userApi)
+    fun provideUserRepository(
+        userApi: UserApi,
+        userStorage: DataStore<Preferences>,
+    ): UserRepository = UserRepository(userApi, userStorage)
 
     @Provides
     @Singleton
