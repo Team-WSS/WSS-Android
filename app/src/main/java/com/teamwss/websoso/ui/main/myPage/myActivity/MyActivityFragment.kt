@@ -6,8 +6,8 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
+import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
-import com.teamwss.websoso.ui.myActivityDetail.MyActivityDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +23,7 @@ class MyActivityFragment :
 
         setUpMyActivitiesAdapter()
         setUpObserve()
-        navigateToMyActivityDetail()
+        onMyActivityDetailButtonClick()
     }
 
     private fun setUpMyActivitiesAdapter() {
@@ -36,10 +36,16 @@ class MyActivityFragment :
         }
     }
 
-    private fun navigateToMyActivityDetail() {
+    private fun onMyActivityDetailButtonClick() {
         binding.btnMyActivityMore.setOnClickListener {
-            val intent = MyActivityDetailActivity.createIntentForMyActivityDetail(requireContext())
+            val intent = ActivityDetailActivity.getIntent(requireContext())
+            intent.putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
             startActivity(intent)
         }
+    }
+
+    companion object {
+        const val EXTRA_SOURCE = "source"
+        const val SOURCE_MY_ACTIVITY = "myActivity"
     }
 }

@@ -26,7 +26,8 @@ import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
+class ProfileEditActivity :
+    BaseActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
     private val profileEditViewModel: ProfileEditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +70,10 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun updateDuplicateCheckButtonStatus(isEnable: Boolean) {
         binding.tvProfileEditNicknameCheckDuplicate.setTextColor(
-            if (isEnable) AppCompatResources.getColorStateList(this, R.color.primary_100_6A5DFD).defaultColor
+            if (isEnable) AppCompatResources.getColorStateList(
+                this,
+                R.color.primary_100_6A5DFD
+            ).defaultColor
             else AppCompatResources.getColorStateList(this, R.color.gray_200_AEADB3).defaultColor
         )
         binding.tvProfileEditNicknameCheckDuplicate.setBackgroundResource(
@@ -81,9 +85,15 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun updateNicknameEditTextUi(uiState: ProfileEditUiState) = with(binding) {
         tvProfileEditNicknameCount.text = getColoredText(
-            getString(R.string.profile_edit_nickname_max_count, uiState.profile.nicknameModel.nickname.length),
+            getString(
+                R.string.profile_edit_nickname_max_count,
+                uiState.profile.nicknameModel.nickname.length
+            ),
             listOf(uiState.profile.nicknameModel.nickname.length.toString()),
-            AppCompatResources.getColorStateList(this@ProfileEditActivity, R.color.gray_300_52515F).defaultColor
+            AppCompatResources.getColorStateList(
+                this@ProfileEditActivity,
+                R.color.gray_300_52515F
+            ).defaultColor
         )
         tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname.isNotEmpty()
         tvProfileEditNicknameResult.isSelected = uiState.nicknameEditResult == VALID_NICKNAME
@@ -91,15 +101,25 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
         when {
             uiState.defaultState -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp)
-            uiState.profile.nicknameModel.hasFocus -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp)
-            uiState.nicknameEditResult == VALID_NICKNAME -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_white_stroke_primary_100_radius_12dp)
+            uiState.profile.nicknameModel.hasFocus -> viewProfileEditNickname.setBackgroundResource(
+                R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp
+            )
+
+            uiState.nicknameEditResult == VALID_NICKNAME -> viewProfileEditNickname.setBackgroundResource(
+                R.drawable.bg_profile_edit_white_stroke_primary_100_radius_12dp
+            )
+
             else -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_gray_50_radius_12dp)
         }
 
         ivProfileEditNicknameClear.isSelected = uiState.defaultState
     }
 
-    private fun getColoredText(text: String, wordsToColor: List<String>, color: Int): SpannableString {
+    private fun getColoredText(
+        text: String,
+        wordsToColor: List<String>,
+        color: Int,
+    ): SpannableString {
         val spannableString = SpannableString(text)
         wordsToColor.forEach { word ->
             val start = text.indexOf(word)
@@ -116,19 +136,30 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         binding.tvProfileEditIntroductionCount.text = getColoredText(
             getString(R.string.profile_edit_introduction_max_count, introduction.length),
             listOf(introduction.length.toString()),
-            AppCompatResources.getColorStateList(this@ProfileEditActivity, R.color.gray_300_52515F).defaultColor
+            AppCompatResources.getColorStateList(
+                this@ProfileEditActivity,
+                R.color.gray_300_52515F
+            ).defaultColor
         )
     }
 
     private fun handleProfileEditResult(profileEditResult: ProfileEditResult) {
         when (profileEditResult) {
             ProfileEditResult.Success -> {
-                showWebsosoToast(this, getString(R.string.profile_edit_success), R.drawable.ic_novel_detail_check)
+                showWebsosoToast(
+                    this,
+                    getString(R.string.profile_edit_success),
+                    R.drawable.ic_novel_detail_check
+                )
                 finish()
             }
 
             ProfileEditResult.Failure -> {
-                showWebsosoToast(this, getString(R.string.novel_rating_save_error), R.drawable.ic_novel_rating_alert)
+                showWebsosoToast(
+                    this,
+                    getString(R.string.novel_rating_save_error),
+                    R.drawable.ic_novel_rating_alert
+                )
             }
 
             else -> return
@@ -166,28 +197,39 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun onNicknameEditTextChange() {
         with(binding.etProfileEditNickname) {
-            setOnFocusChangeListener { _, hasFocus -> profileEditViewModel.updateNicknameFocus(hasFocus) }
+            setOnFocusChangeListener { _, hasFocus ->
+                profileEditViewModel.updateNicknameFocus(
+                    hasFocus
+                )
+            }
             addTextChangedListener { profileEditViewModel.updateNickname(it.toString()) }
         }
     }
 
     private fun onIntroductionEditTextChange() {
         with(binding.etProfileEditIntroduction) {
-            setOnFocusChangeListener { _, hasFocus -> binding.clProfileEditIntroduction.isSelected = hasFocus }
+            setOnFocusChangeListener { _, hasFocus ->
+                binding.clProfileEditIntroduction.isSelected = hasFocus
+            }
             addTextChangedListener { profileEditViewModel.updateIntroduction(it.toString()) }
         }
     }
 
     private fun showAvatarChangeBottomSheetDialog() {
-        val existingDialog = supportFragmentManager.findFragmentByTag(PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG)
+        val existingDialog =
+            supportFragmentManager.findFragmentByTag(PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG)
         if (existingDialog == null) {
-            AvatarChangeBottomSheetDialog().show(supportFragmentManager, PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG)
+            AvatarChangeBottomSheetDialog().show(
+                supportFragmentManager,
+                PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG
+            )
         }
     }
 
     companion object {
         private const val PROFILE_INFO = "PROFILE_INFO"
-        private const val PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG = "PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG"
+        private const val PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG =
+            "PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG"
 
         fun getIntent(
             context: Context,

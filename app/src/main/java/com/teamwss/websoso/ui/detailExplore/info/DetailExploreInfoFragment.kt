@@ -8,6 +8,7 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.FragmentDetailExploreInfoBinding
 import com.teamwss.websoso.ui.detailExplore.DetailExploreViewModel
@@ -22,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailExploreInfoFragment :
     BaseFragment<FragmentDetailExploreInfoBinding>(R.layout.fragment_detail_explore_info) {
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,26 +50,28 @@ class DetailExploreInfoFragment :
 
     private fun onDetailSearchNovelButtonClick() {
         binding.tvDetailExploreSearchButton.setOnClickListener {
-            val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
-            val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
-            val novelRating = detailExploreViewModel.selectedRating.value
+            singleEventHandler.throttleFirst {
+                val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
+                val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
+                val novelRating = detailExploreViewModel.selectedRating.value
 
-            val keywordIds = detailExploreViewModel.uiState.value?.categories?.asSequence()
-                ?.flatMap { it.keywords.asSequence() }
-                ?.filter { it.isSelected }
-                ?.map { it.keywordId }
-                ?.toList() ?: emptyList()
+                val keywordIds = detailExploreViewModel.uiState.value?.categories
+                    ?.flatMap { it.keywords.asSequence() }
+                    ?.filter { it.isSelected }
+                    ?.map { it.keywordId }
+                    ?.toList() ?: emptyList()
 
-            val intent = DetailExploreResultActivity.getIntent(
-                context = requireContext(), DetailExploreFilteredModel(
-                    genres = selectedGenres,
-                    isCompleted = isCompleted,
-                    novelRating = novelRating,
-                    keywordIds = keywordIds,
+                val intent = DetailExploreResultActivity.getIntent(
+                    context = requireContext(), DetailExploreFilteredModel(
+                        genres = selectedGenres,
+                        isCompleted = isCompleted,
+                        novelRating = novelRating,
+                        keywordIds = keywordIds,
+                    )
                 )
-            )
 
-            startActivity(intent)
+                startActivity(intent)
+            }
         }
     }
 

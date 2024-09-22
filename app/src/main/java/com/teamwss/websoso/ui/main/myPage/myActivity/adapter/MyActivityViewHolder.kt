@@ -10,7 +10,7 @@ class MyActivityViewHolder(private val binding: ItemMyActivityBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(myActivity: ActivityModel) {
-        binding.myActivity = myActivity
+        binding.activity = myActivity
     }
 
     companion object {

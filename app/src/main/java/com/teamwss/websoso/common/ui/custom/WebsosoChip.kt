@@ -5,12 +5,15 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.chip.Chip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 
 class WebsosoChip(
     context: Context,
     attrs: AttributeSet? = null,
 ) : Chip(context, attrs) {
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+
     init {
         setLayoutParams()
         rippleColor = null
@@ -126,13 +129,15 @@ class WebsosoChip(
      */
     fun setOnWebsosoChipClick(event: () -> Unit) {
         setOnClickListener {
-            if ((parent as WebsosoChipGroup).isSingleSelectionMode) {
-                eventOnSingleSelectionMode(event)
-                return@setOnClickListener
-            }
+            singleEventHandler.throttleFirst(300) {
+                if ((parent as WebsosoChipGroup).isSingleSelectionMode) {
+                    eventOnSingleSelectionMode(event)
+                    return@throttleFirst
+                }
 
-            setWebsosoChipSelected(!isSelected)
-            event()
+                setWebsosoChipSelected(!isSelected)
+                event()
+            }
         }
     }
 

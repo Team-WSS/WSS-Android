@@ -54,7 +54,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(id: Long) {
+        override fun onProfileClick(userId: Long) {
             // TODO: 유저 프로필로 이동
         }
 
@@ -62,13 +62,13 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             showMenu(view, feedId, isMyFeed)
         }
 
-        override fun onContentClick(id: Long) {
-            navigateToFeedDetail(id)
+        override fun onContentClick(feedId: Long) {
+            navigateToFeedDetail(feedId)
         }
 
-        override fun onNovelInfoClick(id: Long) {
-            if (id == novelId) return
-            startActivity(NovelDetailActivity.getIntent(requireContext(), id))
+        override fun onNovelInfoClick(novelId: Long) {
+            if (novelId == this@NovelFeedFragment.novelId) return
+            startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
@@ -86,10 +86,6 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
                 novelFeedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
             }
-        }
-
-        override fun onCommentButtonClick(feedId: Long) {
-            navigateToFeedDetail(feedId)
         }
     }
 

@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.FakeUserRepository
 import com.teamwss.websoso.data.repository.FeedRepository
+import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
 import com.teamwss.websoso.ui.main.feed.model.Category
 import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class FeedViewModel @Inject constructor(
     private val getFeedsUseCase: GetFeedsUseCase,
     private val feedRepository: FeedRepository,
-    fakeUserRepository: FakeUserRepository,
+    userRepository: UserRepository,
 ) : ViewModel() {
     private val _categories: MutableList<CategoryModel> = mutableListOf()
     val categories: List<CategoryModel> get() = _categories.toList()
@@ -28,9 +29,9 @@ class FeedViewModel @Inject constructor(
     val feedUiState: LiveData<FeedUiState> get() = _feedUiState
 
     init {
-        val categories: List<CategoryModel> = when (fakeUserRepository.gender) {
-            "MALE" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
-            "FEMALE" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
+        val categories: List<CategoryModel> = when (userRepository.userGender) {
+            "M" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
+            "F" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
             else -> throw IllegalArgumentException()
         }.split(",")
             .map {
@@ -55,14 +56,14 @@ class FeedViewModel @Inject constructor(
                 runCatching {
                     when (feedUiState.feeds.isNotEmpty()) {
                         true -> getFeedsUseCase(
-                            selectedCategory.titleEn,
+                            selectedCategory.enTitle,
                             feedUiState.feeds.maxOf { it.id }
                         )
 
-                        false -> getFeedsUseCase(selectedCategory.titleEn)
+                        false -> getFeedsUseCase(selectedCategory.enTitle)
                     }
                 }.onSuccess { feeds ->
-                    if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
+                    if (feeds.category != selectedCategory.enTitle) throw IllegalStateException()
                     // Return result state of error in domain layer later
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
@@ -96,9 +97,9 @@ class FeedViewModel @Inject constructor(
 
             viewModelScope.launch {
                 runCatching {
-                    getFeedsUseCase(category.titleEn)
+                    getFeedsUseCase(category.enTitle)
                 }.onSuccess { feeds ->
-                    if (feeds.category != category.titleEn) throw IllegalStateException()
+                    if (feeds.category != category.enTitle) throw IllegalStateException()
                     // Return result state of error in domain layer later
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
@@ -117,15 +118,14 @@ class FeedViewModel @Inject constructor(
 
     fun updateRefreshedFeeds() {
         feedUiState.value?.let { feedUiState ->
-
             viewModelScope.launch {
                 val selectedCategory: Category =
                     categories.find { it.isSelected }?.category ?: throw IllegalStateException()
-
+                delay(300)
                 runCatching {
-                    getFeedsUseCase(selectedCategory.titleEn)
+                    getFeedsUseCase(selectedCategory.enTitle)
                 }.onSuccess { feeds ->
-                    if (feeds.category != selectedCategory.titleEn) throw IllegalStateException()
+                    if (feeds.category != selectedCategory.enTitle) throw IllegalStateException()
                     // Return result state of error in domain layer later
                     _feedUiState.value = feedUiState.copy(
                         loading = false,

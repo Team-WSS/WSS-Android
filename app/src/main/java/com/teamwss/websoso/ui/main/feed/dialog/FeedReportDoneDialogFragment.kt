@@ -6,6 +6,7 @@ import com.teamwss.websoso.R.layout
 import com.teamwss.websoso.R.string.report_popup_menu_description
 import com.teamwss.websoso.R.string.report_popup_menu_description_comment
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.DialogReportDonePopupMenuBinding
 import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
@@ -13,6 +14,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 
 class FeedReportDoneDialogFragment :
     BaseDialogFragment<DialogReportDonePopupMenuBinding>(layout.dialog_report_done_popup_menu) {
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val menuType: String? by lazy { arguments?.getString(MENU_TYPE) }
     private val onCheckClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener
@@ -27,8 +29,10 @@ class FeedReportDoneDialogFragment :
         }
 
         binding.tvReportPopupMenuCheck.setOnClickListener {
-            onCheckClick()
-            dismiss()
+            singleEventHandler.throttleFirst {
+                onCheckClick()
+                dismiss()
+            }
         }
         dialog?.setCanceledOnTouchOutside(false)
     }

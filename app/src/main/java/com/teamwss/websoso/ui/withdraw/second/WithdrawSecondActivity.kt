@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityWithdrawSecondBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class WithdrawSecondActivity :
     BaseActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
     private val withdrawSecondViewModel: WithdrawSecondViewModel by viewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +63,9 @@ class WithdrawSecondActivity :
         }
 
         override fun onWithdrawButtonClick() {
-            withdrawSecondViewModel.saveWithdrawReason()
+            singleEventHandler.throttleFirst {
+                withdrawSecondViewModel.saveWithdrawReason()
+            }
         }
     }
 

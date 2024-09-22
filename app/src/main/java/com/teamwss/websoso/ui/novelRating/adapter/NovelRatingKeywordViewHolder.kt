@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ItemCommonKeywordBinding
@@ -36,9 +37,15 @@ class NovelRatingKeywordViewHolder(
     }
 
     fun initKeywordView(category: CategoryModel) {
+        val imageUrl: String = itemView.getS3ImageUrl(category.categoryImage)
+
+        val updatedCategory = category.copy(
+            categoryImage = imageUrl,
+        )
+
         binding.apply {
-            tvRatingKeyword.text = category.categoryName
-            categoryImageUrl = category.categoryImage
+            tvRatingKeyword.text = updatedCategory.categoryName
+            categoryImageUrl = updatedCategory.categoryImage
             setupWebsosoChips(category)
         }
         isChipSetting = true
@@ -65,7 +72,8 @@ class NovelRatingKeywordViewHolder(
     }
 
     fun updateChipState(category: CategoryModel) {
-        val keywordSelectionMap = category.keywords.associateBy({ it.keywordName }, { it.isSelected })
+        val keywordSelectionMap =
+            category.keywords.associateBy({ it.keywordName }, { it.isSelected })
 
         (0 until binding.wcgNovelRatingKeyword.childCount)
             .map { binding.wcgNovelRatingKeyword.getChildAt(it) }

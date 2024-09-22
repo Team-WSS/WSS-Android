@@ -16,24 +16,24 @@
             android:id="@+id/tv_notice_notice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:paddingVertical="20dp"
             android:text="@string/notice_notification"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_notice_back" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_notice_back"
             android:layout_width="44dp"
             android:layout_height="0dp"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="24dp"
             android:src="@drawable/ic_notice_back"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_notice_notice"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/tv_notice_notice" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_notice"
@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_notice_back"
+            app:layout_constraintTop_toBottomOf="@id/tv_notice_notice"
             tools:listitem="@layout/item_notice" />
 
         <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout

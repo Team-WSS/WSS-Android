@@ -48,7 +48,10 @@ class NovelRatingDateBottomSheetDialog :
                 uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
             binding.npRatingDateDay.value =
                 uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
-            initNumberPickerValue(uiState.novelRatingModel.ratingDateModel, uiState.isEditingStartDate)
+            initNumberPickerValue(
+                uiState.novelRatingModel.ratingDateModel,
+                uiState.isEditingStartDate
+            )
         }
     }
 
@@ -113,7 +116,10 @@ class NovelRatingDateBottomSheetDialog :
         }
     }
 
-    private fun initNumberPickerValue(ratingDateModel: RatingDateModel, isEditingStartDate: Boolean) {
+    private fun initNumberPickerValue(
+        ratingDateModel: RatingDateModel,
+        isEditingStartDate: Boolean,
+    ) {
         with(binding) {
             when (isEditingStartDate) {
                 true -> {

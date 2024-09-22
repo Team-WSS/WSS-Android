@@ -19,25 +19,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="2dp"
             android:contentDescription="@null"
             android:onClick="@{() -> onClick.onBackButtonClick()}"
             android:padding="10dp"
             android:src="@drawable/btn_setting_back"
+            app:layout_constraintBottom_toBottomOf="@id/tv_setting_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/tv_setting_title" />
 
         <TextView
             android:id="@+id/tv_setting_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
             android:text="@string/setting_title"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/iv_setting_back_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_setting_back_button" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_setting_account_info"
@@ -46,7 +46,7 @@
             android:onClick="@{() -> onClick.onUserAccountInfoButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_setting_back_button">
+            app:layout_constraintTop_toBottomOf="@id/tv_setting_title">
 
             <TextView
                 android:layout_width="wrap_content"

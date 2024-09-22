@@ -8,6 +8,7 @@ import com.teamwss.websoso.R.string.report_popup_menu_impertinence_feed
 import com.teamwss.websoso.R.string.report_popup_menu_spoiling_comment
 import com.teamwss.websoso.R.string.report_popup_menu_spoiling_feed
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
@@ -17,6 +18,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
 
 class FeedReportDialogFragment :
     BaseDialogFragment<DialogReportPopupMenuBinding>(layout.dialog_report_popup_menu) {
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val menuType: String? by lazy { arguments?.getString(MENU_TYPE) }
     private val onReportClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener
@@ -36,23 +38,15 @@ class FeedReportDialogFragment :
         dialog?.setCanceledOnTouchOutside(false)
     }
 
-    private fun setupImpertinenceFeedView() {
-        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_impertinence_feed)
+    private fun setupSpoilerCommentView() {
+        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_spoiling_comment)
         binding.tvReportPopupMenuReport.setOnClickListener {
-            onReportClick()
-            FeedReportDoneDialogFragment
-                .newInstance(IMPERTINENCE_FEED.name) { dismiss() }
-                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
-        }
-    }
-
-    private fun setupSpoilerFeedView() {
-        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_spoiling_feed)
-        binding.tvReportPopupMenuReport.setOnClickListener {
-            onReportClick()
-            FeedReportDoneDialogFragment
-                .newInstance(SPOILER_FEED.name) { dismiss() }
-                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+            singleEventHandler.throttleFirst {
+                onReportClick()
+                FeedReportDoneDialogFragment
+                    .newInstance(IMPERTINENCE_COMMENT.name) { dismiss() }
+                    .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+            }
         }
     }
 
@@ -61,20 +55,36 @@ class FeedReportDialogFragment :
             report_popup_menu_impertinence_comment
         )
         binding.tvReportPopupMenuReport.setOnClickListener {
-            onReportClick()
-            FeedReportDoneDialogFragment
-                .newInstance(IMPERTINENCE_COMMENT.name) { dismiss() }
-                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+            singleEventHandler.throttleFirst {
+                onReportClick()
+                FeedReportDoneDialogFragment
+                    .newInstance(IMPERTINENCE_COMMENT.name) { dismiss() }
+                    .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+            }
         }
     }
 
-    private fun setupSpoilerCommentView() {
-        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_spoiling_comment)
+    private fun setupSpoilerFeedView() {
+        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_spoiling_feed)
         binding.tvReportPopupMenuReport.setOnClickListener {
-            onReportClick()
-            FeedReportDoneDialogFragment
-                .newInstance(IMPERTINENCE_COMMENT.name) { dismiss() }
-                .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+            singleEventHandler.throttleFirst {
+                onReportClick()
+                FeedReportDoneDialogFragment
+                    .newInstance(SPOILER_FEED.name) { dismiss() }
+                    .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+            }
+        }
+    }
+
+    private fun setupImpertinenceFeedView() {
+        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_impertinence_feed)
+        binding.tvReportPopupMenuReport.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                onReportClick()
+                FeedReportDoneDialogFragment
+                    .newInstance(IMPERTINENCE_FEED.name) { dismiss() }
+                    .show(childFragmentManager, FeedReportDoneDialogFragment.TAG)
+            }
         }
     }
 

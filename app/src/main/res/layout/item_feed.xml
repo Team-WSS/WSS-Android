@@ -17,7 +17,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> onClick.onContentClick(feed.id)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_profile"
@@ -32,7 +33,6 @@
             <ImageView
                 android:id="@+id/iv_feed_profile"
                 cornerRadius="@{12f}"
-                isVectorImage="@{true}"
                 loadImageUrl="@{feed.user.avatarImage}"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
@@ -45,7 +45,7 @@
                 android:id="@+id/tv_feed_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="14dp"
                 android:maxLines="1"
                 android:text="@{feed.user.nickname}"
                 android:textAppearance="@style/title2"
@@ -115,7 +115,6 @@
             android:ellipsize="end"
             android:gravity="top"
             android:maxLines="5"
-            android:onClick="@{() -> onClick.onContentClick(feed.id)}"
             android:text="@{feed.content}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
@@ -263,7 +262,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:onClick="@{() -> onClick.onCommentButtonClick(feed.id)}"
             app:layout_constraintBottom_toBottomOf="@+id/cl_feed_like"
             app:layout_constraintStart_toEndOf="@+id/cl_feed_like"
             app:layout_constraintTop_toTopOf="@+id/cl_feed_like">

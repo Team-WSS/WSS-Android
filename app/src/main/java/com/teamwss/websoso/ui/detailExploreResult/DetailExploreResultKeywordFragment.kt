@@ -15,6 +15,7 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.FragmentDetailExploreResultKeywordBinding
 import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreClickListener
@@ -26,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailExploreResultKeywordFragment :
     BaseFragment<FragmentDetailExploreResultKeywordBinding>(R.layout.fragment_detail_explore_result_keyword) {
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
         DetailExploreKeywordAdapter(detailExploreResultViewModel::updateClickedChipState)
     }
@@ -56,14 +58,13 @@ class DetailExploreResultKeywordFragment :
         }
 
         override fun onDetailSearchNovelButtonClick() {
-            detailExploreResultViewModel.updateSearchResult(true)
+            singleEventHandler.throttleFirst {
+                detailExploreResultViewModel.updateSearchResult(true)
 
-            val bottomSheet = requireActivity().supportFragmentManager.findFragmentByTag(
-                DetailExploreResultActivity.DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG
-            ) as? DetailExploreResultDialogBottomSheet
-            bottomSheet?.dismiss()
+                (parentFragment as? DetailExploreResultDialogBottomSheet)?.dismiss()
 
-            detailExploreResultViewModel.updateIsBottomSheetOpen(false)
+                detailExploreResultViewModel.updateIsBottomSheetOpen(false)
+            }
         }
 
         override fun onKeywordResetButtonClick() {
