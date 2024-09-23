@@ -132,10 +132,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     companion object {
         private const val FEED = "FEED"
 
-        fun getIntent(context: Context): Intent = Intent(context, CreateFeed::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
 
         fun getIntent(context: Context, editFeedModel: EditFeedModel): Intent =
-            Intent(context, CreateFeed::class.java).apply {
+            Intent(context, CreateFeedActivity::class.java).apply {
                 putExtra(FEED, editFeedModel)
             }
     }
