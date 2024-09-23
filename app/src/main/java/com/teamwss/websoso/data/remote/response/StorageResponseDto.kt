@@ -12,10 +12,10 @@ data class StorageResponseDto(
     @SerialName("isLoadable")
     val isLoadable: Boolean,
     @SerialName("userNovels")
-    val userNovels: List<LibraryNovelDto>,
+    val userNovels: List<StorageNovelDto>,
     ){
     @Serializable
-    data class LibraryNovelDto(
+    data class StorageNovelDto(
         @SerialName("userNovelId")
         val userNovelId: Long,
         @SerialName("novelId")
