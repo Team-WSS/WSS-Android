@@ -292,32 +292,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_feed_detail" />
 
-        <TextView
-            android:id="@+id/tv_feed_detail_comment_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="2dp"
-            android:text="@string/feed_detail_comment_title"
-            android:textAppearance="@style/title2"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_feed_detail_divider" />
-
-        <TextView
-            android:id="@+id/tv_feed_detail_comment_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:hint="30"
-            android:text="@{String.valueOf(feed.commentCount)}"
-            android:textAppearance="@style/title2"
-            android:textColor="@color/primary_100_6A5DFD"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_feed_detail_comment_title"
-            app:layout_constraintStart_toEndOf="@id/tv_feed_detail_comment_title"
-            app:layout_constraintTop_toTopOf="@+id/tv_feed_detail_comment_title" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
