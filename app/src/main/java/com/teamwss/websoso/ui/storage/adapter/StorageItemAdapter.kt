@@ -7,7 +7,7 @@ import com.teamwss.websoso.data.model.StorageEntity
 import com.teamwss.websoso.databinding.ItemStorageNovelBinding
 
 class StorageItemAdapter(
-    private val novels: List<StorageEntity.UserNovel>,
+    private val novels: List<StorageEntity.StorageNovelEntity>,
 ) : RecyclerView.Adapter<StorageItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StorageItemViewHolder {
