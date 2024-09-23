@@ -2,19 +2,19 @@ package com.teamwss.websoso.data.model
 
 data class StorageEntity(
     val isLoadable: Boolean,
-    val userNovelCount: Int,
-    val userNovelRating: Double,
-    val userNovels: List<UserNovel>,
+    val userNovelCount: Long,
+    val userNovelRating: Float,
+    val userNovels: List<LibraryNovelEntity>,
 ) {
-    data class UserNovel(
+    data class LibraryNovelEntity(
         val author: String,
-        val novelId: Int,
+        val novelId: Long,
         val novelImage: String,
-        val novelRating: Double,
+        val novelRating: Float,
         val title: String,
-        val userNovelId: Int,
+        val userNovelId: Long,
     ){
         val isRatingVisible: Boolean
-            get() = novelRating != 0.0
+            get() = novelRating != 0f
     }
 }
