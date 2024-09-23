@@ -171,8 +171,8 @@
     <string name="onboarding_first_input_nickname">닉네임을 입력하세요</string>
     <string name="onboarding_first_duplicate_check">중복확인</string>
     <string name="onboarding_first_next_button">다음으로</string>
-    <string name="onboarding_second_select_gender_and_birth_year">성별, 출생년도를 선택하세요</string>
-    <string name="onboarding_second_secret_information">*외부에 공개되지 않는 정보예요</string>
+    <string name="onboarding_second_select_gender_and_birth_year">생년월일을 입력해주세요</string>
+    <string name="onboarding_second_secret_information">헤당 정보는 추천에 활용되며, 언제든 변경할 수 있어요</string>
     <string name="onboarding_second_gender">성별</string>
     <string name="onboarding_second_man">남성</string>
     <string name="onboarding_second_woman">여성</string>
@@ -181,6 +181,8 @@
     <string name="onboarding_second_next">다음으로</string>
     <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
+    <string name="onboarding_select_general">평소 즐겨보는 장르를 선택하세요</string>
+    <string name="onboarding_recommend_general">선호 장르를 기반으로 웹소설을 추천해드려요</string>
 
     <!-- 환영 뷰 -->
     <string name="welcome_welcome_websoso">웹소소와 계약 완료!</string>
