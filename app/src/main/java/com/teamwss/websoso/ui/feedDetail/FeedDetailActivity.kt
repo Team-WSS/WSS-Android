@@ -249,9 +249,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(
-                feedId
-            )
+            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(feedId)
         }
         setupView()
         setupObserver()
