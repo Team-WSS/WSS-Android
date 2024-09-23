@@ -15,6 +15,7 @@ import com.teamwss.websoso.R.style.body2
 import com.teamwss.websoso.R.style.body4
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
 import com.teamwss.websoso.common.util.toFloatPxFromDp
@@ -72,7 +73,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     else -> createFeedViewModel.editFeed(editFeedModel.feedId)
                 }
 
-                setResult(RESULT_OK)
+                setResult(CreateFeed.RESULT_OK)
                 if (!isFinishing) finish()
             }
         }
@@ -130,12 +131,11 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
     companion object {
         private const val FEED = "FEED"
-        private const val RESULT_OK = 200
 
-        fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, CreateFeed::class.java)
 
         fun getIntent(context: Context, editFeedModel: EditFeedModel): Intent =
-            Intent(context, CreateFeedActivity::class.java).apply {
+            Intent(context, CreateFeed::class.java).apply {
                 putExtra(FEED, editFeedModel)
             }
     }
