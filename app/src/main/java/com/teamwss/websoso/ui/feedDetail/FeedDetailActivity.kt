@@ -16,7 +16,9 @@ import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.teamwss.websoso.R
+import com.teamwss.websoso.R.id
+import com.teamwss.websoso.R.layout.activity_feed_detail
+import com.teamwss.websoso.R.string
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
@@ -47,7 +49,7 @@ import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
+class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed_detail) {
     private enum class MenuType { COMMENT, FEED }
 
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
@@ -76,13 +78,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         @SuppressLint("CutPasteId")
         override fun onLikeButtonClick(view: View, feedId: Long) {
             val likeCount: Int =
-                view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString().toInt()
+                view.findViewById<TextView>(id.tv_feed_thumb_up_count).text.toString().toInt()
             val updatedLikeCount: Int = when (view.isSelected) {
                 true -> if (likeCount > 0) likeCount - 1 else 0
                 false -> likeCount + 1
             }
 
-            view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text =
+            view.findViewById<TextView>(id.tv_feed_thumb_up_count).text =
                 updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
@@ -92,12 +94,16 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
 
         override fun onNovelInfoClick(novelId: Long) {
-            NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId)
+            navigateToNovelDetail(novelId)
         }
 
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
             // if (isMyFeed) 마이페이지 else 프로필 뷰
         }
+    }
+
+    private fun navigateToNovelDetail(novelId: Long) {
+        startActivity(NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId))
     }
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
@@ -133,7 +139,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
             }
             popupMenu.dismiss()
         }
-        menuContentTitle = getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+        menuContentTitle = getString(string.feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
@@ -192,7 +198,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
             }
             popupMenu.dismiss()
         }
-        menuContentTitle = getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        menuContentTitle = getString(string.feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -245,8 +251,11 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(feedId)
+            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(
+                feedId
+            )
         }
+
         setupView()
         setupObserver()
         onFeedDetailClick()
