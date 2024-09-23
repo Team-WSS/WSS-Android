@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.teamwss.websoso.ui.storage.model.SortType" />
+
+        <variable
+            name="storageViewModel"
+            type="com.teamwss.websoso.ui.storage.StorageViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_detail_white_radius_14dp">
+
+        <TextView
+            android:id="@+id/btn_storage_newest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_novel_detail_white_radius_14dp"
+            android:gravity="center"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="14dp"
+            android:text="@string/storage_newest"
+            android:onClick='@{() -> storageViewModel.updateSortType(SortType.NEWEST)}'
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/btn_storage_oldest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/btn_storage_oldest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_novel_detail_white_radius_14dp"
+            android:gravity="center"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="14dp"
+            android:text="@string/storage_oldest"
+            android:onClick='@{() -> storageViewModel.updateSortType(SortType.OLDEST)}'
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/btn_storage_newest"
+            app:layout_constraintStart_toStartOf="@+id/btn_storage_newest"
+            app:layout_constraintTop_toBottomOf="@+id/btn_storage_newest" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
