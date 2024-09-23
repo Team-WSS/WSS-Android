@@ -371,5 +371,7 @@
     <string name="storage_quitting">하차</string>
     <string name="storage_empty_status">보관함이 비어있어요</string>
     <string name="storage_find_novel">웹소설 찾으러 가기</string>
+    <string name="storage_oldest">오래된 순</string>
+    <string name="storage_newest">최신 순</string>
 
 </resources>
