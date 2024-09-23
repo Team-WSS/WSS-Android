@@ -11,6 +11,7 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
+import com.teamwss.websoso.data.model.StorageEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -139,6 +140,22 @@ class UserRepository @Inject constructor(
             preferences.remove(ACCESS_TOKEN_KEY)
             preferences.remove(REFRESH_TOKEN_KEY)
         }
+    }
+
+    suspend fun fetchUserStorage(
+        userId: Long,
+        readStatus: String,
+        lastUserNovelId: Long,
+        size: Int,
+        sortType: String
+    ): StorageEntity {
+        return userApi.getUserStorage(
+            userId = userId,
+            readStatus = readStatus,
+            lastUserNovelId = lastUserNovelId,
+            size = size,
+            sortType = sortType,
+        ).toData()
     }
 
     companion object {
