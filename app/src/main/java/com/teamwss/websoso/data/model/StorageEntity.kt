@@ -4,9 +4,9 @@ data class StorageEntity(
     val isLoadable: Boolean,
     val userNovelCount: Long,
     val userNovelRating: Float,
-    val userNovels: List<LibraryNovelEntity>,
+    val userNovels: List<StorageNovelEntity>,
 ) {
-    data class LibraryNovelEntity(
+    data class StorageNovelEntity(
         val author: String,
         val novelId: Long,
         val novelImage: String,
