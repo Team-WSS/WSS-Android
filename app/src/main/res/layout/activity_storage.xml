@@ -8,6 +8,14 @@
             name="storage"
             type="com.teamwss.websoso.data.model.StorageEntity" />
 
+        <variable
+            name="storageViewModel"
+            type="com.teamwss.websoso.ui.storage.StorageViewModel" />
+
+        <variable
+            name="onClick"
+            type="com.teamwss.websoso.ui.storage.StorageClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -104,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="3개"
+                android:text='@{String.valueOf(storageViewModel.uiState.userNovelCount)+ " 개"}'
                 android:textAppearance="@style/body4"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -112,12 +120,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_storage_go_to_range"
+                android:id="@+id/iv_storage_go_to_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:padding="8dp"
                 android:src="@drawable/ic_storage_arrow_down"
+                android:onClick="@{() -> onClick.onSortButtonClick(ivStorageGoToSort)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -126,11 +135,11 @@
                 android:id="@+id/tv_storage_range"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="최신 순"
+                android:text="@{storageViewModel.uiState.sortType.displayName}"
                 android:textAppearance="@style/body4"
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/iv_storage_go_to_range"
+                app:layout_constraintEnd_toStartOf="@id/iv_storage_go_to_sort"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
