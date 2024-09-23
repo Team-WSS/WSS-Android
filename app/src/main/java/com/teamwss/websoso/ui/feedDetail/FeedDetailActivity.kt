@@ -18,6 +18,9 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
@@ -241,9 +244,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == REFRESH) feedDetailViewModel.updateFeedDetail(feedId)
+            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(feedId)
         }
         setupView()
         setupObserver()
@@ -252,7 +254,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     private fun onFeedDetailClick() {
         binding.ivFeedDetailBackButton.setOnClickListener {
-            setResult(RESULT_OK)
+            setResult(FeedDetailBack.RESULT_OK)
             if (!isFinishing) finish()
         }
 
@@ -302,7 +304,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
                 feedDetailUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
                 feedDetailUiState.error -> {
                     binding.wllFeed.setLoadingLayoutVisibility(false)
-                    setResult(RESULT_FAIL)
+                    setResult(FeedDetailRemoved.RESULT_OK)
                     if (!isFinishing) finish()
                 }
 
@@ -334,9 +336,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         private const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
-        private const val REFRESH = 200
-        private const val RESULT_OK = 200
-        private const val RESULT_FAIL = 400
 
         fun getIntent(context: Context, feedId: Long): Intent =
             Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }

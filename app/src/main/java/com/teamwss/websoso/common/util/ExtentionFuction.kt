@@ -9,6 +9,13 @@ import android.os.Parcelable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ListView
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.teamwss.websoso.BuildConfig
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomSnackBar
 import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
@@ -94,4 +101,14 @@ inline fun <reified T : Parcelable> Bundle.getAdaptedParcelable(key: String): T?
         @Suppress("DEPRECATION")
         getParcelable(key) as? T
     }
+}
+
+fun Context.createDataStore(preferencesName: String): DataStore<Preferences> {
+    return PreferenceDataStoreFactory.create(
+        corruptionHandler = ReplaceFileCorruptionHandler(
+            produceNewData = { emptyPreferences() }
+        ),
+        migrations = listOf(SharedPreferencesMigration(this, preferencesName)),
+        produceFile = { this.preferencesDataStoreFile(preferencesName) }
+    )
 }

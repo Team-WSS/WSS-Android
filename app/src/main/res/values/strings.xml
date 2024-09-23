@@ -98,7 +98,7 @@
     <string name="feed_category_female">전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타</string>
     <string name="feed_is_modified">(수정됨)</string>
     <string name="feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
-    <string name="feed_removed_feed_snackbar">해당 글은 삭제된 글이에요</string>
+    <string name="feed_removed_feed_snackbar">해당 글을 찾을 수 없어요</string>
     <string name="feed_no_more_title">더 이상 게시글이 없어요</string>
     <string name="feed_no_more_content">새로운 수다를 시작해볼까요?</string>
 
@@ -171,8 +171,8 @@
     <string name="onboarding_first_input_nickname">닉네임을 입력하세요</string>
     <string name="onboarding_first_duplicate_check">중복확인</string>
     <string name="onboarding_first_next_button">다음으로</string>
-    <string name="onboarding_second_select_gender_and_birth_year">성별, 출생년도를 선택하세요</string>
-    <string name="onboarding_second_secret_information">*외부에 공개되지 않는 정보예요</string>
+    <string name="onboarding_second_select_gender_and_birth_year">생년월일을 입력해주세요</string>
+    <string name="onboarding_second_secret_information">헤당 정보는 추천에 활용되며, 언제든 변경할 수 있어요</string>
     <string name="onboarding_second_gender">성별</string>
     <string name="onboarding_second_man">남성</string>
     <string name="onboarding_second_woman">여성</string>
@@ -181,6 +181,8 @@
     <string name="onboarding_second_next">다음으로</string>
     <string name="onboarding_second_bottom_sheet_birth_year">출생연도</string>
     <string name="onboarding_second_bottom_sheet_complete">완료</string>
+    <string name="onboarding_select_general">평소 즐겨보는 장르를 선택하세요</string>
+    <string name="onboarding_recommend_general">선호 장르를 기반으로 웹소설을 추천해드려요</string>
 
     <!-- 환영 뷰 -->
     <string name="welcome_welcome_websoso">웹소소와 계약 완료!</string>
@@ -195,7 +197,7 @@
     <string name="notice_notification">알림</string>
 
     <!-- 로드 뷰 -->
-    <string name="load_load_title">로딩 중…</string>
+    <string name="load_load_title">로딩 중</string>
     <string name="load_load_description">잠시만 기다려주세요</string>
     <string name="load_fail_title">네트워크에\n연결되어 있지 않아요</string>
     <string name="load_fail_description">연결 상태를 확인한 후\n다시 시도해 보세요.</string>
@@ -227,18 +229,18 @@
     <string name="home_interest_feed_description">관심작품의 최신 소식을 모아서 볼 수 있어요.\n좋아하는 웹소설을 관심 등록 해볼까요?</string>
     <string name="home_post_interest_novel">관심작품 등록하기</string>
     <string name="home_user_recommend_novel_description">관심 등록한 작품의 최근 수다예요</string>
-    <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해 드려요!</string>
-    <string name="home_recommend_novel_by_user_taste_description">선호장르를 기반으로 추천해 드려요</string>
+    <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해드려요!</string>
+    <string name="home_recommend_novel_by_user_taste_description">선호장르를 기반으로 추천해드려요</string>
     <string name="home_setting_interest_general">선호장르 설정하기</string>
     <string name="home_recommend_novel">이 웹소설은 어때요?</string>
     <string name="home_popular_novel_nickname">%s 님의 한마디</string>
     <string name="home_popular_novel_feed_title_null">작품 소개</string>
     <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
-    <string name="home_user_interest_feed_nickname_format">%1$s 님의 리뷰</string>
+    <string name="home_user_interest_feed_nickname_format">%1$s 님의 한마디</string>
     <string name="home_user_interest_novel_rating_format">%1$.1f (%2$d)</string>
     <string name="home_nickname_interest_feed">%1$s 님의 관심글</string>
     <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
-    <string name="home_no_associated_feed">아직 관심 등록한 작품과 관련된 글이 없어요</string>
+    <string name="home_no_associated_feed">관심 등록한 작품과 관련된 글이 없어요</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>
@@ -316,7 +318,7 @@
     <string name="edit_profile_introduction_hint">소개글을 적어보세요!</string>
     <string name="profile_edit_introduction_max_count">%d/60</string>
     <string name="profile_edit_prefer_genre">선호장르</string>
-    <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해 드려요</string>
+    <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해드려요</string>
     <string name="profile_edit_avatar_title">프로필 선택</string>
     <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
     <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
@@ -360,5 +362,14 @@
     <string name="tv_create_feed_search_novel_connect_novel_description">작성 중인 글과 관련된 웹소설을 선택하세요</string>
     <string name="tv_create_feed_search_novel_connect_button">해당 작품 연결</string>
     <string name="tv_remove_popup_menu_stop_creating">글 작성을 그만하시겠어요?</string>
+
+    <!-- 보관함 뷰 -->
+    <string name="storage_storage">보관함</string>
+    <string name="storage_interesting">관심</string>
+    <string name="storage_watching">보는중</string>
+    <string name="storage_watched">봤어요</string>
+    <string name="storage_quitting">하차</string>
+    <string name="storage_empty_status">보관함이 비어있어요</string>
+    <string name="storage_find_novel">웹소설 찾으러 가기</string>
 
 </resources>

@@ -13,9 +13,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_page"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -45,10 +45,11 @@
 
                         <ImageView
                             android:id="@+id/iv_my_page_user_profile"
+                            loadImageUrl='@{myPageViewModel.myProfile.avatarImage}'
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="72dp"
-                            loadImageUrl='@{myPageViewModel.myProfile.avatarImage}'
+                            app:isCircularImage="@{true}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -57,10 +58,10 @@
                             android:id="@+id/tv_my_page_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
                             android:text='@{myPageViewModel.myProfile.nickname}'
                             android:textAppearance="@style/headline1"
                             android:textColor="@color/black"
-                            android:layout_marginTop="20dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/iv_my_page_user_profile"
@@ -70,11 +71,11 @@
                             android:id="@+id/tv_my_page_user_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:paddingBottom="30dp"
                             android:text='@{myPageViewModel.myProfile.intro}'
                             android:textAppearance="@style/body2"
                             android:textColor="@color/gray_200_AEADB3"
-                            android:layout_marginTop="4dp"
-                            android:paddingBottom="30dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_name"
@@ -86,13 +87,13 @@
                         android:id="@+id/tb_my_page"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
-                        android:layout_marginTop="32dp"
                         app:contentInsetStart="0dp"
                         app:layout_collapseMode="pin">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp">
 
                             <TextView
                                 android:id="@+id/tv_my_page_sticky_title"
@@ -111,8 +112,8 @@
                                 android:id="@+id/iv_my_page_sticky_go_to_setting"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
-                                android:paddingVertical="10dp"
+                                android:layout_marginEnd="12dp"
+                                android:padding="10dp"
                                 android:src="@drawable/ic_settings"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -129,8 +130,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    app:tabIndicatorColor="@color/black"
                     app:tabBackground="@drawable/bg_my_page_gray70"
+                    app:tabIndicatorColor="@color/black"
                     app:tabIndicatorFullWidth="true"
                     app:tabIndicatorHeight="2dp"
                     app:tabSelectedTextColor="@color/black"
@@ -169,7 +170,7 @@
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/vp_my_page"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

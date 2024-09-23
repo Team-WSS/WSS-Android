@@ -5,9 +5,6 @@ import java.util.Locale
 
 data class ActivityModel(
     val feedId: Int,
-    val userId: Int,
-    val profileImg: String,
-    val nickname: String,
     val isSpoiler: Boolean,
     val feedContent: String,
     val createdDate: String,
