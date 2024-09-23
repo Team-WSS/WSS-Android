@@ -2,12 +2,8 @@ package com.teamwss.websoso.data.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import androidx.datastore.preferences.SharedPreferencesMigration
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.preferencesDataStoreFile
+import com.teamwss.websoso.common.util.createDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,13 +18,7 @@ object DataStoreModule {
     @Singleton
     @Provides
     fun provideUserPreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
-            migrations = listOf(SharedPreferencesMigration(context, USER_PREFERENCES)),
-            produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES) },
-        )
+        return context.createDataStore(USER_PREFERENCES)
     }
 
     private const val USER_PREFERENCES = "com.teamwss.websoso.user_preferences"
