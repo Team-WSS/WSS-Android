@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.splash
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
