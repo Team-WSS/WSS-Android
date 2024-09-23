@@ -8,26 +8,25 @@ import com.teamwss.websoso.databinding.ItemStorageBinding
 import com.teamwss.websoso.ui.storage.model.StorageTab
 
 class StorageViewPagerAdapter(
-    private val novelsMap: Map<StorageTab, List<StorageEntity.UserNovel>>,
-    private val navigateToExplore: () -> Unit,
+    private var novels: List<StorageEntity.StorageNovelEntity>,
+    private val navigateToExplore: () -> Unit
 ) : RecyclerView.Adapter<StorageViewPagerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StorageViewPagerViewHolder {
-        val binding =
-            ItemStorageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemStorageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return StorageViewPagerViewHolder(binding, navigateToExplore)
     }
 
     override fun onBindViewHolder(holder: StorageViewPagerViewHolder, position: Int) {
-        val tab = StorageTab.fromPosition(position)
-        holder.bind(novelsMap[tab] ?: emptyList())
+        holder.bind(novels)
     }
 
     override fun getItemCount(): Int {
-        return ITEM_COUNT
+        return StorageTab.values().size
     }
 
-    companion object {
-        private const val ITEM_COUNT = 4
+    fun updateNovels(newNovels: List<StorageEntity.StorageNovelEntity>) {
+        this.novels = newNovels
+        notifyDataSetChanged()
     }
 }
