@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main.feed
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,16 +15,18 @@ import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.teamwss.websoso.R
 import com.teamwss.websoso.R.color
 import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
-import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.id.tv_feed_thumb_up_count
+import com.teamwss.websoso.R.layout.fragment_feed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
 import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -51,10 +54,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
 @AndroidEntryPoint
-class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
+class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
-    private val popupBinding: MenuFeedPopupBinding
-        get() = _popupBinding ?: error("error: binding is null")
+    private val popupBinding: MenuFeedPopupBinding get() = _popupBinding ?: error("FeedFragment")
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -87,16 +89,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
             singleEventHandler.throttleFirst(300) { navigateToNovelDetail(novelId) }
         }
 
+        @SuppressLint("CutPasteId")
         override fun onLikeButtonClick(view: View, id: Long) {
             val likeCount: Int =
-                view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text.toString().toInt()
+                view.findViewById<TextView>(tv_feed_thumb_up_count).text.toString().toInt()
             val updatedLikeCount: Int = when (view.isSelected) {
                 true -> if (likeCount > 0) likeCount - 1 else 0
                 false -> likeCount + 1
             }
 
-            view.findViewById<TextView>(R.id.tv_feed_thumb_up_count).text =
-                updatedLikeCount.toString()
+            view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
@@ -226,8 +228,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
 
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
             when (result.resultCode) {
-                REFRESH -> feedViewModel.updateRefreshedFeeds()
-                SHOW_SNACK_BAR -> showWebsosoSnackBar(
+                CreateFeed.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                FeedDetailRemoved.RESULT_OK -> showWebsosoSnackBar(
                     view = binding.root,
                     message = getString(feed_removed_feed_snackbar),
                     icon = ic_blocked_user_snack_bar,
@@ -324,10 +326,5 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(layout.fragment_feed) {
     override fun onDestroyView() {
         _popupBinding = null
         super.onDestroyView()
-    }
-
-    companion object {
-        private const val REFRESH = 200
-        private const val SHOW_SNACK_BAR = 400
     }
 }

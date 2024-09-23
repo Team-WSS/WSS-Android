@@ -38,7 +38,7 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="50dp"
             android:scaleType="fitCenter"
-            app:cornerRadius="@{30f}"
+            app:cornerRadius="@{8f}"
             app:layout_constraintDimensionRatio="144:200"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
