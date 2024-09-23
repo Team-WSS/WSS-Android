@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.normalExplore
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +10,7 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.Home
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
@@ -29,7 +29,7 @@ class NormalExploreActivity :
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private val fromViewName by lazy { intent.getStringExtra(FROM_VIEW_NAME) }
+    private val fromViewName by lazy { intent.getStringExtra(BACK_STACK_VIEW_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +91,7 @@ class NormalExploreActivity :
 
         override fun onBackButtonClick() {
             if (fromViewName == HomeFragment.SOURCE_HOME) {
-                setResult(Activity.RESULT_OK)
+                setResult(Home.RESULT_OK)
             }
             finish()
         }
@@ -175,19 +175,19 @@ class NormalExploreActivity :
 
     private fun handleBackPressed() {
         if (fromViewName == HomeFragment.SOURCE_HOME) {
-            setResult(Activity.RESULT_OK)
+            setResult(Home.RESULT_OK)
         }
         finish()
     }
 
     companion object {
-        private const val FROM_VIEW_NAME = "FROM_VIEW_NAME"
+        private const val BACK_STACK_VIEW_NAME = "BACK_STACK_VIEW_NAME"
 
         fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
 
-        fun getIntent(context: Context, fromViewName: String): Intent =
+        fun getIntent(context: Context, backStackViewName: String): Intent =
             Intent(context, NormalExploreActivity::class.java).apply {
-                putExtra(FROM_VIEW_NAME, fromViewName)
+                putExtra(BACK_STACK_VIEW_NAME, backStackViewName)
             }
     }
 }

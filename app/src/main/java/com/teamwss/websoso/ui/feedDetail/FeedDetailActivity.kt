@@ -1,7 +1,6 @@
 package com.teamwss.websoso.ui.feedDetail
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +21,7 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.Home
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
@@ -51,7 +51,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
     private enum class MenuType { COMMENT, FEED }
-    private val fromViewName by lazy { intent.getStringExtra(FROM_VIEW_NAME) }
+
+    private val backStackViewName by lazy { intent.getStringExtra(BACK_STACK_VIEW_NAME) }
 
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
@@ -248,7 +249,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(feedId)
+            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(
+                feedId
+            )
         }
         setupView()
         setupObserver()
@@ -261,9 +264,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     private fun onFeedDetailClick() {
         binding.ivFeedDetailBackButton.setOnClickListener {
             setResult(FeedDetailBack.RESULT_OK)
-            setResult(RESULT_OK)
-            if (fromViewName == HomeFragment.SOURCE_HOME) {
-                setResult(Activity.RESULT_OK)
+            if (backStackViewName == HomeFragment.SOURCE_HOME) {
+                setResult(Home.RESULT_OK)
             }
             if (!isFinishing) finish()
         }
@@ -340,25 +342,25 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun handleBackPressed() {
-        if (fromViewName == HomeFragment.SOURCE_HOME) {
-            setResult(Activity.RESULT_OK)
+        if (backStackViewName == HomeFragment.SOURCE_HOME) {
+            setResult(Home.RESULT_OK)
         }
         finish()
     }
 
     companion object {
         private const val FEED_ID: String = "FEED_ID"
-        private const val FROM_VIEW_NAME = "FROM_VIEW_NAME"
+        private const val BACK_STACK_VIEW_NAME = "BACK_STACK_VIEW_NAME"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(context: Context, feedId: Long): Intent =
             Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
 
-        fun getIntent(context: Context, feedId: Long, fromViewName: String): Intent =
+        fun getIntent(context: Context, feedId: Long, backStackViewName: String): Intent =
             Intent(context, FeedDetailActivity::class.java).apply {
                 putExtra(FEED_ID, feedId)
-                putExtra(FROM_VIEW_NAME, fromViewName)
+                putExtra(BACK_STACK_VIEW_NAME, backStackViewName)
             }
     }
 }

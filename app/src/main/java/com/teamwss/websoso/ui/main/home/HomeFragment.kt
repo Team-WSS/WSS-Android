@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.main.home
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -8,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom.Home
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
@@ -45,7 +45,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val startActivityLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == Home.RESULT_OK) {
             homeViewModel.updateHomeData()
         }
     }
@@ -177,7 +177,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             NovelDetailActivity.getIntent(
                 requireContext(),
                 novelId,
-                SOURCE_HOME
+                SOURCE_HOME,
             )
         )
     }
@@ -187,7 +187,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             FeedDetailActivity.getIntent(
                 requireContext(),
                 feedId,
-                SOURCE_HOME
+                SOURCE_HOME,
             )
         )
     }
@@ -198,7 +198,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 startActivityLauncher.launch(
                     NormalExploreActivity.getIntent(
                         requireContext(),
-                        SOURCE_HOME
+                        SOURCE_HOME,
                     )
                 )
             } else {

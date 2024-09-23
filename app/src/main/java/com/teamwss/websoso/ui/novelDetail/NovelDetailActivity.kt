@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.novelDetail
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -19,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.Home
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
@@ -59,7 +59,7 @@ class NovelDetailActivity :
         }
     }
 
-    private val fromViewName by lazy { intent.getStringExtra(FROM_VIEW_NAME) }
+    private val backStackViewName by lazy { intent.getStringExtra(BACK_STACK_VIEW_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -247,7 +247,7 @@ class NovelDetailActivity :
 
     private fun onNovelDetailButtonClick() = object : NovelDetailClickListener {
         override fun onNavigateBackClick() {
-            setResult(Activity.RESULT_OK)
+            setResult(Home.RESULT_OK)
             finish()
         }
 
@@ -283,8 +283,8 @@ class NovelDetailActivity :
     }
 
     private fun handleBackPressed() {
-        if (fromViewName == HomeFragment.SOURCE_HOME) {
-            setResult(Activity.RESULT_OK)
+        if (backStackViewName == HomeFragment.SOURCE_HOME) {
+            setResult(Home.RESULT_OK)
         }
         finish()
     }
@@ -299,7 +299,7 @@ class NovelDetailActivity :
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
-        private const val FROM_VIEW_NAME = "FROM_VIEW_NAME"
+        private const val BACK_STACK_VIEW_NAME = "BACK_STACK_VIEW_NAME"
         private const val REFRESH = 200
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
@@ -310,10 +310,10 @@ class NovelDetailActivity :
             }
         }
 
-        fun getIntent(context: Context, novelId: Long, fromViewName: String): Intent {
+        fun getIntent(context: Context, novelId: Long, backStackViewName: String): Intent {
             return Intent(context, NovelDetailActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
-                putExtra(FROM_VIEW_NAME, fromViewName)
+                putExtra(BACK_STACK_VIEW_NAME, backStackViewName)
             }
         }
     }
