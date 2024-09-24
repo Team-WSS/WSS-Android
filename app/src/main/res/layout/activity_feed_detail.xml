@@ -60,7 +60,6 @@
             android:id="@+id/sptr_feed_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toTopOf="@+id/cl_feed_detail_input"
             app:layout_constraintTop_toBottomOf="@+id/cl_feed_detail_toolbar">
 
@@ -88,7 +87,6 @@
 
             <ImageView
                 android:id="@+id/iv_feed_detail_my_profile_image"
-                cornerRadius="@{14f}"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="20dp"

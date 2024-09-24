@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.teamwss.websoso.R.id
 import com.teamwss.websoso.R.layout.activity_feed_detail
 import com.teamwss.websoso.R.string
@@ -26,6 +27,8 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.getS3ImageUrl
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
@@ -302,9 +305,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             adapter = feedDetailAdapter
             itemAnimator = null
         }
-        binding.ivFeedDetailMyProfileImage.load(
-            feedDetailViewModel.feedDetailUiState.value?.feed?.user?.avatarImage
-        )
     }
 
     private fun setupRefreshView() {
@@ -335,6 +335,15 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun updateView(feedDetailUiState: FeedDetailUiState) {
+        feedDetailUiState.feed?.user?.avatarImage?.let { image ->
+            binding.ivFeedDetailMyProfileImage.apply {
+                val scaledImage = getS3ImageUrl(image)
+                load(scaledImage) {
+                    transformations(RoundedCornersTransformation(14f.toFloatPxFromDp()))
+                }
+            }
+        }
+
         val header = feedDetailUiState.feed?.let { Header(it) }
         val comments = feedDetailUiState.comments.map { Comment(it) }
         val feedDetail = listOf(header) + comments
