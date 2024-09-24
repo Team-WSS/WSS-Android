@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -57,7 +59,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private val feedDetailAdapter: FeedDetailAdapter by lazy {
         FeedDetailAdapter(
             onFeedContentClick(),
-            onCommentClick()
+            onCommentClick(),
         )
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -246,6 +248,12 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                 event = { event() },
             ).show(supportFragmentManager, FeedReportDialogFragment.TAG)
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
