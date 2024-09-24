@@ -63,8 +63,8 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     }
 
     private fun showLoginRequestDialog() {
-        val dialog = LoginRequestDialogFragment.newInstance()
-        dialog.show(childFragmentManager, LoginRequestDialogFragment.TAG)
+        val loginRequestDialog = LoginRequestDialogFragment.newInstance()
+        loginRequestDialog.show(childFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
     private fun showDetailExploreDialog() {
