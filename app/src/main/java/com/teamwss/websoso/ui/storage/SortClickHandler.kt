@@ -15,7 +15,7 @@ import com.teamwss.websoso.ui.storage.model.SortType
 
 class SortClickHandler(
     private val viewModel: StorageViewModel,
-) : StorageClickListener {
+) : StorageSortTypeClickListener {
 
     @SuppressLint("InflateParams")
     override fun onSortButtonClick(view: View) {
@@ -24,7 +24,7 @@ class SortClickHandler(
             inflater,
             R.layout.menu_storage_popup,
             null,
-            false
+            false,
         )
 
         binding.storageViewModel = viewModel
@@ -33,7 +33,7 @@ class SortClickHandler(
             binding.root,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = POPUP_ELEVATION.toFloatPxFromDp()
 
@@ -41,7 +41,7 @@ class SortClickHandler(
                 view,
                 POPUP_MARGIN_END.toIntPxFromDp(),
                 POPUP_MARGIN_TOP.toIntPxFromDp(),
-                Gravity.END
+                Gravity.END,
             )
         }
 
