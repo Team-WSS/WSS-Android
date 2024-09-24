@@ -70,10 +70,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private fun showDetailExploreDialog() {
         val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
-        detailExploreBottomSheet.show(
-            this@ExploreFragment.childFragmentManager,
-            DETAIL_BOTTOM_SHEET_TAG,
-        )
+        detailExploreBottomSheet.show(childFragmentManager, DETAIL_BOTTOM_SHEET_TAG)
     }
 
     private fun onReloadPageButtonClick() {
