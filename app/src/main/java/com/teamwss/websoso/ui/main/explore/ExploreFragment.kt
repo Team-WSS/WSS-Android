@@ -53,12 +53,11 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
             singleEventHandler.throttleFirst {
-                if (mainViewModel.mainUiState.value?.isLogin == false) {
-                    showLoginRequestDialog()
-                    return@throttleFirst
+                when (mainViewModel.mainUiState.value?.isLogin) {
+                    true -> showDetailExploreDialog()
+                    false -> showLoginRequestDialog()
+                    else -> throw IllegalStateException()
                 }
-
-                showDetailExploreDialog()
             }
         }
     }
