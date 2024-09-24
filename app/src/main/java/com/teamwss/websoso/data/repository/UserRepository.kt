@@ -147,7 +147,7 @@ class UserRepository @Inject constructor(
         readStatus: String,
         lastUserNovelId: Long,
         size: Int,
-        sortType: String
+        sortType: String,
     ): StorageEntity {
         return userApi.getUserStorage(
             userId = userId,
