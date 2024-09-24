@@ -10,6 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityStorageBinding
 import com.teamwss.websoso.ui.main.MainActivity
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.storage.adapter.StorageViewPagerAdapter
 import com.teamwss.websoso.ui.storage.model.StorageTab
 import com.teamwss.websoso.ui.storage.model.StorageUiState
@@ -23,7 +24,7 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
         super.onCreate(savedInstanceState)
         bindViewModel()
         setupViewPagerAndTabLayout()
-        onSortButtonClick()
+        onSortTypeButtonClick()
         onBackButtonClick()
     }
 
@@ -42,6 +43,7 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
         val pagerAdapter = StorageViewPagerAdapter(
             novels = emptyList(),
             navigateToExplore = ::navigateToExploreFragment,
+            novelClickListener = ::navigateToNovelDetail,
         )
         binding.vpStorage.adapter = pagerAdapter
     }
@@ -58,7 +60,6 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
                         onSortTabSelected(it.position)
                     }
                 }
-
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
             })
@@ -80,8 +81,9 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
     }
 
     private fun updateViewPagerAdapter(uiState: StorageUiState) {
-        val adapter = binding.vpStorage.adapter as? StorageViewPagerAdapter
-        adapter?.updateNovels(uiState.storageNovels)
+        if (uiState.storageNovels.isNotEmpty()) {
+            (binding.vpStorage.adapter as? StorageViewPagerAdapter)?.updateNovels(uiState.storageNovels)
+        }
     }
 
     private fun navigateToExploreFragment() {
@@ -90,15 +92,20 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
         startActivity(intent)
     }
 
-    private fun onSortButtonClick() {
-        val clickHandler = SortClickHandler(storageViewModel)
-        binding.onClick = clickHandler
+    private fun navigateToNovelDetail(novelId: Long) {
+        val intent = NovelDetailActivity.getIntent(this, novelId)
+        startActivity(intent)
     }
 
     private fun onBackButtonClick() {
         binding.ivStorageDetailBackButton.setOnClickListener {
             finish()
         }
+    }
+
+    private fun onSortTypeButtonClick() {
+        val clickHandler = SortClickHandler(storageViewModel)
+        binding.onClick = clickHandler
     }
 
     companion object {

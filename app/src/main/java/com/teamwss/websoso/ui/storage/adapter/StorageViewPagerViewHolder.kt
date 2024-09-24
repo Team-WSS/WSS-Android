@@ -7,14 +7,15 @@ import com.teamwss.websoso.databinding.ItemStorageBinding
 
 class StorageViewPagerViewHolder(
     private val binding: ItemStorageBinding,
-    private val navigateToExplore: () -> Unit
+    private val navigateToExplore: () -> Unit,
+    private val novelClickListener: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(novels: List<StorageEntity.StorageNovelEntity>) {
         binding.hasData = novels.isNotEmpty()
 
         if (novels.isNotEmpty()) {
-            val adapter = StorageItemAdapter(novels)
+            val adapter = StorageItemAdapter(novels, novelClickListener)
             binding.rvStorage.adapter = adapter
             binding.rvStorage.layoutManager = GridLayoutManager(binding.root.context, STORAGE_NOVEL_SPAN_COUNT)
         }

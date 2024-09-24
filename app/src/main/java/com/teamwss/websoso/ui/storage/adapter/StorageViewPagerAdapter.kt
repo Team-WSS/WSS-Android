@@ -9,12 +9,13 @@ import com.teamwss.websoso.ui.storage.model.StorageTab
 
 class StorageViewPagerAdapter(
     private var novels: List<StorageEntity.StorageNovelEntity>,
-    private val navigateToExplore: () -> Unit
+    private val navigateToExplore: () -> Unit,
+    private val novelClickListener: (Long) -> Unit,
 ) : RecyclerView.Adapter<StorageViewPagerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StorageViewPagerViewHolder {
         val binding = ItemStorageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return StorageViewPagerViewHolder(binding, navigateToExplore)
+        return StorageViewPagerViewHolder(binding, navigateToExplore, novelClickListener)
     }
 
     override fun onBindViewHolder(holder: StorageViewPagerViewHolder, position: Int) {
