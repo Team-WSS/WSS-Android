@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.novelFeed
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,14 +8,18 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
@@ -31,6 +36,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.novelFeed.model.NovelFeedUiState
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,6 +48,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     private val novelFeedViewModel: NovelFeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -183,6 +190,24 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activityResultCallback =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    BlockUser.RESULT_OK -> {
+                        val nickname =
+                            result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME)
+                        val blockMessage = nickname?.let {
+                            getString(R.string.block_user_success_message, it)
+                        } ?: getString(R.string.block_user_success_message)
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = blockMessage,
+                            icon = R.drawable.ic_novel_detail_check,
+                        )
+                    }
+                }
+            }
         initView()
         novelFeedViewModel.updateFeeds(novelId)
         setupObserver()
