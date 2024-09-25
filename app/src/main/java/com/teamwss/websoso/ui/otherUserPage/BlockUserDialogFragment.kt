@@ -1,12 +1,13 @@
 package com.teamwss.websoso.ui.otherUserPage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.DialogBlockUserBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,20 +44,18 @@ class BlockUserDialogFragment :
     private fun setupObserver() {
         otherUserPageViewModel.isBlockedCompleted.observe(viewLifecycleOwner) { isBlockedCompleted ->
             if (isBlockedCompleted == true) {
+                val intent = Intent().apply {
+                    putExtra(USER_NICKNAME, otherUserPageViewModel.otherUserProfile.value?.nickname)
+                }
+                activity?.setResult(BlockUser.RESULT_OK, intent)
+                dismiss()
                 requireActivity().finish()
-                showWebsosoSnackBar(
-                    view = binding.root,
-                    message = getString(
-                        R.string.block_user_success_message,
-                        otherUserPageViewModel.otherUserProfile.value?.nickname,
-                    ),
-                    icon = R.drawable.ic_novel_rating_alert,
-                )
             }
         }
     }
 
     companion object {
+        const val USER_NICKNAME = "UserNickname"
         const val TAG = "BlockUserDialog"
 
         fun newInstance(): BlockUserDialogFragment = BlockUserDialogFragment()

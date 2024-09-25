@@ -125,9 +125,12 @@ class OtherUserPageActivity :
         private const val TOOLBAR_COLLAPSE_THRESHOLD = 0f
         private const val POPUP_MARGIN_END = -80
         private const val POPUP_MARGIN_TOP = 0
+        private const val USER_ID = "USER_ID"
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, OtherUserPageActivity::class.java)
+        fun getIntent(context: Context, userId: Long): Intent {
+            return Intent(context, OtherUserPageActivity::class.java).apply {
+                putExtra(USER_ID, userId)
+            }
         }
     }
 }
