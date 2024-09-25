@@ -23,7 +23,7 @@
             android:onClick="@{() -> onBlockedUser.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="16dp"
-            android:text="@string/other_user_page_popup_blocked_user_button"
+            android:text="@string/other_user_page_popup_blocked_user_kebab_button"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"

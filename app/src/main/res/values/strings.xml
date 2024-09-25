@@ -335,7 +335,10 @@
     <!-- 다른 유저 페이지 뷰 -->
     <string name="other_user_page_library">서재</string>
     <string name="other_user_page_activity">활동</string>
-    <string name="other_user_page_popup_blocked_user_button">차단하기</string>
+    <string name="other_user_page_popup_blocked_user_kebab_button">차단하기</string>
+    <string name="block_user_title">해당 유저를 차단할까요?</string>
+    <string name="block_user_description">차단하면 서로의 피드, 댓글,\n프로필을 볼 수 없어요</string>
+    <string name="block_user_button">차단</string>
 
     <!-- 다른 유저 서재 뷰 -->
     <string name="other_user_library_storage">보관함</string>

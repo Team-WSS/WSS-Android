@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_logout_white_radius_12dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="24dp">
+
+        <ImageView
+            android:id="@+id/iv_block_user_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="102dp"
+            android:src="@drawable/ic_logout_exit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_block_user_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/block_user_title"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_block_user_exit" />
+
+        <TextView
+            android:id="@+id/tv_block_user_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="@string/block_user_description"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_block_user_title" />
+
+        <TextView
+            android:id="@+id/tv_block_user_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/btn_logout_cancel"
+            android:paddingHorizontal="46dp"
+            android:paddingVertical="10dp"
+            android:text="@string/logout_cancel"
+            android:textAppearance="@style/label1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_block_user_description" />
+
+        <TextView
+            android:id="@+id/tv_block_user_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_block_user"
+            android:paddingHorizontal="46dp"
+            android:paddingVertical="10dp"
+            android:text="@string/block_user_button"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/tv_block_user_cancel_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_block_user_cancel_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
