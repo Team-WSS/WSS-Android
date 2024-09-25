@@ -2,11 +2,15 @@ package com.teamwss.websoso.ui.main.explore
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.FragmentExploreBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
+import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
@@ -15,7 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetail) }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val exploreViewModel: ExploreViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,7 +30,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         onNormalSearchButtonClick()
         onDetailExploreButtonClick()
         onReloadPageButtonClick()
-        setupObserveUiState()
+        setupObserver()
     }
 
     private fun initSosoPickAdapter() {
@@ -46,17 +52,24 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
-            val existingDialog =
-                this@ExploreFragment.childFragmentManager.findFragmentByTag(DETAIL_BOTTOM_SHEET_TAG)
-
-            if (existingDialog == null) {
-                val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
-                detailExploreBottomSheet.show(
-                    this@ExploreFragment.childFragmentManager,
-                    DETAIL_BOTTOM_SHEET_TAG,
-                )
+            singleEventHandler.throttleFirst {
+                when (mainViewModel.mainUiState.value?.isLogin) {
+                    true -> showDetailExploreDialog()
+                    false -> showLoginRequestDialog()
+                    else -> throw IllegalStateException()
+                }
             }
         }
+    }
+
+    private fun showLoginRequestDialog() {
+        val loginRequestDialog = LoginRequestDialogFragment.newInstance()
+        loginRequestDialog.show(childFragmentManager, LoginRequestDialogFragment.TAG)
+    }
+
+    private fun showDetailExploreDialog() {
+        val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
+        detailExploreBottomSheet.show(childFragmentManager, DETAIL_BOTTOM_SHEET_TAG)
     }
 
     private fun onReloadPageButtonClick() {
@@ -66,7 +79,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         }
     }
 
-    private fun setupObserveUiState() {
+    private fun setupObserver() {
         exploreViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.loading -> binding.wllExplore.setWebsosoLoadingVisibility(true)
