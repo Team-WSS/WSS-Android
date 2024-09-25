@@ -17,9 +17,11 @@ import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 import com.teamwss.websoso.ui.profileEdit.model.Genre
+import com.teamwss.websoso.ui.profileEdit.model.LoadProfileResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
+import com.teamwss.websoso.ui.profileEdit.model.ProfileModel.Companion.toProfileEditModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,7 +39,7 @@ class ProfileEditViewModel @Inject constructor(
     private val _avatarChangeUiState = MutableLiveData<AvatarChangeUiState>(AvatarChangeUiState())
     val avatarChangeUiState: LiveData<AvatarChangeUiState> get() = _avatarChangeUiState
 
-    fun updatePreviousProfile(profile: ProfileModel) {
+    private fun updatePreviousProfile(profile: ProfileModel) {
         _profileEditUiState.value = profileEditUiState.value?.copy(
             profile = profile,
             previousProfile = profile,
@@ -207,7 +209,7 @@ class ProfileEditViewModel @Inject constructor(
         )
     }
 
-    fun updateAvatars() {
+    private fun updateAvatars() {
         viewModelScope.launch {
             runCatching {
                 _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
@@ -220,11 +222,11 @@ class ProfileEditViewModel @Inject constructor(
                     avatars = avatarsModel,
                     loading = false,
                 )
+                val representativeAvatar = avatarsModel.find { it.isRepresentative }
                 updatePreviousProfile(
                     profileEditUiState.value?.profile?.copy(
-                        avatarId = avatarsModel.find { it.isRepresentative }?.avatarId ?: 0,
-                        avatarThumbnail = avatarsModel.find { it.isRepresentative }?.avatarThumbnail
-                            ?: "",
+                        avatarId = representativeAvatar?.avatarId ?: 0,
+                        avatarThumbnail = representativeAvatar?.avatarThumbnail ?: "",
                     ) ?: ProfileModel()
                 )
             }.onFailure {
@@ -277,6 +279,37 @@ class ProfileEditViewModel @Inject constructor(
                 else -> MAX_CHARACTER_COLUMN_COUNT
             }
         } ?: MIN_CHARACTER_COLUMN_COUNT
+    }
+
+    fun updateUserProfile() {
+        viewModelScope.launch {
+            runCatching {
+                _profileEditUiState.value = profileEditUiState.value?.copy(
+                    loadProfileResult = LoadProfileResult.Loading,
+                )
+                userRepository.fetchMyProfile()
+            }.onSuccess { profile ->
+                _profileEditUiState.value = profileEditUiState.value?.copy(
+                    loadProfileResult = LoadProfileResult.Success,
+                )
+                updatePreviousProfile(profile.toProfileEditModel())
+                updateAvatars()
+            }.onFailure {
+                _profileEditUiState.value = profileEditUiState.value?.copy(
+                    loadProfileResult = LoadProfileResult.Failure,
+                )
+            }
+        }
+    }
+
+    fun updateAvatarThumbnail(avatarThumbnail: String) {
+        _profileEditUiState.value = profileEditUiState.value?.let { uiState ->
+            uiState.copy(
+                profile = uiState.profile.copy(
+                    avatarThumbnail = avatarThumbnail,
+                ),
+            )
+        }
     }
 
     companion object {

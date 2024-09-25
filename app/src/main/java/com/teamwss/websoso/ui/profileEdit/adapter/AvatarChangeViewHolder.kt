@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.profileEdit.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.ItemProfileEditAvatarBinding
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
 
@@ -17,7 +18,9 @@ class AvatarChangeViewHolder(
 
     fun setupItem(avatar: AvatarModel) {
         binding.root.tag = avatar.avatarId
-        binding.avatar = avatar
+        binding.avatar = avatar.copy(
+            avatarThumbnail = binding.root.getS3ImageUrl(avatar.avatarThumbnail),
+        )
         binding.isSelected = avatar.isRepresentative
     }
 

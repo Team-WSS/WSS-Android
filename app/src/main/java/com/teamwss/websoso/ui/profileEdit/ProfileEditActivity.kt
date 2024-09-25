@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Patterns
 import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.forEach
@@ -13,31 +14,29 @@ import androidx.core.widget.addTextChangedListener
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoToast
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
-import com.teamwss.websoso.ui.profileEdit.model.NicknameModel
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
-import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProfileEditActivity :
     BaseActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
     private val profileEditViewModel: ProfileEditViewModel by viewModels()
+    private val urlPattern = Patterns.WEB_URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.onAvatarChangeClick = ::showAvatarChangeBottomSheetDialog
-        profileEditViewModel.updateAvatars()
+        profileEditViewModel.updateUserProfile()
 
         bindViewModel()
         setupObserver()
-        initProfileInfo()
         setupGenreChips()
         onNicknameEditTextChange()
         onIntroductionEditTextChange()
@@ -58,6 +57,7 @@ class ProfileEditActivity :
             updateFinishButtonStatus(uiState.isFinishButtonEnabled)
             updateDuplicateCheckButtonStatus(uiState.isCheckDuplicateNicknameEnabled)
             handleProfileEditResult(uiState.profileEditResult)
+            updateAvatarThumbnail(uiState.profile.avatarThumbnail)
         }
     }
 
@@ -173,11 +173,6 @@ class ProfileEditActivity :
         }
     }
 
-    private fun initProfileInfo() {
-        val profile = intent.getAdaptedParcelableExtra<ProfileModel>(PROFILE_INFO)
-        profileEditViewModel.updatePreviousProfile(profile ?: ProfileModel())
-    }
-
     private fun setupGenreChips() {
         Genre.entries.forEach { genre ->
             WebsosoChip(binding.root.context)
@@ -226,27 +221,20 @@ class ProfileEditActivity :
         }
     }
 
+    private fun updateAvatarThumbnail(avatarThumbnail: String) {
+        if (avatarThumbnail.isEmpty() || urlPattern.matcher(avatarThumbnail).matches()) return
+        val updatedAvatarThumbnail = binding.root.getS3ImageUrl(avatarThumbnail)
+        profileEditViewModel.updateAvatarThumbnail(updatedAvatarThumbnail)
+    }
+
     companion object {
-        private const val PROFILE_INFO = "PROFILE_INFO"
         private const val PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG =
             "PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG"
 
         fun getIntent(
             context: Context,
-            nickname: String,
-            introduction: String,
-            genrePreferences: List<Genre>,
         ): Intent {
-            return Intent(context, ProfileEditActivity::class.java).apply {
-                putExtra(
-                    PROFILE_INFO,
-                    ProfileModel(
-                        nicknameModel = NicknameModel(nickname),
-                        introduction = introduction,
-                        genrePreferences = genrePreferences,
-                    )
-                )
-            }
+            return Intent(context, ProfileEditActivity::class.java)
         }
     }
 }
