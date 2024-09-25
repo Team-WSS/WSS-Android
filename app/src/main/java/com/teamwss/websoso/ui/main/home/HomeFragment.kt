@@ -7,7 +7,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.ui.model.ResultFrom.Home
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NormalExploreBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
@@ -45,8 +48,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val startActivityLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Home.RESULT_OK) {
-            homeViewModel.updateHomeData()
+        when (result.resultCode) {
+            FeedDetailBack.RESULT_OK -> {
+                homeViewModel.updateFeedData()
+            }
+
+            FeedDetailRemoved.RESULT_OK -> {
+                homeViewModel.updateFeedData()
+            }
+
+            NormalExploreBack.RESULT_OK -> {
+                homeViewModel.updateNovelData()
+            }
+
+            NovelDetailBack.RESULT_OK -> {
+                homeViewModel.updateNovelData()
+            }
         }
     }
 
@@ -91,7 +108,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setupObserver() {
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.loading -> Unit
                 uiState.error -> Unit
                 !uiState.loading -> {
                     popularNovelsAdapter.submitList(uiState.popularNovels)
@@ -117,14 +133,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 true -> {
                     tvHomeInterestFeed.text =
                         getString(R.string.home_nickname_interest_feed, nickname)
-                    clHomeRecommendNovel.visibility = View.GONE
-                    clHomeUserRecommendNovel.visibility = View.VISIBLE
                 }
 
                 false -> {
                     tvHomeInterestFeed.text = "관심글"
-                    clHomeRecommendNovel.visibility = View.VISIBLE
-                    clHomeUserRecommendNovel.visibility = View.GONE
                 }
             }
         }
