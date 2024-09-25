@@ -16,9 +16,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_feed_detail_header"
-        android:onClick="@{(cl_feed_detail_header) -> onClick.onFeedDetailClick(cl_feed_detail_header)}"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{(cl_feed_detail_header) -> onClick.onFeedDetailClick(cl_feed_detail_header)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_detail"
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:onClick="@{() -> onClick.onProfileClick(feed.user.id, feed.isMyFeed)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -289,7 +289,9 @@
             android:id="@+id/view_feed_detail_divider"
             android:layout_width="0dp"
             android:layout_height="6dp"
+            android:layout_marginBottom="20dp"
             android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_feed_detail" />
