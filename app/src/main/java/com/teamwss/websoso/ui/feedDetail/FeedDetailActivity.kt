@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -28,6 +26,7 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
+import com.teamwss.websoso.common.util.hideKeyboard
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
@@ -105,6 +104,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
             // if (isMyFeed) 마이페이지 else 프로필 뷰
         }
+
+        override fun onFeedDetailClick(view: View) {
+            view.hideKeyboard()
+        }
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
@@ -119,6 +122,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {
             popupMenu.showAsDropDown(view)
             bindMenuByIsMine(commentId, isMyComment, COMMENT)
+        }
+
+        override fun onCommentsClick(view: View) {
+            view.hideKeyboard()
         }
     }
 
@@ -253,12 +260,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
-            .hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-        return super.dispatchTouchEvent(ev)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
@@ -273,6 +274,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun onFeedDetailClick() {
+        binding.root.setOnClickListener { it.hideKeyboard() }
+
         binding.ivFeedDetailBackButton.setOnClickListener {
             setResult(FeedDetailBack.RESULT_OK)
             if (!isFinishing) finish()
@@ -295,6 +298,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                 text.clear()
                 clearFocus()
             }
+            it.hideKeyboard()
         }
     }
 
