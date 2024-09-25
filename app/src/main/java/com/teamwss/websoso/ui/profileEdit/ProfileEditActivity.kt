@@ -16,10 +16,12 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoToast
+import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityProfileEditBinding
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.ui.profileEdit.model.Genre
 import com.teamwss.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromKr
+import com.teamwss.websoso.ui.profileEdit.model.LoadProfileResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +35,9 @@ class ProfileEditActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.onAvatarChangeClick = ::showAvatarChangeBottomSheetDialog
+        binding.wllProfileEdit.setReloadButtonClickListener {
+            profileEditViewModel.updateUserProfile()
+        }
         profileEditViewModel.updateUserProfile()
 
         bindViewModel()
@@ -50,14 +55,21 @@ class ProfileEditActivity :
 
     private fun setupObserver() {
         profileEditViewModel.profileEditUiState.observe(this) { uiState ->
-            profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
-            updateGenreChips(uiState.profile.genrePreferences)
-            updateNicknameEditTextUi(uiState)
-            updateIntroductionEditTextUi(uiState.profile.introduction)
-            updateFinishButtonStatus(uiState.isFinishButtonEnabled)
-            updateDuplicateCheckButtonStatus(uiState.isCheckDuplicateNicknameEnabled)
-            handleProfileEditResult(uiState.profileEditResult)
-            updateAvatarThumbnail(uiState.profile.avatarThumbnail)
+            when (uiState.loadProfileResult) {
+                LoadProfileResult.Loading -> binding.wllProfileEdit.setWebsosoLoadingVisibility(true)
+                LoadProfileResult.Failure -> binding.wllProfileEdit.setErrorLayoutVisibility(true)
+                LoadProfileResult.Success -> {
+                    binding.wllProfileEdit.setWebsosoLoadingVisibility(false)
+                    profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()
+                    updateGenreChips(uiState.profile.genrePreferences)
+                    updateNicknameEditTextUi(uiState)
+                    updateIntroductionEditTextUi(uiState.profile.introduction)
+                    updateFinishButtonStatus(uiState.isFinishButtonEnabled)
+                    updateDuplicateCheckButtonStatus(uiState.isCheckDuplicateNicknameEnabled)
+                    handleProfileEditResult(uiState.profileEditResult)
+                    updateAvatarThumbnail(uiState.profile.avatarThumbnail)
+                }
+            }
         }
     }
 
@@ -182,9 +194,9 @@ class ProfileEditActivity :
                     setWebsosoChipTextColor(R.color.bg_profile_edit_chip_text_selector)
                     setWebsosoChipStrokeColor(R.color.bg_profile_edit_chip_stroke_selector)
                     setWebsosoChipBackgroundColor(R.color.bg_profile_edit_chip_background_selector)
-                    setWebsosoChipPaddingVertical(20f)
-                    setWebsosoChipPaddingHorizontal(12f)
-                    setWebsosoChipRadius(40f)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
                     setOnWebsosoChipClick { profileEditViewModel.updateSelectedGenres(genre) }
                 }.also { websosoChip -> binding.wcgProfileEditPreferGenre.addChip(websosoChip) }
         }
