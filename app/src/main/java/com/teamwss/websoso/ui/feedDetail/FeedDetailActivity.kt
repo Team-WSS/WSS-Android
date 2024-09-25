@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -263,9 +265,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(
-                feedId
-            )
+            if (result.resultCode == CreateFeed.RESULT_OK)
+                feedDetailViewModel.updateFeedDetail(feedId)
         }
 
         setupView()
@@ -336,6 +337,26 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                 }
             }
         }
+
+        binding.etFeedDetailInput.addTextChangedListener(
+            object : TextWatcher {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    when (p0?.trim().isNullOrBlank()) {
+                        true -> binding.ivFeedDetailCommentRegister.visibility = View.INVISIBLE
+                        false -> binding.ivFeedDetailCommentRegister.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) = Unit
+
+                override fun afterTextChanged(s: Editable?) = Unit
+            }
+        )
     }
 
     private fun updateView(feedDetailUiState: FeedDetailUiState) {
