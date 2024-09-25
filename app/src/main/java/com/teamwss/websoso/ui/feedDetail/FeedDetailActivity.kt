@@ -17,10 +17,9 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
@@ -43,6 +42,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -244,7 +244,22 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == CreateFeed.RESULT_OK) feedDetailViewModel.updateFeedDetail(feedId)
+            when (result.resultCode) {
+                CreateFeed.RESULT_OK -> feedDetailViewModel.updateFeedDetail(feedId)
+                BlockUser.RESULT_OK -> {
+                    val nickname =
+                        result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME)
+                    val blockMessage = nickname?.let {
+                        getString(R.string.block_user_success_message, it)
+                    } ?: getString(R.string.block_user_success_message)
+
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = blockMessage,
+                        icon = R.drawable.ic_novel_detail_check,
+                    )
+                }
+            }
         }
         setupView()
         setupObserver()
