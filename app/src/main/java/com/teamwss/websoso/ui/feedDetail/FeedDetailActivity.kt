@@ -21,7 +21,6 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.teamwss.websoso.common.ui.model.ResultFrom.Home
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
@@ -44,15 +43,12 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMME
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
-import com.teamwss.websoso.ui.main.home.HomeFragment
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.activity_feed_detail) {
     private enum class MenuType { COMMENT, FEED }
-
-    private val backStackViewName by lazy { intent.getStringExtra(BACK_STACK_VIEW_NAME) }
 
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
@@ -262,9 +258,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     private fun onFeedDetailClick() {
         binding.ivFeedDetailBackButton.setOnClickListener {
             setResult(FeedDetailBack.RESULT_OK)
-            if (backStackViewName == HomeFragment.SOURCE_HOME) {
-                setResult(Home.RESULT_OK)
-            }
             if (!isFinishing) finish()
         }
 
@@ -340,9 +333,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun handleBackPressed() {
-        if (backStackViewName == HomeFragment.SOURCE_HOME) {
-            setResult(Home.RESULT_OK)
-        }
+        setResult(FeedDetailBack.RESULT_OK)
         finish()
     }
 
