@@ -62,7 +62,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
         override fun onProfileClick(userId: Long) {
-            // TODO: 유저 프로필로 이동
+            // TODO: 본인 프로필 or 타유저 프로필로 이동
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {

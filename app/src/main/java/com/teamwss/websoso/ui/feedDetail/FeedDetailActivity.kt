@@ -96,12 +96,14 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
             // if (isMyFeed) 마이페이지 else 프로필 뷰
+            // TODO: 본인 프로필 or 타유저 프로필로 이동
         }
     }
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
         override fun onProfileClick(userId: Long, isMyComment: Boolean) {
             // if (isMyComment) 마이페이지 else 프로필 뷰
+            // TODO: 본인 프로필 or 타유저 프로필로 이동/**/
         }
 
         override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {

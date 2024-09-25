@@ -112,6 +112,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 //        singleEventHandler.throttleFirst(300) {
 //            OtherUserPageActivity.getIntent(requireContext(), userId)
 //        }
+        // TODO: 본인 프로필 or 타유저 프로필로 이동
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
