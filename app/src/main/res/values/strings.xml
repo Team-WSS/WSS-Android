@@ -199,7 +199,7 @@
     <!-- 로드 뷰 -->
     <string name="load_load_title">로딩 중</string>
     <string name="load_load_description">잠시만 기다려주세요</string>
-    <string name="load_fail_title">네트워크에\n연결되어 있지 않아요</string>
+    <string name="load_fail_title">네트워크 연결에\n실패했어요</string>
     <string name="load_fail_description">연결 상태를 확인한 후\n다시 시도해 보세요.</string>
     <string name="load_fail_reload">페이지 다시 불러오기</string>
 
