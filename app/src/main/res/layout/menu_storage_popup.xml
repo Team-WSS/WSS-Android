@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.teamwss.websoso.ui.storage.model.SortType" />
-
-        <variable
-            name="storageViewModel"
-            type="com.teamwss.websoso.ui.storage.StorageViewModel" />
 
     </data>
 
@@ -21,11 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
             android:text="@string/storage_newest"
-            android:onClick='@{() -> storageViewModel.updateSortType(SortType.NEWEST)}'
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/btn_storage_oldest"
@@ -38,11 +34,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
             android:text="@string/storage_oldest"
-            android:onClick='@{() -> storageViewModel.updateSortType(SortType.OLDEST)}'
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"

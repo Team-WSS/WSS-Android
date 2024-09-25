@@ -1,33 +1,23 @@
-package com.teamwss.websoso.ui.storage
+package com.teamwss.websoso.ui.userStorage
 
-import android.annotation.SuppressLint
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import androidx.databinding.DataBindingUtil
-import com.teamwss.websoso.R
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.MenuStoragePopupBinding
-import com.teamwss.websoso.ui.storage.model.SortType
+import com.teamwss.websoso.ui.userStorage.model.SortType
 
-class SortClickHandler(
-    private val viewModel: StorageViewModel,
-) : StorageSortTypeClickListener {
+class SortPopupHandler {
 
-    @SuppressLint("InflateParams")
-    override fun onSortButtonClick(view: View) {
+    fun showPopupMenu(
+        view: View,
+        onSortTypeSelected: (SortType) -> Unit,
+    ) {
         val inflater = LayoutInflater.from(view.context)
-        val binding: MenuStoragePopupBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.menu_storage_popup,
-            null,
-            false,
-        )
-
-        binding.storageViewModel = viewModel
+        val binding: MenuStoragePopupBinding = MenuStoragePopupBinding.inflate(inflater)
 
         val popupWindow = PopupWindow(
             binding.root,
@@ -35,6 +25,9 @@ class SortClickHandler(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true,
         ).apply {
+            isTouchable = true
+            isFocusable = true
+            isOutsideTouchable = true
             elevation = POPUP_ELEVATION.toFloatPxFromDp()
 
             showAsDropDown(
@@ -46,12 +39,12 @@ class SortClickHandler(
         }
 
         binding.btnStorageNewest.setOnClickListener {
-            viewModel.updateSortType(SortType.NEWEST)
+            onSortTypeSelected(SortType.NEWEST)
             popupWindow.dismiss()
         }
 
         binding.btnStorageOldest.setOnClickListener {
-            viewModel.updateSortType(SortType.OLDEST)
+            onSortTypeSelected(SortType.OLDEST)
             popupWindow.dismiss()
         }
     }

@@ -6,15 +6,15 @@
 
         <variable
             name="storage"
-            type="com.teamwss.websoso.data.model.StorageEntity" />
+            type="com.teamwss.websoso.data.model.UserStorageEntity" />
 
         <variable
             name="storageViewModel"
-            type="com.teamwss.websoso.ui.storage.StorageViewModel" />
+            type="com.teamwss.websoso.ui.userStorage.UserStorageViewModel" />
 
         <variable
-            name="onClick"
-            type="com.teamwss.websoso.ui.storage.StorageSortTypeClickListener" />
+            name="onSortTypeClick"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text='@{String.valueOf(storageViewModel.uiState.userNovelCount)+ " 개"}'
+                android:text='@{storageViewModel.uiState.getUserNovelCountText(context)}'
                 android:textAppearance="@style/body4"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -124,9 +124,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                android:onClick="@{onSortTypeClick}"
                 android:padding="8dp"
                 android:src="@drawable/ic_storage_arrow_down"
-                android:onClick="@{() -> onClick.onSortButtonClick(ivStorageGoToSort)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -135,7 +135,7 @@
                 android:id="@+id/tv_storage_range"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{storageViewModel.uiState.sortType.displayName}"
+                android:text="@{storageViewModel.uiState.sortType.titleKr}"
                 android:textAppearance="@style/body4"
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintBottom_toBottomOf="parent"

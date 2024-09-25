@@ -17,7 +17,7 @@ import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
 import com.teamwss.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
-import com.teamwss.websoso.ui.storage.StorageActivity
+import com.teamwss.websoso.ui.userStorage.UserStorageActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -136,7 +136,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
-            val intent = StorageActivity.getIntent(requireContext())
+            val intent = UserStorageActivity.getIntent(requireContext())
             startActivity(intent)
         }
     }

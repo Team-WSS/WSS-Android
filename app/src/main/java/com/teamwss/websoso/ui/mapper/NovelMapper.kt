@@ -2,6 +2,8 @@ package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
+import com.teamwss.websoso.data.model.UserStorageEntity
+import com.teamwss.websoso.data.model.UserStorageEntity.StorageNovelEntity
 import com.teamwss.websoso.domain.model.ExploreResult
 import com.teamwss.websoso.domain.model.ExploreResult.Novel
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel
@@ -14,6 +16,8 @@ import com.teamwss.websoso.ui.novelInfo.model.ReviewCountModel
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel.Companion.toCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
+import com.teamwss.websoso.ui.userStorage.model.UserStorageModel
+import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
 fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
     return NovelDetailModel(
@@ -90,5 +94,26 @@ fun Novel.toUi(): NovelModel {
         interestedCount = interestedCount,
         rating = rating,
         ratingCount = ratingCount,
+    )
+}
+
+fun UserStorageEntity.toUi(): UserStorageModel {
+    return UserStorageModel(
+        isLoadable = isLoadable,
+        userNovelCount = userNovelCount,
+        userNovelRating = userNovelRating,
+        userNovels = userNovels.map { it.toUi() },
+    )
+}
+
+fun StorageNovelEntity.toUi(): StorageNovelModel {
+    return StorageNovelModel(
+        author = author,
+        novelId = novelId,
+        novelImage = novelImage,
+        novelRating = novelRating.takeIf { it != 0.0f },
+        title = title,
+        userNovelId = userNovelId,
+        isRatingVisible = novelRating != 0.0f,
     )
 }
