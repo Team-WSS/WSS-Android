@@ -18,7 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.Home
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
@@ -27,7 +27,6 @@ import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.home.HomeFragment
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
@@ -58,8 +57,6 @@ class NovelDetailActivity :
             REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
         }
     }
-
-    private val backStackViewName by lazy { intent.getStringExtra(BACK_STACK_VIEW_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -247,7 +244,7 @@ class NovelDetailActivity :
 
     private fun onNovelDetailButtonClick() = object : NovelDetailClickListener {
         override fun onNavigateBackClick() {
-            setResult(Home.RESULT_OK)
+            setResult(NovelDetailBack.RESULT_OK)
             finish()
         }
 
@@ -283,9 +280,7 @@ class NovelDetailActivity :
     }
 
     private fun handleBackPressed() {
-        if (backStackViewName == HomeFragment.SOURCE_HOME) {
-            setResult(Home.RESULT_OK)
-        }
+        setResult(NovelDetailBack.RESULT_OK)
         finish()
     }
 
