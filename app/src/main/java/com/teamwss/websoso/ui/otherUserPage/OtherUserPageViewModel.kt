@@ -20,6 +20,9 @@ class OtherUserPageViewModel @Inject constructor(
 
     private val userId: Long = getUserId()
 
+    private val _isBlockedCompleted: MutableLiveData<Boolean> = MutableLiveData()
+    val isBlockedCompleted: LiveData<Boolean> get() = _isBlockedCompleted
+
     init {
         updateUserProfile(userId)
     }
@@ -36,6 +39,16 @@ class OtherUserPageViewModel @Inject constructor(
     }
 
     private fun getUserId(): Long {
-        return 1L
+        return 3L
+    }
+
+    fun updateBlockedUser() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.saveBlockUser(userId)
+            }.onSuccess {
+                _isBlockedCompleted.value = true
+            }.onFailure {}
+        }
     }
 }

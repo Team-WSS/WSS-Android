@@ -41,6 +41,10 @@ class UserRepository @Inject constructor(
         userApi.deleteBlockedUser(blockId)
     }
 
+    suspend fun saveBlockUser(userId: Long) {
+        userApi.postBlockUser(userId)
+    }
+
     suspend fun fetchUserNovelStats(): UserNovelStatsEntity {
         return userApi.getUserNovelStats().toData()
     }

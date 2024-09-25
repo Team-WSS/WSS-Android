@@ -26,6 +26,7 @@ class OtherUserPageActivity :
     private var _popupBinding: MenuOtherUserPagePopupBinding? = null
     private val popupBinding: MenuOtherUserPagePopupBinding
         get() = _popupBinding ?: error("OtherUserPageActivity")
+    private var menuPopupWindow: PopupWindow? = null
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
     private val viewPagerAdapter: OtherUserPageViewPagerAdapter by lazy {
         OtherUserPageViewPagerAdapter(this)
@@ -47,7 +48,13 @@ class OtherUserPageActivity :
         binding.lifecycleOwner = this
         _popupBinding = MenuOtherUserPagePopupBinding.inflate(layoutInflater)
         popupBinding.lifecycleOwner = this
-        popupBinding.onBlockedUser = otherUserPageViewModel::updateBlockedUser
+        popupBinding.onBlockedUser = ::showBlockUserDialog
+    }
+
+    private fun showBlockUserDialog() {
+        val dialog = BlockUserDialogFragment.newInstance()
+        dialog.show(supportFragmentManager, BlockUserDialogFragment.TAG)
+        menuPopupWindow?.dismiss()
     }
 
     private fun setUpViewPager() {
@@ -99,7 +106,7 @@ class OtherUserPageActivity :
     }
 
     private fun showMenu(view: View) {
-        val popupWindow: PopupWindow = PopupWindow(
+        menuPopupWindow = PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
