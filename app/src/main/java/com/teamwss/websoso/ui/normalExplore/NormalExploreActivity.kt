@@ -10,11 +10,10 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.Home
+import com.teamwss.websoso.common.ui.model.ResultFrom.NormalExploreBack
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
-import com.teamwss.websoso.ui.main.home.HomeFragment
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.teamwss.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
@@ -29,7 +28,6 @@ class NormalExploreActivity :
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private val fromViewName by lazy { intent.getStringExtra(BACK_STACK_VIEW_NAME) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +88,7 @@ class NormalExploreActivity :
     private fun onNormalExploreButtonClick() = object : NormalExploreClickListener {
 
         override fun onBackButtonClick() {
-            if (fromViewName == HomeFragment.SOURCE_HOME) {
-                setResult(Home.RESULT_OK)
-            }
+            setResult(NormalExploreBack.RESULT_OK)
             finish()
         }
 
@@ -174,9 +170,7 @@ class NormalExploreActivity :
     }
 
     private fun handleBackPressed() {
-        if (fromViewName == HomeFragment.SOURCE_HOME) {
-            setResult(Home.RESULT_OK)
-        }
+        setResult(NormalExploreBack.RESULT_OK)
         finish()
     }
 
