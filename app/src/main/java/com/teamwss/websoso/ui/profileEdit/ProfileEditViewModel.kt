@@ -13,6 +13,7 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.UNKNOWN_ERROR
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME_SPELLING
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
+import com.teamwss.websoso.ui.mapper.toProfileEditModel
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
@@ -21,7 +22,6 @@ import com.teamwss.websoso.ui.profileEdit.model.LoadProfileResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditResult
 import com.teamwss.websoso.ui.profileEdit.model.ProfileEditUiState
 import com.teamwss.websoso.ui.profileEdit.model.ProfileModel
-import com.teamwss.websoso.ui.profileEdit.model.ProfileModel.Companion.toProfileEditModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
