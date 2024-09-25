@@ -175,13 +175,6 @@ class NormalExploreActivity :
     }
 
     companion object {
-        private const val BACK_STACK_VIEW_NAME = "BACK_STACK_VIEW_NAME"
-
         fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
-
-        fun getIntent(context: Context, backStackViewName: String): Intent =
-            Intent(context, NormalExploreActivity::class.java).apply {
-                putExtra(BACK_STACK_VIEW_NAME, backStackViewName)
-            }
     }
 }

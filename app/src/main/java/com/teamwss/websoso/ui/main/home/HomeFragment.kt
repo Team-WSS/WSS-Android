@@ -189,7 +189,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             NovelDetailActivity.getIntent(
                 requireContext(),
                 novelId,
-                SOURCE_HOME,
             )
         )
     }
@@ -199,7 +198,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             FeedDetailActivity.getIntent(
                 requireContext(),
                 feedId,
-                SOURCE_HOME,
             )
         )
     }
@@ -209,8 +207,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             if (mainViewModel.mainUiState.value?.isLogin == true) {
                 startActivityLauncher.launch(
                     NormalExploreActivity.getIntent(
-                        requireContext(),
-                        SOURCE_HOME,
+                        requireContext()
                     )
                 )
             } else {
@@ -247,7 +244,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     companion object {
         private const val TODAY_POPULAR_NOVEL_MARGIN = 15
         private const val USER_INTEREST_MARGIN = 14
-
-        const val SOURCE_HOME = "Home"
     }
 }

@@ -339,17 +339,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
 
     companion object {
         private const val FEED_ID: String = "FEED_ID"
-        private const val BACK_STACK_VIEW_NAME = "BACK_STACK_VIEW_NAME"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(context: Context, feedId: Long): Intent =
             Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
-
-        fun getIntent(context: Context, feedId: Long, backStackViewName: String): Intent =
-            Intent(context, FeedDetailActivity::class.java).apply {
-                putExtra(FEED_ID, feedId)
-                putExtra(BACK_STACK_VIEW_NAME, backStackViewName)
-            }
     }
 }

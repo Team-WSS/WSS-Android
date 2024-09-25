@@ -294,7 +294,6 @@ class NovelDetailActivity :
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
-        private const val BACK_STACK_VIEW_NAME = "BACK_STACK_VIEW_NAME"
         private const val REFRESH = 200
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
@@ -302,13 +301,6 @@ class NovelDetailActivity :
         fun getIntent(context: Context, novelId: Long): Intent {
             return Intent(context, NovelDetailActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
-            }
-        }
-
-        fun getIntent(context: Context, novelId: Long, backStackViewName: String): Intent {
-            return Intent(context, NovelDetailActivity::class.java).apply {
-                putExtra(NOVEL_ID, novelId)
-                putExtra(BACK_STACK_VIEW_NAME, backStackViewName)
             }
         }
     }
