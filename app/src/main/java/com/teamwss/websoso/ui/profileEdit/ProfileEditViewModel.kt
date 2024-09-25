@@ -13,7 +13,7 @@ import com.teamwss.websoso.domain.model.NicknameValidationResult.UNKNOWN_ERROR
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.teamwss.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME_SPELLING
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
-import com.teamwss.websoso.ui.mapper.toProfileEditModel
+import com.teamwss.websoso.ui.mapper.toProfileEdit
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.teamwss.websoso.ui.profileEdit.model.AvatarModel
@@ -292,7 +292,7 @@ class ProfileEditViewModel @Inject constructor(
                 _profileEditUiState.value = profileEditUiState.value?.copy(
                     loadProfileResult = LoadProfileResult.Success,
                 )
-                updatePreviousProfile(profile.toProfileEditModel())
+                updatePreviousProfile(profile.toProfileEdit())
                 updateAvatars()
             }.onFailure {
                 _profileEditUiState.value = profileEditUiState.value?.copy(

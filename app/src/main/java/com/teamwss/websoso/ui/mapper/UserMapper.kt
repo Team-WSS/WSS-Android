@@ -22,7 +22,7 @@ fun MyProfileEntity.toUi(): MyProfileModel {
     )
 }
 
-fun MyProfileEntity.toProfileEditModel(): ProfileModel {
+fun MyProfileEntity.toProfileEdit(): ProfileModel {
     return ProfileModel(
         nicknameModel = NicknameModel(nickname = nickname),
         introduction = intro,
