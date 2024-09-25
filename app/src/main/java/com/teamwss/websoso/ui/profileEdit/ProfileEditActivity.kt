@@ -30,7 +30,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class ProfileEditActivity :
     BaseActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
     private val profileEditViewModel: ProfileEditViewModel by viewModels()
-    private val urlPattern = Patterns.WEB_URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -234,7 +233,7 @@ class ProfileEditActivity :
     }
 
     private fun updateAvatarThumbnail(avatarThumbnail: String) {
-        if (avatarThumbnail.isEmpty() || urlPattern.matcher(avatarThumbnail).matches()) return
+        if (avatarThumbnail.isEmpty() || Patterns.WEB_URL.matcher(avatarThumbnail).matches()) return
         val updatedAvatarThumbnail = binding.root.getS3ImageUrl(avatarThumbnail)
         profileEditViewModel.updateAvatarThumbnail(updatedAvatarThumbnail)
     }
