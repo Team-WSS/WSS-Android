@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class StorageResponseDto(
+data class UserStorageResponseDto(
     @SerialName("userNovelCount")
     val userNovelCount: Long,
     @SerialName("userNovelRating")
@@ -13,7 +13,7 @@ data class StorageResponseDto(
     val isLoadable: Boolean,
     @SerialName("userNovels")
     val userNovels: List<StorageNovelDto>,
-    ){
+) {
     @Serializable
     data class StorageNovelDto(
         @SerialName("userNovelId")

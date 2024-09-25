@@ -11,10 +11,10 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
-import com.teamwss.websoso.data.model.StorageEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
+import com.teamwss.websoso.data.model.UserStorageEntity
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
@@ -148,7 +148,7 @@ class UserRepository @Inject constructor(
         lastUserNovelId: Long,
         size: Int,
         sortType: String,
-    ): StorageEntity {
+    ): UserStorageEntity {
         return userApi.getUserStorage(
             userId = userId,
             readStatus = readStatus,

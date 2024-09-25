@@ -1,24 +1,26 @@
-package com.teamwss.websoso.ui.storage
+package com.teamwss.websoso.ui.userStorage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
-import com.teamwss.websoso.ui.storage.model.SortType
-import com.teamwss.websoso.ui.storage.model.StorageTab
-import com.teamwss.websoso.ui.storage.model.StorageUiState
+import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.userStorage.model.SortType
+import com.teamwss.websoso.ui.userStorage.model.StorageTab
+import com.teamwss.websoso.ui.userStorage.model.UserStorageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StorageViewModel @Inject constructor(
-    private val userRepository: UserRepository
+class UserStorageViewModel @Inject constructor(
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _uiState: MutableLiveData<StorageUiState> = MutableLiveData(StorageUiState())
-    val uiState: LiveData<StorageUiState> get() = _uiState
+    private val _uiState: MutableLiveData<UserStorageUiState> =
+        MutableLiveData(UserStorageUiState())
+    val uiState: LiveData<UserStorageUiState> get() = _uiState
 
     init {
         updateReadStatus(
@@ -31,12 +33,12 @@ class StorageViewModel @Inject constructor(
         readStatus: String,
         forceLoad: Boolean = false,
     ) {
-
-        if (_uiState.value?.loading == true || (!forceLoad && _uiState.value?.isLoadable == false)) {
-            return
+        when {
+            _uiState.value?.loading == true -> return
+            !forceLoad && _uiState.value?.isLoadable == false -> return
         }
 
-        _uiState.value = _uiState.value?.copy(readStatus = readStatus)
+        _uiState.value = uiState.value?.copy(readStatus = readStatus)
 
         updateUserNovelsStorage(
             readStatus,
@@ -45,9 +47,11 @@ class StorageViewModel @Inject constructor(
     }
 
     fun updateSortType(sortType: SortType) {
-        if (_uiState.value?.loading == true) return
+        when {
+            _uiState.value?.loading == true -> return
+        }
 
-        _uiState.value = _uiState.value?.copy(sortType = sortType)
+        _uiState.value = uiState.value?.copy(sortType = sortType)
 
         updateUserNovelsStorage(
             _uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus,
@@ -59,8 +63,7 @@ class StorageViewModel @Inject constructor(
         readStatus: String,
         sortType: SortType,
     ) {
-
-        _uiState.value = _uiState.value?.copy(loading = true)
+        _uiState.value = uiState.value?.copy(loading = true)
 
         viewModelScope.launch {
             runCatching {
@@ -68,28 +71,31 @@ class StorageViewModel @Inject constructor(
                     userId = 2L,
                     readStatus = readStatus,
                     lastUserNovelId = _uiState.value?.lastUserNovelId ?: 0L,
-                    size = 20,
-                    sortType = sortType.apiValue,
+                    size = STORAGE_NOVEL_SIZE,
+                    sortType = sortType.titleEn,
                 )
             }.onSuccess { response ->
-                val storageResponse = response
-                val canLoadMore =
-                    storageResponse.isLoadable && storageResponse.userNovels.isNotEmpty()
+                val isLoadable = response.isLoadable && response.userNovels.isNotEmpty()
 
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
-                    userNovelCount = storageResponse.userNovelCount,
-                    userNovelRating = storageResponse.userNovelRating,
-                    storageNovels = storageResponse.userNovels,
-                    lastUserNovelId = storageResponse.userNovels.lastOrNull()?.userNovelId ?: 0L,
-                    isLoadable = canLoadMore,
+                    userNovelCount = response.userNovelCount,
+                    userNovelRating = response.userNovelRating,
+                    storageNovels = response.userNovels.map { it.toUi() },
+                    lastUserNovelId = response.userNovels.lastOrNull()?.userNovelId ?: 0L,
+                    isLoadable = isLoadable,
                 )
-            }.onFailure { throwable ->
+
+            }.onFailure {
                 _uiState.value = _uiState.value?.copy(
                     loading = false,
                     error = true,
                 )
             }
         }
+    }
+
+    companion object {
+        const val STORAGE_NOVEL_SIZE = 20
     }
 }

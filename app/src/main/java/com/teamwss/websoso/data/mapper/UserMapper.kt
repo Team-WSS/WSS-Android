@@ -6,19 +6,21 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
-import com.teamwss.websoso.data.model.StorageEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
+import com.teamwss.websoso.data.model.UserStorageEntity
+import com.teamwss.websoso.data.model.UserStorageEntity.StorageNovelEntity
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
-import com.teamwss.websoso.data.remote.response.StorageResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
+import com.teamwss.websoso.data.remote.response.UserStorageResponseDto
+import com.teamwss.websoso.data.remote.response.UserStorageResponseDto.StorageNovelDto
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.Genres
 
 fun UserInfoResponseDto.toData(): UserInfoEntity {
@@ -97,8 +99,8 @@ fun OtherUserProfileResponseDto.toData(): OtherUserProfileEntity {
     )
 }
 
-fun StorageResponseDto.toData(): StorageEntity {
-    return StorageEntity(
+fun UserStorageResponseDto.toData(): UserStorageEntity {
+    return UserStorageEntity(
         isLoadable = this.isLoadable,
         userNovelRating = this.userNovelRating,
         userNovelCount = this.userNovelCount,
@@ -106,8 +108,8 @@ fun StorageResponseDto.toData(): StorageEntity {
     )
 }
 
-fun StorageResponseDto.StorageNovelDto.toData(): StorageEntity.StorageNovelEntity {
-    return StorageEntity.StorageNovelEntity(
+fun StorageNovelDto.toData(): StorageNovelEntity {
+    return StorageNovelEntity(
         author = this.author,
         userNovelId = this.userNovelId,
         novelId = this.novelId,

@@ -1,8 +1,9 @@
-package com.teamwss.websoso.ui.storage
+package com.teamwss.websoso.ui.userStorage
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -11,14 +12,15 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityStorageBinding
 import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
-import com.teamwss.websoso.ui.storage.adapter.StorageViewPagerAdapter
-import com.teamwss.websoso.ui.storage.model.StorageTab
-import com.teamwss.websoso.ui.storage.model.StorageUiState
+import com.teamwss.websoso.ui.userStorage.adapter.UserStorageViewPagerAdapter
+import com.teamwss.websoso.ui.userStorage.model.StorageTab
+import com.teamwss.websoso.ui.userStorage.model.UserStorageUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_storage) {
-    private val storageViewModel: StorageViewModel by viewModels()
+class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_storage) {
+    private val userStorageViewModel: UserStorageViewModel by viewModels()
+    private lateinit var userStorageAdapter: UserStorageViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,10 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
 
     private fun bindViewModel() {
         binding.lifecycleOwner = this
-        binding.storageViewModel = storageViewModel
+        binding.storageViewModel = userStorageViewModel
+        binding.onSortTypeClick = View.OnClickListener {
+            onSortTypeButtonClick()
+        }
     }
 
     private fun setupViewPagerAndTabLayout() {
@@ -40,49 +45,49 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
     }
 
     private fun setupViewPager() {
-        val pagerAdapter = StorageViewPagerAdapter(
+        userStorageAdapter = UserStorageViewPagerAdapter(
             novels = emptyList(),
-            navigateToExplore = ::navigateToExploreFragment,
+            onExploreButtonClick = ::navigateToExploreFragment,
             novelClickListener = ::navigateToNovelDetail,
         )
-        binding.vpStorage.adapter = pagerAdapter
+        binding.vpStorage.adapter = userStorageAdapter
     }
 
     private fun setupTabLayoutWithViewPager() {
-        binding.vpStorage.adapter?.let {
+        binding.vpStorage.adapter.apply {
             TabLayoutMediator(binding.tlStorage, binding.vpStorage) { tab, position ->
                 tab.text = StorageTab.fromPosition(position).title
             }.attach()
 
             binding.tlStorage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    tab?.let {
-                        onSortTabSelected(it.position)
-                    }
+                    val selectedTab = requireNotNull(tab) { "Tab must not be null" }
+                    onReadingStatusTabSelected(selectedTab.position)
                 }
+
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
             })
         }
     }
 
-    private fun onSortTabSelected(position: Int) {
+    private fun onReadingStatusTabSelected(position: Int) {
         val selectedTab = StorageTab.fromPosition(position)
-        storageViewModel.updateReadStatus(
+        userStorageViewModel.updateReadStatus(
             selectedTab.readStatus,
             forceLoad = true,
         )
     }
 
     private fun setupObserver() {
-        storageViewModel.uiState.observe(this) { uiState ->
-            updateViewPagerAdapter(uiState)
+        userStorageViewModel.uiState.observe(this) { uiState ->
+            updateStorageNovel(uiState)
         }
     }
 
-    private fun updateViewPagerAdapter(uiState: StorageUiState) {
+    private fun updateStorageNovel(uiState: UserStorageUiState) {
         if (uiState.storageNovels.isNotEmpty()) {
-            (binding.vpStorage.adapter as? StorageViewPagerAdapter)?.updateNovels(uiState.storageNovels)
+            userStorageAdapter.updateNovels(uiState.storageNovels)
         }
     }
 
@@ -104,13 +109,18 @@ class StorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_s
     }
 
     private fun onSortTypeButtonClick() {
-        val clickHandler = SortClickHandler(storageViewModel)
-        binding.onClick = clickHandler
+        val sortMenuHandler = SortMenuHandler { sortType ->
+            userStorageViewModel.updateSortType(sortType)
+        }
+
+        binding.ivStorageGoToSort.setOnClickListener { view ->
+            sortMenuHandler.showSortMenu(view)
+        }
     }
 
     companion object {
         fun getIntent(context: Context): Intent {
-            return Intent(context, StorageActivity::class.java)
+            return Intent(context, UserStorageActivity::class.java)
         }
     }
 }
