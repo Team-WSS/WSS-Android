@@ -37,16 +37,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(loading = true)
 
-            val result = runCatching {
+            runCatching {
                 listOf(
                     async { novelRepository.fetchPopularNovels() },
                     async { feedRepository.fetchPopularFeeds() },
                     async { feedRepository.fetchUserInterestFeeds() },
                     async { novelRepository.fetchRecommendedNovelsByUserTaste() }
                 ).awaitAll()
-            }
-
-            result.onSuccess { responses ->
+            }.onSuccess { responses ->
                 val popularNovels = responses[0] as PopularNovelsEntity
                 val popularFeeds = responses[1] as PopularFeedsEntity
                 val userInterestFeeds = responses[2] as UserInterestFeedsEntity
@@ -71,14 +69,12 @@ class HomeViewModel @Inject constructor(
 
     fun updateFeedData() {
         viewModelScope.launch {
-            val result = runCatching {
+            runCatching {
                 listOf(
                     async { feedRepository.fetchPopularFeeds() },
                     async { feedRepository.fetchUserInterestFeeds() }
                 ).awaitAll()
-            }
-
-            result.onSuccess { responses ->
+            }.onSuccess { responses ->
                 val popularFeeds = responses[0] as PopularFeedsEntity
                 val userInterestFeeds = responses[1] as UserInterestFeedsEntity
 
@@ -97,14 +93,12 @@ class HomeViewModel @Inject constructor(
 
     fun updateNovelData() {
         viewModelScope.launch {
-            val result = runCatching {
+            runCatching {
                 listOf(
                     async { novelRepository.fetchPopularNovels() },
                     async { novelRepository.fetchRecommendedNovelsByUserTaste() }
                 ).awaitAll()
-            }
-
-            result.onSuccess { responses ->
+            }.onSuccess { responses ->
                 val popularNovels = responses[0] as PopularNovelsEntity
                 val recommendedNovels = responses[1] as RecommendedNovelsByUserTasteEntity
 
