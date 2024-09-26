@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
 
     fun updateHomeData() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value?.copy(loading = true)
+            _uiState.value = uiState.value?.copy(loading = true)
 
             runCatching {
                 listOf(
@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
                 val userInterestFeeds = responses[2] as UserInterestFeedsEntity
                 val recommendedNovels = responses[3] as RecommendedNovelsByUserTasteEntity
 
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     popularNovels = popularNovels.popularNovels,
                     popularFeeds = popularFeeds.popularFeeds.chunked(3),
@@ -59,7 +59,7 @@ class HomeViewModel @Inject constructor(
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true
                 )
@@ -78,13 +78,13 @@ class HomeViewModel @Inject constructor(
                 val popularFeeds = responses[0] as PopularFeedsEntity
                 val userInterestFeeds = responses[1] as UserInterestFeedsEntity
 
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     popularFeeds = popularFeeds.popularFeeds.chunked(3),
                     isInterestNovel = isUserInterestedInNovels(userInterestFeeds.message),
                     userInterestFeeds = userInterestFeeds.userInterestFeeds
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     error = true
                 )
             }
@@ -102,12 +102,12 @@ class HomeViewModel @Inject constructor(
                 val popularNovels = responses[0] as PopularNovelsEntity
                 val recommendedNovels = responses[1] as RecommendedNovelsByUserTasteEntity
 
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     popularNovels = popularNovels.popularNovels,
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     error = true
                 )
             }
