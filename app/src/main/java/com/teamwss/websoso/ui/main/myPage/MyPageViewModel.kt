@@ -30,7 +30,7 @@ class MyPageViewModel @Inject constructor(
             }.onSuccess { myProfileEntity ->
                 _myPageUiState.value = MyPageUiState(myProfile = myProfileEntity, loading = false)
             }.onFailure { exception ->
-                _myPageUiState.value = MyPageUiState(error = exception.message, loading = false)
+                _myPageUiState.value = MyPageUiState(error = true, loading = false)
             }
         }
     }
