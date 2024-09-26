@@ -9,6 +9,7 @@ import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiModel
+import com.teamwss.websoso.ui.novelInfo.model.Platform
 import com.teamwss.websoso.ui.novelInfo.model.PlatformModel
 import com.teamwss.websoso.ui.novelInfo.model.ReviewCountModel
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
@@ -51,10 +52,10 @@ fun NovelInfoEntity.toUi() = NovelInfoUiModel(
 )
 
 fun NovelInfoEntity.PlatformEntity.toUi() = PlatformModel(
-    platformName = platformName,
+    platform = Platform.fromPlatformName(platformName),
     platformImage = platformImage,
     platformUrl = platformUrl,
-    isVisible = true,
+    isVisible = platformName.isNotEmpty(),
 )
 
 fun NovelInfoEntity.KeywordEntity.toUi() = KeywordModel(

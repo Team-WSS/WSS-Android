@@ -105,4 +105,12 @@ class NovelDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateGenreImage(genreImage: String) {
+        _novelDetailModel.value = novelDetailModel.value?.copy(
+            novel = novelDetailModel.value?.novel?.copy(
+                novelGenreImage = genreImage,
+            ) ?: return
+        )
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewTreeObserver
@@ -19,6 +20,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
@@ -156,6 +158,7 @@ class NovelDetailActivity :
                     binding.llNovelDetailInterest.isSelected =
                         novelDetail.userNovel.isUserNovelInterest
                     if (novelDetail.isFirstLaunched) setupTooltipWindow()
+                    updateGenreImage(novelDetail.novel.novelGenreImage)
                 }
 
                 false -> binding.wllNovelDetail.setWebsosoLoadingVisibility(true)
@@ -283,6 +286,12 @@ class NovelDetailActivity :
             setResult(NovelDetailBack.RESULT_OK)
             finish()
         }
+    }
+
+    private fun updateGenreImage(genreImage: String) {
+        if (genreImage.isEmpty() || Patterns.WEB_URL.matcher(genreImage).matches()) return
+        val updatedGenreImage = binding.root.getS3ImageUrl(genreImage)
+        novelDetailViewModel.updateGenreImage(updatedGenreImage)
     }
 
     override fun onResume() {

@@ -8,7 +8,7 @@ import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiState
-import com.teamwss.websoso.ui.novelInfo.model.PlatformsModel
+import com.teamwss.websoso.ui.novelInfo.model.Platform
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +31,7 @@ class NovelInfoViewModel @Inject constructor(
             }.onSuccess { novelInfo ->
                 _uiState.value = uiState.value?.copy(
                     novelInfoModel = novelInfo.toUi(),
-                    platforms = PlatformsModel.formatPlatforms(novelInfo.platforms),
+                    platforms = novelInfo.platforms.map { it.toUi() },
                     keywords = novelInfo.keywords.map { it.toUi() },
                     isKeywordsExist = novelInfo.keywords.isNotEmpty(),
                     loading = false,
@@ -94,6 +94,18 @@ class NovelInfoViewModel @Inject constructor(
                 isExpandTextToggleSelected = false
             )
             _uiState.value = currentState.copy(expandTextModel = updatedExpandTextUiModel)
+        }
+    }
+
+    fun updatePlatformImage(platform: Platform, platformImage: String) {
+        uiState.value?.let { uiState ->
+            val formattedPlatforms = uiState.platforms.map {
+                when (it.platform == platform) {
+                    true -> it.copy(platformImage = platformImage)
+                    false -> it
+                }
+            }
+            _uiState.value = uiState.copy(platforms = formattedPlatforms)
         }
     }
 
