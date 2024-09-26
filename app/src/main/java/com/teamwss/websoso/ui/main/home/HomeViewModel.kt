@@ -30,10 +30,10 @@ class HomeViewModel @Inject constructor(
     val uiState: LiveData<HomeUiState> get() = _uiState
 
     init {
-        updateHomeData()
+        updateHome()
     }
 
-    private fun updateHomeData() {
+    private fun updateHome() {
         viewModelScope.launch {
             _uiState.value = uiState.value?.copy(loading = true)
 
