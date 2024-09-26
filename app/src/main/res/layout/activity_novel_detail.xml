@@ -613,16 +613,16 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_novel_feed_write_floating_button"
+        <ImageView
+            android:id="@+id/iv_novel_feed_write"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="44dp"
-            android:contentDescription="@{null}"
             android:elevation="40dp"
-            android:foreground="@drawable/bg_floating_write_button"
             android:onClick="@{() -> onClick.onNovelFeedWriteClick()}"
+            android:src="@drawable/bg_floating_write_button"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

@@ -144,7 +144,7 @@ class NovelDetailActivity :
     }
 
     private fun updateNovelFeedWriteButtonVisibility(position: Int) {
-        binding.fabNovelFeedWriteFloatingButton.visibility = when (position) {
+        binding.ivNovelFeedWrite.visibility = when (position) {
             FEED_FRAGMENT_PAGE -> View.VISIBLE
             else -> View.GONE
         }
