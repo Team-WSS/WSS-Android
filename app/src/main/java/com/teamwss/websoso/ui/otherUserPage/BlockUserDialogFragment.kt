@@ -43,7 +43,7 @@ class BlockUserDialogFragment :
 
     private fun setupObserver() {
         otherUserPageViewModel.isBlockedCompleted.observe(viewLifecycleOwner) { isBlockedCompleted ->
-            if (isBlockedCompleted == true) {
+            if (isBlockedCompleted) {
                 val intent = Intent().apply {
                     putExtra(USER_NICKNAME, otherUserPageViewModel.otherUserProfile.value?.nickname)
                 }
