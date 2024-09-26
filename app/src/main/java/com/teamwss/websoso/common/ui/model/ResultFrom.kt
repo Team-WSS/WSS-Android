@@ -4,6 +4,7 @@ enum class ResultFrom {
     FeedDetailBack,
     FeedDetailRemoved,
     CreateFeed,
+    ChangeProfileDisclosure,
     NormalExploreBack,
     NovelDetailBack,
     ProfileEditSuccess,
