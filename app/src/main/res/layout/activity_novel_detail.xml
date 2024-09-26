@@ -212,10 +212,10 @@
                             app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_numeric_info">
 
                             <LinearLayout
+                                android:id="@+id/ll_novel_detail_user_novel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:gravity="center_vertical"
+                                android:gravity="center_horizontal"
                                 app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -226,6 +226,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginHorizontal="4dp"
+                                    android:layout_marginTop="12dp"
                                     android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                                     android:gravity="center_vertical"
                                     android:onClick="@{() -> onClick.onNavigateToNovelRatingClick(ReadStatus.NONE)}"
@@ -262,6 +263,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginHorizontal="4dp"
+                                    android:layout_marginTop="12dp"
                                     android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                                     android:gravity="center_vertical"
                                     android:onClick="@{() -> onClick.onNavigateToNovelRatingClick(ReadStatus.NONE)}"
@@ -302,7 +304,6 @@
                                 android:id="@+id/tg_novel_detail_read_status"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
                                 android:divider="@color/gray_70_DFDFE3"
                                 android:gravity="center"
                                 android:paddingHorizontal="20dp"
