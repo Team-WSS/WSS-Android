@@ -7,10 +7,13 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.teamwss.websoso.R
-import com.teamwss.websoso.R.*
-import com.teamwss.websoso.R.drawable.*
-import com.teamwss.websoso.R.string.*
+import com.teamwss.websoso.R.drawable.ic_novel_detail_check
+import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.string.inquire_link
+import com.teamwss.websoso.R.string.profile_disclosure_message
+import com.teamwss.websoso.R.string.profile_disclosure_private
+import com.teamwss.websoso.R.string.profile_disclosure_public
+import com.teamwss.websoso.R.string.websoso_official
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.EditProfileDisclosure
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -41,10 +44,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
                 ProfileDisclosureActivity.IS_PROFILE_PUBLIC,
                 false,
             )
-        val message: String = when (isProfilePublic) {
+        val message: String = when (isProfilePublic ?: true) {
             true -> getString(profile_disclosure_message, getString(profile_disclosure_public))
             false -> getString(profile_disclosure_message, getString(profile_disclosure_private))
-            else -> error("")
         }
 
         showWebsosoSnackBar(
