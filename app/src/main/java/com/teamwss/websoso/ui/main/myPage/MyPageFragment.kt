@@ -5,9 +5,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
 import com.teamwss.websoso.ui.setting.SettingActivity
@@ -24,6 +27,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
         onSettingButtonClick()
+        setupObserver()
     }
 
     private fun bindViewModel() {
@@ -68,6 +72,24 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         binding.ivMyPageStickyGoToSetting.setOnClickListener {
             val intent = SettingActivity.getIntent(requireContext())
             startActivity(intent)
+        }
+    }
+
+    private fun setupObserver() {
+        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                !uiState.loading -> setUpMyProfileImage(uiState.myProfile?.avatarImage ?: "")
+                uiState.error -> Unit
+            }
+        }
+    }
+
+    private fun setUpMyProfileImage(myProfileUrl: String) {
+        val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(myProfileUrl)
+        binding.ivMyPageUserProfile.load(updatedMyProfileImageUrl) {
+            crossfade(true)
+            error(R.drawable.img_loading_thumbnail)
+            transformations(CircleCropTransformation())
         }
     }
 
