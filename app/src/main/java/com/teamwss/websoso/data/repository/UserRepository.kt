@@ -11,6 +11,7 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
+import com.teamwss.websoso.data.model.UserInfoDetailEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -30,7 +31,12 @@ class UserRepository @Inject constructor(
         private set
 
     suspend fun fetchUserInfo(): UserInfoEntity {
-        return userApi.getUserInfo().toData()
+        val userInfo = userApi.getUserInfo().toData()
+        saveUserInfoToDataStore(userInfo.userId, userInfo.nickname)
+        return userInfo
+    }
+    suspend fun fetchUserInfoDetail(): UserInfoDetailEntity {
+        return userApi.getUserInfoDetail().toData()
     }
 
     suspend fun fetchBlockedUsers(): BlockedUsersEntity {
@@ -53,7 +59,14 @@ class UserRepository @Inject constructor(
         userApi.patchProfileStatus(UserProfileStatusRequestDto(isProfilePublic))
     }
 
-    suspend fun saveUserInfo(gender: String, birthYear: Int) {
+    private suspend fun saveUserInfoToDataStore(userId: Long, nickname: String) {
+        userStorage.edit { preferences ->
+            preferences[USER_ID_KEY] = userId.toString()
+            preferences[NICKNAME_KEY] = nickname
+        }
+    }
+
+    suspend fun saveUserInfoDetail(gender: String, birthYear: Int) {
         userApi.putUserInfo(UserInfoRequestDto(gender, birthYear))
     }
 
@@ -110,6 +123,16 @@ class UserRepository @Inject constructor(
         }
     }
 
+    suspend fun fetchUserIdFromDataStore(): Long {
+        val preferences = userStorage.data.first()
+        return preferences[USER_ID_KEY]?.toLongOrNull() ?: 0L
+    }
+
+    suspend fun fetchNicknameFromDataStore(): String {
+        val preferences = userStorage.data.first()
+        return preferences[NICKNAME_KEY] ?: "웹소소"
+    }
+
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
         return userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
     }
@@ -145,5 +168,7 @@ class UserRepository @Inject constructor(
         val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
         val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN")
         val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
+        val USER_ID_KEY = stringPreferencesKey("USER_ID")
+        val NICKNAME_KEY = stringPreferencesKey("NICKNAME")
     }
 }
