@@ -8,6 +8,7 @@ import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,13 +18,14 @@ class MyActivityFragment :
     private val myActivityAdapter: MyActivityAdapter by lazy {
         MyActivityAdapter()
     }
+    private var userProfile: UserProfileModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setUpMyActivitiesAdapter()
         setUpObserve()
         onMyActivityDetailButtonClick()
+        loadUserProfile()
     }
 
     private fun setUpMyActivitiesAdapter() {
@@ -34,6 +36,31 @@ class MyActivityFragment :
         myActivityViewModel.myActivity.observe(viewLifecycleOwner) { activities ->
             myActivityAdapter.submitList(activities)
         }
+    }
+
+    private fun loadUserProfile() {
+        arguments?.let { bundle ->
+            val avatarImage = bundle.getString("avatarImage", "")
+            val nickname = bundle.getString("nickname", "")
+            val userId = bundle.getLong("userId", 0L)
+
+            userProfile = UserProfileModel(
+                avatarImage = avatarImage,
+                nickname = nickname,
+                userId = userId,
+            ).also {
+                myActivityAdapter.setUserProfile(it)
+            }
+        }
+    }
+
+    fun setupUserProfile(userProfile: UserProfileModel) {
+        this.userProfile = userProfile
+        updateMyActivityes()
+    }
+
+    private fun updateMyActivityes() {
+        userProfile?.let { myActivityAdapter.setUserProfile(it) }
     }
 
     private fun onMyActivityDetailButtonClick() {
