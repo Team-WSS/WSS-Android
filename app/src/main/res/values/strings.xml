@@ -248,6 +248,7 @@
     <string name="setting_profile_disclosure">프로필 공개 설정</string>
     <string name="setting_websoso_account">웹소소 공식 계정</string>
     <string name="setting_inquire_and_feedback"><![CDATA[문의하기 & 의견 보내기]]></string>
+    <string name="setting_privacy_police">개인정보 처리방침</string>
     <string name="setting_app_rating">앱 평점 남기기</string>
     <string name="setting_terms_of_use">서비스 이용약관</string>
 

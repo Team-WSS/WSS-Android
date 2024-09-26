@@ -85,6 +85,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
             startActivity(intent)
         }
 
+        override fun onPrivacyPolicyButtonClick() {
+            // TODO 개인정보 처리방침으로 이동
+        }
+
         override fun onTermsOfUseButtonClick() {
             // TODO 서비스 이용약관으로 이동
         }
