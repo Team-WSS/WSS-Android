@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.databinding.ActivityProfileDisclosureBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,7 +74,13 @@ class ProfileDisclosureActivity :
         }
 
         profileDisclosureViewModel.isSaveStatusComplete.observe(this) { isSaveStatus ->
-            if (isSaveStatus) finish()
+            if (isSaveStatus) {
+                val intent = Intent().apply {
+                    putExtra(IS_PROFILE_PUBLIC, profileDisclosureViewModel.isProfilePublic.value)
+                }
+                setResult(EditProfileDisclosure.RESULT_OK, intent)
+                finish()
+            }
         }
     }
 
@@ -85,6 +93,7 @@ class ProfileDisclosureActivity :
     }
 
     companion object {
+        const val IS_PROFILE_PUBLIC = "isProfilePublic"
 
         fun getIntent(context: Context): Intent {
             return Intent(context, ProfileDisclosureActivity::class.java)
