@@ -25,9 +25,7 @@ class AccountInfoActivity :
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         when (result.resultCode) {
-            ChangeUserInfo.RESULT_OK -> {
-                showChangeUserInfoSuccessMessage()
-            }
+            ChangeUserInfo.RESULT_OK -> showChangeUserInfoSuccessMessage()
         }
     }
 
