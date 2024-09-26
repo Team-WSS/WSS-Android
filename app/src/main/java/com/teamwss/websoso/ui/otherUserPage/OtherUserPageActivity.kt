@@ -38,6 +38,7 @@ class OtherUserPageActivity :
 
         updateUserId()
         bindViewModel()
+        bindPopupMenu()
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
         onBackButtonClick()
@@ -52,6 +53,9 @@ class OtherUserPageActivity :
     private fun bindViewModel() {
         binding.otherUserPageViewModel = otherUserPageViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun bindPopupMenu() {
         _popupBinding = MenuOtherUserPagePopupBinding.inflate(layoutInflater)
         popupBinding.lifecycleOwner = this
         popupBinding.onBlockedUserClick = ::showBlockUserDialog
