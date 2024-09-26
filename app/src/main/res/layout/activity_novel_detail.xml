@@ -302,7 +302,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
                                 android:divider="@color/gray_70_DFDFE3"
-                                android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                                 android:gravity="center"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="12dp"

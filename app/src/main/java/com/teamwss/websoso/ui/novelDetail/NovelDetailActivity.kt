@@ -269,6 +269,7 @@ class NovelDetailActivity :
     }
 
     private fun navigateToNovelRating(readStatus: ReadStatus) {
+        if (novelDetailViewModel.novelDetailModel.value?.novel?.isNovelNotBlank != true) return
         val intent = NovelRatingActivity.getIntent(
             context = this,
             novelId = novelId,
