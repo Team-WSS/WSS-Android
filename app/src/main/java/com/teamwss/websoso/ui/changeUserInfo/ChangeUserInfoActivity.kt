@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityChangeUserInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,7 +78,10 @@ class ChangeUserInfoActivity :
                 else -> {
                     binding.wllChangeUserInfo.setWebsosoLoadingVisibility(false)
                     binding.wllChangeUserInfo.setErrorLayoutVisibility(false)
-                    if (uiState.isSaveStatusComplete) finish()
+                    if (uiState.isSaveStatusComplete) {
+                        setResult(ChangeUserInfo.RESULT_OK, intent)
+                        finish()
+                    }
                 }
             }
         }

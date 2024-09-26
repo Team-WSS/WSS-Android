@@ -3,9 +3,15 @@ package com.teamwss.websoso.ui.accountInfo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import com.teamwss.websoso.R
+import com.teamwss.websoso.R.drawable.ic_novel_detail_check
+import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.string.change_user_info_message
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.ChangeUserInfo
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivityAccountInfoBinding
 import com.teamwss.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.teamwss.websoso.ui.changeUserInfo.ChangeUserInfoActivity
@@ -14,11 +20,25 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AccountInfoActivity :
-    BaseActivity<ActivityAccountInfoBinding>(R.layout.activity_account_info) {
+    BaseActivity<ActivityAccountInfoBinding>(layout.activity_account_info) {
     private val accountInfoViewModel: AccountInfoViewModel by viewModels()
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        activityResultCallback =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    ChangeUserInfo.RESULT_OK -> {
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(change_user_info_message),
+                            icon = ic_novel_detail_check,
+                        )
+                    }
+                }
+            }
 
         bindViewModel()
         onLogoutButtonClick()
@@ -56,7 +76,7 @@ class AccountInfoActivity :
     private fun onChangeUserInfoButtonClick() {
         binding.clAccountInfoChangeUserInfo.setOnClickListener {
             val intent = ChangeUserInfoActivity.getIntent(this)
-            startActivity(intent)
+            activityResultCallback.launch(intent)
         }
     }
 
