@@ -275,6 +275,7 @@
     <string name="profile_disclosure_title">프로필 공개 설정</string>
     <string name="profile_disclosure_complete">완료</string>
     <string name="profile_disclosure_private">비공개</string>
+    <string name="profile_disclosure_public">전체 공개</string>
     <string name="profile_disclosure_message">프로필이 %s로 전환되었어요</string>
 
     <!-- 로그아웃 다이얼로그 뷰 -->
