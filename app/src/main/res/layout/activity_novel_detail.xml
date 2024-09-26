@@ -254,7 +254,7 @@
 
                             <LinearLayout
                                 android:id="@+id/ll_novel_detail_user_date"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="12dp"
