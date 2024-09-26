@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(
         updateHomeData()
     }
 
-    fun updateHomeData() {
+    private fun updateHomeData() {
         viewModelScope.launch {
             _uiState.value = uiState.value?.copy(loading = true)
 
@@ -61,7 +61,7 @@ class HomeViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = true
+                    error = true,
                 )
             }
         }
@@ -85,7 +85,7 @@ class HomeViewModel @Inject constructor(
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
-                    error = true
+                    error = true,
                 )
             }
         }
@@ -108,7 +108,7 @@ class HomeViewModel @Inject constructor(
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
-                    error = true
+                    error = true,
                 )
             }
         }
