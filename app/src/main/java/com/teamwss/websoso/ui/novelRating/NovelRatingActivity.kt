@@ -282,7 +282,7 @@ class NovelRatingActivity :
             context: Context,
             novelId: Long,
             readStatus: ReadStatus,
-            isInterest: Boolean
+            isInterest: Boolean,
         ): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
