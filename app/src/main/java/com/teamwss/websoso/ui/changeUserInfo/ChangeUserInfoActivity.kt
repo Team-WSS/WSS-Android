@@ -79,7 +79,7 @@ class ChangeUserInfoActivity :
                     binding.wllChangeUserInfo.setWebsosoLoadingVisibility(false)
                     binding.wllChangeUserInfo.setErrorLayoutVisibility(false)
                     if (uiState.isSaveStatusComplete) {
-                        setResult(ChangeUserInfo.RESULT_OK, intent)
+                        setResult(ChangeUserInfo.RESULT_OK)
                         finish()
                     }
                 }
