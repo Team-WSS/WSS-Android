@@ -5,7 +5,7 @@ data class UserFeedsEntity(
     val feeds: List<UserFeedEntity>,
 ) {
     data class UserFeedEntity(
-        val feedId: Int,
+        val feedId: Long,
         val isSpoiler: Boolean,
         val feedContent: String,
         val createdDate: String,
@@ -13,10 +13,10 @@ data class UserFeedsEntity(
         val isLiked: Boolean,
         val likeCount: Int,
         val commentCount: Int,
-        val novelId: Int?,
+        val novelId: Long?,
         val title: String?,
         val novelRatingCount: Int?,
         val novelRating: Float?,
-        val relevantCategories: List<String>,
+        val relevantCategories: List<String>?,
     )
 }

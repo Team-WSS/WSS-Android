@@ -9,6 +9,7 @@ import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
+import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
@@ -83,4 +84,11 @@ interface UserApi {
     suspend fun postUserProfile(
         @Body userProfileRequestDto: UserProfileRequestDto,
     )
+
+    @GET("users/{userId}/feeds")
+    suspend fun getUserFeeds(
+        @Path("userId") userId: Long,
+        @Query("lastFeedId") lastFeedId: Long,
+        @Query("size") size: Int,
+    ): UserFeedsResponseDto
 }

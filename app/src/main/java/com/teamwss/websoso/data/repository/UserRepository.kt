@@ -11,6 +11,7 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
+import com.teamwss.websoso.data.model.UserFeedsEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -139,6 +140,10 @@ class UserRepository @Inject constructor(
             preferences.remove(ACCESS_TOKEN_KEY)
             preferences.remove(REFRESH_TOKEN_KEY)
         }
+    }
+
+    suspend fun fetchUserFeeds(userId: Long, lastFeedId: Long, size: Int): UserFeedsEntity {
+        return userApi.getUserFeeds(userId, lastFeedId, size).toData()
     }
 
     companion object {
