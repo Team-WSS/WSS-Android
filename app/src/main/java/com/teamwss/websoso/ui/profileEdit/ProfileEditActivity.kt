@@ -165,7 +165,7 @@ class ProfileEditActivity :
                 finish()
             }
 
-            ProfileEditResult.Failure -> {
+            ProfileEditResult.Error -> {
                 showWebsosoToast(
                     this,
                     getString(R.string.novel_rating_save_error),
