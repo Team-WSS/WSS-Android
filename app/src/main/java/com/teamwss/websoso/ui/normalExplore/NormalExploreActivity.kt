@@ -36,9 +36,7 @@ class NormalExploreActivity :
         setupUI()
         onSearchTextEditorActionListener()
         setupObserver()
-        onBackPressedDispatcher.addCallback(this) {
-            handleBackPressed()
-        }
+        handleBackPressed()
     }
 
     private fun bindViewModel() {
@@ -170,8 +168,10 @@ class NormalExploreActivity :
     }
 
     private fun handleBackPressed() {
-        setResult(NormalExploreBack.RESULT_OK)
-        finish()
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(NormalExploreBack.RESULT_OK)
+            finish()
+        }
     }
 
     companion object {

@@ -68,9 +68,7 @@ class NovelDetailActivity :
         setupWebsosoLoadingLayout()
         setupViewPager()
         novelDetailViewModel.updateNovelDetail(novelId)
-        onBackPressedDispatcher.addCallback(this) {
-            handleBackPressed()
-        }
+        handleBackPressed()
     }
 
     private fun bindViewModel() {
@@ -280,8 +278,10 @@ class NovelDetailActivity :
     }
 
     private fun handleBackPressed() {
-        setResult(NovelDetailBack.RESULT_OK)
-        finish()
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(NovelDetailBack.RESULT_OK)
+            finish()
+        }
     }
 
     override fun onResume() {
