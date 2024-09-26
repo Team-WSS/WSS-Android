@@ -51,7 +51,7 @@ class NovelDetailActivity :
     private var tooltipPopupWindow: PopupWindow? = null
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
-    private val novelRatingLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+    private val novelDetailResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         when (result.resultCode) {
@@ -267,7 +267,7 @@ class NovelDetailActivity :
                 novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
             )
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
-            novelRatingLauncher.launch(intent)
+            novelDetailResultLauncher.launch(intent)
         }
     }
 
@@ -278,7 +278,7 @@ class NovelDetailActivity :
             novelId = novelId,
             readStatus = readStatus,
         )
-        novelRatingLauncher.launch(intent)
+        novelDetailResultLauncher.launch(intent)
     }
 
     private fun handleBackPressed() {
