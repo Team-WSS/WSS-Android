@@ -67,7 +67,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun updateFeedData() {
+    fun updateFeed() {
         viewModelScope.launch {
             runCatching {
                 listOf(
@@ -91,7 +91,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun updateNovelData() {
+    fun updateNovel() {
         viewModelScope.launch {
             runCatching {
                 listOf(

@@ -50,10 +50,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         when (result.resultCode) {
-            FeedDetailBack.RESULT_OK -> homeViewModel.updateFeedData()
-            FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeedData()
-            NormalExploreBack.RESULT_OK -> homeViewModel.updateNovelData()
-            NovelDetailBack.RESULT_OK -> homeViewModel.updateNovelData()
+            FeedDetailBack.RESULT_OK -> homeViewModel.updateFeed()
+            FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
+            NormalExploreBack.RESULT_OK -> homeViewModel.updateNovel()
+            NovelDetailBack.RESULT_OK -> homeViewModel.updateNovel()
         }
     }
 
