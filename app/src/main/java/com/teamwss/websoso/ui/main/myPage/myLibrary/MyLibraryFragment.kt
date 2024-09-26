@@ -16,6 +16,7 @@ import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
+import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
 import com.teamwss.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
@@ -37,7 +38,6 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         setupRestGenrePreferenceAdapter()
         setUpObserve()
         onStorageButtonClick()
-        setupDominantGenres()
     }
 
     private fun setupRestGenrePreferenceAdapter() {
@@ -61,6 +61,10 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
         myLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
             updateNovelPreferencesKeywords(novelPreferences)
+        }
+
+        myLibraryViewModel.topGenres.observe(viewLifecycleOwner) { topGenres ->
+            updateDominantGenres(topGenres)
         }
     }
 
@@ -144,9 +148,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         }
     }
 
-    private fun setupDominantGenres() {
-        val topGenres = myLibraryViewModel.topGenres.value ?: return
-
+    private fun updateDominantGenres(topGenres: List<GenrePreferenceEntity>) {
         topGenres.forEachIndexed { index, genrePreferenceEntity ->
             val updatedGenreImageUrl = binding.root.getS3ImageUrl(genrePreferenceEntity.genreImage)
 
