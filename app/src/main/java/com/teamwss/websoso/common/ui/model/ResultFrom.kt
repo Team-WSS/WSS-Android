@@ -6,6 +6,7 @@ enum class ResultFrom {
     CreateFeed,
     NormalExploreBack,
     NovelDetailBack,
+    ProfileEditBack,
     ;
 
     val RESULT_OK: Int = ordinal
