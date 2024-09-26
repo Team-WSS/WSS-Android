@@ -99,9 +99,16 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
     }
 
     companion object {
+        const val IS_PROFILE_PUBLIC = "isProfilePublic"
 
         fun getIntent(context: Context): Intent {
             return Intent(context, SettingActivity::class.java)
+        }
+
+        fun getIntent(context: Context, isProfilePublic: Boolean): Intent {
+            return Intent(context, SettingActivity::class.java).apply {
+                putExtra(IS_PROFILE_PUBLIC, isProfilePublic)
+            }
         }
     }
 }
