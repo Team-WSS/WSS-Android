@@ -14,6 +14,7 @@ import androidx.core.widget.addTextChangedListener
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoToast
 import com.teamwss.websoso.common.util.toFloatPxFromDp
@@ -157,6 +158,7 @@ class ProfileEditActivity :
     private fun handleProfileEditResult(profileEditResult: ProfileEditResult) {
         when (profileEditResult) {
             ProfileEditResult.Success -> {
+                setResult(ProfileEditSuccess.RESULT_OK)
                 showWebsosoToast(
                     this,
                     getString(R.string.profile_edit_success),

@@ -6,9 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.NormalExploreBack
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityNormalExploreBinding
@@ -34,6 +36,7 @@ class NormalExploreActivity :
         setupUI()
         onSearchTextEditorActionListener()
         setupObserver()
+        handleBackPressed()
     }
 
     private fun bindViewModel() {
@@ -83,6 +86,7 @@ class NormalExploreActivity :
     private fun onNormalExploreButtonClick() = object : NormalExploreClickListener {
 
         override fun onBackButtonClick() {
+            setResult(NormalExploreBack.RESULT_OK)
             finish()
         }
 
@@ -163,8 +167,14 @@ class NormalExploreActivity :
         }
     }
 
-    companion object {
+    private fun handleBackPressed() {
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(NormalExploreBack.RESULT_OK)
+            finish()
+        }
+    }
 
+    companion object {
         fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
     }
 }

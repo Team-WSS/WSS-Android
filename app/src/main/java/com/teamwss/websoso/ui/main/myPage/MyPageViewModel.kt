@@ -22,7 +22,7 @@ class MyPageViewModel @Inject constructor(
         updateUserProfile()
     }
 
-    private fun updateUserProfile() {
+    fun updateUserProfile() {
         _myPageUiState.value = MyPageUiState(loading = true)
         viewModelScope.launch {
             runCatching {
