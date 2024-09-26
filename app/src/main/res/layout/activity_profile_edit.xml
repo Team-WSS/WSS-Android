@@ -44,7 +44,7 @@
             android:id="@+id/tv_profile_edit_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingVertical="20dp"
+            android:layout_marginTop="20dp"
             android:text="@string/profile_edit_title"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
@@ -70,7 +70,7 @@
 
         <ImageView
             android:id="@+id/iv_profile_edit_profile_image"
-            android:layout_width="0dp"
+            android:layout_width="94dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="132dp"
             android:layout_marginTop="38dp"
