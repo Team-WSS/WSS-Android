@@ -5,6 +5,10 @@ enum class ResultFrom {
     FeedDetailRemoved,
     CreateFeed,
     ChangeUserInfo,
+    ChangeProfileDisclosure,
+    NormalExploreBack,
+    NovelDetailBack,
+    ProfileEditSuccess,
     ;
 
     val RESULT_OK: Int = ordinal

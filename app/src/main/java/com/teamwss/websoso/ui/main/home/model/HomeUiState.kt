@@ -6,7 +6,6 @@ import com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity.Recomme
 import com.teamwss.websoso.data.model.UserInterestFeedsEntity.UserInterestFeedEntity
 
 data class HomeUiState(
-    val nickname: String? = "웹소소",
     val loading: Boolean = true,
     val error: Boolean = false,
     val isInterestNovel: Boolean = false,

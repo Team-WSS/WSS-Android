@@ -10,6 +10,7 @@ data class ProfileEditUiState(
     val isCheckDuplicateNicknameEnabled: Boolean = false,
     val nicknameEditResult: NicknameValidationResult = NONE,
     val profileEditResult: ProfileEditResult = ProfileEditResult.Loading,
+    val loadProfileResult: LoadProfileResult = LoadProfileResult.Loading,
 ) {
     val defaultState = nicknameEditResult != VALID_NICKNAME && nicknameEditResult != NONE
     val isFinishButtonEnabled = when {

@@ -186,7 +186,7 @@
 
     <!-- 환영 뷰 -->
     <string name="welcome_welcome_websoso">웹소소와 계약 완료!</string>
-    <string name="welcome_hello_user">%s 님, 만나서 반가워요!</string>
+    <string name="welcome_hello_user">%s님, 만나서 반가워요!</string>
     <string name="welcome_start">시작하기</string>
 
     <!-- 로그인 요청 다이얼로그 -->
@@ -238,16 +238,17 @@
     <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
     <string name="home_user_interest_feed_nickname_format">%1$s 님의 한마디</string>
     <string name="home_user_interest_novel_rating_format">%1$.1f (%2$d)</string>
-    <string name="home_nickname_interest_feed">%1$s 님의 관심글</string>
+    <string name="home_nickname_interest_feed">%1$s님의 관심글</string>
     <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
     <string name="home_no_associated_feed">관심 등록한 작품과 관련된 글이 없어요</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>
     <string name="setting_account_info">계정정보</string>
-    <string name="setting_profile_disclosure">프로필 공개 여부 설정</string>
+    <string name="setting_profile_disclosure">프로필 공개 설정</string>
     <string name="setting_websoso_account">웹소소 공식 계정</string>
     <string name="setting_inquire_and_feedback"><![CDATA[문의하기 & 의견 보내기]]></string>
+    <string name="setting_privacy_police">개인정보 처리방침</string>
     <string name="setting_app_rating">앱 평점 남기기</string>
     <string name="setting_terms_of_use">서비스 이용약관</string>
 
@@ -273,9 +274,11 @@
     <string name="change_user_info_message">성별/나이 정보가 수정되었어요</string>
 
     <!-- 프로필 공개여부 뷰 -->
-    <string name="profile_disclosure_title">프로필 공개여부</string>
+    <string name="profile_disclosure_title">프로필 공개 설정</string>
     <string name="profile_disclosure_complete">완료</string>
     <string name="profile_disclosure_private">비공개</string>
+    <string name="profile_disclosure_public">전체 공개</string>
+    <string name="profile_disclosure_message">프로필이 %s로 전환되었어요</string>
 
     <!-- 로그아웃 다이얼로그 뷰 -->
     <string name="logout_title">로그아웃 할까요?</string>
@@ -323,7 +326,7 @@
     <string name="profile_edit_avatar_title">프로필 선택</string>
     <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
     <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
-    <string name="profile_edit_success">프로필 정보를 수정했어요!</string>
+    <string name="profile_edit_success">프로필 정보가 수정되었어요</string>
 
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>
