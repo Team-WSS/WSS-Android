@@ -72,7 +72,6 @@ class NovelRatingKeywordBottomSheetDialog :
 
         override fun onClearClick() {
             novelRatingViewModel.clearEditingKeyword()
-            dismiss()
         }
 
         override fun onReportKeywordClick() {
