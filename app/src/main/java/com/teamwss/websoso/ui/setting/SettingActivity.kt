@@ -25,9 +25,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         when (result.resultCode) {
-            ChangeProfileDisclosure.RESULT_OK -> {
-                showEditProfileDisclosureSuccessMessage(result)
-            }
+            ChangeProfileDisclosure.RESULT_OK -> showEditProfileDisclosureSuccessMessage(result)
         }
     }
 
