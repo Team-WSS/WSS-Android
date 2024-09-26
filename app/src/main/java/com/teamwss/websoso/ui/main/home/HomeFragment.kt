@@ -8,10 +8,7 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.home_nickname_interest_feed
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.teamwss.websoso.common.ui.model.ResultFrom.NormalExploreBack
-import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
@@ -23,6 +20,7 @@ import com.teamwss.websoso.ui.main.home.adpater.UserInterestFeedAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.notice.NoticeActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +52,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
             NormalExploreBack.RESULT_OK -> homeViewModel.updateNovel()
             NovelDetailBack.RESULT_OK -> homeViewModel.updateNovel()
+            ProfileEditSuccess.RESULT_OK -> {
+                mainViewModel.updateNickname()
+                homeViewModel.updateNovel()
+            }
         }
     }
 
@@ -110,7 +112,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
                         }
-                        updateViewVisibilityByLogin(mainUiState.isLogin, uiState.nickname)
+                        updateViewVisibilityByLogin(mainUiState.isLogin, mainUiState.nickname)
                     }
                 }
             }
@@ -197,7 +199,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             if (mainViewModel.mainUiState.value?.isLogin == true) {
                 startActivityLauncher.launch(
                     NormalExploreActivity.getIntent(
-                        requireContext()
+                        requireContext(),
                     )
                 )
             } else {
@@ -209,7 +211,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun onSettingPreferenceGenreClick() {
         binding.clHomeRecommendNovel.setOnClickListener {
             if (mainViewModel.mainUiState.value?.isLogin == true) {
-                //TODO 프로필 수정으로 이동
+                startActivityLauncher.launch(
+                    ProfileEditActivity.getIntent(
+                        requireContext(),
+                    )
+                )
             } else {
                 showLoginRequestDialog()
             }
