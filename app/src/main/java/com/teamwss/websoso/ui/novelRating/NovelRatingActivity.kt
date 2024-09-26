@@ -77,9 +77,10 @@ class NovelRatingActivity :
     private fun showCancelNovelRatingAlertDialog() {
         val novelAlertModel = NovelAlertModel(
             title = getString(R.string.novel_rating_cancel_alert_title),
-            acceptButtonText = getString(R.string.novel_rating_cancel_alert_accept),
-            cancelButtonText = getString(R.string.novel_rating_cancel_alert_cancel),
-            onAcceptClick = { finish() },
+            acceptButtonText = getString(R.string.novel_rating_cancel_alert_cancel),
+            cancelButtonText = getString(R.string.novel_rating_cancel_alert_accept),
+            acceptButtonColor = R.drawable.bg_novel_detail_primary_100_radius_8dp,
+            onCancelClick = { finish() },
         )
 
         NovelAlertDialogFragment
