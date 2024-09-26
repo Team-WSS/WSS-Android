@@ -78,7 +78,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     private fun setupObserver() {
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                !uiState.loading -> setUpMyProfileImage(uiState.myProfile?.avatarImage ?: "")
+                !uiState.loading -> setUpMyProfileImage(uiState.myProfile?.avatarImage.orEmpty())
                 uiState.error -> Unit
             }
         }
