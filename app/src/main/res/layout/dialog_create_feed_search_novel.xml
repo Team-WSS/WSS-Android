@@ -51,7 +51,7 @@
         <com.teamwss.websoso.common.ui.custom.WebsosoSearchEditText
             android:id="@+id/wset_create_feed_search_novel"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="20dp"

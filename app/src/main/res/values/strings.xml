@@ -23,7 +23,7 @@
     <string name="explore_detail_search_description">장르, 연재상태, 별점, 키워드로 작품 찾기</string>
     <string name="explore_detail_search_button">내 취향에 맞는 작품 탐색하기</string>
     <string name="explore_soso">소소</string>
-    <string name="explore_sosopick_description">다른 사람들이 최근에 읽고 있는 작품이에요</string>
+    <string name="explore_sosopick_description">다른 독자들이 최근에 읽고 있는 작품이에요</string>
 
     <!-- 상세 탐색 뷰 -->
     <string name="detail_explore_info">정보</string>
@@ -199,7 +199,7 @@
     <!-- 로드 뷰 -->
     <string name="load_load_title">로딩 중</string>
     <string name="load_load_description">잠시만 기다려주세요</string>
-    <string name="load_fail_title">네트워크에\n연결되어 있지 않아요</string>
+    <string name="load_fail_title">네트워크 연결에\n실패했어요</string>
     <string name="load_fail_description">연결 상태를 확인한 후\n다시 시도해 보세요.</string>
     <string name="load_fail_reload">페이지 다시 불러오기</string>
 

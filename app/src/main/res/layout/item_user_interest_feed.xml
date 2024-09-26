@@ -99,7 +99,7 @@
 
             <ImageView
                 android:id="@+id/iv_user_interest_feed_avatar_image"
-                cornerRadius="@{20f}"
+                cornerRadius="@{8f}"
                 loadImageUrl="@{userInterestFeed.avatarImage}"
                 android:layout_width="24dp"
                 android:layout_height="22dp"
