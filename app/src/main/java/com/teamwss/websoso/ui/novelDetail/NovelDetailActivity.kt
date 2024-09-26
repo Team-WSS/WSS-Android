@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -17,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
@@ -66,6 +68,7 @@ class NovelDetailActivity :
         setupWebsosoLoadingLayout()
         setupViewPager()
         novelDetailViewModel.updateNovelDetail(novelId)
+        handleBackPressed()
     }
 
     private fun bindViewModel() {
@@ -239,6 +242,7 @@ class NovelDetailActivity :
 
     private fun onNovelDetailButtonClick() = object : NovelDetailClickListener {
         override fun onNavigateBackClick() {
+            setResult(NovelDetailBack.RESULT_OK)
             finish()
         }
 
@@ -271,6 +275,13 @@ class NovelDetailActivity :
             readStatus = readStatus,
         )
         novelRatingLauncher.launch(intent)
+    }
+
+    private fun handleBackPressed() {
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(NovelDetailBack.RESULT_OK)
+            finish()
+        }
     }
 
     override fun onResume() {

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
@@ -262,6 +263,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         setupView()
         setupObserver()
         onFeedDetailClick()
+        handleBackPressed()
     }
 
     private fun onFeedDetailClick() {
@@ -338,6 +340,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
                     binding.rvFeedDetail.smoothScrollToPosition(itemCount)
                 }
             }
+        }
+    }
+
+    private fun handleBackPressed() {
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(FeedDetailBack.RESULT_OK)
+            finish()
         }
     }
 
