@@ -296,7 +296,7 @@ class ProfileEditViewModel @Inject constructor(
                 updateAvatars()
             }.onFailure {
                 _profileEditUiState.value = profileEditUiState.value?.copy(
-                    loadProfileResult = LoadProfileResult.Failure,
+                    loadProfileResult = LoadProfileResult.Error,
                 )
             }
         }

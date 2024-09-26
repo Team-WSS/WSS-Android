@@ -56,7 +56,7 @@ class ProfileEditActivity :
         profileEditViewModel.profileEditUiState.observe(this) { uiState ->
             when (uiState.loadProfileResult) {
                 LoadProfileResult.Loading -> binding.wllProfileEdit.setWebsosoLoadingVisibility(true)
-                LoadProfileResult.Failure -> binding.wllProfileEdit.setErrorLayoutVisibility(true)
+                LoadProfileResult.Error -> binding.wllProfileEdit.setErrorLayoutVisibility(true)
                 LoadProfileResult.Success -> {
                     binding.wllProfileEdit.setWebsosoLoadingVisibility(false)
                     profileEditViewModel.updateCheckDuplicateNicknameButtonEnabled()

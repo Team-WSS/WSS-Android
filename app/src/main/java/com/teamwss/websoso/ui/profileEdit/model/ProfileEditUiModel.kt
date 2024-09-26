@@ -27,5 +27,5 @@ sealed interface ProfileEditResult {
 sealed interface LoadProfileResult {
     data object Success : LoadProfileResult
     data object Loading : LoadProfileResult
-    data object Failure : LoadProfileResult
+    data object Error : LoadProfileResult
 }
