@@ -15,6 +15,9 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
+import com.teamwss.websoso.R.*
+import com.teamwss.websoso.R.drawable.*
+import com.teamwss.websoso.R.string.*
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.util.InfiniteScrollListener
@@ -40,7 +43,7 @@ import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragment_novel_feed) {
+class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment_novel_feed) {
     private val novelId: Long by lazy { requireArguments().getLong(NOVEL_ID) }
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
@@ -135,7 +138,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             popup.dismiss()
         }
         menuContentTitle =
-            getString(R.string.feed_popup_menu_content_isMyFeed).split(",")
+            getString(feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
@@ -159,7 +162,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             popup.dismiss()
         }
         menuContentTitle =
-            getString(R.string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+            getString(feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -197,13 +200,13 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                         val nickname =
                             result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME)
                         val blockMessage = nickname?.let {
-                            getString(R.string.block_user_success_message, it)
-                        } ?: getString(R.string.block_user_success_message)
+                            getString(block_user_success_message, it)
+                        } ?: getString(block_user_success_message)
 
                         showWebsosoSnackBar(
                             view = binding.root,
                             message = blockMessage,
-                            icon = R.drawable.ic_novel_detail_check,
+                            icon = ic_novel_detail_check,
                         )
                     }
                 }
