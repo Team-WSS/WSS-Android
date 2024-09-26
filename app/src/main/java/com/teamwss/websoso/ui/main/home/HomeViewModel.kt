@@ -116,7 +116,6 @@ class HomeViewModel @Inject constructor(
 
     private fun isUserInterestedInNovels(userInterestFeedMessage: String): Boolean {
         return when (UserInterestFeedMessage.fromMessage(userInterestFeedMessage)) {
-            NO_ASSOCIATED_FEEDS -> true
             NO_INTEREST_NOVELS -> false
             else -> true
         }
