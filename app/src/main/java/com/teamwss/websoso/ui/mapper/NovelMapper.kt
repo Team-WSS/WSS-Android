@@ -19,12 +19,7 @@ fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
     return NovelDetailModel(
         userNovel = NovelDetailModel.UserNovelModel(
             userNovelId = userNovel.userNovelId,
-            readStatus = when (userNovel.readStatus) {
-                "WATCHING" -> ReadStatus.WATCHING
-                "WATCHED" -> ReadStatus.WATCHED
-                "QUIT" -> ReadStatus.QUIT
-                else -> null
-            },
+            readStatus = ReadStatus.fromString(userNovel.readStatus),
             startDate = userNovel.startDate,
             endDate = userNovel.endDate,
             isUserNovelInterest = userNovel.isUserNovelInterest,
