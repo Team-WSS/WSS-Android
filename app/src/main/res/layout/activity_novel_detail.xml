@@ -207,6 +207,7 @@
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="24dp"
                             android:background="@drawable/bg_novel_detail_white_radius_15dp"
+                            android:paddingHorizontal="28dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_numeric_info">
@@ -215,16 +216,15 @@
                                 android:id="@+id/ll_novel_detail_user_rating"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="28dp"
                                 android:layout_marginTop="12dp"
                                 android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                                 android:gravity="center_vertical"
                                 android:onClick="@{() -> onClick.onNavigateToNovelRatingClick(ReadStatus.NONE)}"
-                                app:isVisible="@{novelDetailViewModel.novelDetailModel.userNovel.alreadyAllRated}"
+                                app:isVisible="@{novelDetailViewModel.novelDetailModel.userNovel.userNovelRating > 0}"
                                 app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
+                                app:layout_constraintEnd_toStartOf="@id/ll_novel_detail_user_date"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                tools:visibility="gone">
+                                app:layout_constraintTop_toTopOf="parent">
 
                                 <ImageView
                                     android:layout_width="14dp"
@@ -258,15 +258,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="12dp"
-                                android:layout_marginEnd="28dp"
                                 android:background="@drawable/bg_novel_detail_white_stroke_gray_radius_14dp"
                                 android:gravity="center_vertical"
                                 android:onClick="@{() -> onClick.onNavigateToNovelRatingClick(ReadStatus.NONE)}"
-                                app:isVisible="@{novelDetailViewModel.novelDetailModel.userNovel.alreadyAllRated}"
+                                app:isVisible="@{novelDetailViewModel.novelDetailModel.userNovel.isAlreadyDateRated()}"
+                                app:layout_constraintBottom_toTopOf="@id/tg_novel_detail_read_status"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/ll_novel_detail_user_rating"
-                                app:layout_constraintTop_toTopOf="parent"
-                                tools:visibility="gone">
+                                app:layout_constraintTop_toTopOf="parent">
 
                                 <ImageView
                                     android:layout_width="14dp"
@@ -305,12 +304,12 @@
                                 android:divider="@color/gray_70_DFDFE3"
                                 android:enabled="@{novelDetailViewModel.novelDetailModel.novel.isNovelNotBlank}"
                                 android:gravity="center"
+                                android:paddingTop="10dp"
                                 android:paddingBottom="12dp"
                                 android:showDividers="middle"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_user_rating"
                                 app:selectionRequired="true"
                                 app:singleSelection="true">
 
