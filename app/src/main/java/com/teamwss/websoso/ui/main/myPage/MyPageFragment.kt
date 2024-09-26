@@ -117,7 +117,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                     userId = 2L,
                 )
 
-                (viewPagerAdapter.fragments[1] as? MyActivityFragment)?.setUserProfile(userProfile)
+                (viewPagerAdapter.fragments[1] as? MyActivityFragment)?.setupUserProfile(userProfile)
             }
         }
     }
