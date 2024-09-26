@@ -15,7 +15,7 @@ import com.teamwss.websoso.R.string.profile_disclosure_private
 import com.teamwss.websoso.R.string.profile_disclosure_public
 import com.teamwss.websoso.R.string.websoso_official
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.EditProfileDisclosure
+import com.teamwss.websoso.common.ui.model.ResultFrom.ChangeProfileDisclosure
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivitySettingBinding
 import com.teamwss.websoso.ui.accountInfo.AccountInfoActivity
@@ -30,7 +30,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
         activityResultCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    EditProfileDisclosure.RESULT_OK -> {
+                    ChangeProfileDisclosure.RESULT_OK -> {
                         showEditProfileDisclosureSuccessMessage(result)
                     }
                 }

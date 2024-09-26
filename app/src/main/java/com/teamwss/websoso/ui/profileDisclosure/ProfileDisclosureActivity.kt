@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.databinding.ActivityProfileDisclosureBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +77,7 @@ class ProfileDisclosureActivity :
                 val intent = Intent().apply {
                     putExtra(IS_PROFILE_PUBLIC, profileDisclosureViewModel.isProfilePublic.value)
                 }
-                setResult(EditProfileDisclosure.RESULT_OK, intent)
+                setResult(ChangeProfileDisclosure.RESULT_OK, intent)
                 finish()
             }
         }

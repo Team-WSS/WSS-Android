@@ -4,7 +4,7 @@ enum class ResultFrom {
     FeedDetailBack,
     FeedDetailRemoved,
     CreateFeed,
-    EditProfileDisclosure,
+    ChangeProfileDisclosure,
     ;
 
     val RESULT_OK: Int = ordinal
