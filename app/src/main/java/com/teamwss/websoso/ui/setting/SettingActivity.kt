@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.teamwss.websoso.R.drawable.ic_novel_detail_check
 import com.teamwss.websoso.R.layout
@@ -22,19 +21,19 @@ import com.teamwss.websoso.ui.accountInfo.AccountInfoActivity
 import com.teamwss.websoso.ui.profileDisclosure.ProfileDisclosureActivity
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_setting) {
-    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
+    private val startActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            ChangeProfileDisclosure.RESULT_OK -> {
+                showEditProfileDisclosureSuccessMessage(result)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activityResultCallback =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                when (result.resultCode) {
-                    ChangeProfileDisclosure.RESULT_OK -> {
-                        showEditProfileDisclosureSuccessMessage(result)
-                    }
-                }
-            }
         bindClickListener()
     }
 
@@ -70,7 +69,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
 
         override fun onProfileDisclosureButtonClick() {
             val intent = ProfileDisclosureActivity.getIntent(this@SettingActivity)
-            activityResultCallback.launch(intent)
+            startActivityLauncher.launch(intent)
         }
 
         override fun onWebsosoOfficialButtonClick() {
@@ -99,7 +98,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
     }
 
     companion object {
-        const val IS_PROFILE_PUBLIC = "isProfilePublic"
+        private const val IS_PROFILE_PUBLIC = "isProfilePublic"
 
         fun getIntent(context: Context): Intent {
             return Intent(context, SettingActivity::class.java)
