@@ -186,7 +186,7 @@
 
     <!-- 환영 뷰 -->
     <string name="welcome_welcome_websoso">웹소소와 계약 완료!</string>
-    <string name="welcome_hello_user">%s 님, 만나서 반가워요!</string>
+    <string name="welcome_hello_user">%s님, 만나서 반가워요!</string>
     <string name="welcome_start">시작하기</string>
 
     <!-- 로그인 요청 다이얼로그 -->
@@ -238,7 +238,7 @@
     <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
     <string name="home_user_interest_feed_nickname_format">%1$s 님의 한마디</string>
     <string name="home_user_interest_novel_rating_format">%1$.1f (%2$d)</string>
-    <string name="home_nickname_interest_feed">%1$s 님의 관심글</string>
+    <string name="home_nickname_interest_feed">%1$s님의 관심글</string>
     <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
     <string name="home_no_associated_feed">관심 등록한 작품과 관련된 글이 없어요</string>
 
@@ -325,7 +325,7 @@
     <string name="profile_edit_avatar_title">프로필 선택</string>
     <string name="profile_edit_avatar_setting">대표 캐릭터 설정하기</string>
     <string name="profile_edit_avatar_cancel">원래대로 유지하기</string>
-    <string name="profile_edit_success">프로필 정보를 수정했어요!</string>
+    <string name="profile_edit_success">프로필 정보가 수정되었어요</string>
 
     <!-- 내 활동 뷰 -->
     <string name="my_activity_score_count">%.1f (%d)</string>
