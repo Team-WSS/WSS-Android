@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="onBlockedUser"
+            name="onBlockedUserClick"
             type="kotlin.jvm.functions.Function0" />
     </data>
 
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
             android:gravity="center"
-            android:onClick="@{() -> onBlockedUser.invoke()}"
+            android:onClick="@{() -> onBlockedUserClick.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="16dp"
             android:text="@string/other_user_page_popup_blocked_user_kebab_button"

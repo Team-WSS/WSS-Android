@@ -48,7 +48,7 @@ class OtherUserPageActivity :
         binding.lifecycleOwner = this
         _popupBinding = MenuOtherUserPagePopupBinding.inflate(layoutInflater)
         popupBinding.lifecycleOwner = this
-        popupBinding.onBlockedUser = ::showBlockUserDialog
+        popupBinding.onBlockedUserClick = ::showBlockUserDialog
     }
 
     private fun showBlockUserDialog() {
