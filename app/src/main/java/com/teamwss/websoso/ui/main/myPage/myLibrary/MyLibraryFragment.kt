@@ -9,10 +9,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import coil.load
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentMyLibraryBinding
@@ -35,6 +37,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         setupRestGenrePreferenceAdapter()
         setUpObserve()
         onStorageButtonClick()
+        setupDominantGenres()
     }
 
     private fun setupRestGenrePreferenceAdapter() {
@@ -138,6 +141,20 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         binding.ivMyLibraryGoToStorage.setOnClickListener {
             val intent = StorageActivity.getIntent(requireContext())
             startActivity(intent)
+        }
+    }
+
+    private fun setupDominantGenres() {
+        val topGenres = myLibraryViewModel.topGenres.value ?: return
+
+        topGenres.forEachIndexed { index, genrePreferenceEntity ->
+            val updatedGenreImageUrl = binding.root.getS3ImageUrl(genrePreferenceEntity.genreImage)
+
+            when (index) {
+                0 -> binding.ivMyLibraryDominantGenreFirstLogo.load(updatedGenreImageUrl)
+                1 -> binding.ivMyLibraryDominantGenreSecondLogo.load(updatedGenreImageUrl)
+                2 -> binding.ivMyLibraryDominantGenreThirdLogo.load(updatedGenreImageUrl)
+            }
         }
     }
 }
