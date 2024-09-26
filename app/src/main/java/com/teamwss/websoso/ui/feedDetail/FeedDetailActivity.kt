@@ -250,9 +250,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         setupView()
         setupObserver()
         onFeedDetailClick()
-        onBackPressedDispatcher.addCallback(this) {
-            handleBackPressed()
-        }
+        handleBackPressed()
     }
 
     private fun onFeedDetailClick() {
@@ -333,8 +331,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
     }
 
     private fun handleBackPressed() {
-        setResult(FeedDetailBack.RESULT_OK)
-        finish()
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(FeedDetailBack.RESULT_OK)
+            finish()
+        }
     }
 
     companion object {
