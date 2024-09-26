@@ -249,15 +249,11 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
             when (result.resultCode) {
                 CreateFeed.RESULT_OK -> feedDetailViewModel.updateFeedDetail(feedId)
                 BlockUser.RESULT_OK -> {
-                    val nickname =
-                        result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME)
-                    val blockMessage = nickname?.let {
-                        getString(R.string.block_user_success_message, it)
-                    } ?: getString(R.string.block_user_success_message)
+                    val nickname =  result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME).orEmpty()
 
                     showWebsosoSnackBar(
                         view = binding.root,
-                        message = blockMessage,
+                        message = getString(R.string.block_user_success_message, nickname),
                         icon = R.drawable.ic_novel_detail_check,
                     )
                 }
