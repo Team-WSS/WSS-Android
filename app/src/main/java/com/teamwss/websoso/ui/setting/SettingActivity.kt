@@ -42,9 +42,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
         val isProfilePublic =
             result.data?.getBooleanExtra(
                 ProfileDisclosureActivity.IS_PROFILE_PUBLIC,
-                false,
-            )
-        val message: String = when (isProfilePublic ?: true) {
+                true,
+            ) ?: true
+        val message: String = when (isProfilePublic) {
             true -> getString(profile_disclosure_message, getString(profile_disclosure_public))
             false -> getString(profile_disclosure_message, getString(profile_disclosure_private))
         }
