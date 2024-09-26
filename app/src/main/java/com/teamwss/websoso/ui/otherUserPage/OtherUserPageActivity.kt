@@ -36,11 +36,17 @@ class OtherUserPageActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        updateUserId()
         bindViewModel()
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
         onBackButtonClick()
         onMoreButtonClick()
+    }
+
+    private fun updateUserId() {
+        val userId = intent.getLongExtra(USER_ID, 0L)
+        otherUserPageViewModel.updateUserId(userId)
     }
 
     private fun bindViewModel() {

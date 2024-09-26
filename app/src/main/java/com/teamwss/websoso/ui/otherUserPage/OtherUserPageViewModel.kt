@@ -18,19 +18,22 @@ class OtherUserPageViewModel @Inject constructor(
     private val _otherUserProfile = MutableLiveData<OtherUserProfileEntity>()
     val otherUserProfile: LiveData<OtherUserProfileEntity> get() = _otherUserProfile
 
-    private val userId: Long = getUserId()
+    private val _userId: MutableLiveData<Long> = MutableLiveData()
+    val userId: LiveData<Long> get() = _userId
 
     private val _isBlockedCompleted: MutableLiveData<Boolean> = MutableLiveData()
     val isBlockedCompleted: LiveData<Boolean> get() = _isBlockedCompleted
 
-    init {
-        updateUserProfile(userId)
+    fun updateUserId(userId: Long) {
+        _userId.value = userId
+
+        updateUserProfile()
     }
 
-    private fun updateUserProfile(userId: Long) {
+    private fun updateUserProfile() {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchOtherUserProfile(userId)
+                userRepository.fetchOtherUserProfile(userId.value ?: 0L)
             }.onSuccess { otherUserProfile ->
                 _otherUserProfile.value = otherUserProfile
             }.onFailure { exception ->
@@ -38,14 +41,10 @@ class OtherUserPageViewModel @Inject constructor(
         }
     }
 
-    private fun getUserId(): Long {
-        return 3L
-    }
-
     fun updateBlockedUser() {
         viewModelScope.launch {
             runCatching {
-                userRepository.saveBlockUser(userId)
+                userRepository.saveBlockUser(userId.value ?: 0L)
             }.onSuccess {
                 _isBlockedCompleted.value = true
             }.onFailure {}
