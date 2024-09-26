@@ -90,6 +90,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/load_fail_description"
             android:textAlignment="center"
+            android:textAppearance="@style/body2"
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
