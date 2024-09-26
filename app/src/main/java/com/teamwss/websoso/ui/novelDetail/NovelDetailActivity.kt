@@ -51,14 +51,15 @@ class NovelDetailActivity :
     private var tooltipPopupWindow: PopupWindow? = null
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
-    private val novelDetailResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        when (result.resultCode) {
-            RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
-            REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+    private val novelDetailResultLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -277,6 +278,7 @@ class NovelDetailActivity :
             context = this,
             novelId = novelId,
             readStatus = readStatus,
+            isInterest = binding.llNovelDetailInterest.isSelected,
         )
         novelDetailResultLauncher.launch(intent)
     }
