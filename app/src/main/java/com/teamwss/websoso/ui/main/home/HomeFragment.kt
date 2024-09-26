@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
+import com.teamwss.websoso.R.string.home_nickname_interest_feed
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
@@ -121,7 +122,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             when (isLogin) {
                 true -> {
                     tvHomeInterestFeed.text =
-                        getString(R.string.home_nickname_interest_feed, nickname)
+                        getString(home_nickname_interest_feed, nickname)
                 }
 
                 false -> {
