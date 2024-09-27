@@ -14,6 +14,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
+    private var userId : Long = DEFAULT_USER_ID
+
     private val _mainUiState: MutableLiveData<MainUiState> = MutableLiveData(MainUiState())
     val mainUiState: LiveData<MainUiState> get() = _mainUiState
 
@@ -29,6 +31,7 @@ class MainViewModel @Inject constructor(
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
                         isLogin = userInfo.userId != DEFAULT_USER_ID,
+                        userId = userInfo.userId,
                         loading = false,
                     )
                 }.onFailure {
@@ -40,6 +43,8 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun isUserId(id: Long): Boolean = userId == id
 
     companion object{
         const val DEFAULT_USER_ID = -1L
