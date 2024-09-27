@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Patterns
 import android.view.Gravity
 import android.view.View
 import android.view.ViewTreeObserver
@@ -19,6 +20,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
@@ -49,14 +51,15 @@ class NovelDetailActivity :
     private var tooltipPopupWindow: PopupWindow? = null
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
-    private val novelRatingLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        when (result.resultCode) {
-            RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
-            REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+    private val novelDetailResultLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,7 +145,7 @@ class NovelDetailActivity :
     }
 
     private fun updateNovelFeedWriteButtonVisibility(position: Int) {
-        binding.fabNovelFeedWriteFloatingButton.visibility = when (position) {
+        binding.ivNovelFeedWrite.visibility = when (position) {
             FEED_FRAGMENT_PAGE -> View.VISIBLE
             else -> View.GONE
         }
@@ -156,6 +159,7 @@ class NovelDetailActivity :
                     binding.llNovelDetailInterest.isSelected =
                         novelDetail.userNovel.isUserNovelInterest
                     if (novelDetail.isFirstLaunched) setupTooltipWindow()
+                    updateGenreImage(novelDetail.novel.novelGenreImage)
                 }
 
                 false -> binding.wllNovelDetail.setWebsosoLoadingVisibility(true)
@@ -264,17 +268,19 @@ class NovelDetailActivity :
                 novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
             )
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
-            novelRatingLauncher.launch(intent)
+            novelDetailResultLauncher.launch(intent)
         }
     }
 
     private fun navigateToNovelRating(readStatus: ReadStatus) {
+        if (novelDetailViewModel.novelDetailModel.value?.novel?.isNovelNotBlank != true) return
         val intent = NovelRatingActivity.getIntent(
             context = this,
             novelId = novelId,
             readStatus = readStatus,
+            isInterest = binding.llNovelDetailInterest.isSelected,
         )
-        novelRatingLauncher.launch(intent)
+        novelDetailResultLauncher.launch(intent)
     }
 
     private fun handleBackPressed() {
@@ -282,6 +288,12 @@ class NovelDetailActivity :
             setResult(NovelDetailBack.RESULT_OK)
             finish()
         }
+    }
+
+    private fun updateGenreImage(genreImage: String) {
+        if (genreImage.isEmpty() || Patterns.WEB_URL.matcher(genreImage).matches()) return
+        val updatedGenreImage = binding.root.getS3ImageUrl(genreImage)
+        novelDetailViewModel.updateGenreImage(updatedGenreImage)
     }
 
     override fun onResume() {
