@@ -10,6 +10,7 @@ import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
 import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
+import com.teamwss.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
@@ -26,8 +27,11 @@ import retrofit2.http.Query
 
 interface UserApi {
 
-    @GET("users/info")
+    @GET("users/me")
     suspend fun getUserInfo(): UserInfoResponseDto
+
+    @GET("users/info")
+    suspend fun getUserInfoDetail(): UserInfoDetailResponseDto
 
     @GET("blocks")
     suspend fun getBlockedUser(): BlockedUsersResponseDto

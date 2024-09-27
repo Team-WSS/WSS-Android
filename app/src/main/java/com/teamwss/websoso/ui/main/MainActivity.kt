@@ -32,6 +32,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         setBottomNavigationView()
         handleExploreNavigation()
+        mainViewModel.updateUserInfo()
     }
 
     private fun setBottomNavigationView() {

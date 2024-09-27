@@ -8,7 +8,6 @@ import com.teamwss.websoso.data.model.PopularFeedsEntity
 import com.teamwss.websoso.data.model.PopularNovelsEntity
 import com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.teamwss.websoso.data.model.UserInterestFeedMessage
-import com.teamwss.websoso.data.model.UserInterestFeedMessage.NO_ASSOCIATED_FEEDS
 import com.teamwss.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.teamwss.websoso.data.model.UserInterestFeedsEntity
 import com.teamwss.websoso.data.repository.FeedRepository

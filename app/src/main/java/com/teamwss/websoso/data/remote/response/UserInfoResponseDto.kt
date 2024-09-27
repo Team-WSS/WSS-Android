@@ -5,10 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserInfoResponseDto(
-    @SerialName("email")
-    val email: String,
-    @SerialName("gender")
-    val gender: String,
-    @SerialName("birth")
-    val birth: Int,
+    @SerialName("userId")
+    val userId: Long,
+    @SerialName("nickname")
+    val nickname: String,
 )

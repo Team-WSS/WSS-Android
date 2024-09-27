@@ -11,6 +11,7 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
+import com.teamwss.websoso.data.model.UserInfoDetailEntity
 import com.teamwss.websoso.data.model.UserFeedsEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
@@ -28,11 +29,22 @@ class UserRepository @Inject constructor(
     private val userApi: UserApi,
     private val userStorage: DataStore<Preferences>,
 ) {
-    var userGender: String = "M"
-        private set
 
     suspend fun fetchUserInfo(): UserInfoEntity {
-        return userApi.getUserInfo().toData()
+        val userInfo = userApi.getUserInfo().toData()
+        saveUserInfo(userInfo.userId, userInfo.nickname)
+        return userInfo
+    }
+
+    private suspend fun saveUserInfo(userId: Long, nickname: String) {
+        userStorage.edit { preferences ->
+            preferences[USER_ID_KEY] = userId.toString()
+            preferences[USER_NICKNAME_KEY] = nickname
+        }
+    }
+
+    suspend fun fetchUserInfoDetail(): UserInfoDetailEntity {
+        return userApi.getUserInfoDetail().toData()
     }
 
     suspend fun fetchBlockedUsers(): BlockedUsersEntity {
@@ -59,7 +71,7 @@ class UserRepository @Inject constructor(
         userApi.patchProfileStatus(UserProfileStatusRequestDto(isProfilePublic))
     }
 
-    suspend fun saveUserInfo(gender: String, birthYear: Int) {
+    suspend fun saveUserInfoDetail(gender: String, birthYear: Int) {
         userApi.putUserInfo(UserInfoRequestDto(gender, birthYear))
     }
 
@@ -92,16 +104,14 @@ class UserRepository @Inject constructor(
                 birth,
                 genrePreferences,
             )
-        ).also {
-            userGender = gender
-        }
+        )
     }
 
     suspend fun fetchNicknameValidity(nickname: String): Boolean {
         return userApi.getNicknameValidity(nickname).isValid
     }
 
-    suspend fun saveUserProfile(
+    suspend fun saveEditingUserProfile(
         avatarId: Int?,
         nickname: String?,
         intro: String?,
@@ -114,6 +124,21 @@ class UserRepository @Inject constructor(
         userStorage.edit { preferences ->
             preferences[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] = value
         }
+    }
+
+    suspend fun fetchUserId(): Long {
+        val preferences = userStorage.data.first()
+        return preferences[USER_ID_KEY]?.toLongOrNull() ?: DEFAULT_USER_ID
+    }
+
+    suspend fun fetchNickname(): String {
+        val preferences = userStorage.data.first()
+        return preferences[USER_NICKNAME_KEY] ?: DEFAULT_USER_NICKNAME
+    }
+
+    suspend fun fetchGender(): String {
+        val preferences = userStorage.data.first()
+        return preferences[USER_GENDER_KEY] ?: DEFAULT_USER_GENDER
     }
 
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
@@ -171,5 +196,11 @@ class UserRepository @Inject constructor(
         val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
         val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN")
         val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
+        val USER_ID_KEY = stringPreferencesKey("USER_ID")
+        val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")
+        val USER_GENDER_KEY = stringPreferencesKey("USER_GENDER")
+        const val DEFAULT_USER_NICKNAME = "웹소소"
+        const val DEFAULT_USER_ID = -1L
+        const val DEFAULT_USER_GENDER = "F"
     }
 }

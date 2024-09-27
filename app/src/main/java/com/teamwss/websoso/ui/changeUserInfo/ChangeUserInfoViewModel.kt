@@ -34,13 +34,13 @@ class ChangeUserInfoViewModel @Inject constructor(
             _isCompleteButtonEnabled.value = updateCompleteButtonEnabled()
         }
 
-        updateUserInfo()
+        updateUserInfoDetail()
     }
 
-    private fun updateUserInfo() {
+    private fun updateUserInfoDetail() {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchUserInfo()
+                userRepository.fetchUserInfoDetail()
             }.onSuccess { userInfo ->
                 isInitializeOfGender = Gender.from(userInfo.gender)
                 isInitializeOfBirthYear = userInfo.birthYear
@@ -79,7 +79,7 @@ class ChangeUserInfoViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = uiState.value?.copy(loading = true)
             runCatching {
-                userRepository.saveUserInfo(
+                userRepository.saveUserInfoDetail(
                     gender = uiState.value?.gender?.genderCode
                         ?: isInitializeOfGender.getOppositeGender().genderCode,
                     birthYear = uiState.value?.birthYear ?: isInitializeOfBirthYear,
