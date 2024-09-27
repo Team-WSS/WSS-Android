@@ -15,8 +15,6 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
-import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
 import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -96,22 +94,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 uiState.error -> Unit
             }
         }
-
-        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
-            uiState.myProfile?.let { myProfileEntity ->
-                val userProfile = UserProfileModel(
-                    nickname = myProfileEntity.nickname,
-                    avatarImage = myProfileEntity.avatarImage,
-                    userId = 2L,
-                )
-
-                navigateProfileDataToMyActivityFragment(userProfile)
-            }
-        }
-    }
-
-    private fun navigateProfileDataToMyActivityFragment(userProfile: UserProfileModel) {
-        (viewPagerAdapter.fragments[1] as? MyActivityFragment)?.setupUserProfile(userProfile)
     }
 
     private fun setUpMyProfileImage(myProfileUrl: String) {
