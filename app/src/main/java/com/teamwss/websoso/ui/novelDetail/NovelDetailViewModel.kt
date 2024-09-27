@@ -27,8 +27,22 @@ class NovelDetailViewModel @Inject constructor(
     private val _error = MutableLiveData<Boolean>(false)
     val error: LiveData<Boolean> get() = _error
 
-    init {
-        updateLoginStatus()
+    fun updateNovelDetail(novelId: Long) {
+        if (loading.value == true) return
+        viewModelScope.launch {
+            runCatching {
+                _loading.value = true
+                novelRepository.getNovelDetail(novelId)
+            }.onSuccess { novelDetail ->
+                _novelDetailModel.value = novelDetail.toUi(novelId)
+                _loading.value = false
+                if (novelDetailModel.value?.isLogin == false) updateLoginStatus()
+                if (novelDetailModel.value?.userNovel?.isAlreadyRated == false) checkIsFirstLaunched()
+            }.onFailure {
+                _error.value = true
+                _loading.value = false
+            }
+        }
     }
 
     private fun updateLoginStatus() {
@@ -40,25 +54,6 @@ class NovelDetailViewModel @Inject constructor(
                 _novelDetailModel.value = novelDetailModel.value?.copy(isLogin = true)
             }.onFailure {
                 throw it
-            }
-        }
-    }
-
-    fun updateNovelDetail(novelId: Long) {
-        if (loading.value == true) return
-        viewModelScope.launch {
-            runCatching {
-                _loading.value = true
-                novelRepository.getNovelDetail(novelId)
-            }.onSuccess { novelDetail ->
-                _novelDetailModel.value = novelDetail.toUi(novelId)
-                _loading.value = false
-                if (novelDetailModel.value?.userNovel?.isAlreadyRated == false) {
-                    checkIsFirstLaunched()
-                }
-            }.onFailure {
-                _error.value = true
-                _loading.value = false
             }
         }
     }
