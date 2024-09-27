@@ -121,12 +121,12 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchUserId(): Long {
         val preferences = userStorage.data.first()
-        return preferences[USER_ID_KEY]?.toLongOrNull() ?: -1L
+        return preferences[USER_ID_KEY]?.toLongOrNull() ?: DEFAULT_USER_ID
     }
 
     suspend fun fetchNickname(): String {
         val preferences = userStorage.data.first()
-        return preferences[NICKNAME_KEY] ?: "웹소소"
+        return preferences[NICKNAME_KEY] ?: DEFAULT_NICKNAME
     }
 
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
@@ -166,5 +166,7 @@ class UserRepository @Inject constructor(
         val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
         val USER_ID_KEY = stringPreferencesKey("USER_ID")
         val NICKNAME_KEY = stringPreferencesKey("NICKNAME")
+        const val DEFAULT_NICKNAME = "웹소소"
+        const val DEFAULT_USER_ID = -1L
     }
 }
