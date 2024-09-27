@@ -20,12 +20,28 @@ class NovelDetailViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _novelDetailModel = MutableLiveData<NovelDetailModel>()
+    private val _novelDetailModel = MutableLiveData<NovelDetailModel>(NovelDetailModel())
     val novelDetailModel: LiveData<NovelDetailModel> get() = _novelDetailModel
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
     private val _error = MutableLiveData<Boolean>(false)
     val error: LiveData<Boolean> get() = _error
+
+    init {
+        updateLoginStatus()
+    }
+
+    private fun updateLoginStatus() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchIsLogin()
+            }.onSuccess { isLogin ->
+                _novelDetailModel.value = novelDetailModel.value?.copy(isLogin = isLogin)
+            }.onFailure {
+                throw it
+            }
+        }
+    }
 
     fun updateNovelDetail(novelId: Long) {
         if (loading.value == true) return

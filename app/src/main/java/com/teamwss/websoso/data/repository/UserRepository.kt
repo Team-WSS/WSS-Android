@@ -130,6 +130,10 @@ class UserRepository @Inject constructor(
         return preferences[USER_ID_KEY]?.toLongOrNull() ?: DEFAULT_USER_ID
     }
 
+    suspend fun fetchIsLogin(): Boolean {
+        return fetchUserId() != DEFAULT_USER_ID
+    }
+
     suspend fun fetchNickname(): String {
         val preferences = userStorage.data.first()
         return preferences[USER_NICKNAME_KEY] ?: DEFAULT_USER_NICKNAME
