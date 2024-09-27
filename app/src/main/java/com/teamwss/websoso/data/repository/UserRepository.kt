@@ -27,8 +27,6 @@ class UserRepository @Inject constructor(
     private val userApi: UserApi,
     private val userStorage: DataStore<Preferences>,
 ) {
-    var userGender: String = "M"
-        private set
 
     suspend fun fetchUserInfo(): UserInfoEntity {
         val userInfo = userApi.getUserInfo().toData()
@@ -99,9 +97,7 @@ class UserRepository @Inject constructor(
                 birth,
                 genrePreferences,
             )
-        ).also {
-            userGender = gender
-        }
+        )
     }
 
     suspend fun fetchNicknameValidity(nickname: String): Boolean {
