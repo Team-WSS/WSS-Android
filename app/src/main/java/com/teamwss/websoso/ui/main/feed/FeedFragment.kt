@@ -31,6 +31,7 @@ import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
@@ -86,7 +87,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
         override fun onProfileClick(userId: Long) {
-            singleEventHandler.throttleFirst(300) { navigateToProfileByMe(userId) }
+            singleEventHandler.throttleFirst(300) { navigateToProfile(userId) }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -119,7 +120,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
     }
 
-    private fun navigateToProfileByMe(userId: Long) {
+    private fun navigateToProfile(userId: Long) {
         when (mainViewModel.isUserId(userId)) {
             true -> {
                 (activity as? MainActivity)?.let { mainActivity ->
@@ -251,34 +252,41 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
-                FeedDetailRemoved.RESULT_OK -> showWebsosoSnackBar(
-                    view = binding.root,
-                    message = getString(feed_removed_feed_snackbar),
-                    icon = ic_blocked_user_snack_bar,
-                )
-
-                BlockUser.RESULT_OK -> {
-                    val nickname = result.data?.getStringExtra(USER_NICKNAME)
-                    val blockMessage = nickname?.let {
-                        getString(block_user_success_message, it)
-                    } ?: getString(block_user_success_message)
-
-                    showWebsosoSnackBar(
-                        view = binding.root,
-                        message = blockMessage,
-                        icon = ic_novel_detail_check,
-                    )
-
-                    feedViewModel.updateRefreshedFeeds()
-                }
-            }
-        }
         initView()
         feedViewModel.updateFeeds()
         setupObserver()
+        refreshView()
+    }
+
+    private fun refreshView() {
+        if (::activityResultCallback.isInitialized.not()) {
+            activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                    FeedDetailRemoved.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds()
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(feed_removed_feed_snackbar),
+                            icon = ic_blocked_user_snack_bar,
+                        )
+                    }
+
+                    BlockUser.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds()
+
+                        val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(block_user_success_message, nickname),
+                            icon = ic_novel_detail_check,
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun initView() {
