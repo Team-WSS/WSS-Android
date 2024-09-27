@@ -8,7 +8,11 @@ import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.home_nickname_interest_feed
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.ui.model.ResultFrom.*
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NormalExploreBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
@@ -53,7 +57,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             NormalExploreBack.RESULT_OK -> homeViewModel.updateNovel()
             NovelDetailBack.RESULT_OK -> homeViewModel.updateNovel()
             ProfileEditSuccess.RESULT_OK -> {
-                mainViewModel.updateNickname()
+                mainViewModel.updateUserInfo()
                 homeViewModel.updateNovel()
             }
         }
@@ -98,6 +102,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setupObserver() {
+        mainViewModel.mainUiState.observe(viewLifecycleOwner){ uiState ->
+            when{
+                uiState.error -> Unit
+                !uiState.loading -> updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
+            }
+        }
+
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.error -> Unit
@@ -112,7 +123,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
                         }
-                        updateViewVisibilityByLogin(mainUiState.isLogin, mainUiState.nickname)
                     }
                 }
             }
