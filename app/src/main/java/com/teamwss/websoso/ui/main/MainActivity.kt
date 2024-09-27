@@ -30,6 +30,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mainViewModel.updateLogin(intent.getBooleanExtra(EXTRA_IS_LOGIN, false))
+
         setBottomNavigationView()
         handleExploreNavigation()
         mainViewModel.updateUserInfo()
@@ -103,10 +105,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     companion object {
+        private const val EXTRA_IS_LOGIN = "isLogin"
 
-        fun getIntent(context: Context): Intent {
+        fun getIntent(context: Context, isLogin: Boolean): Intent {
             val intent = Intent(context, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra(EXTRA_IS_LOGIN, isLogin)
             return intent
         }
     }

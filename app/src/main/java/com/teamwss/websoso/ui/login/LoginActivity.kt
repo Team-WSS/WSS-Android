@@ -46,7 +46,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun onWithoutLoginButtonClick() {
         binding.tvLoginWithoutLogin.setOnClickListener {
-            startActivity(MainActivity.getIntent(this))
+            // QA의 편의성을 위해 true로 두었으나 소셜로그인이 붙는다면 false로 바뀔 로직
+            startActivity(MainActivity.getIntent(this, true))
         }
     }
 

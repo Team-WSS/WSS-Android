@@ -34,7 +34,7 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>(R.layout.activity_not
     }
 
     private fun navigateToMainActivity() {
-        val intent = MainActivity.getIntent(this)
+        val intent = MainActivity.getIntent(this, true)
         startActivity(intent)
     }
 
