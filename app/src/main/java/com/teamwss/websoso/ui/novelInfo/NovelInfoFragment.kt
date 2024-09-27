@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Patterns
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
@@ -13,9 +14,11 @@ import androidx.fragment.app.activityViewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.FragmentNovelInfoBinding
 import com.teamwss.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
+import com.teamwss.websoso.ui.novelInfo.model.PlatformModel
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,6 +62,7 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
                     updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
                     updateUsersCharmPointBody(uiState.novelInfoModel.formatAttractivePoints())
                     binding.wllNovelInfo.setWebsosoLoadingVisibility(false)
+                    uiState.platforms.forEach { updatePlatformImage(it) }
                 }
 
                 uiState.loading -> {
@@ -264,6 +268,14 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             novelInfoViewModel.updateNovelInfo(novelId)
             binding.wllNovelInfo.setErrorLayoutVisibility(false)
         }
+    }
+
+    private fun updatePlatformImage(platformModel: PlatformModel) {
+        if (platformModel.platformImage.isEmpty() || Patterns.WEB_URL.matcher(platformModel.platformImage)
+                .matches()
+        ) return
+        val updatedPlatformImage = binding.root.getS3ImageUrl(platformModel.platformImage)
+        novelInfoViewModel.updatePlatformImage(platformModel.platform, updatedPlatformImage)
     }
 
     override fun onResume() {

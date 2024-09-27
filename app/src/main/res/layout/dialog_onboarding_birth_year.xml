@@ -17,6 +17,7 @@
             android:layout_marginStart="20dp"
             android:text="@string/onboarding_second_bottom_sheet_birth_year"
             android:textAppearance="@style/title1"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/iv_onboarding_second_bottom_sheet_cancel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_onboarding_second_bottom_sheet_cancel" />

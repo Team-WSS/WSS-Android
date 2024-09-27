@@ -35,18 +35,23 @@ class NovelRatingActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.onClick = onNovelRatingButtonClick()
-        novelRatingViewModel.updateNovelRating(novelId)
-        bindViewModel()
+        bindView()
+        setupNovelRating()
         setupObserver()
         setupCharmPointChips()
         setupWebsosoLoadingLayout()
         setupBackPressCallback()
     }
 
-    private fun bindViewModel() {
+    private fun bindView() {
         binding.viewModel = novelRatingViewModel
         binding.lifecycleOwner = this
+        binding.onClick = onNovelRatingButtonClick()
+    }
+
+    private fun setupNovelRating() {
+        val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
+        novelRatingViewModel.updateNovelRating(novelId, isInterest)
     }
 
     private fun onNovelRatingButtonClick() =
@@ -77,9 +82,10 @@ class NovelRatingActivity :
     private fun showCancelNovelRatingAlertDialog() {
         val novelAlertModel = NovelAlertModel(
             title = getString(R.string.novel_rating_cancel_alert_title),
-            acceptButtonText = getString(R.string.novel_rating_cancel_alert_accept),
-            cancelButtonText = getString(R.string.novel_rating_cancel_alert_cancel),
-            onAcceptClick = { finish() },
+            acceptButtonText = getString(R.string.novel_rating_cancel_alert_cancel),
+            cancelButtonText = getString(R.string.novel_rating_cancel_alert_accept),
+            acceptButtonColor = R.drawable.bg_novel_detail_primary_100_radius_8dp,
+            onCancelClick = { finish() },
         )
 
         NovelAlertDialogFragment
@@ -248,7 +254,8 @@ class NovelRatingActivity :
 
     private fun setupWebsosoLoadingLayout() {
         binding.wllNovelRating.setReloadButtonClickListener {
-            novelRatingViewModel.updateNovelRating(novelId)
+            val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
+            novelRatingViewModel.updateNovelRating(novelId, isInterest)
         }
     }
 
@@ -263,6 +270,7 @@ class NovelRatingActivity :
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
         private const val READ_STATUS = "READ_STATUS"
+        private const val IS_INTEREST = "IS_INTEREST"
 
         fun getIntent(context: Context, novelId: Long): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
@@ -270,10 +278,16 @@ class NovelRatingActivity :
             }
         }
 
-        fun getIntent(context: Context, novelId: Long, readStatus: ReadStatus): Intent {
+        fun getIntent(
+            context: Context,
+            novelId: Long,
+            readStatus: ReadStatus,
+            isInterest: Boolean,
+        ): Intent {
             return Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
                 putExtra(READ_STATUS, readStatus)
+                putExtra(IS_INTEREST, isInterest)
             }
         }
     }

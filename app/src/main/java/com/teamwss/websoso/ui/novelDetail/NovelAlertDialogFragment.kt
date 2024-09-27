@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.common.util.getAdaptedParcelable
@@ -19,6 +20,7 @@ class NovelAlertDialogFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setupAlertModel()
+        setupAcceptButtonColor()
         onAcceptButtonClick()
         onCancelButtonClick()
         setupView()
@@ -31,6 +33,11 @@ class NovelAlertDialogFragment :
         }
     }
 
+    private fun setupAcceptButtonColor() {
+        binding.tvNovelAlertAccept.background =
+            getDrawable(requireContext(), novelAlertModel.acceptButtonColor)
+    }
+
     private fun onAcceptButtonClick() {
         binding.onAcceptClick = {
             novelAlertModel.onAcceptClick()
@@ -39,7 +46,10 @@ class NovelAlertDialogFragment :
     }
 
     private fun onCancelButtonClick() {
-        binding.onCancelClick = { dismiss() }
+        binding.onCancelClick = {
+            novelAlertModel.onCancelClick()
+            dismiss()
+        }
     }
 
     private fun setupView() {

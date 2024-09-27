@@ -2,14 +2,20 @@ package com.teamwss.websoso.ui.main.myPage
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
+import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
 import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,12 +24,22 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
 
+    private val startActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            ProfileEditSuccess.RESULT_OK -> myPageViewModel.updateUserProfile()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setUpViewPager()
         setUpItemVisibilityOnToolBar()
         onSettingButtonClick()
+        setupObserver()
+        onProfileEditClick()
     }
 
     private fun bindViewModel() {
@@ -68,6 +84,34 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         binding.ivMyPageStickyGoToSetting.setOnClickListener {
             val intent = SettingActivity.getIntent(requireContext())
             startActivity(intent)
+        }
+    }
+
+    private fun setupObserver() {
+        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                !uiState.loading -> setUpMyProfileImage(uiState.myProfile?.avatarImage.orEmpty())
+                uiState.error -> Unit
+            }
+        }
+    }
+
+    private fun setUpMyProfileImage(myProfileUrl: String) {
+        val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(myProfileUrl)
+        binding.ivMyPageUserProfile.load(updatedMyProfileImageUrl) {
+            crossfade(true)
+            error(R.drawable.img_loading_thumbnail)
+            transformations(CircleCropTransformation())
+        }
+    }
+
+    private fun onProfileEditClick() {
+        binding.ivMyPageUserProfileEdit.setOnClickListener {
+            startActivityLauncher.launch(
+                ProfileEditActivity.getIntent(
+                    requireContext(),
+                )
+            )
         }
     }
 
