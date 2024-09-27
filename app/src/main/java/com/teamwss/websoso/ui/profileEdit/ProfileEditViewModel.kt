@@ -177,7 +177,7 @@ class ProfileEditViewModel @Inject constructor(
 
         viewModelScope.launch {
             runCatching {
-                userRepository.saveUserProfile(
+                userRepository.saveEditingUserProfile(
                     avatarId = (previousProfile.avatarId to currentProfile.avatarId).compareAndReturnNewOrNullValue(),
                     nickname = (previousProfile.nicknameModel.nickname to currentProfile.nicknameModel.nickname).compareAndReturnNewOrNullValue(),
                     intro = (previousProfile.introduction to currentProfile.introduction).compareAndReturnNewOrNullValue(),
