@@ -13,6 +13,7 @@ import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
+import com.teamwss.websoso.data.remote.response.UserStorageResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -88,4 +89,13 @@ interface UserApi {
     suspend fun postUserProfile(
         @Body userProfileRequestDto: UserProfileRequestDto,
     )
+
+    @GET("users/{userId}/novels")
+    suspend fun getUserStorage(
+        @Path("userId") userId: Long,
+        @Query("readStatus") readStatus: String,
+        @Query("lastUserNovelId") lastUserNovelId: Long,
+        @Query("size") size: Int,
+        @Query("sortType") sortType: String,
+    ): UserStorageResponseDto
 }
