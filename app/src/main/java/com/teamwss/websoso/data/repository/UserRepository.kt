@@ -34,6 +34,13 @@ class UserRepository @Inject constructor(
         return userInfo
     }
 
+    private suspend fun saveUserInfo(userId: Long, nickname: String) {
+        userStorage.edit { preferences ->
+            preferences[USER_ID_KEY] = userId.toString()
+            preferences[NICKNAME_KEY] = nickname
+        }
+    }
+
     suspend fun fetchUserInfoDetail(): UserInfoDetailEntity {
         return userApi.getUserInfoDetail().toData()
     }
@@ -56,13 +63,6 @@ class UserRepository @Inject constructor(
 
     suspend fun saveUserProfileStatus(isProfilePublic: Boolean) {
         userApi.patchProfileStatus(UserProfileStatusRequestDto(isProfilePublic))
-    }
-
-    private suspend fun saveUserInfo(userId: Long, nickname: String) {
-        userStorage.edit { preferences ->
-            preferences[USER_ID_KEY] = userId.toString()
-            preferences[NICKNAME_KEY] = nickname
-        }
     }
 
     suspend fun saveUserInfoDetail(gender: String, birthYear: Int) {
