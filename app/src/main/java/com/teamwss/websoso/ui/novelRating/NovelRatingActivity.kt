@@ -43,15 +43,15 @@ class NovelRatingActivity :
         setupBackPressCallback()
     }
 
-    private fun setupNovelRating() {
-        val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
-        novelRatingViewModel.updateNovelRating(novelId, isInterest)
-    }
-
     private fun bindView() {
         binding.viewModel = novelRatingViewModel
         binding.lifecycleOwner = this
         binding.onClick = onNovelRatingButtonClick()
+    }
+
+    private fun setupNovelRating() {
+        val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
+        novelRatingViewModel.updateNovelRating(novelId, isInterest)
     }
 
     private fun onNovelRatingButtonClick() =
