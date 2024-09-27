@@ -32,6 +32,8 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -243,7 +245,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+        activityResultCallback.launch(NovelDetailActivity.getIntent(requireContext(), novelId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -251,7 +253,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
             when (result.resultCode) {
-                CreateFeed.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
                 FeedDetailRemoved.RESULT_OK -> showWebsosoSnackBar(
                     view = binding.root,
                     message = getString(feed_removed_feed_snackbar),
@@ -269,6 +271,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         message = blockMessage,
                         icon = ic_novel_detail_check,
                     )
+
+                    feedViewModel.updateRefreshedFeeds()
                 }
             }
         }

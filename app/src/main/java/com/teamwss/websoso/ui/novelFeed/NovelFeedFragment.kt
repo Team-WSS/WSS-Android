@@ -22,6 +22,7 @@ import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -217,6 +218,10 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         activityResultCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
+                    OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
+                        novelId
+                    )
+
                     BlockUser.RESULT_OK -> {
                         val nickname =
                             result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME)
@@ -229,6 +234,8 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
                             message = blockMessage,
                             icon = ic_novel_detail_check,
                         )
+
+                        novelFeedViewModel.updateRefreshedFeeds(novelId)
                     }
                 }
             }

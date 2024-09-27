@@ -22,8 +22,9 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
 import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
@@ -47,7 +48,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
-import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -97,12 +98,21 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
 
         override fun onNovelInfoClick(novelId: Long) {
-            NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId)
+            navigateToNovelDetail(novelId)
         }
 
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
             navigateToProfile(userId, isMyFeed)
         }
+    }
+
+    private fun navigateToNovelDetail(novelId: Long) {
+        activityResultCallback.launch(
+            NovelDetailActivity.getIntent(
+                this@FeedDetailActivity,
+                novelId
+            )
+        )
     }
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
@@ -272,15 +282,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         super.onCreate(savedInstanceState)
         activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
             when (result.resultCode) {
-                CreateFeed.RESULT_OK -> feedDetailViewModel.updateFeedDetail(feedId)
-                BlockUser.RESULT_OK -> {
-                    val nickname =  result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME).orEmpty()
+                NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedDetailViewModel.updateFeedDetail(
+                    feedId
+                )
 
-                    showWebsosoSnackBar(
-                        view = binding.root,
-                        message = getString(R.string.block_user_success_message, nickname),
-                        icon = R.drawable.ic_novel_detail_check,
-                    )
+                BlockUser.RESULT_OK -> {
+                    val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+                    val intent = Intent().apply {
+                        putExtra(USER_NICKNAME, nickname)
+                    }
+                    setResult(BlockUser.RESULT_OK, intent)
+                    if (!isFinishing) finish()
                 }
             }
         }
