@@ -30,7 +30,7 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchUserInfo(): UserInfoEntity {
         val userInfo = userApi.getUserInfo().toData()
-        saveUserInfoToDataStore(userInfo.userId, userInfo.nickname)
+        saveUserInfo(userInfo.userId, userInfo.nickname)
         return userInfo
     }
 
@@ -58,7 +58,7 @@ class UserRepository @Inject constructor(
         userApi.patchProfileStatus(UserProfileStatusRequestDto(isProfilePublic))
     }
 
-    private suspend fun saveUserInfoToDataStore(userId: Long, nickname: String) {
+    private suspend fun saveUserInfo(userId: Long, nickname: String) {
         userStorage.edit { preferences ->
             preferences[USER_ID_KEY] = userId.toString()
             preferences[NICKNAME_KEY] = nickname
