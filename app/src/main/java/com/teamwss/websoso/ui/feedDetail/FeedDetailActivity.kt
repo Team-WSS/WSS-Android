@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
@@ -284,6 +285,11 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun onFeedDetailClick() {
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(FeedDetailBack.RESULT_OK)
+            if (!isFinishing) finish()
+        }
+
         binding.root.setOnClickListener { it.hideKeyboard() }
 
         binding.ivFeedDetailBackButton.setOnClickListener {
