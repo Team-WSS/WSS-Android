@@ -1,6 +1,7 @@
 package com.teamwss.websoso.common.ui.model
 
 enum class ResultFrom {
+    BlockUser,
     FeedDetailBack,
     FeedDetailRemoved,
     CreateFeed,

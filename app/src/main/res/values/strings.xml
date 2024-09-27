@@ -140,7 +140,7 @@
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
     <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
-    <string name="novel_rating_complete">평가 완료!</string>
+    <string name="novel_rating_complete">평가가 완료됐어요</string>
     <string name="novel_rating_save_error">다시 시도해주세요</string>
     <string name="novel_rating_keyword_none">해당 키워드는\n아직 등록되지 않았어요..</string>
     <string name="novel_rating_keyword_report">키워드 문의하러 가기</string>
@@ -163,8 +163,8 @@
     <string name="novel_rating_charm_point_title">매력포인트</string>
     <string name="novel_rating_keyword">키워드</string>
     <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
-    <string name="novel_rating_keyword_exceed">최대 20개까지 선택가능해요!</string>
-    <string name="novel_rating_charm_point_exceed">최대 3개까지 선택가능해요!</string>
+    <string name="novel_rating_keyword_exceed">최대 20개까지 선택 가능해요</string>
+    <string name="novel_rating_charm_point_exceed">최대 3개까지 선택 가능해요</string>
 
     <!-- 온보딩 뷰 -->
     <string name="onboarding_skip">건너뛰기</string>
@@ -339,6 +339,11 @@
     <!-- 다른 유저 페이지 뷰 -->
     <string name="other_user_page_library">서재</string>
     <string name="other_user_page_activity">활동</string>
+    <string name="other_user_page_popup_blocked_user_kebab_button">차단하기</string>
+    <string name="block_user_title">해당 유저를 차단할까요?</string>
+    <string name="block_user_description">상대의 게시글, 댓글,\n프로필을 볼 수 없어요</string>
+    <string name="block_user_button">차단</string>
+    <string name="block_user_success_message">%s님을 차단했어요</string>
 
     <!-- 다른 유저 서재 뷰 -->
     <string name="other_user_library_storage">보관함</string>
@@ -375,5 +380,7 @@
     <string name="storage_quitting">하차</string>
     <string name="storage_empty_status">보관함이 비어있어요</string>
     <string name="storage_find_novel">웹소설 찾으러 가기</string>
-
+    <string name="storage_oldest">오래된 순</string>
+    <string name="storage_newest">최신 순</string>
+    <string name="storage_novel_count">%d개</string>
 </resources>

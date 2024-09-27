@@ -11,6 +11,8 @@ import com.teamwss.websoso.data.model.UserFeedsEntity.UserFeedEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
+import com.teamwss.websoso.data.model.UserStorageEntity
+import com.teamwss.websoso.data.model.UserStorageEntity.StorageNovelEntity
 import com.teamwss.websoso.data.remote.response.BlockedUsersResponseDto
 import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
@@ -21,6 +23,8 @@ import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto.UserFeedRes
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
+import com.teamwss.websoso.data.remote.response.UserStorageResponseDto
+import com.teamwss.websoso.data.remote.response.UserStorageResponseDto.StorageNovelDto
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.Genres
 
 fun UserInfoResponseDto.toData(): UserInfoEntity {
@@ -96,6 +100,26 @@ fun OtherUserProfileResponseDto.toData(): OtherUserProfileEntity {
         avatarImage = this.avatarImage,
         isProfilePublic = this.isProfilePublic,
         genrePreferences = this.genrePreferences,
+    )
+}
+
+fun UserStorageResponseDto.toData(): UserStorageEntity {
+    return UserStorageEntity(
+        isLoadable = this.isLoadable,
+        userNovelRating = this.userNovelRating,
+        userNovelCount = this.userNovelCount,
+        userNovels = this.userNovels.map { it.toData() },
+    )
+}
+
+fun StorageNovelDto.toData(): StorageNovelEntity {
+    return StorageNovelEntity(
+        author = this.author,
+        userNovelId = this.userNovelId,
+        novelId = this.novelId,
+        novelRating = this.novelRating,
+        novelImage = this.novelImage,
+        title = this.title,
     )
 }
 

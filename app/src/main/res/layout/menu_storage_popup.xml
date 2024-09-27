@@ -4,17 +4,6 @@
 
     <data>
 
-        <variable
-            name="novelDetailViewModel"
-            type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
-
-        <variable
-            name="reportError"
-            type="kotlin.jvm.functions.Function0" />
-
-        <variable
-            name="deleteUserNovel"
-            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,38 +12,39 @@
         android:background="@drawable/bg_novel_detail_white_radius_14dp">
 
         <TextView
-            android:id="@+id/btn_novel_detail_popup_report_error"
+            android:id="@+id/btn_storage_newest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:onClick="@{() -> reportError.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
-            android:text="@string/novel_detail_report_error"
+            android:text="@string/storage_newest"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/btn_novel_detail_popup_remove_evaluation"
+            app:layout_constraintBottom_toTopOf="@+id/btn_storage_oldest"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/btn_novel_detail_popup_remove_evaluation"
+            android:id="@+id/btn_storage_oldest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_novel_detail_white_radius_14dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:onClick="@{() -> deleteUserNovel.invoke()}"
             android:paddingHorizontal="32dp"
             android:paddingVertical="14dp"
-            android:text="@string/novel_detail_remove_evaluate"
+            android:text="@string/storage_oldest"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
-            app:isVisible="@{novelDetailViewModel.novelDetailModel.userNovel.isAlreadyRated}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/btn_novel_detail_popup_report_error"
-            app:layout_constraintStart_toStartOf="@+id/btn_novel_detail_popup_report_error"
-            app:layout_constraintTop_toBottomOf="@+id/btn_novel_detail_popup_report_error" />
+            app:layout_constraintEnd_toEndOf="@+id/btn_storage_newest"
+            app:layout_constraintStart_toStartOf="@+id/btn_storage_newest"
+            app:layout_constraintTop_toBottomOf="@+id/btn_storage_newest" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

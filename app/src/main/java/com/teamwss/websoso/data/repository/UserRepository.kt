@@ -15,6 +15,7 @@ import com.teamwss.websoso.data.model.UserFeedsEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
+import com.teamwss.websoso.data.model.UserStorageEntity
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
@@ -140,6 +141,22 @@ class UserRepository @Inject constructor(
             preferences.remove(ACCESS_TOKEN_KEY)
             preferences.remove(REFRESH_TOKEN_KEY)
         }
+    }
+
+    suspend fun fetchUserStorage(
+        userId: Long,
+        readStatus: String,
+        lastUserNovelId: Long,
+        size: Int,
+        sortType: String,
+    ): UserStorageEntity {
+        return userApi.getUserStorage(
+            userId = userId,
+            readStatus = readStatus,
+            lastUserNovelId = lastUserNovelId,
+            size = size,
+            sortType = sortType,
+        ).toData()
     }
 
     suspend fun fetchUserFeeds(userId: Long, lastFeedId: Long, size: Int): UserFeedsEntity {
