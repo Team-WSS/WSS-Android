@@ -19,9 +19,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.NovelRating
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelRating
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
@@ -259,6 +259,7 @@ class NovelDetailActivity :
 
         override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
             if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                binding.tgNovelDetailReadStatus.clearChecked()
                 showLoginRequestDialog()
                 return
             }
