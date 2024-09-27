@@ -29,7 +29,10 @@ class FeedViewModel @Inject constructor(
     val feedUiState: LiveData<FeedUiState> get() = _feedUiState
 
     init {
-        val categories: List<CategoryModel> = when (userRepository.userGender) {
+        // TODO userGender를 가져오는 로직으로 대체 필요
+        val userGender = "F"
+
+        val categories: List<CategoryModel> = when (userGender) {
             "M" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
             "F" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
             else -> throw IllegalArgumentException()

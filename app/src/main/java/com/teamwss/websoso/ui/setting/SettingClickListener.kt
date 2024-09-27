@@ -10,6 +10,8 @@ interface SettingClickListener {
 
     fun onInquireAndFeedbackButtonClick()
 
+    fun onPrivacyPolicyButtonClick()
+
     fun onTermsOfUseButtonClick()
 
     fun onBackButtonClick()

@@ -36,7 +36,7 @@ class NovelDetailViewModel @Inject constructor(
             }.onSuccess { novelDetail ->
                 _novelDetailModel.value = novelDetail.toUi(novelId)
                 _loading.value = false
-                if (novelDetailModel.value?.userNovel?.isAlreadyPartiallyRated == false && novelDetailModel.value?.userNovel?.isAlreadyAllRated == false) {
+                if (novelDetailModel.value?.userNovel?.isAlreadyRated == false) {
                     checkIsFirstLaunched()
                 }
             }.onFailure {
@@ -104,5 +104,13 @@ class NovelDetailViewModel @Inject constructor(
                 _novelDetailModel.value = novelDetailModel.value?.copy(isFirstLaunched = true)
             }
         }
+    }
+
+    fun updateGenreImage(genreImage: String) {
+        _novelDetailModel.value = novelDetailModel.value?.copy(
+            novel = novelDetailModel.value?.novel?.copy(
+                novelGenreImage = genreImage,
+            ) ?: return
+        )
     }
 }

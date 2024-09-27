@@ -10,7 +10,7 @@ data class UserFeedsResponseDto(
     val feeds: List<UserFeedResponseDto>,
     @SerialName("isLoadable")
     val isLoadable: Boolean,
-){
+) {
     @Serializable
     data class UserFeedResponseDto(
         @SerialName("commentCount")
@@ -20,7 +20,7 @@ data class UserFeedsResponseDto(
         @SerialName("feedContent")
         val feedContent: String,
         @SerialName("feedId")
-        val feedId: Int,
+        val feedId: Long,
         @SerialName("isLiked")
         val isLiked: Boolean,
         @SerialName("isModified")
@@ -30,14 +30,14 @@ data class UserFeedsResponseDto(
         @SerialName("likeCount")
         val likeCount: Int,
         @SerialName("novelId")
-        val novelId: Int,
+        val novelId: Long?,
         @SerialName("novelRating")
-        val novelRating: Float,
+        val novelRating: Float?,
         @SerialName("novelRatingCount")
-        val novelRatingCount: Int,
+        val novelRatingCount: Int?,
         @SerialName("relevantCategories")
         val relevantCategories: List<String>,
         @SerialName("title")
-        val title: String,
+        val title: String?,
     )
 }

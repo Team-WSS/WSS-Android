@@ -20,18 +20,22 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.teamwss.websoso.R.id
+import com.teamwss.websoso.R.drawable.ic_novel_detail_check
+import com.teamwss.websoso.R.id.tv_feed_thumb_up_count
 import com.teamwss.websoso.R.layout.activity_feed_detail
-import com.teamwss.websoso.R.string
+import com.teamwss.websoso.R.string.block_user_success_message
+import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
+import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.hideKeyboard
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
@@ -56,6 +60,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -88,14 +93,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         @SuppressLint("CutPasteId")
         override fun onLikeButtonClick(view: View, feedId: Long) {
             val likeCount: Int =
-                view.findViewById<TextView>(id.tv_feed_thumb_up_count).text.toString().toInt()
+                view.findViewById<TextView>(tv_feed_thumb_up_count).text.toString().toInt()
             val updatedLikeCount: Int = when (view.isSelected) {
                 true -> if (likeCount > 0) likeCount - 1 else 0
                 false -> likeCount + 1
             }
 
-            view.findViewById<TextView>(id.tv_feed_thumb_up_count).text =
-                updatedLikeCount.toString()
+            view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
@@ -157,7 +161,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             }
             popupMenu.dismiss()
         }
-        menuContentTitle = getString(string.feed_popup_menu_content_isMyFeed).split(",")
+        menuContentTitle = getString(feed_popup_menu_content_isMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = true
         tvFeedPopupSecondItem.isSelected = true
     }
@@ -216,7 +220,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             }
             popupMenu.dismiss()
         }
-        menuContentTitle = getString(string.feed_popup_menu_content_report_isNotMyFeed).split(",")
+        menuContentTitle = getString(feed_popup_menu_content_report_isNotMyFeed).split(",")
         tvFeedPopupFirstItem.isSelected = false
         tvFeedPopupSecondItem.isSelected = false
     }
@@ -278,23 +282,33 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private fun refreshView() {
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-                if (result.resultCode == CreateFeed.RESULT_OK)
-                    feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
+                when (result.resultCode) {
+                    CreateFeed.RESULT_OK -> feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
+                    BlockUser.RESULT_OK -> {
+                        val nickname =
+                            result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME)
+                                .orEmpty()
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(block_user_success_message, nickname),
+                            icon = ic_novel_detail_check,
+                        )
+                    }
+                }
             }
         }
     }
 
     private fun onFeedDetailClick() {
         onBackPressedDispatcher.addCallback(this) {
-            setResult(FeedDetailBack.RESULT_OK)
-            if (!isFinishing) finish()
+            finish()
         }
 
         binding.root.setOnClickListener { it.hideKeyboard() }
 
         binding.ivFeedDetailBackButton.setOnClickListener {
-            setResult(FeedDetailBack.RESULT_OK)
-            if (!isFinishing) finish()
+            finish()
         }
 
         binding.ivFeedDetailMoreButton.setOnClickListener {
@@ -352,8 +366,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                             .newInstance {
                                 setResult(CreateFeed.RESULT_OK)
                                 if (!isFinishing) finish()
-                            }
-                            .show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
+                            }.show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
 
                         else -> {
                             setResult(FeedDetailRemoved.RESULT_OK)

@@ -29,7 +29,7 @@
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
+                    android:layout_height="260dp"
                     android:background="@color/transparent"
                     app:collapsedTitleGravity="center"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -45,21 +45,33 @@
 
                         <ImageView
                             android:id="@+id/iv_my_page_user_profile"
-                            loadImageUrl='@{myPageViewModel.myProfile.avatarImage}'
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="72dp"
-                            app:isCircularImage="@{true}"
+                            android:layout_width="94dp"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="30dp"
+                            app:layout_constraintDimensionRatio="1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:src="@mipmap/ic_wss_logo" />
+
+                        <ImageView
+                            android:id="@+id/iv_my_page_user_profile_edit"
+                            android:layout_width="40dp"
+                            android:layout_height="0dp"
+                            android:layout_marginEnd="-7.5dp"
+                            android:layout_marginBottom="-7.5dp"
+                            android:padding="7.5dp"
+                            android:src="@drawable/ic_my_page_edit_profile"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_my_page_user_profile"
+                            app:layout_constraintDimensionRatio="1"
+                            app:layout_constraintEnd_toEndOf="@id/iv_my_page_user_profile" />
 
                         <TextView
                             android:id="@+id/tv_my_page_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:text='@{myPageViewModel.myProfile.nickname}'
+                            android:text='@{myPageViewModel.myPageUiState.myProfile.nickname}'
                             android:textAppearance="@style/headline1"
                             android:textColor="@color/black"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +85,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:paddingBottom="30dp"
-                            android:text='@{myPageViewModel.myProfile.intro}'
+                            android:text='@{myPageViewModel.myPageUiState.myProfile.intro}'
                             android:textAppearance="@style/body2"
                             android:textColor="@color/gray_200_AEADB3"
                             app:layout_constraintEnd_toEndOf="parent"

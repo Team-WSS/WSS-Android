@@ -2,10 +2,17 @@ package com.teamwss.websoso.ui.main.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
+import com.teamwss.websoso.R.string.home_nickname_interest_feed
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NormalExploreBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.teamwss.websoso.databinding.FragmentHomeBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
@@ -17,6 +24,7 @@ import com.teamwss.websoso.ui.main.home.adpater.UserInterestFeedAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.notice.NoticeActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,6 +46,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val recommendedNovelsByUserTasteAdapter: RecommendedNovelsByUserTasteAdapter by lazy {
         RecommendedNovelsByUserTasteAdapter(::navigateToNovelDetail)
+    }
+
+    private val startActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            FeedDetailBack.RESULT_OK -> homeViewModel.updateFeed()
+            FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
+            NormalExploreBack.RESULT_OK -> homeViewModel.updateNovel()
+            NovelDetailBack.RESULT_OK -> homeViewModel.updateNovel()
+            ProfileEditSuccess.RESULT_OK -> {
+                mainViewModel.updateUserInfo()
+                homeViewModel.updateNovel()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,9 +102,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setupObserver() {
+        mainViewModel.mainUiState.observe(viewLifecycleOwner){ uiState ->
+            when{
+                uiState.error -> Unit
+                !uiState.loading -> updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
+            }
+        }
+
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.loading -> Unit
                 uiState.error -> Unit
                 !uiState.loading -> {
                     popularNovelsAdapter.submitList(uiState.popularNovels)
@@ -94,7 +123,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
                         }
-                        updateViewVisibilityByLogin(mainUiState.isLogin, uiState.nickname)
                     }
                 }
             }
@@ -106,19 +134,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             when (isLogin) {
                 true -> {
                     tvHomeInterestFeed.text =
-                        getString(R.string.home_nickname_interest_feed, nickname)
-                    clHomeInterestFeed.visibility = View.GONE
-                    clHomeRecommendNovel.visibility = View.GONE
-                    clHomeUserInterestFeed.visibility = View.VISIBLE
-                    clHomeUserRecommendNovel.visibility = View.VISIBLE
+                        getString(home_nickname_interest_feed, nickname)
                 }
 
                 false -> {
                     tvHomeInterestFeed.text = "관심글"
-                    clHomeInterestFeed.visibility = View.VISIBLE
-                    clHomeRecommendNovel.visibility = View.VISIBLE
-                    clHomeUserInterestFeed.visibility = View.GONE
-                    clHomeUserRecommendNovel.visibility = View.GONE
                 }
             }
         }
@@ -167,17 +187,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+        startActivityLauncher.launch(
+            NovelDetailActivity.getIntent(
+                requireContext(),
+                novelId,
+            )
+        )
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+        startActivityLauncher.launch(
+            FeedDetailActivity.getIntent(
+                requireContext(),
+                feedId,
+            )
+        )
     }
 
     private fun onPostInterestNovelClick() {
         binding.clHomeInterestFeed.setOnClickListener {
             if (mainViewModel.mainUiState.value?.isLogin == true) {
-                startActivity(NormalExploreActivity.getIntent(requireContext()))
+                startActivityLauncher.launch(
+                    NormalExploreActivity.getIntent(
+                        requireContext(),
+                    )
+                )
             } else {
                 showLoginRequestDialog()
             }
@@ -187,7 +221,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun onSettingPreferenceGenreClick() {
         binding.clHomeRecommendNovel.setOnClickListener {
             if (mainViewModel.mainUiState.value?.isLogin == true) {
-                //TODO 프로필 수정으로 이동
+                startActivityLauncher.launch(
+                    ProfileEditActivity.getIntent(
+                        requireContext(),
+                    )
+                )
             } else {
                 showLoginRequestDialog()
             }
@@ -207,11 +245,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 showLoginRequestDialog()
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        homeViewModel.updateHomeData()
     }
 
     companion object {

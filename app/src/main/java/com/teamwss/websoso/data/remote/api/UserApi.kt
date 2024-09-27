@@ -9,10 +9,13 @@ import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
+import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
+import com.teamwss.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
 import com.teamwss.websoso.data.remote.response.UserProfileStatusResponseDto
+import com.teamwss.websoso.data.remote.response.UserStorageResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -24,8 +27,11 @@ import retrofit2.http.Query
 
 interface UserApi {
 
-    @GET("users/info")
+    @GET("users/me")
     suspend fun getUserInfo(): UserInfoResponseDto
+
+    @GET("users/info")
+    suspend fun getUserInfoDetail(): UserInfoDetailResponseDto
 
     @GET("blocks")
     suspend fun getBlockedUser(): BlockedUsersResponseDto
@@ -33,6 +39,11 @@ interface UserApi {
     @DELETE("blocks/{blockId}")
     suspend fun deleteBlockedUser(
         @Path("blockId") blockId: Long,
+    )
+
+    @POST("blocks")
+    suspend fun postBlockUser(
+        @Query("userId") userId: Long,
     )
 
     @GET("users/user-novel-stats")
@@ -83,4 +94,20 @@ interface UserApi {
     suspend fun postUserProfile(
         @Body userProfileRequestDto: UserProfileRequestDto,
     )
+
+    @GET("users/{userId}/novels")
+    suspend fun getUserStorage(
+        @Path("userId") userId: Long,
+        @Query("readStatus") readStatus: String,
+        @Query("lastUserNovelId") lastUserNovelId: Long,
+        @Query("size") size: Int,
+        @Query("sortType") sortType: String,
+    ): UserStorageResponseDto
+
+    @GET("users/{userId}/feeds")
+    suspend fun getUserFeeds(
+        @Path("userId") userId: Long,
+        @Query("lastFeedId") lastFeedId: Long,
+        @Query("size") size: Int,
+    ): UserFeedsResponseDto
 }

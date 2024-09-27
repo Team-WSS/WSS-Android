@@ -2,6 +2,8 @@ package com.teamwss.websoso.ui.mapper
 
 import com.teamwss.websoso.data.model.NovelDetailEntity
 import com.teamwss.websoso.data.model.NovelInfoEntity
+import com.teamwss.websoso.data.model.UserStorageEntity
+import com.teamwss.websoso.data.model.UserStorageEntity.StorageNovelEntity
 import com.teamwss.websoso.domain.model.ExploreResult
 import com.teamwss.websoso.domain.model.ExploreResult.Novel
 import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel
@@ -9,22 +11,20 @@ import com.teamwss.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 import com.teamwss.websoso.ui.novelDetail.model.NovelDetailModel
 import com.teamwss.websoso.ui.novelInfo.model.KeywordModel
 import com.teamwss.websoso.ui.novelInfo.model.NovelInfoUiModel
+import com.teamwss.websoso.ui.novelInfo.model.Platform
 import com.teamwss.websoso.ui.novelInfo.model.PlatformModel
 import com.teamwss.websoso.ui.novelInfo.model.ReviewCountModel
 import com.teamwss.websoso.ui.novelInfo.model.UnifiedReviewCountModel
 import com.teamwss.websoso.ui.novelRating.model.NovelRatingModel.Companion.toCharmPoint
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
+import com.teamwss.websoso.ui.userStorage.model.UserStorageModel
+import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
 fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel {
     return NovelDetailModel(
         userNovel = NovelDetailModel.UserNovelModel(
             userNovelId = userNovel.userNovelId,
-            readStatus = when (userNovel.readStatus) {
-                "WATCHING" -> ReadStatus.WATCHING
-                "WATCHED" -> ReadStatus.WATCHED
-                "QUIT" -> ReadStatus.QUIT
-                else -> null
-            },
+            readStatus = ReadStatus.fromString(userNovel.readStatus),
             startDate = userNovel.startDate,
             endDate = userNovel.endDate,
             isUserNovelInterest = userNovel.isUserNovelInterest,
@@ -56,10 +56,10 @@ fun NovelInfoEntity.toUi() = NovelInfoUiModel(
 )
 
 fun NovelInfoEntity.PlatformEntity.toUi() = PlatformModel(
-    platformName = platformName,
+    platform = Platform.fromPlatformName(platformName),
     platformImage = platformImage,
     platformUrl = platformUrl,
-    isVisible = true,
+    isVisible = platformName.isNotEmpty(),
 )
 
 fun NovelInfoEntity.KeywordEntity.toUi() = KeywordModel(
@@ -90,5 +90,25 @@ fun Novel.toUi(): NovelModel {
         interestedCount = interestedCount,
         rating = rating,
         ratingCount = ratingCount,
+    )
+}
+
+fun UserStorageEntity.toUi(): UserStorageModel {
+    return UserStorageModel(
+        isLoadable = isLoadable,
+        userNovelCount = userNovelCount,
+        userNovelRating = userNovelRating,
+        userNovels = userNovels.map { it.toUi() },
+    )
+}
+
+fun StorageNovelEntity.toUi(): StorageNovelModel {
+    return StorageNovelModel(
+        author = author,
+        novelId = novelId,
+        novelImage = novelImage,
+        title = title,
+        userNovelId = userNovelId,
+        novelRating = novelRating,
     )
 }
