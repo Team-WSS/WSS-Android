@@ -28,10 +28,10 @@ class MainViewModel @Inject constructor(
                 runCatching {
                     userRepository.fetchUserInfo()
                 }.onSuccess { userInfo ->
+                    userId = userInfo.userId
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
                         isLogin = userInfo.userId != DEFAULT_USER_ID,
-                        userId = userInfo.userId,
                         loading = false,
                     )
                 }.onFailure {

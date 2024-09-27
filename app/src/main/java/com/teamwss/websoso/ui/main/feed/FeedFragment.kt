@@ -16,6 +16,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.teamwss.websoso.R
 import com.teamwss.websoso.R.color
 import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
 import com.teamwss.websoso.R.drawable.ic_novel_detail_check
@@ -118,13 +119,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun navigateToProfileByMe(userId: Long) {
         when (mainViewModel.isUserId(userId)) {
-            true ->
-                startActivity(
-                    MainActivity.getIntent(
-                        requireContext(),
-                        MainActivity.FragmentType.MY_PAGE,
-                    )
-                )
+            true -> {
+                (activity as? MainActivity)?.let { mainActivity ->
+                    mainActivity.binding.bnvMain.selectedItemId = R.id.menu_my_page
+                }
+            }
 
             false -> {
                 activityResultCallback.launch(
