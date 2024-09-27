@@ -123,12 +123,12 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchUserIdFromDataStore(): Long {
+    suspend fun fetchUserId(): Long {
         val preferences = userStorage.data.first()
         return preferences[USER_ID_KEY]?.toLongOrNull() ?: 0L
     }
 
-    suspend fun fetchNicknameFromDataStore(): String {
+    suspend fun fetchNickname(): String {
         val preferences = userStorage.data.first()
         return preferences[NICKNAME_KEY] ?: "웹소소"
     }
