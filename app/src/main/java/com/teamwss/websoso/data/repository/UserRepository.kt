@@ -121,7 +121,7 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchUserId(): Long {
         val preferences = userStorage.data.first()
-        return preferences[USER_ID_KEY]?.toLongOrNull() ?: 0L
+        return preferences[USER_ID_KEY]?.toLongOrNull() ?: -1L
     }
 
     suspend fun fetchNickname(): String {
