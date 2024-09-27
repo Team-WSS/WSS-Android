@@ -37,6 +37,11 @@ interface UserApi {
         @Path("blockId") blockId: Long,
     )
 
+    @POST("blocks")
+    suspend fun postBlockUser(
+        @Query("userId") userId: Long,
+    )
+
     @GET("users/user-novel-stats")
     suspend fun getUserNovelStats(): UserNovelStatsResponseDto
 
