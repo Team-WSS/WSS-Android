@@ -6,7 +6,7 @@
     <data>
         <variable
             name="activity"
-            type="com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel" />
+            type="com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel" />
 
         <variable
             name="userProfile"
@@ -57,7 +57,7 @@
             android:id="@+id/tv_my_activity_dot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="8dp"
             android:text="@string/my_activity_dot"
             android:textAppearance="@style/title2"
             app:layout_constraintBottom_toBottomOf="@id/tv_my_activity_created_date"
@@ -72,7 +72,7 @@
             android:text='@{activity.createdDate}'
             android:textAppearance="@style/body5"
             android:textColor="@color/black"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/cl_my_activity_profile"
             app:layout_constraintStart_toEndOf="@+id/tv_my_activity_dot"
             app:layout_constraintTop_toTopOf="@+id/cl_my_activity_profile" />
@@ -105,7 +105,7 @@
             android:id="@+id/tv_my_activity_spoiler_warning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:text="@string/feed_spoiler_warning"
             android:textAppearance="@style/body2"
             android:textColor="@color/secondary_100_FF675D"
@@ -117,7 +117,7 @@
             android:id="@+id/tv_my_activity_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:breakStrategy="simple"
             android:ellipsize="end"
             android:gravity="top"
@@ -226,15 +226,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="28dp"
+            android:layout_marginStart="20dp"
             app:layout_constraintBottom_toTopOf="@+id/view_my_activity_indicator"
-            app:layout_constraintStart_toStartOf="@+id/tv_my_activity_genre"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_my_activity_genre">
 
             <ImageView
                 android:id="@+id/iv_my_activity_thumb_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/btn_feed_thumb_up"
