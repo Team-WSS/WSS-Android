@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.novelDetail.model
 
 import android.os.Parcelable
+import com.teamwss.websoso.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -9,5 +10,7 @@ data class NovelAlertModel(
     val message: String = "",
     val acceptButtonText: String,
     val cancelButtonText: String,
-    val onAcceptClick: () -> Unit,
+    val acceptButtonColor: Int = R.drawable.bg_novel_detail_secondary_100_radius_8dp,
+    val onAcceptClick: () -> Unit = {},
+    val onCancelClick: () -> Unit = {},
 ) : Parcelable

@@ -30,13 +30,13 @@ class NovelRatingViewModel @Inject constructor(
     val uiState: LiveData<NovelRatingUiState> get() = _uiState
     private val ratingDateManager = RatingDateManager()
 
-    fun updateNovelRating(novelId: Long) {
+    fun updateNovelRating(novelId: Long, isInterest: Boolean) {
         viewModelScope.launch {
             runCatching {
                 _uiState.value = uiState.value?.copy(loading = true)
                 userNovelRepository.fetchNovelRating(novelId)
             }.onSuccess { novelRatingEntity ->
-                handleSuccessfulFetchNovelRating(novelRatingEntity)
+                handleSuccessfulFetchNovelRating(novelRatingEntity, isInterest)
             }.onFailure {
                 _uiState.value =
                     uiState.value?.copy(
@@ -47,7 +47,10 @@ class NovelRatingViewModel @Inject constructor(
         }
     }
 
-    private fun handleSuccessfulFetchNovelRating(novelRatingEntity: NovelRatingEntity) {
+    private fun handleSuccessfulFetchNovelRating(
+        novelRatingEntity: NovelRatingEntity,
+        isInterest: Boolean,
+    ) {
         val novelRatingModel = novelRatingEntity.toUi()
         val isEditingStartDate =
             ratingDateManager.updateIsEditingStartDate(novelRatingModel.uiReadStatus)
@@ -61,7 +64,7 @@ class NovelRatingViewModel @Inject constructor(
                 currentSelectedKeywords = novelRatingModel.userKeywords,
             ),
             isEditingStartDate = isEditingStartDate,
-            isAlreadyRated = novelRatingEntity.readStatus != null,
+            isAlreadyRated = novelRatingEntity.readStatus != null || isInterest,
             maxDayValue = dayMaxValue,
             loading = false,
         )
