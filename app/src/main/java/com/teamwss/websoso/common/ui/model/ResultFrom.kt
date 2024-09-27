@@ -10,7 +10,8 @@ enum class ResultFrom {
     NormalExploreBack,
     NovelDetailBack,
     ProfileEditSuccess,
+    OtherUserProfileBack,
     ;
 
-    val RESULT_OK: Int = ordinal
+    val RESULT_OK: Int = ordinal + 1
 }
