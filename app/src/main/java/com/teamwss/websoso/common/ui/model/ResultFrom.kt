@@ -1,16 +1,15 @@
 package com.teamwss.websoso.common.ui.model
 
-enum class ResultFrom {
-    BlockUser,
-    FeedDetailBack,
-    FeedDetailRemoved,
-    CreateFeed,
-    ChangeUserInfo,
-    ChangeProfileDisclosure,
-    NormalExploreBack,
-    NovelDetailBack,
-    ProfileEditSuccess,
-    ;
+enum class ResultFrom(private val resultCode: Int) {
+    FeedDetailBack(1),
+    FeedDetailRemoved(2),
+    CreateFeed(3),
+    BlockUser(4),
+    ChangeUserInfo(5),
+    ChangeProfileDisclosure(6),
+    NormalExploreBack(7),
+    NovelDetailBack(8),
+    ProfileEditSuccess(9);
 
-    val RESULT_OK: Int = ordinal + 1
+    val RESULT_OK: Int = resultCode
 }
