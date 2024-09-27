@@ -12,6 +12,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.CategoriesModel
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelRating
 import com.teamwss.websoso.common.util.getAdaptedSerializableExtra
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.showWebsosoToast
@@ -134,7 +135,7 @@ class NovelRatingActivity :
             icon = R.drawable.ic_novel_detail_check,
         )
 
-        setResult(RESULT_OK)
+        setResult(NovelRating.RESULT_OK)
         finish()
     }
 

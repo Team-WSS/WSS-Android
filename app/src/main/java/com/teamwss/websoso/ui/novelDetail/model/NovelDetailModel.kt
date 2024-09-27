@@ -9,6 +9,7 @@ data class NovelDetailModel(
     val novel: NovelModel,
     val userRating: UserRatingModel,
     val isFirstLaunched: Boolean = false,
+    val isLogin: Boolean = false,
 ) {
     data class UserNovelModel(
         val userNovelId: Long? = null,

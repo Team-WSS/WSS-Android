@@ -10,6 +10,7 @@ enum class ResultFrom {
     NormalExploreBack,
     NovelDetailBack,
     ProfileEditSuccess,
+    NovelRating,
     ;
 
     val RESULT_OK: Int = ordinal
