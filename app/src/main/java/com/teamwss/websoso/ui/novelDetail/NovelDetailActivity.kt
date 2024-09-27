@@ -282,6 +282,14 @@ class NovelDetailActivity :
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
             novelDetailResultLauncher.launch(intent)
         }
+
+        override fun onNovelInterestClick() {
+            if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                showLoginRequestDialog()
+                return
+            }
+            novelDetailViewModel.updateUserInterest(novelId)
+        }
     }
 
     private fun navigateToNovelRating(readStatus: ReadStatus) {
