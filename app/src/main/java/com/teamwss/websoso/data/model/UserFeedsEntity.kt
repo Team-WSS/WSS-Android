@@ -17,6 +17,6 @@ data class UserFeedsEntity(
         val title: String?,
         val novelRatingCount: Int?,
         val novelRating: Float?,
-        val relevantCategories: List<String>?,
+        val relevantCategories: List<String>,
     )
 }

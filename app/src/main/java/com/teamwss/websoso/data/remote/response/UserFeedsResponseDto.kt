@@ -36,7 +36,7 @@ data class UserFeedsResponseDto(
         @SerialName("novelRatingCount")
         val novelRatingCount: Int?,
         @SerialName("relevantCategories")
-        val relevantCategories: List<String>?,
+        val relevantCategories: List<String>,
         @SerialName("title")
         val title: String?,
     )

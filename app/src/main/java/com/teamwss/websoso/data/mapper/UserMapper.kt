@@ -19,6 +19,8 @@ import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
+import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
+import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto.UserFeedResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
