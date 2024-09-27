@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,10 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val _mainUiState: MutableLiveData<MainUiState> = MutableLiveData(MainUiState())
     val mainUiState: LiveData<MainUiState> get() = _mainUiState
+
+    init{
+        updateUserInfo()
+    }
 
     fun updateUserInfo() {
         if (mainUiState.value?.isLogin == true) {
