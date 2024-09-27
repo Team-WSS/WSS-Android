@@ -37,7 +37,7 @@ class UserRepository @Inject constructor(
     private suspend fun saveUserInfo(userId: Long, nickname: String) {
         userStorage.edit { preferences ->
             preferences[USER_ID_KEY] = userId.toString()
-            preferences[NICKNAME_KEY] = nickname
+            preferences[USER_NICKNAME_KEY] = nickname
         }
     }
 
@@ -127,12 +127,12 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchNickname(): String {
         val preferences = userStorage.data.first()
-        return preferences[NICKNAME_KEY] ?: DEFAULT_NICKNAME
+        return preferences[USER_NICKNAME_KEY] ?: DEFAULT_USER_NICKNAME
     }
 
     suspend fun fetchGender(): String {
         val preferences = userStorage.data.first()
-        return preferences[GENDER_KEY] ?: DEFAULT_GENDER
+        return preferences[USER_GENDER_KEY] ?: DEFAULT_USER_GENDER
     }
 
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
@@ -171,10 +171,10 @@ class UserRepository @Inject constructor(
         val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN")
         val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
         val USER_ID_KEY = stringPreferencesKey("USER_ID")
-        val NICKNAME_KEY = stringPreferencesKey("NICKNAME")
-        val GENDER_KEY = stringPreferencesKey("GENDER")
-        const val DEFAULT_NICKNAME = "웹소소"
+        val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")
+        val USER_GENDER_KEY = stringPreferencesKey("USER_GENDER")
+        const val DEFAULT_USER_NICKNAME = "웹소소"
         const val DEFAULT_USER_ID = -1L
-        const val DEFAULT_GENDER = "F"
+        const val DEFAULT_USER_GENDER = "F"
     }
 }
