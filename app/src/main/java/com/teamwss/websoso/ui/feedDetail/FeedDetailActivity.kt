@@ -374,8 +374,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             object : TextWatcher {
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     when (p0?.trim().isNullOrBlank()) {
-                        true -> binding.ivFeedDetailCommentRegister.visibility = View.INVISIBLE
-                        false -> binding.ivFeedDetailCommentRegister.visibility = View.VISIBLE
+                        true -> binding.ivFeedDetailCommentRegister.isSelected = false
+                        false -> binding.ivFeedDetailCommentRegister.isSelected = true
                     }
                 }
 
