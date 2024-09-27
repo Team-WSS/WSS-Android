@@ -9,7 +9,7 @@ import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 
 class ActivityItemClickHandler(
     private val context: Context,
-    private val myActivityViewModel: MyActivityViewModel
+    private val myActivityViewModel: MyActivityViewModel,
 ) : ActivityItemClickListener {
 
     override fun onContentClick(feedId: Long) {
@@ -34,7 +34,7 @@ class ActivityItemClickHandler(
         likeCountTextView.text = updatedLikeCount.toString()
         view.isSelected = !view.isSelected
 
-        myActivityViewModel.saveLike(view.isSelected, feedId, updatedLikeCount)
+        myActivityViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
     }
 
     override fun onMoreButtonClick(view: View, feedId: Long) {
