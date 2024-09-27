@@ -26,6 +26,7 @@ import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
@@ -226,19 +227,30 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                CreateFeed.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
-                FeedDetailRemoved.RESULT_OK -> showWebsosoSnackBar(
-                    view = binding.root,
-                    message = getString(feed_removed_feed_snackbar),
-                    icon = ic_blocked_user_snack_bar,
-                )
-            }
-        }
         initView()
         feedViewModel.updateFeeds()
         setupObserver()
+        refreshView()
+    }
+
+    private fun refreshView() {
+        if (::activityResultCallback.isInitialized.not()) {
+            activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    CreateFeed.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                    FeedDetailBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                    FeedDetailRemoved.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds()
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(feed_removed_feed_snackbar),
+                            icon = ic_blocked_user_snack_bar,
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun initView() {

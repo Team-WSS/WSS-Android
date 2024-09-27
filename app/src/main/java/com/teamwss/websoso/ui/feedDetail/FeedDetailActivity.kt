@@ -24,7 +24,9 @@ import com.teamwss.websoso.R.layout.activity_feed_detail
 import com.teamwss.websoso.R.string
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
@@ -41,6 +43,7 @@ import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
+import com.teamwss.websoso.ui.feedDetail.dialog.RemovedFeedDialogFragment
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
@@ -264,14 +267,20 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == CreateFeed.RESULT_OK)
-                feedDetailViewModel.updateFeedDetail(feedId)
-        }
 
         setupView()
         setupObserver()
         onFeedDetailClick()
+        refreshView()
+    }
+
+    private fun refreshView() {
+        if (::activityResultCallback.isInitialized.not()) {
+            activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+                if (result.resultCode == CreateFeed.RESULT_OK)
+                    feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
+            }
+        }
     }
 
     private fun onFeedDetailClick() {
@@ -305,7 +314,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun setupView() {
         setupRefreshView()
-        feedDetailViewModel.updateFeedDetail(feedId)
+        feedDetailViewModel.updateFeedDetail(feedId, Feed)
         binding.rvFeedDetail.apply {
             adapter = feedDetailAdapter
             itemAnimator = null
@@ -316,7 +325,12 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         binding.sptrFeedRefresh.apply {
             setRefreshViewParams(ViewGroup.LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
             setLottieAnimation(LOTTIE_IMAGE)
-            setOnRefreshListener { feedDetailViewModel.updateFeedDetail(feedId) }
+            setOnRefreshListener {
+                feedDetailViewModel.updateFeedDetail(
+                    feedId,
+                    FeedDetailRefreshed,
+                )
+            }
         }
     }
 
@@ -326,8 +340,20 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                 feedDetailUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
                 feedDetailUiState.error -> {
                     binding.wllFeed.setLoadingLayoutVisibility(false)
-                    setResult(FeedDetailRemoved.RESULT_OK)
-                    if (!isFinishing) finish()
+
+                    when (feedDetailUiState.previousStack.from) {
+                        CreateFeed, FeedDetailRefreshed -> RemovedFeedDialogFragment
+                            .newInstance {
+                                setResult(CreateFeed.RESULT_OK)
+                                if (!isFinishing) finish()
+                            }
+                            .show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
+
+                        else -> {
+                            setResult(FeedDetailRemoved.RESULT_OK)
+                            if (!isFinishing) finish()
+                        }
+                    }
                 }
 
                 !feedDetailUiState.loading -> {
