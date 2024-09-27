@@ -16,17 +16,17 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R.color
-import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
+import com.teamwss.websoso.R.drawable.*
 import com.teamwss.websoso.R.id.tv_feed_thumb_up_count
 import com.teamwss.websoso.R.layout.fragment_feed
+import com.teamwss.websoso.R.string.block_user_success_message
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
 import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -50,6 +50,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
@@ -111,6 +112,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 //        singleEventHandler.throttleFirst(300) {
 //            OtherUserPageActivity.getIntent(requireContext(), userId)
 //        }
+        // TODO: 본인 프로필 or 타유저 프로필로 이동
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -234,6 +236,19 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     message = getString(feed_removed_feed_snackbar),
                     icon = ic_blocked_user_snack_bar,
                 )
+
+                BlockUser.RESULT_OK -> {
+                    val nickname = result.data?.getStringExtra(USER_NICKNAME)
+                    val blockMessage = nickname?.let {
+                        getString(block_user_success_message, it)
+                    } ?: getString(block_user_success_message)
+
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = blockMessage,
+                        icon = ic_novel_detail_check,
+                    )
+                }
             }
         }
         initView()
