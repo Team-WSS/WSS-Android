@@ -88,9 +88,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     }
 
     private fun navigateToExploreFragment() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("navigateToExplore", true)
-        startActivity(intent)
+        startActivity(MainActivity.getIntent(this, MainActivity.FragmentType.FEED))
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
