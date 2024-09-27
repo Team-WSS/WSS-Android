@@ -21,19 +21,19 @@ class MainViewModel @Inject constructor(
         if (mainUiState.value?.isLogin == true) {
             viewModelScope.launch {
                 _mainUiState.value = mainUiState.value?.copy(
-                    loading = true
+                    loading = true,
                 )
                 runCatching {
                     userRepository.fetchUserInfo()
                 }.onSuccess { userInfo ->
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
-                        loading = false
+                        loading = false,
                     )
                 }.onFailure {
                     _mainUiState.value = mainUiState.value?.copy(
                         error = true,
-                        loading = false
+                        loading = false,
                     )
                 }
             }
