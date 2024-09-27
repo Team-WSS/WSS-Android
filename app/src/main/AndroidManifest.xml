@@ -113,7 +113,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.storage.StorageActivity"
+            android:name=".ui.userStorage.UserStorageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
