@@ -4,11 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.model.NovelFeedsEntity
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.NovelRepository
+import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelFeed.model.NovelFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +22,7 @@ class NovelFeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val userRepository: UserRepository,
 ) : ViewModel() {
+    private var userId: Long = -1
     private val _feedUiState: MutableLiveData<NovelFeedUiState> =
         MutableLiveData(NovelFeedUiState())
     val feedUiState: LiveData<NovelFeedUiState> get() = _feedUiState
@@ -195,4 +200,6 @@ class NovelFeedViewModel @Inject constructor(
             }
         }
     }
+
+    fun isUserId(id: Long): Boolean = userId == id
 }

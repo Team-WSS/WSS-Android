@@ -19,6 +19,7 @@ import com.teamwss.websoso.R.*
 import com.teamwss.websoso.R.drawable.*
 import com.teamwss.websoso.R.string.*
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
@@ -28,7 +29,11 @@ import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentNovelFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.feed.FeedItemClickListener
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
@@ -40,6 +45,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.novelFeed.model.NovelFeedUiState
 import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment
+import com.teamwss.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -241,7 +247,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         activityResultCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
+                    ResultFrom.OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
                         novelId
                     )
 
