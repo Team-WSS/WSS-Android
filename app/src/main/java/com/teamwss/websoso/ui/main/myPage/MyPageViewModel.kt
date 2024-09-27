@@ -18,19 +18,29 @@ class MyPageViewModel @Inject constructor(
     private val _myPageUiState = MutableLiveData<MyPageUiState>()
     val myPageUiState: LiveData<MyPageUiState> get() = _myPageUiState
 
+
+    private val _myProfile = MutableLiveData<MyProfileEntity>()
+    val myProfile: LiveData<MyProfileEntity> get() = _myProfile
+
     init {
         updateUserProfile()
     }
 
     fun updateUserProfile() {
-        _myPageUiState.value = MyPageUiState(loading = true)
+        _myPageUiState.value = myPageUiState.value?.copy(loading = true) ?: MyPageUiState(loading = true)
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchMyProfile()
             }.onSuccess { myProfileEntity ->
-                _myPageUiState.value = MyPageUiState(myProfile = myProfileEntity, loading = false)
-            }.onFailure { exception ->
-                _myPageUiState.value = MyPageUiState(error = true, loading = false)
+                _myPageUiState.value = myPageUiState.value?.copy(
+                    myProfile = myProfileEntity,
+                    loading = false,
+                )
+            }.onFailure {
+                _myPageUiState.value = myPageUiState.value?.copy(
+                    error = true,
+                    loading = false,
+                )
             }
         }
     }

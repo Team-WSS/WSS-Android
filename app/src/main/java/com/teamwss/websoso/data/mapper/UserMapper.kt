@@ -6,6 +6,8 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
+import com.teamwss.websoso.data.model.UserFeedsEntity
+import com.teamwss.websoso.data.model.UserFeedsEntity.UserFeedEntity
 import com.teamwss.websoso.data.model.UserInfoDetailEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
@@ -17,6 +19,8 @@ import com.teamwss.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.MyProfileResponseDto
 import com.teamwss.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.teamwss.websoso.data.remote.response.OtherUserProfileResponseDto
+import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto
+import com.teamwss.websoso.data.remote.response.UserFeedsResponseDto.UserFeedResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.teamwss.websoso.data.remote.response.UserInfoResponseDto
 import com.teamwss.websoso.data.remote.response.UserNovelStatsResponseDto
@@ -125,5 +129,30 @@ fun StorageNovelDto.toData(): StorageNovelEntity {
         novelRating = this.novelRating,
         novelImage = this.novelImage,
         title = this.title,
+    )
+}
+
+fun UserFeedsResponseDto.toData(): UserFeedsEntity {
+    return UserFeedsEntity(
+        isLoadable = this.isLoadable,
+        feeds = this.feeds.map { it.toData() },
+    )
+}
+
+fun UserFeedResponseDto.toData(): UserFeedEntity {
+    return UserFeedEntity(
+        feedId = this.feedId,
+        isSpoiler = this.isSpoiler,
+        feedContent = this.feedContent,
+        createdDate = this.createdDate,
+        isModified = this.isModified,
+        isLiked = this.isLiked,
+        likeCount = this.likeCount,
+        commentCount = this.commentCount,
+        novelId = this.novelId,
+        title = this.title,
+        novelRatingCount = this.novelRatingCount,
+        novelRating = this.novelRating,
+        relevantCategories = this.relevantCategories,
     )
 }

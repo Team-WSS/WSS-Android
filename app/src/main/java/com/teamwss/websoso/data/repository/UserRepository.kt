@@ -12,6 +12,7 @@ import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
 import com.teamwss.websoso.data.model.UserInfoDetailEntity
+import com.teamwss.websoso.data.model.UserFeedsEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -189,6 +190,10 @@ class UserRepository @Inject constructor(
             size = size,
             sortType = sortType,
         ).toData()
+    }
+
+    suspend fun fetchUserFeeds(userId: Long, lastFeedId: Long, size: Int): UserFeedsEntity {
+        return userApi.getUserFeeds(userId, lastFeedId, size).toData()
     }
 
     companion object {
