@@ -19,7 +19,9 @@ class FeedDetailCommentViewHolder(
 
     fun bind(comment: CommentModel) {
         binding.comment = comment.copy(
-            user = comment.user.copy(avatarImage = itemView.getS3ImageUrl(comment.user.avatarImage))
+            user = comment.user.copy(
+                avatarImage = itemView.getS3ImageUrl(comment.user.avatarImage),
+            ),
         )
     }
 

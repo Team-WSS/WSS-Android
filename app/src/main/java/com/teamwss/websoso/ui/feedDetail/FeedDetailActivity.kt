@@ -126,7 +126,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         activityResultCallback.launch(
             NovelDetailActivity.getIntent(
                 this@FeedDetailActivity,
-                novelId
+                novelId,
             )
         )
     }
