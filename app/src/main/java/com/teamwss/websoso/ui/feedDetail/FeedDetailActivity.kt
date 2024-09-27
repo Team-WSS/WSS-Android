@@ -20,22 +20,22 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.teamwss.websoso.R.drawable.ic_novel_detail_check
 import com.teamwss.websoso.R.id.tv_feed_thumb_up_count
 import com.teamwss.websoso.R.layout.activity_feed_detail
-import com.teamwss.websoso.R.string.block_user_success_message
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.hideKeyboard
-import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
@@ -51,6 +51,7 @@ import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
 import com.teamwss.websoso.ui.feedDetail.dialog.RemovedFeedDialogFragment
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
+import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
@@ -60,7 +61,8 @@ import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
-import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
+import com.teamwss.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -112,7 +114,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
-            // if (isMyFeed) 마이페이지 else 프로필 뷰
+            navigateToProfile(userId, isMyFeed)
         }
 
         override fun onFeedDetailClick(view: View) {
@@ -121,12 +123,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId))
+        activityResultCallback.launch(
+            NovelDetailActivity.getIntent(
+                this@FeedDetailActivity,
+                novelId
+            )
+        )
     }
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
         override fun onProfileClick(userId: Long, isMyComment: Boolean) {
-            // if (isMyComment) 마이페이지 else 프로필 뷰
+            navigateToProfile(userId, isMyComment)
         }
 
         override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {
@@ -136,6 +143,27 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
         override fun onCommentsClick(view: View) {
             view.hideKeyboard()
+        }
+    }
+
+    private fun navigateToProfile(userId: Long, isMe: Boolean) {
+        when (isMe) {
+            true ->
+                startActivity(
+                    MainActivity.getIntent(
+                        this@FeedDetailActivity,
+                        MainActivity.FragmentType.MY_PAGE,
+                    )
+                )
+
+            false -> {
+                activityResultCallback.launch(
+                    OtherUserPageActivity.getIntent(
+                        this@FeedDetailActivity,
+                        userId,
+                    )
+                )
+            }
         }
     }
 
@@ -283,17 +311,18 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    CreateFeed.RESULT_OK -> feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
-                    BlockUser.RESULT_OK -> {
-                        val nickname =
-                            result.data?.getStringExtra(BlockUserDialogFragment.USER_NICKNAME)
-                                .orEmpty()
+                    NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedDetailViewModel.updateFeedDetail(
+                        feedId,
+                        CreateFeed
+                    )
 
-                        showWebsosoSnackBar(
-                            view = binding.root,
-                            message = getString(block_user_success_message, nickname),
-                            icon = ic_novel_detail_check,
-                        )
+                    BlockUser.RESULT_OK -> {
+                        val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+                        val intent = Intent().apply {
+                            putExtra(USER_NICKNAME, nickname)
+                        }
+                        setResult(BlockUser.RESULT_OK, intent)
+                        if (!isFinishing) finish()
                     }
                 }
             }
@@ -302,13 +331,15 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun onFeedDetailClick() {
         onBackPressedDispatcher.addCallback(this) {
-            finish()
+            setResult(FeedDetailBack.RESULT_OK)
+            if (!isFinishing) finish()
         }
 
         binding.root.setOnClickListener { it.hideKeyboard() }
 
         binding.ivFeedDetailBackButton.setOnClickListener {
-            finish()
+            setResult(FeedDetailBack.RESULT_OK)
+            if (!isFinishing) finish()
         }
 
         binding.ivFeedDetailMoreButton.setOnClickListener {

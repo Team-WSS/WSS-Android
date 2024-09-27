@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
@@ -43,6 +45,7 @@ class OtherUserPageActivity :
         setUpItemVisibilityOnToolBar()
         onBackButtonClick()
         onMoreButtonClick()
+        handleBackPressed()
     }
 
     private fun updateUserId() {
@@ -103,6 +106,7 @@ class OtherUserPageActivity :
 
     private fun onBackButtonClick() {
         binding.ivOtherUserPageStickyBack.setOnClickListener {
+            setResult(OtherUserProfileBack.RESULT_OK)
             finish()
         }
     }
@@ -128,6 +132,13 @@ class OtherUserPageActivity :
                 POPUP_MARGIN_END.toIntPxFromDp(),
                 POPUP_MARGIN_TOP.toIntPxFromDp(),
             )
+        }
+    }
+
+    private fun handleBackPressed() {
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(OtherUserProfileBack.RESULT_OK)
+            finish()
         }
     }
 

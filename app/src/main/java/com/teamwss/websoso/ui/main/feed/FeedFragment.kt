@@ -13,8 +13,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.teamwss.websoso.R
 import com.teamwss.websoso.R.color
 import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
 import com.teamwss.websoso.R.drawable.ic_novel_detail_check
@@ -31,6 +33,8 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -43,6 +47,8 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.MainActivity
+import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Loading
@@ -55,6 +61,7 @@ import com.teamwss.websoso.ui.main.feed.model.CategoryModel
 import com.teamwss.websoso.ui.main.feed.model.FeedUiState
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
+import com.teamwss.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 
@@ -62,6 +69,7 @@ import java.io.Serializable
 class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding get() = _popupBinding ?: error("FeedFragment")
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -79,7 +87,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
         override fun onProfileClick(userId: Long) {
-            singleEventHandler.throttleFirst(300) { navigateToOtherUserPage(userId) }
+            singleEventHandler.throttleFirst(300) { navigateToProfile(userId) }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -112,10 +120,23 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
     }
 
-    private fun navigateToOtherUserPage(userId: Long) {
-//        singleEventHandler.throttleFirst(300) {
-//            OtherUserPageActivity.getIntent(requireContext(), userId)
-//        }
+    private fun navigateToProfile(userId: Long) {
+        when (mainViewModel.isUserId(userId)) {
+            true -> {
+                (activity as? MainActivity)?.let { mainActivity ->
+                    mainActivity.binding.bnvMain.selectedItemId = R.id.menu_my_page
+                }
+            }
+
+            false -> {
+                activityResultCallback.launch(
+                    OtherUserPageActivity.getIntent(
+                        requireContext(),
+                        userId,
+                    )
+                )
+            }
+        }
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -225,7 +246,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+        activityResultCallback.launch(NovelDetailActivity.getIntent(requireContext(), novelId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -241,8 +262,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    CreateFeed.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
-                    FeedDetailBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
                     FeedDetailRemoved.RESULT_OK -> {
                         feedViewModel.updateRefreshedFeeds()
 
@@ -254,6 +274,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     }
 
                     BlockUser.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds()
+
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
 
                         showWebsosoSnackBar(

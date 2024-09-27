@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +14,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
+    private var userId : Long = DEFAULT_USER_ID
+
     private val _mainUiState: MutableLiveData<MainUiState> = MutableLiveData(MainUiState())
     val mainUiState: LiveData<MainUiState> get() = _mainUiState
 
@@ -27,8 +28,10 @@ class MainViewModel @Inject constructor(
                 runCatching {
                     userRepository.fetchUserInfo()
                 }.onSuccess { userInfo ->
+                    userId = userInfo.userId
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
+                        isLogin = userInfo.userId != DEFAULT_USER_ID,
                         loading = false,
                     )
                 }.onFailure {
@@ -39,5 +42,11 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun isUserId(id: Long): Boolean = userId == id
+
+    companion object{
+        const val DEFAULT_USER_ID = -1L
     }
 }

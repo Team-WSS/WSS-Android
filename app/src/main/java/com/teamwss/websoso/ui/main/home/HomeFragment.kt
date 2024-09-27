@@ -196,12 +196,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        startActivityLauncher.launch(
-            FeedDetailActivity.getIntent(
-                requireContext(),
-                feedId,
+        if (mainViewModel.mainUiState.value?.isLogin == true) {
+            startActivityLauncher.launch(
+                FeedDetailActivity.getIntent(
+                    requireContext(),
+                    feedId,
+                )
             )
-        )
+        } else {
+            showLoginRequestDialog()
+        }
     }
 
     private fun onPostInterestNovelClick() {
