@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teamwss.websoso.data.repository.UserFeedRepository
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
