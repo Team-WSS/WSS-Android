@@ -31,7 +31,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         setBottomNavigationView()
-        handleNavigation(intent.getSerializableExtra(EXTRA_DESTINATION) as? FragmentType)
+        handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
         mainViewModel.updateUserInfo()
     }
 
@@ -122,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     companion object {
-        private const val EXTRA_DESTINATION = "destination"
+        private const val DESTINATION_KEY = "destination"
 
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, MainActivity::class.java)
@@ -135,7 +135,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             destination: FragmentType = HOME,
         ): Intent {
             return Intent(context, MainActivity::class.java).apply {
-                putExtra(EXTRA_DESTINATION, destination)
+                putExtra(DESTINATION_KEY, destination)
             }
         }
     }
