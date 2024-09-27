@@ -4,6 +4,8 @@ enum class ResultFrom {
     BlockUser,
     FeedDetailBack,
     FeedDetailRemoved,
+    FeedDetailRefreshed,
+    Feed,
     CreateFeed,
     ChangeUserInfo,
     ChangeProfileDisclosure,

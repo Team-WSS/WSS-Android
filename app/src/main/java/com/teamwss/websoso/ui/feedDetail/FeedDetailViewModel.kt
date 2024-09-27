@@ -4,11 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.data.model.CommentsEntity
+import com.teamwss.websoso.data.model.FeedEntity
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,26 +33,34 @@ class FeedDetailViewModel @Inject constructor(
         this.commentId = commentId
     }
 
-    fun updateFeedDetail(feedId: Long) {
+    fun updateFeedDetail(feedId: Long, from: ResultFrom) {
         this.feedId = feedId
         feedDetailUiState.value?.let { feedDetailUiState ->
             viewModelScope.launch {
                 delay(300)
                 _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
-                runCatching {
-                    val feed = async { feedRepository.fetchFeed(feedId) }
-                    val comments = async { feedRepository.fetchComments(feedId) }
 
-                    FeedDetailUiState(
-                        feed = feed.await().toUi(),
-                        comments = comments.await().comments.map { it.toUi() },
+                runCatching {
+                    coroutineScope {
+                        awaitAll(
+                            async { feedRepository.fetchFeed(feedId) },
+                            async { feedRepository.fetchComments(feedId) },
+                        )
+                    }
+                }.onSuccess { result ->
+                    val feed = result[0] as FeedEntity
+                    val comments = result[1] as CommentsEntity
+
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        loading = false,
+                        feed = feed.toUi(),
+                        comments = comments.comments.map { it.toUi() },
                     )
-                }.onSuccess { feedDetail ->
-                    _feedDetailUiState.value = feedDetail.copy(loading = false)
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
                         error = true,
+                        previousStack = FeedDetailUiState.PreviousStack(from),
                     )
                 }
             }
