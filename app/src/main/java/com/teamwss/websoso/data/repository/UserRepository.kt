@@ -108,7 +108,7 @@ class UserRepository @Inject constructor(
         return userApi.getNicknameValidity(nickname).isValid
     }
 
-    suspend fun saveUserProfile(
+    suspend fun saveEditingUserProfile(
         avatarId: Int?,
         nickname: String?,
         intro: String?,
