@@ -26,7 +26,7 @@ class MyActivityFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMyActivitiesAdapter()
-        setupObserve()
+        setupObserver()
         onMyActivityDetailButtonClick()
         loadUserProfile()
     }
@@ -35,7 +35,7 @@ class MyActivityFragment :
         binding.rvMyActivity.adapter = myActivityAdapter
     }
 
-    private fun setupObserve() {
+    private fun setupObserver() {
         myActivityViewModel.myActivity.observe(viewLifecycleOwner) { activities ->
             myActivityAdapter.submitList(activities)
         }
