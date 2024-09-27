@@ -33,6 +33,7 @@ class UserRepository @Inject constructor(
         saveUserInfoToDataStore(userInfo.userId, userInfo.nickname)
         return userInfo
     }
+
     suspend fun fetchUserInfoDetail(): UserInfoDetailEntity {
         return userApi.getUserInfoDetail().toData()
     }
