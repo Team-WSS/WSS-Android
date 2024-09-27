@@ -12,5 +12,5 @@ enum class ResultFrom {
     ProfileEditSuccess,
     ;
 
-    val RESULT_OK: Int = ordinal
+    val RESULT_OK: Int = ordinal + 1
 }
