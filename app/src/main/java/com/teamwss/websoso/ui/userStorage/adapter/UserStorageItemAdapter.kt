@@ -7,7 +7,7 @@ import com.teamwss.websoso.databinding.ItemStorageNovelBinding
 import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
 class UserStorageItemAdapter(
-    private val novels: List<StorageNovelModel>,
+    private var novels: List<StorageNovelModel>,
     private val novelClickListener: (Long) -> Unit,
 ) : RecyclerView.Adapter<UserStorageItemViewHolder>() {
 
@@ -20,9 +20,11 @@ class UserStorageItemAdapter(
     override fun onBindViewHolder(holder: UserStorageItemViewHolder, position: Int) {
         val novel = novels[position]
         holder.bind(novel)
-        holder.itemView.setOnClickListener {
-            novelClickListener(novel.novelId)
-        }
+    }
+
+    fun updateNovels(newNovels: List<StorageNovelModel>) {
+        this.novels = newNovels
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

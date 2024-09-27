@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.userStorage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -20,22 +19,26 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activity_storage) {
     private val userStorageViewModel: UserStorageViewModel by viewModels()
-    private lateinit var userStorageAdapter: UserStorageViewPagerAdapter
+    private val userStorageAdapter: UserStorageViewPagerAdapter by lazy {
+        UserStorageViewPagerAdapter(
+            novels = emptyList(),
+            onExploreButtonClick = ::navigateToExploreFragment,
+            novelClickListener = ::navigateToNovelDetail,
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindViewModel()
         setupViewPagerAndTabLayout()
-        onSortTypeButtonClick()
         onBackButtonClick()
+        onSortTypeButtonClick()
     }
 
     private fun bindViewModel() {
         binding.lifecycleOwner = this
         binding.storageViewModel = userStorageViewModel
-        binding.onSortTypeClick = View.OnClickListener {
-            onSortTypeButtonClick()
-        }
+        binding.onSortTypeClick = ::onSortTypeButtonClick
     }
 
     private fun setupViewPagerAndTabLayout() {
@@ -45,30 +48,23 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     }
 
     private fun setupViewPager() {
-        userStorageAdapter = UserStorageViewPagerAdapter(
-            novels = emptyList(),
-            onExploreButtonClick = ::navigateToExploreFragment,
-            novelClickListener = ::navigateToNovelDetail,
-        )
         binding.vpStorage.adapter = userStorageAdapter
     }
 
     private fun setupTabLayoutWithViewPager() {
-        binding.vpStorage.adapter.apply {
-            TabLayoutMediator(binding.tlStorage, binding.vpStorage) { tab, position ->
-                tab.text = StorageTab.fromPosition(position).title
-            }.attach()
+        TabLayoutMediator(binding.tlStorage, binding.vpStorage) { tab, position ->
+            tab.text = StorageTab.fromPosition(position).title
+        }.attach()
 
-            binding.tlStorage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    val selectedTab = requireNotNull(tab) { "Tab must not be null" }
-                    onReadingStatusTabSelected(selectedTab.position)
-                }
+        binding.tlStorage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val selectedTab = requireNotNull(tab) { "Tab must not be null" }
+                onReadingStatusTabSelected(selectedTab.position)
+            }
 
-                override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
-            })
-        }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
     private fun onReadingStatusTabSelected(position: Int) {

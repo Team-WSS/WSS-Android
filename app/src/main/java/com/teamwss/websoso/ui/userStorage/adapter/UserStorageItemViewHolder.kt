@@ -9,10 +9,18 @@ class UserStorageItemViewHolder(
     private var novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private var novelId: Long? = null
+
+    init {
+        itemView.setOnClickListener {
+            novelId?.let { id ->
+                novelClickListener(id)
+            }
+        }
+    }
+
     fun bind(novel: StorageNovelModel) {
         binding.novel = novel
-        itemView.setOnClickListener {
-            novelClickListener(novel.novelId)
-        }
+        novelId = novel.novelId
     }
 }

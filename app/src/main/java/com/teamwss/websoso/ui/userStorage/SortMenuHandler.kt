@@ -6,9 +6,11 @@ import com.teamwss.websoso.ui.userStorage.model.SortType
 class SortMenuHandler(
     private val onSortTypeSelected: (SortType) -> Unit,
 ) {
+    private val sortPopupHandler: SortPopupHandler by lazy {
+        SortPopupHandler()
+    }
 
     fun showSortMenu(view: View) {
-        val sortPopupHandler = SortPopupHandler()
         sortPopupHandler.showPopupMenu(view, onSortTypeSelected)
     }
 }

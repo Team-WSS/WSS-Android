@@ -111,9 +111,8 @@ fun StorageNovelEntity.toUi(): StorageNovelModel {
         author = author,
         novelId = novelId,
         novelImage = novelImage,
-        novelRating = novelRating.takeIf { it != 0.0f },
         title = title,
         userNovelId = userNovelId,
-        isRatingVisible = novelRating != 0.0f,
+        novelRating = novelRating,
     )
 }

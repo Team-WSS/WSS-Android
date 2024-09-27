@@ -10,9 +10,11 @@ data class UserStorageModel(
         val author: String,
         val novelId: Long,
         val novelImage: String,
-        val novelRating: Float?,
         val title: String,
         val userNovelId: Long,
-        val isRatingVisible: Boolean,
-    )
+        val novelRating: Float,
+    ) {
+        private val visibleNovelRating: Float? = novelRating.takeIf { it != 0.0f }
+        val isRatingVisible: Boolean = visibleNovelRating != null
+    }
 }

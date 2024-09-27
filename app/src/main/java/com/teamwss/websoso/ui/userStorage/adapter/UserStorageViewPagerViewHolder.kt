@@ -11,17 +11,26 @@ class UserStorageViewPagerViewHolder(
     private var novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(novels: List<StorageNovelModel>) {
+    private val adapter: UserStorageItemAdapter by lazy {
+        UserStorageItemAdapter(emptyList(), novelClickListener)
+    }
 
-        if (novels.isNotEmpty()) {
-            val adapter = UserStorageItemAdapter(novels, novelClickListener)
-            binding.rvStorage.adapter = adapter
-            binding.rvStorage.layoutManager =
-                GridLayoutManager(binding.root.context, STORAGE_NOVEL_SPAN_COUNT)
-        }
+    private val layoutManager: GridLayoutManager by lazy {
+        GridLayoutManager(binding.root.context, STORAGE_NOVEL_SPAN_COUNT)
+    }
+
+    init {
+        binding.rvStorage.adapter = adapter
+        binding.rvStorage.layoutManager = layoutManager
 
         binding.btnStorageGoToSearchNovel.setOnClickListener {
             onExploreButtonClick()
+        }
+    }
+
+    fun bind(novels: List<StorageNovelModel>) {
+        if (novels.isNotEmpty()) {
+            adapter.updateNovels(novels)
         }
     }
 

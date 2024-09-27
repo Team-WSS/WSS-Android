@@ -47,9 +47,7 @@ class UserStorageViewModel @Inject constructor(
     }
 
     fun updateSortType(sortType: SortType) {
-        when {
-            _uiState.value?.loading == true -> return
-        }
+        if (_uiState.value?.loading == true) return
 
         _uiState.value = uiState.value?.copy(sortType = sortType)
 
