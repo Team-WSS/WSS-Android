@@ -5,10 +5,11 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 data class NovelDetailModel(
-    val userNovel: UserNovelModel,
-    val novel: NovelModel,
-    val userRating: UserRatingModel,
+    val userNovel: UserNovelModel = UserNovelModel(),
+    val novel: NovelModel = NovelModel(),
+    val userRating: UserRatingModel = UserRatingModel(),
     val isFirstLaunched: Boolean = false,
+    val isLogin: Boolean = false,
 ) {
     data class UserNovelModel(
         val userNovelId: Long? = null,
@@ -18,29 +19,29 @@ data class NovelDetailModel(
         val isUserNovelInterest: Boolean = false,
         val userNovelRating: Float = 0.0f,
         val isAlreadyDateRated: Boolean = startDate != null || endDate != null,
-        val isAlreadyRated: Boolean = userNovelId != null,
+        val isAlreadyRated: Boolean = userNovelId != null && isUserNovelInterest,
         val formattedUserNovelDate: String = formattedDateRange(startDate, endDate),
     )
 
     data class NovelModel(
-        val novelId: Long,
-        val novelTitle: String,
-        val novelImage: String,
-        val novelGenres: String,
-        val novelGenreImage: String,
-        val isNovelCompleted: Boolean,
+        val novelId: Long = 0,
+        val novelTitle: String = "",
+        val novelImage: String = "",
+        val novelGenres: String = "",
+        val novelGenreImage: String = "",
+        val isNovelCompleted: Boolean = false,
         val isNovelCompletedText: String = if (isNovelCompleted) "완결작" else "연재중",
-        val author: String,
+        val author: String = "",
         val formattedNovelDetailSummary: String = "$novelGenres ・ $isNovelCompletedText ・ $author",
         val isNovelNotBlank: Boolean = novelTitle.isNotBlank() && novelImage.isNotBlank() && author.isNotBlank(),
     )
 
     data class UserRatingModel(
-        val interestCount: Int,
-        val novelRating: Float,
-        val novelRatingCount: Int,
+        val interestCount: Int = 0,
+        val novelRating: Float = 0.0f,
+        val novelRatingCount: Int = 0,
         val formattedNovelRating: String = "$novelRating ($novelRatingCount)",
-        val feedCount: Int,
+        val feedCount: Int = 0,
     )
 
     companion object {

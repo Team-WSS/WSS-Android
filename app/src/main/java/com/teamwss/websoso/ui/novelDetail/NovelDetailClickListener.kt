@@ -12,4 +12,6 @@ interface NovelDetailClickListener {
     fun onNovelCoverClick(novelImageUrl: String)
 
     fun onNovelFeedWriteClick()
+
+    fun onNovelInterestClick()
 }

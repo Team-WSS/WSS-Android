@@ -15,14 +15,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
-import com.teamwss.websoso.R.drawable.ic_novel_detail_check
-import com.teamwss.websoso.R.layout
-import com.teamwss.websoso.R.string.block_user_success_message
-import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
-import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.teamwss.websoso.R.*
+import com.teamwss.websoso.R.drawable.*
+import com.teamwss.websoso.R.string.*
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
-import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -31,7 +29,10 @@ import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentNovelFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.feed.FeedItemClickListener
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
@@ -91,6 +92,10 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
+            if (novelFeedViewModel.isLogin.value == false) {
+                showLoginRequestDialog()
+                return
+            }
             showMenu(view, feedId, isMyFeed)
         }
 
@@ -104,6 +109,10 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
+            if (novelFeedViewModel.isLogin.value == false) {
+                showLoginRequestDialog()
+                return
+            }
             val likeTextView = view.requireViewById<TextView>(R.id.tv_feed_thumb_up_count)
             val likeCount: Int = likeTextView.text.toString().toInt()
 
@@ -119,6 +128,11 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
                 novelFeedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
             }
         }
+    }
+
+    private fun showLoginRequestDialog() {
+        val dialog = LoginRequestDialogFragment.newInstance()
+        dialog.show(childFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -205,10 +219,25 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
     }
 
     private fun navigateToFeedEdit(feedId: Long) {
-        // TODO: 피드 수정 뷰
+        val feedContent =
+            novelFeedViewModel.feedUiState.value?.feeds?.find { it.id == feedId }?.let { feed ->
+                EditFeedModel(
+                    feedId = feed.id,
+                    novelId = feed.novel.id,
+                    novelTitle = feed.novel.title,
+                    feedContent = feed.content,
+                    feedCategory = feed.relevantCategories,
+                )
+            } ?: throw IllegalArgumentException()
+
+        activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
+        if (novelFeedViewModel.isLogin.value == false) {
+            showLoginRequestDialog()
+            return
+        }
         startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
     }
 
@@ -218,7 +247,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         activityResultCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
+                    ResultFrom.OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
                         novelId
                     )
 
@@ -241,6 +270,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
             }
         initView()
         novelFeedViewModel.updateFeeds(novelId)
+        novelFeedViewModel.updateLoginStatus()
         setupObserver()
     }
 
