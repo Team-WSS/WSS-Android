@@ -17,10 +17,6 @@ class MainViewModel @Inject constructor(
     private val _mainUiState: MutableLiveData<MainUiState> = MutableLiveData(MainUiState())
     val mainUiState: LiveData<MainUiState> get() = _mainUiState
 
-    init {
-        updateUserInfo()
-    }
-
     fun updateUserInfo() {
         if (mainUiState.value?.isLogin == true) {
             viewModelScope.launch {
