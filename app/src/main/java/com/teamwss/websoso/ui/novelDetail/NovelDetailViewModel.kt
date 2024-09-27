@@ -97,10 +97,7 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
-                val isAlreadyRated = novelDetailModel.value?.userNovel?.isAlreadyRated == false
-                val isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest == true
-
-                if (isAlreadyRated || isUserNovelInterest) {
+                if (novelDetailModel.value?.userNovel?.isAlreadyRated == true) {
                     updateIsFirstLaunched()
                     return@launch
                 }

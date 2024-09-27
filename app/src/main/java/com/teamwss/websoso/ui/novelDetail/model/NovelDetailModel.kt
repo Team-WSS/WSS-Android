@@ -19,7 +19,7 @@ data class NovelDetailModel(
         val isUserNovelInterest: Boolean = false,
         val userNovelRating: Float = 0.0f,
         val isAlreadyDateRated: Boolean = startDate != null || endDate != null,
-        val isAlreadyRated: Boolean = userNovelId != null,
+        val isAlreadyRated: Boolean = userNovelId != null && isUserNovelInterest,
         val formattedUserNovelDate: String = formattedDateRange(startDate, endDate),
     )
 
