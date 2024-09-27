@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.repository
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -11,8 +12,8 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.data.model.OtherUserProfileEntity
-import com.teamwss.websoso.data.model.UserInfoDetailEntity
 import com.teamwss.websoso.data.model.UserFeedsEntity
+import com.teamwss.websoso.data.model.UserInfoDetailEntity
 import com.teamwss.websoso.data.model.UserInfoEntity
 import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.model.UserProfileStatusEntity
@@ -32,14 +33,15 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchUserInfo(): UserInfoEntity {
         val userInfo = userApi.getUserInfo().toData()
-        saveUserInfo(userInfo.userId, userInfo.nickname)
+        saveUserInfo(userInfo.userId, userInfo.nickname, userInfo.gender)
         return userInfo
     }
 
-    private suspend fun saveUserInfo(userId: Long, nickname: String) {
+    private suspend fun saveUserInfo(userId: Long, nickname: String, gender: String) {
         userStorage.edit { preferences ->
             preferences[USER_ID_KEY] = userId.toString()
             preferences[USER_NICKNAME_KEY] = nickname
+            preferences[USER_GENDER_KEY] = gender
         }
     }
 
