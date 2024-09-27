@@ -101,13 +101,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
 
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
-            navigateToProfileByMe(userId, isMyFeed)
+            navigateToProfile(userId, isMyFeed)
         }
     }
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
         override fun onProfileClick(userId: Long, isMyComment: Boolean) {
-            navigateToProfileByMe(userId, isMyComment)
+            navigateToProfile(userId, isMyComment)
         }
 
         override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {
@@ -116,7 +116,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(R.layout.acti
         }
     }
 
-    private fun navigateToProfileByMe(userId: Long, isMe: Boolean) {
+    private fun navigateToProfile(userId: Long, isMe: Boolean) {
         when (isMe) {
             true ->
                 startActivity(
