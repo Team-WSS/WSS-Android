@@ -34,27 +34,19 @@ class MyActivityViewModel @Inject constructor(
         updateMyActivities()
     }
 
-
     private fun updateMyActivities() {
         viewModelScope.launch {
-            val result = runCatching {
+            runCatching {
                 myActivityRepository.fetchUserFeeds(
                     userId,
-                    _lastFeedId.value ?: 0L,
-                    size
+                    lastFeedId.value ?: 0L,
+                    size,
                 )
-            }
-            result.onSuccess { responseDto ->
-                val mappedActivities = responseDto.feeds.map { it.toUi() }.take(5)
+            }.onSuccess { response ->
+                _myActivity.value = response.feeds.map { it.toUi() }.take(5)
 
-                _myActivity.value = mappedActivities
-
-                val lastId = responseDto.feeds.lastOrNull()?.feedId?.toLong() ?: 0L
-                _lastFeedId.value = lastId
-            }.onFailure { exception ->
-
+                _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L
             }
         }
     }
 }
-

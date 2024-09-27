@@ -42,7 +42,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         onSettingButtonClick()
         setupObserver()
         onProfileEditClick()
-        navigateProfileDataToMyActivityFragment()
     }
 
     private fun bindViewModel() {
@@ -97,18 +96,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 uiState.error -> Unit
             }
         }
-    }
 
-    private fun setUpMyProfileImage(myProfileUrl: String) {
-        val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(myProfileUrl)
-        binding.ivMyPageUserProfile.load(updatedMyProfileImageUrl) {
-            crossfade(true)
-            error(R.drawable.img_loading_thumbnail)
-            transformations(CircleCropTransformation())
-        }
-    }
-
-    private fun navigateProfileDataToMyActivityFragment() {
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
             uiState.myProfile?.let { myProfileEntity ->
                 val userProfile = UserProfileModel(
@@ -117,8 +105,21 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                     userId = 2L,
                 )
 
-                (viewPagerAdapter.fragments[1] as? MyActivityFragment)?.setupUserProfile(userProfile)
+                navigateProfileDataToMyActivityFragment(userProfile)
             }
+        }
+    }
+
+    private fun navigateProfileDataToMyActivityFragment(userProfile: UserProfileModel) {
+        (viewPagerAdapter.fragments[1] as? MyActivityFragment)?.setupUserProfile(userProfile)
+    }
+
+    private fun setUpMyProfileImage(myProfileUrl: String) {
+        val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(myProfileUrl)
+        binding.ivMyPageUserProfile.load(updatedMyProfileImageUrl) {
+            crossfade(true)
+            error(R.drawable.img_loading_thumbnail)
+            transformations(CircleCropTransformation())
         }
     }
 
