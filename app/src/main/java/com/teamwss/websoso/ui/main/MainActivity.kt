@@ -30,10 +30,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainViewModel.updateLogin(intent.getBooleanExtra(EXTRA_IS_LOGIN, false))
-
         setBottomNavigationView()
-        handleExploreNavigation()
+        handleNavigation(intent.getSerializableExtra(EXTRA_DESTINATION) as? FragmentType)
         mainViewModel.updateUserInfo()
     }
 
@@ -42,12 +40,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         replaceFragment<HomeFragment>()
 
         binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
-
-        val navigateToExplore = intent.getBooleanExtra("navigateToExplore", false)
-        if (navigateToExplore) {
-            binding.bnvMain.selectedItemId = R.id.menu_explore
-            replaceFragment<ExploreFragment>()
-        }
     }
 
     private fun replaceFragment(item: MenuItem): Boolean {
@@ -73,7 +65,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private enum class FragmentType(@IntegerRes private val resId: Int) {
+    enum class FragmentType(@IntegerRes private val resId: Int) {
         HOME(R.id.menu_home),
         EXPLORE(R.id.menu_explore),
         FEED(R.id.menu_feed),
@@ -92,26 +84,59 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
-    private fun handleExploreNavigation() {
-        val navigateToExplore = intent.getBooleanExtra("navigateToExplore", false)
-        if (navigateToExplore) {
-            selectExploreFragment()
+    private fun handleNavigation(destination: FragmentType?) {
+        when (destination) {
+            EXPLORE -> selectFragment(EXPLORE)
+            MY_PAGE -> selectFragment(MY_PAGE)
+            FEED -> selectFragment(FEED)
+            HOME, null -> selectFragment(HOME)
         }
     }
 
-    private fun selectExploreFragment() {
-        binding.bnvMain.selectedItemId = R.id.menu_explore
-        replaceFragment<ExploreFragment>()
+    private fun selectFragment(fragmentType: FragmentType) {
+        when (fragmentType) {
+            HOME -> {
+                binding.bnvMain.selectedItemId = R.id.menu_home
+                replaceFragment<HomeFragment>()
+            }
+
+            EXPLORE -> {
+                binding.bnvMain.selectedItemId = R.id.menu_explore
+                replaceFragment<ExploreFragment>()
+            }
+
+            FEED -> {
+                binding.bnvMain.selectedItemId = R.id.menu_feed
+                replaceFragment<FeedFragment>()
+            }
+
+            MY_PAGE -> {
+                binding.bnvMain.selectedItemId = R.id.menu_my_page
+                if (mainViewModel.mainUiState.value?.isLogin == true) {
+                    replaceFragment<MyPageFragment>()
+                } else {
+                    showLoginRequestDialog()
+                }
+            }
+        }
     }
 
     companion object {
-        private const val EXTRA_IS_LOGIN = "isLogin"
+        private const val EXTRA_DESTINATION = "destination"
 
-        fun getIntent(context: Context, isLogin: Boolean): Intent {
+        fun getIntent(context: Context): Intent {
             val intent = Intent(context, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            intent.putExtra(EXTRA_IS_LOGIN, isLogin)
             return intent
+        }
+
+        fun getIntent(
+            context: Context,
+            destination: FragmentType = HOME,
+        ): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                putExtra(EXTRA_DESTINATION, destination)
+            }
         }
     }
 }

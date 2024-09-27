@@ -28,6 +28,7 @@ class MainViewModel @Inject constructor(
                 }.onSuccess { userInfo ->
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
+                        isLogin = userInfo.userId != DEFAULT_USER_ID,
                         loading = false,
                     )
                 }.onFailure {
@@ -40,9 +41,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun updateLogin(isLogin: Boolean){
-        _mainUiState.value = mainUiState.value?.copy(
-            isLogin = isLogin,
-        )
+    companion object{
+        const val DEFAULT_USER_ID = -1L
     }
 }
