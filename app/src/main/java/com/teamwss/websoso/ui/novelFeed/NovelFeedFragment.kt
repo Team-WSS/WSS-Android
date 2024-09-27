@@ -50,7 +50,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment_novel_feed) {
     private val novelId: Long by lazy { requireArguments().getLong(NOVEL_ID) }
-    private val isLogin: Boolean by lazy { requireArguments().getBoolean(IS_LOGIN) }
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
@@ -75,7 +74,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
-            if (isLogin.not()) {
+            if (novelFeedViewModel.isLogin.value == false) {
                 showLoginRequestDialog()
                 return
             }
@@ -92,7 +91,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         }
 
         override fun onLikeButtonClick(view: View, id: Long) {
-            if (isLogin.not()) {
+            if (novelFeedViewModel.isLogin.value == false) {
                 showLoginRequestDialog()
                 return
             }
@@ -217,7 +216,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        if (isLogin.not()) {
+        if (novelFeedViewModel.isLogin.value == false) {
             showLoginRequestDialog()
             return
         }
@@ -247,6 +246,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
             }
         initView()
         novelFeedViewModel.updateFeeds(novelId)
+        novelFeedViewModel.updateLoginStatus()
         setupObserver()
     }
 
@@ -327,13 +327,11 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
 
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
-        private const val IS_LOGIN = "IS_LOGIN"
 
-        fun newInstance(novelId: Long, isLogin: Boolean): NovelFeedFragment {
+        fun newInstance(novelId: Long): NovelFeedFragment {
             return NovelFeedFragment().also {
                 it.arguments = Bundle().apply {
                     putLong(NOVEL_ID, novelId)
-                    putBoolean(IS_LOGIN, isLogin)
                 }
             }
         }

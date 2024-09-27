@@ -37,7 +37,7 @@ class NovelDetailViewModel @Inject constructor(
                 _novelDetailModel.value = novelDetail.toUi(novelId)
                 _loading.value = false
                 if (novelDetailModel.value?.isLogin == false) updateLoginStatus()
-                if (novelDetailModel.value?.userNovel?.isAlreadyRated == false) checkIsFirstLaunched()
+                checkIsFirstLaunched()
             }.onFailure {
                 _error.value = true
                 _loading.value = false
@@ -97,6 +97,14 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
+                val isAlreadyRated = novelDetailModel.value?.userNovel?.isAlreadyRated == false
+                val isUserNovelInterest = novelDetailModel.value?.userNovel?.isUserNovelInterest == true
+
+                if (isAlreadyRated || isUserNovelInterest) {
+                    updateIsFirstLaunched()
+                    return@launch
+                }
+
                 _novelDetailModel.value =
                     novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
             }.onFailure {

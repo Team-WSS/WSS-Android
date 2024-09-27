@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.NovelRepository
+import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelFeed.model.NovelFeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +17,13 @@ import javax.inject.Inject
 class NovelFeedViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val feedRepository: FeedRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _feedUiState: MutableLiveData<NovelFeedUiState> =
         MutableLiveData(NovelFeedUiState())
     val feedUiState: LiveData<NovelFeedUiState> get() = _feedUiState
+    private val _isLogin: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isLogin: LiveData<Boolean> get() = _isLogin
 
     fun updateFeeds(novelId: Long) {
         feedUiState.value?.let { feedUiState ->
@@ -168,6 +172,19 @@ class NovelFeedViewModel @Inject constructor(
                         error = true,
                     )
                 }
+            }
+        }
+    }
+
+    fun updateLoginStatus() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchIsLogin()
+            }.onSuccess { isLogin ->
+                //TODO: _isLogin.value = isLogin
+                _isLogin.value = true
+            }.onFailure {
+                throw it
             }
         }
     }

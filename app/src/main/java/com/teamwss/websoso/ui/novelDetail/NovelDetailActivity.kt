@@ -123,8 +123,7 @@ class NovelDetailActivity :
     }
 
     private fun setupViewPager() {
-        val isLogin = novelDetailViewModel.novelDetailModel.value?.isLogin ?: false
-        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId, isLogin)
+        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
         setupTabLayout()
         setupOnPageChangeCallback()
     }

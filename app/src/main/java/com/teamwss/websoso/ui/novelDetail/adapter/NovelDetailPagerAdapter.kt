@@ -9,11 +9,10 @@ import com.teamwss.websoso.ui.novelInfo.NovelInfoFragment
 class NovelDetailPagerAdapter(
     fragmentActivity: FragmentActivity,
     novelId: Long,
-    isLogin: Boolean,
 ) :
     FragmentStateAdapter(fragmentActivity) {
     private val fragments =
-        arrayOf(NovelInfoFragment.newInstance(novelId), NovelFeedFragment.newInstance(novelId, isLogin))
+        arrayOf(NovelInfoFragment.newInstance(novelId), NovelFeedFragment.newInstance(novelId))
 
     override fun getItemCount(): Int = fragments.size
 
