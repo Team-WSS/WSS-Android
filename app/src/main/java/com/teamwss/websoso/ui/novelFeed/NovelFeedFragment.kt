@@ -15,9 +15,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
-import com.teamwss.websoso.R.*
-import com.teamwss.websoso.R.drawable.*
-import com.teamwss.websoso.R.string.*
+import com.teamwss.websoso.R.drawable.ic_novel_detail_check
+import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.string.block_user_success_message
+import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
+import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.util.InfiniteScrollListener
@@ -28,6 +30,7 @@ import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
 import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.databinding.FragmentNovelFeedBinding
 import com.teamwss.websoso.databinding.MenuFeedPopupBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.feed.FeedItemClickListener
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
@@ -187,6 +190,10 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
+        if (requireArguments().getBoolean(IS_LOGIN).not()) {
+            showLoginRequestDialog()
+            return
+        }
         startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
     }
 
@@ -280,6 +287,11 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         }
     }
 
+    private fun showLoginRequestDialog() {
+        val dialog = LoginRequestDialogFragment.newInstance()
+        dialog.show(childFragmentManager, LoginRequestDialogFragment.TAG)
+    }
+
     override fun onResume() {
         super.onResume()
         if (novelFeedViewModel.feedUiState.value?.feeds.isNullOrEmpty().not())
@@ -293,10 +305,14 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
 
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
+        private const val IS_LOGIN = "IS_LOGIN"
 
-        fun newInstance(novelId: Long): NovelFeedFragment {
+        fun newInstance(novelId: Long, isLogin: Boolean): NovelFeedFragment {
             return NovelFeedFragment().also {
-                it.arguments = Bundle().apply { putLong(NOVEL_ID, novelId) }
+                it.arguments = Bundle().apply {
+                    putLong(NOVEL_ID, novelId)
+                    putBoolean(IS_LOGIN, isLogin)
+                }
             }
         }
     }

@@ -123,7 +123,8 @@ class NovelDetailActivity :
     }
 
     private fun setupViewPager() {
-        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId)
+        val isLogin = novelDetailViewModel.novelDetailModel.value?.isLogin ?: false
+        binding.vpNovelDetail.adapter = NovelDetailPagerAdapter(this, novelId, isLogin)
         setupTabLayout()
         setupOnPageChangeCallback()
     }
@@ -142,11 +143,6 @@ class NovelDetailActivity :
         binding.vpNovelDetail.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position == FEED_FRAGMENT_PAGE && novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
-                    binding.vpNovelDetail.setCurrentItem(INFO_FRAGMENT_PAGE, false)
-                    showLoginRequestDialog()
-                    return
-                }
                 updateNovelFeedWriteButtonVisibility(position)
             }
         })
