@@ -36,7 +36,8 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchIsLogin()
             }.onSuccess { isLogin ->
-                _novelDetailModel.value = novelDetailModel.value?.copy(isLogin = isLogin)
+                //TODO: _novelDetailModel.value = novelDetailModel.value?.copy(isLogin = isLogin)
+                _novelDetailModel.value = novelDetailModel.value?.copy(isLogin = true)
             }.onFailure {
                 throw it
             }
