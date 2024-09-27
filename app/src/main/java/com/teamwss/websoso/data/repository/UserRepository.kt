@@ -129,6 +129,11 @@ class UserRepository @Inject constructor(
         return preferences[NICKNAME_KEY] ?: DEFAULT_NICKNAME
     }
 
+    suspend fun fetchGender(): String {
+        val preferences = userStorage.data.first()
+        return preferences[GENDER_KEY] ?: DEFAULT_GENDER
+    }
+
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
         return userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
     }
@@ -166,7 +171,9 @@ class UserRepository @Inject constructor(
         val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
         val USER_ID_KEY = stringPreferencesKey("USER_ID")
         val NICKNAME_KEY = stringPreferencesKey("NICKNAME")
+        val GENDER_KEY = stringPreferencesKey("GENDER")
         const val DEFAULT_NICKNAME = "웹소소"
         const val DEFAULT_USER_ID = -1L
+        const val DEFAULT_GENDER = "F"
     }
 }
