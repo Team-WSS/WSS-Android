@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_login_request_white_radius_12dp">
+        android:background="@drawable/bg_login_request_white_radius_14dp">
 
         <ImageView
             android:id="@+id/iv_login_request_description"
