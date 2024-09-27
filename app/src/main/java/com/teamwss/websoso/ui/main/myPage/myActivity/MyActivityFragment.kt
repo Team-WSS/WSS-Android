@@ -18,8 +18,11 @@ class MyActivityFragment :
     BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
+    private val activityItemClickHandler: ActivityItemClickHandler by lazy {
+        ActivityItemClickHandler(requireContext(), myActivityViewModel)
+    }
     private val myActivityAdapter: MyActivityAdapter by lazy {
-        MyActivityAdapter()
+        MyActivityAdapter(activityItemClickHandler)
     }
     private var userProfile: UserProfileModel? = null
 
@@ -54,7 +57,7 @@ class MyActivityFragment :
 
     fun setupUserProfile(userProfile: UserProfileModel) {
         this.userProfile = userProfile
-        updateMyActivityes()
+        myActivityAdapter.setUserProfile(userProfile)
     }
 
     private fun loadUserProfile() {
@@ -71,10 +74,6 @@ class MyActivityFragment :
                 myActivityAdapter.setUserProfile(it)
             }
         }
-    }
-
-    private fun updateMyActivityes() {
-        userProfile?.let { myActivityAdapter.setUserProfile(it) }
     }
 
     private fun onMyActivityDetailButtonClick() {
