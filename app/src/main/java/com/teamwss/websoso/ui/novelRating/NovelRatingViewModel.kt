@@ -49,7 +49,7 @@ class NovelRatingViewModel @Inject constructor(
 
     private fun handleSuccessfulFetchNovelRating(
         novelRatingEntity: NovelRatingEntity,
-        isInterest: Boolean
+        isInterest: Boolean,
     ) {
         val novelRatingModel = novelRatingEntity.toUi()
         val isEditingStartDate =
