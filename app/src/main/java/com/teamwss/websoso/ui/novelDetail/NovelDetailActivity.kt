@@ -142,6 +142,11 @@ class NovelDetailActivity :
         binding.vpNovelDetail.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                if (position == FEED_FRAGMENT_PAGE && novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                    binding.vpNovelDetail.setCurrentItem(INFO_FRAGMENT_PAGE, false)
+                    showLoginRequestDialog()
+                    return
+                }
                 updateNovelFeedWriteButtonVisibility(position)
             }
         })
