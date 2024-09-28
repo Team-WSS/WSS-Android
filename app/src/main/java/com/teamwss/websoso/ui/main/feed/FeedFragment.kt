@@ -31,6 +31,7 @@ import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
@@ -86,7 +87,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
         override fun onProfileClick(userId: Long) {
-            singleEventHandler.throttleFirst(300) { navigateToProfileByMe(userId) }
+            singleEventHandler.throttleFirst(300) { navigateToProfile(userId) }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -119,7 +120,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
     }
 
-    private fun navigateToProfileByMe(userId: Long) {
+    private fun navigateToProfile(userId: Long) {
         when (mainViewModel.isUserId(userId)) {
             true -> {
                 (activity as? MainActivity)?.let { mainActivity ->
@@ -251,39 +252,46 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
-                FeedDetailRemoved.RESULT_OK -> showWebsosoSnackBar(
-                    view = binding.root,
-                    message = getString(feed_removed_feed_snackbar),
-                    icon = ic_blocked_user_snack_bar,
-                )
+        initView()
+        setupObserver()
+        refreshView()
+    }
 
-                BlockUser.RESULT_OK -> {
-                    val nickname = result.data?.getStringExtra(USER_NICKNAME)
-                    val blockMessage = nickname?.let {
-                        getString(block_user_success_message, it)
-                    } ?: getString(block_user_success_message)
+    private fun refreshView() {
+        if (::activityResultCallback.isInitialized.not()) {
+            activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK ->
+                        feedViewModel.updateRefreshedFeeds(false)
 
-                    showWebsosoSnackBar(
-                        view = binding.root,
-                        message = blockMessage,
-                        icon = ic_novel_detail_check,
-                    )
+                    FeedDetailRemoved.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds(false)
 
-                    feedViewModel.updateRefreshedFeeds()
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(feed_removed_feed_snackbar),
+                            icon = ic_blocked_user_snack_bar,
+                        )
+                    }
+
+                    BlockUser.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds(false)
+
+                        val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(block_user_success_message, nickname),
+                            icon = ic_novel_detail_check,
+                        )
+                    }
                 }
             }
         }
-        initView()
-        feedViewModel.updateFeeds()
-        setupObserver()
     }
 
     private fun initView() {
         binding.onWriteClick = { singleEventHandler.throttleFirst { navigateToFeedWriting() } }
-        feedViewModel.categories.setUpChips()
         setupAdapter()
         setupRefreshView()
     }
@@ -332,7 +340,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 )
                 setLottieAnimation("lottie_websoso_loading.json")
                 setOnRefreshListener {
-                    feedViewModel.updateRefreshedFeeds()
+                    feedViewModel.updateRefreshedFeeds(true)
                 }
             }
         }
@@ -350,17 +358,38 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 }
             }
         }
+
+        feedViewModel.categories.observe(viewLifecycleOwner) { category ->
+            category.setUpChips()
+            feedViewModel.updateFeeds()
+        }
     }
 
     private fun updateFeeds(feedUiState: FeedUiState) {
-        binding.clFeedNone.isVisible = feedUiState.feeds.isEmpty()
         val feeds = feedUiState.feeds.map { Feed(it) }
+
         when (feedUiState.isLoadable) {
-            true -> feedAdapter.submitList(feeds + Loading)
-            false -> feedAdapter.submitList(feeds + NoMore)
-        }.apply {
-            binding.rvFeed.smoothScrollToPosition(0)
+            true -> {
+                feedAdapter.submitList(feeds + Loading)
+                binding.clFeedNone.isVisible = false
+            }
+
+            false -> {
+                when (feeds.isNotEmpty()) {
+                    true -> {
+                        feedAdapter.submitList(feeds + NoMore)
+                        binding.clFeedNone.isVisible = false
+                    }
+
+                    false -> {
+                        feedAdapter.submitList(emptyList())
+                        binding.clFeedNone.isVisible = true
+                    }
+                }
+            }
         }
+
+        if (feedUiState.isRefreshed) binding.rvFeed.smoothScrollToPosition(0)
     }
 
     override fun onDestroyView() {

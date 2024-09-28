@@ -9,4 +9,6 @@ interface FeedDetailClickListener {
     fun onNovelInfoClick(novelId: Long)
 
     fun onProfileClick(userId: Long, isMyFeed: Boolean)
+
+    fun onFeedDetailClick(view: View)
 }

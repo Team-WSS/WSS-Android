@@ -19,7 +19,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelRating
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
@@ -27,6 +29,7 @@ import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityNovelDetailBinding
 import com.teamwss.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.teamwss.websoso.databinding.MenuNovelDetailPopupBinding
+import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
@@ -56,8 +59,8 @@ class NovelDetailActivity :
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             when (result.resultCode) {
-                RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
-                REFRESH -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                NovelRating.RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                CreateFeed.RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
             }
         }
 
@@ -255,6 +258,11 @@ class NovelDetailActivity :
         }
 
         override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
+            if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                binding.tgNovelDetailReadStatus.clearChecked()
+                showLoginRequestDialog()
+                return
+            }
             navigateToNovelRating(readStatus)
         }
 
@@ -264,11 +272,23 @@ class NovelDetailActivity :
         }
 
         override fun onNovelFeedWriteClick() {
+            if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                showLoginRequestDialog()
+                return
+            }
             val editFeedModel = EditFeedModel(
                 novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
             )
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
             novelDetailResultLauncher.launch(intent)
+        }
+
+        override fun onNovelInterestClick() {
+            if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                showLoginRequestDialog()
+                return
+            }
+            novelDetailViewModel.updateUserInterest(novelId)
         }
     }
 
@@ -296,6 +316,11 @@ class NovelDetailActivity :
         novelDetailViewModel.updateGenreImage(updatedGenreImage)
     }
 
+    private fun showLoginRequestDialog() {
+        val dialog = LoginRequestDialogFragment.newInstance()
+        dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
+    }
+
     override fun onResume() {
         super.onResume()
         binding.tgNovelDetailReadStatus.clearChecked()
@@ -306,7 +331,6 @@ class NovelDetailActivity :
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
-        private const val REFRESH = 200
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
 

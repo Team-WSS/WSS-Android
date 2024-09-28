@@ -20,7 +20,7 @@ class NovelDetailViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _novelDetailModel = MutableLiveData<NovelDetailModel>()
+    private val _novelDetailModel = MutableLiveData<NovelDetailModel>(NovelDetailModel())
     val novelDetailModel: LiveData<NovelDetailModel> get() = _novelDetailModel
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
@@ -36,12 +36,24 @@ class NovelDetailViewModel @Inject constructor(
             }.onSuccess { novelDetail ->
                 _novelDetailModel.value = novelDetail.toUi(novelId)
                 _loading.value = false
-                if (novelDetailModel.value?.userNovel?.isAlreadyRated == false) {
-                    checkIsFirstLaunched()
-                }
+                if (novelDetailModel.value?.isLogin == false) updateLoginStatus()
+                checkIsFirstLaunched()
             }.onFailure {
                 _error.value = true
                 _loading.value = false
+            }
+        }
+    }
+
+    private fun updateLoginStatus() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchIsLogin()
+            }.onSuccess { isLogin ->
+                //TODO: _novelDetailModel.value = novelDetailModel.value?.copy(isLogin = isLogin)
+                _novelDetailModel.value = novelDetailModel.value?.copy(isLogin = true)
+            }.onFailure {
+                throw it
             }
         }
     }
@@ -85,6 +97,11 @@ class NovelDetailViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchNovelDetailFirstLaunched()
             }.onSuccess { isFirstLaunched ->
+                if (novelDetailModel.value?.userNovel?.isAlreadyRated == true) {
+                    updateIsFirstLaunched()
+                    return@launch
+                }
+
                 _novelDetailModel.value =
                     novelDetailModel.value?.copy(isFirstLaunched = isFirstLaunched)
             }.onFailure {
