@@ -9,11 +9,14 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import coil.load
 import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
+import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentOtherUserLibraryBinding
 import com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
@@ -26,14 +29,17 @@ class OtherUserLibraryFragment :
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
+    private var userId: Long = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.otherUserLibraryViewModel = otherUserLibraryViewModel
-
+        userId = arguments?.getLong(USER_ID) ?: 0L
         setUpRestGenrePreferenceAdapter()
         setUpObserve()
+
+        otherUserLibraryViewModel.updateUserId(userId)
     }
 
     private fun setUpRestGenrePreferenceAdapter() {
@@ -57,6 +63,10 @@ class OtherUserLibraryFragment :
 
         otherUserLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
             updateNovelPreferencesKeywords(novelPreferences)
+        }
+
+        otherUserLibraryViewModel.topGenres.observe(viewLifecycleOwner) { topGenres ->
+            updateDominantGenres(topGenres)
         }
     }
 
@@ -129,6 +139,31 @@ class OtherUserLibraryFragment :
             setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
             setTextAppearance(R.style.body2)
+        }
+    }
+
+    private fun updateDominantGenres(topGenres: List<GenrePreferenceEntity>) {
+        topGenres.forEachIndexed { index, genrePreferenceEntity ->
+            val updatedGenreImageUrl = binding.root.getS3ImageUrl(genrePreferenceEntity.genreImage)
+
+            when (index) {
+                0 -> binding.ivOtherUserLibraryDominantGenreFirstLogo.load(updatedGenreImageUrl)
+                1 -> binding.ivOtherUserLibraryDominantGenreSecondLogo.load(updatedGenreImageUrl)
+                2 -> binding.ivOtherUserLibraryDominantGenreThirdLogo.load(updatedGenreImageUrl)
+            }
+        }
+    }
+
+    companion object {
+        private const val USER_ID = "USER_ID"
+
+        fun newInstance(userId: Long): OtherUserLibraryFragment {
+            val fragment = OtherUserLibraryFragment()
+            val bundle = Bundle().apply {
+                putLong(USER_ID, userId)
+            }
+            fragment.arguments = bundle
+            return fragment
         }
     }
 }

@@ -22,6 +22,9 @@ data class ActivitiesModel(
         val novelRating: Float?,
         val relevantCategories: String?,
     ) {
+        val isNovelInfoAvailable: Boolean
+            get() = novelId != null && novelId != 0L
+
         val formattedScore: String
             get() = String.format(
                 SCORE_FORMAT,

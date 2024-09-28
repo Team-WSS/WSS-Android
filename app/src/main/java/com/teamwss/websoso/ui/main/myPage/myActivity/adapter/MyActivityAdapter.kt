@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
+import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
-class MyActivityAdapter :
-    ListAdapter<ActivityModel, MyActivityViewHolder>(diffCallback) {
+class MyActivityAdapter(
+    private val activityItemClickListener: ActivityItemClickListener
+) : ListAdapter<ActivityModel, MyActivityViewHolder>(diffCallback) {
     private var userProfile: UserProfileModel? = null
 
     init {
@@ -21,7 +23,7 @@ class MyActivityAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyActivityViewHolder {
         val binding =
             ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyActivityViewHolder(binding)
+        return MyActivityViewHolder(binding, activityItemClickListener)
     }
 
     override fun onBindViewHolder(holder: MyActivityViewHolder, position: Int) {
