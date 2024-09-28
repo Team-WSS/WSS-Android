@@ -45,7 +45,6 @@
 
                         <ImageView
                             android:id="@+id/iv_other_user_page_user_profile"
-                            loadImageUrl='@{otherUserPageViewModel.otherUserProfile.avatarImage}'
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="72dp"
