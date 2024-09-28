@@ -20,13 +20,16 @@ class WithdrawFirstViewModel @Inject constructor(
     val uiState: LiveData<WithdrawFirstUiState> get() = _uiState
 
     init {
-        updateNovelStats()
+        viewModelScope.launch {
+            val userId: Long = userRepository.fetchUserId()
+            updateNovelStats(userId)
+        }
     }
 
-    private fun updateNovelStats() {
+    private fun updateNovelStats(userId: Long) {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchUserNovelStats()
+                userRepository.fetchUserNovelStats(userId)
             }.onSuccess { userNovelStatsEntity ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
