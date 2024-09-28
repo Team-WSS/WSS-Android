@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="genrePreference"
-            type="com.teamwss.websoso.data.model.GenrePreferenceEntity"/>
+            type="com.teamwss.websoso.data.model.GenrePreferenceEntity" />
 
     </data>
 
@@ -17,12 +18,13 @@
 
         <ImageView
             android:id="@+id/iv_rest_genre_logo"
+            loadImageUrl="@{genrePreference.genreImage}"
             android:layout_width="24dp"
             android:layout_height="28dp"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_novel_detail_genre_test"/>
+            tools:src="@drawable/ic_novel_detail_genre_test" />
 
         <TextView
             android:id="@+id/tv_rest_genre_title"
@@ -34,7 +36,7 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_rest_genre_logo"
             app:layout_constraintStart_toEndOf="@id/iv_rest_genre_logo"
             app:layout_constraintTop_toTopOf="@id/iv_rest_genre_logo"
-            tools:text="로판"/>
+            tools:text="로판" />
 
         <TextView
             android:id="@+id/tv_rest_genre_count"
@@ -46,7 +48,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="12편"/>
+            tools:text="12편" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
