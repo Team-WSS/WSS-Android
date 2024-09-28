@@ -42,18 +42,21 @@ class MyLibraryViewModel @Inject constructor(
     private val _novelStats = MutableLiveData<UserNovelStatsEntity>()
     val novelStats: LiveData<UserNovelStatsEntity> get() = _novelStats
 
-    private val userId: Long = getUserId()
+    private var userId: Long = -1
 
     init {
-        updateNovelStats()
-        updateGenrePreference(userId)
-        updateNovelPreferences(userId)
+        viewModelScope.launch {
+            userId = userRepository.fetchUserId()
+            updateNovelStats(userId)
+            updateGenrePreference(userId)
+            updateNovelPreferences(userId)
+        }
     }
 
-    private fun updateNovelStats() {
+    private fun updateNovelStats(userId: Long) {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchUserNovelStats()
+                userRepository.fetchUserNovelStats(userId)
             }.onSuccess { novelStats ->
                 _novelStats.value = novelStats
             }.onFailure { exception ->
@@ -73,10 +76,6 @@ class MyLibraryViewModel @Inject constructor(
             }.onFailure { exception ->
             }
         }
-    }
-
-    private fun getUserId(): Long {
-        return 2L
     }
 
     fun updateToggleGenresVisibility() {
