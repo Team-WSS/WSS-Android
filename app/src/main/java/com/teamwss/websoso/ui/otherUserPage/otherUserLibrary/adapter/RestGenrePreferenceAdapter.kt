@@ -28,7 +28,6 @@ class RestGenrePreferenceAdapter(
         )
 
         binding.genrePreference = updateGenrePreference
-        binding.genrePreference = getItem(position)
         binding.executePendingBindings()
         return binding.root
     }
