@@ -46,8 +46,10 @@ interface UserApi {
         @Query("userId") userId: Long,
     )
 
-    @GET("users/user-novel-stats")
-    suspend fun getUserNovelStats(): UserNovelStatsResponseDto
+    @GET("users/{userId}/user-novel-stats")
+    suspend fun getUserNovelStats(
+        @Path("userId") userId: Long,
+    ): UserNovelStatsResponseDto
 
     @GET("users/profile-status")
     suspend fun getProfileStatus(): UserProfileStatusResponseDto

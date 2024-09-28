@@ -47,15 +47,15 @@ class OtherUserLibraryViewModel @Inject constructor(
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
-        updateNovelStats()
+        updateNovelStats(userId)
         updateGenrePreference(userId)
         updateNovelPreferences(userId)
     }
 
-    private fun updateNovelStats() {
+    private fun updateNovelStats(userId: Long) {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchUserNovelStats()
+                userRepository.fetchUserNovelStats(userId)
             }.onSuccess { novelStats ->
                 _novelStats.value = novelStats
             }.onFailure { exception ->

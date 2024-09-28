@@ -52,10 +52,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         when (result.resultCode) {
-            FeedDetailBack.RESULT_OK -> homeViewModel.updateFeed()
-            FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
-            NormalExploreBack.RESULT_OK -> homeViewModel.updateNovel()
-            NovelDetailBack.RESULT_OK -> homeViewModel.updateNovel()
+            FeedDetailBack.RESULT_OK, FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
+            NormalExploreBack.RESULT_OK, NovelDetailBack.RESULT_OK -> {
+                homeViewModel.updateFeed()
+                homeViewModel.updateNovel()
+            }
+
             ProfileEditSuccess.RESULT_OK -> {
                 mainViewModel.updateUserInfo()
                 homeViewModel.updateNovel()
@@ -102,8 +104,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setupObserver() {
-        mainViewModel.mainUiState.observe(viewLifecycleOwner){ uiState ->
-            when{
+        mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
+            when {
                 uiState.error -> Unit
                 !uiState.loading -> updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
             }
