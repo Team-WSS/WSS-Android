@@ -33,6 +33,7 @@ fun UserInfoResponseDto.toData(): UserInfoEntity {
     return UserInfoEntity(
         userId = this.userId,
         nickname = this.nickname,
+        gender = this.gender,
     )
 }
 

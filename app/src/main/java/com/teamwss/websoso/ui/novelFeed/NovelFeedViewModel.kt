@@ -23,10 +23,11 @@ class NovelFeedViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     private var userId: Long = -1
-
     private val _feedUiState: MutableLiveData<NovelFeedUiState> =
         MutableLiveData(NovelFeedUiState())
     val feedUiState: LiveData<NovelFeedUiState> get() = _feedUiState
+    private val _isLogin: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isLogin: LiveData<Boolean> get() = _isLogin
 
     fun updateFeeds(novelId: Long) {
         feedUiState.value?.let { feedUiState ->
@@ -187,5 +188,18 @@ class NovelFeedViewModel @Inject constructor(
         }
     }
 
-    fun isUserId(id: Long): Boolean = if (userId == id) true else false
+    fun updateLoginStatus() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchIsLogin()
+            }.onSuccess { isLogin ->
+                //TODO: _isLogin.value = isLogin
+                _isLogin.value = true
+            }.onFailure {
+                throw it
+            }
+        }
+    }
+
+    fun isUserId(id: Long): Boolean = userId == id
 }
