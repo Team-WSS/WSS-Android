@@ -11,8 +11,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
 class MyActivityAdapter(
     private val activityItemClickListener: ActivityItemClickListener
-) :
-    ListAdapter<ActivityModel, MyActivityViewHolder>(diffCallback) {
+) : ListAdapter<ActivityModel, MyActivityViewHolder>(diffCallback) {
     private var userProfile: UserProfileModel? = null
 
     init {
@@ -24,7 +23,7 @@ class MyActivityAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyActivityViewHolder {
         val binding =
             ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyActivityViewHolder(binding,activityItemClickListener)
+        return MyActivityViewHolder(binding, activityItemClickListener)
     }
 
     override fun onBindViewHolder(holder: MyActivityViewHolder, position: Int) {
