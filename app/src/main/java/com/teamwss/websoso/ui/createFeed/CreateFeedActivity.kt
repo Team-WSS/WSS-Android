@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.viewModels
+import com.teamwss.websoso.R
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.teamwss.websoso.R.color.bg_detail_explore_chip_text_selector
@@ -18,6 +20,7 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
+import com.teamwss.websoso.common.util.hideKeyboard
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
 import com.teamwss.websoso.ui.createFeed.model.CreatedFeedCategoryModel
@@ -58,6 +61,23 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     }
 
     private fun onCreateFeedClick() {
+        onBackPressedDispatcher.addCallback(this) {
+            singleEventHandler.throttleFirst {
+                val isEmptyCategory = createFeedViewModel.categories.any { it.isSelected }
+                val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
+                val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
+
+                if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
+                    CreatingFeedDialogFragment.newInstance(event = ::finish)
+                        .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
+                    return@throttleFirst
+                }
+                if (!isFinishing) finish()
+            }
+        }
+
+        binding.root.setOnClickListener { it.hideKeyboard() }
+
         binding.ivCreateFeedRemoveButton.setOnClickListener {
             binding.clCreateFeedNovelInfo.visibility = View.INVISIBLE
             createFeedViewModel.updateSelectedNovelClear()
@@ -109,6 +129,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 binding.clCreateFeedNovelInfo.visibility = View.VISIBLE
                 binding.tvCreateFeedNovelName.text = novelTitle
             }
+        }
+        createFeedViewModel.content.observe(this) {
+            binding.tvCreateFeedCharactersCount.text =
+                getString(R.string.tv_create_feed_characters_count, it.length)
         }
     }
 
