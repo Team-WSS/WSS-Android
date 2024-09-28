@@ -253,7 +253,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        feedViewModel.updateFeeds()
         setupObserver()
         refreshView()
     }
@@ -293,7 +292,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun initView() {
         binding.onWriteClick = { singleEventHandler.throttleFirst { navigateToFeedWriting() } }
-        feedViewModel.categories.setUpChips()
         setupAdapter()
         setupRefreshView()
     }
@@ -359,6 +357,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     updateFeeds(feedUiState)
                 }
             }
+        }
+
+        feedViewModel.categories.observe(viewLifecycleOwner) { category ->
+            category.setUpChips()
+            feedViewModel.updateFeeds()
         }
     }
 

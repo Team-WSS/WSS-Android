@@ -22,30 +22,30 @@ class FeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     userRepository: UserRepository,
 ) : ViewModel() {
-    private val _categories: MutableList<CategoryModel> = mutableListOf()
-    val categories: List<CategoryModel> get() = _categories.toList()
+    private val _categories: MutableLiveData<List<CategoryModel>> = MutableLiveData()
+    val categories: LiveData<List<CategoryModel>> get() = _categories
 
     private val _feedUiState: MutableLiveData<FeedUiState> = MutableLiveData(FeedUiState())
     val feedUiState: LiveData<FeedUiState> get() = _feedUiState
 
     init {
-        // TODO userGender를 가져오는 로직으로 대체 필요
-        val userGender = "F"
+        viewModelScope.launch {
+            val userGender = userRepository.fetchGender()
+            val categories: List<CategoryModel> = when (userGender) {
+                "M" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
+                "F" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
+                else -> throw IllegalArgumentException()
+            }.split(",")
+                .map {
+                    val category: Category = Category.from(it)
+                    CategoryModel(
+                        category = category,
+                        isSelected = category == Category.ALL,
+                    )
+                }
 
-        val categories: List<CategoryModel> = when (userGender) {
-            "M" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
-            "F" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
-            else -> throw IllegalArgumentException()
-        }.split(",")
-            .map {
-                val category: Category = Category.from(it)
-                CategoryModel(
-                    category = category,
-                    isSelected = category == Category.ALL,
-                )
-            }
-
-        _categories.addAll(categories)
+            _categories.value = categories
+        }
     }
 
     fun updateFeeds() {
@@ -54,7 +54,8 @@ class FeedViewModel @Inject constructor(
 
             viewModelScope.launch {
                 val selectedCategory: Category =
-                    categories.find { it.isSelected }?.category ?: throw IllegalStateException()
+                    categories.value?.find { it.isSelected }?.category
+                        ?: throw IllegalStateException()
 
                 runCatching {
                     when (feedUiState.feeds.isNotEmpty()) {
@@ -84,12 +85,8 @@ class FeedViewModel @Inject constructor(
     }
 
     fun updateSelectedCategory(category: Category) {
-        categories.forEachIndexed { index, categoryUiState ->
-            _categories[index] = when {
-                categoryUiState.isSelected -> categoryUiState.copy(isSelected = false)
-                categoryUiState.category == category -> categoryUiState.copy(isSelected = true)
-                else -> return@forEachIndexed
-            }
+        _categories.value = categories.value?.map { categoryUiState ->
+            categoryUiState.copy(isSelected = categoryUiState.category == category)
         }
         updateFeedsByCategory(category)
     }
@@ -123,7 +120,8 @@ class FeedViewModel @Inject constructor(
         feedUiState.value?.let { feedUiState ->
             viewModelScope.launch {
                 val selectedCategory: Category =
-                    categories.find { it.isSelected }?.category ?: throw IllegalStateException()
+                    categories.value?.find { it.isSelected }?.category
+                        ?: throw IllegalStateException()
                 delay(300)
                 runCatching {
                     getFeedsUseCase(selectedCategory.enTitle)
