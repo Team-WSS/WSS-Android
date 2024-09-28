@@ -361,14 +361,29 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun updateFeeds(feedUiState: FeedUiState) {
-        binding.clFeedNone.isVisible = feedUiState.feeds.isEmpty()
         val feeds = feedUiState.feeds.map { Feed(it) }
+
         when (feedUiState.isLoadable) {
-            true -> feedAdapter.submitList(feeds + Loading)
-            false -> feedAdapter.submitList(feeds + NoMore)
-        }.apply {
-            binding.rvFeed.smoothScrollToPosition(0)
+            true -> {
+                feedAdapter.submitList(feeds + Loading)
+                binding.clFeedNone.isVisible = false
+            }
+
+            false -> {
+                when (feeds.isNotEmpty()) {
+                    true -> {
+                        feedAdapter.submitList(feeds + NoMore)
+                        binding.clFeedNone.isVisible = false
+                    }
+
+                    false -> {
+                        feedAdapter.submitList(emptyList())
+                        binding.clFeedNone.isVisible = true
+                    }
+                }
+            }
         }
+        binding.rvFeed.smoothScrollToPosition(0)
     }
 
     override fun onDestroyView() {
