@@ -262,9 +262,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK ->
+                        feedViewModel.updateRefreshedFeeds(false)
+
                     FeedDetailRemoved.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds()
+                        feedViewModel.updateRefreshedFeeds(false)
 
                         showWebsosoSnackBar(
                             view = binding.root,
@@ -274,7 +276,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     }
 
                     BlockUser.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds()
+                        feedViewModel.updateRefreshedFeeds(false)
 
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
 
@@ -340,7 +342,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 )
                 setLottieAnimation("lottie_websoso_loading.json")
                 setOnRefreshListener {
-                    feedViewModel.updateRefreshedFeeds()
+                    feedViewModel.updateRefreshedFeeds(true)
                 }
             }
         }
@@ -383,7 +385,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 }
             }
         }
-        binding.rvFeed.smoothScrollToPosition(0)
+
+        if (feedUiState.isRefreshed) binding.rvFeed.smoothScrollToPosition(0)
     }
 
     override fun onDestroyView() {

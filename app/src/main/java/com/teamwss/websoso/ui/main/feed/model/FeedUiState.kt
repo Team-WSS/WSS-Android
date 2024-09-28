@@ -5,4 +5,5 @@ data class FeedUiState(
     val error: Boolean = false,
     val isLoadable: Boolean = true,
     val feeds: List<FeedModel> = emptyList(),
+    val isRefreshed: Boolean = false,
 )

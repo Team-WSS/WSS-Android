@@ -119,7 +119,7 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun updateRefreshedFeeds() {
+    fun updateRefreshedFeeds(isRefreshed: Boolean) {
         feedUiState.value?.let { feedUiState ->
             viewModelScope.launch {
                 val selectedCategory: Category =
@@ -134,6 +134,7 @@ class FeedViewModel @Inject constructor(
                         loading = false,
                         isLoadable = feeds.isLoadable,
                         feeds = feeds.feeds.map { it.toUi() },
+                        isRefreshed = isRefreshed,
                     )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
