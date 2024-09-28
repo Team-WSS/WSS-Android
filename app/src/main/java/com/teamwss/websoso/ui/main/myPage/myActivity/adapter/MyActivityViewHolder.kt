@@ -12,8 +12,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 class MyActivityViewHolder(
     private val binding: ItemMyActivityBinding,
     activityItemClickListener: ActivityItemClickListener,
-) :
-    RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.onClick = activityItemClickListener
