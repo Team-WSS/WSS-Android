@@ -9,4 +9,6 @@ data class UserInfoResponseDto(
     val userId: Long,
     @SerialName("nickname")
     val nickname: String,
+    @SerialName("gender")
+    val gender: String,
 )
