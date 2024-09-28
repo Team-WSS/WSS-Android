@@ -2,16 +2,17 @@ package com.teamwss.websoso.ui.createFeed
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import com.teamwss.websoso.R.layout.dialog_remove_popup_menu
+import com.teamwss.websoso.R.layout.dialog_report_popup_menu
+import com.teamwss.websoso.R.string.remove_popup_menu_keep_creating
+import com.teamwss.websoso.R.string.remove_popup_menu_stop_creating
 import com.teamwss.websoso.R.string.tv_remove_popup_menu_stop_creating
 import com.teamwss.websoso.common.ui.base.BaseDialogFragment
 import com.teamwss.websoso.common.util.SingleEventHandler
-import com.teamwss.websoso.databinding.DialogRemovePopupMenuBinding
+import com.teamwss.websoso.databinding.DialogReportPopupMenuBinding
 import com.teamwss.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 
 class CreatingFeedDialogFragment :
-    BaseDialogFragment<DialogRemovePopupMenuBinding>(dialog_remove_popup_menu) {
+    BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val onRemoveClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener
@@ -20,10 +21,11 @@ class CreatingFeedDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvRemovePopupMenuTitle.visibility = GONE
-        binding.tvRemovePopupMenuDescription.text = getString(tv_remove_popup_menu_stop_creating)
-        binding.tvRemovePopupMenuCancel.setOnClickListener { dismiss() }
-        binding.tvRemovePopupMenuRemove.setOnClickListener {
+        binding.tvReportPopupMenuTitle.text = getString(tv_remove_popup_menu_stop_creating)
+        binding.tvReportPopupMenuCancel.text = getString(remove_popup_menu_keep_creating)
+        binding.tvReportPopupMenuReport.text = getString(remove_popup_menu_stop_creating)
+        binding.tvReportPopupMenuCancel.setOnClickListener { dismiss() }
+        binding.tvReportPopupMenuReport.setOnClickListener {
             singleEventHandler.throttleFirst {
                 dismiss()
                 onRemoveClick()
