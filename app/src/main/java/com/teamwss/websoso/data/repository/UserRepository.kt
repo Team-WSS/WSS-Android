@@ -60,8 +60,8 @@ class UserRepository @Inject constructor(
         userApi.postBlockUser(userId)
     }
 
-    suspend fun fetchUserNovelStats(): UserNovelStatsEntity {
-        return userApi.getUserNovelStats().toData()
+    suspend fun fetchUserNovelStats(userId: Long): UserNovelStatsEntity {
+        return userApi.getUserNovelStats(userId).toData()
     }
 
     suspend fun fetchUserProfileStatus(): UserProfileStatusEntity {
