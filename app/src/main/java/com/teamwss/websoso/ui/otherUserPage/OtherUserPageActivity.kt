@@ -10,11 +10,14 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityOtherUserPageBinding
@@ -30,9 +33,6 @@ class OtherUserPageActivity :
         get() = _popupBinding ?: error("OtherUserPageActivity")
     private var menuPopupWindow: PopupWindow? = null
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
-    private val viewPagerAdapter: OtherUserPageViewPagerAdapter by lazy {
-        OtherUserPageViewPagerAdapter(this)
-    }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,8 +41,9 @@ class OtherUserPageActivity :
         updateUserId()
         bindViewModel()
         bindPopupMenu()
-        setUpViewPager()
-        setUpItemVisibilityOnToolBar()
+        setupObserver()
+        setupViewPager()
+        setupItemVisibilityOnToolBar()
         onBackButtonClick()
         onMoreButtonClick()
         handleBackPressed()
@@ -64,25 +65,33 @@ class OtherUserPageActivity :
         popupBinding.onBlockedUserClick = ::showBlockUserDialog
     }
 
+    private fun setupObserver() {
+        otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
+            setUpMyProfileImage(otherUserProfile.avatarImage.orEmpty())
+        }
+    }
+
     private fun showBlockUserDialog() {
         val dialog = BlockUserDialogFragment.newInstance()
         dialog.show(supportFragmentManager, BlockUserDialogFragment.TAG)
         menuPopupWindow?.dismiss()
     }
 
-    private fun setUpViewPager() {
+    private fun setupViewPager() {
+        val userId = intent.getLongExtra(USER_ID, 0L)
+
         val tabTitleItems = listOf(
             getText(R.string.other_user_page_library),
             getText(R.string.other_user_page_activity)
         )
-        binding.vpOtherUserPage.adapter = viewPagerAdapter
+        binding.vpOtherUserPage.adapter = OtherUserPageViewPagerAdapter(this, userId)
 
         TabLayoutMediator(binding.tlOtherUserPage, binding.vpOtherUserPage) { tab, position ->
             tab.text = tabTitleItems[position]
         }.attach()
     }
 
-    private fun setUpItemVisibilityOnToolBar() {
+    private fun setupItemVisibilityOnToolBar() {
         binding.ablOtherUserPage.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val totalScrollRange = appBarLayout.totalScrollRange
             val percentage = (totalScrollRange.toFloat() + verticalOffset) / totalScrollRange
@@ -132,6 +141,15 @@ class OtherUserPageActivity :
                 POPUP_MARGIN_END.toIntPxFromDp(),
                 POPUP_MARGIN_TOP.toIntPxFromDp(),
             )
+        }
+    }
+
+    private fun setUpMyProfileImage(otherUserProfileUrl: String) {
+        val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(otherUserProfileUrl)
+        binding.ivOtherUserPageUserProfile.load(updatedMyProfileImageUrl) {
+            crossfade(true)
+            error(R.drawable.img_loading_thumbnail)
+            transformations(CircleCropTransformation())
         }
     }
 

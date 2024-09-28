@@ -42,9 +42,11 @@ class OtherUserLibraryViewModel @Inject constructor(
     private val _novelStats = MutableLiveData<UserNovelStatsEntity>()
     val novelStats: LiveData<UserNovelStatsEntity> get() = _novelStats
 
-    private val userId: Long = getUserId()
+    private val _userId: MutableLiveData<Long> = MutableLiveData()
+    val userId: LiveData<Long> get() = _userId
 
-    init {
+    fun updateUserId(userId: Long) {
+        _userId.value = userId
         updateNovelStats()
         updateGenrePreference(userId)
         updateNovelPreferences(userId)
@@ -73,10 +75,6 @@ class OtherUserLibraryViewModel @Inject constructor(
             }.onFailure { exception ->
             }
         }
-    }
-
-    private fun getUserId(): Long {
-        return 1L
     }
 
     fun updateToggleGenresVisibility() {

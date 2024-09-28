@@ -220,7 +220,7 @@
     <string name="my_library_genre_preference">장르 취향</string>
     <string name="my_library_genre_count">%d편</string>
     <string name="my_library_novel_preference">작품 취향</string>
-    <string name="my_library_attractive_point_fixed_text">가 매력적인 작품</string>
+    <string name="my_library_attractive_point_fixed_text">(이)가 매력적인 작품</string>
 
     <!-- 홈 뷰 -->
     <string name="home_today_popular">오늘의 인기작</string>
