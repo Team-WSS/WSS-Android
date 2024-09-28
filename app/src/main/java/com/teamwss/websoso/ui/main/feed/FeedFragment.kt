@@ -253,7 +253,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        feedViewModel.updateFeeds()
         setupObserver()
         refreshView()
     }
@@ -262,9 +261,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedViewModel.updateRefreshedFeeds()
+                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK ->
+                        feedViewModel.updateRefreshedFeeds(false)
+
                     FeedDetailRemoved.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds()
+                        feedViewModel.updateRefreshedFeeds(false)
 
                         showWebsosoSnackBar(
                             view = binding.root,
@@ -274,7 +275,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     }
 
                     BlockUser.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds()
+                        feedViewModel.updateRefreshedFeeds(false)
 
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
 
@@ -291,7 +292,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun initView() {
         binding.onWriteClick = { singleEventHandler.throttleFirst { navigateToFeedWriting() } }
-        feedViewModel.categories.setUpChips()
         setupAdapter()
         setupRefreshView()
     }
@@ -340,7 +340,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 )
                 setLottieAnimation("lottie_websoso_loading.json")
                 setOnRefreshListener {
-                    feedViewModel.updateRefreshedFeeds()
+                    feedViewModel.updateRefreshedFeeds(true)
                 }
             }
         }
@@ -358,17 +358,38 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 }
             }
         }
+
+        feedViewModel.categories.observe(viewLifecycleOwner) { category ->
+            category.setUpChips()
+            feedViewModel.updateFeeds()
+        }
     }
 
     private fun updateFeeds(feedUiState: FeedUiState) {
-        binding.clFeedNone.isVisible = feedUiState.feeds.isEmpty()
         val feeds = feedUiState.feeds.map { Feed(it) }
+
         when (feedUiState.isLoadable) {
-            true -> feedAdapter.submitList(feeds + Loading)
-            false -> feedAdapter.submitList(feeds + NoMore)
-        }.apply {
-            binding.rvFeed.smoothScrollToPosition(0)
+            true -> {
+                feedAdapter.submitList(feeds + Loading)
+                binding.clFeedNone.isVisible = false
+            }
+
+            false -> {
+                when (feeds.isNotEmpty()) {
+                    true -> {
+                        feedAdapter.submitList(feeds + NoMore)
+                        binding.clFeedNone.isVisible = false
+                    }
+
+                    false -> {
+                        feedAdapter.submitList(emptyList())
+                        binding.clFeedNone.isVisible = true
+                    }
+                }
+            }
         }
+
+        if (feedUiState.isRefreshed) binding.rvFeed.smoothScrollToPosition(0)
     }
 
     override fun onDestroyView() {
