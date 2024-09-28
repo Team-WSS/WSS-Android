@@ -31,7 +31,6 @@ class MyActivityFragment :
         setupMyActivitiesAdapter()
         setupObserver()
         onMyActivityDetailButtonClick()
-        loadUserProfile()
     }
 
     private fun setupMyActivitiesAdapter() {
@@ -60,22 +59,6 @@ class MyActivityFragment :
         myActivityAdapter.setUserProfile(userProfile)
     }
 
-    private fun loadUserProfile() {
-        arguments?.let { bundle ->
-            val avatarImage = bundle.getString("KEY_AVATAR_IMAGE", "")
-            val nickname = bundle.getString("KEY_NICKNAME", "")
-            val userId = bundle.getLong("KEY_USER_ID", 0L)
-
-            userProfile = UserProfileModel(
-                avatarImage = avatarImage,
-                nickname = nickname,
-                userId = userId,
-            ).also {
-                myActivityAdapter.setUserProfile(it)
-            }
-        }
-    }
-
     private fun onMyActivityDetailButtonClick() {
         binding.btnMyActivityMore.setOnClickListener {
             val intent = ActivityDetailActivity.getIntent(requireContext())
@@ -87,8 +70,5 @@ class MyActivityFragment :
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_MY_ACTIVITY = "myActivity"
-        const val KEY_AVATAR_IMAGE = "avatarImage"
-        const val KEY_NICKNAME = "nickname"
-        const val KEY_USER_ID = "userId"
     }
 }
