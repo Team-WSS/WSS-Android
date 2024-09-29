@@ -15,7 +15,7 @@ class NoticeDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val noticeItem = intent.getParcelableExtra<NoticeModel>(NOTICE_DETAIL_KEY)
+        val noticeItem = intent.getSerializableExtra(NOTICE_DETAIL_KEY) as? NoticeModel
         binding.noticeItem = noticeItem
 
         onBackButtonClick()
