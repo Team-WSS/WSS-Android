@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.notice
+package com.teamwss.websoso.ui.notice.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load

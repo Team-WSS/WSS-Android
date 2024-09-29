@@ -8,6 +8,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityNoticeBinding
 import com.teamwss.websoso.ui.main.MainActivity
+import com.teamwss.websoso.ui.notice.adapter.NoticeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

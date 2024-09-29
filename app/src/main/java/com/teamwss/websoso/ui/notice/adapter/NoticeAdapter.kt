@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.notice
+package com.teamwss.websoso.ui.notice.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
