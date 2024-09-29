@@ -104,7 +104,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/iv_popular_novel_avatar"
                 app:layout_constraintStart_toEndOf="@id/iv_popular_novel_avatar"
                 app:layout_constraintTop_toTopOf="@id/iv_popular_novel_avatar"
-                tools:text="밝보 님의 한마디" />
+                tools:text="밝보님의 한마디" />
 
             <TextView
                 android:id="@+id/tv_popular_novel_in_short_title_null"
