@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="noticeItem"
+            type="com.teamwss.websoso.ui.notice.model.NoticeModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.noticeDetail.NoticeDetailActivity">
+
+        <TextView
+            android:id="@+id/tv_notice_detail_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
+            android:text="@string/notice_notification"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_notice_detail_back"
+            android:layout_width="44dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="6dp"
+            android:src="@drawable/ic_notice_back"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_notice_detail_notice"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_notice_detail_notice" />
+
+        <TextView
+            android:id="@+id/tv_notice_detail_notice_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@{noticeItem.noticeTitle}"
+            android:textAppearance="@style/headline1"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_notice_detail_notice"
+            tools:text="리뷰 기능 변경 관련 공지" />
+
+        <TextView
+            android:id="@+id/tv_notice_detail_notice_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{noticeItem.createDate}"
+            android:textAppearance="@style/body5"
+            android:textColor="@color/gray_200_AEADB3"
+            app:layout_constraintStart_toStartOf="@id/tv_notice_detail_notice_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_notice_detail_notice_title"
+            tools:text="2024.06.22" />
+
+        <View
+            android:id="@+id/v_notice_detail_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_notice_detail_notice_date" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:paddingHorizontal="20dp"
+            android:scrollbars="vertical"
+            android:text="@{noticeItem.noticeContent}"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_notice_detail_divider"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
