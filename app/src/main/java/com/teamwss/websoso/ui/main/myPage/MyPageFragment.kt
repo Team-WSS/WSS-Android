@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -14,6 +15,7 @@ import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
+import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
 import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
 import com.teamwss.websoso.ui.setting.SettingActivity
@@ -22,13 +24,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val myPageViewModel: MyPageViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
 
     private val startActivityLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         when (result.resultCode) {
-            ProfileEditSuccess.RESULT_OK -> myPageViewModel.updateUserProfile()
+            ProfileEditSuccess.RESULT_OK -> {
+                myPageViewModel.updateUserProfile()
+                mainViewModel.updateUserInfo()
+            }
         }
     }
 
