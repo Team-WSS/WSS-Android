@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemNoticeBinding
 import com.teamwss.websoso.ui.notice.model.NoticeModel
 
-class NoticeAdapter : ListAdapter<NoticeModel, NoticeViewHolder>(NoticeModelDiffCallback) {
+class NoticeAdapter(
+    private val onNoticeClick: (noticeItem: NoticeModel) -> Unit,
+) : ListAdapter<NoticeModel, NoticeViewHolder>(NoticeModelDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
         val binding = ItemNoticeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return NoticeViewHolder(binding)
+        return NoticeViewHolder(binding, onNoticeClick)
     }
 
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {

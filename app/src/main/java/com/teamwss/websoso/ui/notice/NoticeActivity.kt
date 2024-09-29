@@ -9,6 +9,8 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityNoticeBinding
 import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.notice.adapter.NoticeAdapter
+import com.teamwss.websoso.ui.notice.model.NoticeModel
+import com.teamwss.websoso.ui.noticeDetail.NoticeDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,8 +19,11 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>(R.layout.activity_not
     private val noticeViewModel: NoticeViewModel by viewModels()
 
     private val noticeAdapter: NoticeAdapter by lazy {
-        NoticeAdapter()
+        NoticeAdapter(::navigateToNoticeDetail)
     }
+
+    private fun navigateToNoticeDetail(noticeItem: NoticeModel) =
+        startActivity(NoticeDetailActivity.getIntent(this, noticeItem))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

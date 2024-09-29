@@ -8,12 +8,17 @@
         <variable
             name="notice"
             type="com.teamwss.websoso.ui.notice.model.NoticeModel" />
+
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:onClick="@{() -> onClick.invoke(notice)}">
 
         <ImageView
             android:id="@+id/iv_item_notice_icon"
