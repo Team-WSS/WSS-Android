@@ -8,7 +8,7 @@ import com.teamwss.websoso.databinding.ItemNoticeBinding
 import com.teamwss.websoso.ui.notice.model.NoticeModel
 
 class NoticeAdapter(
-    private val onNoticeClick: (noticeItem: NoticeModel) -> Unit,
+    private val onNoticeClick: (notice: NoticeModel) -> Unit,
 ) : ListAdapter<NoticeModel, NoticeViewHolder>(NoticeModelDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {

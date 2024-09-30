@@ -35,7 +35,7 @@ class NoticeDetailActivity :
     }
 
     companion object {
-        const val NOTICE_DETAIL_KEY = "NOTICE_ITEM_KEY"
+        const val NOTICE_DETAIL_KEY = "NOTICE_DETAIL_KEY"
 
         fun getIntent(context: Context, noticeModel: NoticeModel): Intent {
             return Intent(context, NoticeDetailActivity::class.java).apply {

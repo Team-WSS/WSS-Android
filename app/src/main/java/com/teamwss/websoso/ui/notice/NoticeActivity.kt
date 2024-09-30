@@ -22,8 +22,8 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>(R.layout.activity_not
         NoticeAdapter(::navigateToNoticeDetail)
     }
 
-    private fun navigateToNoticeDetail(noticeItem: NoticeModel) =
-        startActivity(NoticeDetailActivity.getIntent(this, noticeItem))
+    private fun navigateToNoticeDetail(notice: NoticeModel) =
+        startActivity(NoticeDetailActivity.getIntent(this, notice))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
