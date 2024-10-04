@@ -47,7 +47,6 @@ class MyActivityFragment :
                 val userProfile = UserProfileModel(
                     nickname = myProfileEntity.nickname,
                     avatarImage = myProfileEntity.avatarImage,
-                    userId = 2L,
                 )
                 setupUserProfile(userProfile)
             }
@@ -61,8 +60,11 @@ class MyActivityFragment :
 
     private fun onMyActivityDetailButtonClick() {
         binding.btnMyActivityMore.setOnClickListener {
-            val intent = ActivityDetailActivity.getIntent(requireContext())
-            intent.putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
+            val userId = myActivityViewModel.userId
+            val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
+                putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
+                putExtra(EXTRA_USER_ID, userId)
+            }
             startActivity(intent)
         }
     }
@@ -70,5 +72,6 @@ class MyActivityFragment :
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_MY_ACTIVITY = "myActivity"
+        const val EXTRA_USER_ID = "userId"
     }
 }
