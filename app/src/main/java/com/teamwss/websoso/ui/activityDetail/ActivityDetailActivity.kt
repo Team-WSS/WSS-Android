@@ -29,14 +29,14 @@ class ActivityDetailActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupUserAndSource()
+        setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
         setUpObserve(source)
         onBackButtonClick()
     }
 
-    private fun setupUserAndSource() {
+    private fun setupUserIDAndSource() {
         userId = intent.getLongExtra(EXTRA_USER_ID, -1L)
         source = intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
 
