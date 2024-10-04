@@ -26,11 +26,14 @@ class OtherUserActivityFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userId = arguments?.getLong(USER_ID) ?: 0L
+        setupUserId()
         setUpMyActivitiesAdapter()
         setupObserve()
         onActivityDetailButtonClick()
+    }
 
+    private fun setupUserId() {
+        userId = arguments?.getLong(USER_ID) ?: 0L
         otherUserActivityViewModel.updateUserId(userId)
     }
 
@@ -48,7 +51,6 @@ class OtherUserActivityFragment :
                 val userProfile = UserProfileModel(
                     nickname = otherUserProfileEntity.nickname,
                     avatarImage = otherUserProfileEntity.avatarImage,
-                    userId = userId
                 )
                 setupUserProfile(userProfile)
             }
@@ -62,8 +64,10 @@ class OtherUserActivityFragment :
 
     private fun onActivityDetailButtonClick() {
         binding.btnOtherUserActivityMore.setOnClickListener {
-            val intent = ActivityDetailActivity.getIntent(requireContext())
-            intent.putExtra(EXTRA_SOURCE, SOURCE_OTHER_USER_ACTIVITY)
+            val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
+                putExtra(EXTRA_SOURCE, SOURCE_OTHER_USER_ACTIVITY)
+                putExtra(EXTRA_USER_ID, userId)
+            }
             startActivity(intent)
         }
     }
@@ -71,6 +75,7 @@ class OtherUserActivityFragment :
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
+        const val EXTRA_USER_ID = "userId"
         private const val USER_ID = "USER_ID"
 
         fun newInstance(userId: Long): OtherUserActivityFragment {
