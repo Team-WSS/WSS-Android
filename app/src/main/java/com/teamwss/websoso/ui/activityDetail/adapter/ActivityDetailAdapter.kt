@@ -4,9 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
 class ActivityDetailAdapter :
     ListAdapter<ActivityModel, ActivityDetailViewHolder>(diffCallback) {
+    private var userProfile: UserProfileModel? = null
 
     init {
         setHasStableIds(true)
@@ -19,7 +21,14 @@ class ActivityDetailAdapter :
     }
 
     override fun onBindViewHolder(holder: ActivityDetailViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val activity = getItem(position)
+
+        userProfile?.let { holder.bind(activity, it) }
+    }
+
+    fun setUserProfile(userProfile: UserProfileModel) {
+        this.userProfile = userProfile
+        notifyDataSetChanged()
     }
 
     companion object {
