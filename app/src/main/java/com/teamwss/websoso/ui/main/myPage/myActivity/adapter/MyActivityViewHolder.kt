@@ -18,12 +18,12 @@ class MyActivityViewHolder(
         binding.onClick = activityItemClickListener
     }
 
-    fun bind(myActivity: ActivityModel, userProfile: UserProfileModel) {
-        binding.activity = myActivity
+    fun bind(activity: ActivityModel, userProfile: UserProfileModel) {
+        binding.activity = activity
         binding.userProfile = userProfile.copy(
             avatarImage = itemView.getS3ImageUrl(userProfile.avatarImage)
         )
-        binding.clMyActivityLike.isSelected = myActivity.isLiked
+        binding.clMyActivityLike.isSelected = activity.isLiked
     }
 
     companion object {
