@@ -26,7 +26,7 @@ class MyActivityViewModel @Inject constructor(
     private val _likeState = MutableLiveData<ActivityLikeState>()
     val likeState: LiveData<ActivityLikeState> get() = _likeState
 
-    private val _lastFeedId = MutableLiveData<Long>().apply { value = 0L }
+    private val _lastFeedId =  MutableLiveData<Long>(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val _userProfile = MutableLiveData<UserProfileModel>()
@@ -34,7 +34,7 @@ class MyActivityViewModel @Inject constructor(
 
     var userId: Long = -1
 
-    private val size: Int = 10
+    private val size: Int = ACTIVITY_SIZE
 
     init {
         viewModelScope.launch {
@@ -88,5 +88,9 @@ class MyActivityViewModel @Inject constructor(
                 activity
             }
         }
+    }
+
+    companion object{
+        const val ACTIVITY_SIZE = 10
     }
 }

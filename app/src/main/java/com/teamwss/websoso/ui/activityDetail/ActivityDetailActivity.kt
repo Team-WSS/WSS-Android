@@ -13,6 +13,8 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import com.teamwss.websoso.R.string.my_activity_detail_title
+import com.teamwss.websoso.R.string.other_user_page_activity
 
 @AndroidEntryPoint
 class ActivityDetailActivity :
@@ -37,7 +39,7 @@ class ActivityDetailActivity :
     }
 
     private fun setupUserIDAndSource() {
-        userId = intent.getLongExtra(EXTRA_USER_ID, -1L)
+        userId = intent.getLongExtra(USER_ID_KEY, -1L)
         source = intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
 
         if (source == SOURCE_OTHER_USER_ACTIVITY) {
@@ -48,13 +50,10 @@ class ActivityDetailActivity :
     }
 
     private fun setActivityTitle() {
-        val source: String? = intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE)
-
-        var title: String = ""
-
-        when (source) {
-            SOURCE_MY_ACTIVITY -> title = getString(R.string.my_activity_detail_title)
-            SOURCE_OTHER_USER_ACTIVITY -> title = getString(R.string.other_user_page_activity)
+        val title = when (source) {
+            SOURCE_MY_ACTIVITY -> getString(my_activity_detail_title)
+            SOURCE_OTHER_USER_ACTIVITY -> getString(other_user_page_activity)
+            else -> ""
         }
         binding.tvActivityDetailTitle.text = title
     }
@@ -96,7 +95,7 @@ class ActivityDetailActivity :
     }
 
     companion object {
-        const val EXTRA_USER_ID = "userId"
+        const val USER_ID_KEY = "userId"
         const val SOURCE_MY_ACTIVITY = "myActivity"
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
 

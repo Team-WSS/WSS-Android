@@ -33,7 +33,7 @@ class OtherUserActivityFragment :
     }
 
     private fun setupUserId() {
-        userId = arguments?.getLong(USER_ID) ?: 0L
+        userId = arguments?.getLong(USER_ID_KEY) ?: 0L
         otherUserActivityViewModel.updateUserId(userId)
     }
 
@@ -66,7 +66,7 @@ class OtherUserActivityFragment :
         binding.btnOtherUserActivityMore.setOnClickListener {
             val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
                 putExtra(EXTRA_SOURCE, SOURCE_OTHER_USER_ACTIVITY)
-                putExtra(EXTRA_USER_ID, userId)
+                putExtra(USER_ID_KEY, userId)
             }
             startActivity(intent)
         }
@@ -75,13 +75,12 @@ class OtherUserActivityFragment :
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
-        const val EXTRA_USER_ID = "userId"
-        private const val USER_ID = "USER_ID"
+        const val USER_ID_KEY = "userId"
 
         fun newInstance(userId: Long): OtherUserActivityFragment {
             val fragment = OtherUserActivityFragment()
             val bundle = Bundle().apply {
-                putLong(USER_ID, userId)
+                putLong(USER_ID_KEY, userId)
             }
             fragment.arguments = bundle
             return fragment

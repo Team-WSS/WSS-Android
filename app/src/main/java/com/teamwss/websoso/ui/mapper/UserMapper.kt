@@ -34,13 +34,13 @@ fun MyProfileEntity.toProfileEdit(): ProfileModel {
 fun MyProfileEntity.toUserProfileModel(): UserProfileModel {
     return UserProfileModel(
         nickname = this.nickname,
-        avatarImage = this.avatarImage
+        avatarImage = this.avatarImage,
     )
 }
 
 fun OtherUserProfileEntity.toUserProfileModel(): UserProfileModel {
     return UserProfileModel(
         nickname = this.nickname,
-        avatarImage = this.avatarImage
+        avatarImage = this.avatarImage,
     )
 }

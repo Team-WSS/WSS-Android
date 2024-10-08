@@ -22,13 +22,13 @@ class OtherUserActivityViewModel @Inject constructor(
     private val _likeState = MutableLiveData<ActivityLikeState>()
     val likeState: LiveData<ActivityLikeState> get() = _likeState
 
-    private val _lastFeedId = MutableLiveData<Long>().apply { value = 0L }
+    private val _lastFeedId =  MutableLiveData<Long>(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val _userId: MutableLiveData<Long> = MutableLiveData()
     val userId: LiveData<Long> get() = _userId
 
-    private val size: Int = 10
+    private val size: Int = ACTIVITY_SIZE
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
@@ -53,5 +53,6 @@ class OtherUserActivityViewModel @Inject constructor(
 
     companion object {
         const val ACTIVITY_COUNT = 5
+        const val ACTIVITY_SIZE = 10
     }
 }

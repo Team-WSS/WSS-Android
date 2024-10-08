@@ -22,10 +22,10 @@ class ActivityDetailViewModel @Inject constructor(
     private val _userId: MutableLiveData<Long> = MutableLiveData()
     val userId: LiveData<Long> get() = _userId
 
-    private val _lastFeedId = MutableLiveData<Long>().apply { value = 0L }
+    private val _lastFeedId =  MutableLiveData<Long>(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
-    private val size: Int = 10
+    private val size: Int = ACTIVITY_SIZE
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
@@ -46,5 +46,9 @@ class ActivityDetailViewModel @Inject constructor(
             }.onFailure {
             }
         }
+    }
+
+    companion object {
+        const val ACTIVITY_SIZE = 10
     }
 }

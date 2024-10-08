@@ -63,7 +63,7 @@ class MyActivityFragment :
             val userId = myActivityViewModel.userId
             val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
                 putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
-                putExtra(EXTRA_USER_ID, userId)
+                putExtra(USER_ID_KEY, userId)
             }
             startActivity(intent)
         }
@@ -72,6 +72,6 @@ class MyActivityFragment :
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_MY_ACTIVITY = "myActivity"
-        const val EXTRA_USER_ID = "userId"
+        const val USER_ID_KEY = "userId"
     }
 }
