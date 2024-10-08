@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
 class MyActivityAdapter(
@@ -29,12 +30,17 @@ class MyActivityAdapter(
     override fun onBindViewHolder(holder: MyActivityViewHolder, position: Int) {
         val activity = getItem(position)
 
-        userProfile?.let { holder.bind(activity, it) }
+        userProfile?.let { userProfile ->
+            val activityModels = UserActivityModel(activity, userProfile)
+            holder.bind(activityModels)
+        }
     }
 
     fun setUserProfile(profile: UserProfileModel) {
         userProfile = profile
-        notifyDataSetChanged()
+        if (currentList.isNotEmpty()) {
+            notifyItemRangeChanged(0, currentList.size)
+        }
     }
 
     companion object {

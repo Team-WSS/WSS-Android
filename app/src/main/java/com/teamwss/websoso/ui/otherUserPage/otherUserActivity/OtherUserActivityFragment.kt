@@ -28,7 +28,7 @@ class OtherUserActivityFragment :
         super.onViewCreated(view, savedInstanceState)
         setupUserId()
         setUpMyActivitiesAdapter()
-        setupObserve()
+        setupObserver()
         onActivityDetailButtonClick()
     }
 
@@ -41,7 +41,7 @@ class OtherUserActivityFragment :
         binding.rvOtherUserActivity.adapter = otherUserActivityAdapter
     }
 
-    private fun setupObserve() {
+    private fun setupObserver() {
         otherUserActivityViewModel.otherUserActivity.observe(viewLifecycleOwner) { activities ->
             otherUserActivityAdapter.submitList(activities)
         }

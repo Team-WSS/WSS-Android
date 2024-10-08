@@ -32,10 +32,10 @@ class OtherUserActivityViewModel @Inject constructor(
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
-        updateUserFeeds(userId)
+        updateOtherUserActivities(userId)
     }
 
-    private fun updateUserFeeds(userId: Long) {
+    private fun updateOtherUserActivities(userId: Long) {
         viewModelScope.launch {
             runCatching {
                 otherUserActivityRepository.fetchUserFeeds(

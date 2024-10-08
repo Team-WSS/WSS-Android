@@ -32,22 +32,16 @@ class MyActivityViewModel @Inject constructor(
     private val _userProfile = MutableLiveData<UserProfileModel>()
     val userProfile: LiveData<UserProfileModel> get() = _userProfile
 
-    var userId: Long = -1
-
     private val size: Int = ACTIVITY_SIZE
 
     init {
-        viewModelScope.launch {
-            userId = userRepository.fetchUserId()
-            updateMyActivities(userId)
-        }
+        updateMyActivities()
     }
 
-    private fun updateMyActivities(userId:Long) {
+    private fun updateMyActivities() {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchUserFeeds(
-                    userId,
+                userRepository.fetchMyActivities(
                     lastFeedId.value ?: 0L,
                     size,
                 )
