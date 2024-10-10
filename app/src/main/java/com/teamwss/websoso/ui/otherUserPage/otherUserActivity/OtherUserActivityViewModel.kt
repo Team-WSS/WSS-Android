@@ -28,7 +28,7 @@ class OtherUserActivityViewModel @Inject constructor(
     private val _userId: MutableLiveData<Long> = MutableLiveData()
     val userId: LiveData<Long> get() = _userId
 
-    private val size: Int = ACTIVITY_SIZE
+    private val size: Int = ACTIVITY_LOAD_SIZE
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
@@ -53,6 +53,6 @@ class OtherUserActivityViewModel @Inject constructor(
 
     companion object {
         const val ACTIVITY_COUNT = 5
-        const val ACTIVITY_SIZE = 10
+        const val ACTIVITY_LOAD_SIZE = 10
     }
 }

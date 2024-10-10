@@ -32,7 +32,7 @@ class MyActivityViewModel @Inject constructor(
     private val _userProfile = MutableLiveData<UserProfileModel>()
     val userProfile: LiveData<UserProfileModel> get() = _userProfile
 
-    private val size: Int = ACTIVITY_SIZE
+    private val size: Int = ACTIVITY_LOAD_SIZE
 
     init {
         updateMyActivities()
@@ -85,6 +85,6 @@ class MyActivityViewModel @Inject constructor(
     }
 
     companion object{
-        const val ACTIVITY_SIZE = 10
+        const val ACTIVITY_LOAD_SIZE = 10
     }
 }

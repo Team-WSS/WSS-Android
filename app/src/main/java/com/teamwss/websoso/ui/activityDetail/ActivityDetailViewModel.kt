@@ -25,7 +25,7 @@ class ActivityDetailViewModel @Inject constructor(
     private val _lastFeedId =  MutableLiveData<Long>(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
-    private val size: Int = ACTIVITY_SIZE
+    private val size: Int = ACTIVITY_LOAD_SIZE
 
     var source: String?
         get() = savedStateHandle["source"]
@@ -80,7 +80,7 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     companion object {
-        const val ACTIVITY_SIZE = 10
+        const val ACTIVITY_LOAD_SIZE = 10
         const val DEFAULT_USER_ID = -1L
     }
 }
