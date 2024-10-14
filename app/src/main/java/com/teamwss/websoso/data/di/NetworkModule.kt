@@ -32,7 +32,7 @@ object NetworkModule {
             val requestBuilder = original.newBuilder()
                 .header(
                     "Authorization",
-                    "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3MiLCJpYXQiOjE3Mjg1NDgxNjksImV4cCI6MTcyODU0OTk2OSwidXNlcklkIjoyfQ.WMaFicskAcX1VCkpXt5zFlPlrtu6RY-UW6bBd1xvGHM"
+                    "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3MiLCJpYXQiOjE3Mjg3MDA3MzAsImV4cCI6MTcyOTkxMDMzMCwidXNlcklkIjoyfQ.0KqxbTFQZ8FcueotRNWhxyVGPsGfvGYX9KYPa1iEMDg"
                 )
                 .header("Content-Type", CONTENT_TYPE)
             val request = requestBuilder.build()
