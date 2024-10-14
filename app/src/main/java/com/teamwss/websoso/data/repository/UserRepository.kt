@@ -197,6 +197,11 @@ class UserRepository @Inject constructor(
         return userApi.getUserFeeds(userId, lastFeedId, size).toData()
     }
 
+    suspend fun fetchMyActivities(lastFeedId: Long, size: Int): UserFeedsEntity {
+        val myUserId = fetchUserId()
+        return fetchUserFeeds(myUserId, lastFeedId, size)
+    }
+
     companion object {
         val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
         val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN")

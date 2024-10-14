@@ -47,7 +47,6 @@ class MyActivityFragment :
                 val userProfile = UserProfileModel(
                     nickname = myProfileEntity.nickname,
                     avatarImage = myProfileEntity.avatarImage,
-                    userId = 2L,
                 )
                 setupUserProfile(userProfile)
             }
@@ -61,8 +60,9 @@ class MyActivityFragment :
 
     private fun onMyActivityDetailButtonClick() {
         binding.btnMyActivityMore.setOnClickListener {
-            val intent = ActivityDetailActivity.getIntent(requireContext())
-            intent.putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
+            val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
+                putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
+            }
             startActivity(intent)
         }
     }

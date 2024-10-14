@@ -26,11 +26,14 @@ class OtherUserActivityFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userId = arguments?.getLong(USER_ID) ?: 0L
+        setupUserId()
         setUpMyActivitiesAdapter()
-        setupObserve()
+        setupObserver()
         onActivityDetailButtonClick()
+    }
 
+    private fun setupUserId() {
+        userId = arguments?.getLong(USER_ID_KEY) ?: 0L
         otherUserActivityViewModel.updateUserId(userId)
     }
 
@@ -38,7 +41,7 @@ class OtherUserActivityFragment :
         binding.rvOtherUserActivity.adapter = otherUserActivityAdapter
     }
 
-    private fun setupObserve() {
+    private fun setupObserver() {
         otherUserActivityViewModel.otherUserActivity.observe(viewLifecycleOwner) { activities ->
             otherUserActivityAdapter.submitList(activities)
         }
@@ -48,7 +51,6 @@ class OtherUserActivityFragment :
                 val userProfile = UserProfileModel(
                     nickname = otherUserProfileEntity.nickname,
                     avatarImage = otherUserProfileEntity.avatarImage,
-                    userId = userId
                 )
                 setupUserProfile(userProfile)
             }
@@ -62,8 +64,10 @@ class OtherUserActivityFragment :
 
     private fun onActivityDetailButtonClick() {
         binding.btnOtherUserActivityMore.setOnClickListener {
-            val intent = ActivityDetailActivity.getIntent(requireContext())
-            intent.putExtra(EXTRA_SOURCE, SOURCE_OTHER_USER_ACTIVITY)
+            val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
+                putExtra(EXTRA_SOURCE, SOURCE_OTHER_USER_ACTIVITY)
+                putExtra(USER_ID_KEY, userId)
+            }
             startActivity(intent)
         }
     }
@@ -71,12 +75,12 @@ class OtherUserActivityFragment :
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
-        private const val USER_ID = "USER_ID"
+        const val USER_ID_KEY = "userId"
 
         fun newInstance(userId: Long): OtherUserActivityFragment {
             val fragment = OtherUserActivityFragment()
             val bundle = Bundle().apply {
-                putLong(USER_ID, userId)
+                putLong(USER_ID_KEY, userId)
             }
             fragment.arguments = bundle
             return fragment

@@ -22,20 +22,20 @@ class OtherUserActivityViewModel @Inject constructor(
     private val _likeState = MutableLiveData<ActivityLikeState>()
     val likeState: LiveData<ActivityLikeState> get() = _likeState
 
-    private val _lastFeedId = MutableLiveData<Long>().apply { value = 0L }
+    private val _lastFeedId =  MutableLiveData<Long>(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val _userId: MutableLiveData<Long> = MutableLiveData()
     val userId: LiveData<Long> get() = _userId
 
-    private val size: Int = 10
+    private val size: Int = ACTIVITY_LOAD_SIZE
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
-        updateUserFeeds(userId)
+        updateOtherUserActivities(userId)
     }
 
-    private fun updateUserFeeds(userId: Long) {
+    private fun updateOtherUserActivities(userId: Long) {
         viewModelScope.launch {
             runCatching {
                 otherUserActivityRepository.fetchUserFeeds(
@@ -53,5 +53,6 @@ class OtherUserActivityViewModel @Inject constructor(
 
     companion object {
         const val ACTIVITY_COUNT = 5
+        const val ACTIVITY_LOAD_SIZE = 10
     }
 }

@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyActivityViewModel @Inject constructor(
-    private val myActivityRepository: UserRepository,
+    private val userRepository: UserRepository,
     private val feedRepository: FeedRepository,
     ) : ViewModel() {
 
@@ -26,15 +26,13 @@ class MyActivityViewModel @Inject constructor(
     private val _likeState = MutableLiveData<ActivityLikeState>()
     val likeState: LiveData<ActivityLikeState> get() = _likeState
 
-    private val _lastFeedId = MutableLiveData<Long>().apply { value = 0L }
+    private val _lastFeedId =  MutableLiveData<Long>(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val _userProfile = MutableLiveData<UserProfileModel>()
     val userProfile: LiveData<UserProfileModel> get() = _userProfile
 
-    private var userId: Long = 2L
-
-    private val size: Int = 10
+    private val size: Int = ACTIVITY_LOAD_SIZE
 
     init {
         updateMyActivities()
@@ -43,8 +41,7 @@ class MyActivityViewModel @Inject constructor(
     private fun updateMyActivities() {
         viewModelScope.launch {
             runCatching {
-                myActivityRepository.fetchUserFeeds(
-                    userId,
+                userRepository.fetchMyActivities(
                     lastFeedId.value ?: 0L,
                     size,
                 )
@@ -85,5 +82,9 @@ class MyActivityViewModel @Inject constructor(
                 activity
             }
         }
+    }
+
+    companion object{
+        const val ACTIVITY_LOAD_SIZE = 10
     }
 }
