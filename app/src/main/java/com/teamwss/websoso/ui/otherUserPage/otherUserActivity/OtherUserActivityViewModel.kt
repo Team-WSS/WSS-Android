@@ -22,7 +22,7 @@ class OtherUserActivityViewModel @Inject constructor(
     private val _likeState = MutableLiveData<ActivityLikeState>()
     val likeState: LiveData<ActivityLikeState> get() = _likeState
 
-    private val _lastFeedId = MutableLiveData<Long>(0L)
+    private val _lastFeedId: MutableLiveData<Long> = MutableLiveData(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val _userId: MutableLiveData<Long> = MutableLiveData()
