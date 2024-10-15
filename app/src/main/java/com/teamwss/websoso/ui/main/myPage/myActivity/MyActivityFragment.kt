@@ -18,7 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyActivityFragment :
-    BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity),ActivityItemClickListener {
+    BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity),
+    ActivityItemClickListener {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val myActivityAdapter: MyActivityAdapter by lazy {

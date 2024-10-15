@@ -28,10 +28,8 @@ class MyActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: MyActivityViewHolder, position: Int) {
-        val activity = getItem(position)
-
         userProfile?.let { userProfile ->
-            val activityModels = UserActivityModel(activity, userProfile)
+            val activityModels = UserActivityModel(getItem(position), userProfile)
             holder.bind(activityModels)
         }
     }
