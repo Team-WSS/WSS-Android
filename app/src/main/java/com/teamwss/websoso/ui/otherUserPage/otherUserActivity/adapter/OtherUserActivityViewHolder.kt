@@ -6,14 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
-import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityViewHolder
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 
 class OtherUserActivityViewHolder(
     private val binding: ItemMyActivityBinding,
     activityItemClickListener: ActivityItemClickListener,
-) :
-    RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.onClick = activityItemClickListener
@@ -31,8 +29,11 @@ class OtherUserActivityViewHolder(
     }
 
     companion object {
-        fun from(parent: ViewGroup, onClick: ActivityItemClickListener): MyActivityViewHolder =
-            MyActivityViewHolder(
+        fun from(
+            parent: ViewGroup,
+            onClick: ActivityItemClickListener
+        ): OtherUserActivityViewHolder =
+            OtherUserActivityViewHolder(
                 ItemMyActivityBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,

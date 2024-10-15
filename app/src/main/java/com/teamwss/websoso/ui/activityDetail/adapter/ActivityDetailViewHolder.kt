@@ -5,10 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
+import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 
-class ActivityDetailViewHolder(private val binding: ItemMyActivityBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class ActivityDetailViewHolder(
+    private val binding: ItemMyActivityBinding,
+    activityItemClickListener: ActivityItemClickListener,
+) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        binding.onClick = activityItemClickListener
+    }
 
     fun bind(activityModels: UserActivityModel) {
         val activity = activityModels.activity
@@ -18,17 +25,19 @@ class ActivityDetailViewHolder(private val binding: ItemMyActivityBinding) :
         binding.userProfile = userProfile.copy(
             avatarImage = itemView.getS3ImageUrl(userProfile.avatarImage)
         )
+
+        binding.clMyActivityLike.isSelected = activity.isLiked
     }
 
     companion object {
-        fun from(parent: ViewGroup): ActivityDetailViewHolder {
-            val binding =
+        fun from(parent: ViewGroup, onClick: ActivityItemClickListener): ActivityDetailViewHolder =
+            ActivityDetailViewHolder(
                 ItemMyActivityBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
-                    false
-                )
-            return ActivityDetailViewHolder(binding)
-        }
+                    false,
+                ),
+                onClick,
+            )
     }
 }

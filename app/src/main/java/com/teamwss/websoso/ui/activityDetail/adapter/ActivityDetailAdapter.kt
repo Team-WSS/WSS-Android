@@ -1,14 +1,18 @@
 package com.teamwss.websoso.ui.activityDetail.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.teamwss.websoso.databinding.ItemMyActivityBinding
+import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
-class ActivityDetailAdapter :
-    ListAdapter<ActivityModel, ActivityDetailViewHolder>(diffCallback) {
+class ActivityDetailAdapter(
+    private val activityItemClickListener: ActivityItemClickListener
+) : ListAdapter<ActivityModel, ActivityDetailViewHolder>(diffCallback) {
     private var userProfile: UserProfileModel? = null
 
     init {
@@ -18,14 +22,14 @@ class ActivityDetailAdapter :
     override fun getItemId(position: Int): Long = getItem(position).feedId.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityDetailViewHolder {
-        return ActivityDetailViewHolder.from(parent)
+        val binding =
+            ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ActivityDetailViewHolder(binding, activityItemClickListener)
     }
 
     override fun onBindViewHolder(holder: ActivityDetailViewHolder, position: Int) {
-        val activity = getItem(position)
-
         userProfile?.let { userProfile ->
-            val activityModels = UserActivityModel(activity, userProfile)
+            val activityModels = UserActivityModel(getItem(position), userProfile)
             holder.bind(activityModels)
         }
     }
