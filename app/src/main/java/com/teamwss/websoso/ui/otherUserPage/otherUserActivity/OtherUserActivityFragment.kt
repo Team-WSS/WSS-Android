@@ -51,13 +51,9 @@ class OtherUserActivityFragment :
                     nickname = otherUserProfileEntity.nickname,
                     avatarImage = otherUserProfileEntity.avatarImage,
                 )
-                setupUserProfile(userProfile)
+                otherUserActivityAdapter.setUserProfile(userProfile)
             }
         }
-    }
-
-    fun setupUserProfile(userProfile: UserProfileModel) {
-        otherUserActivityAdapter.setUserProfile(userProfile)
     }
 
     private fun onActivityDetailButtonClick() {

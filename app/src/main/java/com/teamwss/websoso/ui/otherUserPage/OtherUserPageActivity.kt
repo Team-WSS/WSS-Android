@@ -65,16 +65,25 @@ class OtherUserPageActivity :
         popupBinding.onBlockedUserClick = ::showBlockUserDialog
     }
 
+    private fun showBlockUserDialog() {
+        val dialog = BlockUserDialogFragment.newInstance()
+        dialog.show(supportFragmentManager, BlockUserDialogFragment.TAG)
+        menuPopupWindow?.dismiss()
+    }
+
     private fun setupObserver() {
         otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
             setUpMyProfileImage(otherUserProfile.avatarImage.orEmpty())
         }
     }
 
-    private fun showBlockUserDialog() {
-        val dialog = BlockUserDialogFragment.newInstance()
-        dialog.show(supportFragmentManager, BlockUserDialogFragment.TAG)
-        menuPopupWindow?.dismiss()
+    private fun setUpMyProfileImage(otherUserProfileUrl: String) {
+        val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(otherUserProfileUrl)
+        binding.ivOtherUserPageUserProfile.load(updatedMyProfileImageUrl) {
+            crossfade(true)
+            error(R.drawable.img_loading_thumbnail)
+            transformations(CircleCropTransformation())
+        }
     }
 
     private fun setupViewPager() {
@@ -141,15 +150,6 @@ class OtherUserPageActivity :
                 POPUP_MARGIN_END.toIntPxFromDp(),
                 POPUP_MARGIN_TOP.toIntPxFromDp(),
             )
-        }
-    }
-
-    private fun setUpMyProfileImage(otherUserProfileUrl: String) {
-        val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(otherUserProfileUrl)
-        binding.ivOtherUserPageUserProfile.load(updatedMyProfileImageUrl) {
-            crossfade(true)
-            error(R.drawable.img_loading_thumbnail)
-            transformations(CircleCropTransformation())
         }
     }
 
