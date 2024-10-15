@@ -32,9 +32,7 @@ class ActivityDetailAdapter :
 
     fun setUserProfile(userProfile: UserProfileModel) {
         this.userProfile = userProfile
-        if (currentList.isNotEmpty()) {
-            notifyItemRangeChanged(0, currentList.size)
-        }
+        submitList(currentList)
     }
 
     companion object {

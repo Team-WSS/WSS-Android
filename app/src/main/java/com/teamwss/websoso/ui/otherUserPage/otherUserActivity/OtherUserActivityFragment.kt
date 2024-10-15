@@ -16,13 +16,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OtherUserActivityFragment :
     BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
+
     private val otherUserActivityViewModel: OtherUserActivityViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
     private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy {
         OtherUserActivityAdapter()
     }
-    private var userId: Long = 0L
-    private var userProfile: UserProfileModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,7 +32,7 @@ class OtherUserActivityFragment :
     }
 
     private fun setupUserId() {
-        userId = arguments?.getLong(USER_ID_KEY) ?: 0L
+        val userId = arguments?.getLong(USER_ID_KEY) ?: 0L
         otherUserActivityViewModel.updateUserId(userId)
     }
 
@@ -52,21 +51,16 @@ class OtherUserActivityFragment :
                     nickname = otherUserProfileEntity.nickname,
                     avatarImage = otherUserProfileEntity.avatarImage,
                 )
-                setupUserProfile(userProfile)
+                otherUserActivityAdapter.setUserProfile(userProfile)
             }
         }
-    }
-
-    fun setupUserProfile(userProfile: UserProfileModel) {
-        this.userProfile = userProfile
-        otherUserActivityAdapter.setUserProfile(userProfile)
     }
 
     private fun onActivityDetailButtonClick() {
         binding.btnOtherUserActivityMore.setOnClickListener {
             val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
                 putExtra(EXTRA_SOURCE, SOURCE_OTHER_USER_ACTIVITY)
-                putExtra(USER_ID_KEY, userId)
+                putExtra(USER_ID_KEY, otherUserActivityViewModel.userId.value)
             }
             startActivity(intent)
         }
@@ -77,14 +71,10 @@ class OtherUserActivityFragment :
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
         const val USER_ID_KEY = "userId"
 
-        fun newInstance(userId: Long): OtherUserActivityFragment {
-            val fragment = OtherUserActivityFragment()
-            val bundle = Bundle().apply {
+        fun newInstance(userId: Long) = OtherUserActivityFragment().apply {
+            arguments = Bundle().apply {
                 putLong(USER_ID_KEY, userId)
             }
-            fragment.arguments = bundle
-            return fragment
         }
     }
 }
-

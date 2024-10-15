@@ -22,7 +22,7 @@ class ActivityDetailViewModel @Inject constructor(
     private val _userActivity = MutableLiveData<List<ActivityModel>>()
     val userActivity: LiveData<List<ActivityModel>> get() = _userActivity
 
-    private val _lastFeedId =  MutableLiveData<Long>(0L)
+    private val _lastFeedId: MutableLiveData<Long> = MutableLiveData(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val size: Int = ACTIVITY_LOAD_SIZE
