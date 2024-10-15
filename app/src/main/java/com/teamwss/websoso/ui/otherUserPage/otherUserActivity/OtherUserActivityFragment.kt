@@ -75,13 +75,10 @@ class OtherUserActivityFragment :
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
         const val USER_ID_KEY = "userId"
 
-        fun newInstance(userId: Long): OtherUserActivityFragment {
-            val fragment = OtherUserActivityFragment()
-            val bundle = Bundle().apply {
+        fun newInstance(userId: Long) = OtherUserActivityFragment().apply {
+            arguments = Bundle().apply {
                 putLong(USER_ID_KEY, userId)
             }
-            fragment.arguments = bundle
-            return fragment
         }
     }
 }
