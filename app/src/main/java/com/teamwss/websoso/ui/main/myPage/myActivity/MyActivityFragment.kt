@@ -18,12 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyActivityFragment :
-    BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity),
-    ActivityItemClickListener {
+    BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val myActivityAdapter: MyActivityAdapter by lazy {
-        MyActivityAdapter(this)
+        MyActivityAdapter(onClickFeedItem())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,32 +61,35 @@ class MyActivityFragment :
         }
     }
 
-    override fun onContentClick(feedId: Long) {
-        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
-    }
+    private fun onClickFeedItem() = object : ActivityItemClickListener {
 
-    override fun onNovelInfoClick(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
-    }
-
-    override fun onLikeButtonClick(view: View, feedId: Long) {
-        val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
-        val currentLikeCount = likeCountTextView.text.toString().toInt()
-
-        val updatedLikeCount: Int = if (view.isSelected) {
-            if (currentLikeCount > 0) currentLikeCount - 1 else 0
-        } else {
-            currentLikeCount + 1
+        override fun onContentClick(feedId: Long) {
+            startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
         }
 
-        likeCountTextView.text = updatedLikeCount.toString()
-        view.isSelected = !view.isSelected
+        override fun onNovelInfoClick(novelId: Long) {
+            startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+        }
 
-        myActivityViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
-    }
+        override fun onLikeButtonClick(view: View, feedId: Long) {
+            val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
+            val currentLikeCount = likeCountTextView.text.toString().toInt()
 
-    override fun onMoreButtonClick(view: View, feedId: Long) {
-        // TODO 팝업메뉴 수정 and 차단
+            val updatedLikeCount: Int = if (view.isSelected) {
+                if (currentLikeCount > 0) currentLikeCount - 1 else 0
+            } else {
+                currentLikeCount + 1
+            }
+
+            likeCountTextView.text = updatedLikeCount.toString()
+            view.isSelected = !view.isSelected
+
+            myActivityViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
+        }
+
+        override fun onMoreButtonClick(view: View, feedId: Long) {
+            // TODO 팝업메뉴 수정 and 차단
+        }
     }
 
     companion object {
