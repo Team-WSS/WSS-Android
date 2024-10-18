@@ -118,7 +118,7 @@ class MyActivityFragment :
             WindowManager.LayoutParams.WRAP_CONTENT,
             true
         ).apply {
-            elevation = 2f
+            elevation = POPUP_ELEVATION
             showAsDropDown(view)
         }
 
@@ -133,7 +133,7 @@ class MyActivityFragment :
             }
 
             tvMyActivityPopupDeletion.setOnClickListener {
-                showDialog(
+                showRemovedDialog(
                     RemoveMenuType.REMOVE_FEED.name
                 ) {
                     myActivityViewModel.updateRemovedFeed(feedId)
@@ -157,7 +157,7 @@ class MyActivityFragment :
         } ?: throw IllegalArgumentException("Feed not found")
     }
 
-    private fun showDialog(menuType: String, event: FeedFragment.FeedDialogClickListener) {
+    private fun showRemovedDialog(menuType: String, event: FeedFragment.FeedDialogClickListener) {
         val dialogFragment = FeedRemoveDialogFragment.newInstance(
             menuType = menuType,
             event = event,
@@ -168,5 +168,6 @@ class MyActivityFragment :
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_MY_ACTIVITY = "myActivity"
+        const val POPUP_ELEVATION = 2f
     }
 }
