@@ -2,14 +2,19 @@ package com.teamwss.websoso.ui.main.myPage.myActivity
 
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
+import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
@@ -88,9 +93,48 @@ class MyActivityFragment :
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long) {
-            // TODO 팝업메뉴 수정 and 차단
+            showPopupMenu(view, feedId)
         }
     }
+
+    private fun showPopupMenu(view: View, feedId: Long) {
+        val binding =
+            MenuMyActivityPopupBinding.inflate(layoutInflater)
+
+        val popupWindow = PopupWindow(
+            binding.root,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 2f
+            showAsDropDown(view)
+        }
+        val activityModel = myActivityViewModel.myActivity.value?.find { it.feedId == feedId }
+
+        binding.tvMyActivityModification.setOnClickListener {
+            if (activityModel != null) {
+                val editFeedModel = EditFeedModel(
+                    feedId = activityModel.feedId,
+                    novelId = activityModel.novelId ?: 0L,
+                    novelTitle = activityModel.title ?: "제목 없음",
+                    feedContent = activityModel.feedContent,
+                    feedCategory = activityModel.relevantCategories?.split(", ") ?: emptyList(),
+                )
+                startActivity(CreateFeedActivity.getIntent(requireContext(), editFeedModel))
+                popupWindow.dismiss()
+            } else {
+
+            }
+        }
+
+
+        binding.tvMyActivityPopupDeletion.setOnClickListener {
+            // deleteItem(feedId)
+            popupWindow.dismiss()
+        }
+    }
+
 
     companion object {
         const val EXTRA_SOURCE = "source"
