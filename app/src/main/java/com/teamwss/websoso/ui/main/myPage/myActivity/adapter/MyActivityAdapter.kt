@@ -28,19 +28,15 @@ class MyActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: MyActivityViewHolder, position: Int) {
-        val activity = getItem(position)
-
         userProfile?.let { userProfile ->
-            val activityModels = UserActivityModel(activity, userProfile)
+            val activityModels = UserActivityModel(getItem(position), userProfile)
             holder.bind(activityModels)
         }
     }
 
-    fun setUserProfile(profile: UserProfileModel) {
-        userProfile = profile
-        if (currentList.isNotEmpty()) {
-            notifyItemRangeChanged(0, currentList.size)
-        }
+    fun setUserProfile(userProfile: UserProfileModel) {
+        this.userProfile = userProfile
+        submitList(currentList)
     }
 
     companion object {
