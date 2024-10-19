@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.otherUserPage.otherUserActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -15,10 +14,8 @@ import com.teamwss.websoso.databinding.FragmentOtherUserActivityBinding
 import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
-import com.teamwss.websoso.ui.main.feed.FeedFragment
-import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
-import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
@@ -35,24 +32,7 @@ class OtherUserActivityFragment :
     private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy {
         OtherUserActivityAdapter(onClickFeedItem())
     }
-    private var _popupBinding: MenuOtherUserActivityPopupBinding? = null
-    private val popupBinding: MenuOtherUserActivityPopupBinding
-        get() = _popupBinding ?: error("Popup binding is null")
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-        _popupBinding = MenuOtherUserActivityPopupBinding.inflate(inflater, container, false)
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _popupBinding = null
-    }
+    private var _popupWindow: PopupWindow? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -128,8 +108,12 @@ class OtherUserActivityFragment :
     }
 
     private fun showPopupMenu(view: View, feedId: Long) {
-        val popupWindow: PopupWindow = PopupWindow(
-            popupBinding.root,
+        val inflater = LayoutInflater.from(requireContext())
+        val binding = MenuOtherUserActivityPopupBinding.inflate(inflater)
+
+        _popupWindow?.dismiss()
+        _popupWindow = PopupWindow(
+            binding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             true
@@ -138,33 +122,47 @@ class OtherUserActivityFragment :
             showAsDropDown(view)
         }
 
-        bindMenuItems(popupWindow, feedId)
-    }
+        binding.tvOtherUserActivityReportSpoiler.setOnClickListener {
+            showReportDialog(feedId, "SPOILER_FEED")
+            _popupWindow?.dismiss()
+        }
 
-    private fun bindMenuItems(popup: PopupWindow, feedId: Long) {
-        with(popupBinding) {
-            tvOtherUserActivityReportSpoiler.setOnClickListener {
-                showReportDialog(ReportMenuType.SPOILER_FEED.name) {
-                    otherUserActivityViewModel.updateReportedSpoilerFeed(feedId)
-                }
-                popup.dismiss()
-            }
-
-            tvOtherUserActivityReportExpression.setOnClickListener {
-                showReportDialog(ReportMenuType.IMPERTINENCE_FEED.name) {
-                    otherUserActivityViewModel.updateReportedImpertinenceFeed(feedId)
-                }
-                popup.dismiss()
-            }
+        binding.tvOtherUserActivityReportExpression.setOnClickListener {
+            showReportDialog(feedId, "IMPERTINENCE_FEED")
+            _popupWindow?.dismiss()
         }
     }
 
-    private fun showReportDialog(menuType: String, event: FeedFragment.FeedDialogClickListener) {
+    fun showReportDialog(feedId: Long, menuType: String) {
+        _popupWindow?.dismiss()
+        _popupWindow = null
+
         val dialogFragment = FeedReportDialogFragment.newInstance(
             menuType = menuType,
-            event = event,
+            event = {
+                when (menuType) {
+                    "SPOILER_FEED" -> otherUserActivityViewModel.updateReportedSpoilerFeed(feedId)
+                    "IMPERTINENCE_FEED" -> otherUserActivityViewModel.updateReportedImpertinenceFeed(
+                        feedId
+                    )
+                }
+
+                parentFragmentManager.findFragmentByTag(FeedReportDialogFragment.TAG)?.let {
+                    (it as? FeedReportDialogFragment)?.dismiss()
+                }
+
+                showReportDoneDialog(menuType)
+            }
         )
-        dialogFragment.show(parentFragmentManager, FeedRemoveDialogFragment.TAG)
+        dialogFragment.show(parentFragmentManager, FeedReportDialogFragment.TAG)
+    }
+
+    private fun showReportDoneDialog(menuType: String) {
+        val doneDialogFragment = FeedReportDoneDialogFragment.newInstance(
+            menuType = menuType,
+            event = {}
+        )
+        doneDialogFragment.show(parentFragmentManager, FeedReportDoneDialogFragment.TAG)
     }
 
     companion object {

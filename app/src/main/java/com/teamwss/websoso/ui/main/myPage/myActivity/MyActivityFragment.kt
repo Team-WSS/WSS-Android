@@ -3,7 +3,6 @@ package com.teamwss.websoso.ui.main.myPage.myActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -17,7 +16,6 @@ import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.feed.FeedFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
@@ -32,18 +30,8 @@ class MyActivityFragment :
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val myActivityAdapter: MyActivityAdapter by lazy { MyActivityAdapter(onClickFeedItem()) }
-    private var _popupBinding: MenuMyActivityPopupBinding? = null
-    private val popupBinding: MenuMyActivityPopupBinding
-        get() = _popupBinding ?: error("Popup binding is null")
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _popupBinding = MenuMyActivityPopupBinding.inflate(inflater, container, false)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
+    private var _popupWindow: PopupWindow? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -112,8 +100,12 @@ class MyActivityFragment :
     }
 
     private fun showPopupMenu(view: View, feedId: Long) {
-        val popupWindow: PopupWindow = PopupWindow(
-            popupBinding.root,
+        val inflater = LayoutInflater.from(requireContext())
+        val binding = MenuMyActivityPopupBinding.inflate(inflater)
+
+        _popupWindow?.dismiss()
+        _popupWindow = PopupWindow(
+            binding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             true
@@ -122,29 +114,20 @@ class MyActivityFragment :
             showAsDropDown(view)
         }
 
-        bindMenuItems(popupWindow, feedId)
-    }
+        binding.tvMyActivityModification.setOnClickListener {
+            navigateToFeedEdit(feedId)
+            _popupWindow?.dismiss()
+        }
 
-    private fun bindMenuItems(popup: PopupWindow, feedId: Long) {
-        with(popupBinding) {
-            tvMyActivityModification.setOnClickListener {
-                navigateToFeedEdit(feedId)
-                popup.dismiss()
-            }
-
-            tvMyActivityPopupDeletion.setOnClickListener {
-                showRemovedDialog(
-                    RemoveMenuType.REMOVE_FEED.name
-                ) {
-                    myActivityViewModel.updateRemovedFeed(feedId)
-                }
-                popup.dismiss()
-            }
+        binding.tvMyActivityPopupDeletion.setOnClickListener {
+            showRemovedDialog(feedId)
+            _popupWindow?.dismiss()
         }
     }
 
-    private fun navigateToFeedEdit(feedId: Long) {
-        val activityModel = myActivityViewModel.myActivityUiState.value?.activities?.find { it.feedId == feedId }
+    fun navigateToFeedEdit(feedId: Long) {
+        val activityModel =
+            myActivityViewModel.myActivityUiState.value?.activities?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
@@ -157,10 +140,12 @@ class MyActivityFragment :
         } ?: throw IllegalArgumentException("Feed not found")
     }
 
-    private fun showRemovedDialog(menuType: String, event: FeedFragment.FeedDialogClickListener) {
+    fun showRemovedDialog(feedId: Long) {
         val dialogFragment = FeedRemoveDialogFragment.newInstance(
-            menuType = menuType,
-            event = event,
+            menuType = RemoveMenuType.REMOVE_FEED.name,
+            event = {
+                myActivityViewModel.updateRemovedFeed(feedId)
+            }
         )
         dialogFragment.show(parentFragmentManager, FeedRemoveDialogFragment.TAG)
     }
