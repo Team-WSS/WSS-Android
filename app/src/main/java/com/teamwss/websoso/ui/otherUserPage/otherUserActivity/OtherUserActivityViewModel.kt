@@ -30,15 +30,10 @@ class OtherUserActivityViewModel @Inject constructor(
 
     private val size: Int = ACTIVITY_LOAD_SIZE
 
-    init {
-        updateUserId()
-    }
-
-    fun updateUserId() {
-        viewModelScope.launch {
-            val userInfo = otherUserActivityRepository.fetchUserInfo()
-            _userId.value = userInfo.userId
-            updateOtherUserActivities(userInfo.userId)
+    fun updateUserId(newUserId: Long) {
+        if (_userId.value != newUserId) {
+            _userId.value = newUserId
+            updateOtherUserActivities(newUserId)
         }
     }
 
