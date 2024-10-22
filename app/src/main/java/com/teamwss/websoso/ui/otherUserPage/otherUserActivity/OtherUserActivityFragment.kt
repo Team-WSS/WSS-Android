@@ -25,10 +25,15 @@ class OtherUserActivityFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        otherUserActivityViewModel.updateUserId()
+        setupUserId()
         setUpMyActivitiesAdapter()
         setupObserver()
         onActivityDetailButtonClick()
+    }
+
+    private fun setupUserId() {
+        val userId = arguments?.getLong(USER_ID_KEY) ?: 0L
+        otherUserActivityViewModel.updateUserId(userId)
     }
 
     private fun setUpMyActivitiesAdapter() {
