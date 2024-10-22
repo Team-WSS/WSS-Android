@@ -13,7 +13,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 class MyActivityAdapter(
     private val activityItemClickListener: ActivityItemClickListener
 ) : ListAdapter<ActivityModel, MyActivityViewHolder>(diffCallback) {
-    private var userProfile: UserProfileModel? = null
+    var userProfile: UserProfileModel? = null
 
     init {
         setHasStableIds(true)
@@ -34,11 +34,6 @@ class MyActivityAdapter(
             val activityModels = UserActivityModel(activity, userProfile)
             holder.bind(activityModels)
         }
-    }
-
-    fun setUserProfile(userProfile: UserProfileModel) {
-        this.userProfile = userProfile
-        submitList(currentList)
     }
 
     companion object {

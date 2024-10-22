@@ -12,7 +12,7 @@ import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
+import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,12 +42,10 @@ class MyActivityFragment :
         }
 
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
-            uiState.myProfile?.let { myProfileEntity ->
-                val userProfile = UserProfileModel(
-                    nickname = myProfileEntity.nickname,
-                    avatarImage = myProfileEntity.avatarImage,
-                )
-                myActivityAdapter.setUserProfile(userProfile)
+            uiState.myProfile?.let { myProfile ->
+                val userProfile = myProfile.toUserProfileModel()
+                myActivityAdapter.userProfile = userProfile
+                myActivityAdapter.notifyDataSetChanged()
             }
         }
     }
