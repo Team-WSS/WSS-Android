@@ -9,7 +9,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
 class ActivityDetailAdapter :
     ListAdapter<ActivityModel, ActivityDetailViewHolder>(diffCallback) {
-    private var userProfile: UserProfileModel? = null
+    var userProfile: UserProfileModel? = null
 
     init {
         setHasStableIds(true)
@@ -28,11 +28,6 @@ class ActivityDetailAdapter :
             val activityModels = UserActivityModel(activity, userProfile)
             holder.bind(activityModels)
         }
-    }
-
-    fun setUserProfile(userProfile: UserProfileModel) {
-        this.userProfile = userProfile
-        submitList(currentList)
     }
 
     companion object {
