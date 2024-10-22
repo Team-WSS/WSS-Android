@@ -49,9 +49,10 @@ class OtherUserActivityFragment :
             otherUserProfile?.let { otherUserProfileEntity ->
                 val userProfile = UserProfileModel(
                     nickname = otherUserProfileEntity.nickname,
-                    avatarImage = otherUserProfileEntity.avatarImage,
+                    avatarImage = otherUserProfileEntity.avatarImage
                 )
-                otherUserActivityAdapter.setUserProfile(userProfile)
+                otherUserActivityAdapter.userProfile = userProfile
+                otherUserActivityAdapter.notifyDataSetChanged()
             }
         }
     }
