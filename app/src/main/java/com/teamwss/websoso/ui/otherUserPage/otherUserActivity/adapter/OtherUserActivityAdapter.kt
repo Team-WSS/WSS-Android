@@ -9,7 +9,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
 class OtherUserActivityAdapter :
     ListAdapter<ActivityModel, OtherUserActivityViewHolder>(diffCallback) {
-    private var userProfile: UserProfileModel? = null
+    var userProfile: UserProfileModel? = null
 
     init {
         setHasStableIds(true)
@@ -22,18 +22,9 @@ class OtherUserActivityAdapter :
     }
 
     override fun onBindViewHolder(holder: OtherUserActivityViewHolder, position: Int) {
-        val activity = getItem(position)
-
         userProfile?.let { userProfile ->
-            val activityModels = UserActivityModel(activity, userProfile)
+            val activityModels = UserActivityModel(getItem(position), userProfile)
             holder.bind(activityModels)
-        }
-    }
-
-    fun setUserProfile(profile: UserProfileModel) {
-        userProfile = profile
-        if (currentList.isNotEmpty()) {
-            notifyItemRangeChanged(0, currentList.size)
         }
     }
 

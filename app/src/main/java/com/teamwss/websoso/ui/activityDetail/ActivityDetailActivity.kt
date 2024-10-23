@@ -74,7 +74,8 @@ class ActivityDetailActivity :
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.myPageUiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
-                        activityDetailAdapter.setUserProfile(myProfile.toUserProfileModel())
+                        activityDetailAdapter.userProfile = myProfile.toUserProfileModel()
+                        activityDetailAdapter.submitList(activityDetailAdapter.currentList)
                     }
                 }
             }
@@ -82,12 +83,14 @@ class ActivityDetailActivity :
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
                     otherUserProfile?.let {
-                        activityDetailAdapter.setUserProfile(otherUserProfile.toUserProfileModel())
+                        activityDetailAdapter.userProfile = otherUserProfile.toUserProfileModel()
+                        activityDetailAdapter.submitList(activityDetailAdapter.currentList)
                     }
                 }
             }
         }
     }
+
 
     private fun onBackButtonClick() {
         binding.ivActivityDetailBackButton.setOnClickListener {
