@@ -1,52 +1,44 @@
 package com.teamwss.websoso.ui.otherUserPage.otherUserActivity.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
+import com.teamwss.websoso.databinding.ItemMyActivityBinding
+import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
-class OtherUserActivityAdapter :
-    ListAdapter<ActivityModel, OtherUserActivityViewHolder>(diffCallback) {
-    private var userProfile: UserProfileModel? = null
+class OtherUserActivityAdapter(
+    private val activityItemClickListener: ActivityItemClickListener
+) : ListAdapter<UserActivityModel, OtherUserActivityViewHolder>(diffCallback) {
 
     init {
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int): Long = getItem(position).feedId.toLong()
+    override fun getItemId(position: Int): Long = getItem(position).activity.feedId.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherUserActivityViewHolder {
-        return OtherUserActivityViewHolder.from(parent)
+        val binding =
+            ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return OtherUserActivityViewHolder(binding, activityItemClickListener)
     }
 
     override fun onBindViewHolder(holder: OtherUserActivityViewHolder, position: Int) {
-        val activity = getItem(position)
-
-        userProfile?.let { userProfile ->
-            val activityModels = UserActivityModel(activity, userProfile)
-            holder.bind(activityModels)
-        }
-    }
-
-    fun setUserProfile(profile: UserProfileModel) {
-        userProfile = profile
-        if (currentList.isNotEmpty()) {
-            notifyItemRangeChanged(0, currentList.size)
-        }
+        val userActivityModel = getItem(position)
+        holder.bind(userActivityModel)
     }
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<ActivityModel>() {
+        private val diffCallback = object : DiffUtil.ItemCallback<UserActivityModel>() {
             override fun areItemsTheSame(
-                oldItem: ActivityModel,
-                newItem: ActivityModel,
-            ): Boolean = oldItem.feedId == newItem.feedId
+                oldItem: UserActivityModel,
+                newItem: UserActivityModel,
+            ): Boolean = oldItem.activity.feedId == newItem.activity.feedId
 
             override fun areContentsTheSame(
-                oldItem: ActivityModel,
-                newItem: ActivityModel,
+                oldItem: UserActivityModel,
+                newItem: UserActivityModel,
             ): Boolean = oldItem == newItem
         }
     }

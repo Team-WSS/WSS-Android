@@ -3,6 +3,8 @@ package com.teamwss.websoso.ui.activityDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
@@ -10,18 +12,25 @@ import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
+import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ActivityDetailActivity :
-    BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
+    BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail),
+    ActivityItemClickListener {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
     private val activityDetailAdapter: ActivityDetailAdapter by lazy {
-        ActivityDetailAdapter()
+        ActivityDetailAdapter(this)
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
@@ -36,7 +45,7 @@ class ActivityDetailActivity :
         setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
-        setUpObserver()
+        setupObserver()
         onBackButtonClick()
     }
 
@@ -65,16 +74,21 @@ class ActivityDetailActivity :
         }
     }
 
-    private fun setUpObserver() {
+    private fun setupObserver() {
         activityDetailViewModel.userActivity.observe(this) { activities ->
-            activityDetailAdapter.submitList(activities)
+            val userProfile = getUserProfile()
+            updateAdapterWithActivitiesAndProfile(activities, userProfile)
         }
 
         when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.myPageUiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
-                        activityDetailAdapter.setUserProfile(myProfile.toUserProfileModel())
+                        val userProfile = myProfile.toUserProfileModel()
+                        updateAdapterWithActivitiesAndProfile(
+                            activityDetailViewModel.userActivity.value,
+                            userProfile
+                        )
                     }
                 }
             }
@@ -82,10 +96,42 @@ class ActivityDetailActivity :
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
                     otherUserProfile?.let {
-                        activityDetailAdapter.setUserProfile(otherUserProfile.toUserProfileModel())
+                        val userProfile = otherUserProfile.toUserProfileModel()
+                        updateAdapterWithActivitiesAndProfile(
+                            activityDetailViewModel.userActivity.value,
+                            userProfile
+                        )
                     }
                 }
             }
+        }
+    }
+
+    private fun updateAdapterWithActivitiesAndProfile(
+        activities: List<ActivitiesModel.ActivityModel>?,
+        userProfile: UserProfileModel?
+    ) {
+        if (activities != null && userProfile != null) {
+            val userActivityModels = activities.map { activity ->
+                UserActivityModel(activity, userProfile)
+            }
+            activityDetailAdapter.submitList(userActivityModels)
+        } else {
+            activityDetailAdapter.submitList(emptyList())
+        }
+    }
+
+    private fun getUserProfile(): UserProfileModel? {
+        return when (activityDetailViewModel.source) {
+            SOURCE_MY_ACTIVITY -> {
+                myPageViewModel.myPageUiState.value?.myProfile?.toUserProfileModel()
+            }
+
+            SOURCE_OTHER_USER_ACTIVITY -> {
+                otherUserPageViewModel.otherUserProfile.value?.toUserProfileModel()
+            }
+
+            else -> null
         }
     }
 
@@ -93,6 +139,34 @@ class ActivityDetailActivity :
         binding.ivActivityDetailBackButton.setOnClickListener {
             finish()
         }
+    }
+
+    override fun onContentClick(feedId: Long) {
+        startActivity(FeedDetailActivity.getIntent(this, feedId))
+    }
+
+    override fun onNovelInfoClick(novelId: Long) {
+        startActivity(NovelDetailActivity.getIntent(this, novelId))
+    }
+
+    override fun onLikeButtonClick(view: View, feedId: Long) {
+        val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
+        val currentLikeCount = likeCountTextView.text.toString().toInt()
+
+        val updatedLikeCount: Int = if (view.isSelected) {
+            if (currentLikeCount > 0) currentLikeCount - 1 else 0
+        } else {
+            currentLikeCount + 1
+        }
+
+        likeCountTextView.text = updatedLikeCount.toString()
+        view.isSelected = !view.isSelected
+
+        activityDetailViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
+    }
+
+    override fun onMoreButtonClick(view: View, feedId: Long) {
+        // TODO 팝업메뉴 수정 및 차단
     }
 
     companion object {

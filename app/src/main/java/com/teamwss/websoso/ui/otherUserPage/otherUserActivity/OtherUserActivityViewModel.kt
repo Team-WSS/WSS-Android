@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityLikeState
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OtherUserActivityViewModel @Inject constructor(
     private val otherUserActivityRepository: UserRepository,
+    private val feedRepository: FeedRepository,
 ) : ViewModel() {
     private val _otherUserActivity = MutableLiveData<List<ActivityModel>>()
     val otherUserActivity: LiveData<List<ActivityModel>> get() = _otherUserActivity
@@ -22,7 +24,7 @@ class OtherUserActivityViewModel @Inject constructor(
     private val _likeState = MutableLiveData<ActivityLikeState>()
     val likeState: LiveData<ActivityLikeState> get() = _likeState
 
-    private val _lastFeedId =  MutableLiveData<Long>(0L)
+    private val _lastFeedId: MutableLiveData<Long> = MutableLiveData(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val _userId: MutableLiveData<Long> = MutableLiveData()
@@ -35,7 +37,7 @@ class OtherUserActivityViewModel @Inject constructor(
         updateOtherUserActivities(userId)
     }
 
-    private fun updateOtherUserActivities(userId: Long) {
+    fun updateOtherUserActivities(userId: Long) {
         viewModelScope.launch {
             runCatching {
                 otherUserActivityRepository.fetchUserFeeds(
@@ -47,6 +49,38 @@ class OtherUserActivityViewModel @Inject constructor(
                 _otherUserActivity.value = response.feeds.map { it.toUi() }.take(ACTIVITY_COUNT)
                 _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L
             }.onFailure {
+
+            }
+        }
+    }
+
+    fun updateActivityLike(isLiked: Boolean, feedId: Long, currentLikeCount: Int) {
+        viewModelScope.launch {
+            runCatching {
+                if (isLiked) {
+                    feedRepository.saveLike(false, feedId)
+                } else {
+                    feedRepository.saveLike(true, feedId)
+                }
+            }.onSuccess {
+                val newLikeCount = if (isLiked) currentLikeCount - 1 else currentLikeCount + 1
+                _likeState.value = ActivityLikeState(feedId, !isLiked, newLikeCount)
+
+                saveActivityLikeState(feedId, !isLiked, newLikeCount)
+            }.onFailure {
+            }
+        }
+    }
+
+    private fun saveActivityLikeState(feedId: Long, isLiked: Boolean, likeCount: Int) {
+        _otherUserActivity.value = _otherUserActivity.value?.map { activity ->
+            if (activity.feedId == feedId) {
+                activity.copy(
+                    isLiked = isLiked,
+                    likeCount = likeCount,
+                )
+            } else {
+                activity
             }
         }
     }

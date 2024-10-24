@@ -29,21 +29,27 @@ class OtherUserLibraryFragment :
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
-    private var userId: Long = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.otherUserLibraryViewModel = otherUserLibraryViewModel
-        userId = arguments?.getLong(USER_ID) ?: 0L
+        bindViewModel()
+        updateUserId()
         setUpRestGenrePreferenceAdapter()
         setUpObserve()
+    }
 
-        otherUserLibraryViewModel.updateUserId(userId)
+    private fun bindViewModel() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.otherUserLibraryViewModel = otherUserLibraryViewModel
     }
 
     private fun setUpRestGenrePreferenceAdapter() {
         binding.lvOtherUserLibraryRestGenre.adapter = restGenrePreferenceAdapter
+    }
+
+    private fun updateUserId() {
+        val userId = arguments?.getLong(USER_ID_KEY) ?: 0L
+        otherUserLibraryViewModel.updateUserId(userId)
     }
 
     private fun setUpObserve() {
@@ -155,15 +161,12 @@ class OtherUserLibraryFragment :
     }
 
     companion object {
-        private const val USER_ID = "USER_ID"
+        private const val USER_ID_KEY = "USER_ID"
 
-        fun newInstance(userId: Long): OtherUserLibraryFragment {
-            val fragment = OtherUserLibraryFragment()
-            val bundle = Bundle().apply {
-                putLong(USER_ID, userId)
+        fun newInstance(userId: Long) = OtherUserLibraryFragment().apply {
+            arguments = Bundle().apply {
+                putLong(USER_ID_KEY, userId)
             }
-            fragment.arguments = bundle
-            return fragment
         }
     }
 }
