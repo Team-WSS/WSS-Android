@@ -8,6 +8,8 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentOtherUserActivityBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import com.teamwss.websoso.ui.otherUserPage.otherUserActivity.adapter.OtherUserActivityAdapter
@@ -42,7 +44,8 @@ class OtherUserActivityFragment :
 
     private fun setupObserver() {
         otherUserActivityViewModel.otherUserActivity.observe(viewLifecycleOwner) { activities ->
-            otherUserActivityAdapter.submitList(activities)
+            val userProfile = getUserProfile()
+            updateAdapterWithActivitiesAndProfile(activities, userProfile)
         }
 
         otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
@@ -51,9 +54,31 @@ class OtherUserActivityFragment :
                     nickname = otherUserProfileEntity.nickname,
                     avatarImage = otherUserProfileEntity.avatarImage
                 )
-                otherUserActivityAdapter.userProfile = userProfile
-                otherUserActivityAdapter.notifyDataSetChanged()
+                updateAdapterWithActivitiesAndProfile(otherUserActivityViewModel.otherUserActivity.value, userProfile)
             }
+        }
+    }
+
+    private fun updateAdapterWithActivitiesAndProfile(
+        activities: List<ActivitiesModel.ActivityModel>?,
+        userProfile: UserProfileModel?
+    ) {
+        if (activities != null && userProfile != null) {
+            val userActivityModels = activities.map { activity ->
+                UserActivityModel(activity, userProfile)
+            }
+            otherUserActivityAdapter.submitList(userActivityModels)
+        } else {
+            otherUserActivityAdapter.submitList(emptyList())
+        }
+    }
+
+    private fun getUserProfile(): UserProfileModel? {
+        return otherUserPageViewModel.otherUserProfile.value?.let {
+            UserProfileModel(
+                nickname = it.nickname,
+                avatarImage = it.avatarImage
+            )
         }
     }
 

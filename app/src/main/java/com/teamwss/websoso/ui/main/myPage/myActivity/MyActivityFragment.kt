@@ -12,6 +12,9 @@ import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,15 +41,41 @@ class MyActivityFragment :
 
     private fun setupObserver() {
         myActivityViewModel.myActivity.observe(viewLifecycleOwner) { activities ->
-            myActivityAdapter.submitList(activities)
+            val userProfile = getUserProfile()
+            updateAdapterWithActivitiesAndProfile(activities, userProfile)
         }
 
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
             uiState.myProfile?.let { myProfile ->
                 val userProfile = myProfile.toUserProfileModel()
-                myActivityAdapter.userProfile = userProfile
-                myActivityAdapter.notifyDataSetChanged()
+                updateAdapterWithActivitiesAndProfile(
+                    myActivityViewModel.myActivity.value,
+                    userProfile
+                )
             }
+        }
+    }
+
+    private fun updateAdapterWithActivitiesAndProfile(
+        activities: List<ActivitiesModel.ActivityModel>?,
+        userProfile: UserProfileModel?
+    ) {
+        if (activities != null && userProfile != null) {
+            val userActivityModels = activities.map { activity ->
+                UserActivityModel(activity, userProfile)
+            }
+            myActivityAdapter.submitList(userActivityModels)
+        } else {
+            myActivityAdapter.submitList(emptyList())
+        }
+    }
+
+    private fun getUserProfile(): UserProfileModel? {
+        return myPageViewModel.myPageUiState.value?.myProfile?.let {
+            UserProfileModel(
+                nickname = it.nickname,
+                avatarImage = it.avatarImage
+            )
         }
     }
 

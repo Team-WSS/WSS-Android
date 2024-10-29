@@ -3,41 +3,36 @@ package com.teamwss.websoso.ui.otherUserPage.otherUserActivity.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 
 class OtherUserActivityAdapter :
-    ListAdapter<ActivityModel, OtherUserActivityViewHolder>(diffCallback) {
-    var userProfile: UserProfileModel? = null
+    ListAdapter<UserActivityModel, OtherUserActivityViewHolder>(diffCallback) {
 
     init {
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int): Long = getItem(position).feedId.toLong()
+    override fun getItemId(position: Int): Long = getItem(position).activity.feedId.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherUserActivityViewHolder {
         return OtherUserActivityViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: OtherUserActivityViewHolder, position: Int) {
-        userProfile?.let { userProfile ->
-            val activityModels = UserActivityModel(getItem(position), userProfile)
-            holder.bind(activityModels)
-        }
+        val userActivityModel = getItem(position)
+        holder.bind(userActivityModel)
     }
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<ActivityModel>() {
+        private val diffCallback = object : DiffUtil.ItemCallback<UserActivityModel>() {
             override fun areItemsTheSame(
-                oldItem: ActivityModel,
-                newItem: ActivityModel,
-            ): Boolean = oldItem.feedId == newItem.feedId
+                oldItem: UserActivityModel,
+                newItem: UserActivityModel,
+            ): Boolean = oldItem.activity.feedId == newItem.activity.feedId
 
             override fun areContentsTheSame(
-                oldItem: ActivityModel,
-                newItem: ActivityModel,
+                oldItem: UserActivityModel,
+                newItem: UserActivityModel,
             ): Boolean = oldItem == newItem
         }
     }

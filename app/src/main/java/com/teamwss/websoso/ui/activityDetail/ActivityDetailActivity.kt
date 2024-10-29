@@ -12,6 +12,9 @@ import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +39,7 @@ class ActivityDetailActivity :
         setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
-        setUpObserver()
+        setupObserver()
         onBackButtonClick()
     }
 
@@ -65,17 +68,21 @@ class ActivityDetailActivity :
         }
     }
 
-    private fun setUpObserver() {
+    private fun setupObserver() {
         activityDetailViewModel.userActivity.observe(this) { activities ->
-            activityDetailAdapter.submitList(activities)
+            val userProfile = getUserProfile()
+            updateAdapterWithActivitiesAndProfile(activities, userProfile)
         }
 
         when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.myPageUiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
-                        activityDetailAdapter.userProfile = myProfile.toUserProfileModel()
-                        activityDetailAdapter.submitList(activityDetailAdapter.currentList)
+                        val userProfile = myProfile.toUserProfileModel()
+                        updateAdapterWithActivitiesAndProfile(
+                            activityDetailViewModel.userActivity.value,
+                            userProfile
+                        )
                     }
                 }
             }
@@ -83,14 +90,44 @@ class ActivityDetailActivity :
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
                     otherUserProfile?.let {
-                        activityDetailAdapter.userProfile = otherUserProfile.toUserProfileModel()
-                        activityDetailAdapter.submitList(activityDetailAdapter.currentList)
+                        val userProfile = otherUserProfile.toUserProfileModel()
+                        updateAdapterWithActivitiesAndProfile(
+                            activityDetailViewModel.userActivity.value,
+                            userProfile
+                        )
                     }
                 }
             }
         }
     }
 
+    private fun updateAdapterWithActivitiesAndProfile(
+        activities: List<ActivitiesModel.ActivityModel>?,
+        userProfile: UserProfileModel?
+    ) {
+        if (activities != null && userProfile != null) {
+            val userActivityModels = activities.map { activity ->
+                UserActivityModel(activity, userProfile)
+            }
+            activityDetailAdapter.submitList(userActivityModels)
+        } else {
+            activityDetailAdapter.submitList(emptyList())
+        }
+    }
+
+    private fun getUserProfile(): UserProfileModel? {
+        return when (activityDetailViewModel.source) {
+            SOURCE_MY_ACTIVITY -> {
+                myPageViewModel.myPageUiState.value?.myProfile?.toUserProfileModel()
+            }
+
+            SOURCE_OTHER_USER_ACTIVITY -> {
+                otherUserPageViewModel.otherUserProfile.value?.toUserProfileModel()
+            }
+
+            else -> null
+        }
+    }
 
     private fun onBackButtonClick() {
         binding.ivActivityDetailBackButton.setOnClickListener {
