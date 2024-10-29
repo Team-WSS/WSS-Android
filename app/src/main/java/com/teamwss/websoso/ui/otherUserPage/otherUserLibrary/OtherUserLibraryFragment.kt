@@ -53,6 +53,16 @@ class OtherUserLibraryFragment :
     }
 
     private fun setUpObserve() {
+        otherUserLibraryViewModel.novelStats.observe(viewLifecycleOwner) { stats ->
+            if (otherUserLibraryViewModel.hasNoPreferences(stats)) {
+                binding.clOtherUserLibraryKnownPreference.visibility = View.GONE
+                binding.clOtherUserLibraryUnknownPreference.visibility = View.VISIBLE
+            } else {
+                binding.clOtherUserLibraryKnownPreference.visibility = View.VISIBLE
+                binding.clOtherUserLibraryUnknownPreference.visibility = View.GONE
+            }
+        }
+
         otherUserLibraryViewModel.restGenres.observe(viewLifecycleOwner) { genres ->
             restGenrePreferenceAdapter.updateRestGenrePreferenceData(genres)
         }
