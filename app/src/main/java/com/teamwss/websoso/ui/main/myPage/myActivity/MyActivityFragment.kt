@@ -1,23 +1,15 @@
 package com.teamwss.websoso.ui.main.myPage.myActivity
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
-import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
-import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
-import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
-import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
@@ -29,9 +21,9 @@ class MyActivityFragment :
     BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
-    private val myActivityAdapter: MyActivityAdapter by lazy { MyActivityAdapter(onClickFeedItem()) }
-
-    private var _popupWindow: PopupWindow? = null
+    private val myActivityAdapter: MyActivityAdapter by lazy {
+        MyActivityAdapter(onClickFeedItem())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,10 +45,37 @@ class MyActivityFragment :
             uiState.myProfile?.let { myProfileEntity ->
                 val userProfile = UserProfileModel(
                     nickname = myProfileEntity.nickname,
-                    avatarImage = myProfileEntity.avatarImage,
+                    avatarImage = myProfileEntity.avatarImage
+                )
+                updateAdapterWithActivitiesAndProfile(
+                    myActivityViewModel.myActivity.value,
+                    userProfile
                 )
                 myActivityAdapter.setUserProfile(userProfile)
             }
+        }
+    }
+
+    private fun updateAdapterWithActivitiesAndProfile(
+        activities: List<ActivityModel>?,
+        userProfile: UserProfileModel?
+    ) {
+        if (activities != null && userProfile != null) {
+            val userActivityModels = activities.map { activity ->
+                UserActivityModel(activity, userProfile)
+            }
+            myActivityAdapter.submitList(userActivityModels)
+        } else {
+            myActivityAdapter.submitList(emptyList())
+        }
+    }
+
+    private fun getUserProfile(): UserProfileModel? {
+        return myPageViewModel.myPageUiState.value?.myProfile?.let {
+            UserProfileModel(
+                nickname = it.nickname,
+                avatarImage = it.avatarImage
+            )
         }
     }
 

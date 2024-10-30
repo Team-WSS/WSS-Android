@@ -1,21 +1,15 @@
 package com.teamwss.websoso.ui.otherUserPage.otherUserActivity
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentOtherUserActivityBinding
-import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
-import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
-import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
@@ -25,8 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OtherUserActivityFragment :
-    BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
-
+    BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity),
+    ActivityItemClickListener {
     private val otherUserActivityViewModel: OtherUserActivityViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
     private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy {
@@ -53,17 +47,45 @@ class OtherUserActivityFragment :
 
     private fun setupObserver() {
         otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
-            otherUserActivityAdapter.submitList(uiState.activities)
+            val userProfile = getUserProfile()
+            updateAdapterWithActivitiesAndProfile(activities, userProfile)
         }
 
         otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
-            otherUserProfile?.let { otherUserProfileEntity ->
+            otherUserProfile?.let {
                 val userProfile = UserProfileModel(
-                    nickname = otherUserProfileEntity.nickname,
-                    avatarImage = otherUserProfileEntity.avatarImage,
+                    nickname = it.nickname,
+                    avatarImage = it.avatarImage
+                )
+                updateAdapterWithActivitiesAndProfile(
+                    otherUserActivityViewModel.otherUserActivity.value,
+                    userProfile
                 )
                 otherUserActivityAdapter.setUserProfile(userProfile)
             }
+        }
+    }
+
+    private fun updateAdapterWithActivitiesAndProfile(
+        activities: List<ActivityModel>?,
+        userProfile: UserProfileModel?
+    ) {
+        if (activities != null && userProfile != null) {
+            val userActivityModels = activities.map { activity ->
+                UserActivityModel(activity, userProfile)
+            }
+            otherUserActivityAdapter.submitList(userActivityModels)
+        } else {
+            otherUserActivityAdapter.submitList(emptyList())
+        }
+    }
+
+    private fun getUserProfile(): UserProfileModel? {
+        return otherUserPageViewModel.otherUserProfile.value?.let {
+            UserProfileModel(
+                nickname = it.nickname,
+                avatarImage = it.avatarImage
+            )
         }
     }
 

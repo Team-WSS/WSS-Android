@@ -3,29 +3,16 @@ package com.teamwss.websoso.ui.activityDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.databinding.ViewDataBinding
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
 import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
-import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
-import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
-import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
-import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
-import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
-import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
-import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
-import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
@@ -36,10 +23,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ActivityDetailActivity :
-    BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
+    BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail),
+    ActivityItemClickListener {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
     private val activityDetailAdapter: ActivityDetailAdapter by lazy {
-        ActivityDetailAdapter(onClickFeedItem())
+        ActivityDetailAdapter(this)
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
@@ -49,14 +37,12 @@ class ActivityDetailActivity :
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
 
-    private var _popupWindow: PopupWindow? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
-        setupObserver()
+        setUpObserver()
         onBackButtonClick()
     }
 
@@ -86,25 +72,63 @@ class ActivityDetailActivity :
     }
 
     private fun setupObserver() {
-        activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
-            activityDetailAdapter.submitList(uiState.activities)
+        activityDetailViewModel.userActivity.observe(this) { activities ->
+            val userProfile = getUserProfile()
+            updateAdapterWithActivitiesAndProfile(activities, userProfile)
         }
 
         when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.myPageUiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
-                        activityDetailAdapter.setUserProfile(myProfile.toUserProfileModel())
+                        val userProfile = myProfile.toUserProfileModel()
+                        updateAdapterWithActivitiesAndProfile(
+                            activityDetailViewModel.userActivity.value,
+                            userProfile
+                        )
                     }
                 }
             }
+
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
                     otherUserProfile?.let {
-                        activityDetailAdapter.setUserProfile(otherUserProfile.toUserProfileModel())
+                        val userProfile = otherUserProfile.toUserProfileModel()
+                        updateAdapterWithActivitiesAndProfile(
+                            activityDetailViewModel.userActivity.value,
+                            userProfile
+                        )
                     }
                 }
             }
+        }
+    }
+
+    private fun updateAdapterWithActivitiesAndProfile(
+        activities: List<ActivitiesModel.ActivityModel>?,
+        userProfile: UserProfileModel?
+    ) {
+        if (activities != null && userProfile != null) {
+            val userActivityModels = activities.map { activity ->
+                UserActivityModel(activity, userProfile)
+            }
+            activityDetailAdapter.submitList(userActivityModels)
+        } else {
+            activityDetailAdapter.submitList(emptyList())
+        }
+    }
+
+    private fun getUserProfile(): UserProfileModel? {
+        return when (activityDetailViewModel.source) {
+            SOURCE_MY_ACTIVITY -> {
+                myPageViewModel.myPageUiState.value?.myProfile?.toUserProfileModel()
+            }
+
+            SOURCE_OTHER_USER_ACTIVITY -> {
+                otherUserPageViewModel.otherUserProfile.value?.toUserProfileModel()
+            }
+
+            else -> null
         }
     }
 
