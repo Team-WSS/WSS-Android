@@ -12,20 +12,19 @@ import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
-import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyActivityFragment :
-    BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity),ActivityItemClickListener {
+    BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val myActivityAdapter: MyActivityAdapter by lazy {
-        MyActivityAdapter(this)
+        MyActivityAdapter(onClickFeedItem())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,8 +45,11 @@ class MyActivityFragment :
         }
 
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
-            uiState.myProfile?.let { myProfile ->
-                val userProfile = myProfile.toUserProfileModel()
+            uiState.myProfile?.let { myProfileEntity ->
+                val userProfile = UserProfileModel(
+                    nickname = myProfileEntity.nickname,
+                    avatarImage = myProfileEntity.avatarImage
+                )
                 updateAdapterWithActivitiesAndProfile(
                     myActivityViewModel.myActivity.value,
                     userProfile
@@ -57,7 +59,7 @@ class MyActivityFragment :
     }
 
     private fun updateAdapterWithActivitiesAndProfile(
-        activities: List<ActivitiesModel.ActivityModel>?,
+        activities: List<ActivityModel>?,
         userProfile: UserProfileModel?
     ) {
         if (activities != null && userProfile != null) {
@@ -88,32 +90,39 @@ class MyActivityFragment :
         }
     }
 
-    override fun onContentClick(feedId: Long) {
-        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
-    }
-
-    override fun onNovelInfoClick(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
-    }
-
-    override fun onLikeButtonClick(view: View, feedId: Long) {
-        val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
-        val currentLikeCount = likeCountTextView.text.toString().toInt()
-
-        val updatedLikeCount: Int = if (view.isSelected) {
-            if (currentLikeCount > 0) currentLikeCount - 1 else 0
-        } else {
-            currentLikeCount + 1
+    private fun onClickFeedItem() = object : ActivityItemClickListener {
+        override fun onContentClick(feedId: Long) {
+            startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
         }
 
-        likeCountTextView.text = updatedLikeCount.toString()
-        view.isSelected = !view.isSelected
+        override fun onNovelInfoClick(novelId: Long) {
+            startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+        }
 
-        myActivityViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
-    }
+        override fun onLikeButtonClick(view: View, feedId: Long) {
+            val likeCountTextView: TextView =
+                view.findViewById(R.id.tv_my_activity_thumb_up_count)
+            val currentLikeCount = likeCountTextView.text.toString().toInt()
 
-    override fun onMoreButtonClick(view: View, feedId: Long) {
-        // TODO 팝업메뉴 수정 and 차단
+            val updatedLikeCount: Int = if (view.isSelected) {
+                if (currentLikeCount > 0) currentLikeCount - 1 else 0
+            } else {
+                currentLikeCount + 1
+            }
+
+            likeCountTextView.text = updatedLikeCount.toString()
+            view.isSelected = !view.isSelected
+
+            myActivityViewModel.updateActivityLike(
+                view.isSelected,
+                feedId,
+                updatedLikeCount,
+            )
+        }
+
+        override fun onMoreButtonClick(view: View, feedId: Long) {
+            // TODO 팝업메뉴 수정 and 차단
+        }
     }
 
     companion object {

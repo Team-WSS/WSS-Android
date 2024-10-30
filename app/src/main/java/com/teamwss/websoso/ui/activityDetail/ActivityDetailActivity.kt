@@ -3,6 +3,8 @@ package com.teamwss.websoso.ui.activityDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
@@ -10,12 +12,15 @@ import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
+import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
+import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +29,7 @@ class ActivityDetailActivity :
     BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
     private val activityDetailAdapter: ActivityDetailAdapter by lazy {
-        ActivityDetailAdapter()
+        ActivityDetailAdapter(onClickFeedItem())
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
@@ -132,6 +137,40 @@ class ActivityDetailActivity :
     private fun onBackButtonClick() {
         binding.ivActivityDetailBackButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun onClickFeedItem() = object : ActivityItemClickListener {
+        override fun onContentClick(feedId: Long) {
+            startActivity(FeedDetailActivity.getIntent(this@ActivityDetailActivity, feedId))
+        }
+
+        override fun onNovelInfoClick(novelId: Long) {
+            startActivity(NovelDetailActivity.getIntent(this@ActivityDetailActivity, novelId))
+        }
+
+        override fun onLikeButtonClick(view: View, feedId: Long) {
+            val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
+            val currentLikeCount = likeCountTextView.text.toString().toInt()
+
+            val updatedLikeCount: Int = if (view.isSelected) {
+                if (currentLikeCount > 0) currentLikeCount - 1 else 0
+            } else {
+                currentLikeCount + 1
+            }
+
+            likeCountTextView.text = updatedLikeCount.toString()
+            view.isSelected = !view.isSelected
+
+            activityDetailViewModel.updateActivityLike(
+                view.isSelected,
+                feedId,
+                updatedLikeCount,
+            )
+        }
+
+        override fun onMoreButtonClick(view: View, feedId: Long) {
+            // TODO 팝업메뉴 수정 및 차단
         }
     }
 

@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.teamwss.websoso.databinding.ItemMyActivityBinding
+import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 
-class ActivityDetailAdapter :
-    ListAdapter<UserActivityModel, ActivityDetailViewHolder>(diffCallback) {
+class ActivityDetailAdapter(
+    private val activityItemClickListener: ActivityItemClickListener
+) : ListAdapter<UserActivityModel, ActivityDetailViewHolder>(diffCallback) {
 
     init {
         setHasStableIds(true)
@@ -19,7 +21,7 @@ class ActivityDetailAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityDetailViewHolder {
         val binding =
             ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ActivityDetailViewHolder(binding)
+        return ActivityDetailViewHolder(binding, activityItemClickListener)
     }
 
     override fun onBindViewHolder(holder: ActivityDetailViewHolder, position: Int) {
