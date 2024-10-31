@@ -107,7 +107,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             userStorageViewModel.updateSortType(sortType)
         }
 
-        binding.ivStorageGoToSort.setOnClickListener { view ->
+        binding.clStorageSort.setOnClickListener { view ->
             sortMenuHandler.showSortMenu(view)
         }
     }
