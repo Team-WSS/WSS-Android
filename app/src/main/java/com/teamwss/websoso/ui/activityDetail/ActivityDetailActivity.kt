@@ -202,7 +202,6 @@ class ActivityDetailActivity :
             elevation = 2f
             showAsDropDown(view)
         }
-
         setupPopupMenuClickListeners(binding, feedId)
     }
 
