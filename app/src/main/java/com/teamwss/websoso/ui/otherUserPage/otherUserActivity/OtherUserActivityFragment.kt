@@ -49,6 +49,14 @@ class OtherUserActivityFragment :
         otherUserActivityViewModel.otherUserActivity.observe(viewLifecycleOwner) { activities ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(activities, userProfile)
+
+            if (activities.isNullOrEmpty()) {
+                binding.clOtherUserActivityExistsNull.visibility = View.VISIBLE
+                binding.nsOtherUserActivityExists.visibility = View.GONE
+            } else {
+                binding.clOtherUserActivityExistsNull.visibility = View.GONE
+                binding.nsOtherUserActivityExists.visibility = View.VISIBLE
+            }
         }
 
         otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
