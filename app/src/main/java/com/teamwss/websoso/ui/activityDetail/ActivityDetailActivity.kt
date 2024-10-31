@@ -3,19 +3,35 @@ package com.teamwss.websoso.ui.activityDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.databinding.ViewDataBinding
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
 import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
+import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
+import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
@@ -23,11 +39,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ActivityDetailActivity :
-    BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail),
-    ActivityItemClickListener {
+    BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
     private val activityDetailAdapter: ActivityDetailAdapter by lazy {
-        ActivityDetailAdapter(this)
+        ActivityDetailAdapter(onClickFeedItem())
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
@@ -36,13 +51,14 @@ class ActivityDetailActivity :
         intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
+    private var _popupWindow: PopupWindow? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
-        setUpObserver()
+        setupObserver()
         onBackButtonClick()
     }
 
@@ -72,9 +88,9 @@ class ActivityDetailActivity :
     }
 
     private fun setupObserver() {
-        activityDetailViewModel.userActivity.observe(this) { activities ->
+        activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
             val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
         }
 
         when (activityDetailViewModel.source) {
@@ -83,7 +99,7 @@ class ActivityDetailActivity :
                     uiState.myProfile?.let { myProfile ->
                         val userProfile = myProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.userActivity.value,
+                            activityDetailViewModel.activityDetailUiState.value?.activities,
                             userProfile
                         )
                     }
@@ -95,8 +111,8 @@ class ActivityDetailActivity :
                     otherUserProfile?.let {
                         val userProfile = otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.userActivity.value,
-                            userProfile
+                            activityDetailViewModel.activityDetailUiState.value?.activities,
+                            userProfile,
                         )
                     }
                 }

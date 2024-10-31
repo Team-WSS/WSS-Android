@@ -1,17 +1,27 @@
 package com.teamwss.websoso.ui.main.myPage.myActivity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
+import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +34,7 @@ class MyActivityFragment :
     private val myActivityAdapter: MyActivityAdapter by lazy {
         MyActivityAdapter(onClickFeedItem())
     }
+    private var _popupWindow: PopupWindow? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +49,8 @@ class MyActivityFragment :
 
     private fun setupObserver() {
         myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
-            myActivityAdapter.submitList(uiState.activities)
+            val userProfile = getUserProfile()
+            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
         }
 
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
@@ -48,16 +60,15 @@ class MyActivityFragment :
                     avatarImage = myProfileEntity.avatarImage
                 )
                 updateAdapterWithActivitiesAndProfile(
-                    myActivityViewModel.myActivity.value,
-                    userProfile
+                    myActivityViewModel.myActivityUiState.value?.activities,
+                    userProfile,
                 )
-                myActivityAdapter.setUserProfile(userProfile)
             }
         }
     }
 
     private fun updateAdapterWithActivitiesAndProfile(
-        activities: List<ActivityModel>?,
+        activities: List<ActivitiesModel.ActivityModel>?,
         userProfile: UserProfileModel?
     ) {
         if (activities != null && userProfile != null) {
@@ -159,7 +170,7 @@ class MyActivityFragment :
         } ?: throw IllegalArgumentException("Feed not found")
     }
 
-    fun showRemovedDialog(feedId: Long) {
+    private fun showRemovedDialog(feedId: Long) {
         val dialogFragment = FeedRemoveDialogFragment.newInstance(
             menuType = RemoveMenuType.REMOVE_FEED.name,
             event = {

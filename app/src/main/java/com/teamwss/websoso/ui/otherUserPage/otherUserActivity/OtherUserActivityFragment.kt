@@ -1,16 +1,24 @@
 package com.teamwss.websoso.ui.otherUserPage.otherUserActivity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentOtherUserActivityBinding
+import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
@@ -19,8 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OtherUserActivityFragment :
-    BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity),
-    ActivityItemClickListener {
+    BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
     private val otherUserActivityViewModel: OtherUserActivityViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
     private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy {
@@ -48,7 +55,7 @@ class OtherUserActivityFragment :
     private fun setupObserver() {
         otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
         }
 
         otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
@@ -58,16 +65,15 @@ class OtherUserActivityFragment :
                     avatarImage = it.avatarImage
                 )
                 updateAdapterWithActivitiesAndProfile(
-                    otherUserActivityViewModel.otherUserActivity.value,
-                    userProfile
+                    otherUserActivityViewModel.otherUserActivityUiState.value?.activities,
+                    userProfile,
                 )
-                otherUserActivityAdapter.setUserProfile(userProfile)
             }
         }
     }
 
     private fun updateAdapterWithActivitiesAndProfile(
-        activities: List<ActivityModel>?,
+        activities: List<ActivitiesModel.ActivityModel>?,
         userProfile: UserProfileModel?
     ) {
         if (activities != null && userProfile != null) {
