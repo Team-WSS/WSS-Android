@@ -132,7 +132,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     private fun createKeywordChip(data: NovelPreferenceEntity.KeywordEntity): Chip {
         return WebsosoChip(requireContext()).apply {
             text = "${data.keywordName} ${data.keywordCount}"
-            isCheckable = true
+            isCheckable = false
             isChecked = false
 
             setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
