@@ -75,6 +75,17 @@ class OtherUserPageActivity :
         otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
             setUpMyProfileImage(otherUserProfile.avatarImage.orEmpty())
         }
+
+        otherUserPageViewModel.otherUserProfile.observe(this) { profile ->
+            val isPublic = profile.isProfilePublic
+            if (isPublic) {
+                binding.vpOtherUserPage.visibility = View.VISIBLE
+                binding.clOtherUserPageNoPublic.visibility = View.GONE
+            } else {
+                binding.vpOtherUserPage.visibility = View.GONE
+                binding.clOtherUserPageNoPublic.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setUpMyProfileImage(otherUserProfileUrl: String) {
