@@ -9,7 +9,6 @@ import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelMod
 
 class UserStorageViewPagerAdapter(
     private var novels: List<StorageNovelModel>,
-    private val onExploreButtonClick: () -> Unit,
     private val novelClickListener: (Long) -> Unit,
 ) : RecyclerView.Adapter<UserStorageViewPagerViewHolder>() {
 
@@ -18,7 +17,7 @@ class UserStorageViewPagerAdapter(
         viewType: Int
     ): UserStorageViewPagerViewHolder {
         val binding = ItemStorageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return UserStorageViewPagerViewHolder(binding, onExploreButtonClick, novelClickListener)
+        return UserStorageViewPagerViewHolder(binding, novelClickListener)
     }
 
     override fun onBindViewHolder(holder: UserStorageViewPagerViewHolder, position: Int) {
