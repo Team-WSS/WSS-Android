@@ -321,7 +321,7 @@
     <string name="profile_edit_duplicate">중복확인</string>
     <string name="profile_edit_introduction">소개</string>
     <string name="edit_profile_introduction_hint">소개글을 적어보세요!</string>
-    <string name="profile_edit_introduction_max_count">%d/60</string>
+    <string name="profile_edit_introduction_max_count">%d/50</string>
     <string name="profile_edit_prefer_genre">선호장르</string>
     <string name="profile_edit_prefer_genre_description">선택한 장르에 맞춰 작품을 추천해드려요</string>
     <string name="profile_edit_avatar_title">프로필 선택</string>
