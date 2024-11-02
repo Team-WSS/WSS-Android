@@ -134,6 +134,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             text = "${data.keywordName} ${data.keywordCount}"
             isCheckable = false
             isChecked = false
+            isEnabled = false
 
             setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
