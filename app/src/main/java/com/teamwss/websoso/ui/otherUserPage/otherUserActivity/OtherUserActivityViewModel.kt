@@ -32,9 +32,11 @@ class OtherUserActivityViewModel @Inject constructor(
 
     private val size: Int = ACTIVITY_LOAD_SIZE
 
-    fun updateUserId(userId: Long) {
-        _userId.value = userId
-        updateOtherUserActivities(userId)
+    fun updateUserId(newUserId: Long) {
+        if (_userId.value != newUserId) {
+            _userId.value = newUserId
+            updateOtherUserActivities(newUserId)
+        }
     }
 
     fun updateOtherUserActivities(userId: Long) {
