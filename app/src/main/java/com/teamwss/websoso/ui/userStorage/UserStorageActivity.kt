@@ -112,6 +112,12 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val currentReadStatus = userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
+        userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
+    }
+
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, UserStorageActivity::class.java)

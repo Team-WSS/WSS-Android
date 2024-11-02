@@ -159,4 +159,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        myLibraryViewModel.loadMyLibrary()
+    }
 }
