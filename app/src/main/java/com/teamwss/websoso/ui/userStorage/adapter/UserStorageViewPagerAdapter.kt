@@ -14,7 +14,7 @@ class UserStorageViewPagerAdapter(
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): UserStorageViewPagerViewHolder {
         val binding = ItemStorageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserStorageViewPagerViewHolder(binding, novelClickListener)
