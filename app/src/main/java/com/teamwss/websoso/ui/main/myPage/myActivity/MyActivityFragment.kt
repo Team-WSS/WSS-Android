@@ -71,9 +71,9 @@ class MyActivityFragment :
 
     private fun updateAdapterWithActivitiesAndProfile(
         activities: List<ActivityModel>?,
-        userProfile: UserProfileModel?,
+        userProfile: UserProfileModel,
     ) {
-        if (activities != null && userProfile != null) {
+        if (activities != null) {
             val userActivityModels = activities.map { activity ->
                 UserActivityModel(activity, userProfile)
             }
@@ -83,13 +83,12 @@ class MyActivityFragment :
         }
     }
 
-    private fun getUserProfile(): UserProfileModel? {
-        return myPageViewModel.myPageUiState.value?.myProfile?.let {
-            UserProfileModel(
-                nickname = it.nickname,
-                avatarImage = it.avatarImage,
-            )
-        }
+    private fun getUserProfile(): UserProfileModel {
+        val myProfile = myPageViewModel.myPageUiState.value?.myProfile
+        return UserProfileModel(
+            nickname = myProfile?.nickname.orEmpty(),
+            avatarImage = myProfile?.avatarImage.orEmpty()
+        )
     }
 
     private fun onMyActivityDetailButtonClick() {
