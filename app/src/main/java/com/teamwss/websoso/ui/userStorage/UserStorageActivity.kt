@@ -99,13 +99,11 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     }
 
     private fun navigateToExploreFragment() {
-        val intent = MainActivity.getIntent(this, MainActivity.FragmentType.EXPLORE)
-        startActivity(intent)
+        startActivity(MainActivity.getIntent(this, MainActivity.FragmentType.EXPLORE))
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        val intent = NovelDetailActivity.getIntent(this, novelId)
-        startActivity(intent)
+        startActivity(NovelDetailActivity.getIntent(this, novelId))
     }
 
     private fun onBackButtonClick() {
