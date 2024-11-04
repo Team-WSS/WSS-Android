@@ -9,7 +9,7 @@ import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelMod
 
 class UserStorageViewPagerAdapter(
     private var novels: List<StorageNovelModel>,
-    private val novelClickListener: (Long) -> Unit,
+    private val novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.Adapter<UserStorageViewPagerViewHolder>() {
 
     override fun onCreateViewHolder(
