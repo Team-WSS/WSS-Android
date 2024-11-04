@@ -59,7 +59,7 @@ class MyActivityFragment :
             uiState.myProfile?.let { myProfileEntity ->
                 val userProfile = UserProfileModel(
                     nickname = myProfileEntity.nickname,
-                    avatarImage = myProfileEntity.avatarImage
+                    avatarImage = myProfileEntity.avatarImage,
                 )
                 updateAdapterWithActivitiesAndProfile(
                     myActivityViewModel.myActivity.value,
@@ -71,7 +71,7 @@ class MyActivityFragment :
 
     private fun updateAdapterWithActivitiesAndProfile(
         activities: List<ActivityModel>?,
-        userProfile: UserProfileModel?
+        userProfile: UserProfileModel?,
     ) {
         if (activities != null && userProfile != null) {
             val userActivityModels = activities.map { activity ->
@@ -87,7 +87,7 @@ class MyActivityFragment :
         return myPageViewModel.myPageUiState.value?.myProfile?.let {
             UserProfileModel(
                 nickname = it.nickname,
-                avatarImage = it.avatarImage
+                avatarImage = it.avatarImage,
             )
         }
     }

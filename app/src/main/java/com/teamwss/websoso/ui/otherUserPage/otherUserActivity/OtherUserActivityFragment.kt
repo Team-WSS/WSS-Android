@@ -66,7 +66,7 @@ class OtherUserActivityFragment :
             otherUserProfile?.let {
                 val userProfile = UserProfileModel(
                     nickname = it.nickname,
-                    avatarImage = it.avatarImage
+                    avatarImage = it.avatarImage,
                 )
                 updateAdapterWithActivitiesAndProfile(
                     otherUserActivityViewModel.otherUserActivity.value,
@@ -78,7 +78,7 @@ class OtherUserActivityFragment :
 
     private fun updateAdapterWithActivitiesAndProfile(
         activities: List<ActivityModel>?,
-        userProfile: UserProfileModel?
+        userProfile: UserProfileModel?,
     ) {
         if (activities != null && userProfile != null) {
             val userActivityModels = activities.map { activity ->
@@ -94,7 +94,7 @@ class OtherUserActivityFragment :
         return otherUserPageViewModel.otherUserProfile.value?.let {
             UserProfileModel(
                 nickname = it.nickname,
-                avatarImage = it.avatarImage
+                avatarImage = it.avatarImage,
             )
         }
     }
