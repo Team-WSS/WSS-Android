@@ -31,7 +31,7 @@ class OtherUserActivityFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUserId()
-        setUpMyActivitiesAdapter()
+        setupMyActivitiesAdapter()
         setupObserver()
         onActivityDetailButtonClick()
     }
@@ -41,7 +41,7 @@ class OtherUserActivityFragment :
         otherUserActivityViewModel.updateUserId(userId)
     }
 
-    private fun setUpMyActivitiesAdapter() {
+    private fun setupMyActivitiesAdapter() {
         binding.rvOtherUserActivity.adapter = otherUserActivityAdapter
     }
 
