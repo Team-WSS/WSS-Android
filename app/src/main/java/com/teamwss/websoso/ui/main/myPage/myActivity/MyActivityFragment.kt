@@ -42,13 +42,24 @@ class MyActivityFragment :
         myActivityViewModel.myActivity.observe(viewLifecycleOwner) { activities ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(activities, userProfile)
+
+            when (activities.isNullOrEmpty()) {
+                true -> {
+                    binding.clMyActivityExistsNull.visibility = View.VISIBLE
+                    binding.nsMyActivityExists.visibility = View.GONE
+                }
+                false -> {
+                    binding.clMyActivityExistsNull.visibility = View.GONE
+                    binding.nsMyActivityExists.visibility = View.VISIBLE
+                }
+            }
         }
 
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
             uiState.myProfile?.let { myProfileEntity ->
                 val userProfile = UserProfileModel(
                     nickname = myProfileEntity.nickname,
-                    avatarImage = myProfileEntity.avatarImage
+                    avatarImage = myProfileEntity.avatarImage,
                 )
                 updateAdapterWithActivitiesAndProfile(
                     myActivityViewModel.myActivity.value,
@@ -60,9 +71,9 @@ class MyActivityFragment :
 
     private fun updateAdapterWithActivitiesAndProfile(
         activities: List<ActivityModel>?,
-        userProfile: UserProfileModel?
+        userProfile: UserProfileModel,
     ) {
-        if (activities != null && userProfile != null) {
+        if (activities != null) {
             val userActivityModels = activities.map { activity ->
                 UserActivityModel(activity, userProfile)
             }
@@ -72,13 +83,12 @@ class MyActivityFragment :
         }
     }
 
-    private fun getUserProfile(): UserProfileModel? {
-        return myPageViewModel.myPageUiState.value?.myProfile?.let {
-            UserProfileModel(
-                nickname = it.nickname,
-                avatarImage = it.avatarImage
-            )
-        }
+    private fun getUserProfile(): UserProfileModel {
+        val myProfile = myPageViewModel.myPageUiState.value?.myProfile
+        return UserProfileModel(
+            nickname = myProfile?.nickname.orEmpty(),
+            avatarImage = myProfile?.avatarImage.orEmpty()
+        )
     }
 
     private fun onMyActivityDetailButtonClick() {

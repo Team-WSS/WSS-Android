@@ -31,7 +31,7 @@ class OtherUserActivityFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUserId()
-        setUpMyActivitiesAdapter()
+        setupMyActivitiesAdapter()
         setupObserver()
         onActivityDetailButtonClick()
     }
@@ -41,7 +41,7 @@ class OtherUserActivityFragment :
         otherUserActivityViewModel.updateUserId(userId)
     }
 
-    private fun setUpMyActivitiesAdapter() {
+    private fun setupMyActivitiesAdapter() {
         binding.rvOtherUserActivity.adapter = otherUserActivityAdapter
     }
 
@@ -49,13 +49,24 @@ class OtherUserActivityFragment :
         otherUserActivityViewModel.otherUserActivity.observe(viewLifecycleOwner) { activities ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(activities, userProfile)
+
+            when (activities.isNullOrEmpty()) {
+                true -> {
+                    binding.clOtherUserActivityExistsNull.visibility = View.VISIBLE
+                    binding.nsOtherUserActivityExists.visibility = View.GONE
+                }
+                false -> {
+                    binding.clOtherUserActivityExistsNull.visibility = View.GONE
+                    binding.nsOtherUserActivityExists.visibility = View.VISIBLE
+                }
+            }
         }
 
         otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
             otherUserProfile?.let {
                 val userProfile = UserProfileModel(
                     nickname = it.nickname,
-                    avatarImage = it.avatarImage
+                    avatarImage = it.avatarImage,
                 )
                 updateAdapterWithActivitiesAndProfile(
                     otherUserActivityViewModel.otherUserActivity.value,
@@ -67,9 +78,9 @@ class OtherUserActivityFragment :
 
     private fun updateAdapterWithActivitiesAndProfile(
         activities: List<ActivityModel>?,
-        userProfile: UserProfileModel?
+        userProfile: UserProfileModel,
     ) {
-        if (activities != null && userProfile != null) {
+        if (activities != null) {
             val userActivityModels = activities.map { activity ->
                 UserActivityModel(activity, userProfile)
             }
@@ -79,13 +90,12 @@ class OtherUserActivityFragment :
         }
     }
 
-    private fun getUserProfile(): UserProfileModel? {
-        return otherUserPageViewModel.otherUserProfile.value?.let {
-            UserProfileModel(
-                nickname = it.nickname,
-                avatarImage = it.avatarImage
-            )
-        }
+    private fun getUserProfile(): UserProfileModel {
+        val profile = otherUserPageViewModel.otherUserProfile.value
+        return UserProfileModel(
+            nickname = profile?.nickname.orEmpty(),
+            avatarImage = profile?.avatarImage.orEmpty()
+        )
     }
 
     private fun onActivityDetailButtonClick() {
