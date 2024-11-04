@@ -43,12 +43,15 @@ class MyActivityFragment :
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(activities, userProfile)
 
-            if (activities.isNullOrEmpty()) {
-                binding.clMyActivityExistsNull.visibility = View.VISIBLE
-                binding.nsMyActivityExists.visibility = View.GONE
-            } else {
-                binding.clMyActivityExistsNull.visibility = View.GONE
-                binding.nsMyActivityExists.visibility = View.VISIBLE
+            when (activities.isNullOrEmpty()) {
+                true -> {
+                    binding.clMyActivityExistsNull.visibility = View.VISIBLE
+                    binding.nsMyActivityExists.visibility = View.GONE
+                }
+                false -> {
+                    binding.clMyActivityExistsNull.visibility = View.GONE
+                    binding.nsMyActivityExists.visibility = View.VISIBLE
+                }
             }
         }
 
