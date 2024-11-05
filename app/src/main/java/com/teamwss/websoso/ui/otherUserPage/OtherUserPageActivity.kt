@@ -77,8 +77,7 @@ class OtherUserPageActivity :
         }
 
         otherUserPageViewModel.otherUserProfile.observe(this) { profile ->
-            val isPublic = profile.isProfilePublic
-            if (isPublic) {
+            if (profile.isProfilePublic) {
                 binding.vpOtherUserPage.visibility = View.VISIBLE
                 binding.clOtherUserPageNoPublic.visibility = View.GONE
             } else {
