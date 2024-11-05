@@ -33,7 +33,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         setupViewPagerAndTabLayout()
         onBackButtonClick()
         onSortTypeButtonClick()
-        onGoToExploreFragment()
+        onExploreButton()
     }
 
     private fun bindViewModel() {
@@ -92,7 +92,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         }
     }
 
-    private fun onGoToExploreFragment() {
+    private fun onExploreButton() {
         binding.btnStorageGoToSearchNovel.setOnClickListener {
             navigateToExploreFragment()
         }
