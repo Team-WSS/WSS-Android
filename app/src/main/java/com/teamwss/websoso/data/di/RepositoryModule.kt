@@ -2,9 +2,11 @@ package com.teamwss.websoso.data.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.teamwss.websoso.data.remote.api.AuthApi
 import com.teamwss.websoso.data.remote.api.FeedApi
 import com.teamwss.websoso.data.remote.api.NovelApi
 import com.teamwss.websoso.data.remote.api.UserApi
+import com.teamwss.websoso.data.repository.AuthRepository
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.data.repository.UserRepository
@@ -32,4 +34,11 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideNovelRepository(novelApi: NovelApi): NovelRepository = NovelRepository(novelApi)
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        authApi: AuthApi,
+        authStorage: DataStore<Preferences>,
+    ): AuthRepository = AuthRepository(authApi, authStorage)
 }

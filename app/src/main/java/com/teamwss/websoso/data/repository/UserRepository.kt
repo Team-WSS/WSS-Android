@@ -4,7 +4,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import com.teamwss.websoso.data.mapper.toData
 import com.teamwss.websoso.data.model.BlockedUsersEntity
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
@@ -93,26 +92,6 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun saveUserProfile(
-        nickname: String,
-        gender: String,
-        birth: Int,
-        genrePreferences: List<String>,
-    ) {
-        userApi.postUserProfile(
-            UserProfileRequestDto(
-                nickname,
-                gender,
-                birth,
-                genrePreferences,
-            )
-        )
-    }
-
-    suspend fun fetchNicknameValidity(nickname: String): Boolean {
-        return userApi.getNicknameValidity(nickname).isValid
-    }
-
-    suspend fun saveEditingUserProfile(
         avatarId: Int?,
         nickname: String?,
         intro: String?,
@@ -150,10 +129,8 @@ class UserRepository @Inject constructor(
         return userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
     }
 
-    suspend fun saveAccessToken(value: String) {
-        userStorage.edit { preferences ->
-            preferences[ACCESS_TOKEN_KEY] = value
-        }
+    suspend fun fetchNicknameValidity(nickname: String): Boolean {
+        return userApi.getNicknameValidity(nickname).isValid
     }
 
     suspend fun fetchAccessToken(): String {

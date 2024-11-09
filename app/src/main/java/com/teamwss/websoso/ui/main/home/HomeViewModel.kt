@@ -28,13 +28,12 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
     val uiState: LiveData<HomeUiState> get() = _uiState
 
-    init {
-        updateHome()
+    fun updateHomeData() {
+        updatePopularNovels()
+        updatePopularFeeds()
+        updateUserInterestFeeds()
+        updateRecommendedNovelsByUser()
     }
-
-    private fun updateHome() {
-        viewModelScope.launch {
-            _uiState.value = uiState.value?.copy(loading = true)
 
             runCatching {
                 listOf(

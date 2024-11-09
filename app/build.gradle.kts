@@ -22,6 +22,8 @@ android {
 
         buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
+        buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("kakao.app.key"))
+        manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir).getProperty("kakao.app.key")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -102,4 +104,7 @@ dependencies {
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // KAKAO
+    implementation("com.kakao.sdk:v2-user:2.15.0")
 }

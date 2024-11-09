@@ -10,6 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityOnboardingBinding
+import com.teamwss.websoso.ui.login.LoginActivity
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 import com.teamwss.websoso.ui.onboarding.welcome.WelcomeActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +23,12 @@ class OnboardingActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        intent?.let {
+            val accessToken = it.getStringExtra(LoginActivity.ACCESS_TOKEN_KEY).orEmpty()
+            val refreshToken = it.getStringExtra(LoginActivity.REFRESH_TOKEN_KEY).orEmpty()
+            viewModel.setTokens(accessToken, refreshToken)
+        }
 
         bindViewModel()
         setupViewPager()

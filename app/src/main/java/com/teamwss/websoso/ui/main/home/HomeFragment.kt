@@ -104,13 +104,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setupObserver() {
-        mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                uiState.error -> Unit
-                !uiState.loading -> updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
+        mainViewModel.mainUiState.observe(viewLifecycleOwner) { mainUiState ->
+            mainUiState?.let {
+                if (mainUiState.isLogin) {
+                    homeViewModel.updateHomeData()
+                }
             }
         }
 
+                !uiState.loading -> updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.error -> Unit
