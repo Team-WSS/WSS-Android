@@ -14,7 +14,6 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.NormalExploreBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.teamwss.websoso.databinding.FragmentHomeBinding
-import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.home.adpater.PopularFeedsAdapter
@@ -104,15 +103,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setupObserver() {
-        mainViewModel.mainUiState.observe(viewLifecycleOwner) { mainUiState ->
-            mainUiState?.let {
-                if (mainUiState.isLogin) {
-                    homeViewModel.updateHomeData()
-                }
+        mainViewModel.isLogin.observe(viewLifecycleOwner) { isLogin ->
+            homeViewModel.updateHomeData(isLogin = isLogin)
+            if (isLogin) {
+                updateViewVisibilityByLogin(
+                    isLogin,
+                    mainViewModel.mainUiState.value?.nickname
+                )
             }
         }
 
-                !uiState.loading -> updateViewVisibilityByLogin(uiState.isLogin, uiState.nickname)
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.error -> Unit
@@ -120,8 +120,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
 
-                    mainViewModel.mainUiState.value?.let { mainUiState ->
-                        if (mainUiState.isLogin) {
+                    mainViewModel.isLogin.value?.let { isLogin ->
+                        if (isLogin) {
                             updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
                             updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
@@ -200,58 +200,37 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
-        if (mainViewModel.mainUiState.value?.isLogin == true) {
-            startActivityLauncher.launch(
-                FeedDetailActivity.getIntent(
-                    requireContext(),
-                    feedId,
-                )
+        startActivityLauncher.launch(
+            FeedDetailActivity.getIntent(
+                requireContext(),
+                feedId,
             )
-        } else {
-            showLoginRequestDialog()
-        }
+        )
     }
 
     private fun onPostInterestNovelClick() {
         binding.clHomeInterestFeed.setOnClickListener {
-            if (mainViewModel.mainUiState.value?.isLogin == true) {
-                startActivityLauncher.launch(
-                    NormalExploreActivity.getIntent(
-                        requireContext(),
-                    )
+            startActivityLauncher.launch(
+                NormalExploreActivity.getIntent(
+                    requireContext(),
                 )
-            } else {
-                showLoginRequestDialog()
-            }
+            )
         }
     }
 
     private fun onSettingPreferenceGenreClick() {
         binding.clHomeRecommendNovel.setOnClickListener {
-            if (mainViewModel.mainUiState.value?.isLogin == true) {
-                startActivityLauncher.launch(
-                    ProfileEditActivity.getIntent(
-                        requireContext(),
-                    )
+            startActivityLauncher.launch(
+                ProfileEditActivity.getIntent(
+                    requireContext(),
                 )
-            } else {
-                showLoginRequestDialog()
-            }
+            )
         }
-    }
-
-    private fun showLoginRequestDialog() {
-        val dialog = LoginRequestDialogFragment.newInstance()
-        dialog.show(parentFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
     private fun onNoticeButtonClick() {
         binding.ivHomeNotification.setOnClickListener {
-            if (mainViewModel.mainUiState.value?.isLogin == true) {
-                startActivity(NoticeActivity.getIntent(requireContext()))
-            } else {
-                showLoginRequestDialog()
-            }
+            startActivity(NoticeActivity.getIntent(requireContext()))
         }
     }
 
