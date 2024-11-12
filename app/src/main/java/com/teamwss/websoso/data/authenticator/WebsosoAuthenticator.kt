@@ -1,9 +1,7 @@
 package com.teamwss.websoso.data.authenticator
 
 import android.content.Context
-import android.content.Intent
 import com.kakao.sdk.user.UserApiClient
-import com.teamwss.websoso.data.remote.api.AuthApi
 import com.teamwss.websoso.data.repository.AuthRepository
 import com.teamwss.websoso.ui.login.LoginActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -27,35 +25,31 @@ class WebsosoAuthenticator @Inject constructor(
         }
 
         if (response.code == 401) {
-            val refreshToken = runBlocking { authRepository.fetchRefreshToken() }
-            if (refreshToken.isEmpty()) {
+            val refreshToken = runBlocking {
+                authRepository.fetchRefreshToken()
+            }
+
+            if (refreshToken.isBlank()) {
                 return null
             }
 
             val newAccessToken = runCatching {
                 runBlocking {
-                    authRepository.reissueToken(refreshToken)
+                    authRepository.reissueToken()
                 }
-            }.getOrElse {
-                handleLogout()
-                return null
-            }
+            }.onFailure {
+                runBlocking {
+                    authRepository.clearTokens()
+                    UserApiClient.instance.logout {
+                        context.startActivity(LoginActivity.getIntent(context))
+                    }
+                }
+            }.getOrThrow()
 
             return response.request.newBuilder()
                 .header("Authorization", "Bearer $newAccessToken")
                 .build()
         }
         return null
-    }
-
-    private fun handleLogout() {
-        runBlocking {
-            authRepository.clearTokens()
-            UserApiClient.instance.logout {
-                val loginIntent = Intent(context, LoginActivity::class.java)
-                loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                context.startActivity(loginIntent)
-            }
-        }
     }
 }
