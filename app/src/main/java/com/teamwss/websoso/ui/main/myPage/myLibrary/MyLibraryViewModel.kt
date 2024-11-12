@@ -42,7 +42,7 @@ class MyLibraryViewModel @Inject constructor(
     private val _novelStats = MutableLiveData<UserNovelStatsEntity>()
     val novelStats: LiveData<UserNovelStatsEntity> get() = _novelStats
 
-    private var userId: Long = -1
+    var userId: Long = -1
 
     init {
         viewModelScope.launch {

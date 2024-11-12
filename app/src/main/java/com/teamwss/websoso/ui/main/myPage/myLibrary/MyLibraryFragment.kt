@@ -67,9 +67,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         }
 
         myLibraryViewModel.translatedAttractivePoints.observe(viewLifecycleOwner) { translatedPoints ->
-            val combinedText =
-                translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text)
-            applyTextColors(combinedText)
+            applyTextColors(translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
         }
 
         myLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
@@ -137,8 +135,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun updateNovelPreferencesKeywords(novelPreferences: NovelPreferenceEntity) {
         novelPreferences.keywords.forEach { keyword ->
-            val chip = createKeywordChip(keyword)
-            binding.wcgMyLibraryAttractivePoints.addView(chip)
+            binding.wcgMyLibraryAttractivePoints.addView(createKeywordChip(keyword))
         }
     }
 
@@ -156,8 +153,13 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
-            val intent = UserStorageActivity.getIntent(requireContext())
-            startActivity(intent)
+            startActivity(
+                UserStorageActivity.getIntent(
+                    requireContext(),
+                    UserStorageActivity.SOURCE_MY_LIBRARY,
+                    myLibraryViewModel.userId,
+                )
+            )
         }
     }
 
@@ -171,5 +173,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                 2 -> binding.ivMyLibraryDominantGenreThirdLogo.load(updatedGenreImageUrl)
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_SOURCE = "source"
     }
 }
