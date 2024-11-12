@@ -8,7 +8,7 @@ import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelMod
 
 class UserStorageItemAdapter(
     private var novels: List<StorageNovelModel>,
-    private val novelClickListener: (Long) -> Unit,
+    private val novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.Adapter<UserStorageItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserStorageItemViewHolder {

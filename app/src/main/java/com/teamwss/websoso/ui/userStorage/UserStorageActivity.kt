@@ -3,6 +3,7 @@ package com.teamwss.websoso.ui.userStorage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -22,7 +23,6 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private val userStorageAdapter: UserStorageViewPagerAdapter by lazy {
         UserStorageViewPagerAdapter(
             novels = emptyList(),
-            onExploreButtonClick = ::navigateToExploreFragment,
             novelClickListener = ::navigateToNovelDetail,
         )
     }
@@ -33,6 +33,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         setupViewPagerAndTabLayout()
         onBackButtonClick()
         onSortTypeButtonClick()
+        onExploreButton()
     }
 
     private fun bindViewModel() {
@@ -78,6 +79,10 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private fun setupObserver() {
         userStorageViewModel.uiState.observe(this) { uiState ->
             updateStorageNovel(uiState)
+            binding.clStorageNull.visibility =
+                if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
+            binding.vpStorage.visibility =
+                if (uiState.userNovelCount > 0L) View.VISIBLE else View.GONE
         }
     }
 
@@ -87,13 +92,18 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         }
     }
 
+    private fun onExploreButton() {
+        binding.btnStorageGoToSearchNovel.setOnClickListener {
+            navigateToExploreFragment()
+        }
+    }
+
     private fun navigateToExploreFragment() {
-        startActivity(MainActivity.getIntent(this, MainActivity.FragmentType.FEED))
+        startActivity(MainActivity.getIntent(this, MainActivity.FragmentType.EXPLORE))
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        val intent = NovelDetailActivity.getIntent(this, novelId)
-        startActivity(intent)
+        startActivity(NovelDetailActivity.getIntent(this, novelId))
     }
 
     private fun onBackButtonClick() {

@@ -7,7 +7,6 @@ import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelMod
 
 class UserStorageViewPagerViewHolder(
     private val binding: ItemStorageBinding,
-    private val onExploreButtonClick: () -> Unit,
     private var novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -22,10 +21,6 @@ class UserStorageViewPagerViewHolder(
     init {
         binding.rvStorage.adapter = adapter
         binding.rvStorage.layoutManager = layoutManager
-
-        binding.btnStorageGoToSearchNovel.setOnClickListener {
-            onExploreButtonClick()
-        }
     }
 
     fun bind(novels: List<StorageNovelModel>) {

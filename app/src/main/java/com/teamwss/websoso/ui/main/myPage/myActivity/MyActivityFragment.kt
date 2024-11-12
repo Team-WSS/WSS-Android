@@ -20,7 +20,7 @@ import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
@@ -51,13 +51,25 @@ class MyActivityFragment :
         myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(activities, userProfile)
+
+            when (activities.isNullOrEmpty()) {
+                true -> {
+                    binding.clMyActivityExistsNull.visibility = View.VISIBLE
+                    binding.nsMyActivityExists.visibility = View.GONE
+                }
+                false -> {
+                    binding.clMyActivityExistsNull.visibility = View.GONE
+                    binding.nsMyActivityExists.visibility = View.VISIBLE
+                }
+            }
         }
 
         myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
             uiState.myProfile?.let { myProfileEntity ->
                 val userProfile = UserProfileModel(
                     nickname = myProfileEntity.nickname,
-                    avatarImage = myProfileEntity.avatarImage
+                    avatarImage = myProfileEntity.avatarImage,
                 )
                 updateAdapterWithActivitiesAndProfile(
                     myActivityViewModel.myActivityUiState.value?.activities,
@@ -68,10 +80,10 @@ class MyActivityFragment :
     }
 
     private fun updateAdapterWithActivitiesAndProfile(
-        activities: List<ActivitiesModel.ActivityModel>?,
-        userProfile: UserProfileModel?
+        activities: List<ActivityModel>?,
+        userProfile: UserProfileModel,
     ) {
-        if (activities != null && userProfile != null) {
+        if (activities != null) {
             val userActivityModels = activities.map { activity ->
                 UserActivityModel(activity, userProfile)
             }
@@ -81,13 +93,12 @@ class MyActivityFragment :
         }
     }
 
-    private fun getUserProfile(): UserProfileModel? {
-        return myPageViewModel.myPageUiState.value?.myProfile?.let {
-            UserProfileModel(
-                nickname = it.nickname,
-                avatarImage = it.avatarImage
-            )
-        }
+    private fun getUserProfile(): UserProfileModel {
+        val myProfile = myPageViewModel.myPageUiState.value?.myProfile
+        return UserProfileModel(
+            nickname = myProfile?.nickname.orEmpty(),
+            avatarImage = myProfile?.avatarImage.orEmpty()
+        )
     }
 
     private fun onMyActivityDetailButtonClick() {
@@ -121,7 +132,11 @@ class MyActivityFragment :
             likeCountTextView.text = updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
-            myActivityViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
+            myActivityViewModel.updateActivityLike(
+                view.isSelected,
+                feedId,
+                updatedLikeCount,
+            )
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long) {
