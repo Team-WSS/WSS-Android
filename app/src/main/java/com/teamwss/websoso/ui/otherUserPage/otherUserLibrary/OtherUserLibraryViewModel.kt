@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.model.GenrePreferenceEntity
-import com.teamwss.websoso.data.model.NovelPreferenceEntity
-import com.teamwss.websoso.data.model.UserNovelStatsEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.main.myPage.myLibrary.model.AttractivePoints
+import com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.model.OtherUserLibraryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,35 +16,18 @@ class OtherUserLibraryViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _genres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val genres: LiveData<List<GenrePreferenceEntity>> get() = _genres
-
-    private val _dominantGenres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val topGenres: LiveData<List<GenrePreferenceEntity>> get() = _dominantGenres
-
-    private val _restGenres = MutableLiveData<List<GenrePreferenceEntity>>()
-    val restGenres: LiveData<List<GenrePreferenceEntity>> get() = _restGenres
-
-    private val _isGenreListVisible = MutableLiveData<Boolean>(false)
-    val isGenreListVisible: LiveData<Boolean> get() = _isGenreListVisible
-
-    private val _novelPreferences = MutableLiveData<NovelPreferenceEntity>()
-    val novelPreferences: LiveData<NovelPreferenceEntity> get() = _novelPreferences
+    private val _uiState = MutableLiveData(OtherUserLibraryUiState())
+    val uiState: LiveData<OtherUserLibraryUiState> get() = _uiState
 
     private val _attractivePointsText = MutableLiveData<String>()
     val attractivePointsText: LiveData<String> get() = _attractivePointsText
 
-    private val _translatedAttractivePoints = MutableLiveData<List<String>>()
-    val translatedAttractivePoints: LiveData<List<String>> get() = _translatedAttractivePoints
-
-    private val _novelStats = MutableLiveData<UserNovelStatsEntity>()
-    val novelStats: LiveData<UserNovelStatsEntity> get() = _novelStats
-
-    private val _userId: MutableLiveData<Long> = MutableLiveData()
+    private val _userId = MutableLiveData<Long>()
     val userId: LiveData<Long> get() = _userId
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
+        _uiState.value = _uiState.value?.copy(isLoading = true)
         updateNovelStats(userId)
         updateGenrePreference(userId)
         updateNovelPreferences(userId)
@@ -57,13 +38,21 @@ class OtherUserLibraryViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchUserNovelStats(userId)
             }.onSuccess { novelStats ->
-                _novelStats.value = novelStats
-            }.onFailure { exception ->
+                _uiState.value = _uiState.value?.copy(
+                    novelStats = novelStats,
+                    isLoading = false,
+                )
+            }.onFailure {
+                _uiState.value = _uiState.value?.copy(
+                    isLoading = false,
+                    error = true,
+                )
             }
         }
     }
 
-    fun hasNoPreferences(stats: UserNovelStatsEntity): Boolean {
+    fun hasNoPreferences(): Boolean {
+        val stats = _uiState.value?.novelStats ?: return true
         return stats.interestNovelCount == 0 &&
                 stats.watchingNovelCount == 0 &&
                 stats.watchedNovelCount == 0 &&
@@ -76,16 +65,20 @@ class OtherUserLibraryViewModel @Inject constructor(
                 userRepository.fetchGenrePreference(userId)
             }.onSuccess { genres ->
                 val sortedGenres = genres.sortedByDescending { it.genreCount }
-
-                _dominantGenres.value = sortedGenres.take(3)
-                _restGenres.value = sortedGenres.drop(3)
-            }.onFailure { exception ->
+                _uiState.value = _uiState.value?.copy(
+                    topGenres = sortedGenres.take(3),
+                    restGenres = sortedGenres.drop(3),
+                )
+            }.onFailure {
+                _uiState.value = _uiState.value?.copy(error = true)
             }
         }
     }
 
     fun updateToggleGenresVisibility() {
-        _isGenreListVisible.value = _isGenreListVisible.value?.not() ?: false
+        _uiState.value = _uiState.value?.copy(
+            isGenreListVisible = !_uiState.value?.isGenreListVisible!!
+        )
     }
 
     private fun updateNovelPreferences(userId: Long) {
@@ -93,10 +86,12 @@ class OtherUserLibraryViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchNovelPreferences(userId)
             }.onSuccess { novelPreferences ->
-                _novelPreferences.value = novelPreferences
-                _translatedAttractivePoints.value =
-                    translateAttractivePoints(novelPreferences.attractivePoints)
-            }.onFailure { exception ->
+                _uiState.value = _uiState.value?.copy(
+                    novelPreferences = novelPreferences,
+                    translatedAttractivePoints = translateAttractivePoints(novelPreferences.attractivePoints),
+                )
+            }.onFailure {
+                _uiState.value = _uiState.value?.copy(error = true)
             }
         }
     }
