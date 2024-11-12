@@ -57,7 +57,7 @@ class OtherUserActivityFragment :
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
 
-            when (activities.isNullOrEmpty()) {
+            when (uiState.activities.isNullOrEmpty()) {
                 true -> {
                     binding.clOtherUserActivityExistsNull.visibility = View.VISIBLE
                     binding.nsOtherUserActivityExists.visibility = View.GONE

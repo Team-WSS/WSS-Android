@@ -51,9 +51,8 @@ class MyActivityFragment :
         myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
-            updateAdapterWithActivitiesAndProfile(activities, userProfile)
 
-            when (activities.isNullOrEmpty()) {
+            when (uiState.activities.isNullOrEmpty()) {
                 true -> {
                     binding.clMyActivityExistsNull.visibility = View.VISIBLE
                     binding.nsMyActivityExists.visibility = View.GONE
