@@ -1,4 +1,4 @@
-package com.teamwss.websoso.data.remote.service
+package com.teamwss.websoso.data.remote.api
 
 import com.teamwss.websoso.data.model.OAuthToken
 

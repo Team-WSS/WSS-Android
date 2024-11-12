@@ -1,4 +1,4 @@
-package com.teamwss.websoso.data.remote.service
+package com.teamwss.websoso.data.remote.api
 
 import android.content.Context
 import com.kakao.sdk.common.model.ClientError

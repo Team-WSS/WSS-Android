@@ -1,8 +1,8 @@
 package com.teamwss.websoso.data.di
 
 import com.kakao.sdk.user.UserApiClient
-import com.teamwss.websoso.data.remote.service.KakaoAuthService
-import com.teamwss.websoso.data.remote.service.OAuthService
+import com.teamwss.websoso.data.remote.api.KakaoAuthService
+import com.teamwss.websoso.data.remote.api.OAuthService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
