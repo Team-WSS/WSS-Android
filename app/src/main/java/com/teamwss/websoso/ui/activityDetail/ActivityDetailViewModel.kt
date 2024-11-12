@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity.Companion.SOURCE_MY_ACTIVITY
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
+import com.teamwss.websoso.ui.activityDetail.model.ActivityDetailUiState
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityLikeState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,14 +22,11 @@ class ActivityDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _userActivity = MutableLiveData<List<ActivityModel>>()
-    val userActivity: LiveData<List<ActivityModel>> get() = _userActivity
+    private val _activityDetailUiState = MutableLiveData<ActivityDetailUiState>()
+    val activityDetailUiState: LiveData<ActivityDetailUiState> get() = _activityDetailUiState
 
     private val _likeState = MutableLiveData<ActivityLikeState>()
     val likeState: LiveData<ActivityLikeState> get() = _likeState
-
-    private val _lastFeedId: MutableLiveData<Long> = MutableLiveData(0L)
-    val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val size: Int = ACTIVITY_LOAD_SIZE
 
@@ -45,6 +42,10 @@ class ActivityDetailViewModel @Inject constructor(
             savedStateHandle["userId"] = value
         }
 
+    init {
+        _activityDetailUiState.value = ActivityDetailUiState()
+    }
+
     fun updateUserActivities(userId: Long) {
         this.userId = userId
         if (source == SOURCE_MY_ACTIVITY) {
@@ -55,32 +56,50 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     private fun updateMyActivities() {
+        _activityDetailUiState.value = _activityDetailUiState.value?.copy(isLoading = true)
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchMyActivities(
-                    lastFeedId.value ?: 0L,
+                    _activityDetailUiState.value?.lastFeedId ?: 0L,
                     size,
                 )
             }.onSuccess { response ->
-                _userActivity.value = response.feeds.map { it.toUi() }
-
-                _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L
+                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                    isLoading = false,
+                    activities = response.feeds.map { it.toUi() },
+                    lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
+                    error = false,
+                )
+            }.onFailure { exception ->
+                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                    isLoading = false,
+                    error = true,
+                )
             }
         }
     }
 
     private fun updateOtherUserActivities(userId: Long) {
+        _activityDetailUiState.value = _activityDetailUiState.value?.copy(isLoading = true)
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchUserFeeds(
                     userId = userId,
-                    lastFeedId = lastFeedId.value ?: 0L,
+                    lastFeedId = _activityDetailUiState.value?.lastFeedId ?: 0L,
                     size = size,
                 )
             }.onSuccess { response ->
-                _userActivity.value = response.feeds.map { it.toUi() }
-                _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L
-            }.onFailure {
+                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                    isLoading = false,
+                    activities = response.feeds.map { it.toUi() },
+                    lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
+                    error = false,
+                )
+            }.onFailure { exception ->
+                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                    isLoading = false,
+                    error = true,
+                )
             }
         }
     }
@@ -96,22 +115,80 @@ class ActivityDetailViewModel @Inject constructor(
             }.onSuccess {
                 val newLikeCount = if (isLiked) currentLikeCount - 1 else currentLikeCount + 1
                 _likeState.value = ActivityLikeState(feedId, !isLiked, newLikeCount)
-
-                saveActivityLikeState(feedId, !isLiked, newLikeCount)
+                updateLikeStateInUi(feedId, !isLiked, newLikeCount)
             }.onFailure {
+
             }
         }
     }
 
-    private fun saveActivityLikeState(feedId: Long, isLiked: Boolean, likeCount: Int) {
-        _userActivity.value = _userActivity.value?.map { activity ->
-            if (activity.feedId == feedId) {
-                activity.copy(
-                    isLiked = isLiked,
-                    likeCount = likeCount,
+    private fun updateLikeStateInUi(feedId: Long, isLiked: Boolean, likeCount: Int) {
+        _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+            activities = _activityDetailUiState.value?.activities?.map { activity ->
+                if (activity.feedId == feedId) {
+                    activity.copy(
+                        isLiked = isLiked,
+                        likeCount = likeCount,
+                    )
+                } else {
+                    activity
+                }
+            } ?: emptyList()
+        )
+    }
+
+    fun updateRemovedFeed(feedId: Long) {
+        viewModelScope.launch {
+            _activityDetailUiState.value = _activityDetailUiState.value?.copy(isLoading = true)
+            runCatching {
+                feedRepository.saveRemovedFeed(feedId)
+            }.onSuccess {
+                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                    isLoading = false,
+                    activities = _activityDetailUiState.value?.activities?.filter { it.feedId != feedId }
+                        ?: emptyList(),
                 )
-            } else {
-                activity
+            }.onFailure {
+                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                    isLoading = false,
+                    error = true,
+                )
+            }
+        }
+    }
+
+    fun updateReportedSpoilerFeed(feedId: Long) {
+        activityDetailUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _activityDetailUiState.value = feedUiState.copy(isLoading = true)
+                runCatching {
+                    feedRepository.saveSpoilerFeed(feedId)
+                }.onSuccess {
+                    _activityDetailUiState.value = feedUiState.copy(isLoading = false)
+                }.onFailure {
+                    _activityDetailUiState.value = feedUiState.copy(
+                        isLoading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateReportedImpertinenceFeed(feedId: Long) {
+        activityDetailUiState.value?.let { feedUiState ->
+            viewModelScope.launch {
+                _activityDetailUiState.value = feedUiState.copy(isLoading = true)
+                runCatching {
+                    feedRepository.saveImpertinenceFeed(feedId)
+                }.onSuccess {
+                    _activityDetailUiState.value = feedUiState.copy(isLoading = false)
+                }.onFailure {
+                    _activityDetailUiState.value = feedUiState.copy(
+                        isLoading = false,
+                        error = true,
+                    )
+                }
             }
         }
     }

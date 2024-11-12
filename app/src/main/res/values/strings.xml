@@ -334,6 +334,8 @@
     <string name="my_activity_dot">·</string>
     <string name="my_activity_more">활동기록 더보기</string>
     <string name="my_activity_emtpy">작성한 글이 없어요</string>
+    <string name="my_activity_modification">수정하기</string>
+    <string name="my_activity_deletion">삭제하기</string>
 
     <!-- 내 활동 디테일 뷰 -->
     <string name="my_activity_detail_title">내 활동</string>
@@ -388,6 +390,8 @@
     <string name="storage_newest">최신 순</string>
     <string name="storage_novel_count">%d개</string>
 
-    <!-- 다른 유저 활동 뷰 -->
+    <!-- 다른 유저 활동 뷰-->
+    <string name="other_user_activity_report_spoiler">스포일러 신고</string>
+    <string name="other_user_activity_report_expression">부적절한 표현 신고</string>
     <string name="other_user_activity_emtpy">작성한 글이 없어요</string>
 </resources>

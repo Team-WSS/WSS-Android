@@ -3,16 +3,29 @@ package com.teamwss.websoso.ui.activityDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.databinding.ViewDataBinding
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
 import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
+import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
+import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
+import com.teamwss.websoso.ui.main.feed.dialog.ReportMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityFragment
@@ -38,6 +51,7 @@ class ActivityDetailActivity :
         intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
+    private var _popupWindow: PopupWindow? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,9 +88,9 @@ class ActivityDetailActivity :
     }
 
     private fun setupObserver() {
-        activityDetailViewModel.userActivity.observe(this) { activities ->
+        activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
             val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
         }
 
         when (activityDetailViewModel.source) {
@@ -85,7 +99,7 @@ class ActivityDetailActivity :
                     uiState.myProfile?.let { myProfile ->
                         val userProfile = myProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.userActivity.value,
+                            activityDetailViewModel.activityDetailUiState.value?.activities,
                             userProfile
                         )
                     }
@@ -97,8 +111,8 @@ class ActivityDetailActivity :
                     otherUserProfile?.let {
                         val userProfile = otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.userActivity.value,
-                            userProfile
+                            activityDetailViewModel.activityDetailUiState.value?.activities,
+                            userProfile,
                         )
                     }
                 }
@@ -162,16 +176,111 @@ class ActivityDetailActivity :
             likeCountTextView.text = updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
-            activityDetailViewModel.updateActivityLike(
-                view.isSelected,
-                feedId,
-                updatedLikeCount,
-            )
+            activityDetailViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long) {
-            // TODO 팝업메뉴 수정 및 차단
+            showPopupMenu(view, feedId)
         }
+    }
+
+    private fun showPopupMenu(view: View, feedId: Long) {
+        val inflater = LayoutInflater.from(this)
+        val binding = when (source) {
+            SOURCE_MY_ACTIVITY -> MenuMyActivityPopupBinding.inflate(inflater)
+            SOURCE_OTHER_USER_ACTIVITY -> MenuOtherUserActivityPopupBinding.inflate(inflater)
+            else -> return
+        }
+
+        _popupWindow?.dismiss()
+        _popupWindow = PopupWindow(
+            binding.root,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 2f
+            showAsDropDown(view)
+        }
+        setupPopupMenuClickListeners(binding, feedId)
+    }
+
+    private fun setupPopupMenuClickListeners(binding: ViewDataBinding, feedId: Long) {
+        when (binding) {
+            is MenuMyActivityPopupBinding -> {
+                binding.tvMyActivityModification.setOnClickListener {
+                    navigateToFeedEdit(feedId)
+                    _popupWindow?.dismiss()
+                }
+                binding.tvMyActivityPopupDeletion.setOnClickListener {
+                    showRemoveDialog(feedId)
+                    _popupWindow?.dismiss()
+                }
+            }
+
+            is MenuOtherUserActivityPopupBinding -> {
+                binding.tvOtherUserActivityReportSpoiler.setOnClickListener {
+                    showReportDialog(feedId, ReportMenuType.SPOILER_FEED.name)
+                    _popupWindow?.dismiss()
+                }
+                binding.tvOtherUserActivityReportExpression.setOnClickListener {
+                    showReportDialog(feedId, ReportMenuType.IMPERTINENCE_FEED.name)
+                    _popupWindow?.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun navigateToFeedEdit(feedId: Long) {
+        val activityModel =
+            activityDetailViewModel.activityDetailUiState.value?.activities?.find { it.feedId == feedId }
+        activityModel?.let { feed ->
+            val editFeedModel = EditFeedModel(
+                feedId = feed.feedId,
+                novelId = feed.novelId ?: 0L,
+                novelTitle = feed.title ?: "",
+                feedContent = feed.feedContent,
+                feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
+            )
+            startActivity(CreateFeedActivity.getIntent(this, editFeedModel))
+        } ?: throw IllegalArgumentException("Feed not found")
+    }
+
+    private fun showRemoveDialog(feedId: Long) {
+        val dialogFragment = FeedRemoveDialogFragment.newInstance(
+            menuType = RemoveMenuType.REMOVE_FEED.name,
+            event = {
+                activityDetailViewModel.updateRemovedFeed(feedId)
+            }
+        )
+        dialogFragment.show(supportFragmentManager, FeedRemoveDialogFragment.TAG)
+    }
+
+    private fun showReportDialog(feedId: Long, menuType: String) {
+        val dialogFragment = FeedReportDialogFragment.newInstance(
+            menuType = menuType,
+            event = {
+                when (menuType) {
+                    ReportMenuType.SPOILER_FEED.name -> activityDetailViewModel.updateReportedSpoilerFeed(
+                        feedId
+                    )
+
+                    ReportMenuType.IMPERTINENCE_FEED.name -> activityDetailViewModel.updateReportedImpertinenceFeed(
+                        feedId
+                    )
+                }
+                showReportDoneDialog(menuType)
+            }
+        )
+        dialogFragment.show(supportFragmentManager, FeedReportDialogFragment.TAG)
+    }
+
+    private fun showReportDoneDialog(menuType: String) {
+        val doneDialogFragment = FeedReportDoneDialogFragment.newInstance(
+            menuType = menuType,
+            event = {}
+        )
+        doneDialogFragment.show(supportFragmentManager, FeedReportDoneDialogFragment.TAG)
     }
 
     companion object {
