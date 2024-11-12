@@ -190,6 +190,13 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wll_my_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
