@@ -10,7 +10,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityOnboardingBinding
-import com.teamwss.websoso.ui.login.LoginActivity
+import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 import com.teamwss.websoso.ui.onboarding.welcome.WelcomeActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,8 +25,8 @@ class OnboardingActivity :
         super.onCreate(savedInstanceState)
 
         intent?.let {
-            val accessToken = it.getStringExtra(LoginActivity.ACCESS_TOKEN_KEY).orEmpty()
-            val refreshToken = it.getStringExtra(LoginActivity.REFRESH_TOKEN_KEY).orEmpty()
+            val accessToken = it.getStringExtra(ACCESS_TOKEN_KEY).orEmpty()
+            val refreshToken = it.getStringExtra(REFRESH_TOKEN_KEY).orEmpty()
             viewModel.setTokens(accessToken, refreshToken)
         }
 
@@ -90,8 +90,17 @@ class OnboardingActivity :
     companion object {
         private const val ANIMATION_PROPERTY_NAME = "progress"
         private const val ANIMATION_DURATION_TIME = 200L
+        const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN"
+        const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN"
 
         fun getIntent(context: Context): Intent =
             Intent(context, OnboardingActivity::class.java)
+
+        fun getIntent(context: Context, accessToken: String, refreshToken: String): Intent {
+            return Intent(context, OnboardingActivity::class.java).apply {
+                putExtra(ACCESS_TOKEN_KEY, accessToken)
+                putExtra(REFRESH_TOKEN_KEY, refreshToken)
+            }
+        }
     }
 }

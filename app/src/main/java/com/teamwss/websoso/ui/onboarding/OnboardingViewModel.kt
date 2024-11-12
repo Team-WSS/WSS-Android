@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.onboarding
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -59,7 +58,6 @@ class OnboardingViewModel @Inject constructor(
     private var refreshToken: String = ""
 
     fun setTokens(accessToken: String, refreshToken: String) {
-        Log.d("asdf", accessToken + "\n" + refreshToken)
         this.accessToken = accessToken
         this.refreshToken = refreshToken
     }
@@ -238,7 +236,7 @@ class OnboardingViewModel @Inject constructor(
             }.onSuccess {
                 authRepository.saveAccessToken(accessToken)
                 authRepository.saveRefreshToken(refreshToken)
-                authRepository.setAutoLoginConfigured(true)
+                authRepository.setAutoLogin(true)
                 _isUserProfileSubmit.value = true
             }.onFailure { exception ->
                 exception.printStackTrace()
