@@ -70,7 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text='@{String.valueOf(otherUserLibraryViewModel.novelStats.interestNovelCount)}'
+                        android:text='@{String.valueOf(otherUserLibraryViewModel.uiState.novelStats.interestNovelCount)}'
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12" />
@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text='@{String.valueOf(otherUserLibraryViewModel.novelStats.watchingNovelCount)}'
+                        android:text='@{String.valueOf(otherUserLibraryViewModel.uiState.novelStats.watchingNovelCount)}'
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12" />
@@ -135,7 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text='@{String.valueOf(otherUserLibraryViewModel.novelStats.watchedNovelCount)}'
+                        android:text='@{String.valueOf(otherUserLibraryViewModel.uiState.novelStats.watchedNovelCount)}'
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12" />
@@ -165,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@{String.valueOf(otherUserLibraryViewModel.novelStats.quitNovelCount)}"
+                        android:text="@{String.valueOf(otherUserLibraryViewModel.uiState.novelStats.quitNovelCount)}"
                         android:textAppearance="@style/title2"
                         android:textColor="@color/black"
                         tools:text="12" />
@@ -289,7 +289,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="@{otherUserLibraryViewModel.topGenres[0].genreName}"
+                            android:text="@{otherUserLibraryViewModel.uiState.topGenres[0].genreName}"
                             android:textAppearance="@style/title3"
                             android:textColor="@color/black"
                             tools:text="로판" />
@@ -299,7 +299,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.topGenres[0].genreCount)}'
+                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.uiState.topGenres[0].genreCount)}'
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             tools:text="12편" />
@@ -325,7 +325,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="@{otherUserLibraryViewModel.topGenres[1].genreName}"
+                            android:text="@{otherUserLibraryViewModel.uiState.topGenres[1].genreName}"
                             android:textAppearance="@style/title3"
                             android:textColor="@color/black"
                             tools:text="로판" />
@@ -335,7 +335,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.topGenres[1].genreCount)}'
+                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.uiState.topGenres[1].genreCount)}'
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             tools:text="12편" />
@@ -361,7 +361,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="@{otherUserLibraryViewModel.topGenres[2].genreName}"
+                            android:text="@{otherUserLibraryViewModel.uiState.topGenres[2].genreName}"
                             android:textAppearance="@style/title3"
                             android:textColor="@color/black"
                             tools:text="로판" />
@@ -371,7 +371,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.topGenres[2].genreCount)}'
+                            android:text='@{String.format(@string/other_user_library_genre_count, otherUserLibraryViewModel.uiState.topGenres[2].genreCount)}'
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_200_AEADB3"
                             tools:text="12편" />
@@ -397,7 +397,7 @@
                     android:layout_marginTop="20dp"
                     android:onClick="@{() -> otherUserLibraryViewModel.updateToggleGenresVisibility()}"
                     android:padding="8dp"
-                    android:src="@{otherUserLibraryViewModel.isGenreListVisible ? @drawable/ic_my_library_upper_path : @drawable/ic_my_library_lower_path}"
+                    android:src="@{otherUserLibraryViewModel.uiState.isGenreListVisible ? @drawable/ic_my_library_upper_path : @drawable/ic_my_library_lower_path}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lv_other_user_library_rest_genre" />
@@ -458,6 +458,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wll_other_user_library"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
