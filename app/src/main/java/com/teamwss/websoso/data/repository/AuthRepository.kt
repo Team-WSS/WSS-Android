@@ -51,9 +51,10 @@ class AuthRepository @Inject constructor(
     suspend fun logout() {
         runCatching {
             val refreshToken = fetchRefreshToken()
-            if (refreshToken.isNotEmpty()) {
+            val accessToken = fetchAccessToken()
+            if (accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
                 val logoutRequest = LogoutRequestDto(refreshToken)
-                authApi.logout(logoutRequest)
+                authApi.logout("Bearer $accessToken", logoutRequest)
             }
         }.onSuccess {
             clearTokens()

@@ -38,6 +38,7 @@ interface AuthApi {
 
     @POST("auth/logout")
     suspend fun logout(
+        @Header("Authorization") authorization: String,
         @Body loginResponseDto: LogoutRequestDto,
-    ): Unit
+    )
 }
