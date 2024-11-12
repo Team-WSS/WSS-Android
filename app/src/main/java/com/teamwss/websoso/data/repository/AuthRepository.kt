@@ -11,6 +11,7 @@ import com.teamwss.websoso.data.remote.api.AuthApi
 import com.teamwss.websoso.data.remote.request.LogoutRequestDto
 import com.teamwss.websoso.data.remote.request.TokenReissueRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
+import com.teamwss.websoso.data.remote.request.WithdrawRequestDto
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -53,8 +54,7 @@ class AuthRepository @Inject constructor(
             val refreshToken = fetchRefreshToken()
             val accessToken = fetchAccessToken()
             if (accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
-                val logoutRequest = LogoutRequestDto(refreshToken)
-                authApi.logout("Bearer $accessToken", logoutRequest)
+                authApi.logout("Bearer $accessToken", LogoutRequestDto(refreshToken))
             }
         }.onSuccess {
             clearTokens()
@@ -63,13 +63,27 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun isAutoLoginConfigured(): Boolean {
-        return authStorage.data.first()[AUTO_LOGIN_CONFIGURED_KEY] ?: false
+    suspend fun withdraw(reason: String) {
+        runCatching {
+            val refreshToken = fetchRefreshToken()
+            val accessToken = fetchAccessToken()
+            if (accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
+                authApi.withdraw("Bearer $accessToken", WithdrawRequestDto(reason, refreshToken))
+            }
+        }.onSuccess {
+            clearTokens()
+        }.onFailure {
+            it.printStackTrace()
+        }
     }
 
-    suspend fun setAutoLoginConfigured(configured: Boolean) {
+    suspend fun isAutoLogin(): Boolean {
+        return authStorage.data.first()[AUTO_LOGIN_KEY] ?: false
+    }
+
+    suspend fun setAutoLogin(autoLogin: Boolean) {
         authStorage.edit { preferences ->
-            preferences[AUTO_LOGIN_CONFIGURED_KEY] = configured
+            preferences[AUTO_LOGIN_KEY] = autoLogin
         }
     }
 
@@ -100,8 +114,8 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun reissueToken(refreshToken: String): String? {
-        val reissueRequest = TokenReissueRequestDto(refreshToken)
+    suspend fun reissueToken(): String? {
+        val reissueRequest = TokenReissueRequestDto(fetchRefreshToken())
         return try {
             val response = authApi.reissueToken(reissueRequest)
             saveAccessToken(response.authorization)
@@ -115,6 +129,6 @@ class AuthRepository @Inject constructor(
     companion object {
         private val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN")
         private val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
-        private val AUTO_LOGIN_CONFIGURED_KEY = booleanPreferencesKey("AUTO_LOGIN_CONFIGURED")
+        private val AUTO_LOGIN_KEY = booleanPreferencesKey("AUTO_LOGIN")
     }
 }

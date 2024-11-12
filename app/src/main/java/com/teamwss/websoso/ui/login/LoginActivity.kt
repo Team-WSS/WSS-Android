@@ -5,12 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.Toast
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.data.remote.service.OAuthService
+import com.teamwss.websoso.common.ui.custom.WebsosoCustomToast
+import com.teamwss.websoso.data.remote.api.OAuthService
 import com.teamwss.websoso.databinding.ActivityLoginBinding
 import com.teamwss.websoso.ui.login.adapter.ImageViewPagerAdapter
 import com.teamwss.websoso.ui.login.model.LoginUiState
@@ -38,7 +39,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         onWithoutLoginButtonClick()
         onKakaoLoginButtonClick()
         startAutoScroll()
-        viewModel.autoLogin()
     }
 
     private fun setupObserver() {
@@ -51,26 +51,38 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
         viewModel.loginUiState.observe(this) { state ->
             when (state) {
+                is LoginUiState.Loading -> {
+                    binding.wllLogin.visibility = View.VISIBLE
+                }
+
                 is LoginUiState.Success -> {
-                    if (state.isRegistered) {
-                        startActivity(MainActivity.getIntent(this@LoginActivity))
-                    } else {
-                        startActivity(
-                            OnboardingActivity.getIntent(this@LoginActivity).apply {
-                                putExtra(ACCESS_TOKEN_KEY, state.accessToken)
-                                putExtra(REFRESH_TOKEN_KEY, state.refreshToken)
-                            }
-                        )
+                    binding.wllLogin.visibility = View.INVISIBLE
+
+                    when (state.isRegistered) {
+                        true -> {
+                            startActivity(MainActivity.getIntent(this@LoginActivity))
+                        }
+
+                        false -> {
+                            startActivity(
+                                OnboardingActivity.getIntent(
+                                    this@LoginActivity,
+                                    state.accessToken,
+                                    state.refreshToken
+                                )
+                            )
+                        }
                     }
                     finish()
                 }
 
                 is LoginUiState.Failure -> {
-                    Toast.makeText(this, "로그인 실패: ${state.error.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    binding.wllLogin.visibility = View.INVISIBLE
                 }
 
-                is LoginUiState.Idle -> {}
+                is LoginUiState.Idle -> {
+                    binding.wllLogin.visibility = View.INVISIBLE
+                }
             }
         }
     }
@@ -81,7 +93,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun onWithoutLoginButtonClick() {
         binding.tvLoginWithoutLogin.setOnClickListener {
-            startActivity(MainActivity.getIntent(this))
+            startActivity(MainActivity.getIntent(this, false))
         }
     }
 
@@ -93,11 +105,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 }.onSuccess { token ->
                     viewModel.loginWithKakao(token.accessToken)
                 }.onFailure { error ->
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "로그인 실패: ${error.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    WebsosoCustomToast.make(this@LoginActivity)
+                        .setText("카카오톡 소셜 로그인에 실패했어요")
+                        .setIcon(R.drawable.ic_novel_rating_alert)
+                        .show()
                 }
             }
         }
@@ -127,8 +138,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     companion object {
         private const val PAGE_SCROLL_DELAY = 2000L
-        const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN"
-        const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN"
 
         fun getIntent(context: Context): Intent {
             return Intent(context, LoginActivity::class.java).apply {

@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,39 +32,23 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun autoLogin() {
-        viewModelScope.launch {
-            val isConfigured = authRepository.isAutoLoginConfigured()
-            if (isConfigured) {
-                val accessToken = authRepository.fetchAccessToken()
-                val refreshToken = authRepository.fetchRefreshToken()
-                _loginUiState.value = LoginUiState.Success(
-                    isRegistered = true,
-                    accessToken = accessToken,
-                    refreshToken = refreshToken
-                )
-            } else {
-                _loginUiState.value = LoginUiState.Idle
-            }
-        }
-    }
-
     fun loginWithKakao(accessToken: String) {
         viewModelScope.launch {
+            _loginUiState.value = LoginUiState.Loading
             runCatching {
                 authRepository.loginWithKakao(accessToken)
             }.onSuccess { loginEntity ->
+                if (loginEntity.isRegister) {
+                    authRepository.saveAccessToken(loginEntity.authorization)
+                    authRepository.saveRefreshToken(loginEntity.refreshToken)
+                    authRepository.setAutoLogin(true)
+                }
+
                 _loginUiState.value = LoginUiState.Success(
                     isRegistered = loginEntity.isRegister,
                     accessToken = loginEntity.authorization,
-                    refreshToken = loginEntity.refreshToken
+                    refreshToken = loginEntity.refreshToken,
                 )
-
-                if (loginEntity.isRegister && authRepository.isAutoLoginConfigured().not()) {
-                    authRepository.saveAccessToken(loginEntity.authorization)
-                    authRepository.saveRefreshToken(loginEntity.refreshToken)
-                    authRepository.setAutoLoginConfigured(true)
-                }
             }.onFailure { error ->
                 _loginUiState.value = LoginUiState.Failure(error)
             }
