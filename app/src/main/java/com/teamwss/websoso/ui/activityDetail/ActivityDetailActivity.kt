@@ -240,7 +240,7 @@ class ActivityDetailActivity :
                 novelId = feed.novelId ?: 0L,
                 novelTitle = feed.title ?: "",
                 feedContent = feed.feedContent,
-                feedCategory = feed.relevantCategories?.split(", ") ?: emptyList()
+                feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
             startActivity(CreateFeedActivity.getIntent(this, editFeedModel))
         } ?: throw IllegalArgumentException("Feed not found")
