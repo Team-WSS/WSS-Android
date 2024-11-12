@@ -101,7 +101,7 @@ class OtherUserPageActivity :
 
         val tabTitleItems = listOf(
             getText(R.string.other_user_page_library),
-            getText(R.string.other_user_page_activity)
+            getText(R.string.other_user_page_activity),
         )
         binding.vpOtherUserPage.adapter = OtherUserPageViewPagerAdapter(this, userId)
 
