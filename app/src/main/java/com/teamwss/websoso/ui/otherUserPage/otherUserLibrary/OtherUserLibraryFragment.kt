@@ -34,8 +34,8 @@ class OtherUserLibraryFragment :
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         updateUserId()
-        setUpRestGenrePreferenceAdapter()
-        setUpObserve()
+        setupRestGenrePreferenceAdapter()
+        setupObserve()
     }
 
     private fun bindViewModel() {
@@ -43,7 +43,7 @@ class OtherUserLibraryFragment :
         binding.otherUserLibraryViewModel = otherUserLibraryViewModel
     }
 
-    private fun setUpRestGenrePreferenceAdapter() {
+    private fun setupRestGenrePreferenceAdapter() {
         binding.lvOtherUserLibraryRestGenre.adapter = restGenrePreferenceAdapter
     }
 
@@ -52,7 +52,20 @@ class OtherUserLibraryFragment :
         otherUserLibraryViewModel.updateUserId(userId)
     }
 
-    private fun setUpObserve() {
+    private fun setupObserve() {
+        otherUserLibraryViewModel.novelStats.observe(viewLifecycleOwner) { stats ->
+            when (otherUserLibraryViewModel.hasNoPreferences(stats)) {
+                true -> {
+                    binding.clOtherUserLibraryKnownPreference.visibility = View.GONE
+                    binding.clOtherUserLibraryUnknownPreference.visibility = View.VISIBLE
+                }
+                false -> {
+                    binding.clOtherUserLibraryKnownPreference.visibility = View.VISIBLE
+                    binding.clOtherUserLibraryUnknownPreference.visibility = View.GONE
+                }
+            }
+        }
+
         otherUserLibraryViewModel.restGenres.observe(viewLifecycleOwner) { genres ->
             restGenrePreferenceAdapter.updateRestGenrePreferenceData(genres)
         }
