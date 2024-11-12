@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.mapper.toUi
+import com.teamwss.websoso.ui.userStorage.UserStorageActivity.Companion.SOURCE_MY_LIBRARY
 import com.teamwss.websoso.ui.userStorage.model.SortType
 import com.teamwss.websoso.ui.userStorage.model.StorageTab
 import com.teamwss.websoso.ui.userStorage.model.UserStorageUiState
@@ -22,11 +23,14 @@ class UserStorageViewModel @Inject constructor(
         MutableLiveData(UserStorageUiState())
     val uiState: LiveData<UserStorageUiState> get() = _uiState
 
-    init {
-        updateReadStatus(
-            StorageTab.INTEREST.readStatus,
-            forceLoad = true,
-        )
+    private var userId: Long = DEFAULT_USER_ID
+    private var source: String = SOURCE_MY_LIBRARY
+
+    fun updateUserStorage(source: String, receivedUserId: Long) {
+        this.source = source
+        this.userId = receivedUserId
+
+        updateReadStatus(StorageTab.INTEREST.readStatus, forceLoad = true)
     }
 
     fun updateReadStatus(
@@ -66,7 +70,7 @@ class UserStorageViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchUserStorage(
-                    userId = 2L,
+                    userId = userId,
                     readStatus = readStatus,
                     lastUserNovelId = _uiState.value?.lastUserNovelId ?: 0L,
                     size = STORAGE_NOVEL_SIZE,
@@ -95,5 +99,6 @@ class UserStorageViewModel @Inject constructor(
 
     companion object {
         const val STORAGE_NOVEL_SIZE = 20
+        const val DEFAULT_USER_ID = -1L
     }
 }
