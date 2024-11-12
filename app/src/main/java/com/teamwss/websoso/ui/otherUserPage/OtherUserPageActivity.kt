@@ -75,6 +75,16 @@ class OtherUserPageActivity :
         otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
             setUpMyProfileImage(otherUserProfile.avatarImage.orEmpty())
         }
+
+        otherUserPageViewModel.otherUserProfile.observe(this) { profile ->
+            if (profile.isProfilePublic) {
+                binding.vpOtherUserPage.visibility = View.VISIBLE
+                binding.clOtherUserPageNoPublic.visibility = View.GONE
+            } else {
+                binding.vpOtherUserPage.visibility = View.GONE
+                binding.clOtherUserPageNoPublic.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setUpMyProfileImage(otherUserProfileUrl: String) {
@@ -91,7 +101,7 @@ class OtherUserPageActivity :
 
         val tabTitleItems = listOf(
             getText(R.string.other_user_page_library),
-            getText(R.string.other_user_page_activity)
+            getText(R.string.other_user_page_activity),
         )
         binding.vpOtherUserPage.adapter = OtherUserPageViewPagerAdapter(this, userId)
 

@@ -1,15 +1,23 @@
 package com.teamwss.websoso.ui.main.myPage.myActivity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
+import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
+import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
+import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
+import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
+import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType
 import com.teamwss.websoso.ui.main.myPage.MyPageViewModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
@@ -26,6 +34,7 @@ class MyActivityFragment :
     private val myActivityAdapter: MyActivityAdapter by lazy {
         MyActivityAdapter(onClickFeedItem())
     }
+    private var _popupWindow: PopupWindow? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,11 +48,11 @@ class MyActivityFragment :
     }
 
     private fun setupObserver() {
-        myActivityViewModel.myActivity.observe(viewLifecycleOwner) { activities ->
+        myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
 
-            when (activities.isNullOrEmpty()) {
+            when (uiState.activities.isNullOrEmpty()) {
                 true -> {
                     binding.clMyActivityExistsNull.visibility = View.VISIBLE
                     binding.nsMyActivityExists.visibility = View.GONE
@@ -62,8 +71,8 @@ class MyActivityFragment :
                     avatarImage = myProfileEntity.avatarImage,
                 )
                 updateAdapterWithActivitiesAndProfile(
-                    myActivityViewModel.myActivity.value,
-                    userProfile
+                    myActivityViewModel.myActivityUiState.value?.activities,
+                    userProfile,
                 )
             }
         }
@@ -110,8 +119,7 @@ class MyActivityFragment :
         }
 
         override fun onLikeButtonClick(view: View, feedId: Long) {
-            val likeCountTextView: TextView =
-                view.findViewById(R.id.tv_my_activity_thumb_up_count)
+            val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
             val currentLikeCount = likeCountTextView.text.toString().toInt()
 
             val updatedLikeCount: Int = if (view.isSelected) {
@@ -131,12 +139,64 @@ class MyActivityFragment :
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long) {
-            // TODO 팝업메뉴 수정 and 차단
+            showPopupMenu(view, feedId)
         }
+    }
+
+    private fun showPopupMenu(view: View, feedId: Long) {
+        val inflater = LayoutInflater.from(requireContext())
+        val binding = MenuMyActivityPopupBinding.inflate(inflater)
+
+        _popupWindow?.dismiss()
+        _popupWindow = PopupWindow(
+            binding.root,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = POPUP_ELEVATION
+            showAsDropDown(view)
+        }
+
+        binding.tvMyActivityModification.setOnClickListener {
+            navigateToFeedEdit(feedId)
+            _popupWindow?.dismiss()
+        }
+
+        binding.tvMyActivityPopupDeletion.setOnClickListener {
+            showRemovedDialog(feedId)
+            _popupWindow?.dismiss()
+        }
+    }
+
+    fun navigateToFeedEdit(feedId: Long) {
+        val activityModel =
+            myActivityViewModel.myActivityUiState.value?.activities?.find { it.feedId == feedId }
+        activityModel?.let { feed ->
+            val editFeedModel = EditFeedModel(
+                feedId = feed.feedId,
+                novelId = feed.novelId ?: 0L,
+                novelTitle = feed.title ?: "",
+                feedContent = feed.feedContent,
+                feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
+            )
+            startActivity(CreateFeedActivity.getIntent(requireContext(), editFeedModel))
+        } ?: throw IllegalArgumentException("Feed not found")
+    }
+
+    private fun showRemovedDialog(feedId: Long) {
+        val dialogFragment = FeedRemoveDialogFragment.newInstance(
+            menuType = RemoveMenuType.REMOVE_FEED.name,
+            event = {
+                myActivityViewModel.updateRemovedFeed(feedId)
+            }
+        )
+        dialogFragment.show(parentFragmentManager, FeedRemoveDialogFragment.TAG)
     }
 
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_MY_ACTIVITY = "myActivity"
+        const val POPUP_ELEVATION = 2f
     }
 }
