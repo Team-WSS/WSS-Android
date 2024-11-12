@@ -89,6 +89,16 @@ class ActivityDetailActivity :
 
     private fun setupObserver() {
         activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllActivityDetail.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllActivityDetail.setWebsosoLoadingVisibility(false)
+                }
+            }
+        }
+
+        activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
         }
@@ -107,9 +117,9 @@ class ActivityDetailActivity :
             }
 
             SOURCE_OTHER_USER_ACTIVITY -> {
-                otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
-                    otherUserProfile?.let {
-                        val userProfile = otherUserProfile.toUserProfileModel()
+                otherUserPageViewModel.uiState.observe(this) { uiState ->
+                    uiState.otherUserProfile?.let {
+                        val userProfile = uiState.otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
                             activityDetailViewModel.activityDetailUiState.value?.activities,
                             userProfile,
@@ -141,7 +151,7 @@ class ActivityDetailActivity :
             }
 
             SOURCE_OTHER_USER_ACTIVITY -> {
-                otherUserPageViewModel.otherUserProfile.value?.toUserProfileModel()
+                otherUserPageViewModel.uiState.value?.otherUserProfile?.toUserProfileModel()
             }
 
             else -> null
