@@ -3,6 +3,7 @@ package com.teamwss.websoso.data.remote.api
 import com.teamwss.websoso.data.remote.request.LogoutRequestDto
 import com.teamwss.websoso.data.remote.request.TokenReissueRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
+import com.teamwss.websoso.data.remote.request.WithdrawRequestDto
 import com.teamwss.websoso.data.remote.response.KakaoLoginResponseDto
 import com.teamwss.websoso.data.remote.response.KakaoTokenReissueResponseDto
 import com.teamwss.websoso.data.remote.response.UserNicknameValidityResponseDto
@@ -31,7 +32,7 @@ interface AuthApi {
         @Body userProfileRequestDto: UserProfileRequestDto,
     )
 
-    @POST("auth/reissue")
+    @POST("reissue")
     suspend fun reissueToken(
         @Body tokenReissueRequestDto: TokenReissueRequestDto,
     ): KakaoTokenReissueResponseDto
@@ -40,5 +41,11 @@ interface AuthApi {
     suspend fun logout(
         @Header("Authorization") authorization: String,
         @Body loginResponseDto: LogoutRequestDto,
+    )
+
+    @POST("auth/withdraw")
+    suspend fun withdraw(
+        @Header("Authorization") authorization: String,
+        @Body withdrawRequestDto: WithdrawRequestDto,
     )
 }

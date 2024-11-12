@@ -5,12 +5,15 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
+class WithdrawSecondViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+) : ViewModel() {
     private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
     val withdrawReason: LiveData<String> get() = _withdrawReason
 
@@ -19,6 +22,9 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
 
     private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
+
+    private val _isWithDrawSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithDrawSuccess: LiveData<Boolean> get() = _isWithDrawSuccess
 
     val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
 
@@ -61,18 +67,18 @@ class WithdrawSecondViewModel @Inject constructor() : ViewModel() {
         _isWithdrawCheckAgree.value = isWithdrawCheckAgree.value?.not()
     }
 
-    fun saveWithdrawReason() {
+    fun withdraw() {
         viewModelScope.launch {
             runCatching {
                 val withdrawReason = when (withdrawReason.value) {
                     ETC_INPUT_REASON -> withdrawEtcReason.value
                     else -> withdrawReason.value
-                }
-                // TODO: API 개발 완료 시 reason을 사용하여 회원 탈퇴 진행
+                }?:""
+                authRepository.withdraw(withdrawReason)
             }.onSuccess {
-                // TODO: 성공 처리
+                _isWithDrawSuccess.value = true
             }.onFailure {
-                // TODO: 실패 처리
+                _isWithDrawSuccess.value = false
             }
         }
     }
