@@ -26,11 +26,17 @@ class UserStorageViewModel @Inject constructor(
     private var userId: Long = DEFAULT_USER_ID
     private var source: String = SOURCE_MY_LIBRARY
 
-    fun updateUserStorage(source: String, receivedUserId: Long) {
+    fun updateUserStorage(
+        source: String,
+        receivedUserId: Long,
+    ) {
         this.source = source
         this.userId = receivedUserId
 
-        updateReadStatus(StorageTab.INTEREST.readStatus, forceLoad = true)
+        updateReadStatus(
+            StorageTab.INTEREST.readStatus,
+            forceLoad = true,
+        )
     }
 
     fun updateReadStatus(
