@@ -306,7 +306,7 @@
     <string name="withdraw_check_do_not_recover">삭제된 계정 정보는 복구할 수 없어요</string>
     <string name="withdraw_check_do_not_recover_description">회원님이 평가하고 기록한 서재 정보와 계정 정보는\n탈퇴 즉시 삭제되며, 절대 복구할 수 없어요.</string>
     <string name="withdraw_check_is_not_automatically_deleted_post">게시글 및 댓글은 자동 삭제되지 않아요</string>
-    <string name="withdraw_check_is_not_automatically_deleted_post_description">리뷰, 피드 게시글, 댓글은 탈퇴 시 자동으로 삭제되지\n않아요. 탈퇴 전 개별적으로 삭제해 주세요.</string>
+    <string name="withdraw_check_is_not_automatically_deleted_post_description">리뷰, 피드 게시글, 댓글은 탈퇴 시 자동으로 삭제되지 않아요.\n탈퇴 전 개별적으로 삭제해 주세요.</string>
     <string name="withdraw_check_re_sign_up">처음부터 다시 가입해야 해요</string>
     <string name="withdraw_check_re_sign_up_description">계정 정보는 탈퇴 즉시 삭제되어 바로 재가입 가능하지만,\n회원가입부터 작품 평가를 다시 해야 해요.</string>
     <string name="withdraw_check_agree">위 주의사항을 모두 확인했고, 탈퇴에 동의합니다.</string>
@@ -333,6 +333,9 @@
     <string name="my_activity_score_count">%.1f (%d)</string>
     <string name="my_activity_dot">·</string>
     <string name="my_activity_more">활동기록 더보기</string>
+    <string name="my_activity_emtpy">작성한 글이 없어요</string>
+    <string name="my_activity_modification">수정하기</string>
+    <string name="my_activity_deletion">삭제하기</string>
 
     <!-- 내 활동 디테일 뷰 -->
     <string name="my_activity_detail_title">내 활동</string>
@@ -341,6 +344,7 @@
     <string name="other_user_page_library">서재</string>
     <string name="other_user_page_activity">활동</string>
     <string name="other_user_page_popup_blocked_user_kebab_button">차단하기</string>
+    <string name="other_user_page_no_public">%1$s님의 프로필은\n비공개 상태에요</string>
     <string name="block_user_title">해당 유저를 차단할까요?</string>
     <string name="block_user_description">상대의 게시글, 댓글,\n프로필을 볼 수 없어요</string>
     <string name="block_user_button">차단</string>
@@ -386,4 +390,9 @@
     <string name="storage_oldest">오래된 순</string>
     <string name="storage_newest">최신 순</string>
     <string name="storage_novel_count">%d개</string>
+
+    <!-- 다른 유저 활동 뷰-->
+    <string name="other_user_activity_report_spoiler">스포일러 신고</string>
+    <string name="other_user_activity_report_expression">부적절한 표현 신고</string>
+    <string name="other_user_activity_emtpy">작성한 글이 없어요</string>
 </resources>

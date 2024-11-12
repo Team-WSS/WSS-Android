@@ -63,6 +63,13 @@ class OtherUserLibraryViewModel @Inject constructor(
         }
     }
 
+    fun hasNoPreferences(stats: UserNovelStatsEntity): Boolean {
+        return stats.interestNovelCount == 0 &&
+                stats.watchingNovelCount == 0 &&
+                stats.watchedNovelCount == 0 &&
+                stats.quitNovelCount == 0
+    }
+
     private fun updateGenrePreference(userId: Long) {
         viewModelScope.launch {
             runCatching {

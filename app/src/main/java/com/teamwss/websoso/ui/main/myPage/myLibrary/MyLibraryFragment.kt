@@ -45,6 +45,19 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     }
 
     private fun setUpObserve() {
+        myLibraryViewModel.novelStats.observe(viewLifecycleOwner) { stats ->
+            when (myLibraryViewModel.hasNoPreferences(stats)) {
+                true -> {
+                    binding.clMyLibraryKnownPreference.visibility = View.GONE
+                    binding.clMyLibraryUnknownPreference.visibility = View.VISIBLE
+                }
+                false -> {
+                    binding.clMyLibraryKnownPreference.visibility = View.VISIBLE
+                    binding.clMyLibraryUnknownPreference.visibility = View.GONE
+                }
+            }
+        }
+
         myLibraryViewModel.restGenres.observe(viewLifecycleOwner) { genres ->
             restGenrePreferenceAdapter.updateRestGenrePreferenceData(genres)
         }
