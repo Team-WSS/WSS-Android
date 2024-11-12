@@ -20,6 +20,8 @@ import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentOtherUserLibraryBinding
 import com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
+import com.teamwss.websoso.ui.userStorage.UserStorageActivity
+import com.teamwss.websoso.ui.userStorage.UserStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +38,7 @@ class OtherUserLibraryFragment :
         updateUserId()
         setupRestGenrePreferenceAdapter()
         setupObserve()
+        onStorageButtonClick()
     }
 
     private fun bindViewModel() {
@@ -75,9 +78,7 @@ class OtherUserLibraryFragment :
         }
 
         otherUserLibraryViewModel.translatedAttractivePoints.observe(viewLifecycleOwner) { translatedPoints ->
-            val combinedText =
-                translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text)
-            applyTextColors(combinedText)
+            applyTextColors(translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
         }
 
         otherUserLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
@@ -145,8 +146,7 @@ class OtherUserLibraryFragment :
 
     private fun updateNovelPreferencesKeywords(novelPreferences: NovelPreferenceEntity) {
         novelPreferences.keywords.forEach { keyword ->
-            val chip = createKeywordChip(keyword)
-            binding.wcgOtherUserLibraryAttractivePoints.addView(chip)
+            binding.wcgOtherUserLibraryAttractivePoints.addView(createKeywordChip(keyword))
         }
     }
 
@@ -172,6 +172,19 @@ class OtherUserLibraryFragment :
             }
         }
     }
+
+    private fun onStorageButtonClick() {
+        binding.ivOtherUserLibraryGoToStorage.setOnClickListener {
+            startActivity(
+                UserStorageActivity.getIntent(
+                    requireContext(),
+                    UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
+                    otherUserLibraryViewModel.userId.value ?: UserStorageViewModel.DEFAULT_USER_ID,
+                )
+            )
+        }
+    }
+
 
     companion object {
         private const val USER_ID_KEY = "USER_ID"
