@@ -68,7 +68,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                 OnboardingActivity.getIntent(
                                     this@LoginActivity,
                                     state.accessToken,
-                                    state.refreshToken
+                                    state.refreshToken,
                                 )
                             )
                         }
@@ -104,7 +104,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     kakaoAuthService.login()
                 }.onSuccess { token ->
                     viewModel.loginWithKakao(token.accessToken)
-                }.onFailure { error ->
+                }.onFailure {
                     WebsosoCustomToast.make(this@LoginActivity)
                         .setText("카카오톡 소셜 로그인에 실패했어요")
                         .setIcon(R.drawable.ic_novel_rating_alert)
