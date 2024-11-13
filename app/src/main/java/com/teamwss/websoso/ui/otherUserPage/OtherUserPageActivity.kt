@@ -72,12 +72,22 @@ class OtherUserPageActivity :
     }
 
     private fun setupObserver() {
-        otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
-            setUpMyProfileImage(otherUserProfile.avatarImage.orEmpty())
+        otherUserPageViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllOtherUserPage.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllOtherUserPage.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllOtherUserPage.setWebsosoLoadingVisibility(false)
+                }
+            }
         }
 
-        otherUserPageViewModel.otherUserProfile.observe(this) { profile ->
-            if (profile.isProfilePublic) {
+        otherUserPageViewModel.uiState.observe(this) { uiState ->
+            setUpMyProfileImage(uiState.otherUserProfile?.avatarImage.orEmpty())
+        }
+
+        otherUserPageViewModel.uiState.observe(this) { uiState ->
+            if (uiState.otherUserProfile?.isProfilePublic == true) {
                 binding.vpOtherUserPage.visibility = View.VISIBLE
                 binding.clOtherUserPageNoPublic.visibility = View.GONE
             } else {
