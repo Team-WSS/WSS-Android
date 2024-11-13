@@ -36,13 +36,13 @@ class AccountInfoViewModel @Inject constructor(
         }
     }
 
-    fun logout(){
+    fun logout() {
         viewModelScope.launch {
             runCatching {
                 authRepository.logout()
             }.onSuccess {
                 _isLogoutSuccess.value = true
-                authRepository.setAutoLogin(false)
+                authRepository.isAutoLogin = false
             }.onFailure {
                 _isLogoutSuccess.value = false
             }

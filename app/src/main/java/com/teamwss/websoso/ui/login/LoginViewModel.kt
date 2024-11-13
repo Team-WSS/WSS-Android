@@ -38,9 +38,9 @@ class LoginViewModel @Inject constructor(
                 authRepository.loginWithKakao(accessToken)
             }.onSuccess { loginEntity ->
                 if (loginEntity.isRegister) {
-                    authRepository.saveAccessToken(loginEntity.authorization)
-                    authRepository.saveRefreshToken(loginEntity.refreshToken)
-                    authRepository.setAutoLogin(true)
+                    authRepository.accessToken = loginEntity.authorization
+                    authRepository.refreshToken = loginEntity.refreshToken
+                    authRepository.isAutoLogin = true
                 }
 
                 _loginUiState.value = LoginUiState.Success(

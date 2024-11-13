@@ -234,9 +234,9 @@ class OnboardingViewModel @Inject constructor(
                     )
                 }
             }.onSuccess {
-                authRepository.saveAccessToken(accessToken)
-                authRepository.saveRefreshToken(refreshToken)
-                authRepository.setAutoLogin(true)
+                authRepository.accessToken = accessToken
+                authRepository.refreshToken = refreshToken
+                authRepository.isAutoLogin = true
                 _isUserProfileSubmit.value = true
             }.onFailure { exception ->
                 exception.printStackTrace()

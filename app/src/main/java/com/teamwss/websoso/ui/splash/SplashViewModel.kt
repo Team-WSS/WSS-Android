@@ -20,7 +20,7 @@ class SplashViewModel @Inject constructor(
 
     fun autoLogin() {
         viewModelScope.launch {
-            if (authRepository.isAutoLogin()) {
+            if (authRepository.isAutoLogin) {
                 runCatching {
                     delay(1000L)
                     authRepository.reissueToken()

@@ -25,11 +25,7 @@ class WebsosoAuthenticator @Inject constructor(
         }
 
         if (response.code == 401) {
-            val refreshToken = runBlocking {
-                authRepository.fetchRefreshToken()
-            }
-
-            if (refreshToken.isBlank()) {
+            if (authRepository.refreshToken.isBlank()) {
                 return null
             }
 

@@ -1,5 +1,6 @@
 package com.teamwss.websoso.data.di
 
+import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.teamwss.websoso.data.remote.api.AuthApi
@@ -39,6 +40,6 @@ object RepositoryModule {
     @Singleton
     fun provideAuthRepository(
         authApi: AuthApi,
-        authStorage: DataStore<Preferences>,
-    ): AuthRepository = AuthRepository(authApi, authStorage)
+        preferences: SharedPreferences,
+    ): AuthRepository = AuthRepository(authApi, preferences)
 }
