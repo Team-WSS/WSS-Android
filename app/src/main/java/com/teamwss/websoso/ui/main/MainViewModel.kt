@@ -23,7 +23,7 @@ class MainViewModel @Inject constructor(
     val isLogin: LiveData<Boolean> get() = _isLogin
 
     fun setIsLogin(isLogin: Boolean) {
-        this._isLogin.value = isLogin
+        _isLogin.value = isLogin
     }
 
     fun updateUserInfo() {

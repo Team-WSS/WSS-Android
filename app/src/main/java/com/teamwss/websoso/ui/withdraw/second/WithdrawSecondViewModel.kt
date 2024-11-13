@@ -73,7 +73,7 @@ class WithdrawSecondViewModel @Inject constructor(
                 val withdrawReason = when (withdrawReason.value) {
                     ETC_INPUT_REASON -> withdrawEtcReason.value
                     else -> withdrawReason.value
-                }?:""
+                } ?: ""
                 authRepository.withdraw(withdrawReason)
             }.onSuccess {
                 _isWithDrawSuccess.value = true
