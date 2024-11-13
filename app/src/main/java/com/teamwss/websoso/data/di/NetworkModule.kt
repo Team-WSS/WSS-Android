@@ -61,7 +61,7 @@ object NetworkModule {
     fun provideSecuredOkHttpClient(
         @Log logInterceptor: Interceptor,
         @Auth authInterceptor: Interceptor,
-        websosoAuthenticator: WebsosoAuthenticator
+        websosoAuthenticator: WebsosoAuthenticator,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
         .addInterceptor(authInterceptor)
@@ -75,7 +75,7 @@ object NetworkModule {
     @Singleton
     @Unsecured
     fun provideUnsecuredOkHttpClient(
-        @Log logInterceptor: Interceptor
+        @Log logInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
         .connectTimeout(60, TimeUnit.SECONDS)
