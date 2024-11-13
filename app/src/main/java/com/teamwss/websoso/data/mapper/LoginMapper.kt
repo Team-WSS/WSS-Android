@@ -7,6 +7,6 @@ fun KakaoLoginResponseDto.toData(): LoginEntity {
     return LoginEntity(
         authorization = this.authorization,
         refreshToken = this.refreshToken,
-        isRegister = this.isRegister
+        isRegister = this.isRegister,
     )
 }
