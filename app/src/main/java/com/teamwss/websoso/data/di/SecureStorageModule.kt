@@ -30,13 +30,13 @@ object SecureStorageModule {
                 createEncryptedSharedPreferences(APP_PREFERENCES_NAME, context)
             } catch (e: GeneralSecurityException) {
                 deleteMasterKeyEntry()
-                deleteExistingPref(APP_PREFERENCES_NAME, context)
+                deleteExistingPreferences(APP_PREFERENCES_NAME, context)
                 createEncryptedSharedPreferences(APP_PREFERENCES_NAME, context)
             }
         }
     }
 
-    private fun deleteExistingPref(fileName: String, context: Context) {
+    private fun deleteExistingPreferences(fileName: String, context: Context) {
         context.deleteSharedPreferences(fileName)
     }
 
@@ -60,7 +60,7 @@ object SecureStorageModule {
             fileName,
             masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
         )
     }
 }
