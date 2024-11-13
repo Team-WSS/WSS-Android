@@ -1,11 +1,9 @@
 package com.teamwss.websoso.ui.main.myPage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.main.myPage.model.MyPageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,10 +16,6 @@ class MyPageViewModel @Inject constructor(
 ) : ViewModel() {
     private val _myPageUiState = MutableLiveData<MyPageUiState>()
     val myPageUiState: LiveData<MyPageUiState> get() = _myPageUiState
-
-
-    private val _myProfile = MutableLiveData<MyProfileEntity>()
-    val myProfile: LiveData<MyProfileEntity> get() = _myProfile
 
     init {
         updateUserProfile()
