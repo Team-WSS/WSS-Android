@@ -17,7 +17,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _loginUiState = MutableLiveData<LoginUiState>()
-    val loginUiState: LiveData<LoginUiState> = _loginUiState
+    val loginUiState: LiveData<LoginUiState> get() = _loginUiState
 
     private val _loginImages = MutableLiveData<List<Int>>()
     val loginImages: LiveData<List<Int>> = _loginImages
