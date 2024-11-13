@@ -45,39 +45,36 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     }
 
     private fun setUpObserve() {
-        myLibraryViewModel.novelStats.observe(viewLifecycleOwner) { stats ->
-            when (myLibraryViewModel.hasNoPreferences(stats)) {
-                true -> {
-                    binding.clMyLibraryKnownPreference.visibility = View.GONE
-                    binding.clMyLibraryUnknownPreference.visibility = View.VISIBLE
+        myLibraryViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            uiState?.let {
+                when {
+                    uiState.isLoading -> binding.wllMyLibrary.setWebsosoLoadingVisibility(true)
+                    uiState.error -> binding.wllMyLibrary.setLoadingLayoutVisibility(false)
+                    !uiState.isLoading -> {
+                        binding.wllMyLibrary.setWebsosoLoadingVisibility(false)
+                    }
                 }
-                false -> {
-                    binding.clMyLibraryKnownPreference.visibility = View.VISIBLE
-                    binding.clMyLibraryUnknownPreference.visibility = View.GONE
+
+                when (myLibraryViewModel.hasNoPreferences()) {
+                    true -> {
+                        binding.clMyLibraryKnownPreference.visibility = View.GONE
+                        binding.clMyLibraryUnknownPreference.visibility = View.VISIBLE
+                    }
+
+                    false -> {
+                        binding.clMyLibraryKnownPreference.visibility = View.VISIBLE
+                        binding.clMyLibraryUnknownPreference.visibility = View.GONE
+                    }
                 }
+
+                restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
+                updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
+
+                uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
+                updateDominantGenres(uiState.topGenres)
+
+                applyTextColors(uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
             }
-        }
-
-        myLibraryViewModel.restGenres.observe(viewLifecycleOwner) { genres ->
-            restGenrePreferenceAdapter.updateRestGenrePreferenceData(genres)
-        }
-
-        myLibraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
-            updateRestGenrePreferenceVisibility(isVisible)
-        }
-
-        myLibraryViewModel.translatedAttractivePoints.observe(viewLifecycleOwner) { translatedPoints ->
-            val combinedText =
-                translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text)
-            applyTextColors(combinedText)
-        }
-
-        myLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
-            updateNovelPreferencesKeywords(novelPreferences)
-        }
-
-        myLibraryViewModel.topGenres.observe(viewLifecycleOwner) { topGenres ->
-            updateDominantGenres(topGenres)
         }
     }
 
