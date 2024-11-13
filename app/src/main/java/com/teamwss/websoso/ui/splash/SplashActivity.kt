@@ -16,11 +16,11 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setObserver()
+        setupObserver()
         splashViewModel.autoLogin()
     }
 
-    private fun setObserver() {
+    private fun setupObserver() {
         splashViewModel.isAutoLoginSuccess.observe(this) { isAutoLogin ->
             when (isAutoLogin) {
                 true -> navigateToMainActivity()

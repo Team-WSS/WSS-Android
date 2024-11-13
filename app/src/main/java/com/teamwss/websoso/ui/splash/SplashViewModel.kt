@@ -16,7 +16,7 @@ class SplashViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _isAutoLoginSuccess = MutableLiveData(false)
-    val isAutoLoginSuccess: LiveData<Boolean> = _isAutoLoginSuccess
+    val isAutoLoginSuccess: LiveData<Boolean> get() = _isAutoLoginSuccess
 
     fun autoLogin() {
         viewModelScope.launch {
