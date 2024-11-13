@@ -1,15 +1,20 @@
 package com.teamwss.websoso.ui.otherUserPage.otherUserActivity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.databinding.FragmentOtherUserActivityBinding
 import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
@@ -21,6 +26,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.Activ
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import com.teamwss.websoso.ui.otherUserPage.otherUserActivity.adapter.OtherUserActivityAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,19 +34,30 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OtherUserActivityFragment :
     BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
+
     private val otherUserActivityViewModel: OtherUserActivityViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
-    private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy {
-        OtherUserActivityAdapter(onClickFeedItem())
-    }
+    private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy { OtherUserActivityAdapter(onClickFeedItem()) }
     private var _popupWindow: PopupWindow? = null
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupActivityResultCallback()
         setupUserId()
         setupMyActivitiesAdapter()
         setupObserver()
         onActivityDetailButtonClick()
+    }
+
+    private fun setupActivityResultCallback() {
+        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
+                    otherUserActivityViewModel.updateRefreshedActivities()
+                }
+            }
+        }
     }
 
     private fun setupUserId() {
@@ -117,7 +134,7 @@ class OtherUserActivityFragment :
 
     private fun onClickFeedItem() = object : ActivityItemClickListener {
         override fun onContentClick(feedId: Long) {
-            startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+            activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
         }
 
         override fun onNovelInfoClick(novelId: Long) {
@@ -147,6 +164,10 @@ class OtherUserActivityFragment :
         override fun onMoreButtonClick(view: View, feedId: Long) {
             showPopupMenu(view, feedId)
         }
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showPopupMenu(view: View, feedId: Long) {

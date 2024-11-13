@@ -8,12 +8,16 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
+import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
 import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
@@ -34,6 +38,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,9 +46,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ActivityDetailActivity :
     BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
-    private val activityDetailAdapter: ActivityDetailAdapter by lazy {
-        ActivityDetailAdapter(onClickFeedItem())
-    }
+    private val activityDetailAdapter: ActivityDetailAdapter by lazy { ActivityDetailAdapter(onClickFeedItem()) }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
 
@@ -52,14 +55,35 @@ class ActivityDetailActivity :
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
     private var _popupWindow: PopupWindow? = null
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupActivityResultCallback()
         setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
         setupObserver()
         onBackButtonClick()
+    }
+
+    private fun setupActivityResultCallback() {
+        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                }
+                ResultFrom.FeedDetailRemoved.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                    showSnackBar(getString(R.string.feed_removed_feed_snackbar))
+                }
+                ResultFrom.BlockUser.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                    val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+                    showSnackBar(getString(R.string.block_user_success_message, nickname))
+                }
+            }
+        }
     }
 
     private fun setupUserIDAndSource() {
@@ -75,8 +99,8 @@ class ActivityDetailActivity :
 
     private fun setActivityTitle() {
         binding.tvActivityDetailTitle.text = when (source) {
-            SOURCE_MY_ACTIVITY -> getString(my_activity_detail_title)
-            SOURCE_OTHER_USER_ACTIVITY -> getString(other_user_page_activity)
+            SOURCE_MY_ACTIVITY -> getString(R.string.my_activity_detail_title)
+            SOURCE_OTHER_USER_ACTIVITY -> getString(R.string.other_user_page_activity)
             else -> ""
         }
     }
@@ -139,11 +163,9 @@ class ActivityDetailActivity :
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.myPageUiState.value?.myProfile?.toUserProfileModel()
             }
-
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.otherUserProfile.value?.toUserProfileModel()
             }
-
             else -> null
         }
     }
@@ -156,7 +178,7 @@ class ActivityDetailActivity :
 
     private fun onClickFeedItem() = object : ActivityItemClickListener {
         override fun onContentClick(feedId: Long) {
-            startActivity(FeedDetailActivity.getIntent(this@ActivityDetailActivity, feedId))
+            activityResultCallback.launch(FeedDetailActivity.getIntent(this@ActivityDetailActivity, feedId))
         }
 
         override fun onNovelInfoClick(novelId: Long) {
@@ -182,6 +204,10 @@ class ActivityDetailActivity :
         override fun onMoreButtonClick(view: View, feedId: Long) {
             showPopupMenu(view, feedId)
         }
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showPopupMenu(view: View, feedId: Long) {
@@ -242,7 +268,7 @@ class ActivityDetailActivity :
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
-            startActivity(CreateFeedActivity.getIntent(this, editFeedModel))
+            activityResultCallback.launch(CreateFeedActivity.getIntent(this, editFeedModel))
         } ?: throw IllegalArgumentException("Feed not found")
     }
 

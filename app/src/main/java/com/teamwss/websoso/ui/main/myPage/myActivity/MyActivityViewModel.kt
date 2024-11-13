@@ -35,6 +35,11 @@ class MyActivityViewModel @Inject constructor(
         updateMyActivities()
     }
 
+    fun updateRefreshedActivities() {
+        _lastFeedId.value = 0L
+        updateMyActivities()
+    }
+
     private fun updateMyActivities() {
         viewModelScope.launch {
             _myActivityUiState.value = _myActivityUiState.value?.copy(isLoading = true)
@@ -58,40 +63,38 @@ class MyActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateActivityLike(isLiked: Boolean, feedId: Long, currentLikeCount: Int) {
-        viewModelScope.launch {
-            runCatching {
-                if (isLiked) {
-                    feedRepository.saveLike(false, feedId)
-                } else {
-                    feedRepository.saveLike(true, feedId)
+    fun updateLike(selectedFeedId: Long, isLiked: Boolean, updatedLikeCount: Int) {
+        myActivityUiState.value?.let { myActivityUiState ->
+            val selectedFeed = myActivityUiState.activities.find { activityModel ->
+                activityModel.feedId == selectedFeedId
+            } ?: throw IllegalArgumentException()
+
+            if (selectedFeed.isLiked == isLiked) return
+
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.saveLike(selectedFeed.isLiked, selectedFeedId)
+                }.onSuccess {
+                    _myActivityUiState.value = myActivityUiState.copy(
+                        activities = myActivityUiState.activities.map { activityModel ->
+                            when (activityModel.feedId == selectedFeedId) {
+                                true -> activityModel.copy(
+                                    isLiked = isLiked,
+                                    likeCount = updatedLikeCount,
+                                )
+
+                                false -> activityModel
+                            }
+                        }
+                    )
+                }.onFailure {
+                    _myActivityUiState.value = myActivityUiState.copy(
+                        isLoading = false,
+                        error = true,
+                    )
                 }
-            }.onSuccess {
-                val newLikeCount = if (isLiked) currentLikeCount - 1 else currentLikeCount + 1
-                _myActivityUiState.value = _myActivityUiState.value?.copy(
-                    likeState = ActivityLikeState(feedId, !isLiked, newLikeCount),
-                )
-
-                saveActivityLikeState(feedId, !isLiked, newLikeCount)
-            }.onFailure {
-
             }
         }
-    }
-
-    private fun saveActivityLikeState(feedId: Long, isLiked: Boolean, likeCount: Int) {
-        _myActivityUiState.value = _myActivityUiState.value?.copy(
-            activities = _myActivityUiState.value?.activities?.map { activity ->
-                if (activity.feedId == feedId) {
-                    activity.copy(
-                        isLiked = isLiked,
-                        likeCount = likeCount,
-                    )
-                } else {
-                    activity
-                }
-            } ?: emptyList()
-        )
     }
 
     fun updateRemovedFeed(feedId: Long) {

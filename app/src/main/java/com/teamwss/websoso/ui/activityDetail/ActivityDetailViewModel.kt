@@ -46,6 +46,11 @@ class ActivityDetailViewModel @Inject constructor(
         _activityDetailUiState.value = ActivityDetailUiState()
     }
 
+    fun updateRefreshedActivities() {
+        _activityDetailUiState.value = _activityDetailUiState.value?.copy(lastFeedId = 0L)
+        updateUserActivities(userId)
+    }
+
     fun updateUserActivities(userId: Long) {
         this.userId = userId
         if (source == SOURCE_MY_ACTIVITY) {

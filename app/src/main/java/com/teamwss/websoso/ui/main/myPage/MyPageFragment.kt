@@ -17,6 +17,8 @@ import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.databinding.FragmentMyPageBinding
 import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
+import com.teamwss.websoso.ui.main.myPage.myActivity.MyActivityViewModel
+import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.profileEdit.ProfileEditActivity
 import com.teamwss.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
