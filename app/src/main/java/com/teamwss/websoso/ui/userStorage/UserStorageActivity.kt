@@ -78,6 +78,16 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     private fun setupObserver() {
         userStorageViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.loading -> binding.wllStorage.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllStorage.setLoadingLayoutVisibility(false)
+                !uiState.loading -> {
+                    binding.wllStorage.setWebsosoLoadingVisibility(false)
+                }
+            }
+        }
+
+        userStorageViewModel.uiState.observe(this) { uiState ->
             updateStorageNovel(uiState)
             binding.clStorageNull.visibility =
                 if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
