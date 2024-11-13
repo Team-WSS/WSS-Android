@@ -84,7 +84,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = uiState.value?.copy(
                     loading = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.popularFeeds.chunked(3)
+                    popularFeeds = popularFeeds.popularFeeds.chunked(3),
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(

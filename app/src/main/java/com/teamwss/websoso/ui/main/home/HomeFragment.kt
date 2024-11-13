@@ -108,7 +108,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             if (isLogin) {
                 updateViewVisibilityByLogin(
                     isLogin,
-                    mainViewModel.mainUiState.value?.nickname
+                    mainViewModel.mainUiState.value?.nickname,
                 )
             }
         }
