@@ -57,7 +57,7 @@ class OnboardingViewModel @Inject constructor(
     private var accessToken: String = ""
     private var refreshToken: String = ""
 
-    fun setTokens(accessToken: String, refreshToken: String) {
+    fun updateTokens(accessToken: String, refreshToken: String) {
         this.accessToken = accessToken
         this.refreshToken = refreshToken
     }

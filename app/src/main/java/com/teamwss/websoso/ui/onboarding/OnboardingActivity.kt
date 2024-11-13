@@ -10,7 +10,6 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityOnboardingBinding
-import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
 import com.teamwss.websoso.ui.onboarding.welcome.WelcomeActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +26,7 @@ class OnboardingActivity :
         intent?.let {
             val accessToken = it.getStringExtra(ACCESS_TOKEN_KEY).orEmpty()
             val refreshToken = it.getStringExtra(REFRESH_TOKEN_KEY).orEmpty()
-            viewModel.setTokens(accessToken, refreshToken)
+            viewModel.updateTokens(accessToken, refreshToken)
         }
 
         bindViewModel()
