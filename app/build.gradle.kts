@@ -108,4 +108,7 @@ dependencies {
 
     // KAKAO
     implementation("com.kakao.sdk:v2-user:2.15.0")
+
+    // Security
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }
