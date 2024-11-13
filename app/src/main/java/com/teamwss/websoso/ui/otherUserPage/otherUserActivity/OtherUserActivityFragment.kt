@@ -54,6 +54,16 @@ class OtherUserActivityFragment :
 
     private fun setupObserver() {
         otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllOtherUserActivity.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllOtherUserActivity.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllOtherUserActivity.setWebsosoLoadingVisibility(false)
+                }
+            }
+        }
+
+        otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
 
@@ -69,8 +79,8 @@ class OtherUserActivityFragment :
             }
         }
 
-        otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
-            otherUserProfile?.let {
+        otherUserPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            uiState.otherUserProfile?.let {
                 val userProfile = UserProfileModel(
                     nickname = it.nickname,
                     avatarImage = it.avatarImage,
@@ -98,10 +108,10 @@ class OtherUserActivityFragment :
     }
 
     private fun getUserProfile(): UserProfileModel {
-        val profile = otherUserPageViewModel.otherUserProfile.value
+        val profile = otherUserPageViewModel.uiState.value?.otherUserProfile
         return UserProfileModel(
             nickname = profile?.nickname.orEmpty(),
-            avatarImage = profile?.avatarImage.orEmpty()
+            avatarImage = profile?.avatarImage.orEmpty(),
         )
     }
 
