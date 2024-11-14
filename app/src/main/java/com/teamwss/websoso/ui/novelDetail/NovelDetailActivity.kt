@@ -37,6 +37,7 @@ import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
+import com.teamwss.websoso.ui.userStorage.UserStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,7 +45,6 @@ class NovelDetailActivity :
     BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
-
     private var _novelDetailMenuPopupBinding: MenuNovelDetailPopupBinding? = null
     private val novelDetailMenuPopupBinding get() = _novelDetailMenuPopupBinding ?: error("")
     private val novelDetailToolTipBinding: ItemNovelDetailTooltipBinding by lazy {
@@ -55,15 +55,17 @@ class NovelDetailActivity :
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
     private val novelDetailResultLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
-                NovelRating.RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
-                CreateFeed.RESULT_OK -> novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                NovelRating.RESULT_OK -> {
+                    novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                    setResult(NovelDetailBack.RESULT_OK)
+                }
+                CreateFeed.RESULT_OK -> {
+                    novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                }
             }
         }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
