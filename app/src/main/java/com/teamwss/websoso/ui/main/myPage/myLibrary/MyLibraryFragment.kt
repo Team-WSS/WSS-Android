@@ -16,6 +16,7 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
@@ -31,6 +32,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val userStorageResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -162,12 +164,14 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
-            val intent = UserStorageActivity.getIntent(
-                context = requireContext(),
-                source = UserStorageActivity.SOURCE_MY_LIBRARY,
-                userId = myLibraryViewModel.userId
-            )
-            userStorageResultLauncher.launch(intent)
+            singleEventHandler.throttleFirst {
+                val intent = UserStorageActivity.getIntent(
+                    context = requireContext(),
+                    source = UserStorageActivity.SOURCE_MY_LIBRARY,
+                    userId = myLibraryViewModel.userId,
+                )
+                userStorageResultLauncher.launch(intent)
+            }
         }
     }
 

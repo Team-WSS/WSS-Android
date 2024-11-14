@@ -14,6 +14,7 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
@@ -31,6 +32,7 @@ class OtherUserLibraryFragment :
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -175,16 +177,18 @@ class OtherUserLibraryFragment :
 
     private fun onStorageButtonClick() {
         binding.ivOtherUserLibraryGoToStorage.setOnClickListener {
-            startActivity(
-                UserStorageActivity.getIntent(
-                    requireContext(),
-                    UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
-                    otherUserLibraryViewModel.userId.value ?: UserStorageViewModel.DEFAULT_USER_ID,
+            singleEventHandler.throttleFirst {
+                startActivity(
+                    UserStorageActivity.getIntent(
+                        requireContext(),
+                        UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
+                        otherUserLibraryViewModel.userId.value
+                            ?: UserStorageViewModel.DEFAULT_USER_ID,
+                    )
                 )
-            )
+            }
         }
     }
-
 
     companion object {
         private const val USER_ID_KEY = "USER_ID"
