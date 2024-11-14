@@ -17,15 +17,15 @@ class AuthRepository @Inject constructor(
 
     var accessToken: String
         get() = preferences.getString(ACCESS_TOKEN_KEY, "").orEmpty()
-        set(value) = preferences.edit().putString(ACCESS_TOKEN_KEY, value).apply()
+        private set(value) = preferences.edit().putString(ACCESS_TOKEN_KEY, value).apply()
 
     var refreshToken: String
         get() = preferences.getString(REFRESH_TOKEN_KEY, "").orEmpty()
-        set(value) = preferences.edit().putString(REFRESH_TOKEN_KEY, value).apply()
+        private set(value) = preferences.edit().putString(REFRESH_TOKEN_KEY, value).apply()
 
     var isAutoLogin: Boolean
         get() = preferences.getBoolean(AUTO_LOGIN_KEY, false)
-        set(value) = preferences.edit().putBoolean(AUTO_LOGIN_KEY, value).apply()
+        private set(value) = preferences.edit().putBoolean(AUTO_LOGIN_KEY, value).apply()
 
     suspend fun loginWithKakao(accessToken: String): LoginEntity {
         val response = authApi.loginWithKakao(accessToken)
@@ -93,6 +93,18 @@ class AuthRepository @Inject constructor(
             it.printStackTrace()
             null
         }
+    }
+
+    fun updateAccessToken(accessToken: String) {
+        this.accessToken = accessToken
+    }
+
+    fun updateRefreshToken(refreshToken: String) {
+        this.refreshToken = refreshToken
+    }
+
+    fun updateIsAutoLogin(isAutoLogin: Boolean) {
+        this.isAutoLogin = isAutoLogin
     }
 
     companion object {

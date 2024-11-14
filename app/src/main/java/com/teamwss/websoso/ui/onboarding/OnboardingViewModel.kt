@@ -60,11 +60,11 @@ class OnboardingViewModel @Inject constructor(
 
     var accessToken: String
         get() = savedStateHandle[ACCESS_TOKEN_KEY] ?: ""
-        set(value) { savedStateHandle[ACCESS_TOKEN_KEY] = value }
+        private set(value) { savedStateHandle[ACCESS_TOKEN_KEY] = value }
 
     var refreshToken: String
         get() = savedStateHandle[REFRESH_TOKEN_KEY] ?: ""
-        set(value) { savedStateHandle[REFRESH_TOKEN_KEY] = value }
+        private set(value) { savedStateHandle[REFRESH_TOKEN_KEY] = value }
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
@@ -238,9 +238,9 @@ class OnboardingViewModel @Inject constructor(
                     )
                 }
             }.onSuccess {
-                authRepository.accessToken = accessToken
-                authRepository.refreshToken = refreshToken
-                authRepository.isAutoLogin = true
+                authRepository.updateAccessToken(accessToken)
+                authRepository.updateRefreshToken(refreshToken)
+                authRepository.updateIsAutoLogin(true)
                 _isUserProfileSubmit.value = true
             }.onFailure { exception ->
                 exception.printStackTrace()

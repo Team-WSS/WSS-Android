@@ -46,9 +46,9 @@ class LoginViewModel @Inject constructor(
                 refreshToken = loginEntity.refreshToken
 
                 if (loginEntity.isRegister) {
-                    authRepository.accessToken = loginEntity.authorization
-                    authRepository.refreshToken = loginEntity.refreshToken
-                    authRepository.isAutoLogin = true
+                    authRepository.updateAccessToken(loginEntity.authorization)
+                    authRepository.updateRefreshToken(loginEntity.refreshToken)
+                    authRepository.updateIsAutoLogin(true)
                 }
 
                 _loginUiState.value = LoginUiState.Success(

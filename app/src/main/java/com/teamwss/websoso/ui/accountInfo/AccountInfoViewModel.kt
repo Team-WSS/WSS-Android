@@ -42,7 +42,7 @@ class AccountInfoViewModel @Inject constructor(
                 authRepository.logout()
             }.onSuccess {
                 _isLogoutSuccess.value = true
-                authRepository.isAutoLogin = false
+                authRepository.updateIsAutoLogin(false)
             }.onFailure {
                 _isLogoutSuccess.value = false
             }
