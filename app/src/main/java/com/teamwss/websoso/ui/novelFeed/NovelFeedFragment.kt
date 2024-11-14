@@ -15,12 +15,17 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
-import com.teamwss.websoso.R.*
-import com.teamwss.websoso.R.drawable.*
-import com.teamwss.websoso.R.string.*
+import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
+import com.teamwss.websoso.R.drawable.ic_novel_detail_check
+import com.teamwss.websoso.R.layout
+import com.teamwss.websoso.R.string.block_user_success_message
+import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
+import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.teamwss.websoso.R.string.other_user_page_withdraw_user
 import com.teamwss.websoso.common.ui.base.BaseFragment
-import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.WithdrawUser
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -247,7 +252,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
         activityResultCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    ResultFrom.OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
+                    OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
                         novelId
                     )
 
@@ -265,6 +270,14 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
                         )
 
                         novelFeedViewModel.updateRefreshedFeeds(novelId)
+                    }
+
+                    WithdrawUser.RESULT_OK -> {
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(other_user_page_withdraw_user),
+                            icon = ic_blocked_user_snack_bar,
+                        )
                     }
                 }
             }

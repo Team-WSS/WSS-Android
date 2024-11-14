@@ -20,22 +20,17 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.teamwss.websoso.R
 import com.teamwss.websoso.R.id.tv_feed_thumb_up_count
 import com.teamwss.websoso.R.layout.activity_feed_detail
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
-import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
-import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.hideKeyboard
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.common.util.toIntPxFromDp
 import com.teamwss.websoso.databinding.ActivityFeedDetailBinding
@@ -323,6 +318,14 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                         }
                         setResult(BlockUser.RESULT_OK, intent)
                         if (!isFinishing) finish()
+                    }
+
+                    WithdrawUser.RESULT_OK -> {
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(R.string.other_user_page_withdraw_user),
+                            icon = R.drawable.ic_blocked_user_snack_bar,
+                        )
                     }
                 }
             }

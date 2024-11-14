@@ -14,6 +14,7 @@ enum class ResultFrom {
     ProfileEditSuccess,
     OtherUserProfileBack,
     NovelRating,
+    WithdrawUser,
     ;
 
     val RESULT_OK: Int = ordinal + 1
