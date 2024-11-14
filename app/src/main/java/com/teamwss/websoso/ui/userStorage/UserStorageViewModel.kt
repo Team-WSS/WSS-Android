@@ -35,13 +35,8 @@ class UserStorageViewModel @Inject constructor(
     ) {
         this.source = source
         this.userId = receivedUserId
-    }
 
-    init {
-        updateReadStatus(
-            StorageTab.INTEREST.readStatus,
-            forceLoad = true,
-        )
+        updateReadStatus(StorageTab.INTEREST.readStatus, forceLoad = true)
     }
 
     fun updateRatingChanged() {
@@ -85,7 +80,7 @@ class UserStorageViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchUserStorage(
-                    userId = 2L,
+                    userId = userId,
                     readStatus = readStatus,
                     lastUserNovelId = _uiState.value?.lastUserNovelId ?: 0L,
                     size = STORAGE_NOVEL_SIZE,
