@@ -1,11 +1,13 @@
 package com.teamwss.websoso.ui.main.myPage.myLibrary
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -28,6 +30,11 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     private val myLibraryViewModel: MyLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
+    }
+    private val userStorageResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            myLibraryViewModel.updateMyLibrary() // 변경사항 반영을 위해 데이터 갱신
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -158,7 +165,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
             val intent = UserStorageActivity.getIntent(requireContext())
-            startActivity(intent)
+            userStorageResultLauncher.launch(intent) // ActivityResultLauncher를 사용하여 시작
         }
     }
 
@@ -172,10 +179,5 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                 2 -> binding.ivMyLibraryDominantGenreThirdLogo.load(updatedGenreImageUrl)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        myLibraryViewModel.updateMyLibrary()
     }
 }
