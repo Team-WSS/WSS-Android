@@ -26,7 +26,6 @@ class ActivityDetailViewModel @Inject constructor(
     val activityDetailUiState: LiveData<ActivityDetailUiState> get() = _activityDetailUiState
 
     private val _likeState = MutableLiveData<ActivityLikeState>()
-    val likeState: LiveData<ActivityLikeState> get() = _likeState
 
     private val size: Int = ACTIVITY_LOAD_SIZE
 
