@@ -23,12 +23,6 @@ class OnboardingActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        intent?.let {
-            val accessToken = it.getStringExtra(ACCESS_TOKEN_KEY).orEmpty()
-            val refreshToken = it.getStringExtra(REFRESH_TOKEN_KEY).orEmpty()
-            viewModel.updateTokens(accessToken, refreshToken)
-        }
-
         bindViewModel()
         setupViewPager()
         setupObserver()

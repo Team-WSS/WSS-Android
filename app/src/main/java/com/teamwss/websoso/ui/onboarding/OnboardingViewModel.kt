@@ -2,12 +2,15 @@ package com.teamwss.websoso.ui.onboarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.AuthRepository
 import com.teamwss.websoso.domain.model.NicknameValidationResult
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
+import com.teamwss.websoso.ui.onboarding.OnboardingActivity.Companion.ACCESS_TOKEN_KEY
+import com.teamwss.websoso.ui.onboarding.OnboardingActivity.Companion.REFRESH_TOKEN_KEY
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
@@ -22,6 +25,7 @@ class OnboardingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val validateNicknameUseCase: ValidateNicknameUseCase,
     private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _currentPage = MutableLiveData(OnboardingPage.FIRST)
     val currentPage: LiveData<OnboardingPage> get() = _currentPage
@@ -54,13 +58,13 @@ class OnboardingViewModel @Inject constructor(
     private val _isUserProfileSubmit = MutableLiveData<Boolean>(false)
     val isUserProfileSubmit: LiveData<Boolean> get() = _isUserProfileSubmit
 
-    private var accessToken: String = ""
-    private var refreshToken: String = ""
+    var accessToken: String
+        get() = savedStateHandle[ACCESS_TOKEN_KEY] ?: ""
+        set(value) { savedStateHandle[ACCESS_TOKEN_KEY] = value }
 
-    fun updateTokens(accessToken: String, refreshToken: String) {
-        this.accessToken = accessToken
-        this.refreshToken = refreshToken
-    }
+    var refreshToken: String
+        get() = savedStateHandle[REFRESH_TOKEN_KEY] ?: ""
+        set(value) { savedStateHandle[REFRESH_TOKEN_KEY] = value }
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
