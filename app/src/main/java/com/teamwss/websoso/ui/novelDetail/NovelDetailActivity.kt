@@ -45,8 +45,6 @@ class NovelDetailActivity :
     BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
-    private val userStorageViewModel: UserStorageViewModel by viewModels()
-
     private var _novelDetailMenuPopupBinding: MenuNovelDetailPopupBinding? = null
     private val novelDetailMenuPopupBinding get() = _novelDetailMenuPopupBinding ?: error("")
     private val novelDetailToolTipBinding: ItemNovelDetailTooltipBinding by lazy {

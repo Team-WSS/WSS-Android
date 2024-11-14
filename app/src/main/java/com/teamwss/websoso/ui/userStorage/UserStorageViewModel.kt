@@ -25,7 +25,6 @@ class UserStorageViewModel @Inject constructor(
     private val _isRatingChanged = MutableLiveData<Boolean>()
     val isRatingChanged: LiveData<Boolean> get() = _isRatingChanged
 
-
     init {
         updateReadStatus(
             StorageTab.INTEREST.readStatus,

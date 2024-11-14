@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.userStorage
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -128,6 +129,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     private fun onBackButtonClick() {
         binding.ivStorageDetailBackButton.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }
