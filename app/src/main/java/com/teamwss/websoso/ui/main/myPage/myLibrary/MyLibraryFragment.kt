@@ -56,35 +56,33 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun setUpObserve() {
         myLibraryViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            uiState?.let {
-                when {
-                    uiState.isLoading -> binding.wllMyLibrary.setWebsosoLoadingVisibility(true)
-                    uiState.error -> binding.wllMyLibrary.setLoadingLayoutVisibility(false)
-                    !uiState.isLoading -> {
-                        binding.wllMyLibrary.setWebsosoLoadingVisibility(false)
-                    }
+            when {
+                uiState.isLoading -> binding.wllMyLibrary.setWebsosoLoadingVisibility(true)
+                uiState.isError -> binding.wllMyLibrary.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllMyLibrary.setWebsosoLoadingVisibility(false)
                 }
-
-                when (myLibraryViewModel.hasNoPreferences()) {
-                    true -> {
-                        binding.clMyLibraryKnownPreference.visibility = View.GONE
-                        binding.clMyLibraryUnknownPreference.visibility = View.VISIBLE
-                    }
-
-                    false -> {
-                        binding.clMyLibraryKnownPreference.visibility = View.VISIBLE
-                        binding.clMyLibraryUnknownPreference.visibility = View.GONE
-                    }
-                }
-
-                restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
-                updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
-
-                uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
-                updateDominantGenres(uiState.topGenres)
-
-                applyTextColors(uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
             }
+
+            when (myLibraryViewModel.hasNoPreferences()) {
+                true -> {
+                    binding.clMyLibraryKnownPreference.visibility = View.GONE
+                    binding.clMyLibraryUnknownPreference.visibility = View.VISIBLE
+                }
+
+                false -> {
+                    binding.clMyLibraryKnownPreference.visibility = View.VISIBLE
+                    binding.clMyLibraryUnknownPreference.visibility = View.GONE
+                }
+            }
+
+            restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
+            updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
+
+            uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
+            updateDominantGenres(uiState.topGenres)
+
+            applyTextColors(uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
         }
     }
 
