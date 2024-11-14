@@ -53,13 +53,24 @@ class OtherUserActivityFragment :
     }
 
     private fun setupObserver() {
-        otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
+        otherUserPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.isLoading -> binding.wllOtherUserActivity.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllOtherUserActivity.setLoadingLayoutVisibility(false)
                 !uiState.isLoading -> {
                     binding.wllOtherUserActivity.setWebsosoLoadingVisibility(false)
                 }
+            }
+
+            uiState.otherUserProfile?.let {
+                val userProfile = UserProfileModel(
+                    nickname = it.nickname,
+                    avatarImage = it.avatarImage,
+                )
+                updateAdapterWithActivitiesAndProfile(
+                    otherUserActivityViewModel.otherUserActivityUiState.value?.activities,
+                    userProfile,
+                )
             }
         }
 
@@ -76,19 +87,6 @@ class OtherUserActivityFragment :
                     binding.clOtherUserActivityExistsNull.visibility = View.GONE
                     binding.nsOtherUserActivityExists.visibility = View.VISIBLE
                 }
-            }
-        }
-
-        otherUserPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            uiState.otherUserProfile?.let {
-                val userProfile = UserProfileModel(
-                    nickname = it.nickname,
-                    avatarImage = it.avatarImage,
-                )
-                updateAdapterWithActivitiesAndProfile(
-                    otherUserActivityViewModel.otherUserActivityUiState.value?.activities,
-                    userProfile,
-                )
             }
         }
     }
