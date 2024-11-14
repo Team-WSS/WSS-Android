@@ -67,8 +67,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                             startActivity(
                                 OnboardingActivity.getIntent(
                                     this@LoginActivity,
-                                    state.accessToken,
-                                    state.refreshToken,
+                                    viewModel.accessToken,
+                                    viewModel.refreshToken,
                                 )
                             )
                         }

@@ -22,6 +22,11 @@ class LoginViewModel @Inject constructor(
     private val _loginImages = MutableLiveData<List<Int>>()
     val loginImages: LiveData<List<Int>> = _loginImages
 
+    lateinit var accessToken: String
+        private set
+    lateinit var refreshToken: String
+        private set
+
     init {
         _loginImages.value = listOf(
             R.drawable.img_login_1,
@@ -31,12 +36,15 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun loginWithKakao(accessToken: String) {
+    fun loginWithKakao(kakaoAccessToken: String) {
         viewModelScope.launch {
             _loginUiState.value = LoginUiState.Loading
             runCatching {
-                authRepository.loginWithKakao(accessToken)
+                authRepository.loginWithKakao(kakaoAccessToken)
             }.onSuccess { loginEntity ->
+                accessToken = loginEntity.authorization
+                refreshToken = loginEntity.refreshToken
+
                 if (loginEntity.isRegister) {
                     authRepository.accessToken = loginEntity.authorization
                     authRepository.refreshToken = loginEntity.refreshToken
@@ -45,8 +53,6 @@ class LoginViewModel @Inject constructor(
 
                 _loginUiState.value = LoginUiState.Success(
                     isRegistered = loginEntity.isRegister,
-                    accessToken = loginEntity.authorization,
-                    refreshToken = loginEntity.refreshToken,
                 )
             }.onFailure { error ->
                 _loginUiState.value = LoginUiState.Failure(error)
