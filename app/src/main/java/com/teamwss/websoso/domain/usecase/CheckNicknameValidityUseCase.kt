@@ -11,7 +11,7 @@ import javax.inject.Inject
 class CheckNicknameValidityUseCase @Inject constructor() {
 
     private val invalidSpacingRegex = Regex("^\\s|\\s$")
-    private val specialCharacterRegex = Regex("[^\\w가-힣-_]")
+    private val specialCharacterRegex = Regex("[^a-zA-Z0-9가-힣-_]")
     private val koreanConsonantAndVowelRegex = Regex("[ㄱ-ㅎㅏ-ㅣ]")
 
     operator fun invoke(nickname: String): NicknameValidationResult {
