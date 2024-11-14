@@ -20,8 +20,8 @@ class MyActivityViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
 ) : ViewModel() {
 
-    private val _myActivityUiState: MutableLiveData<MyActivityUiState> = MutableLiveData(MyActivityUiState())
-    val myActivityUiState: LiveData<MyActivityUiState> get() = _myActivityUiState
+    private val _uiState: MutableLiveData<MyActivityUiState> = MutableLiveData(MyActivityUiState())
+    val uiState: LiveData<MyActivityUiState> get() = _uiState
 
     private val _lastFeedId: MutableLiveData<Long> = MutableLiveData(0L)
     val lastFeedId: LiveData<Long> get() = _lastFeedId
@@ -37,20 +37,20 @@ class MyActivityViewModel @Inject constructor(
 
     private fun updateMyActivities() {
         viewModelScope.launch {
-            _myActivityUiState.value = _myActivityUiState.value?.copy(isLoading = true)
+            _uiState.value = uiState.value?.copy(isLoading = true)
             runCatching {
                 userRepository.fetchMyActivities(
                     lastFeedId.value ?: 0L,
                     size,
                 )
             }.onSuccess { response ->
-                _myActivityUiState.value = _myActivityUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     activities = response.feeds.map { it.toUi() }.take(ACTIVITY_LIMIT_COUNT),
                 )
                 _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L
             }.onFailure {
-                _myActivityUiState.value = _myActivityUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )
@@ -68,7 +68,7 @@ class MyActivityViewModel @Inject constructor(
                 }
             }.onSuccess {
                 val newLikeCount = if (isLiked) currentLikeCount - 1 else currentLikeCount + 1
-                _myActivityUiState.value = _myActivityUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     likeState = ActivityLikeState(feedId, !isLiked, newLikeCount),
                 )
 
@@ -80,8 +80,8 @@ class MyActivityViewModel @Inject constructor(
     }
 
     private fun saveActivityLikeState(feedId: Long, isLiked: Boolean, likeCount: Int) {
-        _myActivityUiState.value = _myActivityUiState.value?.copy(
-            activities = _myActivityUiState.value?.activities?.map { activity ->
+        _uiState.value = uiState.value?.copy(
+            activities = uiState.value?.activities?.map { activity ->
                 if (activity.feedId == feedId) {
                     activity.copy(
                         isLiked = isLiked,
@@ -96,16 +96,16 @@ class MyActivityViewModel @Inject constructor(
 
     fun updateRemovedFeed(feedId: Long) {
         viewModelScope.launch {
-            _myActivityUiState.value = _myActivityUiState.value?.copy(isLoading = true)
+            _uiState.value = uiState.value?.copy(isLoading = true)
             runCatching {
                 feedRepository.saveRemovedFeed(feedId)
             }.onSuccess {
-                _myActivityUiState.value = _myActivityUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
-                    activities = _myActivityUiState.value?.activities?.filter { it.feedId != feedId } ?: emptyList(),
+                    activities = uiState.value?.activities?.filter { it.feedId != feedId } ?: emptyList(),
                 )
             }.onFailure {
-                _myActivityUiState.value = _myActivityUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )

@@ -71,7 +71,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:text='@{myPageViewModel.myPageUiState.myProfile.nickname}'
+                            android:text='@{myPageViewModel.uiState.myProfile.nickname}'
                             android:textAppearance="@style/headline1"
                             android:textColor="@color/black"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +87,7 @@
                             android:layout_marginHorizontal="20dp"
                             android:paddingBottom="30dp"
                             android:gravity="center"
-                            android:text='@{myPageViewModel.myPageUiState.myProfile.intro}'
+                            android:text='@{myPageViewModel.uiState.myProfile.intro}'
                             android:textAppearance="@style/body2"
                             android:textColor="@color/gray_200_AEADB3"
                             app:layout_constraintEnd_toEndOf="parent"

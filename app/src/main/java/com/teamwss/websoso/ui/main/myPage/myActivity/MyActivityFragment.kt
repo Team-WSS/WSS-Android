@@ -48,17 +48,7 @@ class MyActivityFragment :
     }
 
     private fun setupObserver() {
-        myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                uiState.isLoading -> binding.wllMyActivity.setWebsosoLoadingVisibility(true)
-                uiState.error -> binding.wllMyActivity.setLoadingLayoutVisibility(false)
-                !uiState.isLoading -> {
-                    binding.wllMyActivity.setWebsosoLoadingVisibility(false)
-                }
-            }
-        }
-
-        myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
+        myActivityViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
 
@@ -72,16 +62,24 @@ class MyActivityFragment :
                     binding.nsMyActivityExists.visibility = View.VISIBLE
                 }
             }
+
+            when {
+                uiState.isLoading -> binding.wllMyActivity.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllMyActivity.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllMyActivity.setWebsosoLoadingVisibility(false)
+                }
+            }
         }
 
-        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
+        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             uiState.myProfile?.let { myProfileEntity ->
                 val userProfile = UserProfileModel(
                     nickname = myProfileEntity.nickname,
                     avatarImage = myProfileEntity.avatarImage,
                 )
                 updateAdapterWithActivitiesAndProfile(
-                    myActivityViewModel.myActivityUiState.value?.activities,
+                    myActivityViewModel.uiState.value?.activities,
                     userProfile,
                 )
             }
@@ -103,7 +101,7 @@ class MyActivityFragment :
     }
 
     private fun getUserProfile(): UserProfileModel {
-        val myProfile = myPageViewModel.myPageUiState.value?.myProfile
+        val myProfile = myPageViewModel.uiState.value?.myProfile
         return UserProfileModel(
             nickname = myProfile?.nickname.orEmpty(),
             avatarImage = myProfile?.avatarImage.orEmpty()
@@ -181,7 +179,7 @@ class MyActivityFragment :
 
     fun navigateToFeedEdit(feedId: Long) {
         val activityModel =
-            myActivityViewModel.myActivityUiState.value?.activities?.find { it.feedId == feedId }
+            myActivityViewModel.uiState.value?.activities?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,

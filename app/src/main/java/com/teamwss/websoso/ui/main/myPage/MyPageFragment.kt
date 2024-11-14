@@ -94,7 +94,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     }
 
     private fun setupObserver() {
-        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
+        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.loading -> binding.wllMyPage.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllMyPage.setLoadingLayoutVisibility(false)
@@ -102,7 +102,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             }
         }
 
-        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
+        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 !uiState.loading -> setUpMyProfileImage(uiState.myProfile?.avatarImage.orEmpty())
                 uiState.error -> Unit

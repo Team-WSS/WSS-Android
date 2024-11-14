@@ -8,6 +8,8 @@ import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.main.myPage.myLibrary.model.AttractivePoints
 import com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.model.OtherUserLibraryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,20 +29,19 @@ class OtherUserLibraryViewModel @Inject constructor(
 
     fun updateUserId(userId: Long) {
         _userId.value = userId
-        _uiState.value = _uiState.value?.copy(isLoading = true)
+        _uiState.value = uiState.value?.copy(isLoading = true)
 
         viewModelScope.launch {
-            val novelStatsResult = runCatching { updateNovelStats(userId) }
-            val genrePreferenceResult = runCatching { updateGenrePreference(userId) }
-            val novelPreferencesResult = runCatching { updateNovelPreferences(userId) }
-
-            when {
-                novelStatsResult.isSuccess && genrePreferenceResult.isSuccess && novelPreferencesResult.isSuccess -> {
-                    _uiState.value = _uiState.value?.copy(isLoading = false, error = false)
-                }
-                else -> {
-                    _uiState.value = _uiState.value?.copy(isLoading = false, error = true)
-                }
+            runCatching {
+                listOf(
+                    async { updateNovelStats(userId) },
+                    async { updateGenrePreference(userId) },
+                    async { updateNovelPreferences(userId) },
+                ).awaitAll()
+            }.onSuccess {
+                _uiState.value = uiState.value?.copy(isLoading = false, error = false)
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(isLoading = false, error = true)
             }
         }
     }
@@ -50,12 +51,12 @@ class OtherUserLibraryViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchUserNovelStats(userId)
             }.onSuccess { novelStats ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     novelStats = novelStats,
                     isLoading = false,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )
@@ -77,19 +78,19 @@ class OtherUserLibraryViewModel @Inject constructor(
                 userRepository.fetchGenrePreference(userId)
             }.onSuccess { genres ->
                 val sortedGenres = genres.sortedByDescending { it.genreCount }
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     topGenres = sortedGenres.take(3),
                     restGenres = sortedGenres.drop(3),
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(error = true)
+                _uiState.value = uiState.value?.copy(error = true)
             }
         }
     }
 
     fun updateToggleGenresVisibility() {
-        _uiState.value = _uiState.value?.copy(
-            isGenreListVisible = _uiState.value?.isGenreListVisible?.not() ?: false
+        _uiState.value = uiState.value?.copy(
+            isGenreListVisible = uiState.value?.isGenreListVisible?.not() ?: false
         )
     }
 
@@ -98,12 +99,12 @@ class OtherUserLibraryViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchNovelPreferences(userId)
             }.onSuccess { novelPreferences ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     novelPreferences = novelPreferences,
                     translatedAttractivePoints = translateAttractivePoints(novelPreferences.attractivePoints),
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(error = true)
+                _uiState.value = uiState.value?.copy(error = true)
             }
         }
     }

@@ -43,19 +43,19 @@ class MyLibraryViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchUserNovelStats(userId)
             }.onSuccess { novelStats ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     novelStats = novelStats,
                     isError = false,
                     isLoading = false,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(isLoading = false, isError = true)
+                _uiState.value = uiState.value?.copy(isLoading = false, isError = true)
             }
         }
     }
 
     fun hasNoPreferences(): Boolean {
-        return _uiState.value?.novelStats?.run {
+        return uiState.value?.novelStats?.run {
             interestNovelCount == 0 && watchingNovelCount == 0 &&
                     watchedNovelCount == 0 && quitNovelCount == 0
         } ?: true
@@ -67,19 +67,19 @@ class MyLibraryViewModel @Inject constructor(
                 userRepository.fetchGenrePreference(userId)
             }.onSuccess { genres ->
                 val sortedGenres = genres.sortedByDescending { it.genreCount }
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     topGenres = sortedGenres.take(TOP_GENRE_COUNT),
                     restGenres = sortedGenres.drop(TOP_GENRE_COUNT),
                     isError = false,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(isError = true)
+                _uiState.value = uiState.value?.copy(isError = true)
             }
         }
     }
 
     fun updateToggleGenresVisibility() {
-        _uiState.value = _uiState.value?.copy(
+        _uiState.value = uiState.value?.copy(
             isGenreListVisible = _uiState.value?.isGenreListVisible?.not() ?: false
         )
     }
@@ -89,13 +89,13 @@ class MyLibraryViewModel @Inject constructor(
             runCatching {
                 userRepository.fetchNovelPreferences(userId)
             }.onSuccess { novelPreferences ->
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     novelPreferences = novelPreferences,
                     translatedAttractivePoints = translateAttractivePoints(novelPreferences.attractivePoints),
                     isError = false,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(isError = true)
+                _uiState.value = uiState.value?.copy(isError = true)
             }
         }
     }
