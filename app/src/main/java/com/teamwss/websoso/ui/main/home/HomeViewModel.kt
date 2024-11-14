@@ -28,14 +28,18 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
     val uiState: LiveData<HomeUiState> get() = _uiState
 
-    init {
-        updateHome()
+    fun updateHomeData(isLogin: Boolean) {
+        viewModelScope.launch {
+            if (isLogin) {
+                fetchUserHomeData()
+            } else {
+                fetchGuestData()
+            }
+        }
     }
 
-    private fun updateHome() {
+    private suspend fun fetchUserHomeData() {
         viewModelScope.launch {
-            _uiState.value = uiState.value?.copy(loading = true)
-
             runCatching {
                 listOf(
                     async { novelRepository.fetchPopularNovels() },
@@ -56,6 +60,31 @@ class HomeViewModel @Inject constructor(
                     isInterestNovel = isUserInterestedInNovels(userInterestFeeds.message),
                     userInterestFeeds = userInterestFeeds.userInterestFeeds,
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels
+                )
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = true,
+                )
+            }
+        }
+    }
+
+    private suspend fun fetchGuestData() {
+        viewModelScope.launch {
+            runCatching {
+                listOf(
+                    async { novelRepository.fetchPopularNovels() },
+                    async { feedRepository.fetchPopularFeeds() }
+                ).awaitAll()
+            }.onSuccess { responses ->
+                val popularNovels = responses[0] as PopularNovelsEntity
+                val popularFeeds = responses[1] as PopularFeedsEntity
+
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    popularNovels = popularNovels.popularNovels,
+                    popularFeeds = popularFeeds.popularFeeds.chunked(3),
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(

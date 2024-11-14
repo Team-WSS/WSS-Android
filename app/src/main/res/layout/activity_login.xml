@@ -67,5 +67,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wll_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

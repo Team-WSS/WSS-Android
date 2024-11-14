@@ -2,6 +2,12 @@ package com.teamwss.websoso.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.teamwss.websoso.BuildConfig
+import com.teamwss.websoso.data.authenticator.WebsosoAuthenticator
+import com.teamwss.websoso.data.interceptor.AuthInterceptor
+import com.teamwss.websoso.data.qualifier.Auth
+import com.teamwss.websoso.data.qualifier.Logging
+import com.teamwss.websoso.data.qualifier.Secured
+import com.teamwss.websoso.data.qualifier.Unsecured
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +17,9 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -19,44 +27,83 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val BASE_URL = BuildConfig.BASE_URL
     private const val CONTENT_TYPE = "application/json"
-    private val json: Json = Json {
-        ignoreUnknownKeys = true
-    }
 
-    // 서버 Auth 로직이 나온 후 제거합니다.
     @Provides
     @Singleton
-    fun provideHeaderInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            val original = chain.request()
-            val requestBuilder = original.newBuilder()
-                .header(
-                    "Authorization",
-                    "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhY2Nlc3MiLCJpYXQiOjE3MzExNjc5NTksImV4cCI6MTczMjM3NzU1OSwidXNlcklkIjoyfQ.5wyHZCyGrqYfhxq7NzBXJYc62T2jkmB615I7EQMkDcg"
-                )
-                .header("Content-Type", CONTENT_TYPE)
-            val request = requestBuilder.build()
-            chain.proceed(request)
+    fun provideJson(): Json = Json { ignoreUnknownKeys = true }
+
+    @Provides
+    @Singleton
+    fun provideJsonConverterFactory(json: Json): Converter.Factory {
+        return json.asConverterFactory(CONTENT_TYPE.toMediaType())
+    }
+
+    @Provides
+    @Singleton
+    @Logging
+    fun provideLoggingInterceptor(): Interceptor =
+        HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
         }
-    }
 
     @Provides
     @Singleton
-    fun provideLogOkHttpClient(headerInterceptor: Interceptor): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            )
-            .addInterceptor(headerInterceptor)
-            .build()
+    @Auth
+    fun provideAuthInterceptor(interceptor: AuthInterceptor): Interceptor = interceptor
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    @Secured
+    fun provideSecuredOkHttpClient(
+        @Logging loggingInterceptor: Interceptor,
+        @Auth authInterceptor: Interceptor,
+        websosoAuthenticator: WebsosoAuthenticator,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .addInterceptor(authInterceptor)
+        .authenticator(websosoAuthenticator)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(15, TimeUnit.SECONDS)
+        .build()
+
+    @Provides
+    @Singleton
+    @Unsecured
+    fun provideUnsecuredOkHttpClient(
+        @Logging loggingInterceptor: Interceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(15, TimeUnit.SECONDS)
+        .build()
+
+    @Provides
+    @Singleton
+    @Secured
+    fun provideSecuredRetrofit(
+        @Secured client: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(json.asConverterFactory(CONTENT_TYPE.toMediaType()))
+        .client(client)
+        .addConverterFactory(converterFactory)
+        .build()
+
+    @Provides
+    @Singleton
+    @Unsecured
+    fun provideUnsecuredRetrofit(
+        @Unsecured client: OkHttpClient,
+        converterFactory: Converter.Factory
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .client(client)
+        .addConverterFactory(converterFactory)
         .build()
 }

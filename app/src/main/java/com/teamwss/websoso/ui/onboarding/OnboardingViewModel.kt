@@ -2,12 +2,15 @@ package com.teamwss.websoso.ui.onboarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.repository.UserRepository
+import com.teamwss.websoso.data.repository.AuthRepository
 import com.teamwss.websoso.domain.model.NicknameValidationResult
 import com.teamwss.websoso.domain.usecase.CheckNicknameValidityUseCase
 import com.teamwss.websoso.domain.usecase.ValidateNicknameUseCase
+import com.teamwss.websoso.ui.onboarding.OnboardingActivity.Companion.ACCESS_TOKEN_KEY
+import com.teamwss.websoso.ui.onboarding.OnboardingActivity.Companion.REFRESH_TOKEN_KEY
 import com.teamwss.websoso.ui.onboarding.first.model.NicknameInputType
 import com.teamwss.websoso.ui.onboarding.first.model.OnboardingFirstUiState
 import com.teamwss.websoso.ui.onboarding.model.OnboardingPage
@@ -19,9 +22,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
     private val validateNicknameUseCase: ValidateNicknameUseCase,
     private val checkNicknameValidityUseCase: CheckNicknameValidityUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _currentPage = MutableLiveData(OnboardingPage.FIRST)
     val currentPage: LiveData<OnboardingPage> get() = _currentPage
@@ -53,6 +57,14 @@ class OnboardingViewModel @Inject constructor(
 
     private val _isUserProfileSubmit = MutableLiveData<Boolean>(false)
     val isUserProfileSubmit: LiveData<Boolean> get() = _isUserProfileSubmit
+
+    var accessToken: String
+        get() = savedStateHandle[ACCESS_TOKEN_KEY] ?: ""
+        private set(value) { savedStateHandle[ACCESS_TOKEN_KEY] = value }
+
+    var refreshToken: String
+        get() = savedStateHandle[REFRESH_TOKEN_KEY] ?: ""
+        private set(value) { savedStateHandle[REFRESH_TOKEN_KEY] = value }
 
     fun validateNickname() {
         val currentInput: String = currentNicknameInput.value.orEmpty()
@@ -95,7 +107,7 @@ class OnboardingViewModel @Inject constructor(
     private fun dispatchNicknameDuplication(nickname: String) {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchNicknameValidity(nickname)
+                authRepository.fetchNicknameValidity(accessToken, nickname)
             }.onSuccess { isNicknameValid ->
                 when (isNicknameValid) {
                     true -> {
@@ -217,7 +229,8 @@ class OnboardingViewModel @Inject constructor(
                     nickname = currentNicknameInput.value.orEmpty(),
                 )
                 userProfile.value?.let { profile ->
-                    userRepository.saveUserProfile(
+                    authRepository.signUp(
+                        authorization = accessToken,
                         nickname = profile.nickname,
                         gender = profile.gender,
                         birth = profile.birthYear,
@@ -225,6 +238,9 @@ class OnboardingViewModel @Inject constructor(
                     )
                 }
             }.onSuccess {
+                authRepository.updateAccessToken(accessToken)
+                authRepository.updateRefreshToken(refreshToken)
+                authRepository.updateIsAutoLogin(true)
                 _isUserProfileSubmit.value = true
             }.onFailure { exception ->
                 exception.printStackTrace()
