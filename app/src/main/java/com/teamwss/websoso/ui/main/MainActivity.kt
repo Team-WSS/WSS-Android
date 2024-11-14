@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
@@ -31,8 +32,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         setBottomNavigationView()
+        setupObserver()
+        onViewGuestClick()
         handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
-        mainViewModel.updateUserInfo()
     }
 
     private fun setBottomNavigationView() {
@@ -42,18 +44,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
     }
 
+    private fun setupObserver() {
+        mainViewModel.isLogin.observe(this) { isLogin ->
+            when (isLogin){
+                true -> {
+                    binding.viewMainGuest.visibility = View.GONE
+                    mainViewModel.updateUserInfo()
+                }
+                false -> binding.viewMainGuest.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun onViewGuestClick() {
+        binding.viewMainGuest.setOnClickListener {
+            showLoginRequestDialog()
+        }
+    }
+
     private fun replaceFragment(item: MenuItem): Boolean {
         when (FragmentType.valueOf(item.itemId)) {
             HOME -> replaceFragment<HomeFragment>()
             EXPLORE -> replaceFragment<ExploreFragment>()
             FEED -> replaceFragment<FeedFragment>()
-            MY_PAGE -> {
-                if (mainViewModel.mainUiState.value?.isLogin == true) {
-                    replaceFragment<MyPageFragment>()
-                } else {
-                    showLoginRequestDialog()
-                }
-            }
+            MY_PAGE -> replaceFragment<MyPageFragment>()
         }
         return true
     }
@@ -73,7 +87,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         ;
 
         companion object {
-            fun valueOf(id: Int): FragmentType = values().find { fragmentView ->
+            fun valueOf(id: Int): FragmentType = entries.find { fragmentView ->
                 fragmentView.resId == id
             } ?: throw IllegalArgumentException()
         }
@@ -112,17 +126,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
             MY_PAGE -> {
                 binding.bnvMain.selectedItemId = R.id.menu_my_page
-                if (mainViewModel.mainUiState.value?.isLogin == true) {
-                    replaceFragment<MyPageFragment>()
-                } else {
-                    showLoginRequestDialog()
-                }
+                replaceFragment<MyPageFragment>()
             }
         }
     }
 
     companion object {
         private const val DESTINATION_KEY = "destination"
+        const val IS_LOGIN_KEY = "isLogin"
 
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, MainActivity::class.java)
@@ -136,6 +147,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         ): Intent {
             return Intent(context, MainActivity::class.java).apply {
                 putExtra(DESTINATION_KEY, destination)
+            }
+        }
+
+        fun getIntent(context: Context, isLogin: Boolean): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                putExtra(IS_LOGIN_KEY, isLogin)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
         }
     }

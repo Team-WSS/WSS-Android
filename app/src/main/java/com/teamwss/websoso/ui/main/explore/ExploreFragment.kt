@@ -2,15 +2,12 @@ package com.teamwss.websoso.ui.main.explore
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.FragmentExploreBinding
-import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
-import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.teamwss.websoso.ui.normalExplore.NormalExploreActivity
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
@@ -21,7 +18,6 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetail) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val exploreViewModel: ExploreViewModel by viewModels()
-    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,18 +49,9 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
             singleEventHandler.throttleFirst {
-                when (mainViewModel.mainUiState.value?.isLogin) {
-                    true -> showDetailExploreDialog()
-                    false -> showLoginRequestDialog()
-                    else -> throw IllegalStateException()
-                }
+                showDetailExploreDialog()
             }
         }
-    }
-
-    private fun showLoginRequestDialog() {
-        val loginRequestDialog = LoginRequestDialogFragment.newInstance()
-        loginRequestDialog.show(childFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
     private fun showDetailExploreDialog() {
