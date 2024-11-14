@@ -162,13 +162,12 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
-            startActivity(
-                UserStorageActivity.getIntent(
-                    requireContext(),
-                    UserStorageActivity.SOURCE_MY_LIBRARY,
-                    myLibraryViewModel.userId,
-                )
+            val intent = UserStorageActivity.getIntent(
+                context = requireContext(),
+                source = UserStorageActivity.SOURCE_MY_LIBRARY,
+                userId = myLibraryViewModel.userId
             )
+            userStorageResultLauncher.launch(intent)
         }
     }
 
