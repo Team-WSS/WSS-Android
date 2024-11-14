@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
@@ -13,18 +14,14 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private var userId: Long = DEFAULT_USER_ID
 
     private val _mainUiState: MutableLiveData<MainUiState> = MutableLiveData(MainUiState())
     val mainUiState: LiveData<MainUiState> get() = _mainUiState
 
-    private var _isLogin: MutableLiveData<Boolean> = MutableLiveData(true)
-    val isLogin: LiveData<Boolean> get() = _isLogin
-
-    fun setIsLogin(isLogin: Boolean) {
-        _isLogin.value = isLogin
-    }
+    val isLogin: LiveData<Boolean> = savedStateHandle.getLiveData(MainActivity.IS_LOGIN_KEY, true)
 
     fun updateUserInfo() {
         viewModelScope.launch {

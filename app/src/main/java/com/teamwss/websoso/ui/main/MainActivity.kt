@@ -31,14 +31,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val isLogin = intent.getBooleanExtra(IS_LOGIN_KEY, true)
-        if (isLogin.not()) binding.viewMainGuest.visibility = View.VISIBLE
-        mainViewModel.setIsLogin(isLogin)
-
         setBottomNavigationView()
+        setupObserver()
         onViewGuestClick()
         handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
-        if (isLogin) mainViewModel.updateUserInfo()
     }
 
     private fun setBottomNavigationView() {
@@ -46,6 +42,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         replaceFragment<HomeFragment>()
 
         binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
+    }
+
+    private fun setupObserver() {
+        mainViewModel.isLogin.observe(this) { isLogin ->
+            when (isLogin){
+                true -> {
+                    binding.viewMainGuest.visibility = View.GONE
+                    mainViewModel.updateUserInfo()
+                }
+                false -> binding.viewMainGuest.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun onViewGuestClick() {
@@ -125,7 +133,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     companion object {
         private const val DESTINATION_KEY = "destination"
-        private const val IS_LOGIN_KEY = "isLogin"
+        const val IS_LOGIN_KEY = "isLogin"
 
         fun getIntent(context: Context): Intent {
             val intent = Intent(context, MainActivity::class.java)
