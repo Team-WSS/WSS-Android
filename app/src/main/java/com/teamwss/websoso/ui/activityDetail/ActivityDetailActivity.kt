@@ -46,7 +46,6 @@ class ActivityDetailActivity :
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
-
     private val source: String by lazy {
         intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
     }
@@ -92,9 +91,7 @@ class ActivityDetailActivity :
             when {
                 uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllActivityDetail.setLoadingLayoutVisibility(false)
-                !uiState.isLoading -> {
-                    binding.wllActivityDetail.setWebsosoLoadingVisibility(false)
-                }
+                !uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(false)
             }
         }
 
