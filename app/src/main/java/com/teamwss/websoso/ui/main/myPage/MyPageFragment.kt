@@ -77,7 +77,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             tbMyPage.setBackgroundColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    color
+                    color,
                 )
             )
 

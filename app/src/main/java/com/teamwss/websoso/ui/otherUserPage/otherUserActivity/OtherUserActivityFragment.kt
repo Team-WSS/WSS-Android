@@ -11,7 +11,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom
@@ -26,7 +25,6 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.Activ
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
-import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import com.teamwss.websoso.ui.otherUserPage.otherUserActivity.adapter.OtherUserActivityAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,7 +51,8 @@ class OtherUserActivityFragment :
     private fun setupActivityResultCallback() {
         activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
-                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
+                ResultFrom.FeedDetailBack.RESULT_OK,
+                ResultFrom.CreateFeed.RESULT_OK -> {
                     otherUserActivityViewModel.updateRefreshedActivities()
                 }
             }
@@ -71,8 +70,7 @@ class OtherUserActivityFragment :
 
     private fun setupObserver() {
         otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
-            val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(uiState.activities, getUserProfile())
 
             when (uiState.activities.isNullOrEmpty()) {
                 true -> {
@@ -166,10 +164,6 @@ class OtherUserActivityFragment :
         }
     }
 
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
-    }
-
     private fun showPopupMenu(view: View, feedId: Long) {
         val inflater = LayoutInflater.from(requireContext())
         val binding = MenuOtherUserActivityPopupBinding.inflate(inflater)
@@ -206,7 +200,7 @@ class OtherUserActivityFragment :
                 when (menuType) {
                     "SPOILER_FEED" -> otherUserActivityViewModel.updateReportedSpoilerFeed(feedId)
                     "IMPERTINENCE_FEED" -> otherUserActivityViewModel.updateReportedImpertinenceFeed(
-                        feedId
+                        feedId,
                     )
                 }
 
@@ -223,7 +217,7 @@ class OtherUserActivityFragment :
     private fun showReportDoneDialog(menuType: String) {
         val doneDialogFragment = FeedReportDoneDialogFragment.newInstance(
             menuType = menuType,
-            event = {}
+            event = {},
         )
         doneDialogFragment.show(parentFragmentManager, FeedReportDoneDialogFragment.TAG)
     }

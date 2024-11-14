@@ -14,8 +14,6 @@ import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
-import com.teamwss.websoso.R.string.my_activity_detail_title
-import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
@@ -113,18 +111,16 @@ class ActivityDetailActivity :
 
     private fun setupObserver() {
         activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
-            val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(uiState.activities, getUserProfile())
         }
 
         when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.myPageUiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
-                        val userProfile = myProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
                             activityDetailViewModel.activityDetailUiState.value?.activities,
-                            userProfile
+                            myProfile.toUserProfileModel(),
                         )
                     }
                 }
@@ -133,10 +129,9 @@ class ActivityDetailActivity :
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
                     otherUserProfile?.let {
-                        val userProfile = otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
                             activityDetailViewModel.activityDetailUiState.value?.activities,
-                            userProfile,
+                            otherUserProfile.toUserProfileModel(),
                         )
                     }
                 }
@@ -288,11 +283,11 @@ class ActivityDetailActivity :
             event = {
                 when (menuType) {
                     ReportMenuType.SPOILER_FEED.name -> activityDetailViewModel.updateReportedSpoilerFeed(
-                        feedId
+                        feedId,
                     )
 
                     ReportMenuType.IMPERTINENCE_FEED.name -> activityDetailViewModel.updateReportedImpertinenceFeed(
-                        feedId
+                        feedId,
                     )
                 }
                 showReportDoneDialog(menuType)
@@ -304,7 +299,7 @@ class ActivityDetailActivity :
     private fun showReportDoneDialog(menuType: String) {
         val doneDialogFragment = FeedReportDoneDialogFragment.newInstance(
             menuType = menuType,
-            event = {}
+            event = {},
         )
         doneDialogFragment.show(supportFragmentManager, FeedReportDoneDialogFragment.TAG)
     }

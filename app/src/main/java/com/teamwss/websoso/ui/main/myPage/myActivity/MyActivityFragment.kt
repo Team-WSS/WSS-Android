@@ -107,7 +107,7 @@ class MyActivityFragment :
         val myProfile = myPageViewModel.myPageUiState.value?.myProfile
         return UserProfileModel(
             nickname = myProfile?.nickname.orEmpty(),
-            avatarImage = myProfile?.avatarImage.orEmpty()
+            avatarImage = myProfile?.avatarImage.orEmpty(),
         )
     }
 
