@@ -165,7 +165,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
             val intent = UserStorageActivity.getIntent(requireContext())
-            userStorageResultLauncher.launch(intent) // ActivityResultLauncher를 사용하여 시작
+            userStorageResultLauncher.launch(intent)
         }
     }
 
