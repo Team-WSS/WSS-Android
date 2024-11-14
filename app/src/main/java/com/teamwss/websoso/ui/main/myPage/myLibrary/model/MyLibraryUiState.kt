@@ -6,7 +6,7 @@ import com.teamwss.websoso.data.model.UserNovelStatsEntity
 
 data class MyLibraryUiState(
     val isLoading: Boolean = false,
-    val error: Boolean = false,
+    val isError: Boolean = false,
     val novelStats: UserNovelStatsEntity? = null,
     val topGenres: List<GenrePreferenceEntity> = emptyList(),
     val restGenres: List<GenrePreferenceEntity> = emptyList(),
