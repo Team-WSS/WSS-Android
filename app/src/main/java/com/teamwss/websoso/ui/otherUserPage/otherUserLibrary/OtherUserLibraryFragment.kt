@@ -14,12 +14,15 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
 import com.teamwss.websoso.data.model.NovelPreferenceEntity
 import com.teamwss.websoso.databinding.FragmentOtherUserLibraryBinding
 import com.teamwss.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
+import com.teamwss.websoso.ui.userStorage.UserStorageActivity
+import com.teamwss.websoso.ui.userStorage.UserStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +32,7 @@ class OtherUserLibraryFragment :
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +40,7 @@ class OtherUserLibraryFragment :
         updateUserId()
         setupRestGenrePreferenceAdapter()
         setupObserve()
+        onStorageButtonClick()
     }
 
     private fun bindViewModel() {
@@ -139,8 +144,7 @@ class OtherUserLibraryFragment :
 
     private fun updateNovelPreferencesKeywords(novelPreferences: NovelPreferenceEntity) {
         novelPreferences.keywords.forEach { keyword ->
-            val chip = createKeywordChip(keyword)
-            binding.wcgOtherUserLibraryAttractivePoints.addView(chip)
+            binding.wcgOtherUserLibraryAttractivePoints.addView(createKeywordChip(keyword))
         }
     }
 
@@ -163,6 +167,21 @@ class OtherUserLibraryFragment :
                 0 -> binding.ivOtherUserLibraryDominantGenreFirstLogo.load(updatedGenreImageUrl)
                 1 -> binding.ivOtherUserLibraryDominantGenreSecondLogo.load(updatedGenreImageUrl)
                 2 -> binding.ivOtherUserLibraryDominantGenreThirdLogo.load(updatedGenreImageUrl)
+            }
+        }
+    }
+
+    private fun onStorageButtonClick() {
+        binding.ivOtherUserLibraryGoToStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                startActivity(
+                    UserStorageActivity.getIntent(
+                        requireContext(),
+                        UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
+                        otherUserLibraryViewModel.userId.value
+                            ?: UserStorageViewModel.DEFAULT_USER_ID,
+                    )
+                )
             }
         }
     }

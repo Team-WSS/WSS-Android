@@ -81,10 +81,12 @@
 
                         <TextView
                             android:id="@+id/tv_my_page_user_description"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
+                            android:layout_marginHorizontal="20dp"
                             android:paddingBottom="30dp"
+                            android:gravity="center"
                             android:text='@{myPageViewModel.myPageUiState.myProfile.intro}'
                             android:textAppearance="@style/body2"
                             android:textColor="@color/gray_200_AEADB3"

@@ -240,7 +240,7 @@
                 android:background="@null"
                 android:gravity="top"
                 android:hint="@string/edit_profile_introduction_hint"
-                android:maxLength="60"
+                android:maxLength="50"
                 android:maxLines="4"
                 android:minHeight="44dp"
                 android:text="@{viewModel.profileEditUiState.profile.introduction}"
