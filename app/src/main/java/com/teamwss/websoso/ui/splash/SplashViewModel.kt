@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +21,6 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             if (authRepository.isAutoLogin) {
                 runCatching {
-                    delay(1000L)
                     authRepository.reissueToken()
                 }.onSuccess {
                     _isAutoLoginSuccess.value = true
