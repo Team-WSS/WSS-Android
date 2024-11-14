@@ -23,6 +23,7 @@ class MyLibraryViewModel @Inject constructor(
     val attractivePointsText: LiveData<String> get() = _attractivePointsText
 
     var userId: Long = -1
+        private set
 
     init {
         updateMyLibrary()
@@ -44,11 +45,11 @@ class MyLibraryViewModel @Inject constructor(
             }.onSuccess { novelStats ->
                 _uiState.value = _uiState.value?.copy(
                     novelStats = novelStats,
-                    error = false,
+                    isError = false,
                     isLoading = false,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(isLoading = false, error = true)
+                _uiState.value = _uiState.value?.copy(isLoading = false, isError = true)
             }
         }
     }
@@ -67,12 +68,12 @@ class MyLibraryViewModel @Inject constructor(
             }.onSuccess { genres ->
                 val sortedGenres = genres.sortedByDescending { it.genreCount }
                 _uiState.value = _uiState.value?.copy(
-                    topGenres = sortedGenres.take(3),
-                    restGenres = sortedGenres.drop(3),
-                    error = false,
+                    topGenres = sortedGenres.take(TOP_GENRE_COUNT),
+                    restGenres = sortedGenres.drop(TOP_GENRE_COUNT),
+                    isError = false,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(error = true)
+                _uiState.value = _uiState.value?.copy(isError = true)
             }
         }
     }
@@ -90,10 +91,10 @@ class MyLibraryViewModel @Inject constructor(
                 _uiState.value = _uiState.value?.copy(
                     novelPreferences = novelPreferences,
                     translatedAttractivePoints = translateAttractivePoints(novelPreferences.attractivePoints),
-                    error = false,
+                    isError = false,
                 )
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(error = true)
+                _uiState.value = _uiState.value?.copy(isError = true)
             }
         }
     }
@@ -102,5 +103,9 @@ class MyLibraryViewModel @Inject constructor(
         return attractivePoints.mapNotNull { point ->
             AttractivePoints.fromString(point)?.korean
         }
+    }
+
+    companion object {
+        private const val TOP_GENRE_COUNT = 3
     }
 }
