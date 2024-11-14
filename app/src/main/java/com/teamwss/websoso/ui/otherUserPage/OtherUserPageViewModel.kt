@@ -18,9 +18,12 @@ class OtherUserPageViewModel @Inject constructor(
     private val _uiState = MutableLiveData(OtherUserPageUiState())
     val uiState: LiveData<OtherUserPageUiState> get() = _uiState
 
-    fun updateUserId(userId: Long) {
-        _uiState.value = _uiState.value?.copy(userId = userId, isLoading = true)
-        updateUserProfile(userId)
+    private var userId: Long = 0L
+
+    fun updateUserId(newUserId: Long) {
+        userId = newUserId
+        _uiState.value = _uiState.value?.copy(isLoading = true)
+        updateUserProfile(newUserId)
     }
 
     private fun updateUserProfile(userId: Long) {
@@ -46,7 +49,7 @@ class OtherUserPageViewModel @Inject constructor(
         _uiState.value = _uiState.value?.copy(isLoading = true)
         viewModelScope.launch {
             runCatching {
-                userRepository.saveBlockUser(_uiState.value?.userId ?: 0L)
+                userRepository.saveBlockUser(userId)
             }.onSuccess {
                 _uiState.value = _uiState.value?.copy(
                     isBlockedCompleted = true,
