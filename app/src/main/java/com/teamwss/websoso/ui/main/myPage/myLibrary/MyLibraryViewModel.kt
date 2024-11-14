@@ -45,10 +45,10 @@ class MyLibraryViewModel @Inject constructor(
     private var userId: Long = -1
 
     init {
-        loadMyLibrary()
+        updateMyLibrary()
     }
 
-    fun loadMyLibrary(){
+   fun updateMyLibrary(){
         viewModelScope.launch {
             userId = userRepository.fetchUserId()
             updateNovelStats(userId)
