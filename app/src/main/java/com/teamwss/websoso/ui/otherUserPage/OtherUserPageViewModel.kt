@@ -24,6 +24,9 @@ class OtherUserPageViewModel @Inject constructor(
     private val _isBlockedCompleted: MutableLiveData<Boolean> = MutableLiveData()
     val isBlockedCompleted: LiveData<Boolean> get() = _isBlockedCompleted
 
+    private val _isWithdrawUser: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithdrawUser: LiveData<Boolean> get() = _isWithdrawUser
+
     fun updateUserId(userId: Long) {
         _userId.value = userId
 
@@ -37,6 +40,9 @@ class OtherUserPageViewModel @Inject constructor(
             }.onSuccess { otherUserProfile ->
                 _otherUserProfile.value = otherUserProfile
             }.onFailure { exception ->
+                if (exception.message?.contains(WITHDRAW_USER_CODE) == true) {
+                    _isWithdrawUser.value = true
+                }
             }
         }
     }
@@ -49,5 +55,9 @@ class OtherUserPageViewModel @Inject constructor(
                 _isBlockedCompleted.value = true
             }.onFailure {}
         }
+    }
+
+    companion object {
+        private const val WITHDRAW_USER_CODE = "403"
     }
 }
