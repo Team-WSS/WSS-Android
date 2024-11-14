@@ -1,14 +1,17 @@
 package com.teamwss.websoso.ui.userStorage
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.databinding.ActivityStorageBinding
 import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.myPage.myLibrary.MyLibraryFragment.Companion.EXTRA_SOURCE
@@ -27,6 +30,14 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             novelClickListener = ::navigateToNovelDetail,
         )
     }
+    private val novelDetailResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == ResultFrom.NovelDetailBack.RESULT_OK) {
+                val currentReadStatus =
+                    userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
+                userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +104,15 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             binding.vpStorage.visibility =
                 if (uiState.userNovelCount > 0L) View.VISIBLE else View.GONE
         }
+
+        userStorageViewModel.isRatingChanged.observe(this) { isChanged ->
+            if (isChanged) {
+                val currentReadStatus =
+                    userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
+                userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
+                userStorageViewModel.updateRatingChanged()
+            }
+        }
     }
 
     private fun updateStorageNovel(uiState: UserStorageUiState) {
@@ -112,11 +132,13 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        startActivity(NovelDetailActivity.getIntent(this, novelId))
+        val intent = NovelDetailActivity.getIntent(this, novelId)
+        novelDetailResultLauncher.launch(intent)
     }
 
     private fun onBackButtonClick() {
         binding.ivStorageDetailBackButton.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }
@@ -126,7 +148,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             userStorageViewModel.updateSortType(sortType)
         }
 
-        binding.ivStorageGoToSort.setOnClickListener { view ->
+        binding.clStorageSort.setOnClickListener { view ->
             sortMenuHandler.showSortMenu(view)
         }
     }

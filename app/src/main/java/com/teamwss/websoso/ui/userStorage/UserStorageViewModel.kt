@@ -23,6 +23,9 @@ class UserStorageViewModel @Inject constructor(
         MutableLiveData(UserStorageUiState())
     val uiState: LiveData<UserStorageUiState> get() = _uiState
 
+    private val _isRatingChanged = MutableLiveData<Boolean>()
+    val isRatingChanged: LiveData<Boolean> get() = _isRatingChanged
+
     private var userId: Long = DEFAULT_USER_ID
     private var source: String = SOURCE_MY_LIBRARY
 
@@ -32,11 +35,17 @@ class UserStorageViewModel @Inject constructor(
     ) {
         this.source = source
         this.userId = receivedUserId
+    }
 
+    init {
         updateReadStatus(
             StorageTab.INTEREST.readStatus,
             forceLoad = true,
         )
+    }
+
+    fun updateRatingChanged() {
+        _isRatingChanged.value = true
     }
 
     fun updateReadStatus(
@@ -76,7 +85,7 @@ class UserStorageViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchUserStorage(
-                    userId = userId,
+                    userId = 2L,
                     readStatus = readStatus,
                     lastUserNovelId = _uiState.value?.lastUserNovelId ?: 0L,
                     size = STORAGE_NOVEL_SIZE,
