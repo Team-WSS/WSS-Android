@@ -17,6 +17,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
 import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
@@ -61,7 +62,11 @@ class MyActivityFragment :
                 }
                 ResultFrom.FeedDetailRemoved.RESULT_OK -> {
                     myActivityViewModel.updateRefreshedActivities()
-                    showSnackBar(getString(R.string.feed_removed_feed_snackbar))
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(R.string.feed_removed_feed_snackbar),
+                        icon = R.drawable.ic_blocked_user_snack_bar,
+                    )
                 }
             }
         }
@@ -161,10 +166,6 @@ class MyActivityFragment :
         override fun onMoreButtonClick(view: View, feedId: Long) {
             showPopupMenu(view, feedId)
         }
-    }
-
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showPopupMenu(view: View, feedId: Long) {

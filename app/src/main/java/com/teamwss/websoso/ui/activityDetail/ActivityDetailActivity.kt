@@ -12,10 +12,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
-import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
@@ -44,7 +44,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class ActivityDetailActivity :
     BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
-    private val activityDetailAdapter: ActivityDetailAdapter by lazy { ActivityDetailAdapter(onClickFeedItem()) }
+    private val activityDetailAdapter: ActivityDetailAdapter by lazy {
+        ActivityDetailAdapter(
+            onClickFeedItem()
+        )
+    }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
 
@@ -53,11 +57,36 @@ class ActivityDetailActivity :
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
     private var _popupWindow: PopupWindow? = null
-    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
+    private val activityResultCallback: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                }
+
+                ResultFrom.FeedDetailRemoved.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(R.string.feed_removed_feed_snackbar),
+                        icon = R.drawable.ic_blocked_user_snack_bar,
+                    )
+                }
+
+                ResultFrom.BlockUser.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                    val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(R.string.block_user_success_message, nickname),
+                        icon = R.drawable.ic_blocked_user_snack_bar,
+                    )
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupActivityResultCallback()
         setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
@@ -65,24 +94,6 @@ class ActivityDetailActivity :
         onBackButtonClick()
     }
 
-    private fun setupActivityResultCallback() {
-        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
-                    activityDetailViewModel.updateRefreshedActivities()
-                }
-                ResultFrom.FeedDetailRemoved.RESULT_OK -> {
-                    activityDetailViewModel.updateRefreshedActivities()
-                    showSnackBar(getString(R.string.feed_removed_feed_snackbar))
-                }
-                ResultFrom.BlockUser.RESULT_OK -> {
-                    activityDetailViewModel.updateRefreshedActivities()
-                    val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
-                    showSnackBar(getString(R.string.block_user_success_message, nickname))
-                }
-            }
-        }
-    }
 
     private fun setupUserIDAndSource() {
         activityDetailViewModel.source = source
@@ -199,10 +210,6 @@ class ActivityDetailActivity :
         override fun onMoreButtonClick(view: View, feedId: Long) {
             showPopupMenu(view, feedId)
         }
-    }
-
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun showPopupMenu(view: View, feedId: Long) {
