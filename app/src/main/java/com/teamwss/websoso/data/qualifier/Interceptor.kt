@@ -4,7 +4,7 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class Log
+annotation class Logging
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)

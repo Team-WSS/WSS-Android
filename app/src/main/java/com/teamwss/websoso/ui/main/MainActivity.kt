@@ -32,7 +32,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         val isLogin = intent.getBooleanExtra(IS_LOGIN_KEY, true)
-        if (isLogin.not()) binding.vMainGuest.visibility = View.VISIBLE
+        if (isLogin.not()) binding.viewMainGuest.visibility = View.VISIBLE
         mainViewModel.setIsLogin(isLogin)
 
         setBottomNavigationView()
@@ -49,7 +49,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun onViewGuestClick() {
-        binding.vMainGuest.setOnClickListener {
+        binding.viewMainGuest.setOnClickListener {
             showLoginRequestDialog()
         }
     }

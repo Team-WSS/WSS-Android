@@ -5,7 +5,7 @@ import com.teamwss.websoso.BuildConfig
 import com.teamwss.websoso.data.authenticator.WebsosoAuthenticator
 import com.teamwss.websoso.data.interceptor.AuthInterceptor
 import com.teamwss.websoso.data.qualifier.Auth
-import com.teamwss.websoso.data.qualifier.Log
+import com.teamwss.websoso.data.qualifier.Logging
 import com.teamwss.websoso.data.qualifier.Secured
 import com.teamwss.websoso.data.qualifier.Unsecured
 import dagger.Module
@@ -40,7 +40,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Log
+    @Logging
     fun provideLoggingInterceptor(): Interceptor =
         HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
@@ -59,11 +59,11 @@ object NetworkModule {
     @Singleton
     @Secured
     fun provideSecuredOkHttpClient(
-        @Log logInterceptor: Interceptor,
+        @Logging loggingInterceptor: Interceptor,
         @Auth authInterceptor: Interceptor,
         websosoAuthenticator: WebsosoAuthenticator,
     ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(logInterceptor)
+        .addInterceptor(loggingInterceptor)
         .addInterceptor(authInterceptor)
         .authenticator(websosoAuthenticator)
         .connectTimeout(60, TimeUnit.SECONDS)
@@ -75,9 +75,9 @@ object NetworkModule {
     @Singleton
     @Unsecured
     fun provideUnsecuredOkHttpClient(
-        @Log logInterceptor: Interceptor,
+        @Logging loggingInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(logInterceptor)
+        .addInterceptor(loggingInterceptor)
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(15, TimeUnit.SECONDS)
