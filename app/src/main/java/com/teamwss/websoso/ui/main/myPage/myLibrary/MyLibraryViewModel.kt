@@ -79,8 +79,9 @@ class MyLibraryViewModel @Inject constructor(
     }
 
     fun updateToggleGenresVisibility() {
-        _uiState.value =
-            _uiState.value?.copy(isGenreListVisible = !_uiState.value!!.isGenreListVisible)
+        _uiState.value = _uiState.value?.copy(
+            isGenreListVisible = _uiState.value?.isGenreListVisible?.not() ?: false
+        )
     }
 
     private fun updateNovelPreferences(userId: Long) {

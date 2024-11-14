@@ -28,9 +28,21 @@ class OtherUserLibraryViewModel @Inject constructor(
     fun updateUserId(userId: Long) {
         _userId.value = userId
         _uiState.value = _uiState.value?.copy(isLoading = true)
-        updateNovelStats(userId)
-        updateGenrePreference(userId)
-        updateNovelPreferences(userId)
+
+        viewModelScope.launch {
+            val novelStatsResult = runCatching { updateNovelStats(userId) }
+            val genrePreferenceResult = runCatching { updateGenrePreference(userId) }
+            val novelPreferencesResult = runCatching { updateNovelPreferences(userId) }
+
+            when {
+                novelStatsResult.isSuccess && genrePreferenceResult.isSuccess && novelPreferencesResult.isSuccess -> {
+                    _uiState.value = _uiState.value?.copy(isLoading = false, error = false)
+                }
+                else -> {
+                    _uiState.value = _uiState.value?.copy(isLoading = false, error = true)
+                }
+            }
+        }
     }
 
     private fun updateNovelStats(userId: Long) {
@@ -77,7 +89,7 @@ class OtherUserLibraryViewModel @Inject constructor(
 
     fun updateToggleGenresVisibility() {
         _uiState.value = _uiState.value?.copy(
-            isGenreListVisible = !_uiState.value?.isGenreListVisible!!
+            isGenreListVisible = _uiState.value?.isGenreListVisible?.not() ?: false
         )
     }
 
