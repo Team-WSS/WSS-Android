@@ -14,6 +14,7 @@ import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.databinding.ActivityStorageBinding
 import com.teamwss.websoso.ui.main.MainActivity
+import com.teamwss.websoso.ui.main.myPage.myLibrary.MyLibraryFragment.Companion.EXTRA_SOURCE
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.userStorage.adapter.UserStorageViewPagerAdapter
 import com.teamwss.websoso.ui.userStorage.model.StorageTab
@@ -40,11 +41,19 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupUserId()
         bindViewModel()
         setupViewPagerAndTabLayout()
         onBackButtonClick()
         onSortTypeButtonClick()
         onExploreButton()
+    }
+
+    private fun setupUserId() {
+        val source = intent.getStringExtra(EXTRA_SOURCE) ?: SOURCE_MY_LIBRARY
+        val userId = intent.getLongExtra(USER_ID_KEY, UserStorageViewModel.DEFAULT_USER_ID)
+
+        userStorageViewModel.updateUserStorage(source, userId)
     }
 
     private fun bindViewModel() {
@@ -145,8 +154,15 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     }
 
     companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, UserStorageActivity::class.java)
+        const val USER_ID_KEY = "userId"
+        const val SOURCE_MY_LIBRARY = "myLibrary"
+        const val SOURCE_OTHER_USER_LIBRARY = "otherUserLibrary"
+
+        fun getIntent(context: Context, source: String, userId: Long): Intent {
+            return Intent(context, UserStorageActivity::class.java).apply {
+                putExtra(EXTRA_SOURCE, source)
+                putExtra(USER_ID_KEY, userId)
+            }
         }
     }
 }
