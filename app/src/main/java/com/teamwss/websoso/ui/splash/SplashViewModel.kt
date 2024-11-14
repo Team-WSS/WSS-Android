@@ -14,8 +14,8 @@ class SplashViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
-    private var _isAutoLoginSuccess = MutableLiveData(false)
-    val isAutoLoginSuccess: LiveData<Boolean> get() = _isAutoLoginSuccess
+    private var _isAutoLogin = MutableLiveData(false)
+    val isAutoLogin: LiveData<Boolean> get() = _isAutoLogin
 
     fun autoLogin() {
         viewModelScope.launch {
@@ -23,12 +23,12 @@ class SplashViewModel @Inject constructor(
                 runCatching {
                     authRepository.reissueToken()
                 }.onSuccess {
-                    _isAutoLoginSuccess.value = true
+                    _isAutoLogin.value = true
                 }.onFailure {
-                    _isAutoLoginSuccess.value = false
+                    _isAutoLogin.value = false
                 }
             } else {
-                _isAutoLoginSuccess.value = false
+                _isAutoLogin.value = false
             }
         }
     }

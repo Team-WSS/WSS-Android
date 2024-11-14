@@ -24,7 +24,7 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
     }
 
     private fun setupObserver() {
-        splashViewModel.isAutoLoginSuccess.observe(this) { isAutoLogin ->
+        splashViewModel.isAutoLogin.observe(this) { isAutoLogin ->
             lifecycleScope.launch {
                 delay(1000L)
                 when (isAutoLogin) {
