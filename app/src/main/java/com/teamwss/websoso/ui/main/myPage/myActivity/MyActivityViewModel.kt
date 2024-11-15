@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.UserRepository
-import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivityLikeState
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.MyActivityUiState
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUi
@@ -35,22 +34,27 @@ class MyActivityViewModel @Inject constructor(
         updateMyActivities()
     }
 
+    fun updateRefreshedActivities() {
+        _lastFeedId.value = 0L
+        updateMyActivities()
+    }
+
     private fun updateMyActivities() {
         viewModelScope.launch {
-            _uiState.value = uiState.value?.copy(isLoading = true)
+            _uiState.value = _uiState.value?.copy(isLoading = true)
             runCatching {
                 userRepository.fetchMyActivities(
                     lastFeedId.value ?: 0L,
                     size,
                 )
             }.onSuccess { response ->
-                _uiState.value = uiState.value?.copy(
+                _uiState.value = _uiState.value?.copy(
                     isLoading = false,
                     activities = response.feeds.map { it.toUi() }.take(ACTIVITY_LIMIT_COUNT),
                 )
-                _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L
+                _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: _lastFeedId.value
             }.onFailure {
-                _uiState.value = uiState.value?.copy(
+                _uiState.value = _uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )
@@ -58,54 +62,52 @@ class MyActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateActivityLike(isLiked: Boolean, feedId: Long, currentLikeCount: Int) {
-        viewModelScope.launch {
-            runCatching {
-                if (isLiked) {
-                    feedRepository.saveLike(false, feedId)
-                } else {
-                    feedRepository.saveLike(true, feedId)
+    fun updateLike(selectedFeedId: Long, isLiked: Boolean, updatedLikeCount: Int) {
+        uiState.value?.let { myActivityUiState ->
+            val selectedFeed = myActivityUiState.activities.find { activityModel ->
+                activityModel.feedId == selectedFeedId
+            } ?: throw IllegalArgumentException()
+
+            if (selectedFeed.isLiked == isLiked) return
+
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.saveLike(selectedFeed.isLiked, selectedFeedId)
+                }.onSuccess {
+                    _uiState.value = myActivityUiState.copy(
+                        activities = myActivityUiState.activities.map { activityModel ->
+                            when (activityModel.feedId == selectedFeedId) {
+                                true -> activityModel.copy(
+                                    isLiked = isLiked,
+                                    likeCount = updatedLikeCount,
+                                )
+
+                                false -> activityModel
+                            }
+                        }
+                    )
+                }.onFailure {
+                    _uiState.value = myActivityUiState.copy(
+                        isLoading = false,
+                        error = true,
+                    )
                 }
-            }.onSuccess {
-                val newLikeCount = if (isLiked) currentLikeCount - 1 else currentLikeCount + 1
-                _uiState.value = uiState.value?.copy(
-                    likeState = ActivityLikeState(feedId, !isLiked, newLikeCount),
-                )
-
-                saveActivityLikeState(feedId, !isLiked, newLikeCount)
-            }.onFailure {
-
             }
         }
     }
 
-    private fun saveActivityLikeState(feedId: Long, isLiked: Boolean, likeCount: Int) {
-        _uiState.value = uiState.value?.copy(
-            activities = uiState.value?.activities?.map { activity ->
-                if (activity.feedId == feedId) {
-                    activity.copy(
-                        isLiked = isLiked,
-                        likeCount = likeCount,
-                    )
-                } else {
-                    activity
-                }
-            } ?: emptyList()
-        )
-    }
-
     fun updateRemovedFeed(feedId: Long) {
         viewModelScope.launch {
-            _uiState.value = uiState.value?.copy(isLoading = true)
+            _uiState.value = _uiState.value?.copy(isLoading = true)
             runCatching {
                 feedRepository.saveRemovedFeed(feedId)
             }.onSuccess {
-                _uiState.value = uiState.value?.copy(
+                _uiState.value = _uiState.value?.copy(
                     isLoading = false,
-                    activities = uiState.value?.activities?.filter { it.feedId != feedId } ?: emptyList(),
+                    activities = _uiState.value?.activities?.filter { it.feedId != feedId } ?: emptyList(),
                 )
             }.onFailure {
-                _uiState.value = uiState.value?.copy(
+                _uiState.value = _uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )

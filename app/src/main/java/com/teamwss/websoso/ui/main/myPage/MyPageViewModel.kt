@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.main.myPage.model.MyPageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

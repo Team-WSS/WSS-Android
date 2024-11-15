@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.activityDetail
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +9,16 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
 import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
@@ -34,6 +39,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
 import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
+import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +48,9 @@ class ActivityDetailActivity :
     BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
     private val activityDetailAdapter: ActivityDetailAdapter by lazy {
-        ActivityDetailAdapter(onClickFeedItem())
+        ActivityDetailAdapter(
+            onClickFeedItem()
+        )
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
@@ -51,14 +59,45 @@ class ActivityDetailActivity :
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
     private var _popupWindow: PopupWindow? = null
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupActivityResultCallback()
         setupUserIDAndSource()
         setActivityTitle()
         setupMyActivitiesDetailAdapter()
         setupObserver()
         onBackButtonClick()
+    }
+
+    private fun setupActivityResultCallback() {
+        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                }
+
+                ResultFrom.FeedDetailRemoved.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(R.string.feed_removed_feed_snackbar),
+                        icon = R.drawable.ic_blocked_user_snack_bar,
+                    )
+                }
+
+                ResultFrom.BlockUser.RESULT_OK -> {
+                    activityDetailViewModel.updateRefreshedActivities()
+                    val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(R.string.block_user_success_message, nickname),
+                        icon = R.drawable.ic_blocked_user_snack_bar,
+                    )
+                }
+            }
+        }
     }
 
     private fun setupUserIDAndSource() {
@@ -88,24 +127,16 @@ class ActivityDetailActivity :
 
     private fun setupObserver() {
         activityDetailViewModel.uiState.observe(this) { uiState ->
-            val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
-
-            when {
-                uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(true)
-                uiState.error -> binding.wllActivityDetail.setLoadingLayoutVisibility(false)
-                !uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(false)
-            }
+            updateAdapterWithActivitiesAndProfile(uiState.activities, getUserProfile())
         }
 
         when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.uiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
-                        val userProfile = myProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
                             activityDetailViewModel.uiState.value?.activities,
-                            userProfile
+                            myProfile.toUserProfileModel(),
                         )
                     }
                 }
@@ -114,10 +145,9 @@ class ActivityDetailActivity :
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.uiState.observe(this) { uiState ->
                     uiState.otherUserProfile?.let {
-                        val userProfile = uiState.otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
                             activityDetailViewModel.uiState.value?.activities,
-                            userProfile,
+                            uiState.otherUserProfile.toUserProfileModel(),
                         )
                     }
                 }
@@ -144,24 +174,23 @@ class ActivityDetailActivity :
             SOURCE_MY_ACTIVITY -> {
                 myPageViewModel.uiState.value?.myProfile?.toUserProfileModel()
             }
-
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.uiState.value?.otherUserProfile?.toUserProfileModel()
             }
-
             else -> null
         }
     }
 
     private fun onBackButtonClick() {
         binding.ivActivityDetailBackButton.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }
 
     private fun onClickFeedItem() = object : ActivityItemClickListener {
         override fun onContentClick(feedId: Long) {
-            startActivity(FeedDetailActivity.getIntent(this@ActivityDetailActivity, feedId))
+            activityResultCallback.launch(FeedDetailActivity.getIntent(this@ActivityDetailActivity, feedId))
         }
 
         override fun onNovelInfoClick(novelId: Long) {
@@ -242,12 +271,12 @@ class ActivityDetailActivity :
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
-                novelId = feed.novelId ?: 0L,
-                novelTitle = feed.title ?: "",
+                novelId = feed.novelId,
+                novelTitle = feed.title,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
-            startActivity(CreateFeedActivity.getIntent(this, editFeedModel))
+            activityResultCallback.launch(CreateFeedActivity.getIntent(this, editFeedModel))
         } ?: throw IllegalArgumentException("Feed not found")
     }
 
@@ -267,11 +296,11 @@ class ActivityDetailActivity :
             event = {
                 when (menuType) {
                     ReportMenuType.SPOILER_FEED.name -> activityDetailViewModel.updateReportedSpoilerFeed(
-                        feedId
+                        feedId,
                     )
 
                     ReportMenuType.IMPERTINENCE_FEED.name -> activityDetailViewModel.updateReportedImpertinenceFeed(
-                        feedId
+                        feedId,
                     )
                 }
                 showReportDoneDialog(menuType)
@@ -283,7 +312,7 @@ class ActivityDetailActivity :
     private fun showReportDoneDialog(menuType: String) {
         val doneDialogFragment = FeedReportDoneDialogFragment.newInstance(
             menuType = menuType,
-            event = {}
+            event = {},
         )
         doneDialogFragment.show(supportFragmentManager, FeedReportDoneDialogFragment.TAG)
     }
