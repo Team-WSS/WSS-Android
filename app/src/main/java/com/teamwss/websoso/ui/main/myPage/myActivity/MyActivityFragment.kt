@@ -81,6 +81,14 @@ class MyActivityFragment :
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
             setupVisibility(uiState.activities)
+
+            when {
+                uiState.isLoading -> binding.wllMyActivity.setWebsosoLoadingVisibility(true)
+                uiState.isError -> binding.wllMyActivity.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllMyActivity.setWebsosoLoadingVisibility(false)
+                }
+            }
         }
 
         myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
