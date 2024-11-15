@@ -183,7 +183,7 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     companion object {
-        const val ACTIVITY_LOAD_SIZE = 5
+        const val ACTIVITY_LOAD_SIZE = 20
         const val DEFAULT_USER_ID = -1L
     }
 }
