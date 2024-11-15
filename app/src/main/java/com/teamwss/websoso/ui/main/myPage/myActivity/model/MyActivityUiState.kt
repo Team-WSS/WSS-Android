@@ -5,5 +5,5 @@ data class MyActivityUiState(
     val isLoading: Boolean = false,
     val activities: List<ActivityModel> = emptyList(),
     val likeState: ActivityLikeState? = null,
-    val error: Boolean = false,
+    val isError: Boolean = false,
 )
