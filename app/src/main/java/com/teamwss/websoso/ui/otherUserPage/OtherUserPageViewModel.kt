@@ -20,6 +20,9 @@ class OtherUserPageViewModel @Inject constructor(
 
     private var userId: Long = 0L
 
+    private val _isWithdrawUser: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithdrawUser: LiveData<Boolean> get() = _isWithdrawUser
+
     fun updateUserId(newUserId: Long) {
         userId = newUserId
         _uiState.value = _uiState.value?.copy(isLoading = true)
@@ -36,7 +39,11 @@ class OtherUserPageViewModel @Inject constructor(
                     isLoading = false,
                     error = false,
                 )
-            }.onFailure {
+            }.onFailure { exception ->
+                if (exception.message?.contains(WITHDRAW_USER_CODE) == true) {
+                    _isWithdrawUser.value = true
+                    return@onFailure
+                }
                 _uiState.value = _uiState.value?.copy(
                     isLoading = false,
                     error = true,
@@ -63,5 +70,9 @@ class OtherUserPageViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    companion object {
+        private const val WITHDRAW_USER_CODE = "403"
     }
 }

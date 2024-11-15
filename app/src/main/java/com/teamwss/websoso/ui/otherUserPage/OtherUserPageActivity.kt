@@ -15,7 +15,8 @@ import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.toFloatPxFromDp
@@ -96,6 +97,12 @@ class OtherUserPageActivity :
             setUpMyProfileImage(uiState.otherUserProfile?.avatarImage.orEmpty())
         }
 
+        otherUserPageViewModel.isWithdrawUser.observe(this) { isWithdrawUser ->
+            if (isWithdrawUser) {
+                setResult(WithdrawUser.RESULT_OK, intent)
+                finish()
+            }
+        }
     }
 
     private fun setUpMyProfileImage(otherUserProfileUrl: String) {
