@@ -41,8 +41,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
-        setUpViewPager()
-        setUpItemVisibilityOnToolBar()
+        setupViewPager()
+        setupItemVisibilityOnToolBar()
         onSettingButtonClick()
         setupObserver()
         onProfileEditClick()
@@ -53,7 +53,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    private fun setUpViewPager() {
+    private fun setupViewPager() {
         val tabTitleItems =
             listOf(getText(R.string.my_page_library), getText(R.string.my_page_activity))
         binding.vpMyPage.adapter = viewPagerAdapter
@@ -63,7 +63,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         }.attach()
     }
 
-    private fun setUpItemVisibilityOnToolBar() {
+    private fun setupItemVisibilityOnToolBar() {
         binding.ablMyPage.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val totalScrollRange = appBarLayout.totalScrollRange
             val percentage = (totalScrollRange.toFloat() + verticalOffset) / totalScrollRange
@@ -94,7 +94,15 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     }
 
     private fun setupObserver() {
-        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
+        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.loading -> binding.wllMyPage.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllMyPage.setLoadingLayoutVisibility(false)
+                !uiState.loading -> binding.wllMyPage.setWebsosoLoadingVisibility(false)
+            }
+        }
+
+        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 !uiState.loading -> setUpMyProfileImage(uiState.myProfile?.avatarImage.orEmpty())
                 uiState.error -> Unit

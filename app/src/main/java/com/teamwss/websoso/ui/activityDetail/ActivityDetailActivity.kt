@@ -46,7 +46,6 @@ class ActivityDetailActivity :
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
-
     private val source: String by lazy {
         intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
     }
@@ -88,18 +87,24 @@ class ActivityDetailActivity :
     }
 
     private fun setupObserver() {
-        activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
+        activityDetailViewModel.uiState.observe(this) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
+
+            when {
+                uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllActivityDetail.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(false)
+            }
         }
 
         when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
-                myPageViewModel.myPageUiState.observe(this) { uiState ->
+                myPageViewModel.uiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
                         val userProfile = myProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.activityDetailUiState.value?.activities,
+                            activityDetailViewModel.uiState.value?.activities,
                             userProfile
                         )
                     }
@@ -107,11 +112,11 @@ class ActivityDetailActivity :
             }
 
             SOURCE_OTHER_USER_ACTIVITY -> {
-                otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
-                    otherUserProfile?.let {
-                        val userProfile = otherUserProfile.toUserProfileModel()
+                otherUserPageViewModel.uiState.observe(this) { uiState ->
+                    uiState.otherUserProfile?.let {
+                        val userProfile = uiState.otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.activityDetailUiState.value?.activities,
+                            activityDetailViewModel.uiState.value?.activities,
                             userProfile,
                         )
                     }
@@ -137,11 +142,11 @@ class ActivityDetailActivity :
     private fun getUserProfile(): UserProfileModel? {
         return when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
-                myPageViewModel.myPageUiState.value?.myProfile?.toUserProfileModel()
+                myPageViewModel.uiState.value?.myProfile?.toUserProfileModel()
             }
 
             SOURCE_OTHER_USER_ACTIVITY -> {
-                otherUserPageViewModel.otherUserProfile.value?.toUserProfileModel()
+                otherUserPageViewModel.uiState.value?.otherUserProfile?.toUserProfileModel()
             }
 
             else -> null
@@ -233,7 +238,7 @@ class ActivityDetailActivity :
 
     private fun navigateToFeedEdit(feedId: Long) {
         val activityModel =
-            activityDetailViewModel.activityDetailUiState.value?.activities?.find { it.feedId == feedId }
+            activityDetailViewModel.uiState.value?.activities?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
