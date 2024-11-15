@@ -22,8 +22,8 @@ class ActivityDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _activityDetailUiState = MutableLiveData<ActivityDetailUiState>()
-    val activityDetailUiState: LiveData<ActivityDetailUiState> get() = _activityDetailUiState
+    private val _uiState = MutableLiveData<ActivityDetailUiState>()
+    val uiState: LiveData<ActivityDetailUiState> get() = _uiState
 
     private val _likeState = MutableLiveData<ActivityLikeState>()
 
@@ -42,7 +42,7 @@ class ActivityDetailViewModel @Inject constructor(
         }
 
     init {
-        _activityDetailUiState.value = ActivityDetailUiState()
+        _uiState.value = ActivityDetailUiState()
     }
 
     fun updateRefreshedActivities() {
@@ -60,22 +60,22 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     private fun updateMyActivities() {
-        _activityDetailUiState.value = _activityDetailUiState.value?.copy(isLoading = true)
+        _uiState.value = uiState.value?.copy(isLoading = true)
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchMyActivities(
-                    _activityDetailUiState.value?.lastFeedId ?: 0L,
+                    uiState.value?.lastFeedId ?: 0L,
                     size,
                 )
             }.onSuccess { response ->
-                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     activities = response.feeds.map { it.toUi() },
                     lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
                     error = false,
                 )
             }.onFailure { exception ->
-                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )
@@ -84,23 +84,23 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     private fun updateOtherUserActivities(userId: Long) {
-        _activityDetailUiState.value = _activityDetailUiState.value?.copy(isLoading = true)
+        _uiState.value = uiState.value?.copy(isLoading = true)
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchUserFeeds(
                     userId = userId,
-                    lastFeedId = _activityDetailUiState.value?.lastFeedId ?: 0L,
+                    lastFeedId = uiState.value?.lastFeedId ?: 0L,
                     size = size,
                 )
             }.onSuccess { response ->
-                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     activities = response.feeds.map { it.toUi() },
                     lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
                     error = false,
                 )
             }.onFailure { exception ->
-                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )
@@ -127,8 +127,8 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     private fun updateLikeStateInUi(feedId: Long, isLiked: Boolean, likeCount: Int) {
-        _activityDetailUiState.value = _activityDetailUiState.value?.copy(
-            activities = _activityDetailUiState.value?.activities?.map { activity ->
+        _uiState.value = uiState.value?.copy(
+            activities = uiState.value?.activities?.map { activity ->
                 if (activity.feedId == feedId) {
                     activity.copy(
                         isLiked = isLiked,
@@ -143,17 +143,17 @@ class ActivityDetailViewModel @Inject constructor(
 
     fun updateRemovedFeed(feedId: Long) {
         viewModelScope.launch {
-            _activityDetailUiState.value = _activityDetailUiState.value?.copy(isLoading = true)
+            _uiState.value = uiState.value?.copy(isLoading = true)
             runCatching {
                 feedRepository.saveRemovedFeed(feedId)
             }.onSuccess {
-                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
-                    activities = _activityDetailUiState.value?.activities?.filter { it.feedId != feedId }
+                    activities = uiState.value?.activities?.filter { it.feedId != feedId }
                         ?: emptyList(),
                 )
             }.onFailure {
-                _activityDetailUiState.value = _activityDetailUiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
                     error = true,
                 )
@@ -162,15 +162,15 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     fun updateReportedSpoilerFeed(feedId: Long) {
-        activityDetailUiState.value?.let { feedUiState ->
+        _uiState.value?.let { feedUiState ->
             viewModelScope.launch {
-                _activityDetailUiState.value = feedUiState.copy(isLoading = true)
+                _uiState.value = feedUiState.copy(isLoading = true)
                 runCatching {
                     feedRepository.saveSpoilerFeed(feedId)
                 }.onSuccess {
-                    _activityDetailUiState.value = feedUiState.copy(isLoading = false)
+                    _uiState.value = feedUiState.copy(isLoading = false)
                 }.onFailure {
-                    _activityDetailUiState.value = feedUiState.copy(
+                    _uiState.value = feedUiState.copy(
                         isLoading = false,
                         error = true,
                     )
@@ -180,15 +180,15 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     fun updateReportedImpertinenceFeed(feedId: Long) {
-        activityDetailUiState.value?.let { feedUiState ->
+        _uiState.value?.let { feedUiState ->
             viewModelScope.launch {
-                _activityDetailUiState.value = feedUiState.copy(isLoading = true)
+                _uiState.value = feedUiState.copy(isLoading = true)
                 runCatching {
                     feedRepository.saveImpertinenceFeed(feedId)
                 }.onSuccess {
-                    _activityDetailUiState.value = feedUiState.copy(isLoading = false)
+                    _uiState.value = feedUiState.copy(isLoading = false)
                 }.onFailure {
-                    _activityDetailUiState.value = feedUiState.copy(
+                    _uiState.value = feedUiState.copy(
                         isLoading = false,
                         error = true,
                     )

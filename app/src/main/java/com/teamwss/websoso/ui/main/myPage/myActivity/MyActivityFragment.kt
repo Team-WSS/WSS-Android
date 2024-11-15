@@ -77,17 +77,17 @@ class MyActivityFragment :
     }
 
     private fun setupObserver() {
-        myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
+        myActivityViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
             setupVisibility(uiState.activities)
         }
 
-        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
+        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             uiState.myProfile?.let { myProfile ->
                 val userProfile = myProfile.toUserProfileModel()
                 updateAdapterWithActivitiesAndProfile(
-                    myActivityViewModel.myActivityUiState.value?.activities,
+                    myActivityViewModel.uiState.value?.activities,
                     userProfile,
                 )
             }
@@ -109,7 +109,7 @@ class MyActivityFragment :
     }
 
     private fun getUserProfile(): UserProfileModel {
-        val myProfile = myPageViewModel.myPageUiState.value?.myProfile
+        val myProfile = myPageViewModel.uiState.value?.myProfile
         return UserProfileModel(
             nickname = myProfile?.nickname.orEmpty(),
             avatarImage = myProfile?.avatarImage.orEmpty(),
@@ -196,7 +196,7 @@ class MyActivityFragment :
 
     private fun navigateToFeedEdit(feedId: Long) {
         val activityModel =
-            myActivityViewModel.myActivityUiState.value?.activities?.find { it.feedId == feedId }
+            myActivityViewModel.uiState.value?.activities?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,

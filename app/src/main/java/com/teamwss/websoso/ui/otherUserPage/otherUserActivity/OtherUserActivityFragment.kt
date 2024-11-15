@@ -69,6 +69,27 @@ class OtherUserActivityFragment :
     }
 
     private fun setupObserver() {
+        otherUserPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllOtherUserActivity.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllOtherUserActivity.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllOtherUserActivity.setWebsosoLoadingVisibility(false)
+                }
+            }
+
+            uiState.otherUserProfile?.let {
+                val userProfile = UserProfileModel(
+                    nickname = it.nickname,
+                    avatarImage = it.avatarImage,
+                )
+                updateAdapterWithActivitiesAndProfile(
+                    otherUserActivityViewModel.otherUserActivityUiState.value?.activities,
+                    userProfile,
+                )
+            }
+        }
+
         otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
             updateAdapterWithActivitiesAndProfile(uiState.activities, getUserProfile())
 
@@ -81,19 +102,6 @@ class OtherUserActivityFragment :
                     binding.clOtherUserActivityExistsNull.visibility = View.GONE
                     binding.nsOtherUserActivityExists.visibility = View.VISIBLE
                 }
-            }
-        }
-
-        otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
-            otherUserProfile?.let {
-                val userProfile = UserProfileModel(
-                    nickname = it.nickname,
-                    avatarImage = it.avatarImage,
-                )
-                updateAdapterWithActivitiesAndProfile(
-                    otherUserActivityViewModel.otherUserActivityUiState.value?.activities,
-                    userProfile,
-                )
             }
         }
     }
@@ -113,10 +121,10 @@ class OtherUserActivityFragment :
     }
 
     private fun getUserProfile(): UserProfileModel {
-        val profile = otherUserPageViewModel.otherUserProfile.value
+        val profile = otherUserPageViewModel.uiState.value?.otherUserProfile
         return UserProfileModel(
             nickname = profile?.nickname.orEmpty(),
-            avatarImage = profile?.avatarImage.orEmpty()
+            avatarImage = profile?.avatarImage.orEmpty(),
         )
     }
 

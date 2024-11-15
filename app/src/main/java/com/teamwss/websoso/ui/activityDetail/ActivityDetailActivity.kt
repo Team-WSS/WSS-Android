@@ -13,6 +13,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
 import com.teamwss.websoso.R
+import com.teamwss.websoso.R.string.my_activity_detail_title
+import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -51,7 +53,6 @@ class ActivityDetailActivity :
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
-
     private val source: String by lazy {
         intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
     }
@@ -94,7 +95,6 @@ class ActivityDetailActivity :
         onBackButtonClick()
     }
 
-
     private fun setupUserIDAndSource() {
         activityDetailViewModel.source = source
         activityDetailViewModel.userId = userId
@@ -108,8 +108,8 @@ class ActivityDetailActivity :
 
     private fun setActivityTitle() {
         binding.tvActivityDetailTitle.text = when (source) {
-            SOURCE_MY_ACTIVITY -> getString(R.string.my_activity_detail_title)
-            SOURCE_OTHER_USER_ACTIVITY -> getString(R.string.other_user_page_activity)
+            SOURCE_MY_ACTIVITY -> getString(my_activity_detail_title)
+            SOURCE_OTHER_USER_ACTIVITY -> getString(other_user_page_activity)
             else -> ""
         }
     }
@@ -127,7 +127,7 @@ class ActivityDetailActivity :
 
         when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
-                myPageViewModel.myPageUiState.observe(this) { uiState ->
+                myPageViewModel.uiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
                         updateAdapterWithActivitiesAndProfile(
                             activityDetailViewModel.activityDetailUiState.value?.activities,
@@ -138,10 +138,11 @@ class ActivityDetailActivity :
             }
 
             SOURCE_OTHER_USER_ACTIVITY -> {
-                otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
-                    otherUserProfile?.let {
+                otherUserPageViewModel.uiState.observe(this) { uiState ->
+                    uiState.otherUserProfile?.let {
+                        val userProfile = uiState.otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.activityDetailUiState.value?.activities,
+                            activityDetailViewModel.uiState.value?.activities,
                             otherUserProfile.toUserProfileModel(),
                         )
                     }
@@ -167,10 +168,10 @@ class ActivityDetailActivity :
     private fun getUserProfile(): UserProfileModel? {
         return when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
-                myPageViewModel.myPageUiState.value?.myProfile?.toUserProfileModel()
+                myPageViewModel.uiState.value?.myProfile?.toUserProfileModel()
             }
             SOURCE_OTHER_USER_ACTIVITY -> {
-                otherUserPageViewModel.otherUserProfile.value?.toUserProfileModel()
+                otherUserPageViewModel.uiState.value?.otherUserProfile?.toUserProfileModel()
             }
             else -> null
         }
@@ -261,7 +262,7 @@ class ActivityDetailActivity :
 
     private fun navigateToFeedEdit(feedId: Long) {
         val activityModel =
-            activityDetailViewModel.activityDetailUiState.value?.activities?.find { it.feedId == feedId }
+            activityDetailViewModel.uiState.value?.activities?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,

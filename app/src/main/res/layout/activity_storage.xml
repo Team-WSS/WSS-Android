@@ -119,11 +119,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_storage_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> onSortTypeClick.invoke()}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
             <ImageView
                 android:id="@+id/iv_storage_go_to_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> onSortTypeClick.invoke()}"
                 android:paddingEnd="28dp"
                 android:paddingStart="8dp"
                 android:paddingVertical="8dp"
@@ -142,6 +149,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_storage_go_to_sort"
                 app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,6 +209,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wll_storage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

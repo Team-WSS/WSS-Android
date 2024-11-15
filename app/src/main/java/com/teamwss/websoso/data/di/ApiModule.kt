@@ -1,18 +1,13 @@
 package com.teamwss.websoso.data.di
 
-import com.teamwss.websoso.data.remote.api.AvatarApi
-import com.teamwss.websoso.data.remote.api.FeedApi
-import com.teamwss.websoso.data.remote.api.KeywordApi
-import com.teamwss.websoso.data.remote.api.NoticeApi
-import com.teamwss.websoso.data.remote.api.NovelApi
-import com.teamwss.websoso.data.remote.api.UserApi
-import com.teamwss.websoso.data.remote.api.UserNovelApi
+import com.teamwss.websoso.data.qualifier.Secured
+import com.teamwss.websoso.data.qualifier.Unsecured
+import com.teamwss.websoso.data.remote.api.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -21,29 +16,33 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideNovelApi(retrofit: Retrofit): NovelApi = retrofit.create()
+    fun provideAuthApi(@Unsecured retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
 
     @Provides
     @Singleton
-    fun provideUserNovelApi(retrofit: Retrofit): UserNovelApi = retrofit.create()
+    fun provideNovelApi(@Secured retrofit: Retrofit): NovelApi = retrofit.create(NovelApi::class.java)
 
     @Provides
     @Singleton
-    fun provideNoticeApi(retrofit: Retrofit): NoticeApi = retrofit.create()
+    fun provideUserNovelApi(@Secured retrofit: Retrofit): UserNovelApi = retrofit.create(UserNovelApi::class.java)
 
     @Provides
     @Singleton
-    fun provideFeedApi(retrofit: Retrofit): FeedApi = retrofit.create()
+    fun provideNoticeApi(@Secured retrofit: Retrofit): NoticeApi = retrofit.create(NoticeApi::class.java)
 
     @Provides
     @Singleton
-    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create()
+    fun provideFeedApi(@Secured retrofit: Retrofit): FeedApi = retrofit.create(FeedApi::class.java)
 
     @Provides
     @Singleton
-    fun provideKeywordApi(retrofit: Retrofit): KeywordApi = retrofit.create()
+    fun provideUserApi(@Secured retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
     @Provides
     @Singleton
-    fun provideAvatarApi(retrofit: Retrofit): AvatarApi = retrofit.create()
+    fun provideKeywordApi(@Secured retrofit: Retrofit): KeywordApi = retrofit.create(KeywordApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAvatarApi(@Secured retrofit: Retrofit): AvatarApi = retrofit.create(AvatarApi::class.java)
 }

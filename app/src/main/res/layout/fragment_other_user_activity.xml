@@ -69,5 +69,12 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wll_other_user_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

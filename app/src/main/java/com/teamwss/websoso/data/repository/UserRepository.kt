@@ -20,7 +20,6 @@ import com.teamwss.websoso.data.model.UserStorageEntity
 import com.teamwss.websoso.data.remote.api.UserApi
 import com.teamwss.websoso.data.remote.request.UserInfoRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileEditRequestDto
-import com.teamwss.websoso.data.remote.request.UserProfileRequestDto
 import com.teamwss.websoso.data.remote.request.UserProfileStatusRequestDto
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -92,26 +91,6 @@ class UserRepository @Inject constructor(
         return userApi.getOtherUserProfile(userId).toData()
     }
 
-    suspend fun saveUserProfile(
-        nickname: String,
-        gender: String,
-        birth: Int,
-        genrePreferences: List<String>,
-    ) {
-        userApi.postUserProfile(
-            UserProfileRequestDto(
-                nickname,
-                gender,
-                birth,
-                genrePreferences,
-            )
-        )
-    }
-
-    suspend fun fetchNicknameValidity(nickname: String): Boolean {
-        return userApi.getNicknameValidity(nickname).isValid
-    }
-
     suspend fun saveEditingUserProfile(
         avatarId: Int?,
         nickname: String?,
@@ -150,31 +129,8 @@ class UserRepository @Inject constructor(
         return userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
     }
 
-    suspend fun saveAccessToken(value: String) {
-        userStorage.edit { preferences ->
-            preferences[ACCESS_TOKEN_KEY] = value
-        }
-    }
-
-    suspend fun fetchAccessToken(): String {
-        return userStorage.data.first()[ACCESS_TOKEN_KEY].orEmpty()
-    }
-
-    suspend fun saveRefreshToken(value: String) {
-        userStorage.edit { preferences ->
-            preferences[REFRESH_TOKEN_KEY] = value
-        }
-    }
-
-    suspend fun fetchRefreshToken(): String {
-        return userStorage.data.first()[REFRESH_TOKEN_KEY].orEmpty()
-    }
-
-    suspend fun clearTokens() {
-        userStorage.edit { preferences ->
-            preferences.remove(ACCESS_TOKEN_KEY)
-            preferences.remove(REFRESH_TOKEN_KEY)
-        }
+    suspend fun fetchNicknameValidity(nickname: String): Boolean {
+        return userApi.getNicknameValidity(nickname).isValid
     }
 
     suspend fun fetchUserStorage(
@@ -204,8 +160,6 @@ class UserRepository @Inject constructor(
 
     companion object {
         val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
-        val ACCESS_TOKEN_KEY = stringPreferencesKey("ACCESS_TOKEN")
-        val REFRESH_TOKEN_KEY = stringPreferencesKey("REFRESH_TOKEN")
         val USER_ID_KEY = stringPreferencesKey("USER_ID")
         val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")
         val USER_GENDER_KEY = stringPreferencesKey("USER_GENDER")
