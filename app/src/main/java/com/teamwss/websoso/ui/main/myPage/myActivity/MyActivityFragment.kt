@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.main.myPage.myActivity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.model.ResultFrom
@@ -43,7 +43,6 @@ class MyActivityFragment :
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val myActivityAdapter: MyActivityAdapter by lazy { MyActivityAdapter(onClickFeedItem()) }
     private var _popupWindow: PopupWindow? = null
-
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,9 +56,10 @@ class MyActivityFragment :
     private fun setupActivityResultCallback() {
         activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
-                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
+                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK, Activity.RESULT_OK -> {
                     myActivityViewModel.updateRefreshedActivities()
                 }
+
                 ResultFrom.FeedDetailRemoved.RESULT_OK -> {
                     myActivityViewModel.updateRefreshedActivities()
                     showWebsosoSnackBar(
@@ -134,7 +134,7 @@ class MyActivityFragment :
             val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
                 putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
             }
-            startActivity(intent)
+            activityResultCallback.launch(intent)
         }
     }
 
@@ -200,8 +200,8 @@ class MyActivityFragment :
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
-                novelId = feed.novelId ?: 0L,
-                novelTitle = feed.title ?: "",
+                novelId = feed.novelId,
+                novelTitle = feed.title,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )

@@ -13,10 +13,10 @@ fun UserFeedEntity.toUi(): ActivityModel =
         isLiked = isLiked,
         likeCount = likeCount,
         commentCount = commentCount,
-        novelId = novelId ?: 0L,
-        title = title ?: "",
-        novelRatingCount = novelRatingCount ?: 0,
-        novelRating = novelRating ?: 0.0f,
+        novelId = novelId,
+        title = title,
+        novelRatingCount = novelRatingCount,
+        novelRating = novelRating,
         relevantCategories = ActivityModel.translateGenres(relevantCategories ?: emptyList()),
     )
 

@@ -23,13 +23,13 @@ data class ActivitiesModel(
         val relevantCategories: String?,
     ) {
         val isNovelInfoAvailable: Boolean
-            get() = novelId != null && novelId != 0L
+            get() = novelId != null
 
         val formattedScore: String
             get() = String.format(
                 SCORE_FORMAT,
-                novelRating?.takeIf { it != null } ?: 0.0f,
-                novelRatingCount?.takeIf { it != null } ?: 0,
+                novelRating?.takeIf { it != null },
+                novelRatingCount?.takeIf { it != null },
             )
 
         companion object {

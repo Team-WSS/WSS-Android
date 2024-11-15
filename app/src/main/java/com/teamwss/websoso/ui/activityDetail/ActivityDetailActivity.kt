@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.activityDetail
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -58,8 +59,20 @@ class ActivityDetailActivity :
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
     private var _popupWindow: PopupWindow? = null
-    private val activityResultCallback: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupActivityResultCallback()
+        setupUserIDAndSource()
+        setActivityTitle()
+        setupMyActivitiesDetailAdapter()
+        setupObserver()
+        onBackButtonClick()
+    }
+
+    private fun setupActivityResultCallback() {
+        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
                 ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
                     activityDetailViewModel.updateRefreshedActivities()
@@ -85,14 +98,6 @@ class ActivityDetailActivity :
                 }
             }
         }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupUserIDAndSource()
-        setActivityTitle()
-        setupMyActivitiesDetailAdapter()
-        setupObserver()
-        onBackButtonClick()
     }
 
     private fun setupUserIDAndSource() {
@@ -121,7 +126,7 @@ class ActivityDetailActivity :
     }
 
     private fun setupObserver() {
-        activityDetailViewModel.activityDetailUiState.observe(this) { uiState ->
+        activityDetailViewModel.uiState.observe(this) { uiState ->
             updateAdapterWithActivitiesAndProfile(uiState.activities, getUserProfile())
         }
 
@@ -130,7 +135,7 @@ class ActivityDetailActivity :
                 myPageViewModel.uiState.observe(this) { uiState ->
                     uiState.myProfile?.let { myProfile ->
                         updateAdapterWithActivitiesAndProfile(
-                            activityDetailViewModel.activityDetailUiState.value?.activities,
+                            activityDetailViewModel.uiState.value?.activities,
                             myProfile.toUserProfileModel(),
                         )
                     }
@@ -140,10 +145,9 @@ class ActivityDetailActivity :
             SOURCE_OTHER_USER_ACTIVITY -> {
                 otherUserPageViewModel.uiState.observe(this) { uiState ->
                     uiState.otherUserProfile?.let {
-                        val userProfile = uiState.otherUserProfile.toUserProfileModel()
                         updateAdapterWithActivitiesAndProfile(
                             activityDetailViewModel.uiState.value?.activities,
-                            otherUserProfile.toUserProfileModel(),
+                            uiState.otherUserProfile.toUserProfileModel(),
                         )
                     }
                 }
@@ -179,6 +183,7 @@ class ActivityDetailActivity :
 
     private fun onBackButtonClick() {
         binding.ivActivityDetailBackButton.setOnClickListener {
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }
@@ -266,8 +271,8 @@ class ActivityDetailActivity :
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
-                novelId = feed.novelId ?: 0L,
-                novelTitle = feed.title ?: "",
+                novelId = feed.novelId,
+                novelTitle = feed.title,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
