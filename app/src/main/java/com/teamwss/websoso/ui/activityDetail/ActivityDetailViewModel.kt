@@ -46,63 +46,48 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     fun updateRefreshedActivities() {
-        _uiState.value = uiState.value?.copy(lastFeedId = 0L)
-        updateUserActivities(userId)
+        _uiState.value = ActivityDetailUiState(isLoading = true)
+        updateUserActivities()
     }
 
-    fun updateUserActivities(userId: Long) {
-        this.userId = userId
-        if (source == SOURCE_MY_ACTIVITY) {
-            updateMyActivities()
-        } else {
-            updateOtherUserActivities(userId)
-        }
-    }
+    fun updateUserActivities() {
+        val currentState = uiState.value ?: ActivityDetailUiState()
 
-    private fun updateMyActivities() {
-        _uiState.value = uiState.value?.copy(isLoading = true)
+        if (!currentState.isLoadable || currentState.isLoading) return
+
+        _uiState.value = currentState.copy(isLoading = true)
+
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchMyActivities(
-                    uiState.value?.lastFeedId ?: 0L,
-                    size,
-                )
+                if (source == SOURCE_MY_ACTIVITY) {
+                    userRepository.fetchMyActivities(
+                        lastFeedId = currentState.lastFeedId,
+                        size = size
+                    )
+                } else {
+                    userRepository.fetchUserFeeds(
+                        userId = userId,
+                        lastFeedId = currentState.lastFeedId,
+                        size = size
+                    )
+                }
             }.onSuccess { response ->
-                _uiState.value = uiState.value?.copy(
-                    isLoading = false,
-                    activities = response.feeds.map { it.toUi() },
-                    lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
-                    error = false,
-                )
-            }.onFailure { exception ->
-                _uiState.value = uiState.value?.copy(
-                    isLoading = false,
-                    error = true,
-                )
-            }
-        }
-    }
+                val newActivities = response.feeds.map { it.toUi() }
 
-    private fun updateOtherUserActivities(userId: Long) {
-        _uiState.value = uiState.value?.copy(isLoading = true)
-        viewModelScope.launch {
-            runCatching {
-                userRepository.fetchUserFeeds(
-                    userId = userId,
-                    lastFeedId = uiState.value?.lastFeedId ?: 0L,
-                    size = size,
-                )
-            }.onSuccess { response ->
-                _uiState.value = uiState.value?.copy(
+                val isLoadable = newActivities.isNotEmpty()
+
+                _uiState.value = currentState.copy(
                     isLoading = false,
-                    activities = response.feeds.map { it.toUi() },
-                    lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
-                    error = false,
+                    isLoadable = isLoadable,
+                    activities = (currentState.activities + newActivities)
+                        .distinctBy { it.feedId },
+                    lastFeedId = if (isLoadable) newActivities.lastOrNull()?.feedId
+                        ?: currentState.lastFeedId else currentState.lastFeedId
                 )
-            }.onFailure { exception ->
-                _uiState.value = uiState.value?.copy(
+            }.onFailure {
+                _uiState.value = currentState.copy(
                     isLoading = false,
-                    error = true,
+                    isError = true
                 )
             }
         }
@@ -155,7 +140,7 @@ class ActivityDetailViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     isLoading = false,
-                    error = true,
+                    isError = true,
                 )
             }
         }
@@ -172,7 +157,7 @@ class ActivityDetailViewModel @Inject constructor(
                 }.onFailure {
                     _uiState.value = feedUiState.copy(
                         isLoading = false,
-                        error = true,
+                        isError = true,
                     )
                 }
             }
@@ -190,7 +175,7 @@ class ActivityDetailViewModel @Inject constructor(
                 }.onFailure {
                     _uiState.value = feedUiState.copy(
                         isLoading = false,
-                        error = true,
+                        isError = true,
                     )
                 }
             }
@@ -198,7 +183,7 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     companion object {
-        const val ACTIVITY_LOAD_SIZE = 10
+        const val ACTIVITY_LOAD_SIZE = 5
         const val DEFAULT_USER_ID = -1L
     }
 }
