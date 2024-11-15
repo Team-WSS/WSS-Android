@@ -19,8 +19,7 @@ class UserStorageViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _uiState: MutableLiveData<UserStorageUiState> =
-        MutableLiveData(UserStorageUiState())
+    private val _uiState: MutableLiveData<UserStorageUiState> = MutableLiveData(UserStorageUiState())
     val uiState: LiveData<UserStorageUiState> get() = _uiState
 
     private val _isRatingChanged = MutableLiveData<Boolean>()
@@ -35,13 +34,8 @@ class UserStorageViewModel @Inject constructor(
     ) {
         this.source = source
         this.userId = receivedUserId
-    }
 
-    init {
-        updateReadStatus(
-            StorageTab.INTEREST.readStatus,
-            forceLoad = true,
-        )
+        updateReadStatus(StorageTab.INTEREST.readStatus, forceLoad = true)
     }
 
     fun updateRatingChanged() {
@@ -85,16 +79,16 @@ class UserStorageViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 userRepository.fetchUserStorage(
-                    userId = 2L,
+                    userId = userId,
                     readStatus = readStatus,
-                    lastUserNovelId = _uiState.value?.lastUserNovelId ?: 0L,
+                    lastUserNovelId = uiState.value?.lastUserNovelId ?: 0L,
                     size = STORAGE_NOVEL_SIZE,
                     sortType = sortType.titleEn,
                 )
             }.onSuccess { response ->
                 val isLoadable = response.isLoadable && response.userNovels.isNotEmpty()
 
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     userNovelCount = response.userNovelCount,
                     userNovelRating = response.userNovelRating,
@@ -104,7 +98,7 @@ class UserStorageViewModel @Inject constructor(
                 )
 
             }.onFailure {
-                _uiState.value = _uiState.value?.copy(
+                _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true,
                 )

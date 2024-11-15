@@ -58,8 +58,16 @@ class OtherUserLibraryFragment :
     }
 
     private fun setupObserve() {
-        otherUserLibraryViewModel.novelStats.observe(viewLifecycleOwner) { stats ->
-            when (otherUserLibraryViewModel.hasNoPreferences(stats)) {
+        otherUserLibraryViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllOtherUserLibrary.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllOtherUserLibrary.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllOtherUserLibrary.setWebsosoLoadingVisibility(false)
+                }
+            }
+
+            when (otherUserLibraryViewModel.hasNoPreferences()) {
                 true -> {
                     binding.clOtherUserLibraryKnownPreference.visibility = View.GONE
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.VISIBLE
@@ -69,26 +77,14 @@ class OtherUserLibraryFragment :
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.GONE
                 }
             }
-        }
 
-        otherUserLibraryViewModel.restGenres.observe(viewLifecycleOwner) { genres ->
-            restGenrePreferenceAdapter.updateRestGenrePreferenceData(genres)
-        }
+            restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
+            updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
 
-        otherUserLibraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
-            updateRestGenrePreferenceVisibility(isVisible)
-        }
+            uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
+            updateDominantGenres(uiState.topGenres)
 
-        otherUserLibraryViewModel.translatedAttractivePoints.observe(viewLifecycleOwner) { translatedPoints ->
-            applyTextColors(translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
-        }
-
-        otherUserLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
-            updateNovelPreferencesKeywords(novelPreferences)
-        }
-
-        otherUserLibraryViewModel.topGenres.observe(viewLifecycleOwner) { topGenres ->
-            updateDominantGenres(topGenres)
+            applyTextColors(uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
         }
     }
 

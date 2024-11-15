@@ -1,15 +1,23 @@
 package com.teamwss.websoso.ui.main.myPage.myActivity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.util.SingleEventHandler
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.FragmentMyActivityBinding
 import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
@@ -23,6 +31,7 @@ import com.teamwss.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 import com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel
+import com.teamwss.websoso.ui.mapper.toUserProfileModel
 import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,16 +40,36 @@ class MyActivityFragment :
     BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
-    private val myActivityAdapter: MyActivityAdapter by lazy {
-        MyActivityAdapter(onClickFeedItem())
-    }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private val myActivityAdapter: MyActivityAdapter by lazy { MyActivityAdapter(onClickFeedItem()) }
     private var _popupWindow: PopupWindow? = null
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupActivityResultCallback()
         setupMyActivitiesAdapter()
         setupObserver()
         onMyActivityDetailButtonClick()
+    }
+
+    private fun setupActivityResultCallback() {
+        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK, Activity.RESULT_OK -> {
+                    myActivityViewModel.updateRefreshedActivities()
+                }
+
+                ResultFrom.FeedDetailRemoved.RESULT_OK -> {
+                    myActivityViewModel.updateRefreshedActivities()
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(R.string.feed_removed_feed_snackbar),
+                        icon = R.drawable.ic_blocked_user_snack_bar,
+                    )
+                }
+            }
+        }
     }
 
     private fun setupMyActivitiesAdapter() {
@@ -48,30 +77,17 @@ class MyActivityFragment :
     }
 
     private fun setupObserver() {
-        myActivityViewModel.myActivityUiState.observe(viewLifecycleOwner) { uiState ->
+        myActivityViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
-
-            when (uiState.activities.isNullOrEmpty()) {
-                true -> {
-                    binding.clMyActivityExistsNull.visibility = View.VISIBLE
-                    binding.nsMyActivityExists.visibility = View.GONE
-                }
-                false -> {
-                    binding.clMyActivityExistsNull.visibility = View.GONE
-                    binding.nsMyActivityExists.visibility = View.VISIBLE
-                }
-            }
+            setupVisibility(uiState.activities)
         }
 
-        myPageViewModel.myPageUiState.observe(viewLifecycleOwner) { uiState ->
-            uiState.myProfile?.let { myProfileEntity ->
-                val userProfile = UserProfileModel(
-                    nickname = myProfileEntity.nickname,
-                    avatarImage = myProfileEntity.avatarImage,
-                )
+        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            uiState.myProfile?.let { myProfile ->
+                val userProfile = myProfile.toUserProfileModel()
                 updateAdapterWithActivitiesAndProfile(
-                    myActivityViewModel.myActivityUiState.value?.activities,
+                    myActivityViewModel.uiState.value?.activities,
                     userProfile,
                 )
             }
@@ -93,11 +109,24 @@ class MyActivityFragment :
     }
 
     private fun getUserProfile(): UserProfileModel {
-        val myProfile = myPageViewModel.myPageUiState.value?.myProfile
+        val myProfile = myPageViewModel.uiState.value?.myProfile
         return UserProfileModel(
             nickname = myProfile?.nickname.orEmpty(),
-            avatarImage = myProfile?.avatarImage.orEmpty()
+            avatarImage = myProfile?.avatarImage.orEmpty(),
         )
+    }
+
+    private fun setupVisibility(activities: List<ActivityModel>?) {
+        when (activities.isNullOrEmpty()) {
+            true -> {
+                binding.clMyActivityExistsNull.visibility = View.VISIBLE
+                binding.nsMyActivityExists.visibility = View.GONE
+            }
+            false -> {
+                binding.clMyActivityExistsNull.visibility = View.GONE
+                binding.nsMyActivityExists.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun onMyActivityDetailButtonClick() {
@@ -105,13 +134,13 @@ class MyActivityFragment :
             val intent = ActivityDetailActivity.getIntent(requireContext()).apply {
                 putExtra(EXTRA_SOURCE, SOURCE_MY_ACTIVITY)
             }
-            startActivity(intent)
+            activityResultCallback.launch(intent)
         }
     }
 
     private fun onClickFeedItem() = object : ActivityItemClickListener {
         override fun onContentClick(feedId: Long) {
-            startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+            activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
         }
 
         override fun onNovelInfoClick(novelId: Long) {
@@ -119,23 +148,19 @@ class MyActivityFragment :
         }
 
         override fun onLikeButtonClick(view: View, feedId: Long) {
-            val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
-            val currentLikeCount = likeCountTextView.text.toString().toInt()
-
-            val updatedLikeCount: Int = if (view.isSelected) {
-                if (currentLikeCount > 0) currentLikeCount - 1 else 0
-            } else {
-                currentLikeCount + 1
+            val likeCount: Int =
+                view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text.toString().toInt()
+            val updatedLikeCount: Int = when (view.isSelected) {
+                true -> if (likeCount > 0) likeCount - 1 else 0
+                false -> likeCount + 1
             }
 
-            likeCountTextView.text = updatedLikeCount.toString()
+            view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text = updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
-            myActivityViewModel.updateActivityLike(
-                view.isSelected,
-                feedId,
-                updatedLikeCount,
-            )
+            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                myActivityViewModel.updateLike(feedId, view.isSelected, updatedLikeCount)
+            }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long) {
@@ -169,18 +194,18 @@ class MyActivityFragment :
         }
     }
 
-    fun navigateToFeedEdit(feedId: Long) {
+    private fun navigateToFeedEdit(feedId: Long) {
         val activityModel =
-            myActivityViewModel.myActivityUiState.value?.activities?.find { it.feedId == feedId }
+            myActivityViewModel.uiState.value?.activities?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
-                novelId = feed.novelId ?: 0L,
-                novelTitle = feed.title ?: "",
+                novelId = feed.novelId,
+                novelTitle = feed.title,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
-            startActivity(CreateFeedActivity.getIntent(requireContext(), editFeedModel))
+            activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), editFeedModel))
         } ?: throw IllegalArgumentException("Feed not found")
     }
 

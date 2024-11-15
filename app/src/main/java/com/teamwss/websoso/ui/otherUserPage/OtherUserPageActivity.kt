@@ -73,18 +73,28 @@ class OtherUserPageActivity :
     }
 
     private fun setupObserver() {
-        otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
-            setUpMyProfileImage(otherUserProfile.avatarImage.orEmpty())
-        }
-
-        otherUserPageViewModel.otherUserProfile.observe(this) { profile ->
-            if (profile.isProfilePublic) {
-                binding.vpOtherUserPage.visibility = View.VISIBLE
-                binding.clOtherUserPageNoPublic.visibility = View.GONE
-            } else {
-                binding.vpOtherUserPage.visibility = View.GONE
-                binding.clOtherUserPageNoPublic.visibility = View.VISIBLE
+        otherUserPageViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllOtherUserPage.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllOtherUserPage.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllOtherUserPage.setWebsosoLoadingVisibility(false)
+                }
             }
+
+            when (uiState.otherUserProfile?.isProfilePublic) {
+                true -> {
+                    binding.vpOtherUserPage.visibility = View.VISIBLE
+                    binding.clOtherUserPageNoPublic.visibility = View.GONE
+                }
+
+                false, null -> {
+                    binding.vpOtherUserPage.visibility = View.GONE
+                    binding.clOtherUserPageNoPublic.visibility = View.VISIBLE
+                }
+            }
+
+            setUpMyProfileImage(uiState.otherUserProfile?.avatarImage.orEmpty())
         }
 
         otherUserPageViewModel.isWithdrawUser.observe(this) { isWithdrawUser ->

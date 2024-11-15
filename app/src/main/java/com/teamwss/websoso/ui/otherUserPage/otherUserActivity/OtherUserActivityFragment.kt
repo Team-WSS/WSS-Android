@@ -1,15 +1,19 @@
 package com.teamwss.websoso.ui.otherUserPage.otherUserActivity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
+import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.databinding.FragmentOtherUserActivityBinding
 import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.ActivityDetailActivity
@@ -28,19 +32,31 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OtherUserActivityFragment :
     BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
+
     private val otherUserActivityViewModel: OtherUserActivityViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
-    private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy {
-        OtherUserActivityAdapter(onClickFeedItem())
-    }
+    private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy { OtherUserActivityAdapter(onClickFeedItem()) }
     private var _popupWindow: PopupWindow? = null
+    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupActivityResultCallback()
         setupUserId()
         setupMyActivitiesAdapter()
         setupObserver()
         onActivityDetailButtonClick()
+    }
+
+    private fun setupActivityResultCallback() {
+        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                ResultFrom.FeedDetailBack.RESULT_OK,
+                ResultFrom.CreateFeed.RESULT_OK -> {
+                    otherUserActivityViewModel.updateRefreshedActivities()
+                }
+            }
+        }
     }
 
     private fun setupUserId() {
@@ -53,9 +69,29 @@ class OtherUserActivityFragment :
     }
 
     private fun setupObserver() {
+        otherUserPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllOtherUserActivity.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllOtherUserActivity.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllOtherUserActivity.setWebsosoLoadingVisibility(false)
+                }
+            }
+
+            uiState.otherUserProfile?.let {
+                val userProfile = UserProfileModel(
+                    nickname = it.nickname,
+                    avatarImage = it.avatarImage,
+                )
+                updateAdapterWithActivitiesAndProfile(
+                    otherUserActivityViewModel.otherUserActivityUiState.value?.activities,
+                    userProfile,
+                )
+            }
+        }
+
         otherUserActivityViewModel.otherUserActivityUiState.observe(viewLifecycleOwner) { uiState ->
-            val userProfile = getUserProfile()
-            updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
+            updateAdapterWithActivitiesAndProfile(uiState.activities, getUserProfile())
 
             when (uiState.activities.isNullOrEmpty()) {
                 true -> {
@@ -66,19 +102,6 @@ class OtherUserActivityFragment :
                     binding.clOtherUserActivityExistsNull.visibility = View.GONE
                     binding.nsOtherUserActivityExists.visibility = View.VISIBLE
                 }
-            }
-        }
-
-        otherUserPageViewModel.otherUserProfile.observe(viewLifecycleOwner) { otherUserProfile ->
-            otherUserProfile?.let {
-                val userProfile = UserProfileModel(
-                    nickname = it.nickname,
-                    avatarImage = it.avatarImage,
-                )
-                updateAdapterWithActivitiesAndProfile(
-                    otherUserActivityViewModel.otherUserActivityUiState.value?.activities,
-                    userProfile,
-                )
             }
         }
     }
@@ -98,10 +121,10 @@ class OtherUserActivityFragment :
     }
 
     private fun getUserProfile(): UserProfileModel {
-        val profile = otherUserPageViewModel.otherUserProfile.value
+        val profile = otherUserPageViewModel.uiState.value?.otherUserProfile
         return UserProfileModel(
             nickname = profile?.nickname.orEmpty(),
-            avatarImage = profile?.avatarImage.orEmpty()
+            avatarImage = profile?.avatarImage.orEmpty(),
         )
     }
 
@@ -117,7 +140,7 @@ class OtherUserActivityFragment :
 
     private fun onClickFeedItem() = object : ActivityItemClickListener {
         override fun onContentClick(feedId: Long) {
-            startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+            activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
         }
 
         override fun onNovelInfoClick(novelId: Long) {
@@ -185,7 +208,7 @@ class OtherUserActivityFragment :
                 when (menuType) {
                     "SPOILER_FEED" -> otherUserActivityViewModel.updateReportedSpoilerFeed(feedId)
                     "IMPERTINENCE_FEED" -> otherUserActivityViewModel.updateReportedImpertinenceFeed(
-                        feedId
+                        feedId,
                     )
                 }
 
@@ -202,7 +225,7 @@ class OtherUserActivityFragment :
     private fun showReportDoneDialog(menuType: String) {
         val doneDialogFragment = FeedReportDoneDialogFragment.newInstance(
             menuType = menuType,
-            event = {}
+            event = {},
         )
         doneDialogFragment.show(parentFragmentManager, FeedReportDoneDialogFragment.TAG)
     }
