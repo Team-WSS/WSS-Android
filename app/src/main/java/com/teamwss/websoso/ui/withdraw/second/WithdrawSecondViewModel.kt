@@ -77,6 +77,7 @@ class WithdrawSecondViewModel @Inject constructor(
                 authRepository.withdraw(withdrawReason)
             }.onSuccess {
                 _isWithDrawSuccess.value = true
+                authRepository.updateIsAutoLogin(false)
             }.onFailure {
                 _isWithDrawSuccess.value = false
             }
