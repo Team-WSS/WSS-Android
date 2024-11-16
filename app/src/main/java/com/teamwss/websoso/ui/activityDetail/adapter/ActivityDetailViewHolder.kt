@@ -30,7 +30,7 @@ class ActivityDetailViewHolder(
     }
 
     companion object {
-        fun from(parent: ViewGroup, onClick: ActivityItemClickListener): ActivityDetailViewHolder =
+        fun of(parent: ViewGroup, onClick: ActivityItemClickListener): ActivityDetailViewHolder =
             ActivityDetailViewHolder(
                 ItemMyActivityBinding.inflate(
                     LayoutInflater.from(parent.context),

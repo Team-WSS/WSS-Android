@@ -221,7 +221,7 @@ class MyActivityFragment :
             activityResultCallback.launch(
                 CreateFeedActivity.getIntent(
                     requireContext(),
-                    editFeedModel
+                    editFeedModel,
                 )
             )
         } ?: throw IllegalArgumentException("Feed not found")
