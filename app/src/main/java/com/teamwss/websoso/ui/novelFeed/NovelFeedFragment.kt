@@ -2,6 +2,7 @@ package com.teamwss.websoso.ui.novelFeed
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.teamwss.websoso.R
@@ -59,7 +61,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
-    private val novelFeedViewModel: NovelFeedViewModel by viewModels()
+    private val novelFeedViewModel: NovelFeedViewModel by activityViewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>

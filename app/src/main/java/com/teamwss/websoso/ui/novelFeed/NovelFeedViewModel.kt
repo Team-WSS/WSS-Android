@@ -29,9 +29,9 @@ class NovelFeedViewModel @Inject constructor(
     private val _isLogin: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLogin: LiveData<Boolean> get() = _isLogin
 
-    fun updateFeeds(novelId: Long) {
+    fun updateFeeds(novelId: Long, isAgainRefresh: Boolean = false) {
         feedUiState.value?.let { feedUiState ->
-            if (!feedUiState.isLoadable) return
+            if (!feedUiState.isLoadable && !isAgainRefresh) return
 
             viewModelScope.launch {
                 runCatching {

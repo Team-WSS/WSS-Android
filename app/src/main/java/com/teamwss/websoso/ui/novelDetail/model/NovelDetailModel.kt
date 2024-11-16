@@ -34,7 +34,10 @@ data class NovelDetailModel(
         val author: String = "",
         val formattedNovelDetailSummary: String = "$novelGenres ・ $isNovelCompletedText ・ $author",
         val isNovelNotBlank: Boolean = novelTitle.isNotBlank() && novelImage.isNotBlank() && author.isNotBlank(),
-    )
+    ) {
+        val getGenres: List<String>
+            get() = novelGenres.split("/")
+    }
 
     data class UserRatingModel(
         val interestCount: Int = 0,

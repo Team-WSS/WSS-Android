@@ -68,6 +68,7 @@
     <string name="novel_detail_remove_accept">삭제</string>
     <string name="novel_detail_remove_result">평가를 모두 삭제했어요</string>
     <string name="novel_detail_tooltip">읽기 상태를 체크하여\n작품을 평가해보세요!</string>
+    <string name="novel_detail_feed_write">작성 완료!</string>
 
     <!-- 작품 소개 -->
     <string name="novel_info_platforms_title">작품 보러가기</string>
@@ -142,7 +143,7 @@
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
     <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
-    <string name="novel_rating_complete">평가가 완료됐어요</string>
+    <string name="novel_rating_complete">평가 완료!</string>
     <string name="novel_rating_save_error">다시 시도해주세요</string>
     <string name="novel_rating_keyword_none">해당 키워드는\n아직 등록되지 않았어요..</string>
     <string name="novel_rating_keyword_report">키워드 문의하러 가기</string>
