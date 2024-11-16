@@ -37,7 +37,6 @@ import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
-import com.teamwss.websoso.ui.userStorage.UserStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,11 +60,13 @@ class NovelDetailActivity :
                     novelInfoViewModel.updateNovelInfoWithDelay(novelId)
                     setResult(NovelDetailBack.RESULT_OK)
                 }
+
                 CreateFeed.RESULT_OK -> {
                     novelInfoViewModel.updateNovelInfoWithDelay(novelId)
                 }
             }
         }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -279,7 +280,9 @@ class NovelDetailActivity :
                 return
             }
             val editFeedModel = EditFeedModel(
-                novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
+                novelId = novelId,
+                novelTitle = binding.tvNovelDetailTitle.text.toString(),
+                feedCategory = novelDetailViewModel.novelDetailModel.value?.novel?.getGenres ?: emptyList(),
             )
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
             novelDetailResultLauncher.launch(intent)
