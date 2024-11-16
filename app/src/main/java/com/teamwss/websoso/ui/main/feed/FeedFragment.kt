@@ -269,7 +269,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         feedViewModel.updateRefreshedFeeds(false)
 
                     CreateFeed.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds(false)
+                        feedViewModel.updateRefreshedFeeds(true)
                         showWebsosoSnackBar(
                             view = binding.root,
                             message = getString(feed_create_done),
