@@ -85,6 +85,10 @@ class ChangeUserInfoViewModel @Inject constructor(
                     birthYear = uiState.value?.birthYear ?: isInitializeOfBirthYear,
                 )
             }.onSuccess {
+                userRepository.saveGender(
+                    uiState.value?.gender?.genderCode
+                        ?: isInitializeOfGender.getOppositeGender().genderCode,
+                )
                 _uiState.value = uiState.value?.copy(
                     loading = false,
                     isSaveStatusComplete = true,
