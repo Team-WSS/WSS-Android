@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
@@ -37,7 +38,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == ResultFrom.NovelDetailBack.RESULT_OK) {
                 val currentReadStatus =
-                    userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
+                userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
                 userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
             }
         }
@@ -81,14 +82,10 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             tab.text = StorageTab.fromPosition(position).title
         }.attach()
 
-        binding.tlStorage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val selectedTab = requireNotNull(tab) { "Tab must not be null" }
-                onReadingStatusTabSelected(selectedTab.position)
+        binding.vpStorage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                onReadingStatusTabSelected(position)
             }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
 
@@ -102,7 +99,6 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     private fun setupObserver() {
         userStorageViewModel.uiState.observe(this) { uiState ->
-            Log.d("asdf",uiState.toString())
             when {
                 uiState.loading -> binding.wllStorage.setWebsosoLoadingVisibility(false)
                 uiState.error -> binding.wllStorage.setLoadingLayoutVisibility(false)
@@ -129,7 +125,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     }
 
     private fun updateStorageNovels(uiState: UserStorageUiState) {
-        val currentTabPosition = StorageTab.values().indexOfFirst { it.readStatus == uiState.readStatus }
+        val currentTabPosition = StorageTab.entries.indexOfFirst { it.readStatus == uiState.readStatus }
 
         if (currentTabPosition != -1 && uiState.storageNovels.isNotEmpty()) {
             userStorageAdapter.updateNovels(

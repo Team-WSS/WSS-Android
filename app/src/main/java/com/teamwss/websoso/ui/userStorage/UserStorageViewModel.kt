@@ -1,5 +1,6 @@
 package com.teamwss.websoso.ui.userStorage
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,7 @@ class UserStorageViewModel @Inject constructor(
     private val _uiState: MutableLiveData<UserStorageUiState> = MutableLiveData(UserStorageUiState())
     val uiState: LiveData<UserStorageUiState> get() = _uiState
 
-    private val _isRatingChanged = MutableLiveData<Boolean>()
+    private val _isRatingChanged = MutableLiveData<Boolean>(false)
     val isRatingChanged: LiveData<Boolean> get() = _isRatingChanged
 
     private val tabDataMap: MutableMap<String, MutableList<UserStorageModel.StorageNovelModel>> =
@@ -77,9 +78,6 @@ class UserStorageViewModel @Inject constructor(
     private fun updateUserNovelsStorage(readStatus: String, sortType: SortType) {
         val currentState = _uiState.value ?: UserStorageUiState()
 
-        if (currentState.loading || !currentState.isLoadable)
-            return
-
         _uiState.value = currentState.copy(loading = true)
 
         viewModelScope.launch {
@@ -93,7 +91,7 @@ class UserStorageViewModel @Inject constructor(
                 )
             }.onSuccess { response ->
                 val newNovels = response.userNovels.map { it.toUi() }
-                val isLoadable = newNovels.isNotEmpty()
+                val isLoadable = response.isLoadable
 
                 val updatedNovels = (tabDataMap[readStatus] ?: mutableListOf()).apply {
                     addAll(newNovels)
@@ -168,7 +166,7 @@ class UserStorageViewModel @Inject constructor(
     }
 
     companion object {
-        const val STORAGE_NOVEL_SIZE = 12
+        const val STORAGE_NOVEL_SIZE = 9
         const val DEFAULT_USER_ID = -1L
     }
 }
