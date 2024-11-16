@@ -64,11 +64,21 @@ class NovelDetailActivity :
                 }
 
                 CreateFeed.RESULT_OK -> {
-                    novelInfoViewModel.updateNovelInfoWithDelay(novelId)
-                    novelFeedViewModel.updateFeeds(novelId)
+                    handleCreateFeedResult()
                 }
             }
         }
+
+    private fun handleCreateFeedResult() {
+        novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+        novelFeedViewModel.updateFeeds(novelId, true)
+        binding.vpNovelDetail.currentItem = FEED_FRAGMENT_PAGE
+        showWebsosoSnackBar(
+            view = binding.root,
+            message = getString(R.string.novel_detail_feed_write),
+            icon = R.drawable.ic_novel_detail_check,
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
