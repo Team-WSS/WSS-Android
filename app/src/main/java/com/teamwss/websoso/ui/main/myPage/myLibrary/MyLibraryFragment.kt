@@ -195,6 +195,12 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        view?.requestLayout()
+    }
+
     companion object {
         const val EXTRA_SOURCE = "source"
     }
