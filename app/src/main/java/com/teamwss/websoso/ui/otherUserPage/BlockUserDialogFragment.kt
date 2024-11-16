@@ -42,10 +42,10 @@ class BlockUserDialogFragment :
     }
 
     private fun setupObserver() {
-        otherUserPageViewModel.isBlockedCompleted.observe(viewLifecycleOwner) { isBlockedCompleted ->
-            if (isBlockedCompleted) {
+        otherUserPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            if (uiState.isBlockedCompleted) {
                 val intent = Intent().apply {
-                    putExtra(USER_NICKNAME, otherUserPageViewModel.otherUserProfile.value?.nickname)
+                    putExtra(USER_NICKNAME, otherUserPageViewModel.uiState.value?.otherUserProfile?.nickname)
                 }
                 activity?.setResult(BlockUser.RESULT_OK, intent)
                 dismiss()

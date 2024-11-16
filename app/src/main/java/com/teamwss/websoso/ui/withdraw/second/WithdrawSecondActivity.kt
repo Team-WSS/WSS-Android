@@ -9,6 +9,7 @@ import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityWithdrawSecondBinding
+import com.teamwss.websoso.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,7 +65,7 @@ class WithdrawSecondActivity :
 
         override fun onWithdrawButtonClick() {
             singleEventHandler.throttleFirst {
-                withdrawSecondViewModel.saveWithdrawReason()
+                withdrawSecondViewModel.withdraw()
             }
         }
     }
@@ -84,6 +85,10 @@ class WithdrawSecondActivity :
 
         withdrawSecondViewModel.withdrawReason.observe(this) { reason ->
             updateWithdrawReasonCheckButtonImage(reason)
+        }
+
+        withdrawSecondViewModel.isWithDrawSuccess.observe(this) { isWithdrawSuccess ->
+            if (isWithdrawSuccess) startActivity(LoginActivity.getIntent(this))
         }
     }
 

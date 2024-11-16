@@ -29,12 +29,7 @@ import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
 import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
-import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
-import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -283,6 +278,14 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                             view = binding.root,
                             message = getString(block_user_success_message, nickname),
                             icon = ic_novel_detail_check,
+                        )
+                    }
+
+                    WithdrawUser.RESULT_OK -> {
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(R.string.other_user_page_withdraw_user),
+                            icon = ic_blocked_user_snack_bar,
                         )
                     }
                 }

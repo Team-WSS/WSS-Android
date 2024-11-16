@@ -1,11 +1,13 @@
 package com.teamwss.websoso.ui.main.myPage.myLibrary
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -14,6 +16,7 @@ import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.setListViewHeightBasedOnChildren
 import com.teamwss.websoso.data.model.GenrePreferenceEntity
@@ -29,6 +32,13 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private val userStorageResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                myLibraryViewModel.updateMyLibrary()
+            }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,39 +55,34 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     }
 
     private fun setUpObserve() {
-        myLibraryViewModel.novelStats.observe(viewLifecycleOwner) { stats ->
-            when (myLibraryViewModel.hasNoPreferences(stats)) {
+        myLibraryViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllMyLibrary.setWebsosoLoadingVisibility(true)
+                uiState.isError -> binding.wllMyLibrary.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllMyLibrary.setWebsosoLoadingVisibility(false)
+                }
+            }
+
+            when (myLibraryViewModel.hasNoPreferences()) {
                 true -> {
                     binding.clMyLibraryKnownPreference.visibility = View.GONE
                     binding.clMyLibraryUnknownPreference.visibility = View.VISIBLE
                 }
+
                 false -> {
                     binding.clMyLibraryKnownPreference.visibility = View.VISIBLE
                     binding.clMyLibraryUnknownPreference.visibility = View.GONE
                 }
             }
-        }
 
-        myLibraryViewModel.restGenres.observe(viewLifecycleOwner) { genres ->
-            restGenrePreferenceAdapter.updateRestGenrePreferenceData(genres)
-        }
+            restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
+            updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
 
-        myLibraryViewModel.isGenreListVisible.observe(viewLifecycleOwner) { isVisible ->
-            updateRestGenrePreferenceVisibility(isVisible)
-        }
+            uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
+            updateDominantGenres(uiState.topGenres)
 
-        myLibraryViewModel.translatedAttractivePoints.observe(viewLifecycleOwner) { translatedPoints ->
-            val combinedText =
-                translatedPoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text)
-            applyTextColors(combinedText)
-        }
-
-        myLibraryViewModel.novelPreferences.observe(viewLifecycleOwner) { novelPreferences ->
-            updateNovelPreferencesKeywords(novelPreferences)
-        }
-
-        myLibraryViewModel.topGenres.observe(viewLifecycleOwner) { topGenres ->
-            updateDominantGenres(topGenres)
+            applyTextColors(uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
         }
     }
 
@@ -137,16 +142,16 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun updateNovelPreferencesKeywords(novelPreferences: NovelPreferenceEntity) {
         novelPreferences.keywords.forEach { keyword ->
-            val chip = createKeywordChip(keyword)
-            binding.wcgMyLibraryAttractivePoints.addView(chip)
+            binding.wcgMyLibraryAttractivePoints.addView(createKeywordChip(keyword))
         }
     }
 
     private fun createKeywordChip(data: NovelPreferenceEntity.KeywordEntity): Chip {
         return WebsosoChip(requireContext()).apply {
             text = "${data.keywordName} ${data.keywordCount}"
-            isCheckable = true
+            isCheckable = false
             isChecked = false
+            isEnabled = false
 
             setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
@@ -156,8 +161,14 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
-            val intent = UserStorageActivity.getIntent(requireContext())
-            startActivity(intent)
+            singleEventHandler.throttleFirst {
+                val intent = UserStorageActivity.getIntent(
+                    context = requireContext(),
+                    source = UserStorageActivity.SOURCE_MY_LIBRARY,
+                    userId = myLibraryViewModel.userId,
+                )
+                userStorageResultLauncher.launch(intent)
+            }
         }
     }
 
@@ -171,5 +182,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                 2 -> binding.ivMyLibraryDominantGenreThirdLogo.load(updatedGenreImageUrl)
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_SOURCE = "source"
     }
 }

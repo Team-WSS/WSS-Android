@@ -15,7 +15,8 @@ import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.ui.model.ResultFrom.*
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.toFloatPxFromDp
@@ -72,17 +73,34 @@ class OtherUserPageActivity :
     }
 
     private fun setupObserver() {
-        otherUserPageViewModel.otherUserProfile.observe(this) { otherUserProfile ->
-            setUpMyProfileImage(otherUserProfile.avatarImage.orEmpty())
+        otherUserPageViewModel.uiState.observe(this) { uiState ->
+            when {
+                uiState.isLoading -> binding.wllOtherUserPage.setWebsosoLoadingVisibility(true)
+                uiState.error -> binding.wllOtherUserPage.setLoadingLayoutVisibility(false)
+                !uiState.isLoading -> {
+                    binding.wllOtherUserPage.setWebsosoLoadingVisibility(false)
+                }
+            }
+
+            when (uiState.otherUserProfile?.isProfilePublic) {
+                true -> {
+                    binding.vpOtherUserPage.visibility = View.VISIBLE
+                    binding.clOtherUserPageNoPublic.visibility = View.GONE
+                }
+
+                false, null -> {
+                    binding.vpOtherUserPage.visibility = View.GONE
+                    binding.clOtherUserPageNoPublic.visibility = View.VISIBLE
+                }
+            }
+
+            setUpMyProfileImage(uiState.otherUserProfile?.avatarImage.orEmpty())
         }
 
-        otherUserPageViewModel.otherUserProfile.observe(this) { profile ->
-            if (profile.isProfilePublic) {
-                binding.vpOtherUserPage.visibility = View.VISIBLE
-                binding.clOtherUserPageNoPublic.visibility = View.GONE
-            } else {
-                binding.vpOtherUserPage.visibility = View.GONE
-                binding.clOtherUserPageNoPublic.visibility = View.VISIBLE
+        otherUserPageViewModel.isWithdrawUser.observe(this) { isWithdrawUser ->
+            if (isWithdrawUser) {
+                setResult(WithdrawUser.RESULT_OK, intent)
+                finish()
             }
         }
     }

@@ -3,6 +3,8 @@ package com.teamwss.websoso.ui.main.myPage.myLibrary.model
 enum class AttractivePoints(val korean: String) {
     CHARACTER("캐릭터"),
     RELATIONSHIP("관계"),
+    WORLDVIEW("세계관"),
+    VIBE("분위기"),
     MATERIAL("소재");
 
     companion object {

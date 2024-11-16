@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamwss.websoso.data.model.OtherUserProfileEntity
 import com.teamwss.websoso.data.repository.UserRepository
+import com.teamwss.websoso.ui.otherUserPage.model.OtherUserPageUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,39 +15,64 @@ class OtherUserPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _otherUserProfile = MutableLiveData<OtherUserProfileEntity>()
-    val otherUserProfile: LiveData<OtherUserProfileEntity> get() = _otherUserProfile
+    private val _uiState = MutableLiveData(OtherUserPageUiState())
+    val uiState: LiveData<OtherUserPageUiState> get() = _uiState
 
-    private val _userId: MutableLiveData<Long> = MutableLiveData()
-    val userId: LiveData<Long> get() = _userId
+    private var userId: Long = 0L
 
-    private val _isBlockedCompleted: MutableLiveData<Boolean> = MutableLiveData()
-    val isBlockedCompleted: LiveData<Boolean> get() = _isBlockedCompleted
+    private val _isWithdrawUser: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithdrawUser: LiveData<Boolean> get() = _isWithdrawUser
 
-    fun updateUserId(userId: Long) {
-        _userId.value = userId
-
-        updateUserProfile()
+    fun updateUserId(newUserId: Long) {
+        userId = newUserId
+        _uiState.value = _uiState.value?.copy(isLoading = true)
+        updateUserProfile(newUserId)
     }
 
-    private fun updateUserProfile() {
+    private fun updateUserProfile(userId: Long) {
         viewModelScope.launch {
             runCatching {
-                userRepository.fetchOtherUserProfile(userId.value ?: 0L)
+                userRepository.fetchOtherUserProfile(userId)
             }.onSuccess { otherUserProfile ->
-                _otherUserProfile.value = otherUserProfile
+                _uiState.value = _uiState.value?.copy(
+                    otherUserProfile = otherUserProfile,
+                    isLoading = false,
+                    error = false,
+                )
             }.onFailure { exception ->
+                if (exception.message?.contains(WITHDRAW_USER_CODE) == true) {
+                    _isWithdrawUser.value = true
+                    return@onFailure
+                }
+                _uiState.value = _uiState.value?.copy(
+                    isLoading = false,
+                    error = true,
+                )
             }
         }
     }
 
     fun updateBlockedUser() {
+        _uiState.value = _uiState.value?.copy(isLoading = true)
         viewModelScope.launch {
             runCatching {
-                userRepository.saveBlockUser(userId.value ?: 0L)
+                userRepository.saveBlockUser(userId)
             }.onSuccess {
-                _isBlockedCompleted.value = true
-            }.onFailure {}
+                _uiState.value = _uiState.value?.copy(
+                    isBlockedCompleted = true,
+                    isLoading = false,
+                    error = false,
+                )
+            }.onFailure {
+                _uiState.value = _uiState.value?.copy(
+                    isLoading = false,
+                    error = true,
+                )
+            }
         }
+    }
+
+    companion object {
+        private const val WITHDRAW_USER_CODE = "403"
     }
 }

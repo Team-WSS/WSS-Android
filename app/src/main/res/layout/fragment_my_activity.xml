@@ -15,11 +15,11 @@
                 android:id="@+id/iv_my_activity_empty_cat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_novel_info_none"
                 android:layout_marginTop="100dp"
+                android:src="@drawable/img_novel_info_none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"  />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_my_activity_empty"
@@ -39,8 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_my_activity"/>
+                    tools:listitem="@layout/item_my_activity" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_my_activity_more"
@@ -66,8 +66,16 @@
                     android:elevation="0dp"
                     android:stateListAnimator="@null"
                     android:text="@string/my_activity_more"
-                    android:textColor="@color/primary_100_6A5DFD" />
+                    android:textColor="@color/primary_100_6A5DFD"
+                    android:visibility="gone" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            android:id="@+id/wll_my_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="invisible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
