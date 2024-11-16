@@ -54,22 +54,23 @@ class MyActivityFragment :
     }
 
     private fun setupActivityResultCallback() {
-        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK, Activity.RESULT_OK -> {
-                    myActivityViewModel.updateRefreshedActivities()
-                }
+        activityResultCallback =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK, Activity.RESULT_OK -> {
+                        myActivityViewModel.updateRefreshedActivities()
+                    }
 
-                ResultFrom.FeedDetailRemoved.RESULT_OK -> {
-                    myActivityViewModel.updateRefreshedActivities()
-                    showWebsosoSnackBar(
-                        view = binding.root,
-                        message = getString(R.string.feed_removed_feed_snackbar),
-                        icon = R.drawable.ic_blocked_user_snack_bar,
-                    )
+                    ResultFrom.FeedDetailRemoved.RESULT_OK -> {
+                        myActivityViewModel.updateRefreshedActivities()
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(R.string.feed_removed_feed_snackbar),
+                            icon = R.drawable.ic_blocked_user_snack_bar,
+                        )
+                    }
                 }
             }
-        }
     }
 
     private fun setupMyActivitiesAdapter() {
@@ -81,14 +82,7 @@ class MyActivityFragment :
             val userProfile = getUserProfile()
             updateAdapterWithActivitiesAndProfile(uiState.activities, userProfile)
             setupVisibility(uiState.activities)
-
-            when {
-                uiState.isLoading -> binding.wllMyActivity.setWebsosoLoadingVisibility(true)
-                uiState.isError -> binding.wllMyActivity.setLoadingLayoutVisibility(false)
-                !uiState.isLoading -> {
-                    binding.wllMyActivity.setWebsosoLoadingVisibility(false)
-                }
-            }
+            setupActivityMoreButtonVisibility(uiState.activities.count())
         }
 
         myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
@@ -130,10 +124,19 @@ class MyActivityFragment :
                 binding.clMyActivityExistsNull.visibility = View.VISIBLE
                 binding.nsMyActivityExists.visibility = View.GONE
             }
+
             false -> {
                 binding.clMyActivityExistsNull.visibility = View.GONE
                 binding.nsMyActivityExists.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun setupActivityMoreButtonVisibility(activityCount: Int) {
+        if (activityCount >= 5) {
+            binding.btnMyActivityMore.visibility = View.VISIBLE
+        } else {
+            binding.btnMyActivityMore.visibility = View.GONE
         }
     }
 
@@ -157,13 +160,15 @@ class MyActivityFragment :
 
         override fun onLikeButtonClick(view: View, feedId: Long) {
             val likeCount: Int =
-                view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text.toString().toInt()
+                view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text.toString()
+                    .toInt()
             val updatedLikeCount: Int = when (view.isSelected) {
                 true -> if (likeCount > 0) likeCount - 1 else 0
                 false -> likeCount + 1
             }
 
-            view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text = updatedLikeCount.toString()
+            view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text =
+                updatedLikeCount.toString()
             view.isSelected = !view.isSelected
 
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
@@ -213,7 +218,12 @@ class MyActivityFragment :
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
-            activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), editFeedModel))
+            activityResultCallback.launch(
+                CreateFeedActivity.getIntent(
+                    requireContext(),
+                    editFeedModel,
+                )
+            )
         } ?: throw IllegalArgumentException("Feed not found")
     }
 

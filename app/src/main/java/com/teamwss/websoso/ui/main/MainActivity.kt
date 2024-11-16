@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
+import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivityMainBinding
 import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.main.MainActivity.FragmentType.EXPLORE
@@ -27,14 +29,40 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainViewModel: MainViewModel by viewModels()
+    private var backPressedTime: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupBackButtonListener()
         setBottomNavigationView()
         setupObserver()
         onViewGuestClick()
         handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
+    }
+
+    private fun setupBackButtonListener() {
+        this.onBackPressedDispatcher.addCallback(this, backPressedCallback)
+    }
+
+    private val backPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            when (System.currentTimeMillis() - backPressedTime > 2000) {
+                true -> {
+                    backPressedTime = System.currentTimeMillis()
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(R.string.main_back_press),
+                        icon = R.drawable.ic_blocked_user_snack_bar,
+                    )
+                }
+
+                false -> {
+                    this.isEnabled = false
+                    finish()
+                }
+            }
+        }
     }
 
     private fun setBottomNavigationView() {
@@ -46,11 +74,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private fun setupObserver() {
         mainViewModel.isLogin.observe(this) { isLogin ->
-            when (isLogin){
+            when (isLogin) {
                 true -> {
                     binding.viewMainGuest.visibility = View.GONE
                     mainViewModel.updateUserInfo()
                 }
+
                 false -> binding.viewMainGuest.visibility = View.VISIBLE
             }
         }

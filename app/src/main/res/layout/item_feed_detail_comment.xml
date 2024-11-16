@@ -16,9 +16,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_feed_detail_comment"
-        android:onClick="@{(cl_feed_detail_comment) -> onClick.onCommentsClick(cl_feed_detail_comment)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{(cl_feed_detail_comment) -> onClick.onCommentsClick(cl_feed_detail_comment)}"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp">
 
@@ -42,7 +42,6 @@
             android:maxLength="10"
             android:maxLines="1"
             android:onClick="@{() -> onClick.onProfileClick(comment.user.id,comment.isMyComment)}"
-            android:text="@{comment.user.nickname}"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/iv_feed_detail_comment_profile"
@@ -96,7 +95,6 @@
             android:maxLength="500"
             android:maxLines="4"
             android:scrollbars="vertical"
-            android:text="@{comment.commentContent}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"

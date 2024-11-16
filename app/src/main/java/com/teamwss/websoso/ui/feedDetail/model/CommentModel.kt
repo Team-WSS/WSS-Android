@@ -9,4 +9,7 @@ data class CommentModel(
     val createdDate: String,
     val isModified: Boolean,
     val isMyComment: Boolean,
+    val isSpoiler: Boolean,
+    val isBlocked: Boolean,
+    val isHidden: Boolean,
 )
