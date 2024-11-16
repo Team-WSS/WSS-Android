@@ -141,7 +141,7 @@
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
     <string name="novel_rating_cancel_alert_cancel">계속 작성</string>
-    <string name="novel_rating_complete">평가가 완료됐어요</string>
+    <string name="novel_rating_complete">평가 완료!</string>
     <string name="novel_rating_save_error">다시 시도해주세요</string>
     <string name="novel_rating_keyword_none">해당 키워드는\n아직 등록되지 않았어요..</string>
     <string name="novel_rating_keyword_report">키워드 문의하러 가기</string>
