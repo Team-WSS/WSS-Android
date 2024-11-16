@@ -3,7 +3,9 @@ package com.teamwss.websoso.ui.createFeed
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.teamwss.websoso.R
@@ -20,7 +22,6 @@ import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getAdaptedParcelableExtra
-import com.teamwss.websoso.common.util.hideKeyboard
 import com.teamwss.websoso.common.util.toFloatPxFromDp
 import com.teamwss.websoso.databinding.ActivityCreateFeedBinding
 import com.teamwss.websoso.ui.createFeed.model.CreatedFeedCategoryModel
@@ -31,6 +32,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_create_feed) {
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val imm: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return super.dispatchTouchEvent(ev)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +83,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 if (!isFinishing) finish()
             }
         }
-
-        binding.root.setOnClickListener { it.hideKeyboard() }
 
         binding.ivCreateFeedRemoveButton.setOnClickListener {
             binding.clCreateFeedNovelInfo.visibility = View.INVISIBLE

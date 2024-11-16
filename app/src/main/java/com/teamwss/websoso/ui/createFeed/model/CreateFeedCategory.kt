@@ -4,15 +4,16 @@ enum class CreateFeedCategory(
     val krTitle: String,
     val enTitle: String,
 ) {
-    ROMANCE_FANTASY("로판", "romanceFantasy"),
-    ROMANCE("로맨스", "romance"),
-    BOYS_LOVE("BL", "BL"),
+
     FANTASY("판타지", "fantasy"),
     MODERN_FANTASY("현판", "modernFantasy"),
+    ROMANCE("로맨스", "romance"),
+    ROMANCE_FANTASY("로판", "romanceFantasy"),
     WUXIA("무협", "wuxia"),
     DRAMA("드라마", "drama"),
     MYSTERY("미스터리", "mystery"),
     LIGHT_NOVEL("라노벨", "lightNovel"),
+    BOYS_LOVE("BL", "BL"),
     ETC("기타", "etc")
     ;
 

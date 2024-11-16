@@ -29,7 +29,13 @@ import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
 import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.ui.model.ResultFrom.*
+import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
+import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.WithdrawUser
 import com.teamwss.websoso.common.util.InfiniteScrollListener
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -256,8 +262,17 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK ->
+                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, OtherUserProfileBack.RESULT_OK ->
                         feedViewModel.updateRefreshedFeeds(false)
+
+                    CreateFeed.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds(false)
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = "작성 완료!",
+                            icon = ic_novel_detail_check,
+                        )
+                    }
 
                     FeedDetailRemoved.RESULT_OK -> {
                         feedViewModel.updateRefreshedFeeds(false)
