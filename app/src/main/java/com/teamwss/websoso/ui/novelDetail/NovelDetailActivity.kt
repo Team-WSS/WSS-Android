@@ -34,6 +34,7 @@ import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
+import com.teamwss.websoso.ui.novelFeed.NovelFeedViewModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
@@ -44,6 +45,7 @@ class NovelDetailActivity :
     BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
+    private val novelFeedViewModel by viewModels<NovelFeedViewModel>()
     private var _novelDetailMenuPopupBinding: MenuNovelDetailPopupBinding? = null
     private val novelDetailMenuPopupBinding get() = _novelDetailMenuPopupBinding ?: error("")
     private val novelDetailToolTipBinding: ItemNovelDetailTooltipBinding by lazy {
@@ -63,6 +65,7 @@ class NovelDetailActivity :
 
                 CreateFeed.RESULT_OK -> {
                     novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                    novelFeedViewModel.updateFeeds(novelId)
                 }
             }
         }
