@@ -9,6 +9,7 @@
     <string name="main_ic_explore">탐색</string>
     <string name="main_ic_feed">수다</string>
     <string name="main_ic_my_page">My</string>
+    <string name="main_back_press">뒤로가기를 한번 더 누르면 종료됩니다</string>
 
     <!--일반 탐색 뷰-->
     <string name="normal_explore_novel_count_title">작품</string>
