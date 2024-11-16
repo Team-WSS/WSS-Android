@@ -11,11 +11,13 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.color
 import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
@@ -23,6 +25,7 @@ import com.teamwss.websoso.R.drawable.ic_novel_detail_check
 import com.teamwss.websoso.R.id.tv_feed_thumb_up_count
 import com.teamwss.websoso.R.layout.fragment_feed
 import com.teamwss.websoso.R.string.block_user_success_message
+import com.teamwss.websoso.R.string.feed_create_done
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
@@ -269,7 +272,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         feedViewModel.updateRefreshedFeeds(false)
                         showWebsosoSnackBar(
                             view = binding.root,
-                            message = "작성 완료!",
+                            message = getString(feed_create_done),
                             icon = ic_novel_detail_check,
                         )
                     }
@@ -378,7 +381,15 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
 
         feedViewModel.categories.observe(viewLifecycleOwner) { category ->
-            category.setUpChips()
+            if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
+
+            val selectedCategory = category.find { it.isSelected } ?: category.first()
+
+            binding.wcgFeed.children.forEach {
+                val chip = it as Chip
+                chip.isSelected = chip.text == selectedCategory.category.krTitle
+            }
+
             feedViewModel.updateFeeds()
         }
     }

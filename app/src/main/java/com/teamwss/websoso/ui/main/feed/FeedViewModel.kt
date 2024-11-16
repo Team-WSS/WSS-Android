@@ -33,8 +33,7 @@ class FeedViewModel @Inject constructor(
             val userGender = userRepository.fetchGender()
             val categories: List<CategoryModel> = when (userGender) {
                 "M" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
-                "F" -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
-                else -> throw IllegalArgumentException()
+                else -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
             }.split(",")
                 .map {
                     val category: Category = Category.from(it)
