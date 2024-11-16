@@ -28,7 +28,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private val userStorageAdapter: UserStorageViewPagerAdapter by lazy {
         UserStorageViewPagerAdapter(
             novelClickListener = ::navigateToNovelDetail,
-            loadMoreCallback = {userStorageViewModel.loadMoreNovels()},
+            loadMoreCallback = userStorageViewModel::loadMoreNovels,
             singleEventHandler = singleEventHandler,
         )
     }
