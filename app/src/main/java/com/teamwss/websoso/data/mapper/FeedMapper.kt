@@ -62,6 +62,9 @@ fun CommentResponseDto.toData(): CommentEntity = CommentEntity(
     createdDate = createdDate,
     isModified = isModified,
     isMyComment = isMyComment,
+    isBlocked = isBlocked,
+    isHidden = isHidden,
+    isSpoiler = isSpoiler,
 )
 
 fun FeedDetailResponseDto.toData(): FeedEntity = FeedEntity(

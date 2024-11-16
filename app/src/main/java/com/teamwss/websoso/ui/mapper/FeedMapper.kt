@@ -67,4 +67,7 @@ fun CommentEntity.toUi(): CommentModel = CommentModel(
     createdDate = createdDate,
     isModified = isModified,
     isMyComment = isMyComment,
+    isHidden = isHidden,
+    isSpoiler = isSpoiler,
+    isBlocked = isBlocked,
 )
