@@ -39,7 +39,10 @@ class NovelFeedViewModel @Inject constructor(
                         async {
                             novelRepository.fetchNovelFeeds(
                                 novelId = novelId,
-                                lastFeedId = 0,
+                                lastFeedId = when (feedUiState.feeds.isNotEmpty()) {
+                                    true -> feedUiState.feeds.minOf { it.id }
+                                    false -> 0
+                                },
                                 size = 20,
                             )
                         },
