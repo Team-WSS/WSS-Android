@@ -4,12 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
@@ -38,7 +36,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == ResultFrom.NovelDetailBack.RESULT_OK) {
                 val currentReadStatus =
-                userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
+                    userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
                 userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
             }
         }
@@ -100,7 +98,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private fun setupObserver() {
         userStorageViewModel.uiState.observe(this) { uiState ->
             when {
-                uiState.loading -> binding.wllStorage.setWebsosoLoadingVisibility(false)
+                uiState.loading -> binding.wllStorage.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllStorage.setLoadingLayoutVisibility(false)
                 else -> {
                     binding.wllStorage.setWebsosoLoadingVisibility(false)
@@ -125,15 +123,16 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     }
 
     private fun updateStorageNovels(uiState: UserStorageUiState) {
-        val currentTabPosition = StorageTab.entries.indexOfFirst { it.readStatus == uiState.readStatus }
+        val currentTabPosition =
+            StorageTab.entries.indexOfFirst { it.readStatus == uiState.readStatus }
 
-        if (currentTabPosition != -1 && uiState.storageNovels.isNotEmpty()) {
-            userStorageAdapter.updateNovels(
-                position = currentTabPosition,
-                newNovels = uiState.storageNovels
-            )
-        } else {
-            Log.d("UserStorage", "아니아니오냉ㄹ ㄴ안되냔고안ㅇ아자ㅣㅣㄴ짲ㄹ짤증낭챈어ㅏㄴㅇ")
+        when {
+            currentTabPosition != -1 && uiState.storageNovels.isNotEmpty() -> {
+                userStorageAdapter.updateNovels(
+                    position = currentTabPosition,
+                    newNovels = uiState.storageNovels,
+                )
+            }
         }
     }
 

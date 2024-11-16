@@ -1,6 +1,5 @@
 package com.teamwss.websoso.ui.userStorage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +20,8 @@ class UserStorageViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _uiState: MutableLiveData<UserStorageUiState> = MutableLiveData(UserStorageUiState())
+    private val _uiState: MutableLiveData<UserStorageUiState> =
+        MutableLiveData(UserStorageUiState())
     val uiState: LiveData<UserStorageUiState> get() = _uiState
 
     private val _isRatingChanged = MutableLiveData<Boolean>(false)
@@ -141,7 +141,7 @@ class UserStorageViewModel @Inject constructor(
                     lastUserNovelId = if (forceLoad) 0L else currentState.storageNovels.lastOrNull()?.userNovelId
                         ?: 0L,
                     size = STORAGE_NOVEL_SIZE,
-                    sortType = currentState.sortType.titleEn
+                    sortType = currentState.sortType.titleEn,
                 )
             }.onSuccess { response ->
                 val newNovels = response.userNovels.map { it.toUi() }
@@ -166,7 +166,7 @@ class UserStorageViewModel @Inject constructor(
     }
 
     companion object {
-        const val STORAGE_NOVEL_SIZE = 9
+        const val STORAGE_NOVEL_SIZE = 20
         const val DEFAULT_USER_ID = -1L
     }
 }
