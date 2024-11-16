@@ -2,7 +2,14 @@ package com.teamwss.websoso.data.di
 
 import com.teamwss.websoso.data.qualifier.Secured
 import com.teamwss.websoso.data.qualifier.Unsecured
-import com.teamwss.websoso.data.remote.api.*
+import com.teamwss.websoso.data.remote.api.AuthApi
+import com.teamwss.websoso.data.remote.api.AvatarApi
+import com.teamwss.websoso.data.remote.api.FeedApi
+import com.teamwss.websoso.data.remote.api.KeywordApi
+import com.teamwss.websoso.data.remote.api.NoticeApi
+import com.teamwss.websoso.data.remote.api.NovelApi
+import com.teamwss.websoso.data.remote.api.UserApi
+import com.teamwss.websoso.data.remote.api.UserNovelApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

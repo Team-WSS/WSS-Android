@@ -14,7 +14,8 @@ import com.teamwss.websoso.databinding.DialogDetailExploreBinding
 import com.teamwss.websoso.ui.detailExplore.info.DetailExploreInfoFragment
 import com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreKeywordFragment
 import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle
-import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle.*
+import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle.INFO
+import com.teamwss.websoso.ui.detailExplore.model.SelectedFragmentTitle.KEYWORD
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
