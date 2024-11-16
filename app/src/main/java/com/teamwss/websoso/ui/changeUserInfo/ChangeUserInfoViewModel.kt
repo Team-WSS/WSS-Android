@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.changeUserInfo.model.ChangeUserInfoUiState
-import com.teamwss.websoso.ui.changeUserInfo.model.Gender
-import com.teamwss.websoso.ui.changeUserInfo.model.Gender.Companion.getOppositeGender
-import com.teamwss.websoso.ui.changeUserInfo.model.Gender.FEMALE
-import com.teamwss.websoso.ui.changeUserInfo.model.Gender.MALE
+import com.teamwss.websoso.common.ui.model.Gender
+import com.teamwss.websoso.common.ui.model.Gender.Companion.getOppositeGender
+import com.teamwss.websoso.common.ui.model.Gender.FEMALE
+import com.teamwss.websoso.common.ui.model.Gender.MALE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
