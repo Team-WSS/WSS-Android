@@ -95,6 +95,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
                 when {
                     editFeedModel == null -> createFeedViewModel.createFeed()
+                    editFeedModel.feedId == DEFAULT_FEED_ID -> createFeedViewModel.createFeed()
                     editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
                     else -> createFeedViewModel.editFeed(editFeedModel.feedId)
                 }
@@ -161,6 +162,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
     companion object {
         private const val FEED = "FEED"
+        private const val DEFAULT_FEED_ID = -1L
 
         fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
 

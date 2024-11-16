@@ -217,7 +217,8 @@ class ProfileEditViewModel @Inject constructor(
                 )
                 avatarRepository.fetchAvatars()
             }.onSuccess { avatars ->
-                val avatarsModel = avatars.map { it.toUi() }
+                val previousNickname = profileEditUiState.value?.profile?.nicknameModel?.nickname ?: ""
+                val avatarsModel = avatars.map { it.toUi(previousNickname) }
                 _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
                     avatars = avatarsModel,
                     loading = false,

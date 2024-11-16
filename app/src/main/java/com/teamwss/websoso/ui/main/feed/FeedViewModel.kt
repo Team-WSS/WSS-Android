@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.teamwss.websoso.common.ui.model.Gender.FEMALE
+import com.teamwss.websoso.common.ui.model.Gender.MALE
 import com.teamwss.websoso.data.repository.FeedRepository
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.domain.usecase.GetFeedsUseCase
@@ -32,8 +34,9 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch {
             val userGender = userRepository.fetchGender()
             val categories: List<CategoryModel> = when (userGender) {
-                "M" -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
-                else -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
+                MALE.genderCode -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
+                FEMALE.genderCode -> "전체,로맨스,로판,BL,판타지,현판,무협,드라마,미스터리,라노벨,기타"
+                else -> "전체,판타지,현판,무협,드라마,미스터리,라노벨,로맨스,로판,BL,기타"
             }.split(",")
                 .map {
                     val category: Category = Category.from(it)

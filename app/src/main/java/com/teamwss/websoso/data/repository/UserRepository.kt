@@ -125,6 +125,12 @@ class UserRepository @Inject constructor(
         return preferences[USER_GENDER_KEY] ?: DEFAULT_USER_GENDER
     }
 
+    suspend fun saveGender(gender: String) {
+        userStorage.edit { preferences ->
+            preferences[USER_GENDER_KEY] = gender
+        }
+    }
+
     suspend fun fetchNovelDetailFirstLaunched(): Boolean {
         return userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
     }

@@ -1,4 +1,4 @@
-package com.teamwss.websoso.ui.changeUserInfo.model
+package com.teamwss.websoso.common.ui.model
 
 enum class Gender(val genderCode: String, val displayName: String) {
     MALE("M", "남자"),

@@ -141,8 +141,19 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     }
 
     private fun updateNovelPreferencesKeywords(novelPreferences: NovelPreferenceEntity) {
+        val existingKeywords = mutableSetOf<String>()
+
+        for (i in 0 until binding.wcgMyLibraryAttractivePoints.childCount) {
+            val chip = binding.wcgMyLibraryAttractivePoints.getChildAt(i) as? Chip
+            chip?.text?.let { existingKeywords.add(it.toString()) }
+        }
+
         novelPreferences.keywords.forEach { keyword ->
-            binding.wcgMyLibraryAttractivePoints.addView(createKeywordChip(keyword))
+            val keywordText = "${keyword.keywordName} ${keyword.keywordCount}"
+            if (!existingKeywords.contains(keywordText)) {
+                binding.wcgMyLibraryAttractivePoints.addView(createKeywordChip(keyword))
+                existingKeywords.add(keywordText)
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.teamwss.websoso.ui.changeUserInfo.model
 
-import com.teamwss.websoso.ui.changeUserInfo.model.Gender.FEMALE
+import com.teamwss.websoso.common.ui.model.Gender
+import com.teamwss.websoso.common.ui.model.Gender.FEMALE
 
 data class ChangeUserInfoUiState(
     val loading: Boolean = true,

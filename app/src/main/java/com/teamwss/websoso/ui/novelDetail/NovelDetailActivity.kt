@@ -34,10 +34,10 @@ import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.teamwss.websoso.ui.novelDetail.model.NovelAlertModel
+import com.teamwss.websoso.ui.novelFeed.NovelFeedViewModel
 import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel
 import com.teamwss.websoso.ui.novelRating.NovelRatingActivity
 import com.teamwss.websoso.ui.novelRating.model.ReadStatus
-import com.teamwss.websoso.ui.userStorage.UserStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,6 +45,7 @@ class NovelDetailActivity :
     BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
+    private val novelFeedViewModel by viewModels<NovelFeedViewModel>()
     private var _novelDetailMenuPopupBinding: MenuNovelDetailPopupBinding? = null
     private val novelDetailMenuPopupBinding get() = _novelDetailMenuPopupBinding ?: error("")
     private val novelDetailToolTipBinding: ItemNovelDetailTooltipBinding by lazy {
@@ -61,11 +62,24 @@ class NovelDetailActivity :
                     novelInfoViewModel.updateNovelInfoWithDelay(novelId)
                     setResult(NovelDetailBack.RESULT_OK)
                 }
+
                 CreateFeed.RESULT_OK -> {
-                    novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+                    handleCreateFeedResult()
                 }
             }
         }
+
+    private fun handleCreateFeedResult() {
+        novelInfoViewModel.updateNovelInfoWithDelay(novelId)
+        novelFeedViewModel.updateFeeds(novelId, true)
+        binding.vpNovelDetail.currentItem = FEED_FRAGMENT_PAGE
+        showWebsosoSnackBar(
+            view = binding.root,
+            message = getString(R.string.novel_detail_feed_write),
+            icon = R.drawable.ic_novel_detail_check,
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -279,7 +293,9 @@ class NovelDetailActivity :
                 return
             }
             val editFeedModel = EditFeedModel(
-                novelId = novelId, novelTitle = binding.tvNovelDetailTitle.text.toString(),
+                novelId = novelId,
+                novelTitle = binding.tvNovelDetailTitle.text.toString(),
+                feedCategory = novelDetailViewModel.novelDetailModel.value?.novel?.getGenres ?: emptyList(),
             )
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
             novelDetailResultLauncher.launch(intent)

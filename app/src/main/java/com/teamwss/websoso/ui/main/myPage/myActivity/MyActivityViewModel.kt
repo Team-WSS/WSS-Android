@@ -56,7 +56,7 @@ class MyActivityViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
                     isLoading = false,
-                    error = true,
+                    isError = true,
                 )
             }
         }
@@ -89,7 +89,7 @@ class MyActivityViewModel @Inject constructor(
                 }.onFailure {
                     _uiState.value = myActivityUiState.copy(
                         isLoading = false,
-                        error = true,
+                        isError = true,
                     )
                 }
             }
@@ -109,7 +109,7 @@ class MyActivityViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
                     isLoading = false,
-                    error = true,
+                    isError = true,
                 )
             }
         }
