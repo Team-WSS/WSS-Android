@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
-    private val myPageViewModel: MyPageViewModel by viewModels()
+    private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
     private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
 
