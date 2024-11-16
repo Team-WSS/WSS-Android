@@ -9,9 +9,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.teamwss.websoso.R.drawable.ic_novel_detail_check
 import com.teamwss.websoso.R.layout
 import com.teamwss.websoso.R.string.inquire_link
+import com.teamwss.websoso.R.string.privacy_policy_link
 import com.teamwss.websoso.R.string.profile_disclosure_message
 import com.teamwss.websoso.R.string.profile_disclosure_private
 import com.teamwss.websoso.R.string.profile_disclosure_public
+import com.teamwss.websoso.R.string.terms_of_use_link
 import com.teamwss.websoso.R.string.websoso_official
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom.ChangeProfileDisclosure
@@ -83,11 +85,15 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(layout.activity_set
         }
 
         override fun onPrivacyPolicyButtonClick() {
-            // TODO 개인정보 처리방침으로 이동
+            val inquireUrl = getString(privacy_policy_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+            startActivity(intent)
         }
 
         override fun onTermsOfUseButtonClick() {
-            // TODO 서비스 이용약관으로 이동
+            val inquireUrl = getString(terms_of_use_link)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+            startActivity(intent)
         }
 
         override fun onBackButtonClick() {
