@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -12,6 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom
+import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityStorageBinding
 import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.myPage.myLibrary.MyLibraryFragment.Companion.EXTRA_SOURCE
@@ -26,8 +28,9 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private val userStorageViewModel: UserStorageViewModel by viewModels()
     private val userStorageAdapter: UserStorageViewPagerAdapter by lazy {
         UserStorageViewPagerAdapter(
-            novels = emptyList(),
             novelClickListener = ::navigateToNovelDetail,
+            loadMoreCallback = {userStorageViewModel.loadMoreNovels()},
+            singleEventHandler = singleEventHandler,
         )
     }
     private val novelDetailResultLauncher =
@@ -38,6 +41,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
                 userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
             }
         }
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,17 +102,16 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     private fun setupObserver() {
         userStorageViewModel.uiState.observe(this) { uiState ->
+            Log.d("asdf",uiState.toString())
             when {
-                uiState.loading -> binding.wllStorage.setWebsosoLoadingVisibility(true)
+                uiState.loading -> binding.wllStorage.setWebsosoLoadingVisibility(false)
                 uiState.error -> binding.wllStorage.setLoadingLayoutVisibility(false)
-                !uiState.loading -> {
+                else -> {
                     binding.wllStorage.setWebsosoLoadingVisibility(false)
+                    updateStorageNovels(uiState)
                 }
             }
-        }
 
-        userStorageViewModel.uiState.observe(this) { uiState ->
-            updateStorageNovel(uiState)
             binding.clStorageNull.visibility =
                 if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
             binding.vpStorage.visibility =
@@ -125,9 +128,16 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         }
     }
 
-    private fun updateStorageNovel(uiState: UserStorageUiState) {
-        if (uiState.storageNovels.isNotEmpty()) {
-            userStorageAdapter.updateNovels(uiState.storageNovels)
+    private fun updateStorageNovels(uiState: UserStorageUiState) {
+        val currentTabPosition = StorageTab.values().indexOfFirst { it.readStatus == uiState.readStatus }
+
+        if (currentTabPosition != -1 && uiState.storageNovels.isNotEmpty()) {
+            userStorageAdapter.updateNovels(
+                position = currentTabPosition,
+                newNovels = uiState.storageNovels
+            )
+        } else {
+            Log.d("UserStorage", "아니아니오냉ㄹ ㄴ안되냔고안ㅇ아자ㅣㅣㄴ짲ㄹ짤증낭챈어ㅏㄴㅇ")
         }
     }
 
