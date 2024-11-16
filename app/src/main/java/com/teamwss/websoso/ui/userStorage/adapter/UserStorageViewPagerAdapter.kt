@@ -21,7 +21,12 @@ class UserStorageViewPagerAdapter(
         viewType: Int
     ): UserStorageViewPagerViewHolder {
         val binding = ItemStorageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return UserStorageViewPagerViewHolder(binding, novelClickListener,loadMoreCallback,singleEventHandler)
+        return UserStorageViewPagerViewHolder(
+            binding,
+            novelClickListener,
+            loadMoreCallback,
+            singleEventHandler,
+        )
     }
 
     override fun onBindViewHolder(holder: UserStorageViewPagerViewHolder, position: Int) {
