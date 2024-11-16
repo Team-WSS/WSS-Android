@@ -26,7 +26,15 @@ import com.teamwss.websoso.R.layout.activity_feed_detail
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.common.ui.base.BaseActivity
-import com.teamwss.websoso.common.ui.model.ResultFrom.*
+import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
+import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
+import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.WithdrawUser
 import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.hideKeyboard
@@ -128,6 +136,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
         override fun onProfileClick(userId: Long, isMyComment: Boolean) {
+            // if (isMyComment) return
             navigateToProfile(userId, isMyComment)
         }
 
@@ -191,7 +200,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun setupEditingFeed() {
         val feedContent =
-            feedDetailViewModel.feedDetailUiState.value?.feed?.let { feed ->
+            feedDetailViewModel.feedDetailUiState.value?.feedDetail?.feed?.let { feed ->
                 EditFeedModel(
                     feedId = feed.id,
                     novelId = feed.novel.id,
@@ -205,9 +214,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun setupEditingComment(commentId: Long) {
-        val writtenComment = feedDetailViewModel.feedDetailUiState.value?.comments?.find {
-            it.commentId == commentId
-        }?.commentContent.orEmpty()
+        val writtenComment =
+            feedDetailViewModel.feedDetailUiState.value?.feedDetail?.comments?.find {
+                it.commentId == commentId
+            }?.commentContent.orEmpty()
 
         feedDetailViewModel.updateCommentId(commentId)
         binding.etFeedDetailInput.setText(writtenComment)
@@ -346,7 +356,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         binding.ivFeedDetailMoreButton.setOnClickListener {
-            val isMyFeed = feedDetailViewModel.feedDetailUiState.value?.feed?.isMyFeed
+            val isMyFeed = feedDetailViewModel.feedDetailUiState.value?.feedDetail?.feed?.isMyFeed
                 ?: throw IllegalStateException()
 
             popupMenu.showAsDropDown(binding.ivFeedDetailMoreButton)
@@ -439,7 +449,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun updateView(feedDetailUiState: FeedDetailUiState) {
-        feedDetailUiState.feed?.user?.avatarImage?.let { image ->
+        feedDetailUiState.feedDetail.user?.avatarImage?.let { image ->
             binding.ivFeedDetailMyProfileImage.apply {
                 val scaledImage = getS3ImageUrl(image)
                 load(scaledImage) {
@@ -448,8 +458,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             }
         }
 
-        val header = feedDetailUiState.feed?.let { Header(it) }
-        val comments = feedDetailUiState.comments.map { Comment(it) }
+        val header = feedDetailUiState.feedDetail.feed?.let { Header(it) }
+        val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
         val feedDetail = listOf(header) + comments
 
         with(feedDetailAdapter) {
