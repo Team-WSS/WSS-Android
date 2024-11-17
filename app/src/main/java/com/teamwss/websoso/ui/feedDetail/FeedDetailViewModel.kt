@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.teamwss.websoso.common.ui.model.ResultFrom
 import com.teamwss.websoso.data.model.CommentsEntity
 import com.teamwss.websoso.data.model.FeedEntity
+import com.teamwss.websoso.data.model.MyProfileEntity
 import com.teamwss.websoso.data.repository.FeedRepository
+import com.teamwss.websoso.data.repository.UserRepository
+import com.teamwss.websoso.ui.feedDetail.model.FeedDetailModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
 import com.teamwss.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedDetailViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private var feedId: Long = -1
     private val _feedDetailUiState: MutableLiveData<FeedDetailUiState> =
@@ -43,18 +47,26 @@ class FeedDetailViewModel @Inject constructor(
                 runCatching {
                     coroutineScope {
                         awaitAll(
+                            async { userRepository.fetchMyProfile() },
                             async { feedRepository.fetchFeed(feedId) },
                             async { feedRepository.fetchComments(feedId) },
                         )
                     }
                 }.onSuccess { result ->
-                    val feed = result[0] as FeedEntity
-                    val comments = result[1] as CommentsEntity
+                    val myProfile = result[0] as MyProfileEntity
+                    val feed = (result[1] as FeedEntity)
+                    val comments = result[2] as CommentsEntity
 
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        feed = feed.toUi(),
-                        comments = comments.comments.map { it.toUi() },
+                        feedDetail = FeedDetailModel(
+                            feed = feed.toUi(),
+                            comments = comments.comments.map { it.toUi() },
+                            user = FeedDetailModel.UserModel(
+                                avatarImage = myProfile.avatarImage,
+                            )
+
+                        ),
                     )
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
@@ -125,7 +137,7 @@ class FeedDetailViewModel @Inject constructor(
 
     fun updateLike(isLiked: Boolean, updatedLikeCount: Int) {
         feedDetailUiState.value?.let { feedDetailUiState ->
-            val feed = feedDetailUiState.feed ?: throw IllegalArgumentException()
+            val feed = feedDetailUiState.feedDetail.feed ?: throw IllegalArgumentException()
             if (feed.isLiked == isLiked) return
 
             viewModelScope.launch {
@@ -133,10 +145,12 @@ class FeedDetailViewModel @Inject constructor(
                     feedRepository.saveLike(feed.isLiked, feedId)
                 }.onSuccess {
                     _feedDetailUiState.value = feedDetailUiState.copy(
-                        feed = feedDetailUiState.feed.copy(
-                            isLiked = isLiked,
-                            likeCount = updatedLikeCount,
-                        ),
+                        feedDetail = feedDetailUiState.feedDetail.copy(
+                            feed = feedDetailUiState.feedDetail.feed.copy(
+                                isLiked = isLiked,
+                                likeCount = updatedLikeCount,
+                            ),
+                        )
                     )
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(error = true)
@@ -191,8 +205,10 @@ class FeedDetailViewModel @Inject constructor(
 
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        comments = comments,
-                        feed = feedDetailUiState.feed?.copy(commentCount = comments.size),
+                        feedDetail = feedDetailUiState.feedDetail.copy(
+                            feed = feedDetailUiState.feedDetail.feed?.copy(commentCount = comments.size),
+                            comments = comments
+                        ),
                     )
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
@@ -247,12 +263,15 @@ class FeedDetailViewModel @Inject constructor(
                 runCatching {
                     feedRepository.deleteComment(feedId, commentId)
                 }.onSuccess {
-                    val comments = feedDetailUiState.comments.filter { it.commentId != commentId }
+                    val comments =
+                        feedDetailUiState.feedDetail.comments.filter { it.commentId != commentId }
 
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        comments = comments,
-                        feed = feedDetailUiState.feed?.copy(commentCount = comments.size),
+                        feedDetail = feedDetailUiState.feedDetail.copy(
+                            feed = feedDetailUiState.feedDetail.feed?.copy(commentCount = comments.size),
+                            comments = comments,
+                        ),
                     )
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(

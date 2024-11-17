@@ -11,22 +11,23 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.chip.Chip
 import com.teamwss.websoso.R
-import com.teamwss.websoso.R.color
 import com.teamwss.websoso.R.drawable.ic_blocked_user_snack_bar
 import com.teamwss.websoso.R.drawable.ic_novel_detail_check
 import com.teamwss.websoso.R.id.tv_feed_thumb_up_count
 import com.teamwss.websoso.R.layout.fragment_feed
 import com.teamwss.websoso.R.string.block_user_success_message
+import com.teamwss.websoso.R.string.feed_create_done
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
-import com.teamwss.websoso.R.style
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
@@ -262,14 +263,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    FeedDetailBack.RESULT_OK, NovelDetailBack.RESULT_OK, OtherUserProfileBack.RESULT_OK ->
-                        feedViewModel.updateRefreshedFeeds(false)
+                    FeedDetailBack.RESULT_OK,
+                    NovelDetailBack.RESULT_OK,
+                    OtherUserProfileBack.RESULT_OK,
+                    -> feedViewModel.updateRefreshedFeeds(false)
 
                     CreateFeed.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds(false)
+                        feedViewModel.updateRefreshedFeeds(true)
                         showWebsosoSnackBar(
                             view = binding.root,
-                            message = "작성 완료!",
+                            message = getString(feed_create_done),
                             icon = ic_novel_detail_check,
                         )
                     }
@@ -318,22 +321,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext()))
     }
 
-    private fun List<CategoryModel>.setUpChips() {
-        forEach { categoryUiState ->
-            WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(categoryUiState.category.krTitle)
-                setWebsosoChipTextAppearance(style.title3)
-                setWebsosoChipTextColor(color.bg_feed_chip_text_selector)
-                setWebsosoChipBackgroundColor(color.bg_feed_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
-                setWebsosoChipRadius(18f.toFloatPxFromDp())
-                setWebsosoChipSelected(categoryUiState.isSelected)
-                setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
-            }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
-        }
-    }
-
     private fun setupAdapter() {
         binding.rvFeed.apply {
             adapter = feedAdapter
@@ -378,8 +365,32 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
 
         feedViewModel.categories.observe(viewLifecycleOwner) { category ->
-            category.setUpChips()
-            feedViewModel.updateFeeds()
+            if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
+
+            val selectedCategory = category.find { it.isSelected } ?: category.first()
+
+            binding.wcgFeed.children.forEach {
+                val chip = it as Chip
+                chip.isSelected = chip.text == selectedCategory.category.krTitle
+            }
+
+            feedViewModel.updateFeeds(true)
+        }
+    }
+
+    private fun List<CategoryModel>.setUpChips() {
+        forEach { categoryUiState ->
+            WebsosoChip(requireContext()).apply {
+                setWebsosoChipText(categoryUiState.category.krTitle)
+                setWebsosoChipTextAppearance(R.style.title3)
+                setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
+                setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
+                setWebsosoChipRadius(18f.toFloatPxFromDp())
+                setWebsosoChipSelected(categoryUiState.isSelected)
+                setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
+            }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
 
@@ -405,9 +416,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     }
                 }
             }
+        }.also {
+            if (feedUiState.isRefreshed) binding.rvFeed.smoothScrollToPosition(0)
         }
-
-        if (feedUiState.isRefreshed) binding.rvFeed.smoothScrollToPosition(0)
     }
 
     override fun onDestroyView() {

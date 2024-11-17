@@ -14,7 +14,7 @@ import androidx.core.widget.addTextChangedListener
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.ui.model.ResultFrom.*
+import com.teamwss.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.teamwss.websoso.common.util.getS3ImageUrl
 import com.teamwss.websoso.common.util.showWebsosoToast
 import com.teamwss.websoso.common.util.toFloatPxFromDp
