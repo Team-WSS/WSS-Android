@@ -50,7 +50,7 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun updateFeeds() {
+    fun updateFeeds(isRefreshed: Boolean = false) {
         feedUiState.value?.let { feedUiState ->
             if (!feedUiState.isLoadable) return
 
@@ -63,7 +63,7 @@ class FeedViewModel @Inject constructor(
                     when (feedUiState.feeds.isNotEmpty()) {
                         true -> getFeedsUseCase(
                             selectedCategory.enTitle,
-                            feedUiState.feeds.maxOf { it.id }
+                            feedUiState.feeds.minOf { it.id }
                         )
 
                         false -> getFeedsUseCase(selectedCategory.enTitle)
@@ -75,6 +75,7 @@ class FeedViewModel @Inject constructor(
                         loading = false,
                         isLoadable = feeds.isLoadable,
                         feeds = feeds.feeds.map { it.toUi() },
+                        isRefreshed = isRefreshed,
                     )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
