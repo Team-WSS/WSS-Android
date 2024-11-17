@@ -54,7 +54,6 @@ import com.teamwss.websoso.ui.feedDetail.adapter.FeedDetailType.Header
 import com.teamwss.websoso.ui.feedDetail.dialog.RemovedFeedDialogFragment
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
 import com.teamwss.websoso.ui.feedDetail.model.FeedDetailUiState
-import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.teamwss.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
@@ -117,7 +116,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
-            navigateToProfile(userId, isMyFeed)
+            if (isMyFeed || userId.toInt() == -1) return
+            navigateToProfile(userId)
         }
 
         override fun onFeedDetailClick(view: View) {
@@ -136,8 +136,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
         override fun onProfileClick(userId: Long, isMyComment: Boolean) {
-            // if (isMyComment) return
-            navigateToProfile(userId, isMyComment)
+            if (isMyComment || userId.toInt() == -1) return
+            navigateToProfile(userId)
         }
 
         override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {
@@ -150,25 +150,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
     }
 
-    private fun navigateToProfile(userId: Long, isMe: Boolean) {
-        when (isMe) {
-            true ->
-                startActivity(
-                    MainActivity.getIntent(
-                        this@FeedDetailActivity,
-                        MainActivity.FragmentType.MY_PAGE,
-                    )
-                )
-
-            false -> {
-                activityResultCallback.launch(
-                    OtherUserPageActivity.getIntent(
-                        this@FeedDetailActivity,
-                        userId,
-                    )
-                )
-            }
-        }
+    private fun navigateToProfile(userId: Long) {
+        activityResultCallback.launch(
+            OtherUserPageActivity.getIntent(
+                this@FeedDetailActivity,
+                userId,
+            )
+        )
     }
 
     private fun bindMenuByIsMine(id: Long, isMine: Boolean, menuType: MenuType) {
