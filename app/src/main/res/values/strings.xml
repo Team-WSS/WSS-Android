@@ -22,7 +22,7 @@
     <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
     <string name="explore_detail_search_title">뭐 읽을지 고민될 땐?</string>
     <string name="explore_detail_search_description">장르, 연재상태, 별점, 키워드로 작품 찾기</string>
-    <string name="explore_detail_search_button">내 취향에 맞는 작품 탐색하기</string>
+    <string name="explore_detail_search_button">내 취향에 맞는 웹소설 찾기</string>
     <string name="explore_soso">소소</string>
     <string name="explore_sosopick_description">다른 독자들이 최근에 읽고 있는 작품이에요</string>
 
