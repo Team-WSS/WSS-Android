@@ -237,6 +237,12 @@ class MyActivityFragment :
         dialogFragment.show(parentFragmentManager, FeedRemoveDialogFragment.TAG)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        view?.requestLayout()
+    }
+
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_MY_ACTIVITY = "myActivity"
