@@ -230,6 +230,12 @@ class OtherUserActivityFragment :
         doneDialogFragment.show(parentFragmentManager, FeedReportDoneDialogFragment.TAG)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        view?.requestLayout()
+    }
+
     companion object {
         const val EXTRA_SOURCE = "source"
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"

@@ -186,6 +186,12 @@ class OtherUserLibraryFragment :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        view?.requestLayout()
+    }
+
     companion object {
         private const val USER_ID_KEY = "USER_ID"
 
