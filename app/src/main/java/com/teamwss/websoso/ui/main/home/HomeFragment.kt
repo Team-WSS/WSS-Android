@@ -115,7 +115,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.error -> Unit
+                uiState.error -> {
+                    binding.wllHome.setWebsosoLoadingVisibility(true)
+                    binding.wllHome.setErrorLayoutVisibility(true)
+                }
+
                 !uiState.loading -> {
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
