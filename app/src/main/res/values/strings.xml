@@ -22,7 +22,7 @@
     <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
     <string name="explore_detail_search_title">뭐 읽을지 고민될 땐?</string>
     <string name="explore_detail_search_description">장르, 연재상태, 별점, 키워드로 작품 찾기</string>
-    <string name="explore_detail_search_button">내 취향에 맞는 작품 탐색하기</string>
+    <string name="explore_detail_search_button">내 취향에 맞는 웹소설 찾기</string>
     <string name="explore_soso">소소</string>
     <string name="explore_sosopick_description">다른 독자들이 최근에 읽고 있는 작품이에요</string>
 
@@ -63,7 +63,7 @@
     <string name="novel_detail_report_error">오류 제보</string>
     <string name="novel_detail_remove_evaluate">평가 삭제</string>
     <string name="novel_detail_remove_evaluate_alert_title">평가를 모두 삭제할까요?</string>
-    <string name="novel_detail_remove_evaluate_alert_message">별점, 관심, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
+    <string name="novel_detail_remove_evaluate_alert_message">별점, 상태, 날짜, 매력포인트,\n키워드 정보가 사라지고 되돌릴 수 없어요</string>
     <string name="novel_detail_remove_cancel">취소</string>
     <string name="novel_detail_remove_accept">삭제</string>
     <string name="novel_detail_remove_result">평가를 모두 삭제했어요</string>
