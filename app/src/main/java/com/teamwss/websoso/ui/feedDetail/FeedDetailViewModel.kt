@@ -91,7 +91,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isReported = true,
                     )
                 }
             }
@@ -109,7 +109,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isReported = true,
                     )
                 }
             }
@@ -154,7 +154,9 @@ class FeedDetailViewModel @Inject constructor(
                         )
                     )
                 }.onFailure {
-                    _feedDetailUiState.value = feedDetailUiState.copy(error = true)
+                    _feedDetailUiState.value = feedDetailUiState.copy(
+                        isServerError = true,
+                    )
                 }
             }
         }
@@ -171,7 +173,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isServerError = true,
                     )
                 }
             }
@@ -189,7 +191,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isServerError = true,
                     )
                 }
             }
@@ -215,7 +217,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isServerError = true,
                     )
                 }
             }
@@ -233,7 +235,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isReported = true,
                     )
                 }
             }
@@ -251,7 +253,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isReported = true,
                     )
                 }
             }
@@ -278,7 +280,7 @@ class FeedDetailViewModel @Inject constructor(
                 }.onFailure {
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
-                        error = true,
+                        isServerError = true,
                     )
                 }
             }

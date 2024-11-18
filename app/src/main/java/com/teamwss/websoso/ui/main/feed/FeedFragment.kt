@@ -28,11 +28,13 @@ import com.teamwss.websoso.R.string.feed_create_done
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
+import com.teamwss.websoso.R.string.feed_server_error
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailError
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
@@ -276,6 +278,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         showWebsosoSnackBar(
                             view = binding.root,
                             message = getString(feed_removed_feed_snackbar),
+                            icon = ic_blocked_user_snack_bar,
+                        )
+                    }
+
+                    FeedDetailError.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds(false)
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(feed_server_error),
                             icon = ic_blocked_user_snack_bar,
                         )
                     }

@@ -30,6 +30,7 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailError
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
@@ -404,6 +405,11 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                             if (!isFinishing) finish()
                         }
                     }
+                }
+
+                feedDetailUiState.isServerError -> {
+                    setResult(FeedDetailError.RESULT_OK)
+                    if (!isFinishing) finish()
                 }
 
                 !feedDetailUiState.loading -> {
