@@ -78,6 +78,28 @@ class OtherUserLibraryFragment :
                 }
             }
 
+            when (otherUserLibraryViewModel.hasNoNovelPreferences()) {
+                true -> {
+                    binding.clOtherUserLibraryNovelPreference.visibility = View.GONE
+                    binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.VISIBLE
+                }
+
+                false -> {
+                    binding.clOtherUserLibraryNovelPreference.visibility = View.VISIBLE
+                    binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.GONE
+                }
+            }
+
+            when (otherUserLibraryViewModel.hasNoAttractivePoints()) {
+                true -> {
+                    binding.clOtherUserLibraryAttractivePoints.visibility = View.GONE
+                }
+
+                false -> {
+                    binding.clOtherUserLibraryAttractivePoints.visibility = View.VISIBLE
+                }
+            }
+
             restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
             updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
 

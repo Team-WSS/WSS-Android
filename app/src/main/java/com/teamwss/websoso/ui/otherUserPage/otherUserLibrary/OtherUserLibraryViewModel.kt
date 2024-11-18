@@ -109,6 +109,18 @@ class OtherUserLibraryViewModel @Inject constructor(
         }
     }
 
+    fun hasNoNovelPreferences(): Boolean {
+        return uiState.value?.novelPreferences?.run {
+            attractivePoints.isEmpty() && keywords.isEmpty()
+        } ?: true
+    }
+
+    fun hasNoAttractivePoints(): Boolean {
+        return uiState.value?.novelPreferences?.run {
+            attractivePoints.isEmpty()
+        } ?: true
+    }
+
     private fun translateAttractivePoints(attractivePoints: List<String>): List<String> {
         return attractivePoints.mapNotNull { point ->
             AttractivePoints.fromString(point)?.korean
