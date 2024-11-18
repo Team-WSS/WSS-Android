@@ -78,6 +78,7 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
     }
 
     private fun setupKeywordChip(keywords: List<KeywordModel>) {
+        if (binding.wcgNovelInfoKeyword.childCount > 0) return
         keywords.forEach { keyword ->
             WebsosoChip(requireContext()).apply {
                 setWebsosoChipText(
