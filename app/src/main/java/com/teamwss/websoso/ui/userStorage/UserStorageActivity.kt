@@ -7,12 +7,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom
-import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.databinding.ActivityStorageBinding
 import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.myPage.myLibrary.MyLibraryFragment.Companion.EXTRA_SOURCE
@@ -27,9 +26,8 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private val userStorageViewModel: UserStorageViewModel by viewModels()
     private val userStorageAdapter: UserStorageViewPagerAdapter by lazy {
         UserStorageViewPagerAdapter(
+            novels = emptyList(),
             novelClickListener = ::navigateToNovelDetail,
-            loadMoreCallback = userStorageViewModel::loadMoreNovels,
-            singleEventHandler = singleEventHandler,
         )
     }
     private val novelDetailResultLauncher =
@@ -40,7 +38,6 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
                 userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
             }
         }
-    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,10 +77,14 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             tab.text = StorageTab.fromPosition(position).title
         }.attach()
 
-        binding.vpStorage.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                onReadingStatusTabSelected(position)
+        binding.tlStorage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val selectedTab = requireNotNull(tab) { "Tab must not be null" }
+                onReadingStatusTabSelected(selectedTab.position)
             }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
 
@@ -100,12 +101,14 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             when {
                 uiState.loading -> binding.wllStorage.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllStorage.setLoadingLayoutVisibility(false)
-                else -> {
+                !uiState.loading -> {
                     binding.wllStorage.setWebsosoLoadingVisibility(false)
-                    updateStorageNovels(uiState)
                 }
             }
+        }
 
+        userStorageViewModel.uiState.observe(this) { uiState ->
+            updateStorageNovel(uiState)
             binding.clStorageNull.visibility =
                 if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
             binding.vpStorage.visibility =
@@ -122,17 +125,9 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         }
     }
 
-    private fun updateStorageNovels(uiState: UserStorageUiState) {
-        val currentTabPosition =
-            StorageTab.entries.indexOfFirst { it.readStatus == uiState.readStatus }
-
-        when {
-            currentTabPosition != -1 && uiState.storageNovels.isNotEmpty() -> {
-                userStorageAdapter.updateNovels(
-                    position = currentTabPosition,
-                    newNovels = uiState.storageNovels,
-                )
-            }
+    private fun updateStorageNovel(uiState: UserStorageUiState) {
+        if (uiState.storageNovels.isNotEmpty()) {
+            userStorageAdapter.updateNovels(uiState.storageNovels)
         }
     }
 

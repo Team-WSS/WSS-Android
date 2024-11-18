@@ -7,7 +7,7 @@ import com.teamwss.websoso.databinding.ItemStorageNovelBinding
 import com.teamwss.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
 class UserStorageItemAdapter(
-    private var novels: MutableList<StorageNovelModel>,
+    private var novels: List<StorageNovelModel>,
     private val novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.Adapter<UserStorageItemViewHolder>() {
 
@@ -23,8 +23,7 @@ class UserStorageItemAdapter(
     }
 
     fun updateNovels(newNovels: List<StorageNovelModel>) {
-        novels.clear()
-        novels.addAll(newNovels)
+        this.novels = newNovels
         notifyDataSetChanged()
     }
 

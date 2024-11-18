@@ -78,7 +78,7 @@ class ActivityDetailActivity :
     private fun setupActivityResultCallback() {
         activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
-                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK -> {
+                ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK, Activity.RESULT_OK -> {
                     activityDetailViewModel.updateRefreshedActivities()
                 }
 
