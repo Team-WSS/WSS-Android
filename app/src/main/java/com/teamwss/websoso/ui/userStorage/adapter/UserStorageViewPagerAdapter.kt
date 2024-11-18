@@ -25,7 +25,7 @@ class UserStorageViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return StorageTab.values().size
+        return StorageTab.entries.size
     }
 
     fun updateNovels(newNovels: List<StorageNovelModel>) {

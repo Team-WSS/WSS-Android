@@ -103,10 +103,10 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
                 uiState.error -> binding.wllStorage.setLoadingLayoutVisibility(false)
                 !uiState.loading -> {
                     binding.wllStorage.setWebsosoLoadingVisibility(false)
+                    updateStorageNovel(uiState)
                 }
             }
 
-            updateStorageNovel(uiState)
             binding.clStorageNull.visibility =
                 if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
             binding.vpStorage.visibility =
