@@ -76,6 +76,28 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                 }
             }
 
+            when (myLibraryViewModel.hasNoNovelPreferences()) {
+                true -> {
+                    binding.clMyLibraryNovelPreference.visibility = View.GONE
+                    binding.clMyLibraryUnknownNovelPreference.visibility = View.VISIBLE
+                }
+
+                false -> {
+                    binding.clMyLibraryNovelPreference.visibility = View.VISIBLE
+                    binding.clMyLibraryUnknownNovelPreference.visibility = View.GONE
+                }
+            }
+
+            when (myLibraryViewModel.hasNoAttractivePoints()) {
+                true -> {
+                    binding.clMyLibraryAttractivePoints.visibility = View.GONE
+                }
+
+                false -> {
+                    binding.clMyLibraryAttractivePoints.visibility = View.VISIBLE
+                }
+            }
+
             restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
             updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
 
