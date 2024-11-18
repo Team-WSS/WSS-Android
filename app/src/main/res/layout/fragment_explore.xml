@@ -170,7 +170,7 @@
                     android:gravity="center"
                     android:paddingVertical="16dp"
                     android:text="@string/explore_detail_search_button"
-                    android:textAppearance="@style/body2"
+                    android:textAppearance="@style/title3"
                     android:textColor="@color/primary_100_6A5DFD"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
