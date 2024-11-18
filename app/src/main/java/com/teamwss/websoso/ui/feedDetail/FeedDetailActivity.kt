@@ -352,15 +352,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         binding.ivFeedDetailCommentRegister.setOnClickListener {
-            binding.etFeedDetailInput.run {
-                when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
-                    true -> feedDetailViewModel.dispatchComment(text.toString())
-                    false -> feedDetailViewModel.modifyComment(text.toString())
+            if (binding.etFeedDetailInput.text.isNullOrBlank().not()) {
+                binding.etFeedDetailInput.run {
+                    when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
+                        true -> feedDetailViewModel.dispatchComment(text.toString())
+                        false -> feedDetailViewModel.modifyComment(text.toString())
+                    }
+                    text.clear()
+                    clearFocus()
                 }
-                text.clear()
-                clearFocus()
+                it.hideKeyboard()
             }
-            it.hideKeyboard()
         }
     }
 
@@ -378,10 +380,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             setRefreshViewParams(ViewGroup.LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
             setLottieAnimation(LOTTIE_IMAGE)
             setOnRefreshListener {
-                feedDetailViewModel.updateFeedDetail(
-                    feedId,
-                    FeedDetailRefreshed,
-                )
+                feedDetailViewModel.updateFeedDetail(feedId, FeedDetailRefreshed)
             }
         }
     }
