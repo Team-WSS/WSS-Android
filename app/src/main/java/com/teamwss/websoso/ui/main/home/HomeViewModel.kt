@@ -41,17 +41,27 @@ class HomeViewModel @Inject constructor(
     private suspend fun fetchUserHomeData() {
         viewModelScope.launch {
             runCatching {
-                listOf(
-                    async { novelRepository.fetchPopularNovels() },
-                    async { feedRepository.fetchPopularFeeds() },
-                    async { feedRepository.fetchUserInterestFeeds() },
-                    async { novelRepository.fetchRecommendedNovelsByUserTaste() }
-                ).awaitAll()
-            }.onSuccess { responses ->
-                val popularNovels = responses[0] as PopularNovelsEntity
-                val popularFeeds = responses[1] as PopularFeedsEntity
-                val userInterestFeeds = responses[2] as UserInterestFeedsEntity
-                val recommendedNovels = responses[3] as RecommendedNovelsByUserTasteEntity
+                val popularNovelsDeferred =
+                    async { runCatching { novelRepository.fetchPopularNovels() } }
+                val popularFeedsDeferred =
+                    async { runCatching { feedRepository.fetchPopularFeeds() } }
+                val userInterestFeedsDeferred =
+                    async { runCatching { feedRepository.fetchUserInterestFeeds() } }
+                val recommendedNovelsDeferred =
+                    async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
+
+                val results = listOf(
+                    popularNovelsDeferred.await(),
+                    popularFeedsDeferred.await(),
+                    userInterestFeedsDeferred.await(),
+                    recommendedNovelsDeferred.await()
+                )
+
+                val popularNovels = results[0] as PopularNovelsEntity
+                val popularFeeds = results[1] as PopularFeedsEntity
+                val userInterestFeeds = results[2] as UserInterestFeedsEntity
+                val recommendedNovels =
+                    results[3] as RecommendedNovelsByUserTasteEntity
 
                 _uiState.value = uiState.value?.copy(
                     loading = false,
@@ -64,7 +74,7 @@ class HomeViewModel @Inject constructor(
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = true,
+                    error = true
                 )
             }
         }
