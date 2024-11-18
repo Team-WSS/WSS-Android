@@ -65,6 +65,8 @@ import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -416,8 +418,13 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     }
                 }
             }
-        }.also {
-            if (feedUiState.isRefreshed) binding.rvFeed.smoothScrollToPosition(0)
+        }
+
+        if (feedUiState.isRefreshed) {
+            lifecycleScope.launch {
+                delay(300)
+                binding.rvFeed.smoothScrollToPosition(0)
+            }
         }
     }
 
