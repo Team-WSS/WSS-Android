@@ -304,10 +304,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedDetailViewModel.updateFeedDetail(
-                        feedId,
-                        CreateFeed
-                    )
+                    NovelDetailBack.RESULT_OK,
+                    CreateFeed.RESULT_OK,
+                    OtherUserProfileBack.RESULT_OK,
+                    -> feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
 
                     BlockUser.RESULT_OK -> {
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
@@ -450,10 +450,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         val feedDetail = listOf(header) + comments
 
         with(feedDetailAdapter) {
-            when (itemCount == 0) {
-                true -> submitList(feedDetail)
-                false -> submitList(feedDetail).also {
-                    binding.rvFeedDetail.smoothScrollToPosition(itemCount)
+            submitList(feedDetail).also {
+                when (feedDetailUiState.isRefreshed) {
+                    true -> binding.rvFeedDetail.smoothScrollToPosition(0)
+                    false -> binding.rvFeedDetail.smoothScrollToPosition(itemCount)
                 }
             }
         }

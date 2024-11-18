@@ -6,6 +6,7 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
 data class FeedDetailUiState(
     val loading: Boolean = true,
     val error: Boolean = false,
+    val isRefreshed: Boolean = false,
     val previousStack: PreviousStack = PreviousStack(Feed),
     val feedDetail: FeedDetailModel = FeedDetailModel(),
 ) {

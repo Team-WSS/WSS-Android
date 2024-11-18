@@ -59,6 +59,7 @@ class FeedDetailViewModel @Inject constructor(
 
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
+                        isRefreshed = true,
                         feedDetail = FeedDetailModel(
                             feed = feed.toUi(),
                             comments = comments.comments.map { it.toUi() },
@@ -205,6 +206,7 @@ class FeedDetailViewModel @Inject constructor(
 
                     _feedDetailUiState.value = feedDetailUiState.copy(
                         loading = false,
+                        isRefreshed = false,
                         feedDetail = feedDetailUiState.feedDetail.copy(
                             feed = feedDetailUiState.feedDetail.feed?.copy(commentCount = comments.size),
                             comments = comments
