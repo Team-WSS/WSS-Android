@@ -38,7 +38,6 @@ import com.teamwss.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.feed.FeedItemClickListener
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
@@ -75,25 +74,15 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(userId: Long) {
-            when (novelFeedViewModel.isUserId(userId)) {
-                true ->
-                    startActivity(
-                        MainActivity.getIntent(
-                            requireContext(),
-                            MainActivity.FragmentType.MY_PAGE,
-                        )
-                    )
-
-                false -> {
-                    activityResultCallback.launch(
-                        OtherUserPageActivity.getIntent(
-                            requireContext(),
-                            userId,
-                        )
-                    )
-                }
-            }
+        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
+            if (isMyFeed) return
+            
+            activityResultCallback.launch(
+                OtherUserPageActivity.getIntent(
+                    requireContext(),
+                    userId,
+                )
+            )
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {

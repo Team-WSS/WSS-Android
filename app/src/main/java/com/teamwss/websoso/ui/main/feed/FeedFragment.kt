@@ -49,7 +49,6 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
@@ -90,8 +89,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(userId: Long) {
-            singleEventHandler.throttleFirst(300) { navigateToProfile(userId) }
+        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
+            singleEventHandler.throttleFirst(300) { navigateToProfile(userId, isMyFeed) }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -124,23 +123,15 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
     }
 
-    private fun navigateToProfile(userId: Long) {
-        when (mainViewModel.isUserId(userId)) {
-            true -> {
-                (activity as? MainActivity)?.let { mainActivity ->
-                    mainActivity.binding.bnvMain.selectedItemId = R.id.menu_my_page
-                }
-            }
+    private fun navigateToProfile(userId: Long, isMyFeed: Boolean) {
+        if (isMyFeed) return
 
-            false -> {
-                activityResultCallback.launch(
-                    OtherUserPageActivity.getIntent(
-                        requireContext(),
-                        userId,
-                    )
-                )
-            }
-        }
+        activityResultCallback.launch(
+            OtherUserPageActivity.getIntent(
+                requireContext(),
+                userId,
+            )
+        )
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
