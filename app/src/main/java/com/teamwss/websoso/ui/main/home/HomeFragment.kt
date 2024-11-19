@@ -106,7 +106,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         mainViewModel.isLogin.observe(viewLifecycleOwner) { isLogin ->
             homeViewModel.updateHomeData(isLogin = isLogin)
 
-            if (isLogin.not()) binding.tvHomeInterestFeed.text = "관심글"
+            if (isLogin.not()) binding.tvHomeInterestFeed.text =
+                getString(R.string.home_interest_feed_text)
         }
 
         mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
