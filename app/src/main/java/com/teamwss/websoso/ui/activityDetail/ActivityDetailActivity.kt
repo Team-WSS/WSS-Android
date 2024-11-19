@@ -13,21 +13,16 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamwss.websoso.R
 import com.teamwss.websoso.R.string.my_activity_detail_title
 import com.teamwss.websoso.R.string.other_user_page_activity
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.model.ResultFrom
-import com.teamwss.websoso.common.util.InfiniteScrollListener
-import com.teamwss.websoso.common.util.SingleEventHandler
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
 import com.teamwss.websoso.databinding.ActivityActivityDetailBinding
 import com.teamwss.websoso.databinding.MenuMyActivityPopupBinding
 import com.teamwss.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.teamwss.websoso.ui.activityDetail.adapter.ActivityDetailAdapter
-import com.teamwss.websoso.ui.activityDetail.model.ActivityDetailUiState
-import com.teamwss.websoso.ui.activityDetail.model.ActivityType
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
@@ -52,6 +47,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class ActivityDetailActivity :
     BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
+    private val activityDetailAdapter: ActivityDetailAdapter by lazy {
+        ActivityDetailAdapter(
+            onClickFeedItem()
+        )
+    }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
     private val source: String by lazy {
@@ -59,10 +59,6 @@ class ActivityDetailActivity :
     }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
     private var _popupWindow: PopupWindow? = null
-    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private val activityDetailAdapter: ActivityDetailAdapter by lazy {
-        ActivityDetailAdapter(onClickFeedItem())
-    }
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,7 +108,7 @@ class ActivityDetailActivity :
             otherUserPageViewModel.updateUserId(userId)
         }
 
-        activityDetailViewModel.updateUserActivities()
+        activityDetailViewModel.updateUserActivities(userId)
     }
 
     private fun setActivityTitle() {
@@ -126,29 +122,12 @@ class ActivityDetailActivity :
     private fun setupMyActivitiesDetailAdapter() {
         binding.rvActivityDetail.apply {
             adapter = activityDetailAdapter
-            itemAnimator = null
-            setHasFixedSize(true)
-            addOnScrollListener(
-                InfiniteScrollListener.of(
-                    singleEventHandler = singleEventHandler,
-                    event = { activityDetailViewModel.updateUserActivities() },
-                )
-            )
         }
     }
 
     private fun setupObserver() {
         activityDetailViewModel.uiState.observe(this) { uiState ->
             updateAdapterWithActivitiesAndProfile(uiState.activities, getUserProfile())
-
-            when {
-                uiState.isLoading -> binding.wllActivityDetail.setWebsosoLoadingVisibility(false)
-                uiState.isError -> binding.wllActivityDetail.setLoadingLayoutVisibility(false)
-                !uiState.isLoading -> {
-                    binding.wllActivityDetail.setWebsosoLoadingVisibility(false)
-                    updateActivities(uiState, getUserProfile())
-                }
-            }
         }
 
         when (activityDetailViewModel.source) {
@@ -176,54 +155,19 @@ class ActivityDetailActivity :
         }
     }
 
-    private fun updateActivities(uiState: ActivityDetailUiState, userProfile: UserProfileModel?) {
-        if (userProfile == null) {
-            activityDetailAdapter.submitList(listOf(ActivityType.Loading))
-            return
-        }
-
-        val currentActivities =
-            activityDetailAdapter.currentList.filterIsInstance<ActivityType.Activity>()
-                .map { it.activity }
-
-        val newActivities = uiState.activities.map { activity ->
-            UserActivityModel(
-                activity = activity,
-                userProfile = userProfile,
-            )
-        }
-
-        val updatedActivities = (currentActivities + newActivities)
-            .distinctBy { it.activity.feedId }
-
-        activityDetailAdapter.submitList(
-            when {
-                uiState.isLoadable -> updatedActivities.map { ActivityType.Activity(it) } + ActivityType.Loading
-                updatedActivities.isNotEmpty() -> updatedActivities.map { ActivityType.Activity(it) } + ActivityType.NoMore
-                else -> emptyList()
-            }
-        ) {
-            binding.rvActivityDetail.scrollToPosition(
-                (binding.rvActivityDetail.layoutManager as LinearLayoutManager)
-                    .findFirstVisibleItemPosition()
-            )
-        }
-    }
-
     private fun updateAdapterWithActivitiesAndProfile(
         activities: List<ActivitiesModel.ActivityModel>?,
         userProfile: UserProfileModel?
     ) {
         if (activities != null && userProfile != null) {
             val userActivityModels = activities.map { activity ->
-                ActivityType.Activity(UserActivityModel(activity, userProfile))
+                UserActivityModel(activity, userProfile)
             }
-            activityDetailAdapter.submitList(userActivityModels + ActivityType.NoMore)
+            activityDetailAdapter.submitList(userActivityModels)
         } else {
-            activityDetailAdapter.submitList(listOf(ActivityType.Loading))
+            activityDetailAdapter.submitList(emptyList())
         }
     }
-
 
     private fun getUserProfile(): UserProfileModel? {
         return when (activityDetailViewModel.source) {
