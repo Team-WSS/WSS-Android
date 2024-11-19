@@ -74,10 +74,10 @@ class HomeViewModel @Inject constructor(
                     userInterestFeeds = userInterestFeeds.userInterestFeeds,
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels
                 )
-            }.onFailure { throwable ->
+            }.onFailure {
                 _uiState.value = uiState.value?.copy(
                     loading = false,
-                    error = true
+                    error = true,
                 )
             }
         }
