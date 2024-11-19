@@ -21,7 +21,7 @@ class MainViewModel @Inject constructor(
     private val _mainUiState: MutableLiveData<MainUiState> = MutableLiveData(MainUiState())
     val mainUiState: LiveData<MainUiState> get() = _mainUiState
 
-    val isLogin: LiveData<Boolean> = savedStateHandle.getLiveData(MainActivity.IS_LOGIN_KEY, true)
+    val isLogin: LiveData<Boolean> = savedStateHandle.getLiveData(MainActivity.IS_LOGIN_KEY)
 
     fun updateUserInfo() {
         viewModelScope.launch {

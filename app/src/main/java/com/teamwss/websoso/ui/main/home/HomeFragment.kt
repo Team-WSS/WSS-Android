@@ -105,12 +105,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun setupObserver() {
         mainViewModel.isLogin.observe(viewLifecycleOwner) { isLogin ->
             homeViewModel.updateHomeData(isLogin = isLogin)
-            if (isLogin) {
-                updateViewVisibilityByLogin(
-                    isLogin,
-                    mainViewModel.mainUiState.value?.nickname,
-                )
-            }
+
+            if (isLogin.not()) binding.tvHomeInterestFeed.text = "관심글"
+        }
+
+        mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
+            binding.tvHomeInterestFeed.text =
+                getString(home_nickname_interest_feed, uiState.nickname)
         }
 
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
@@ -121,6 +122,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 }
 
                 !uiState.loading -> {
+                    binding.wllHome.setWebsosoLoadingVisibility(false)
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
 
@@ -132,21 +134,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
                         }
                     }
-                }
-            }
-        }
-    }
-
-    private fun updateViewVisibilityByLogin(isLogin: Boolean, nickname: String?) {
-        with(binding) {
-            when (isLogin) {
-                true -> {
-                    tvHomeInterestFeed.text =
-                        getString(home_nickname_interest_feed, nickname)
-                }
-
-                false -> {
-                    tvHomeInterestFeed.text = "관심글"
                 }
             }
         }
