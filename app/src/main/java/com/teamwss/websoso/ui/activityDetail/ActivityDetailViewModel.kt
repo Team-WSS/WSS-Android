@@ -46,48 +46,63 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     fun updateRefreshedActivities() {
-        _uiState.value = ActivityDetailUiState(isLoading = true)
-        updateUserActivities()
+        _uiState.value = uiState.value?.copy(lastFeedId = 0L)
+        updateUserActivities(userId)
     }
 
-    fun updateUserActivities() {
-        val currentState = uiState.value ?: ActivityDetailUiState()
+    fun updateUserActivities(userId: Long) {
+        this.userId = userId
+        if (source == SOURCE_MY_ACTIVITY) {
+            updateMyActivities()
+        } else {
+            updateOtherUserActivities(userId)
+        }
+    }
 
-        if (!currentState.isLoadable || currentState.isLoading) return
-
-        _uiState.value = currentState.copy(isLoading = true)
-
+    private fun updateMyActivities() {
+        _uiState.value = uiState.value?.copy(isLoading = true)
         viewModelScope.launch {
             runCatching {
-                if (source == SOURCE_MY_ACTIVITY) {
-                    userRepository.fetchMyActivities(
-                        lastFeedId = currentState.lastFeedId,
-                        size = size
-                    )
-                } else {
-                    userRepository.fetchUserFeeds(
-                        userId = userId,
-                        lastFeedId = currentState.lastFeedId,
-                        size = size
-                    )
-                }
-            }.onSuccess { response ->
-                val newActivities = response.feeds.map { it.toUi() }
-
-                val isLoadable = newActivities.isNotEmpty()
-
-                _uiState.value = currentState.copy(
-                    isLoading = false,
-                    isLoadable = isLoadable,
-                    activities = (currentState.activities + newActivities)
-                        .distinctBy { it.feedId },
-                    lastFeedId = if (isLoadable) newActivities.lastOrNull()?.feedId
-                        ?: currentState.lastFeedId else currentState.lastFeedId
+                userRepository.fetchMyActivities(
+                    uiState.value?.lastFeedId ?: 0L,
+                    size,
                 )
-            }.onFailure {
-                _uiState.value = currentState.copy(
+            }.onSuccess { response ->
+                _uiState.value = uiState.value?.copy(
                     isLoading = false,
-                    isError = true
+                    activities = response.feeds.map { it.toUi() },
+                    lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
+                    isError = false,
+                )
+            }.onFailure { exception ->
+                _uiState.value = uiState.value?.copy(
+                    isLoading = false,
+                    isError = true,
+                )
+            }
+        }
+    }
+
+    private fun updateOtherUserActivities(userId: Long) {
+        _uiState.value = uiState.value?.copy(isLoading = true)
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchUserFeeds(
+                    userId = userId,
+                    lastFeedId = uiState.value?.lastFeedId ?: 0L,
+                    size = size,
+                )
+            }.onSuccess { response ->
+                _uiState.value = uiState.value?.copy(
+                    isLoading = false,
+                    activities = response.feeds.map { it.toUi() },
+                    lastFeedId = response.feeds.lastOrNull()?.feedId?.toLong() ?: 0L,
+                    isError = false,
+                )
+            }.onFailure { exception ->
+                _uiState.value = uiState.value?.copy(
+                    isLoading = false,
+                    isError = true,
                 )
             }
         }
@@ -183,7 +198,7 @@ class ActivityDetailViewModel @Inject constructor(
     }
 
     companion object {
-        const val ACTIVITY_LOAD_SIZE = 40
+        const val ACTIVITY_LOAD_SIZE = 100
         const val DEFAULT_USER_ID = -1L
     }
 }
