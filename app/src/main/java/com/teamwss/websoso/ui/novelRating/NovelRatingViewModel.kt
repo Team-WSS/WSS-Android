@@ -93,7 +93,7 @@ class NovelRatingViewModel @Inject constructor(
         keyword: String?,
         categories: List<CategoryModel>,
     ) {
-        val selectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptyList()
+        val selectedKeywords = uiState.value?.keywordsModel?.currentSelectedKeywords ?: emptySet()
         val updatedCategories = categories.map { it }.map {
             it.copy(keywords = it.keywords.map { keyword ->
                 keyword.copy(isSelected = selectedKeywords.contains(keyword))
@@ -121,7 +121,7 @@ class NovelRatingViewModel @Inject constructor(
 
     private fun updateDefaultKeywords(
         updatedCategories: List<CategoryModel>,
-        selectedKeywords: List<KeywordModel>,
+        selectedKeywords: Set<KeywordModel>,
     ) {
         _uiState.value = uiState.value?.copy(
             keywordsModel = NovelRatingKeywordsModel(
@@ -251,14 +251,14 @@ class NovelRatingViewModel @Inject constructor(
     fun clearEditingKeyword() {
         uiState.value?.let { uiState ->
             _uiState.value = uiState.copy(
-                novelRatingModel = uiState.novelRatingModel.copy(userKeywords = emptyList()),
+                novelRatingModel = uiState.novelRatingModel.copy(userKeywords = setOf()),
                 keywordsModel = uiState.keywordsModel.copy(
                     categories = uiState.keywordsModel.categories.map { category ->
                         category.copy(keywords = category.keywords.map { keyword ->
                             keyword.copy(isSelected = false)
                         })
                     },
-                    currentSelectedKeywords = emptyList(),
+                    currentSelectedKeywords = setOf(),
                 ),
             )
         }

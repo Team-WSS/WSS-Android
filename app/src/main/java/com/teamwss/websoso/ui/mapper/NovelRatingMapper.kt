@@ -12,5 +12,5 @@ fun NovelRatingEntity.toUi(): NovelRatingModel =
         endDate = endDate,
         userNovelRating = userNovelRating,
         charmPoints = charmPoints.map { it.toCharmPoint() },
-        userKeywords = userKeywords.map { it.toUi() },
+        userKeywords = userKeywords.map { it.toUi() }.toSet(),
     )

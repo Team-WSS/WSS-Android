@@ -107,7 +107,7 @@ class NovelRatingKeywordBottomSheetDialog :
         }
     }
 
-    private fun updateCurrentSelectedKeywordsHeader(currentSelectedKeywords: List<KeywordModel>) {
+    private fun updateCurrentSelectedKeywordsHeader(currentSelectedKeywords: Set<KeywordModel>) {
         val existingKeywords = mutableListOf<String>()
 
         for (i in 0 until binding.wcgNovelRatingKeywordSelectedKeyword.childCount) {

@@ -12,7 +12,7 @@ data class NovelRatingModel(
     val userNovelRating: Float = 0f,
     val charmPoints: List<CharmPoint> = emptyList(),
     val isCharmPointExceed: Boolean = false,
-    val userKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
+    val userKeywords: Set<CategoriesModel.CategoryModel.KeywordModel> = setOf(),
     val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus ?: ReadStatus.WATCHING.name),
     val ratingDateModel: RatingDateModel =
         RatingDateModel(
@@ -83,7 +83,7 @@ data class RatingDateModel(
 
 data class NovelRatingKeywordsModel(
     val categories: List<CategoriesModel.CategoryModel> = emptyList(),
-    val currentSelectedKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
+    val currentSelectedKeywords: Set<CategoriesModel.CategoryModel.KeywordModel> = mutableSetOf(),
     val isCurrentSelectedKeywordsEmpty: Boolean = currentSelectedKeywords.isEmpty(),
     val isSearchKeywordProceeding: Boolean = false,
     val isInitialSearchKeyword: Boolean = true,
@@ -105,12 +105,12 @@ data class NovelRatingKeywordsModel(
         keyword: CategoriesModel.CategoryModel.KeywordModel,
         isSelected: Boolean,
     ): NovelRatingKeywordsModel {
-        val newSelectedKeywords = currentSelectedKeywords.toMutableList().apply {
+        val newSelectedKeywords = currentSelectedKeywords.toMutableSet().apply {
             when (isSelected) {
                 true -> add(keyword)
                 false -> removeIf { it.keywordId == keyword.keywordId }
             }
-        }.toList()
+        }
 
         return this.copy(
             categories = this.updatedCategories(keyword.copy(isSelected = isSelected)),
