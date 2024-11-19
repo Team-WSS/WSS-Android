@@ -41,37 +41,40 @@ class HomeViewModel @Inject constructor(
     private suspend fun fetchUserHomeData() {
         viewModelScope.launch {
             runCatching {
-                val popularNovelsDeferred =
-                    async { runCatching { novelRepository.fetchPopularNovels() } }
-                val popularFeedsDeferred =
-                    async { runCatching { feedRepository.fetchPopularFeeds() } }
-                val userInterestFeedsDeferred =
-                    async { runCatching { feedRepository.fetchUserInterestFeeds() } }
-                val recommendedNovelsDeferred =
-                    async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
-
                 val results = listOf(
-                    popularNovelsDeferred.await(),
-                    popularFeedsDeferred.await(),
-                    userInterestFeedsDeferred.await(),
-                    recommendedNovelsDeferred.await()
-                )
+                    async { runCatching { novelRepository.fetchPopularNovels() } },
+                    async { runCatching { feedRepository.fetchPopularFeeds() } },
+                    async { runCatching { feedRepository.fetchUserInterestFeeds() } },
+                    async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
+                ).awaitAll()
 
-                val popularNovels = results[0] as PopularNovelsEntity
-                val popularFeeds = results[1] as PopularFeedsEntity
-                val userInterestFeeds = results[2] as UserInterestFeedsEntity
+                // 실패가 하나라도 있다면 상위 onFailure로 예외 전파
+                val failures = results.filter { it.isFailure }
+                if (failures.isNotEmpty()) {
+                    throw failures.first().exceptionOrNull()
+                        ?: IllegalStateException("Unknown error")
+                }
+
+                val popularNovels = results[0].getOrNull() as? PopularNovelsEntity
+                    ?: PopularNovelsEntity(emptyList())
+                val popularFeeds = results[1].getOrNull() as? PopularFeedsEntity
+                    ?: PopularFeedsEntity(emptyList())
+                val userInterestFeeds = results[2].getOrNull() as? UserInterestFeedsEntity
+                    ?: UserInterestFeedsEntity(emptyList(), "")
                 val recommendedNovels =
-                    results[3] as RecommendedNovelsByUserTasteEntity
+                    results[3].getOrNull() as? RecommendedNovelsByUserTasteEntity
+                        ?: RecommendedNovelsByUserTasteEntity(emptyList())
 
                 _uiState.value = uiState.value?.copy(
                     loading = false,
+                    error = false,
                     popularNovels = popularNovels.popularNovels,
                     popularFeeds = popularFeeds.popularFeeds.chunked(3),
                     isInterestNovel = isUserInterestedInNovels(userInterestFeeds.message),
                     userInterestFeeds = userInterestFeeds.userInterestFeeds,
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels
                 )
-            }.onFailure {
+            }.onFailure { throwable ->
                 _uiState.value = uiState.value?.copy(
                     loading = false,
                     error = true
