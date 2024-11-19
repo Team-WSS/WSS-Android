@@ -338,6 +338,7 @@
                                     app:icon="@drawable/ic_novel_detail_watching_selector"
                                     app:iconGravity="top"
                                     app:iconPadding="4dp"
+                                    app:iconSize="20dp"
                                     app:iconTint="@color/bg_novel_detail_read_status_selector" />
 
                                 <com.google.android.material.button.MaterialButton
@@ -353,9 +354,10 @@
                                     android:text="@string/novel_rating_read_status_watched"
                                     android:textAppearance="@style/body4"
                                     android:textColor="@color/bg_novel_detail_read_status_selector"
-                                    app:icon="@drawable/ic_novel_detail_watched"
+                                    app:icon="@drawable/ic_novel_detail_watched_selector"
                                     app:iconGravity="top"
                                     app:iconPadding="4dp"
+                                    app:iconSize="20dp"
                                     app:iconTint="@color/bg_novel_detail_read_status_selector" />
 
                                 <com.google.android.material.button.MaterialButton
@@ -371,9 +373,10 @@
                                     android:text="@string/novel_rating_read_status_quit"
                                     android:textAppearance="@style/body4"
                                     android:textColor="@color/bg_novel_detail_read_status_selector"
-                                    app:icon="@drawable/ic_novel_detail_quit"
+                                    app:icon="@drawable/ic_novel_detail_quit_selector"
                                     app:iconGravity="top"
                                     app:iconPadding="4dp"
+                                    app:iconSize="20dp"
                                     app:iconTint="@color/bg_novel_detail_read_status_selector" />
                             </com.google.android.material.button.MaterialButtonToggleGroup>
                         </androidx.constraintlayout.widget.ConstraintLayout>
