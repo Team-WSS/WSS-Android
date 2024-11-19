@@ -78,6 +78,28 @@ class OtherUserLibraryFragment :
                 }
             }
 
+            when (otherUserLibraryViewModel.hasNovelPreferences()) {
+                true -> {
+                    binding.clOtherUserLibraryNovelPreference.visibility = View.VISIBLE
+                    binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.GONE
+                }
+
+                false -> {
+                    binding.clOtherUserLibraryNovelPreference.visibility = View.GONE
+                    binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.VISIBLE
+                }
+            }
+
+            when (otherUserLibraryViewModel.hasAttractivePoints()) {
+                true -> {
+                    binding.clOtherUserLibraryAttractivePoints.visibility = View.VISIBLE
+                }
+
+                false -> {
+                    binding.clOtherUserLibraryAttractivePoints.visibility = View.GONE
+                }
+            }
+
             restGenrePreferenceAdapter.updateRestGenrePreferenceData(uiState.restGenres)
             updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
 
@@ -184,6 +206,12 @@ class OtherUserLibraryFragment :
                 )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        view?.requestLayout()
     }
 
     companion object {
