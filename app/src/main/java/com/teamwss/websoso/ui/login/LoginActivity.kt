@@ -60,7 +60,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
                     when (state.isRegistered) {
                         true -> {
-                            startActivity(MainActivity.getIntent(this@LoginActivity,true))
+                            startActivity(MainActivity.getIntent(this@LoginActivity, true))
                         }
 
                         false -> {

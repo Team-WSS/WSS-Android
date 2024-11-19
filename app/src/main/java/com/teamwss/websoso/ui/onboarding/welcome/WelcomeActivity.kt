@@ -24,7 +24,7 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(R.layout.activity_w
 
     private fun onCompleteButtonClick() {
         binding.btnWelcomeStart.setOnClickListener {
-            startActivity(MainActivity.getIntent(this,true))
+            startActivity(MainActivity.getIntent(this, true))
             finish()
         }
     }

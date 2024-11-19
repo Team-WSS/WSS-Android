@@ -36,7 +36,7 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
     }
 
     private fun navigateToMainActivity() {
-        startActivity(MainActivity.getIntent(this,true))
+        startActivity(MainActivity.getIntent(this, true))
         finish()
     }
 
