@@ -100,16 +100,14 @@ class MyLibraryViewModel @Inject constructor(
         }
     }
 
-    fun hasNoNovelPreferences(): Boolean {
+    fun hasNovelPreferences(): Boolean {
         return uiState.value?.novelPreferences?.run {
-            attractivePoints.isEmpty() && keywords.isEmpty()
-        } ?: true
+            attractivePoints.isNotEmpty() || keywords.isNotEmpty()
+        } ?: false
     }
 
-    fun hasNoAttractivePoints(): Boolean {
-        return uiState.value?.novelPreferences?.run {
-            attractivePoints.isEmpty()
-        } ?: true
+    fun hasAttractivePoints(): Boolean {
+        return uiState.value?.novelPreferences?.attractivePoints?.isNotEmpty() ?: false
     }
 
     private fun translateAttractivePoints(attractivePoints: List<String>): List<String> {

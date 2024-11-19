@@ -78,25 +78,25 @@ class OtherUserLibraryFragment :
                 }
             }
 
-            when (otherUserLibraryViewModel.hasNoNovelPreferences()) {
+            when (otherUserLibraryViewModel.hasNovelPreferences()) {
                 true -> {
-                    binding.clOtherUserLibraryNovelPreference.visibility = View.GONE
-                    binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.VISIBLE
-                }
-
-                false -> {
                     binding.clOtherUserLibraryNovelPreference.visibility = View.VISIBLE
                     binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.GONE
                 }
+
+                false -> {
+                    binding.clOtherUserLibraryNovelPreference.visibility = View.GONE
+                    binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.VISIBLE
+                }
             }
 
-            when (otherUserLibraryViewModel.hasNoAttractivePoints()) {
+            when (otherUserLibraryViewModel.hasAttractivePoints()) {
                 true -> {
-                    binding.clOtherUserLibraryAttractivePoints.visibility = View.GONE
+                    binding.clOtherUserLibraryAttractivePoints.visibility = View.VISIBLE
                 }
 
                 false -> {
-                    binding.clOtherUserLibraryAttractivePoints.visibility = View.VISIBLE
+                    binding.clOtherUserLibraryAttractivePoints.visibility = View.GONE
                 }
             }
 
