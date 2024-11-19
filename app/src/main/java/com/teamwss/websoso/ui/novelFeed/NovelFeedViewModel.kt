@@ -203,6 +203,4 @@ class NovelFeedViewModel @Inject constructor(
             }
         }
     }
-
-    fun isUserId(id: Long): Boolean = userId == id
 }

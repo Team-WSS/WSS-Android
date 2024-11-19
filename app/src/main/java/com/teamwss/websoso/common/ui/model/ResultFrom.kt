@@ -5,6 +5,7 @@ enum class ResultFrom {
     FeedDetailBack,
     FeedDetailRemoved,
     FeedDetailRefreshed,
+    FeedDetailError,
     Feed,
     CreateFeed,
     ChangeUserInfo,

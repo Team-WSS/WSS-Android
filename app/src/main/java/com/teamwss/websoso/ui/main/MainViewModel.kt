@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private var userId: Long = DEFAULT_USER_ID
 
@@ -44,8 +44,6 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-
-    fun isUserId(id: Long): Boolean = userId == id
 
     companion object {
         const val DEFAULT_USER_ID = -1L

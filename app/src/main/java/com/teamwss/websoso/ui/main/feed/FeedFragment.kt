@@ -28,11 +28,13 @@ import com.teamwss.websoso.R.string.feed_create_done
 import com.teamwss.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.teamwss.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.teamwss.websoso.R.string.feed_removed_feed_snackbar
+import com.teamwss.websoso.R.string.feed_server_error
 import com.teamwss.websoso.common.ui.base.BaseFragment
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
 import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailError
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.teamwss.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
@@ -49,7 +51,6 @@ import com.teamwss.websoso.databinding.MenuFeedPopupBinding
 import com.teamwss.websoso.ui.createFeed.CreateFeedActivity
 import com.teamwss.websoso.ui.feedDetail.FeedDetailActivity
 import com.teamwss.websoso.ui.feedDetail.model.EditFeedModel
-import com.teamwss.websoso.ui.main.MainActivity
 import com.teamwss.websoso.ui.main.MainViewModel
 import com.teamwss.websoso.ui.main.feed.adapter.FeedAdapter
 import com.teamwss.websoso.ui.main.feed.adapter.FeedType.Feed
@@ -65,6 +66,8 @@ import com.teamwss.websoso.ui.novelDetail.NovelDetailActivity
 import com.teamwss.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.teamwss.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -88,8 +91,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(userId: Long) {
-            singleEventHandler.throttleFirst(300) { navigateToProfile(userId) }
+        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
+            singleEventHandler.throttleFirst(300) { navigateToProfile(userId, isMyFeed) }
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -122,23 +125,15 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
     }
 
-    private fun navigateToProfile(userId: Long) {
-        when (mainViewModel.isUserId(userId)) {
-            true -> {
-                (activity as? MainActivity)?.let { mainActivity ->
-                    mainActivity.binding.bnvMain.selectedItemId = R.id.menu_my_page
-                }
-            }
+    private fun navigateToProfile(userId: Long, isMyFeed: Boolean) {
+        if (isMyFeed) return
 
-            false -> {
-                activityResultCallback.launch(
-                    OtherUserPageActivity.getIntent(
-                        requireContext(),
-                        userId,
-                    )
-                )
-            }
-        }
+        activityResultCallback.launch(
+            OtherUserPageActivity.getIntent(
+                requireContext(),
+                userId,
+            )
+        )
     }
 
     private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
@@ -287,6 +282,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         )
                     }
 
+                    FeedDetailError.RESULT_OK -> {
+                        feedViewModel.updateRefreshedFeeds(false)
+
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(feed_server_error),
+                            icon = ic_blocked_user_snack_bar,
+                        )
+                    }
+
                     BlockUser.RESULT_OK -> {
                         feedViewModel.updateRefreshedFeeds(false)
 
@@ -416,8 +421,13 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     }
                 }
             }
-        }.also {
-            if (feedUiState.isRefreshed) binding.rvFeed.smoothScrollToPosition(0)
+        }
+
+        if (feedUiState.isRefreshed) {
+            lifecycleScope.launch {
+                delay(300)
+                binding.rvFeed.smoothScrollToPosition(0)
+            }
         }
     }
 

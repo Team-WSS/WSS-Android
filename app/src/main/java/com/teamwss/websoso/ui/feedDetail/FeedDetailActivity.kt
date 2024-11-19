@@ -30,6 +30,7 @@ import com.teamwss.websoso.common.ui.model.ResultFrom.BlockUser
 import com.teamwss.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.teamwss.websoso.common.ui.model.ResultFrom.Feed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailBack
+import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailError
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.teamwss.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelDetailBack
@@ -304,10 +305,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         if (::activityResultCallback.isInitialized.not()) {
             activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    NovelDetailBack.RESULT_OK, CreateFeed.RESULT_OK, OtherUserProfileBack.RESULT_OK -> feedDetailViewModel.updateFeedDetail(
-                        feedId,
-                        CreateFeed
-                    )
+                    NovelDetailBack.RESULT_OK,
+                    CreateFeed.RESULT_OK,
+                    OtherUserProfileBack.RESULT_OK,
+                    -> feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
 
                     BlockUser.RESULT_OK -> {
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
@@ -352,15 +353,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         binding.ivFeedDetailCommentRegister.setOnClickListener {
-            binding.etFeedDetailInput.run {
-                when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
-                    true -> feedDetailViewModel.dispatchComment(text.toString())
-                    false -> feedDetailViewModel.modifyComment(text.toString())
+            if (binding.etFeedDetailInput.text.isNullOrBlank().not()) {
+                binding.etFeedDetailInput.run {
+                    when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
+                        true -> feedDetailViewModel.dispatchComment(text.toString())
+                        false -> feedDetailViewModel.modifyComment(text.toString())
+                    }
+                    text.clear()
+                    clearFocus()
                 }
-                text.clear()
-                clearFocus()
+                it.hideKeyboard()
             }
-            it.hideKeyboard()
         }
     }
 
@@ -378,10 +381,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             setRefreshViewParams(ViewGroup.LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
             setLottieAnimation(LOTTIE_IMAGE)
             setOnRefreshListener {
-                feedDetailViewModel.updateFeedDetail(
-                    feedId,
-                    FeedDetailRefreshed,
-                )
+                feedDetailViewModel.updateFeedDetail(feedId, FeedDetailRefreshed)
             }
         }
     }
@@ -405,6 +405,11 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                             if (!isFinishing) finish()
                         }
                     }
+                }
+
+                feedDetailUiState.isServerError -> {
+                    setResult(FeedDetailError.RESULT_OK)
+                    if (!isFinishing) finish()
                 }
 
                 !feedDetailUiState.loading -> {
@@ -451,10 +456,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         val feedDetail = listOf(header) + comments
 
         with(feedDetailAdapter) {
-            when (itemCount == 0) {
-                true -> submitList(feedDetail)
-                false -> submitList(feedDetail).also {
-                    binding.rvFeedDetail.smoothScrollToPosition(itemCount)
+            submitList(feedDetail).also {
+                when (feedDetailUiState.isRefreshed) {
+                    true -> binding.rvFeedDetail.smoothScrollToPosition(0)
+                    false -> binding.rvFeedDetail.smoothScrollToPosition(itemCount)
                 }
             }
         }

@@ -74,15 +74,15 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
     }
 
     private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(userId: Long) {
-            if (novelFeedViewModel.isUserId(userId).not()) {
-                activityResultCallback.launch(
-                    OtherUserPageActivity.getIntent(
-                        requireContext(),
-                        userId,
-                    )
+        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
+            if (isMyFeed) return
+            
+            activityResultCallback.launch(
+                OtherUserPageActivity.getIntent(
+                    requireContext(),
+                    userId,
                 )
-            }
+            )
         }
 
         override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
