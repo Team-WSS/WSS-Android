@@ -47,6 +47,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         onProfileEditClick()
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.updateUserInfo()
+        myPageViewModel.updateUserProfile()
+    }
+
     private fun bindViewModel() {
         binding.myPageViewModel = myPageViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -96,15 +102,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.loading -> binding.wllMyPage.setWebsosoLoadingVisibility(true)
-                uiState.error -> binding.wllMyPage.setLoadingLayoutVisibility(false)
-                !uiState.loading -> binding.wllMyPage.setWebsosoLoadingVisibility(false)
-            }
-        }
-
-        myPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            when {
-                !uiState.loading -> setUpMyProfileImage(uiState.myProfile?.avatarImage.orEmpty())
-                uiState.error -> Unit
+                uiState.error -> binding.wllMyPage.setErrorLayoutVisibility(true)
+                !uiState.loading -> {
+                    binding.wllMyPage.setErrorLayoutVisibility(false)
+                    binding.wllMyPage.setWebsosoLoadingVisibility(false)
+                    setUpMyProfileImage(uiState.myProfile?.avatarImage.orEmpty())
+                }
             }
         }
     }
