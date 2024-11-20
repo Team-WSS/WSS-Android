@@ -11,7 +11,7 @@ import androidx.core.view.forEach
 import com.teamwss.websoso.R
 import com.teamwss.websoso.common.ui.base.BaseActivity
 import com.teamwss.websoso.common.ui.custom.WebsosoChip
-import com.teamwss.websoso.common.ui.model.CategoriesModel
+import com.teamwss.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.teamwss.websoso.common.ui.model.ResultFrom.NovelRating
 import com.teamwss.websoso.common.util.getAdaptedSerializableExtra
 import com.teamwss.websoso.common.util.showWebsosoSnackBar
@@ -184,7 +184,7 @@ class NovelRatingActivity :
         }
     }
 
-    private fun updateKeywordChips(selectedKeywords: List<CategoriesModel.CategoryModel.KeywordModel>) {
+    private fun updateKeywordChips(selectedKeywords: Set<KeywordModel>) {
         val keywordChipGroup = binding.wcgNovelRatingKeywords
         keywordChipGroup.removeAllViews()
         selectedKeywords.forEach { keyword ->
@@ -200,6 +200,7 @@ class NovelRatingActivity :
                     setWebsosoChipRadius(20f.toFloatPxFromDp())
                     setOnCloseIconClickListener {
                         novelRatingViewModel.updateSelectedKeywords(keyword, false)
+                        novelRatingViewModel.saveSelectedKeywords()
                     }
                     setWebsosoChipCloseIconVisibility(true)
                     setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
