@@ -66,6 +66,7 @@
                     android:elevation="0dp"
                     android:stateListAnimator="@null"
                     android:text="@string/my_activity_more"
+                    android:textAppearance="@style/title2"
                     android:textColor="@color/primary_100_6A5DFD"
                     android:visibility="gone" />
             </LinearLayout>
