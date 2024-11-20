@@ -194,6 +194,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     feedId = feed.id,
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
+                    isSpoiler = feed.isSpoiler,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
                 )

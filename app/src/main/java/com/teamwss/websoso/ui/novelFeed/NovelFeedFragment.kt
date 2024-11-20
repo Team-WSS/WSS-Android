@@ -76,7 +76,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
     private fun onClickFeedItem() = object : FeedItemClickListener {
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
             if (isMyFeed) return
-            
+
             activityResultCallback.launch(
                 OtherUserPageActivity.getIntent(
                     requireContext(),
@@ -219,6 +219,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
                     feedId = feed.id,
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
+                    isSpoiler = feed.isSpoiler,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
                 )
@@ -327,6 +328,12 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
                     binding.sptrNovelFeedRefresh.setRefreshing(false)
                     updateFeeds(novelFeedUiState)
                 }
+            }
+        }
+        novelFeedViewModel.isRefreshed.observe(viewLifecycleOwner) { isRefreshed ->
+            if (isRefreshed) {
+                novelFeedViewModel.updateIsRefreshed(false)
+                binding.rvNovelFeed.scrollToPosition(0)
             }
         }
     }

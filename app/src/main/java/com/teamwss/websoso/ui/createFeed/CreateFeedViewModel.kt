@@ -49,6 +49,7 @@ class CreateFeedViewModel @Inject constructor(
             novelId = feed.novelId
             _selectedNovelTitle.value = feed.novelTitle.orEmpty()
             content.value = feed.feedContent
+            isSpoiled.value = feed.isSpoiler
             _categories.addAll(createCategories(feed.feedCategory))
         } ?: _categories.addAll(createCategories())
 

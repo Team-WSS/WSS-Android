@@ -375,7 +375,7 @@
     <string name="tv_create_feed_done_button">완료</string>
     <string name="tv_create_feed_write_content">내용 작성하기</string>
     <string name="tv_create_feed_spoiler">스포일러</string>
-    <string name="et_create_feed_content_hint">피드 작성 유의사항!\n\n욕설, 비방, 명예훼손성 표현은 사용하지 말아주세요.\n작품 내용을 담은 글은 스포일러를 체크해주세요.</string>
+    <string name="et_create_feed_content_hint">웹소설과 관련된 글을 자유롭게 남겨보세요\n\n •  작품에 대한 한줄평\n •  여운이 남는 명장면, 명대사\n •  수다 떨고 싶은 작품 이야기\n •  다른 독자들과 공유하고 싶은 작품 정보 등</string>
     <string name="tv_create_feed_characters_count">(%d/2000)</string>
     <string name="tv_create_feed_connect_novel">작품 연결하기</string>
     <string name="wset_create_feed_search_novel">작품 제목, 작가를 검색하세요</string>

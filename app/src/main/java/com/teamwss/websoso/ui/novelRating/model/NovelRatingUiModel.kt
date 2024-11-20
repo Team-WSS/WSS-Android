@@ -121,6 +121,6 @@ data class NovelRatingKeywordsModel(
     }
 
     companion object {
-        private const val MAX_KEYWORD_COUNT = 5
+        private const val MAX_KEYWORD_COUNT = 20
     }
 }
