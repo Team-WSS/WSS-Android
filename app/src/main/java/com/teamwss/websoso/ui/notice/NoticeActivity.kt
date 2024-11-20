@@ -40,7 +40,7 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>(R.layout.activity_not
     }
 
     private fun navigateToMainActivity() {
-        startActivity(MainActivity.getIntent(this))
+        startActivity(MainActivity.getIntent(context = this, isLogin = true))
     }
 
     private fun setupAdapter() {
