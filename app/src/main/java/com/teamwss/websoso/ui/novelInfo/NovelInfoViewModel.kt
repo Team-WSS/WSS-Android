@@ -110,6 +110,6 @@ class NovelInfoViewModel @Inject constructor(
     }
 
     companion object {
-        private const val UPDATE_TASK_DELAY = 2000L
+        const val UPDATE_TASK_DELAY = 1000L
     }
 }

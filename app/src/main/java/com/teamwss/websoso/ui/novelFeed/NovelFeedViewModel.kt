@@ -10,9 +10,11 @@ import com.teamwss.websoso.data.repository.NovelRepository
 import com.teamwss.websoso.data.repository.UserRepository
 import com.teamwss.websoso.ui.mapper.toUi
 import com.teamwss.websoso.ui.novelFeed.model.NovelFeedUiState
+import com.teamwss.websoso.ui.novelInfo.NovelInfoViewModel.Companion.UPDATE_TASK_DELAY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +28,8 @@ class NovelFeedViewModel @Inject constructor(
     private val _feedUiState: MutableLiveData<NovelFeedUiState> =
         MutableLiveData(NovelFeedUiState())
     val feedUiState: LiveData<NovelFeedUiState> get() = _feedUiState
+    private val _isRefreshed: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isRefreshed: LiveData<Boolean> get() = _isRefreshed
     private val _isLogin: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLogin: LiveData<Boolean> get() = _isLogin
 
@@ -58,6 +62,8 @@ class NovelFeedViewModel @Inject constructor(
                         loading = false,
                         isLoadable = feeds.isLoadable,
                     )
+
+                    _isRefreshed.value = isAgainRefresh
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
                         error = true,
@@ -67,6 +73,17 @@ class NovelFeedViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updateFeedWithDelay(novelId: Long, isAgainRefresh: Boolean) {
+        viewModelScope.launch {
+            delay(UPDATE_TASK_DELAY)
+            updateFeeds(novelId, isAgainRefresh)
+        }
+    }
+
+    fun updateIsRefreshed(boolean: Boolean) {
+        _isRefreshed.value = boolean
     }
 
     fun updateRefreshedFeeds(novelId: Long) {

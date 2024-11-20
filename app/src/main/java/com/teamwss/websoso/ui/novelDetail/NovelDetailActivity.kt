@@ -71,7 +71,7 @@ class NovelDetailActivity :
 
     private fun handleCreateFeedResult() {
         novelInfoViewModel.updateNovelInfoWithDelay(novelId)
-        novelFeedViewModel.updateFeeds(novelId, true)
+        novelFeedViewModel.updateFeedWithDelay(novelId, true)
         binding.vpNovelDetail.currentItem = FEED_FRAGMENT_PAGE
         showWebsosoSnackBar(
             view = binding.root,
