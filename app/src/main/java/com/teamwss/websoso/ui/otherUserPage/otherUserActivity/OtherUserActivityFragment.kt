@@ -103,6 +103,7 @@ class OtherUserActivityFragment :
                     binding.nsOtherUserActivityExists.visibility = View.VISIBLE
                 }
             }
+            setupActivityMoreButtonVisibility(uiState.activities.count())
         }
     }
 
@@ -135,6 +136,14 @@ class OtherUserActivityFragment :
                 putExtra(USER_ID_KEY, otherUserActivityViewModel.userId.value)
             }
             startActivity(intent)
+        }
+    }
+
+    private fun setupActivityMoreButtonVisibility(activityCount: Int) {
+        if (activityCount >= 5) {
+            binding.btnOtherUserActivityMore.visibility = View.VISIBLE
+        } else {
+            binding.btnOtherUserActivityMore.visibility = View.GONE
         }
     }
 
