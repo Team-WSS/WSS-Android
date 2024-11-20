@@ -28,7 +28,7 @@ data class ActivitiesModel(
         val formattedScore: String
             get() = String.format(
                 SCORE_FORMAT,
-                novelRating?.takeIf { it != null },
+                novelRating?.let { String.format("%.1f", it) },
                 novelRatingCount?.takeIf { it != null },
             )
 
