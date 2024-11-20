@@ -230,6 +230,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     feedId = feed.id,
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
+                    isSpoiler = feed.isSpoiler,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
                 )

@@ -9,5 +9,6 @@ data class EditFeedModel(
     val novelId: Long?,
     val novelTitle: String?,
     val feedContent: String = "",
+    val isSpoiler: Boolean = false,
     val feedCategory: List<String> = emptyList(),
 ) : Parcelable

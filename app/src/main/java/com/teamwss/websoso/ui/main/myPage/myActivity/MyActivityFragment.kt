@@ -215,6 +215,7 @@ class MyActivityFragment :
                 feedId = feed.feedId,
                 novelId = feed.novelId,
                 novelTitle = feed.title,
+                isSpoiler = feed.isSpoiler,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )

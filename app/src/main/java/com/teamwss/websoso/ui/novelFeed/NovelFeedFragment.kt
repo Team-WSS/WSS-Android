@@ -219,6 +219,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(layout.fragment
                     feedId = feed.id,
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
+                    isSpoiler = feed.isSpoiler,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
                 )
