@@ -17,8 +17,8 @@ android {
         applicationId = "com.teamwss.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 10000
+        versionName = "1.0.0"
 
         buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
