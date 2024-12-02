@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toTopOf="@id/iv_novel_rating_keyword"
                 tools:text="세계관" />
 
-            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+            <com.into.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_novel_rating_keyword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

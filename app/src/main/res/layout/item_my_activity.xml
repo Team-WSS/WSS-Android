@@ -7,15 +7,15 @@
         <import type="android.view.View"/>
         <variable
             name="activity"
-            type="com.teamwss.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel" />
+            type="com.into.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel" />
 
         <variable
             name="userProfile"
-            type="com.teamwss.websoso.ui.main.myPage.myActivity.model.UserProfileModel" />
+            type="com.into.websoso.ui.main.myPage.myActivity.model.UserProfileModel" />
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.main.myPage.myActivity.ActivityItemClickListener" />
+            type="com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener" />
 
     </data>
 

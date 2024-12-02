@@ -7,13 +7,13 @@
 
         <variable
             name="viewModel"
-            type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
+            type="com.into.websoso.ui.novelRating.NovelRatingViewModel" />
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.novelRating.NovelRatingClickListener" />
+            type="com.into.websoso.ui.novelRating.NovelRatingClickListener" />
 
-        <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
+        <import type="com.into.websoso.ui.novelRating.model.ReadStatus" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
