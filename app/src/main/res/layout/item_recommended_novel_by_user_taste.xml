@@ -7,7 +7,7 @@
 
         <variable
             name="recommendedNovel"
-            type="com.teamwss.websoso.data.model.RecommendedNovelsByUserTasteEntity.RecommendedNovelByUserTasteEntity" />
+            type="com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity.RecommendedNovelByUserTasteEntity" />
 
         <variable
             name="onClick"

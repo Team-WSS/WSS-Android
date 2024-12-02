@@ -7,13 +7,13 @@
 
         <variable
             name="viewModel"
-            type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
+            type="com.into.websoso.ui.novelRating.NovelRatingViewModel" />
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.novelRating.NovelRatingClickListener" />
+            type="com.into.websoso.ui.novelRating.NovelRatingClickListener" />
 
-        <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
+        <import type="com.into.websoso.ui.novelRating.model.ReadStatus" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,7 +154,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_rating" />
 
-                <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+                <com.into.websoso.common.ui.custom.WebsosoChipGroup
                     android:id="@+id/wcg_novel_rating_charm_points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -214,7 +214,7 @@
                     app:layout_constraintTop_toTopOf="@id/tv_novel_rating_keyword_button"
                     app:tint="@color/gray_300_52515F" />
 
-                <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+                <com.into.websoso.common.ui.custom.WebsosoChipGroup
                     android:id="@+id/wcg_novel_rating_keywords"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -294,7 +294,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_novel_rating"
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -7,7 +7,7 @@
 
         <variable
             name="blockedUserViewModel"
-            type="com.teamwss.websoso.ui.blockedUsers.BlockedUsersViewModel" />
+            type="com.into.websoso.ui.blockedUsers.BlockedUsersViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

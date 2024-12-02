@@ -7,7 +7,7 @@
 
         <variable
             name="myPageViewModel"
-            type="com.teamwss.websoso.ui.main.myPage.MyPageViewModel" />
+            type="com.into.websoso.ui.main.myPage.MyPageViewModel" />
 
     </data>
 
@@ -192,7 +192,7 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_my_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

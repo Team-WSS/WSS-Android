@@ -6,7 +6,7 @@
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.setting.SettingClickListener" />
+            type="com.into.websoso.ui.setting.SettingClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

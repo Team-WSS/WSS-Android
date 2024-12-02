@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.teamwss.websoso.ui.createFeed.CreateFeedViewModel" />
+            type="com.into.websoso.ui.createFeed.CreateFeedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +48,7 @@
             app:layout_constraintStart_toStartOf="@+id/tv_create_feed_search_novel_connect_novel"
             app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_search_novel_connect_novel" />
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoSearchEditText
+        <com.into.websoso.common.ui.custom.WebsosoSearchEditText
             android:id="@+id/wset_create_feed_search_novel"
             android:layout_width="0dp"
             android:layout_height="52dp"

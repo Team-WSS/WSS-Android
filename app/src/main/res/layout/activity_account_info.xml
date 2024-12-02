@@ -7,7 +7,7 @@
 
         <variable
             name="accountInfoViewModel"
-            type="com.teamwss.websoso.ui.accountInfo.AccountInfoViewModel" />
+            type="com.into.websoso.ui.accountInfo.AccountInfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

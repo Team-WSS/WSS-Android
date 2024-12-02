@@ -7,7 +7,7 @@
 
         <variable
             name="notice"
-            type="com.teamwss.websoso.ui.notice.model.NoticeModel" />
+            type="com.into.websoso.ui.notice.model.NoticeModel" />
 
         <variable
             name="onClick"

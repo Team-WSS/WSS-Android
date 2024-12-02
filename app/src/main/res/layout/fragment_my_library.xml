@@ -6,7 +6,7 @@
     <data>
         <variable
             name="myLibraryViewModel"
-            type="com.teamwss.websoso.ui.main.myPage.myLibrary.MyLibraryViewModel" />
+            type="com.into.websoso.ui.main.myPage.myLibrary.MyLibraryViewModel" />
 
     </data>
 
@@ -448,7 +448,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+                <com.into.websoso.common.ui.custom.WebsosoChipGroup
                     android:id="@+id/wcg_my_library_attractive_points"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -503,7 +503,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_my_library"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

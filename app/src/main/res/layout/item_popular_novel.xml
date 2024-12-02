@@ -7,7 +7,7 @@
 
         <variable
             name="popularNovel"
-            type="com.teamwss.websoso.data.model.PopularNovelsEntity.PopularNovelEntity" />
+            type="com.into.websoso.data.model.PopularNovelsEntity.PopularNovelEntity" />
 
         <variable
             name="onClick"

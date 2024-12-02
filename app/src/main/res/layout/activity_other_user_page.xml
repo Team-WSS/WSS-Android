@@ -7,7 +7,7 @@
 
         <variable
             name="otherUserPageViewModel"
-            type="com.teamwss.websoso.ui.otherUserPage.OtherUserPageViewModel" />
+            type="com.into.websoso.ui.otherUserPage.OtherUserPageViewModel" />
 
     </data>
 
@@ -222,7 +222,7 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+            <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
                 android:id="@+id/wll_other_user_page"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

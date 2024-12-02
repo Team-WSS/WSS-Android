@@ -7,11 +7,11 @@
 
         <variable
             name="viewModel"
-            type="com.teamwss.websoso.ui.novelRating.NovelRatingViewModel" />
+            type="com.into.websoso.ui.novelRating.NovelRatingViewModel" />
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.novelRating.NovelRatingClickListener" />
+            type="com.into.websoso.ui.novelRating.NovelRatingClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoSearchEditText
+        <com.into.websoso.common.ui.custom.WebsosoSearchEditText
             android:id="@+id/wset_rating_keyword_search"
             android:layout_width="0dp"
             android:layout_height="52dp"
@@ -68,7 +68,7 @@
             app:layout_constraintTop_toBottomOf="@id/wset_rating_keyword_search"
             tools:visibility="gone">
 
-            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+            <com.into.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_novel_rating_keyword_selected_keyword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+            <com.into.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_novel_rating_keyword_search_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
