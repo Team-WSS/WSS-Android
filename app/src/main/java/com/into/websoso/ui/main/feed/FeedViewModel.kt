@@ -169,7 +169,8 @@ class FeedViewModel @Inject constructor(
 
                                 false -> feedModel
                             }
-                        }
+                        },
+                        isRefreshed = false,
                     )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
