@@ -111,6 +111,13 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
                 if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
             binding.vpStorage.visibility =
                 if (uiState.userNovelCount > 0L) View.VISIBLE else View.GONE
+
+            binding.btnStorageGoToSearchNovel.visibility =
+                if (uiState.userNovelCount == 0L && intent.getStringExtra(EXTRA_SOURCE) == SOURCE_MY_LIBRARY) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
         }
 
         userStorageViewModel.isRatingChanged.observe(this) { isChanged ->
