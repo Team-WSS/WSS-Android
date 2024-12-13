@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
@@ -51,7 +50,6 @@ import com.into.websoso.databinding.MenuFeedPopupBinding
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
-import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.feed.adapter.FeedAdapter
 import com.into.websoso.ui.main.feed.adapter.FeedType.Feed
 import com.into.websoso.ui.main.feed.adapter.FeedType.Loading
@@ -74,7 +72,6 @@ import java.io.Serializable
 class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding get() = _popupBinding ?: error("FeedFragment")
-    private val mainViewModel: MainViewModel by activityViewModels()
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -266,6 +263,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
                     CreateFeed.RESULT_OK -> {
                         feedViewModel.updateRefreshedFeeds(true)
+
                         showWebsosoSnackBar(
                             view = binding.root,
                             message = getString(feed_create_done),
