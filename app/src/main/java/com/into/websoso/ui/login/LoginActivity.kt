@@ -8,6 +8,10 @@ import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseActivity
 import com.into.websoso.common.ui.custom.WebsosoCustomToast
@@ -23,7 +27,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
-
+    private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
     private val viewModel: LoginViewModel by viewModels()
     private var currentPage = 0
     private val handler = Handler(Looper.getMainLooper())
@@ -78,6 +82,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
                 is LoginUiState.Failure -> {
                     binding.wllLogin.visibility = View.INVISIBLE
+                    firebaseAnalytics.logEvent("login_failure") {
+                        param("error_message", state.error.message ?: "Unknown Error")
+                        param("timestamp", System.currentTimeMillis().toString())
+                    }
                 }
 
                 is LoginUiState.Idle -> {
