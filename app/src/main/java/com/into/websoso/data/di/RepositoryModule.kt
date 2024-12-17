@@ -7,10 +7,12 @@ import com.into.websoso.data.remote.api.AuthApi
 import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.api.NovelApi
 import com.into.websoso.data.remote.api.UserApi
+import com.into.websoso.data.remote.api.VersionApi
 import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.UserRepository
+import com.into.websoso.data.repository.VersionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,4 +44,8 @@ object RepositoryModule {
         authApi: AuthApi,
         preferences: SharedPreferences,
     ): AuthRepository = AuthRepository(authApi, preferences)
+
+    @Provides
+    @Singleton
+    fun provideVersionRepository(versionApi: VersionApi): VersionRepository = VersionRepository(versionApi)
 }
