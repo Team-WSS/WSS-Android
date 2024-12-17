@@ -406,4 +406,5 @@
     <string name="minimum_version_popup_menu_title">업데이트 알림</string>
     <string name="minimum_version_popup_menu_description">웹소소 세계에 변화가 생겼어요!\n지금 업데이트해보세요.</string>
     <string name="minimum_version_popup_menu_update">업데이트</string>
+    <string name="minimum_version_popup_menu_url">https://play.google.com/store/apps/details?id=com.into.websoso</string>
 </resources>
