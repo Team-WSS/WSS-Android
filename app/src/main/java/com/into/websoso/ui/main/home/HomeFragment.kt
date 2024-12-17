@@ -20,6 +20,7 @@ import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.into.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.into.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.into.websoso.ui.main.home.adpater.UserInterestFeedAdapter
+import com.into.websoso.ui.main.home.dialog.MinimumVersionDialogFragment
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.notice.NoticeActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
@@ -138,6 +139,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 }
             }
         }
+
+        homeViewModel.updateMinimumVersion { isUpdateRequired ->
+            if (isUpdateRequired) {
+                showMinimumVersionDialog()
+            }
+        }
     }
 
     private fun updateUserInterestFeedsVisibility(isUserInterestEmpty: Boolean) {
@@ -224,6 +231,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.ivHomeNotification.setOnClickListener {
             startActivity(NoticeActivity.getIntent(requireContext()))
         }
+    }
+
+    private fun showMinimumVersionDialog() {
+        val dialog = MinimumVersionDialogFragment.newInstance()
+        dialog.isCancelable = false
+        dialog.show(parentFragmentManager, "MinimumVersionDialog")
     }
 
     companion object {
