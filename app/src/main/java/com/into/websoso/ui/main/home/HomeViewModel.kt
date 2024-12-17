@@ -161,9 +161,10 @@ class HomeViewModel @Inject constructor(
     fun updateMinimumVersion(checkVersionCallback: (Boolean) -> Unit) {
         viewModelScope.launch {
             runCatching {
-                val minVersion = versionRepository.fetchMinimumVersion()
-                val currentVersion = BuildConfig.VERSION_NAME
-                isUpdateRequired(currentVersion, minVersion.minimumVersion)
+                isUpdateRequired(
+                    BuildConfig.VERSION_NAME,
+                    versionRepository.fetchMinimumVersion().minimumVersion,
+                )
             }.onSuccess { isUpdateRequired ->
                 checkVersionCallback(isUpdateRequired)
             }.onFailure {
