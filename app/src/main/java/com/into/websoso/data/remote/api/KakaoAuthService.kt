@@ -1,6 +1,10 @@
 package com.into.websoso.data.remote.api
 
 import android.content.Context
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
@@ -16,6 +20,7 @@ class KakaoAuthService @Inject constructor(
     @ActivityContext private val context: Context,
     private val client: UserApiClient,
 ) : OAuthService {
+    private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
     private val isKakaoTalkLoginAvailable: Boolean
         get() = client.isKakaoTalkLoginAvailable(context)
 
@@ -27,6 +32,12 @@ class KakaoAuthService @Inject constructor(
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
+                    }
+
+                    // Firebase Analytics에 실패 이벤트 로그 기록
+                    firebaseAnalytics.logEvent("kakao_login_failure") {
+                        param("error_message", error.message ?: "Unknown Error")
+                        param("login_method", "kakao_talk")
                     }
 
                     // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
