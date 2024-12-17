@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.BuildConfig
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
@@ -12,6 +13,7 @@ import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NovelRepository
+import com.into.websoso.data.repository.VersionRepository
 import com.into.websoso.ui.main.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -23,6 +25,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val feedRepository: FeedRepository,
+    private val versionRepository: VersionRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
@@ -153,6 +156,35 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun updateMinimumVersion(checkVersionCallback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            runCatching {
+                val minVersion = versionRepository.fetchMinimumVersion()
+                val currentVersion = BuildConfig.VERSION_NAME
+                isUpdateRequired(currentVersion, minVersion.minimumVersion)
+            }.onSuccess { isUpdateRequired ->
+                checkVersionCallback(isUpdateRequired)
+            }.onFailure {
+                _uiState.value = uiState.value?.copy(
+                    error = true,
+                )
+            }
+        }
+    }
+
+    private fun isUpdateRequired(currentVersion: String, minVersion: String): Boolean {
+        val currentParts = currentVersion.split(".").map { it.toIntOrNull() ?: 0 }
+        val minParts = minVersion.split(".").map { it.toIntOrNull() ?: 0 }
+
+        for (i in 0 until maxOf(currentParts.size, minParts.size)) {
+            val current = currentParts.getOrNull(i) ?: 0
+            val min = minParts.getOrNull(i) ?: 0
+            if (current < min) return true
+            if (current > min) return false
+        }
+        return false
     }
 
     private fun isUserInterestedInNovels(userInterestFeedMessage: String): Boolean {
