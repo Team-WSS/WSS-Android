@@ -199,41 +199,46 @@ class NovelDetailActivity :
     }
 
     private fun setupTooltipBottomFramePosition() {
-        binding.ctlNovelDetail.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val layoutParams =
-                    binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
+        binding.ctlNovelDetail.viewTreeObserver.addOnPreDrawListener(object :
+            ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                binding.ctlNovelDetail.viewTreeObserver.removeOnPreDrawListener(this)
+
+                val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.topMargin = binding.ctlNovelDetail.height
                 binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
-                binding.ctlNovelDetail.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                return true
             }
         })
     }
 
     private fun showTooltipWindow() {
-        tooltipPopupWindow = PopupWindow(
-            novelDetailToolTipBinding.root,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            true,
-        ).apply {
-            novelDetailToolTipBinding.root.measure(
-                View.MeasureSpec.UNSPECIFIED,
-                View.MeasureSpec.UNSPECIFIED,
-            )
-            val anchorViewWidth = binding.tgNovelDetailReadStatus.measuredWidth
-            val popupWidth = novelDetailToolTipBinding.root.measuredWidth
+        binding.tgNovelDetailReadStatus.post {
+            tooltipPopupWindow = PopupWindow(
+                novelDetailToolTipBinding.root,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                true,
+            ).apply {
+                novelDetailToolTipBinding.root.measure(
+                    View.MeasureSpec.UNSPECIFIED,
+                    View.MeasureSpec.UNSPECIFIED,
+                )
 
-            val xOffset = (anchorViewWidth - popupWidth) / 2
-            val yOffset = 6.toIntPxFromDp()
+                val anchorViewWidth = binding.tgNovelDetailReadStatus.measuredWidth
+                val popupWidth = novelDetailToolTipBinding.root.measuredWidth
+                val xOffset = (anchorViewWidth - popupWidth) / 2
+                val yOffset = 6.toIntPxFromDp()
 
-            showAsDropDown(binding.tgNovelDetailReadStatus, xOffset, yOffset)
+                showAsDropDown(binding.tgNovelDetailReadStatus, xOffset, yOffset)
 
-            novelDetailToolTipBinding.root.setOnClickListener { dismiss() }
-            this.setOnDismissListener {
-                novelDetailViewModel.updateIsFirstLaunched()
-                binding.tgNovelDetailReadStatus.clearChecked()
+                novelDetailToolTipBinding.root.setOnClickListener { dismiss() }
+
+                this.setOnDismissListener {
+                    novelDetailViewModel.updateIsFirstLaunched()
+                    binding.tgNovelDetailReadStatus.clearChecked()
+                }
             }
         }
     }
