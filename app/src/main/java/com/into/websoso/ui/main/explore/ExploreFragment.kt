@@ -41,13 +41,17 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
-        tracker.trackEvent("seek")
+        tracker.trackEvent(
+            eventName = "soso_pick",
+            properties = mapOf("novelId" to novelId)
+        )
         val intent = NovelDetailActivity.getIntent(requireContext(), novelId)
         startActivity(intent)
     }
 
     private fun onNormalSearchButtonClick() {
         binding.clExploreNormalSearch.setOnClickListener {
+            tracker.trackEvent("general_search")
             val intent = NormalExploreActivity.getIntent(requireContext())
             startActivity(intent)
         }
