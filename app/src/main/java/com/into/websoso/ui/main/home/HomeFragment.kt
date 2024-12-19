@@ -13,6 +13,7 @@ import com.into.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.data.tracker.Tracker
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
@@ -25,26 +26,30 @@ import com.into.websoso.ui.notice.NoticeActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.profileEdit.ProfileEditActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
     private val popularNovelsAdapter: PopularNovelsAdapter by lazy {
-        PopularNovelsAdapter(::navigateToNovelDetail)
+        PopularNovelsAdapter(::onPopularNovelClick)
     }
 
     private val popularFeedsAdapter: PopularFeedsAdapter by lazy {
-        PopularFeedsAdapter(::navigateToFeedDetail)
+        PopularFeedsAdapter(::onPopularFeedClick)
     }
 
     private val userInterestFeedAdapter: UserInterestFeedAdapter by lazy {
-        UserInterestFeedAdapter(::navigateToNovelDetail)
+        UserInterestFeedAdapter(::onUserInterestNovelFeedClick)
     }
 
     private val recommendedNovelsByUserTasteAdapter: RecommendedNovelsByUserTasteAdapter by lazy {
-        RecommendedNovelsByUserTasteAdapter(::navigateToNovelDetail)
+        RecommendedNovelsByUserTasteAdapter(::onRecommendedNovelClick)
     }
 
     private val startActivityLauncher = registerForActivityResult(
@@ -75,6 +80,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         onPostInterestNovelClick()
         onSettingPreferenceGenreClick()
         onNoticeButtonClick()
+        tracker.trackEvent("home")
     }
 
     private fun bindViewModel() {
@@ -182,6 +188,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.dotsIndicatorHome.attachTo(binding.vpHomePopularFeed)
     }
 
+    private fun onPopularNovelClick(novelId: Long) {
+        tracker.trackEvent("home_today_ranking")
+        navigateToNovelDetail(novelId)
+    }
+
+    private fun onUserInterestNovelFeedClick(novelId: Long) {
+        tracker.trackEvent("home_love_feedlist")
+        navigateToNovelDetail(novelId)
+    }
+
+    private fun onRecommendedNovelClick(novelId: Long) {
+        tracker.trackEvent("home_prefer_novellist")
+        navigateToNovelDetail(novelId)
+    }
+
     private fun navigateToNovelDetail(novelId: Long) {
         startActivityLauncher.launch(
             NovelDetailActivity.getIntent(
@@ -189,6 +210,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 novelId,
             )
         )
+    }
+
+    private fun onPopularFeedClick(feedId: Long) {
+        tracker.trackEvent("home_hot_feedlist")
+        navigateToFeedDetail(feedId)
     }
 
     private fun navigateToFeedDetail(feedId: Long) {
@@ -202,6 +228,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun onPostInterestNovelClick() {
         binding.clHomeInterestFeed.setOnClickListener {
+            tracker.trackEvent("home_to_love_btn")
             startActivityLauncher.launch(
                 NormalExploreActivity.getIntent(
                     requireContext(),
@@ -212,6 +239,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun onSettingPreferenceGenreClick() {
         binding.clHomeRecommendNovel.setOnClickListener {
+            tracker.trackEvent("home_to_prefer_btn")
             startActivityLauncher.launch(
                 ProfileEditActivity.getIntent(
                     requireContext(),
