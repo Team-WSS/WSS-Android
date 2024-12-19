@@ -6,15 +6,20 @@ import androidx.fragment.app.viewModels
 import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseFragment
 import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.data.tracker.Tracker
 import com.into.websoso.databinding.FragmentExploreBinding
 import com.into.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.into.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_explore) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetail) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val exploreViewModel: ExploreViewModel by viewModels()
@@ -27,6 +32,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
         onDetailExploreButtonClick()
         onReloadPageButtonClick()
         setupObserver()
+        tracker.trackEvent("search")
     }
 
     private fun initSosoPickAdapter() {
@@ -35,6 +41,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
+        tracker.trackEvent("seek")
         val intent = NovelDetailActivity.getIntent(requireContext(), novelId)
         startActivity(intent)
     }
