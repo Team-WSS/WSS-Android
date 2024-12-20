@@ -42,7 +42,6 @@ class NormalExploreActivity :
         onSearchTextEditorActionListener()
         setupObserver()
         handleBackPressed()
-        tracker.trackEvent("general_search")
     }
 
     private fun bindViewModel() {

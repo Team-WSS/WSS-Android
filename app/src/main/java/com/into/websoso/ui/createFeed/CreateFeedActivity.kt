@@ -23,13 +23,18 @@ import com.into.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.getAdaptedParcelableExtra
 import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.data.tracker.Tracker
 import com.into.websoso.databinding.ActivityCreateFeedBinding
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_create_feed) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -48,6 +53,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         bindViewModel()
         setupObserver()
         createFeedViewModel.categories.setupCategoryChips()
+        tracker.trackEvent("write")
     }
 
     private fun setupView() {
@@ -100,6 +106,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     else -> createFeedViewModel.editFeed(editFeedModel.feedId)
                 }
 
+                tracker.trackEvent("write_feed")
                 setResult(CreateFeed.RESULT_OK)
                 if (!isFinishing) finish()
             }

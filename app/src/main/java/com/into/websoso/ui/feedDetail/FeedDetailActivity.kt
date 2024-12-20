@@ -42,6 +42,7 @@ import com.into.websoso.common.util.hideKeyboard
 import com.into.websoso.common.util.showWebsosoSnackBar
 import com.into.websoso.common.util.toFloatPxFromDp
 import com.into.websoso.common.util.toIntPxFromDp
+import com.into.websoso.data.tracker.Tracker
 import com.into.websoso.databinding.ActivityFeedDetailBinding
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
@@ -67,9 +68,13 @@ import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.into.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed_detail) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private enum class MenuType { COMMENT, FEED }
 
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
@@ -108,6 +113,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             view.isSelected = !view.isSelected
 
             singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                tracker.trackEvent("feed_detail_like")
                 feedDetailViewModel.updateLike(view.isSelected, updatedLikeCount)
             }
         }
@@ -258,7 +264,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private fun setupReportingSpoilerComment(commentId: Long) {
         showDialog<DialogReportPopupMenuBinding>(
             menuType = SPOILER_COMMENT.name,
-            event = { feedDetailViewModel.updateReportedSpoilerComment(commentId) },
+            event = {
+                tracker.trackEvent("alert_comment_spoiler")
+                feedDetailViewModel.updateReportedSpoilerComment(commentId)
+            },
         )
     }
 
@@ -272,7 +281,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private fun setupReportingImpertinenceComment(commentId: Long) {
         showDialog<DialogReportPopupMenuBinding>(
             menuType = IMPERTINENCE_COMMENT.name,
-            event = { feedDetailViewModel.updateReportedImpertinenceComment(commentId) },
+            event = {
+                tracker.trackEvent("alert_feed_abuse")
+                feedDetailViewModel.updateReportedImpertinenceComment(commentId)
+            },
         )
     }
 
@@ -300,6 +312,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         setupObserver()
         onFeedDetailClick()
         refreshView()
+        tracker.trackEvent("feed_detail")
     }
 
     private fun refreshView() {
@@ -356,6 +369,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         binding.ivFeedDetailCommentRegister.setOnClickListener {
             if (binding.etFeedDetailInput.text.isNullOrBlank().not()) {
                 binding.etFeedDetailInput.run {
+                    tracker.trackEvent("write_comment")
                     when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
                         true -> feedDetailViewModel.dispatchComment(text.toString())
                         false -> feedDetailViewModel.modifyComment(text.toString())

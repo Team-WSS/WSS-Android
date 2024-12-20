@@ -15,6 +15,7 @@ import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseFragment
 import com.into.websoso.common.ui.custom.WebsosoChip
 import com.into.websoso.common.util.getS3ImageUrl
+import com.into.websoso.data.tracker.Tracker
 import com.into.websoso.databinding.FragmentNovelInfoBinding
 import com.into.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.into.websoso.ui.novelInfo.model.KeywordModel
@@ -22,9 +23,13 @@ import com.into.websoso.ui.novelInfo.model.PlatformModel
 import com.into.websoso.ui.novelInfo.model.UnifiedReviewCountModel
 import com.into.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragment_novel_info) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val novelInfoViewModel by activityViewModels<NovelInfoViewModel>()
     private val novelId: Long by lazy { arguments?.getLong(NOVEL_ID) ?: 0L }
 
@@ -46,6 +51,7 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
     }
 
     private fun navigateToWebView(url: String) {
+        tracker.trackEvent("direct_novel")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }

@@ -12,14 +12,19 @@ import com.into.websoso.R.layout.dialog_create_feed_search_novel
 import com.into.websoso.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.common.util.InfiniteScrollListener
 import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.data.tracker.Tracker
 import com.into.websoso.databinding.DialogCreateFeedSearchNovelBinding
 import com.into.websoso.ui.createFeed.adapter.SearchNovelAdapter
 import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Loading
 import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Novels
 import com.into.websoso.ui.createFeed.model.SearchNovelUiState
+import javax.inject.Inject
 
 class CreateFeedSearchNovelBottomSheetDialog :
     BaseBottomSheetDialog<DialogCreateFeedSearchNovelBinding>(dialog_create_feed_search_novel) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val createFeedViewModel: CreateFeedViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val searchNovelAdapter: SearchNovelAdapter by lazy { SearchNovelAdapter(::onNovelClick) }
@@ -119,9 +124,10 @@ class CreateFeedSearchNovelBottomSheetDialog :
     }
 
     private fun setupNavigateToInquireNovel() {
+        tracker.trackEvent("contact_novel_connect")
         val inquireUrl = getString(R.string.inquire_link)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
-        binding.tvCreateFeedAddNovelInquireButton.setOnClickListener{
+        binding.tvCreateFeedAddNovelInquireButton.setOnClickListener {
             startActivity(intent)
         }
     }
