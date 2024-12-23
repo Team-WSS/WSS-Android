@@ -11,7 +11,7 @@ import com.into.websoso.R.string.change_user_info_message
 import com.into.websoso.common.ui.base.BaseActivity
 import com.into.websoso.common.ui.model.ResultFrom.ChangeUserInfo
 import com.into.websoso.common.util.showWebsosoSnackBar
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityAccountInfoBinding
 import com.into.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.into.websoso.ui.changeUserInfo.ChangeUserInfoActivity

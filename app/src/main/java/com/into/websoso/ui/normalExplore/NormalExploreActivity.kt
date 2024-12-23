@@ -13,7 +13,7 @@ import com.into.websoso.common.ui.base.BaseActivity
 import com.into.websoso.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.common.util.InfiniteScrollListener
 import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNormalExploreBinding
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header

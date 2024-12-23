@@ -17,7 +17,7 @@ import com.into.websoso.common.util.getAdaptedSerializableExtra
 import com.into.websoso.common.util.showWebsosoSnackBar
 import com.into.websoso.common.util.showWebsosoToast
 import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNovelRatingBinding
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel

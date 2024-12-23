@@ -43,7 +43,7 @@ import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.showWebsosoSnackBar
 import com.into.websoso.common.util.toFloatPxFromDp
 import com.into.websoso.common.util.toIntPxFromDp
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding

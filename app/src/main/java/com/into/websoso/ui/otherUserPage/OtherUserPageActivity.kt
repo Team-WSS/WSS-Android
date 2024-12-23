@@ -21,7 +21,7 @@ import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.getS3ImageUrl
 import com.into.websoso.common.util.toFloatPxFromDp
 import com.into.websoso.common.util.toIntPxFromDp
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityOtherUserPageBinding
 import com.into.websoso.databinding.MenuOtherUserPagePopupBinding
 import com.into.websoso.ui.otherUserPage.adapter.OtherUserPageViewPagerAdapter

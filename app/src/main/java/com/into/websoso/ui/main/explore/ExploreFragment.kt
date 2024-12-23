@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseFragment
 import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentExploreBinding
 import com.into.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.into.websoso.ui.main.explore.adapter.SosoPickAdapter

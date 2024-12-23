@@ -1,4 +1,4 @@
-package com.into.websoso.data.tracker
+package com.into.websoso.common.util.tracker
 
 interface Tracker {
     fun trackEvent(

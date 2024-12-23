@@ -13,7 +13,7 @@ import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseFragment
 import com.into.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentMyPageBinding
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter

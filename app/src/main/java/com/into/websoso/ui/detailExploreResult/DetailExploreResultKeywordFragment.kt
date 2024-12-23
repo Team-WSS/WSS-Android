@@ -17,7 +17,7 @@ import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordMod
 import com.into.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
 import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentDetailExploreResultKeywordBinding
 import com.into.websoso.ui.detailExplore.keyword.DetailExploreClickListener
 import com.into.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter

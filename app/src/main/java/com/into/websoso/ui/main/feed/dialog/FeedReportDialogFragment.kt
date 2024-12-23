@@ -9,7 +9,7 @@ import com.into.websoso.R.string.report_popup_menu_spoiling_comment
 import com.into.websoso.R.string.report_popup_menu_spoiling_feed
 import com.into.websoso.common.ui.base.BaseDialogFragment
 import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT

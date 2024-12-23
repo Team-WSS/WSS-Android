@@ -8,7 +8,7 @@ import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseDialogFragment
 import com.into.websoso.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogBlockUserBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

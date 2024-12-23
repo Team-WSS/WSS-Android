@@ -15,7 +15,7 @@ import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseFragment
 import com.into.websoso.common.ui.custom.WebsosoChip
 import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentNovelInfoBinding
 import com.into.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.into.websoso.ui.novelInfo.model.KeywordModel

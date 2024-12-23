@@ -1,9 +1,9 @@
-package com.into.websoso.data.tracker.di
+package com.into.websoso.common.util.tracker.di
 
 import android.content.Context
 import com.into.websoso.BuildConfig
-import com.into.websoso.data.tracker.Tracker
-import com.into.websoso.data.tracker.amplitude.AmplitudeTracker
+import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.common.util.tracker.amplitude.AmplitudeTracker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

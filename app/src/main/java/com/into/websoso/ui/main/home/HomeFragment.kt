@@ -13,7 +13,7 @@ import com.into.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel

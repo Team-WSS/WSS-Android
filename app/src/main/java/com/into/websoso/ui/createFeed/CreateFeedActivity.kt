@@ -23,7 +23,7 @@ import com.into.websoso.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.getAdaptedParcelableExtra
 import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityCreateFeedBinding
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel

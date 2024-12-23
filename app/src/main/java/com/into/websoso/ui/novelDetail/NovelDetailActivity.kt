@@ -26,7 +26,7 @@ import com.into.websoso.common.util.getS3ImageUrl
 import com.into.websoso.common.util.showWebsosoSnackBar
 import com.into.websoso.common.util.toFloatPxFromDp
 import com.into.websoso.common.util.toIntPxFromDp
-import com.into.websoso.data.tracker.Tracker
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNovelDetailBinding
 import com.into.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.into.websoso.databinding.MenuNovelDetailPopupBinding
