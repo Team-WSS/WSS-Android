@@ -26,6 +26,7 @@ import com.into.websoso.common.util.getS3ImageUrl
 import com.into.websoso.common.util.showWebsosoSnackBar
 import com.into.websoso.common.util.toFloatPxFromDp
 import com.into.websoso.common.util.toIntPxFromDp
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNovelDetailBinding
 import com.into.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.into.websoso.databinding.MenuNovelDetailPopupBinding
@@ -39,10 +40,14 @@ import com.into.websoso.ui.novelInfo.NovelInfoViewModel
 import com.into.websoso.ui.novelRating.NovelRatingActivity
 import com.into.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NovelDetailActivity :
     BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val novelDetailViewModel by viewModels<NovelDetailViewModel>()
     private val novelInfoViewModel by viewModels<NovelInfoViewModel>()
     private val novelFeedViewModel by viewModels<NovelFeedViewModel>()
@@ -91,6 +96,7 @@ class NovelDetailActivity :
         setupViewPager()
         novelDetailViewModel.updateNovelDetail(novelId)
         handleBackPressed()
+        tracker.trackEvent("novel_info")
     }
 
     private fun bindViewModel() {
@@ -107,6 +113,7 @@ class NovelDetailActivity :
     }
 
     private fun navigateToReportError() {
+        tracker.trackEvent("contact_error")
         val inquireUrl = getString(R.string.inquire_link)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
@@ -126,6 +133,7 @@ class NovelDetailActivity :
     }
 
     private fun deleteUserNovel() {
+        tracker.trackEvent("rate_delete")
         novelDetailViewModel.deleteUserNovel(novelId)
         novelInfoViewModel.updateNovelInfoWithDelay(novelId)
 
@@ -292,10 +300,12 @@ class NovelDetailActivity :
                 showLoginRequestDialog()
                 return
             }
+            tracker.trackEvent("novel_write_btn")
             val editFeedModel = EditFeedModel(
                 novelId = novelId,
                 novelTitle = binding.tvNovelDetailTitle.text.toString(),
-                feedCategory = novelDetailViewModel.novelDetailModel.value?.novel?.getGenres ?: emptyList(),
+                feedCategory = novelDetailViewModel.novelDetailModel.value?.novel?.getGenres
+                    ?: emptyList(),
             )
             val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
             novelDetailResultLauncher.launch(intent)
@@ -306,6 +316,7 @@ class NovelDetailActivity :
                 showLoginRequestDialog()
                 return
             }
+            tracker.trackEvent("rate_love")
             novelDetailViewModel.updateUserInterest(novelId)
         }
     }

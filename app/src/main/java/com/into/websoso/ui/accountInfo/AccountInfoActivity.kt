@@ -11,15 +11,20 @@ import com.into.websoso.R.string.change_user_info_message
 import com.into.websoso.common.ui.base.BaseActivity
 import com.into.websoso.common.ui.model.ResultFrom.ChangeUserInfo
 import com.into.websoso.common.util.showWebsosoSnackBar
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityAccountInfoBinding
 import com.into.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.into.websoso.ui.changeUserInfo.ChangeUserInfoActivity
 import com.into.websoso.ui.withdraw.first.WithdrawFirstActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AccountInfoActivity :
     BaseActivity<ActivityAccountInfoBinding>(R.layout.activity_account_info) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val accountInfoViewModel: AccountInfoViewModel by viewModels()
     private val startActivityLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -62,6 +67,7 @@ class AccountInfoActivity :
 
     private fun onWithDrawButtonClick() {
         binding.clAccountInfoWithdraw.setOnClickListener {
+            tracker.trackEvent("withdraw")
             val intent = WithdrawFirstActivity.getIntent(this)
             startActivity(intent)
         }
@@ -75,6 +81,7 @@ class AccountInfoActivity :
 
     private fun onChangeUserInfoButtonClick() {
         binding.clAccountInfoChangeUserInfo.setOnClickListener {
+            tracker.trackEvent("logout")
             val intent = ChangeUserInfoActivity.getIntent(this)
             startActivityLauncher.launch(intent)
         }

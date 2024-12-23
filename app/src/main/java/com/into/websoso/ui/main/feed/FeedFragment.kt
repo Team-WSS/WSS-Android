@@ -43,6 +43,7 @@ import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.showWebsosoSnackBar
 import com.into.websoso.common.util.toFloatPxFromDp
 import com.into.websoso.common.util.toIntPxFromDp
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
@@ -67,9 +68,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private var _popupBinding: MenuFeedPopupBinding? = null
     private val popupBinding: MenuFeedPopupBinding get() = _popupBinding ?: error("FeedFragment")
     private val feedViewModel: FeedViewModel by viewModels()
@@ -106,6 +111,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
         @SuppressLint("CutPasteId")
         override fun onLikeButtonClick(view: View, id: Long) {
+            tracker.trackEvent("feed_like")
             val likeCount: Int =
                 view.findViewById<TextView>(tv_feed_thumb_up_count).text.toString().toInt()
             val updatedLikeCount: Int = when (view.isSelected) {
@@ -250,6 +256,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         initView()
         setupObserver()
         refreshView()
+        tracker.trackEvent("feed_all")
     }
 
     private fun refreshView() {
@@ -322,6 +329,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     }
 
     private fun navigateToFeedWriting() {
+        tracker.trackEvent("feed_write_floating_btn")
         activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext()))
     }
 
@@ -372,6 +380,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
 
             val selectedCategory = category.find { it.isSelected } ?: category.first()
+            tracker.trackEvent("feed_${selectedCategory.category.enTitle}")
 
             binding.wcgFeed.children.forEach {
                 val chip = it as Chip

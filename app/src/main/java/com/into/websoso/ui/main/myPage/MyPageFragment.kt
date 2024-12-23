@@ -13,15 +13,20 @@ import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseFragment
 import com.into.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.common.util.getS3ImageUrl
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentMyPageBinding
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
 import com.into.websoso.ui.profileEdit.ProfileEditActivity
 import com.into.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
     private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
@@ -45,6 +50,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         onSettingButtonClick()
         setupObserver()
         onProfileEditClick()
+        tracker.trackEvent("mypage")
     }
 
     override fun onResume() {
