@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.home.dialog
+package com.into.websoso.ui.splash.dialog
 
 import android.content.Intent
 import android.net.Uri
