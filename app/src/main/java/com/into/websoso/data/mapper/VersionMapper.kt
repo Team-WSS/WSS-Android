@@ -6,5 +6,4 @@ import com.into.websoso.data.remote.response.MinimumVersionResponseDto
 fun MinimumVersionResponseDto.toData(): MinimumVersionEntity =
     MinimumVersionEntity(
         minimumVersion = minimumVersion,
-        updateDate = updateDate,
     )
