@@ -22,7 +22,6 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
 
         setupObserver()
         splashViewModel.autoLogin()
-        showMinimumVersionDialog()
     }
 
     private fun setupObserver() {
