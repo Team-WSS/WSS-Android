@@ -10,21 +10,28 @@ class VersionRepository @Inject constructor(
     private val versionApi: VersionApi,
 ) {
     suspend fun isUpdateRequired(): Boolean {
-        val currentVersionCode = BuildConfig.VERSION_CODE
-        val minVersionCode = parseVersionCode(fetchMinimumVersion().minimumVersion)
-        return currentVersionCode < minVersionCode
+        val currentVersion = BuildConfig.VERSION_NAME
+        val minVersion = fetchMinimumVersion().minimumVersion
+
+        return compareVersions(parseVersionName(currentVersion), parseVersionName(minVersion))
     }
 
     private suspend fun fetchMinimumVersion(): MinimumVersionEntity {
         return versionApi.getMinimumVersion(os = OS).toData()
     }
 
-    private fun parseVersionCode(version: String): Int {
-        val parts = version.split(".").map { it.toIntOrNull() ?: 0 }
-        val major = parts.getOrNull(0) ?: 0
-        val minor = parts.getOrNull(1) ?: 0
-        val patch = parts.getOrNull(2) ?: 0
-        return major * 1000000 + minor * 1000 + patch
+    private fun parseVersionName(version: String): List<Int> {
+        return version.split(".").map { it.toIntOrNull() ?: 0 }
+    }
+
+    private fun compareVersions(currentVersionParts: List<Int>, minVersionParts: List<Int>): Boolean {
+        for (i in 0 until maxOf(currentVersionParts.size, minVersionParts.size)) {
+            val current = currentVersionParts.getOrNull(i) ?: 0
+            val min = minVersionParts.getOrNull(i) ?: 0
+            if (current < min) return true
+            if (current > min) return false
+        }
+        return false
     }
 
     companion object {
