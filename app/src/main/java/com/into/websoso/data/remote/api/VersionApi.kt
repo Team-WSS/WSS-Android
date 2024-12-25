@@ -7,6 +7,6 @@ import retrofit2.http.Query
 interface VersionApi {
     @GET("minimum-version")
     suspend fun getMinimumVersion(
-        @Query("os") os: String = "android",
+        @Query("os") os: String,
     ): MinimumVersionResponseDto
 }
