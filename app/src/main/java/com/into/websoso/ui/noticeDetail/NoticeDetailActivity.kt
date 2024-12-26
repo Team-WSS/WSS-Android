@@ -20,6 +20,7 @@ class NoticeDetailActivity :
 
         onBackButtonClick()
         handleBackPressed()
+        setupHyperlink(noticeItem?.noticeContent)
     }
 
     private fun onBackButtonClick() {
@@ -31,6 +32,18 @@ class NoticeDetailActivity :
     private fun handleBackPressed() {
         onBackPressedDispatcher.addCallback(this) {
             finish()
+        }
+    }
+
+    private fun setupHyperlink(noticeContent: String?) {
+        binding.tvNoticeDetailContent.apply {
+            movementMethod = android.text.method.LinkMovementMethod.getInstance()
+            text = noticeContent?.let { content ->
+                android.text.Html.fromHtml(
+                    content,
+                    android.text.Html.FROM_HTML_MODE_LEGACY,
+                )
+            }
         }
     }
 
