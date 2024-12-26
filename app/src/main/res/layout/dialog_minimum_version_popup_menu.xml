@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_detail_white_radius_14dp">
+
+        <ImageView
+            android:id="@+id/iv_minimum_version_popup_menu_warning"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="100dp"
+            android:layout_marginStart="116dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="116dp"
+            android:src="@drawable/ic_novel_detail_warning"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_minimum_version_popup_menu_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/minimum_version_popup_menu_title"
+            android:textAlignment="center"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/iv_minimum_version_popup_menu_warning"
+            app:layout_constraintStart_toStartOf="@+id/iv_minimum_version_popup_menu_warning"
+            app:layout_constraintTop_toBottomOf="@id/iv_minimum_version_popup_menu_warning" />
+
+        <TextView
+            android:id="@+id/tv_minimum_version_popup_menu_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/minimum_version_popup_menu_description"
+            android:textAlignment="center"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintEnd_toEndOf="@+id/tv_minimum_version_popup_menu_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_minimum_version_popup_menu_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_minimum_version_popup_menu_title" />
+
+        <TextView
+            android:id="@+id/tv_minimum_version_popup_menu_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_home_primary100_radius_8dp"
+            android:gravity="center"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="100dp"
+            android:text="@string/minimum_version_popup_menu_update"
+            android:textAlignment="center"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_minimum_version_popup_menu_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
