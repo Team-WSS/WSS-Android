@@ -401,4 +401,9 @@
     <string name="other_user_activity_report_spoiler">스포일러 신고</string>
     <string name="other_user_activity_report_expression">부적절한 표현 신고</string>
     <string name="other_user_activity_emtpy">작성한 글이 없어요</string>
+
+    <!-- 최소 버전 팝업 뷰-->
+    <string name="minimum_version_popup_menu_title">업데이트 알림</string>
+    <string name="minimum_version_popup_menu_description">웹소소 세계에 변화가 생겼어요!\n지금 업데이트해보세요.</string>
+    <string name="minimum_version_popup_menu_update">업데이트</string>
 </resources>

@@ -9,15 +9,20 @@ import com.into.websoso.R.string.report_popup_menu_spoiling_comment
 import com.into.websoso.R.string.report_popup_menu_spoiling_feed
 import com.into.websoso.common.ui.base.BaseDialogFragment
 import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
+import javax.inject.Inject
 
 class FeedReportDialogFragment :
     BaseDialogFragment<DialogReportPopupMenuBinding>(R.layout.dialog_report_popup_menu) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val menuType: String? by lazy { arguments?.getString(MENU_TYPE) }
     private val onReportClick: FeedDialogClickListener by lazy {
@@ -56,6 +61,7 @@ class FeedReportDialogFragment :
         )
         binding.tvReportPopupMenuReport.setOnClickListener {
             singleEventHandler.throttleFirst {
+                tracker.trackEvent("alert_feed_abuse")
                 onReportClick()
                 FeedReportDoneDialogFragment
                     .newInstance(IMPERTINENCE_COMMENT.name) { dismiss() }
@@ -68,6 +74,7 @@ class FeedReportDialogFragment :
         binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_spoiling_feed)
         binding.tvReportPopupMenuReport.setOnClickListener {
             singleEventHandler.throttleFirst {
+                tracker.trackEvent("alert_feed_spoiler")
                 onReportClick()
                 FeedReportDoneDialogFragment
                     .newInstance(SPOILER_FEED.name) { dismiss() }

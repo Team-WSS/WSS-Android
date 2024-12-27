@@ -8,6 +8,7 @@ import com.into.websoso.common.ui.base.BaseActivity
 import com.into.websoso.databinding.ActivityLoginBinding
 import com.into.websoso.ui.login.LoginActivity
 import com.into.websoso.ui.main.MainActivity
+import com.into.websoso.ui.splash.dialog.MinimumVersionDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,9 +28,15 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
         splashViewModel.isAutoLogin.observe(this) { isAutoLogin ->
             lifecycleScope.launch {
                 delay(1000L)
-                when (isAutoLogin) {
-                    true -> navigateToMainActivity()
-                    false -> navigateToLoginActivity()
+                splashViewModel.updateMinimumVersion { isUpdateRequired ->
+                    if (isUpdateRequired) {
+                        showMinimumVersionDialog()
+                    } else {
+                        when (isAutoLogin) {
+                            true -> navigateToMainActivity()
+                            false -> navigateToLoginActivity()
+                        }
+                    }
                 }
             }
         }
@@ -43,5 +50,15 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
     private fun navigateToLoginActivity() {
         startActivity(LoginActivity.getIntent(this))
         finish()
+    }
+
+    private fun showMinimumVersionDialog() {
+        val dialog = MinimumVersionDialogFragment.newInstance()
+        dialog.isCancelable = false
+        dialog.show(supportFragmentManager, MINIMUM_VERSION_TAG)
+    }
+
+    companion object {
+        private const val MINIMUM_VERSION_TAG = "MinimumVersionDialog"
     }
 }

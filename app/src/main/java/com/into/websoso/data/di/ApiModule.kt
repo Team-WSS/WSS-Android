@@ -10,6 +10,7 @@ import com.into.websoso.data.remote.api.NoticeApi
 import com.into.websoso.data.remote.api.NovelApi
 import com.into.websoso.data.remote.api.UserApi
 import com.into.websoso.data.remote.api.UserNovelApi
+import com.into.websoso.data.remote.api.VersionApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,4 +53,8 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideAvatarApi(@Secured retrofit: Retrofit): AvatarApi = retrofit.create(AvatarApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideVersionApi(@Secured retrofit: Retrofit): VersionApi = retrofit.create(VersionApi::class.java)
 }

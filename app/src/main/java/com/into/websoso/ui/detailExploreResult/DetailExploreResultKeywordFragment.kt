@@ -17,15 +17,20 @@ import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordMod
 import com.into.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
 import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentDetailExploreResultKeywordBinding
 import com.into.websoso.ui.detailExplore.keyword.DetailExploreClickListener
 import com.into.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
 import com.into.websoso.ui.detailExploreResult.model.DetailExploreResultUiState
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailExploreResultKeywordFragment :
     BaseFragment<FragmentDetailExploreResultKeywordBinding>(R.layout.fragment_detail_explore_result_keyword) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
@@ -41,6 +46,7 @@ class DetailExploreResultKeywordFragment :
         setupSearchKeyword()
         setupWebsosoSearchEditListener()
         setupBackButtonListener()
+        tracker.trackEvent("seek_result")
     }
 
     private fun bindViewModel() {

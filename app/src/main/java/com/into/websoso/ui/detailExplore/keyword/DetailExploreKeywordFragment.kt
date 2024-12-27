@@ -17,6 +17,7 @@ import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordMod
 import com.into.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
 import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel
 import com.into.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
@@ -24,10 +25,14 @@ import com.into.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiSta
 import com.into.websoso.ui.detailExploreResult.DetailExploreResultActivity
 import com.into.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailExploreKeywordFragment :
     BaseFragment<FragmentDetailExploreKeywordBinding>(R.layout.fragment_detail_explore_keyword) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val detailExploreKeywordAdapter: DetailExploreKeywordAdapter by lazy {
@@ -54,6 +59,7 @@ class DetailExploreKeywordFragment :
     private fun onDetailExploreKeywordButtonClick() = object : DetailExploreClickListener {
 
         override fun onNovelInquireButtonClick() {
+            tracker.trackEvent("contact_keyword")
             val inquireUrl = getString(R.string.inquire_link)
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
             startActivity(intent)

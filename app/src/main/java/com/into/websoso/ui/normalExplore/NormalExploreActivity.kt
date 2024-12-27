@@ -13,6 +13,7 @@ import com.into.websoso.common.ui.base.BaseActivity
 import com.into.websoso.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.common.util.InfiniteScrollListener
 import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNormalExploreBinding
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
@@ -21,10 +22,14 @@ import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Novels
 import com.into.websoso.ui.normalExplore.model.NormalExploreUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NormalExploreActivity :
     BaseActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -92,6 +97,7 @@ class NormalExploreActivity :
 
         override fun onSearchButtonClick() {
             singleEventHandler.throttleFirst {
+                tracker.trackEvent("click_search_result")
                 normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
                 binding.etNormalExploreSearchContent.clearFocus()
                 hideKeyboard()
@@ -106,6 +112,7 @@ class NormalExploreActivity :
         }
 
         override fun onNovelInquireButtonClick() {
+            tracker.trackEvent("contact_novel_search")
             val inquireUrl = getString(R.string.inquire_link)
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
             startActivity(intent)

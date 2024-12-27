@@ -21,14 +21,19 @@ import com.into.websoso.common.util.SingleEventHandler
 import com.into.websoso.common.util.getS3ImageUrl
 import com.into.websoso.common.util.toFloatPxFromDp
 import com.into.websoso.common.util.toIntPxFromDp
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityOtherUserPageBinding
 import com.into.websoso.databinding.MenuOtherUserPagePopupBinding
 import com.into.websoso.ui.otherUserPage.adapter.OtherUserPageViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OtherUserPageActivity :
     BaseActivity<ActivityOtherUserPageBinding>(R.layout.activity_other_user_page) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private var _popupBinding: MenuOtherUserPagePopupBinding? = null
     private val popupBinding: MenuOtherUserPagePopupBinding
         get() = _popupBinding ?: error("OtherUserPageActivity")
@@ -48,6 +53,7 @@ class OtherUserPageActivity :
         onBackButtonClick()
         onMoreButtonClick()
         handleBackPressed()
+        tracker.trackEvent("other_mypage")
     }
 
     private fun updateUserId() {
