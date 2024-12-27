@@ -7,18 +7,19 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.teamwss.websoso"
+    namespace = "com.into.websoso"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.teamwss.websoso"
+        applicationId = "com.into.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = 10000
-        versionName = "1.0.0"
+        versionCode = 10005
+        versionName = "1.0.5"
 
         buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
@@ -111,4 +112,8 @@ dependencies {
 
     // Security
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }

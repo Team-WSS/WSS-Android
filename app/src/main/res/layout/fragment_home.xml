@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.teamwss.websoso.ui.main.home.HomeViewModel" />
+            type="com.into.websoso.ui.main.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -314,7 +314,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_home"
             android:layout_width="0dp"
             android:layout_height="0dp"

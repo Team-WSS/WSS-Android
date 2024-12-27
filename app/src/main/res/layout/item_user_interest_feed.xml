@@ -7,7 +7,7 @@
 
         <variable
             name="userInterestFeed"
-            type="com.teamwss.websoso.data.model.UserInterestFeedsEntity.UserInterestFeedEntity" />
+            type="com.into.websoso.data.model.UserInterestFeedsEntity.UserInterestFeedEntity" />
 
         <variable
             name="onClick"

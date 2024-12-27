@@ -7,11 +7,11 @@
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.feedDetail.FeedDetailClickListener" />
+            type="com.into.websoso.ui.feedDetail.FeedDetailClickListener" />
 
         <variable
             name="feed"
-            type="com.teamwss.websoso.ui.main.feed.model.FeedModel" />
+            type="com.into.websoso.ui.main.feed.model.FeedModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

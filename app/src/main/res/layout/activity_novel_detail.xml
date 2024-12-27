@@ -7,13 +7,13 @@
 
         <variable
             name="novelDetailViewModel"
-            type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
+            type="com.into.websoso.ui.novelDetail.NovelDetailViewModel" />
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.novelDetail.NovelDetailClickListener" />
+            type="com.into.websoso.ui.novelDetail.NovelDetailClickListener" />
 
-        <import type="com.teamwss.websoso.ui.novelRating.model.ReadStatus" />
+        <import type="com.into.websoso.ui.novelRating.model.ReadStatus" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.teamwss.websoso.ui.novelDetail.NovelDetailAppBar
+            <com.into.websoso.ui.novelDetail.NovelDetailAppBar
                 android:id="@+id/abl_novel_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -602,7 +602,7 @@
                     android:minHeight="-54dp"
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                     app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
-            </com.teamwss.websoso.ui.novelDetail.NovelDetailAppBar>
+            </com.into.websoso.ui.novelDetail.NovelDetailAppBar>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_novel_detail"
@@ -639,7 +639,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_novel_detail"
             android:layout_width="0dp"
             android:layout_height="0dp"

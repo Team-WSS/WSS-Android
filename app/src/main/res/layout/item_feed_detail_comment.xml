@@ -7,11 +7,11 @@
 
         <variable
             name="comment"
-            type="com.teamwss.websoso.ui.feedDetail.model.CommentModel" />
+            type="com.into.websoso.ui.feedDetail.model.CommentModel" />
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.feedDetail.CommentClickListener" />
+            type="com.into.websoso.ui.feedDetail.CommentClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

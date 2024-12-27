@@ -7,7 +7,7 @@
 
         <variable
             name="sosoPick"
-            type="com.teamwss.websoso.data.model.SosoPickEntity.NovelEntity" />
+            type="com.into.websoso.data.model.SosoPickEntity.NovelEntity" />
 
         <variable
             name="sosoPickItemClickListener"

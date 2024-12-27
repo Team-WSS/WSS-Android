@@ -7,7 +7,7 @@
 
         <variable
             name="avatar"
-            type="com.teamwss.websoso.ui.profileEdit.model.AvatarModel" />
+            type="com.into.websoso.ui.profileEdit.model.AvatarModel" />
 
         <variable
             name="isSelected"

@@ -7,11 +7,11 @@
 
         <variable
             name="withdrawSecondViewModel"
-            type="com.teamwss.websoso.ui.withdraw.second.WithdrawSecondViewModel" />
+            type="com.into.websoso.ui.withdraw.second.WithdrawSecondViewModel" />
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.withdraw.second.WithdrawClickListener" />
+            type="com.into.websoso.ui.withdraw.second.WithdrawClickListener" />
     </data>
 
     <androidx.core.widget.NestedScrollView

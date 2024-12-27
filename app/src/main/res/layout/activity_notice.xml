@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_notice_notice"
             tools:listitem="@layout/item_notice" />
 
-        <com.teamwss.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_notice"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -6,7 +6,7 @@
 
         <variable
             name="novelDetailViewModel"
-            type="com.teamwss.websoso.ui.novelDetail.NovelDetailViewModel" />
+            type="com.into.websoso.ui.novelDetail.NovelDetailViewModel" />
 
         <variable
             name="reportError"

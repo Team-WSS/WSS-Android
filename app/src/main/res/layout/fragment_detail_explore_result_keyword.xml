@@ -7,11 +7,11 @@
 
         <variable
             name="onClick"
-            type="com.teamwss.websoso.ui.detailExplore.keyword.DetailExploreClickListener" />
+            type="com.into.websoso.ui.detailExplore.keyword.DetailExploreClickListener" />
 
         <variable
             name="detailExploreResultViewModel"
-            type="com.teamwss.websoso.ui.detailExploreResult.DetailExploreResultViewModel" />
+            type="com.into.websoso.ui.detailExploreResult.DetailExploreResultViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.teamwss.websoso.common.ui.custom.WebsosoSearchEditText
+            <com.into.websoso.common.ui.custom.WebsosoSearchEditText
                 android:id="@+id/wset_detail_explore_keyword_search"
                 android:layout_width="0dp"
                 android:layout_height="44dp"
@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@id/cl_detail_explore_keyword_search"
             tools:visibility="gone">
 
-            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+            <com.into.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_detail_explore_keyword_selected_keyword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.teamwss.websoso.common.ui.custom.WebsosoChipGroup
+            <com.into.websoso.common.ui.custom.WebsosoChipGroup
                 android:id="@+id/wcg_detail_explore_keyword_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

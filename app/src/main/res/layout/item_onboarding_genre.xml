@@ -6,7 +6,7 @@
 
         <variable
             name="genre"
-            type="com.teamwss.websoso.ui.onboarding.third.model.Genre" />
+            type="com.into.websoso.ui.onboarding.third.model.Genre" />
 
         <variable
             name="isSelected"
