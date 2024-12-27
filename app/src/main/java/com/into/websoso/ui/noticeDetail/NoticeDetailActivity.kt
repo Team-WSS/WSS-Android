@@ -3,6 +3,8 @@ package com.into.websoso.ui.noticeDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import androidx.activity.addCallback
 import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseActivity
@@ -37,11 +39,11 @@ class NoticeDetailActivity :
 
     private fun setupHyperlink(noticeContent: String?) {
         binding.tvNoticeDetailContent.apply {
-            movementMethod = android.text.method.LinkMovementMethod.getInstance()
+            movementMethod = LinkMovementMethod.getInstance()
             text = noticeContent?.let { content ->
-                android.text.Html.fromHtml(
+                Html.fromHtml(
                     content,
-                    android.text.Html.FROM_HTML_MODE_LEGACY,
+                    Html.FROM_HTML_MODE_LEGACY,
                 )
             }
         }
