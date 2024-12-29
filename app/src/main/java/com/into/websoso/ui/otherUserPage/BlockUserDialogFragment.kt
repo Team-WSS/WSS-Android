@@ -8,12 +8,17 @@ import com.into.websoso.R
 import com.into.websoso.common.ui.base.BaseDialogFragment
 import com.into.websoso.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogBlockUserBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BlockUserDialogFragment :
     BaseDialogFragment<DialogBlockUserBinding>(R.layout.dialog_block_user) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
 
@@ -36,6 +41,7 @@ class BlockUserDialogFragment :
     private fun onBlockButtonClick() {
         binding.tvBlockUserButton.setOnClickListener {
             singleEventHandler.throttleFirst {
+                tracker.trackEvent("other_block")
                 otherUserPageViewModel.updateBlockedUser()
             }
         }
@@ -45,7 +51,10 @@ class BlockUserDialogFragment :
         otherUserPageViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             if (uiState.isBlockedCompleted) {
                 val intent = Intent().apply {
-                    putExtra(USER_NICKNAME, otherUserPageViewModel.uiState.value?.otherUserProfile?.nickname)
+                    putExtra(
+                        USER_NICKNAME,
+                        otherUserPageViewModel.uiState.value?.otherUserProfile?.nickname
+                    )
                 }
                 activity?.setResult(BlockUser.RESULT_OK, intent)
                 dismiss()

@@ -17,6 +17,7 @@ import com.into.websoso.common.util.getAdaptedSerializableExtra
 import com.into.websoso.common.util.showWebsosoSnackBar
 import com.into.websoso.common.util.showWebsosoToast
 import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNovelRatingBinding
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
@@ -26,10 +27,14 @@ import com.into.websoso.ui.novelRating.model.NovelRatingUiState
 import com.into.websoso.ui.novelRating.model.RatingDateModel
 import com.into.websoso.ui.novelRating.model.ReadStatus
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NovelRatingActivity :
     BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
+    @Inject
+    lateinit var tracker: Tracker
+
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
     private val novelId: Long by lazy { intent.getLongExtra(NOVEL_ID, 0) }
@@ -42,6 +47,7 @@ class NovelRatingActivity :
         setupCharmPointChips()
         setupWebsosoLoadingLayout()
         setupBackPressCallback()
+        tracker.trackEvent("rate")
     }
 
     private fun bindView() {
@@ -70,6 +76,7 @@ class NovelRatingActivity :
             }
 
             override fun onSaveClick() {
+                tracker.trackEvent("rate_novel")
                 novelRatingViewModel.updateUserNovelRating(novelId, binding.rbNovelRating.rating)
             }
 

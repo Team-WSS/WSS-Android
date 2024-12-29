@@ -18,12 +18,14 @@ android {
         applicationId = "com.into.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = 10005
-        versionName = "1.0.5"
+        versionCode = 10006
+        versionName = "1.0.6"
 
         buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
         buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("kakao.app.key"))
+        buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
+
         manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
             .getProperty("kakao.app.key").replace("\"", "")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -116,4 +118,7 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
+
+    // Amplitude
+    implementation("com.amplitude:analytics-android:1.+")
 }

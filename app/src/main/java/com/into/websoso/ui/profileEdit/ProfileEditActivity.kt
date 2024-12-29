@@ -3,6 +3,7 @@ package com.into.websoso.ui.profileEdit
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -45,6 +46,7 @@ class ProfileEditActivity :
         setupGenreChips()
         onNicknameEditTextChange()
         onIntroductionEditTextChange()
+        setupProfileIntroductionMaxLines()
     }
 
     private fun bindViewModel() {
@@ -240,9 +242,28 @@ class ProfileEditActivity :
         profileEditViewModel.updateAvatarThumbnail(updatedAvatarThumbnail)
     }
 
+    private fun setupProfileIntroductionMaxLines() {
+        binding.etProfileEditIntroduction.filters =
+            arrayOf(InputFilter { source, start, end, dest, dstart, dend ->
+
+                val newText = dest.toString().substring(0, dstart) +
+                        source.toString().substring(start, end) +
+                        dest.toString().substring(dend)
+
+                if (newText.length > MAX_LENGTH || newText.lines().size > MAX_LINES) {
+                    ""
+                } else {
+                    null
+                }
+            })
+    }
+
     companion object {
         private const val PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG =
             "PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG"
+
+        private const val MAX_LENGTH = 50
+        private const val MAX_LINES = 2
 
         fun getIntent(
             context: Context,
