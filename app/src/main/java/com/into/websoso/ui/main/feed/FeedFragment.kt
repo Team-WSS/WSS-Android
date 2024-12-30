@@ -380,7 +380,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
 
             val selectedCategory = category.find { it.isSelected } ?: category.first()
-            tracker.trackEvent("feed_${selectedCategory.category.enTitle}")
+            tracker.trackEvent("feed_${selectedCategory.category.shortCode}")
 
             binding.wcgFeed.children.forEach {
                 val chip = it as Chip
