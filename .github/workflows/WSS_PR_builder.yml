@@ -45,7 +45,7 @@ jobs:
           S3_BASE_URL: ${{ secrets.S3_BASE_URL }}
           KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
           AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
-          run: |
+        run: |
             echo "BASE_URL=${BASE_URL}" >> $GITHUB_ENV
             echo "S3_BASE_URL=${S3_BASE_URL}" >> $GITHUB_ENV
             echo "KAKAO_APP_KEY=${KAKAO_APP_KEY}" >> $GITHUB_ENV
