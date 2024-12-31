@@ -46,10 +46,10 @@ jobs:
           KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
           AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
         run: |
-            echo "BASE_URL=${BASE_URL}" >> $GITHUB_ENV
-            echo "S3_BASE_URL=${S3_BASE_URL}" >> $GITHUB_ENV
-            echo "KAKAO_APP_KEY=${KAKAO_APP_KEY}" >> $GITHUB_ENV
-            echo "AMPLITUDE_KEY=${AMPLITUDE_KEY}" >> $GITHUB_ENV
+            echo base.url=\"$BASE_URL\" >> ./local.properties
+            echo s3.url=\"$S3_BASE_URL\" >> ./local.properties
+            echo kakao.app.key=\"$KAKAO_APP_KEY\" >> ./local.properties
+            echo amplitude.key=\"$AMPLITUDE_KEY\" >> ./local.properties
 
 
       - name: Run Ktlint
