@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "develop", "release", "hotfix" ]
+    branches: [ "develop", "release_wss", "release/*", "hotfix" ]
   pull_request:
-    branches: [ "develop", "release", "hotfix" ]
+    branches: [ "develop", "release_wss", "release/*", "hotfix" ]
 
 jobs:
   build:
