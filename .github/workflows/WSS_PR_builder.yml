@@ -41,8 +41,16 @@ jobs:
 
       - name: Create local.properties
         env:
-          LOCAL_PROPERTIES_CONTENTS: ${{ secrets.LOCAL_PROPERTIES_CONTENTS }}
-        run: echo "${LOCAL_PROPERTIES_CONTENTS}" > local.properties
+          BASE_URL: ${{ secrets.BASE_URL }}
+          S3_BASE_URL: ${{ secrets.S3_BASE_URL }}
+          KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+          AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
+          run: |
+            echo "BASE_URL=${BASE_URL}" >> $GITHUB_ENV
+            echo "S3_BASE_URL=${S3_BASE_URL}" >> $GITHUB_ENV
+            echo "KAKAO_APP_KEY=${KAKAO_APP_KEY}" >> $GITHUB_ENV
+            echo "AMPLITUDE_KEY=${AMPLITUDE_KEY}" >> $GITHUB_ENV
+
 
       - name: Run Ktlint
         uses: ScaCap/action-ktlint@master
