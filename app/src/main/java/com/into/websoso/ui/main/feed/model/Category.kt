@@ -15,13 +15,13 @@ enum class Category(
     DRAMA("드라마", "drama", "D"),
     MYSTERY("미스터리", "mystery", "M"),
     LIGHT_NOVEL("라노벨", "lightNovel", "LN"),
-    ETC("기타", "etc", "etc");
+    ETC("기타", "etc", "etc"),
     ;
 
     companion object {
-
-        fun from(title: String): Category = Category.entries.find { category ->
-            title == category.krTitle
-        } ?: throw IllegalArgumentException()
+        fun from(title: String): Category =
+            Category.entries.find { category ->
+                title == category.krTitle
+            } ?: throw IllegalArgumentException()
     }
 }
