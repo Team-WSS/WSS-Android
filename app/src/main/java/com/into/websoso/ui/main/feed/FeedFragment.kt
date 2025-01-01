@@ -135,7 +135,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             OtherUserPageActivity.getIntent(
                 requireContext(),
                 userId,
-            )
+            ),
         )
     }
 
@@ -144,7 +144,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = 2f
             showAsDropDown(view)
@@ -341,7 +341,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 InfiniteScrollListener.of(
                     singleEventHandler = singleEventHandler,
                     event = feedViewModel::updateFeeds,
-                )
+                ),
             )
             setHasFixedSize(true)
         }
@@ -353,7 +353,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 setRefreshViewParams(
                     params = ViewGroup.LayoutParams(
                         30.toIntPxFromDp(), 30.toIntPxFromDp(),
-                    )
+                    ),
                 )
                 setLottieAnimation("lottie_websoso_loading.json")
                 setOnRefreshListener {
@@ -380,7 +380,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
 
             val selectedCategory = category.find { it.isSelected } ?: category.first()
-            tracker.trackEvent("feed_${selectedCategory.category.enTitle}")
+            tracker.trackEvent("feed_${selectedCategory.category.shortCode}")
 
             binding.wcgFeed.children.forEach {
                 val chip = it as Chip
