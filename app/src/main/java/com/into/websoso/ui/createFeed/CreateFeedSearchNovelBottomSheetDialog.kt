@@ -18,8 +18,10 @@ import com.into.websoso.ui.createFeed.adapter.SearchNovelAdapter
 import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Loading
 import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Novels
 import com.into.websoso.ui.createFeed.model.SearchNovelUiState
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CreateFeedSearchNovelBottomSheetDialog :
     BaseBottomSheetDialog<DialogCreateFeedSearchNovelBinding>(dialog_create_feed_search_novel) {
     @Inject

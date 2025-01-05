@@ -16,8 +16,10 @@ import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_COMMENT
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class FeedReportDialogFragment :
     BaseDialogFragment<DialogReportPopupMenuBinding>(R.layout.dialog_report_popup_menu) {
     @Inject
