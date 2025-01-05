@@ -41,16 +41,17 @@ jobs:
 
       - name: Create local.properties
         env:
-          BASE_URL: ${{ secrets.BASE_URL }}
+          DEBUG_BASE_URL: ${{ secrets.DEBUG_BASE_URL }}
+          RELEASE_BASE_URL: ${{ secrets.RELEASE_BASE_URL }}
           S3_BASE_URL: ${{ secrets.S3_BASE_URL }}
           KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
           AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
         run: |
-            echo base.url=\"$BASE_URL\" >> ./local.properties
-            echo s3.url=\"$S3_BASE_URL\" >> ./local.properties
-            echo kakao.app.key=\"$KAKAO_APP_KEY\" >> ./local.properties
-            echo amplitude.key=\"$AMPLITUDE_KEY\" >> ./local.properties
-
+          echo debug.base.url=\"$DEBUG_BASE_URL\" >> ./local.properties
+          echo release.base.url=\"$RELEASE_BASE_URL\" >> ./local.properties
+          echo s3.url=\"$S3_BASE_URL\" >> ./local.properties
+          echo kakao.app.key=\"$KAKAO_APP_KEY\" >> ./local.properties
+          echo amplitude.key=\"$AMPLITUDE_KEY\" >> ./local.properties
 
       - name: Run Ktlint
         uses: ScaCap/action-ktlint@master
