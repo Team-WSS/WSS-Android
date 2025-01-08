@@ -34,7 +34,7 @@
     <style name="body2">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">15dp</item>
-        <item name="lineHeight">22dp</item>
+        <item name="lineHeight">22.5dp</item>
     </style>
 
     <style name="body3">

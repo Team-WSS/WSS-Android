@@ -122,8 +122,9 @@
                 <TextView
                     android:id="@+id/tv_home_interest_feed"
                     android:layout_width="wrap_content"
-                    android:layout_height="29dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="76dp"
+                    android:paddingVertical="2dp"
                     android:text="@string/home_interest_feed"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="@id/vp_home_popular_feed"
@@ -142,8 +143,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:textAppearance="@style/body2"
+                        android:layout_marginTop="2dp"
                         android:text="@string/home_user_interest_recent_feed"
+                        android:textAppearance="@style/body2"
+                        android:textColor="@color/gray_200_AEADB3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -232,6 +235,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="56dp"
+                    android:paddingVertical="2dp"
                     android:text="@string/home_recommend_novel"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="@id/vp_home_popular_feed"
@@ -250,8 +254,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:textAppearance="@style/body2"
+                        android:layout_marginTop="2dp"
                         android:text="@string/home_recommend_novel_by_user_taste_description"
+                        android:textAppearance="@style/body2"
+                        android:textColor="@color/gray_200_AEADB3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
