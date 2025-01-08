@@ -21,7 +21,6 @@ android {
         versionCode = 10008
         versionName = "1.0.8"
 
-        buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
         buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("kakao.app.key"))
         buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
@@ -32,12 +31,21 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("debug.base.url"))
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
+            buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("release.base.url"))
         }
     }
     compileOptions {
