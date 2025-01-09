@@ -8,13 +8,4 @@ data class NovelInfoUiState(
     val loading: Boolean = false,
     val error: Boolean = false,
     val isKeywordsExist: Boolean = false,
-) {
-
-    fun getNaverPlatform(): PlatformModel {
-        return platforms.firstOrNull { it.platform == Platform.NAVER_SERIES } ?: PlatformModel()
-    }
-
-    fun getKakaoPlatform(): PlatformModel {
-        return platforms.firstOrNull { it.platform == Platform.KAKAO_PAGE } ?: PlatformModel()
-    }
-}
+)

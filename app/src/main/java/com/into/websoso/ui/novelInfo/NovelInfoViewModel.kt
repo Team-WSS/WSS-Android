@@ -8,7 +8,6 @@ import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.ui.mapper.toUi
 import com.into.websoso.ui.novelInfo.model.ExpandTextUiModel.Companion.DEFAULT_BODY_MAX_LINES
 import com.into.websoso.ui.novelInfo.model.NovelInfoUiState
-import com.into.websoso.ui.novelInfo.model.Platform
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -94,18 +93,6 @@ class NovelInfoViewModel @Inject constructor(
                 isExpandTextToggleSelected = false
             )
             _uiState.value = currentState.copy(expandTextModel = updatedExpandTextUiModel)
-        }
-    }
-
-    fun updatePlatformImage(platform: Platform, platformImage: String) {
-        uiState.value?.let { uiState ->
-            val formattedPlatforms = uiState.platforms.map {
-                when (it.platform == platform) {
-                    true -> it.copy(platformImage = platformImage)
-                    false -> it
-                }
-            }
-            _uiState.value = uiState.copy(platforms = formattedPlatforms)
         }
     }
 
