@@ -1,12 +1,20 @@
 [versions]
+# Gradle Plugin & Kotlin
 android-gradle-plugin = "8.1.3"
 kotlin = "1.9.0"
 serialization = "1.5.1"
+
+# Dependency Injection
 hilt = "2.48"
+
+# Firebase
 google-services = "4.4.2"
 firebase-bom = "33.7.0"
+
+# Analytics
 amplitude = "1.+"
 
+# AndroidX Libraries
 androidx = "1.9.0"
 appcompat = "1.6.1"
 material = "1.11.0"
@@ -17,25 +25,31 @@ lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.1.1"
 security-crypto = "1.1.0-alpha06"
 
+# Testing Libraries
 junit = "4.13.2"
 androidx-test-junit = "1.1.5"
 espresso-core = "3.5.1"
 
+# Networking Libraries
 retrofit = "2.11.0"
 retrofit-kotlinx-serialization = "1.0.0"
 okhttp = "4.11.0"
 okhttp-logging-interceptor = "4.10.0"
 
+# Coroutines
+coroutines = "1.6.4"
+
+# Image Loading Libraries
 coil = "2.7.0"
 coil-transformers = "1.0.6"
 
+# Misc UI Libraries
 dots-indicator = "5.0"
 lottie = "5.0.2"
 pull-to-refresh = "1.5.2"
 
+# Social Login Libraries
 kakao = "2.15.0"
-
-coroutines = "1.6.4"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
