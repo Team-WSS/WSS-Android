@@ -143,7 +143,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
         override fun onProfileClick(userId: Long, isMyComment: Boolean) {
-            if (isMyComment || userId.toInt() == -1) return
+            if (isMyComment) return
             navigateToProfile(userId)
         }
 
