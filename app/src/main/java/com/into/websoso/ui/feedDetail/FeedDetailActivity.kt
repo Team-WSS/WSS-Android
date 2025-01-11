@@ -123,7 +123,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
-            if (isMyFeed || userId.toInt() == -1) return
+            if (isMyFeed) return
             navigateToProfile(userId)
         }
 
@@ -137,7 +137,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             NovelDetailActivity.getIntent(
                 this@FeedDetailActivity,
                 novelId,
-            )
+            ),
         )
     }
 
@@ -162,7 +162,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             OtherUserPageActivity.getIntent(
                 this@FeedDetailActivity,
                 userId,
-            )
+            ),
         )
     }
 
@@ -452,7 +452,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                 ) = Unit
 
                 override fun afterTextChanged(s: Editable?) = Unit
-            }
+            },
         )
     }
 
