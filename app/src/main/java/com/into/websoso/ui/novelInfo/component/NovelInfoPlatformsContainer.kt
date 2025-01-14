@@ -1,12 +1,10 @@
 package com.into.websoso.ui.novelInfo.component
 
-import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import com.into.websoso.common.util.getS3ImageUrl
 import com.into.websoso.ui.novelInfo.model.PlatformModel
 
 @OptIn(ExperimentalLayoutApi::class)
