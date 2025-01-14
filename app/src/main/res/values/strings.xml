@@ -227,7 +227,7 @@
     <string name="my_library_attractive_point_fixed_text">(이)가 매력적인 작품</string>
 
     <!-- 홈 뷰 -->
-    <string name="home_today_popular">오늘의 인기작</string>
+    <string name="home_today_popular">오늘의 발견</string>
     <string name="home_rising_feed">지금 뜨는 수다글</string>
     <string name="home_interest_feed">관심글</string>
     <string name="home_user_interest_recent_feed">관심 등록한 작품의 최근 수다예요</string>
