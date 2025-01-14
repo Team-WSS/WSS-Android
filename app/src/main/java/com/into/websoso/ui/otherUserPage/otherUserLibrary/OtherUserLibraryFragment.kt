@@ -194,15 +194,16 @@ class OtherUserLibraryFragment :
     }
 
     private fun onStorageButtonClick() {
+        val userId = requireNotNull(otherUserLibraryViewModel.userId.value)
+
         binding.ivOtherUserLibraryGoToStorage.setOnClickListener {
             singleEventHandler.throttleFirst {
                 startActivity(
                     UserStorageActivity.getIntent(
                         requireContext(),
                         UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
-                        otherUserLibraryViewModel.userId.value
-                            ?: UserStorageViewModel.DEFAULT_USER_ID,
-                    ),
+                        userId,
+                    )
                 )
             }
         }
@@ -213,9 +214,8 @@ class OtherUserLibraryFragment :
                     UserStorageActivity.getIntent(
                         requireContext(),
                         UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
-                        otherUserLibraryViewModel.userId.value
-                            ?: UserStorageViewModel.DEFAULT_USER_ID,
-                    ),
+                        userId,
+                    )
                 )
             }
         }
