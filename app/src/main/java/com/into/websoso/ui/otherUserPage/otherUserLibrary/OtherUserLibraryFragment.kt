@@ -202,7 +202,7 @@ class OtherUserLibraryFragment :
                         UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
                         otherUserLibraryViewModel.userId.value
                             ?: UserStorageViewModel.DEFAULT_USER_ID,
-                    )
+                    ),
                 )
             }
         }
@@ -215,7 +215,7 @@ class OtherUserLibraryFragment :
                         UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
                         otherUserLibraryViewModel.userId.value
                             ?: UserStorageViewModel.DEFAULT_USER_ID,
-                    )
+                    ),
                 )
             }
         }
