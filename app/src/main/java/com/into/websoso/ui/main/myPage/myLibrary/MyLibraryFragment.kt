@@ -27,7 +27,7 @@ import com.into.websoso.ui.userStorage.UserStorageActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class  MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
+class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
     private val myLibraryViewModel: MyLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
@@ -81,6 +81,7 @@ class  MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragm
                     binding.clMyLibraryNovelPreference.visibility = View.VISIBLE
                     binding.clMyLibraryUnknownNovelPreference.visibility = View.GONE
                 }
+
                 false -> {
                     binding.clMyLibraryNovelPreference.visibility = View.GONE
                     binding.clMyLibraryUnknownNovelPreference.visibility = View.VISIBLE
@@ -91,6 +92,7 @@ class  MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragm
                 true -> {
                     binding.clMyLibraryAttractivePoints.visibility = View.VISIBLE
                 }
+
                 false -> {
                     binding.clMyLibraryAttractivePoints.visibility = View.GONE
                 }
@@ -130,7 +132,7 @@ class  MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragm
                         ForegroundColorSpan(primary100),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(attractivePoints)
@@ -141,7 +143,7 @@ class  MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragm
                         ForegroundColorSpan(gray300),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(fixedSpannable)
@@ -151,7 +153,7 @@ class  MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragm
                     ForegroundColorSpan(primary100),
                     0,
                     length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
             }
             spannableStringBuilder.append(spannable)
