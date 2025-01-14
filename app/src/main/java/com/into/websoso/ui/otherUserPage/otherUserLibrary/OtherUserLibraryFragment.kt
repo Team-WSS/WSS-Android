@@ -206,6 +206,19 @@ class OtherUserLibraryFragment :
                 )
             }
         }
+
+        binding.llOtherUserLibraryStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                startActivity(
+                    UserStorageActivity.getIntent(
+                        requireContext(),
+                        UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
+                        otherUserLibraryViewModel.userId.value
+                            ?: UserStorageViewModel.DEFAULT_USER_ID,
+                    )
+                )
+            }
+        }
     }
 
     override fun onResume() {
