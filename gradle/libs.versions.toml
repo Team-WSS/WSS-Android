@@ -1,0 +1,120 @@
+[versions]
+# App Versioning
+versionCode = "10008"
+versionName = "1.0.8"
+
+# Gradle Plugin & Kotlin
+android-gradle-plugin = "8.1.3"
+kotlin = "1.9.0"
+serialization = "1.5.1"
+
+# Dependency Injection
+hilt = "2.48"
+
+# Firebase
+google-services = "4.4.2"
+firebase-bom = "33.7.0"
+
+# Analytics
+amplitude = "1.+"
+
+# AndroidX Libraries
+androidx = "1.9.0"
+appcompat = "1.6.1"
+material = "1.11.0"
+constraintlayout = "2.1.4"
+viewpager2 = "1.0.0"
+fragment-ktx = "1.6.1"
+lifecycle-extensions = "2.2.0"
+datastore-preferences = "1.1.1"
+security-crypto = "1.1.0-alpha06"
+
+# Testing Libraries
+junit = "4.13.2"
+androidx-test-junit = "1.1.5"
+espresso-core = "3.5.1"
+
+# Networking Libraries
+retrofit = "2.11.0"
+retrofit-kotlinx-serialization = "1.0.0"
+okhttp = "4.11.0"
+okhttp-logging-interceptor = "4.10.0"
+
+# Coroutines
+coroutines = "1.6.4"
+
+# Image Loading Libraries
+coil = "2.7.0"
+coil-transformers = "1.0.6"
+
+# Misc UI Libraries
+dots-indicator = "5.0"
+lottie = "5.0.2"
+pull-to-refresh = "1.5.2"
+
+# Social Login Libraries
+kakao = "2.15.0"
+
+# Ktlint
+ktlint = "12.1.0"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+
+[libraries]
+# AndroidX Libraries
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment-ktx" }
+lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle-extensions" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
+security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
+
+# Testing Libraries
+junit = { module = "junit:junit", version.ref = "junit" }
+androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
+
+# Networking Libraries
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-logging-interceptor" }
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# Image Loading Libraries
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil" }
+coil-transformers = { module = "jp.wasabeef.transformers:coil", version.ref = "coil-transformers" }
+
+# Misc UI Libraries
+dots-indicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dots-indicator" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+pull-to-refresh = { module = "com.github.SimformSolutionsPvtLtd:SSPullToRefresh", version.ref = "pull-to-refresh" }
+
+# Social Login Libraries
+kakao = { module = "com.kakao.sdk:v2-user", version.ref = "kakao" }
+
+# Dependency Injection Libraries
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+
+# Firebase Libraries
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+
+# Amplitude Libraries
+amplitude = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
