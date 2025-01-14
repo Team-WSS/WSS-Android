@@ -13,7 +13,6 @@ import com.into.websoso.ui.novelInfo.model.PlatformModel
 @Composable
 fun NovelInfoPlatformsContainer(
     platforms: List<PlatformModel>,
-    requireView: View,
     navigateToPlatform: (String) -> Unit,
 ) {
     FlowRow(
@@ -22,7 +21,7 @@ fun NovelInfoPlatformsContainer(
     ) {
         platforms.forEach { platform ->
             PlatformCard(
-                platformImage = requireView.getS3ImageUrl(platform.platformImage),
+                platformImage = platform.platformImage,
                 onClick = { navigateToPlatform(platform.platformUrl) },
             )
         }

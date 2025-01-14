@@ -110,7 +110,7 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
         binding.cvNovelInfoPlatforms.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                NovelInfoPlatformsContainer(platforms, requireView(), ::navigateToWebView)
+                NovelInfoPlatformsContainer(platforms, ::navigateToWebView)
             }
         }
     }

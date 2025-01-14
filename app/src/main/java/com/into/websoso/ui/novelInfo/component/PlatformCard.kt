@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.into.websoso.common.ui.component.AdaptationImage
 import com.into.websoso.common.ui.component.clickableWithoutRipple
 
 @Composable
@@ -17,9 +17,8 @@ fun PlatformCard(
     platformImage: String,
     onClick: () -> Unit,
 ) {
-    AsyncImage(
-        model = platformImage,
-        contentDescription = null,
+    AdaptationImage(
+        imageUrl = platformImage,
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
             .width(46.dp)
