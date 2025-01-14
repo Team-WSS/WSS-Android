@@ -16,11 +16,16 @@ fun AdaptationImage(
     contentScale: ContentScale = ContentScale.Crop,
     alignment: Alignment = Alignment.Center,
 ) {
-    val view = LocalView.current
+    val urlRegex = Regex("^(https?://).*")
+    val formattedUrl = when (urlRegex.matches(imageUrl)) {
+        true -> imageUrl
+        false -> LocalView.current.getS3ImageUrl(imageUrl)
+    }
+
     AsyncImage(
         modifier = modifier,
         contentDescription = contentDescription,
-        model = view.getS3ImageUrl(imageUrl),
+        model = formattedUrl,
         contentScale = contentScale,
         alignment = alignment,
     )
