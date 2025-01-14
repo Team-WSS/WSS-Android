@@ -81,6 +81,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                     binding.clMyLibraryNovelPreference.visibility = View.VISIBLE
                     binding.clMyLibraryUnknownNovelPreference.visibility = View.GONE
                 }
+
                 false -> {
                     binding.clMyLibraryNovelPreference.visibility = View.GONE
                     binding.clMyLibraryUnknownNovelPreference.visibility = View.VISIBLE
@@ -91,6 +92,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                 true -> {
                     binding.clMyLibraryAttractivePoints.visibility = View.VISIBLE
                 }
+
                 false -> {
                     binding.clMyLibraryAttractivePoints.visibility = View.GONE
                 }
@@ -130,7 +132,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                         ForegroundColorSpan(primary100),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(attractivePoints)
@@ -141,7 +143,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                         ForegroundColorSpan(gray300),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(fixedSpannable)
@@ -151,7 +153,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                     ForegroundColorSpan(primary100),
                     0,
                     length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
             }
             spannableStringBuilder.append(spannable)
@@ -192,6 +194,17 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                val intent = UserStorageActivity.getIntent(
+                    context = requireContext(),
+                    source = UserStorageActivity.SOURCE_MY_LIBRARY,
+                    userId = myLibraryViewModel.userId,
+                )
+                userStorageResultLauncher.launch(intent)
+            }
+        }
+
+        binding.llMyLibraryStorage.setOnClickListener {
             singleEventHandler.throttleFirst {
                 val intent = UserStorageActivity.getIntent(
                     context = requireContext(),

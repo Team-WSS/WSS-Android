@@ -168,6 +168,7 @@
             android:gravity="center"
             android:onClick="@{() -> viewModel.checkNicknameValidity(viewModel.profileEditUiState.profile.nicknameModel.nickname)}"
             android:text="@string/profile_edit_duplicate"
+            android:textAppearance="@style/body2"
             android:textAlignment="center"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintBottom_toBottomOf="@id/view_profile_edit_nickname"
