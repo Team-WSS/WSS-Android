@@ -27,7 +27,7 @@ import com.into.websoso.ui.userStorage.UserStorageActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
+class  MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
     private val myLibraryViewModel: MyLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
@@ -192,6 +192,17 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                val intent = UserStorageActivity.getIntent(
+                    context = requireContext(),
+                    source = UserStorageActivity.SOURCE_MY_LIBRARY,
+                    userId = myLibraryViewModel.userId,
+                )
+                userStorageResultLauncher.launch(intent)
+            }
+        }
+
+        binding.llMyLibraryStorage.setOnClickListener {
             singleEventHandler.throttleFirst {
                 val intent = UserStorageActivity.getIntent(
                     context = requireContext(),
