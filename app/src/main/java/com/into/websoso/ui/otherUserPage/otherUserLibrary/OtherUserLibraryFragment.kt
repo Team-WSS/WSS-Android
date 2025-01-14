@@ -203,7 +203,7 @@ class OtherUserLibraryFragment :
                         requireContext(),
                         UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
                         userId,
-                    )
+                    ),
                 )
             }
         }
@@ -215,7 +215,7 @@ class OtherUserLibraryFragment :
                         requireContext(),
                         UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
                         userId,
-                    )
+                    ),
                 )
             }
         }
