@@ -22,9 +22,12 @@ import com.into.websoso.designsystem.theme.White
 import com.into.websoso.domain.model.Notice
 
 @Composable
-fun NoticeCard(notice: Notice) {
+fun NoticeCard(
+    modifier: Modifier,
+    notice: Notice,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(if (notice.isRead) White else Primary20)
             .padding(20.dp)
             .fillMaxWidth()

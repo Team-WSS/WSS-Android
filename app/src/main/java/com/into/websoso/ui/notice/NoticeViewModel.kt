@@ -25,14 +25,14 @@ class NoticeViewModel
         }
 
         fun updateNotices() {
-            when (noticeUiState.value.isLoading) {
-                true -> return
-                false -> handleLoadingState()
+            when {
+                noticeUiState.value.isLoadable.not() -> return
+                noticeUiState.value.isLoading -> return
+                noticeUiState.value.isLoading.not() -> handleLoadingState()
             }
-            if (!noticeUiState.value.noticeInfo.isLoadable) return
 
             viewModelScope.launch {
-                runCatching { getNoticeListUseCase(noticeUiState.value.noticeInfo.lastNoticeId) }
+                runCatching { getNoticeListUseCase(noticeUiState.value.lastNoticeId) }
                     .onSuccess { handleSuccessState(it.getOrDefault(NoticeInfo())) }
                     .onFailure { handleFailureState() }
             }
@@ -48,11 +48,11 @@ class NoticeViewModel
         private fun handleSuccessState(noticeInfo: NoticeInfo) {
             val currentUiState = noticeUiState.value
             _noticeUiState.value = currentUiState.copy(
+                isLoadable = noticeInfo.isLoadable,
                 isLoading = false,
                 isError = false,
-                noticeInfo = noticeInfo.copy(
-                    notices = currentUiState.noticeInfo.notices + noticeInfo.notices,
-                ),
+                lastNoticeId = noticeInfo.lastNoticeId,
+                notices = currentUiState.notices + noticeInfo.notices,
             )
         }
 
