@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import com.into.websoso.common.util.clickableWithoutRipple
 import com.into.websoso.domain.model.Notice
 import com.into.websoso.domain.model.NoticeType
+import com.into.websoso.domain.usecase.GetNoticeListUseCase.Companion.DEFAULT_INTRINSIC_ID
 
 @Composable
 fun NoticesContainer(
@@ -56,6 +57,7 @@ private fun navigateToDetail(
     navigateToNoticeDetail: (Long) -> Unit,
     navigateToFeedDetail: (Long) -> Unit,
 ) {
+    if (intrinsicId == DEFAULT_INTRINSIC_ID) return
     when (noticeType) {
         NoticeType.NOTICE -> navigateToNoticeDetail(intrinsicId)
         NoticeType.FEED -> navigateToFeedDetail(intrinsicId)
