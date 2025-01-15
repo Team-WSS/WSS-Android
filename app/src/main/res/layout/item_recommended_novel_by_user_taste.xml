@@ -31,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/img_normal_explore_test_cover" />
+            tools:src="@drawable/img_loading_thumbnail" />
 
         <ImageView
             android:id="@+id/iv_taste_novel_interest"
