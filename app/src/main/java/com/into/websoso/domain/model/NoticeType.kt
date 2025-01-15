@@ -7,12 +7,10 @@ enum class NoticeType {
     ;
 
     companion object {
-        fun from(value: String): NoticeType {
-            return when (value) {
-                "NOTICE" -> NOTICE
-                "FEED" -> FEED
-                else -> NONE
-            }
+        fun from(value: String): NoticeType = when (value) {
+            "NOTICE" -> NOTICE
+            "FEED" -> FEED
+            else -> NONE
         }
     }
 }

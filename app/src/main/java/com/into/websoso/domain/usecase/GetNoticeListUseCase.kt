@@ -8,18 +8,17 @@ import javax.inject.Inject
 class GetNoticeListUseCase @Inject constructor(
     private val noticeRepository: NoticeRepository,
 ) {
-
-    suspend operator fun invoke(lastNoticeId: Long = DEFAULT_LAST_NOTICE_ID): Result<NoticeInfo> {
-        return try {
-            val size = when (lastNoticeId) {
-                DEFAULT_LAST_NOTICE_ID -> DEFAULT_LOAD_SIZE
-                else -> ADDITIONAL_LOAD_SIZE
-            }
-            val notices = noticeRepository.fetchNotices(lastNoticeId, size).toDomain()
-            Result.success(notices)
-        } catch (e: Exception) {
-            Result.failure(e)
+    suspend operator fun invoke(
+        lastNoticeId: Long = DEFAULT_LAST_NOTICE_ID,
+    ): Result<NoticeInfo> = try {
+        val size = when (lastNoticeId) {
+            DEFAULT_LAST_NOTICE_ID -> DEFAULT_LOAD_SIZE
+            else -> ADDITIONAL_LOAD_SIZE
         }
+        val notices = noticeRepository.fetchNotices(lastNoticeId, size).toDomain()
+        Result.success(notices)
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
     companion object {
