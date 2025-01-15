@@ -36,7 +36,7 @@ private fun NotificationEntity.getNoticeType(): NoticeType {
     )
 }
 
-private fun NotificationEntity.getIntrinsicId(): Long? {
+private fun NotificationEntity.getIntrinsicId(): Long {
     return when {
         isNotice -> notificationId
         feedId != null -> feedId
