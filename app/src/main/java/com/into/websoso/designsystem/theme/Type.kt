@@ -10,6 +10,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.into.websoso.R
 
@@ -88,60 +89,29 @@ class WebsosoTypography internal constructor(
 fun websosoTypography(): WebsosoTypography {
     val density = LocalDensity.current
 
+    fun textStyle(
+        fontFamily: FontFamily,
+        fontWeight: FontWeight,
+        fontSizeDp: Dp,
+        lineHeightDp: Dp,
+    ): TextStyle {
+        return TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = fontWeight,
+            fontSize = with(density) { fontSizeDp.toSp() },
+            lineHeight = with(density) { lineHeightDp.toSp() },
+        )
+    }
+
     return WebsosoTypography(
-        headline = TextStyle(
-            fontFamily = PretendardBold,
-            fontWeight = FontWeight.Bold,
-            fontSize = with(density) { 24.dp.toSp() },
-            lineHeight = with(density) { 32.dp.toSp() },
-        ),
-        title1 = TextStyle(
-            fontFamily = PretendardSemiBold,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = with(density) { 20.dp.toSp() },
-            lineHeight = with(density) { 28.dp.toSp() },
-        ),
-        title2 = TextStyle(
-            fontFamily = PretendardMedium,
-            fontWeight = FontWeight.Medium,
-            fontSize = with(density) { 18.dp.toSp() },
-            lineHeight = with(density) { 25.dp.toSp() },
-        ),
-        body1 = TextStyle(
-            fontFamily = PretendardRegular,
-            fontWeight = FontWeight.Normal,
-            fontSize = with(density) { 16.dp.toSp() },
-            lineHeight = with(density) { 24.dp.toSp() },
-        ),
-        body2 = TextStyle(
-            fontFamily = PretendardRegular,
-            fontWeight = FontWeight.Normal,
-            fontSize = with(density) { 14.dp.toSp() },
-            lineHeight = with(density) { 21.dp.toSp() },
-        ),
-        body3 = TextStyle(
-            fontFamily = PretendardRegular,
-            fontWeight = FontWeight.Normal,
-            fontSize = with(density) { 12.dp.toSp() },
-            lineHeight = with(density) { 18.dp.toSp() },
-        ),
-        caption = TextStyle(
-            fontFamily = PretendardRegular,
-            fontWeight = FontWeight.Normal,
-            fontSize = with(density) { 10.dp.toSp() },
-            lineHeight = with(density) { 15.dp.toSp() },
-        ),
-        button = TextStyle(
-            fontFamily = PretendardBold,
-            fontWeight = FontWeight.Bold,
-            fontSize = with(density) { 14.dp.toSp() },
-            lineHeight = with(density) { 20.dp.toSp() },
-        ),
-        label = TextStyle(
-            fontFamily = PretendardSemiBold,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = with(density) { 13.dp.toSp() },
-            lineHeight = with(density) { 19.dp.toSp() },
-        ),
+        headline = textStyle(PretendardBold, FontWeight.Bold, 24.dp, 32.dp),
+        title1 = textStyle(PretendardSemiBold, FontWeight.SemiBold, 20.dp, 28.dp),
+        title2 = textStyle(PretendardMedium, FontWeight.Medium, 18.dp, 25.dp),
+        body1 = textStyle(PretendardRegular, FontWeight.Normal, 16.dp, 24.dp),
+        body2 = textStyle(PretendardRegular, FontWeight.Normal, 14.dp, 21.dp),
+        body3 = textStyle(PretendardRegular, FontWeight.Normal, 12.dp, 18.dp),
+        caption = textStyle(PretendardRegular, FontWeight.Normal, 10.dp, 15.dp),
+        button = textStyle(PretendardBold, FontWeight.Bold, 14.dp, 20.dp),
+        label = textStyle(PretendardSemiBold, FontWeight.SemiBold, 13.dp, 19.dp),
     )
 }
