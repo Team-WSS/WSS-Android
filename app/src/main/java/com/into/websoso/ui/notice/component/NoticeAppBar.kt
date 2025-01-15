@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.into.websoso.R
@@ -42,7 +43,7 @@ fun NoticeAppBar() {
                 .size(44.dp),
         )
         Text(
-            text = "알림",
+            text = stringResource(R.string.notice_notification),
             style = WebsosoTheme.typography.title2,
             color = Black,
             textAlign = TextAlign.Center,
