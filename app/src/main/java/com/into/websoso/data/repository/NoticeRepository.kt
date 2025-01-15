@@ -5,12 +5,13 @@ import com.into.websoso.data.model.NotificationsEntity
 import com.into.websoso.data.remote.api.NoticeApi
 import javax.inject.Inject
 
-class NoticeRepository @Inject constructor(
-    private val noticeApi: NoticeApi,
-) {
-
-    suspend fun fetchNotices(
-        lastNotificationId: Long,
-        size: Int,
-    ): NotificationsEntity = noticeApi.getNotices(lastNotificationId, size).toData()
-}
+class NoticeRepository
+    @Inject
+    constructor(
+        private val noticeApi: NoticeApi,
+    ) {
+        suspend fun fetchNotices(
+            lastNotificationId: Long,
+            size: Int,
+        ): NotificationsEntity = noticeApi.getNotices(lastNotificationId, size).toData()
+    }
