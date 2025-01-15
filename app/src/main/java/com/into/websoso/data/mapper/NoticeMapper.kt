@@ -1,17 +1,23 @@
 package com.into.websoso.data.mapper
 
-import com.into.websoso.data.model.NoticesEntity
-import com.into.websoso.data.model.NoticesEntity.NoticeEntity
-import com.into.websoso.data.remote.response.NoticesResponseDto
+import com.into.websoso.data.model.NotificationsEntity
+import com.into.websoso.data.model.NotificationsEntity.NotificationEntity
+import com.into.websoso.data.remote.response.NotificationsResponseDto
 
-fun NoticesResponseDto.toData(): NoticesEntity {
-    return NoticesEntity(
-        notices = notices.map {
-            NoticeEntity(
-                createDate = it.createdDate,
-                noticeTitle = it.noticeTitle,
-                noticeContent = it.noticeContent,
+fun NotificationsResponseDto.toData(): NotificationsEntity {
+    return NotificationsEntity(
+        isLoadable = isLoadable,
+        notifications = notifications.map {
+            NotificationEntity(
+                notificationId = it.notificationId,
+                notificationImage = it.notificationImage,
+                notificationTitle = it.notificationTitle,
+                notificationDescription = it.notificationDescription,
+                createdDate = it.createdDate,
+                isRead = it.isRead,
+                isNotice = it.isNotice,
+                feedId = it.feedId,
             )
-        }
+        },
     )
 }

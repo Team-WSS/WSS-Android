@@ -1,10 +1,10 @@
 package com.into.websoso.ui.mapper
 
 
-import com.into.websoso.data.model.NoticesEntity.NoticeEntity
+import com.into.websoso.data.model.NotificationsEntity.NotificationEntity
 import com.into.websoso.ui.notice.model.NoticeModel
 
-fun NoticeEntity.toUi(): NoticeModel {
+fun NotificationEntity.toUi(): NoticeModel {
     return NoticeModel(
         createDate = this.createDate,
         noticeTitle = this.noticeTitle,
@@ -12,6 +12,6 @@ fun NoticeEntity.toUi(): NoticeModel {
     )
 }
 
-fun List<NoticeEntity>.toUi(): List<NoticeModel> {
+fun List<NotificationEntity>.toUi(): List<NoticeModel> {
     return this.map { it.toUi() }
 }

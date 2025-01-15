@@ -1,7 +1,9 @@
 package com.into.websoso.ui.notice.model
 
+import com.into.websoso.domain.model.NoticeInfo
+
 data class NoticeUiState(
-    val loading: Boolean = true,
-    val error: Boolean = false,
-    val notices: List<NoticeModel> = emptyList(),
+    val isLoading: Boolean = true,
+    val isError: Boolean = false,
+    val noticeInfo: NoticeInfo = NoticeInfo(),
 )
