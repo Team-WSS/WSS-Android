@@ -5,6 +5,7 @@ import com.into.websoso.data.model.NotificationsEntity.NotificationEntity
 import com.into.websoso.domain.model.Notice
 import com.into.websoso.domain.model.NoticeInfo
 import com.into.websoso.domain.model.NoticeType
+import com.into.websoso.domain.usecase.GetNoticeListUseCase.Companion.DEFAULT_INTRINSIC_ID
 
 fun NotificationsEntity.toDomain(): NoticeInfo {
     return NoticeInfo(
@@ -43,5 +44,3 @@ private fun NotificationEntity.getIntrinsicId(): Long {
         else -> DEFAULT_INTRINSIC_ID
     }
 }
-
-private const val DEFAULT_INTRINSIC_ID = -1L
