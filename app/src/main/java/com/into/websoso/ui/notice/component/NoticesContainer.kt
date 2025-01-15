@@ -15,7 +15,7 @@ fun NoticesContainer(
 ) {
     val listState = rememberLazyListState()
 
-    LaunchedEffect(listState) {
+    LaunchedEffect(listState, isLoadable) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .collect { index ->
                 if (index + LOAD_THRESHOLD >= notices.size && isLoadable) {
@@ -24,7 +24,9 @@ fun NoticesContainer(
             }
     }
 
-    LazyColumn {
+    LazyColumn(
+        state = listState,
+    ) {
         notices.forEach { notice ->
             item {
                 NoticeCard(notice)
@@ -33,4 +35,4 @@ fun NoticesContainer(
     }
 }
 
-private const val LOAD_THRESHOLD = 10
+private const val LOAD_THRESHOLD = 5

@@ -10,7 +10,7 @@ import com.into.websoso.domain.usecase.GetNoticeListUseCase.Companion.DEFAULT_IN
 fun NotificationsEntity.toDomain(): NoticeInfo =
     NoticeInfo(
         isLoadable = isLoadable,
-        lastNoticeId = notifications.maxOf { it.notificationId },
+        lastNoticeId = notifications.last().notificationId,
         notices = notifications.map { it.toDomain() },
     )
 

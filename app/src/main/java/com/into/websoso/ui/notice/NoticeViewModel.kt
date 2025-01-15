@@ -29,9 +29,10 @@ class NoticeViewModel
                 true -> return
                 false -> handleLoadingState()
             }
+            if (!noticeUiState.value.noticeInfo.isLoadable) return
 
             viewModelScope.launch {
-                runCatching { getNoticeListUseCase() }
+                runCatching { getNoticeListUseCase(noticeUiState.value.noticeInfo.lastNoticeId) }
                     .onSuccess { handleSuccessState(it.getOrDefault(NoticeInfo())) }
                     .onFailure { handleFailureState() }
             }
@@ -49,7 +50,7 @@ class NoticeViewModel
             _noticeUiState.value = currentUiState.copy(
                 isLoading = false,
                 isError = false,
-                noticeInfo = currentUiState.noticeInfo.copy(
+                noticeInfo = noticeInfo.copy(
                     notices = currentUiState.noticeInfo.notices + noticeInfo.notices,
                 ),
             )
