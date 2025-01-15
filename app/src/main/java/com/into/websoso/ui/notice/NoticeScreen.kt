@@ -15,6 +15,10 @@ fun NoticeScreen(viewModel: NoticeViewModel) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         NoticeAppBar()
-        NoticesContainer(uiState)
+        NoticesContainer(
+            notices = uiState.noticeInfo.notices,
+            isLoadable = uiState.noticeInfo.isLoadable,
+            updateNotices = viewModel::updateNotices,
+        )
     }
 }
