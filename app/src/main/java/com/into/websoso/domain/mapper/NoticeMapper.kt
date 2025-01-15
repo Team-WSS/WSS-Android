@@ -19,15 +19,29 @@ fun NotificationEntity.toDomain(): Notice {
         id = notificationId,
         noticeIconImage = notificationImage,
         noticeTitle = notificationTitle,
-        noticeType = NoticeType.from(
-            when {
-                isNotice -> "NOTICE"
-                else -> "FEED"
-            },
-        ),
+        noticeType = getNoticeType(),
         noticeDescription = notificationDescription,
         createdDate = createdDate,
         isRead = isRead,
-        feedId = feedId,
+        intrinsicId = getIntrinsicId(),
     )
 }
+
+private fun NotificationEntity.getNoticeType(): NoticeType {
+    return NoticeType.from(
+        when {
+            isNotice -> "NOTICE"
+            else -> "FEED"
+        },
+    )
+}
+
+private fun NotificationEntity.getIntrinsicId(): Long? {
+    return when {
+        isNotice -> notificationId
+        feedId != null -> feedId
+        else -> DEFAULT_INTRINSIC_ID
+    }
+}
+
+private const val DEFAULT_INTRINSIC_ID = -1L

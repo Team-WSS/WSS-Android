@@ -8,5 +8,5 @@ data class Notice(
     val noticeDescription: String,
     val createdDate: String,
     val isRead: Boolean,
-    val feedId: Long?,
+    val intrinsicId: Long?,
 )

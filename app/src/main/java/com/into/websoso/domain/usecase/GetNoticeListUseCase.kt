@@ -15,8 +15,8 @@ class GetNoticeListUseCase @Inject constructor(
                 DEFAULT_LAST_NOTICE_ID -> DEFAULT_LOAD_SIZE
                 else -> ADDITIONAL_LOAD_SIZE
             }
-            val notices = noticeRepository.fetchNotices(lastNoticeId, size)
-            Result.success(notices.toDomain())
+            val notices = noticeRepository.fetchNotices(lastNoticeId, size).toDomain()
+            Result.success(notices)
         } catch (e: Exception) {
             Result.failure(e)
         }
