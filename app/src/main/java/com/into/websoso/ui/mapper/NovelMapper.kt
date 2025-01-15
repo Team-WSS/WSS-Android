@@ -11,7 +11,6 @@ import com.into.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
 import com.into.websoso.ui.novelDetail.model.NovelDetailModel
 import com.into.websoso.ui.novelInfo.model.KeywordModel
 import com.into.websoso.ui.novelInfo.model.NovelInfoUiModel
-import com.into.websoso.ui.novelInfo.model.Platform
 import com.into.websoso.ui.novelInfo.model.PlatformModel
 import com.into.websoso.ui.novelInfo.model.ReviewCountModel
 import com.into.websoso.ui.novelInfo.model.UnifiedReviewCountModel
@@ -56,10 +55,9 @@ fun NovelInfoEntity.toUi() = NovelInfoUiModel(
 )
 
 fun NovelInfoEntity.PlatformEntity.toUi() = PlatformModel(
-    platform = Platform.fromPlatformName(platformName),
+    platformName = platformName,
     platformImage = platformImage,
     platformUrl = platformUrl,
-    isVisible = platformName.isNotEmpty(),
 )
 
 fun NovelInfoEntity.KeywordEntity.toUi() = KeywordModel(
