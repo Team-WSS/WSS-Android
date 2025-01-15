@@ -18,7 +18,9 @@ android {
         applicationId = "com.into.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = libs.versions.versionCode.get().toInt()
+        versionCode = libs.versions.versionCode
+            .get()
+            .toInt()
         versionName = libs.versions.versionName.get()
 
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
@@ -26,7 +28,8 @@ android {
         buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
 
         manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
-            .getProperty("kakao.app.key").replace("\"", "")
+            .getProperty("kakao.app.key")
+            .replace("\"", "")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -40,7 +43,8 @@ android {
             buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("debug.base.url"))
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
