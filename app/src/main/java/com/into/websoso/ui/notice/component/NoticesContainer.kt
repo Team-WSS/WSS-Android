@@ -59,7 +59,7 @@ private fun navigateToDetail(
     when (noticeType) {
         NoticeType.NOTICE -> navigateToNoticeDetail(intrinsicId)
         NoticeType.FEED -> navigateToFeedDetail(intrinsicId)
-        else -> Unit
+        NoticeType.NONE -> Unit
     }
 }
 
