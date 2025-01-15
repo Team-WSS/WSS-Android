@@ -190,7 +190,6 @@
                     android:background="@color/gray_50_F4F5F8"
                     app:isVisible="@{novelInfoViewModel.uiState.novelInfoModel.isAttractivePointsExist}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/hsv_novel_info_keyword" />
 
