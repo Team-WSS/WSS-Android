@@ -4,27 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalView
-import com.into.websoso.common.util.getS3ImageUrl
+import coil.compose.AsyncImage
 
 @Composable
-fun AdaptationImage(
+fun ExternalImage(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     imageUrl: String,
     contentScale: ContentScale = ContentScale.Fit,
     alignment: Alignment = Alignment.Center,
 ) {
-    val urlRegex = Regex("^(https?://).*")
-    val formattedUrl = when (urlRegex.matches(imageUrl)) {
-        true -> imageUrl
-        false -> LocalView.current.getS3ImageUrl(imageUrl)
-    }
-
-    ExternalImage(
+    AsyncImage(
         modifier = modifier,
         contentDescription = contentDescription,
-        imageUrl = formattedUrl,
+        model = imageUrl,
         contentScale = contentScale,
         alignment = alignment,
     )
