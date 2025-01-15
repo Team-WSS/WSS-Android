@@ -9,5 +9,6 @@ interface NoticeApi {
     @GET("notifications")
     suspend fun getNotices(
         @Query("lastNotificationId") lastNotificationId: Long,
+        @Query("size") size: Int,
     ): NotificationsResponseDto
 }

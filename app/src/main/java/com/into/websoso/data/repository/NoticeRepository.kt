@@ -9,7 +9,7 @@ class NoticeRepository @Inject constructor(
     private val noticeApi: NoticeApi,
 ) {
 
-    suspend fun fetchNotices(lastNotificationId: Long): NotificationsEntity {
-        return noticeApi.getNotices(lastNotificationId).toData()
+    suspend fun fetchNotices(lastNotificationId: Long, size: Int): NotificationsEntity {
+        return noticeApi.getNotices(lastNotificationId, size).toData()
     }
 }

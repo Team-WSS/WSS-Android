@@ -135,6 +135,7 @@ compose-foundation-layout = { module = "androidx.compose.foundation:foundation-l
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 
 [bundles]
 compose = [
@@ -148,4 +149,5 @@ compose = [
     "compose-runtime-livedata",
     "compose-ui-tooling",
     "coil-compose",
+    "lifecycle-runtime-compose",
 ]
