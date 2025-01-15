@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.into.websoso.common.ui.component.AdaptationImage
-import com.into.websoso.common.ui.component.clickableWithoutRipple
+import com.into.websoso.common.util.clickableWithoutRipple
 
 @Composable
 fun PlatformCard(

@@ -9,6 +9,11 @@ import android.os.Parcelable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ListView
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.SharedPreferencesMigration
@@ -110,5 +115,19 @@ fun Context.createDataStore(preferencesName: String): DataStore<Preferences> {
         ),
         migrations = listOf(SharedPreferencesMigration(this, preferencesName)),
         produceFile = { this.preferencesDataStoreFile(preferencesName) }
+    )
+}
+
+@Composable
+fun Modifier.clickableWithoutRipple(
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+): Modifier {
+    val mutableInteractionSource = remember { MutableInteractionSource() }
+    return this.clickable(
+        enabled = enabled,
+        interactionSource = mutableInteractionSource,
+        indication = null,
+        onClick = onClick,
     )
 }
