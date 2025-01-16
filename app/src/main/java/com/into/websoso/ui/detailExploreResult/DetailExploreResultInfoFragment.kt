@@ -5,10 +5,10 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.databinding.FragmentDetailExploreResultInfoBinding
 import com.into.websoso.ui.detailExplore.info.model.Genre
 import com.into.websoso.ui.detailExplore.info.model.Rating
@@ -21,7 +21,10 @@ class DetailExploreResultInfoFragment :
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
@@ -59,17 +62,18 @@ class DetailExploreResultInfoFragment :
     private fun setupGenreChips() {
         val genres = Genre.entries
         genres.forEach { genre ->
-            WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(genre.titleKr)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
-                setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
-                setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick { detailExploreResultViewModel.updateSelectedGenres(genre) }
-            }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
+            WebsosoChip(requireContext())
+                .apply {
+                    setWebsosoChipText(genre.titleKr)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
+                    setOnWebsosoChipClick { detailExploreResultViewModel.updateSelectedGenres(genre) }
+                }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
 
@@ -122,7 +126,10 @@ class DetailExploreResultInfoFragment :
         }
     }
 
-    private fun setupChipCheckListener(chip: Chip, onCheckedChange: (Boolean) -> Unit) {
+    private fun setupChipCheckListener(
+        chip: Chip,
+        onCheckedChange: (Boolean) -> Unit,
+    ) {
         chip.setOnCheckedChangeListener(null)
         chip.setOnCheckedChangeListener { _, isChecked -> onCheckedChange(isChecked) }
     }

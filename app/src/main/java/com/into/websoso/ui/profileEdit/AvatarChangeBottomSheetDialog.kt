@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.databinding.DialogAvatarChangeBinding
 import com.into.websoso.ui.profileEdit.adapter.AvatarChangeAdapter
 import com.into.websoso.ui.profileEdit.model.Avatar.Companion.animation

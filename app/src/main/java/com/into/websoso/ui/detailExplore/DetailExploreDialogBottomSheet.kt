@@ -8,8 +8,8 @@ import androidx.fragment.app.commit
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseBottomSheetDialog
-import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.DialogDetailExploreBinding
 import com.into.websoso.ui.detailExplore.info.DetailExploreInfoFragment
 import com.into.websoso.ui.detailExplore.keyword.DetailExploreKeywordFragment
@@ -19,14 +19,16 @@ import com.into.websoso.ui.detailExplore.model.SelectedFragmentTitle.KEYWORD
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreDialogBottomSheet :
-    BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
+class DetailExploreDialogBottomSheet : BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
     private val detailExploreInfoFragment: DetailExploreInfoFragment by lazy { DetailExploreInfoFragment() }
     private val detailExploreKeywordFragment: DetailExploreKeywordFragment by lazy { DetailExploreKeywordFragment() }
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupBottomSheet()
@@ -147,9 +149,6 @@ class DetailExploreDialogBottomSheet :
     }
 
     companion object {
-
-        fun newInstance(): DetailExploreDialogBottomSheet {
-            return DetailExploreDialogBottomSheet()
-        }
+        fun newInstance(): DetailExploreDialogBottomSheet = DetailExploreDialogBottomSheet()
     }
 }

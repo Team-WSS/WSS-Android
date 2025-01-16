@@ -17,9 +17,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.R
-import com.into.websoso.common.util.clickableWithoutRipple
-import com.into.websoso.designsystem.theme.Black
-import com.into.websoso.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.common.util.clickableWithoutRipple
+import com.into.websoso.core.designsystem.theme.Black
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 
 @Composable
 fun NoticeAppBar(

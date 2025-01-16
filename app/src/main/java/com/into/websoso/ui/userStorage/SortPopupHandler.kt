@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.toIntPxFromDp
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.databinding.MenuStoragePopupBinding
 import com.into.websoso.ui.userStorage.model.SortType
 
 class SortPopupHandler {
-
     fun showPopupMenu(
         view: View,
         onSortTypeSelected: (SortType) -> Unit,

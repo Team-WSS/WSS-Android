@@ -1,7 +1,7 @@
 package com.into.websoso.ui.detailExplore.keyword.model
 
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 
 data class DetailExploreKeywordUiState(
     val categories: List<CategoryModel> = emptyList(),

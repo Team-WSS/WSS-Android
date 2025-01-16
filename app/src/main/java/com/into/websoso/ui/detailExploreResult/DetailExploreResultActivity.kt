@@ -7,10 +7,10 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.util.InfiniteScrollListener
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.getAdaptedParcelableExtra
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.util.InfiniteScrollListener
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.getAdaptedParcelableExtra
 import com.into.websoso.databinding.ActivityDetailExploreResultBinding
 import com.into.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
 import com.into.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
@@ -25,8 +25,7 @@ import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreResultActivity :
-    BaseActivity<ActivityDetailExploreResultBinding>(R.layout.activity_detail_explore_result) {
+class DetailExploreResultActivity : BaseActivity<ActivityDetailExploreResultBinding>(R.layout.activity_detail_explore_result) {
     private val detailExploreResultAdapter: DetailExploreResultAdapter by lazy {
         DetailExploreResultAdapter(::navigateToNovelDetail)
     }
@@ -65,14 +64,13 @@ class DetailExploreResultActivity :
     private fun setupAdapter() {
         val gridLayoutManager = GridLayoutManager(this, 2)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return when (detailExploreResultAdapter.getItemViewType(position)) {
+            override fun getSpanSize(position: Int): Int =
+                when (detailExploreResultAdapter.getItemViewType(position)) {
                     HEADER.ordinal -> FULL_SPAN
                     NOVELS.ordinal -> HALF_SPAN
                     LOADING.ordinal -> FULL_SPAN
                     else -> HALF_SPAN
                 }
-            }
         }
 
         binding.rvDetailExploreResult.apply {
@@ -82,7 +80,7 @@ class DetailExploreResultActivity :
                 InfiniteScrollListener.of(
                     singleEventHandler = singleEventHandler,
                     event = { detailExploreResultViewModel.updateSearchResult(false) },
-                )
+                ),
             )
         }
     }
@@ -173,10 +171,9 @@ class DetailExploreResultActivity :
         fun getIntent(
             context: Context,
             detailExploreFilteredModel: DetailExploreFilteredModel,
-        ): Intent {
-            return Intent(context, DetailExploreResultActivity::class.java).apply {
+        ): Intent =
+            Intent(context, DetailExploreResultActivity::class.java).apply {
                 putExtra(DETAIL_EXPLORE_FILTERED_INFO, detailExploreFilteredModel)
             }
-        }
     }
 }

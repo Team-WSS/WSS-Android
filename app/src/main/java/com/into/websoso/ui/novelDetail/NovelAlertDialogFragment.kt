@@ -6,17 +6,18 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseDialogFragment
-import com.into.websoso.common.util.getAdaptedParcelable
+import com.into.websoso.core.common.ui.base.BaseDialogFragment
+import com.into.websoso.core.common.util.getAdaptedParcelable
 import com.into.websoso.databinding.DialogNovelAlertBinding
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 
-class NovelAlertDialogFragment :
-    BaseDialogFragment<DialogNovelAlertBinding>(R.layout.dialog_novel_alert) {
-
+class NovelAlertDialogFragment : BaseDialogFragment<DialogNovelAlertBinding>(R.layout.dialog_novel_alert) {
     private lateinit var novelAlertModel: NovelAlertModel
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupAlertModel()
@@ -75,12 +76,11 @@ class NovelAlertDialogFragment :
 
         private const val ALERT_MODEL = "ALERT_MODEL"
 
-        fun newInstance(
-            novelAlertModel: NovelAlertModel,
-        ): NovelAlertDialogFragment = NovelAlertDialogFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(ALERT_MODEL, novelAlertModel)
+        fun newInstance(novelAlertModel: NovelAlertModel): NovelAlertDialogFragment =
+            NovelAlertDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ALERT_MODEL, novelAlertModel)
+                }
             }
-        }
     }
 }

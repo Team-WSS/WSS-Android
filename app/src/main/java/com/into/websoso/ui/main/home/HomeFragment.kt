@@ -7,13 +7,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.into.websoso.R
 import com.into.websoso.R.string.home_nickname_interest_feed
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.into.websoso.common.ui.model.ResultFrom.NormalExploreBack
-import com.into.websoso.common.ui.model.ResultFrom.NovelDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
+import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
@@ -53,7 +53,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private val startActivityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         when (result.resultCode) {
             FeedDetailBack.RESULT_OK, FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
@@ -69,7 +69,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
@@ -101,8 +104,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         with(binding) {
             rvHomeTodayPopularNovel.addItemDecoration(
                 HomeCustomItemDecoration(
-                    TODAY_POPULAR_NOVEL_MARGIN
-                )
+                    TODAY_POPULAR_NOVEL_MARGIN,
+                ),
             )
             rvUserInterestFeed.addItemDecoration(HomeCustomItemDecoration(USER_INTEREST_MARGIN))
         }
@@ -112,8 +115,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         mainViewModel.isLogin.observe(viewLifecycleOwner) { isLogin ->
             homeViewModel.updateHomeData(isLogin = isLogin)
 
-            if (isLogin.not()) binding.tvHomeInterestFeed.text =
-                getString(R.string.home_interest_feed_text)
+            if (isLogin.not()) {
+                binding.tvHomeInterestFeed.text =
+                    getString(R.string.home_interest_feed_text)
+            }
         }
 
         mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
@@ -208,7 +213,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             NovelDetailActivity.getIntent(
                 requireContext(),
                 novelId,
-            )
+            ),
         )
     }
 
@@ -222,7 +227,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             FeedDetailActivity.getIntent(
                 requireContext(),
                 feedId,
-            )
+            ),
         )
     }
 
@@ -232,7 +237,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             startActivityLauncher.launch(
                 NormalExploreActivity.getIntent(
                     requireContext(),
-                )
+                ),
             )
         }
     }
@@ -243,7 +248,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             startActivityLauncher.launch(
                 ProfileEditActivity.getIntent(
                     requireContext(),
-                )
+                ),
             )
         }
     }

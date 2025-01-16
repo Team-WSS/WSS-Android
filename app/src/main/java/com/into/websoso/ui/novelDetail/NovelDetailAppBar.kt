@@ -8,12 +8,14 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.into.websoso.R
-import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.toFloatPxFromDp
 import kotlin.math.abs
 import kotlin.math.min
 
-class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(context, attrs) {
-
+class NovelDetailAppBar(
+    context: Context,
+    attrs: AttributeSet?,
+) : AppBarLayout(context, attrs) {
     private var navigateBackBtn: TextView? = null
     private val argbEvaluator = ArgbEvaluator()
 
@@ -38,7 +40,10 @@ class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(c
         }
     }
 
-    private fun updateImageViewColorByOffset(appBarLayout: AppBarLayout, verticalOffset: Int) {
+    private fun updateImageViewColorByOffset(
+        appBarLayout: AppBarLayout,
+        verticalOffset: Int,
+    ) {
         val totalScrollRange = appBarLayout.totalScrollRange.toFloat()
         val offsetForColorChange = TOOLBAR_BUTTON_COLOR_CHANGE_OFFSET.toFloatPxFromDp()
         val scrollPointForColorChange = totalScrollRange - offsetForColorChange
@@ -59,9 +64,11 @@ class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(c
         return if (currentOffset > SCROLL_START_THRESHOLD) {
             min(
                 MAX_SCROLL_OFFSET,
-                (currentOffset - SCROLL_START_THRESHOLD) / (1 - SCROLL_START_THRESHOLD)
+                (currentOffset - SCROLL_START_THRESHOLD) / (1 - SCROLL_START_THRESHOLD),
             )
-        } else 0f
+        } else {
+            0f
+        }
     }
 
     private fun calculateColorBasedOnScrollPosition(offsetRatio: Float): Int {
@@ -69,7 +76,9 @@ class NovelDetailAppBar(context: Context, attrs: AttributeSet?) : AppBarLayout(c
         val colorWhenScrollAtBottom = ContextCompat.getColor(this.context, R.color.transparent)
 
         return argbEvaluator.evaluate(
-            offsetRatio, colorWhenScrollAtBottom, colorWhenScrollAtTop
+            offsetRatio,
+            colorWhenScrollAtBottom,
+            colorWhenScrollAtTop,
         ) as Int
     }
 

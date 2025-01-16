@@ -15,16 +15,16 @@ import com.into.websoso.R.string.profile_disclosure_private
 import com.into.websoso.R.string.profile_disclosure_public
 import com.into.websoso.R.string.terms_of_use_link
 import com.into.websoso.R.string.websoso_official
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.model.ResultFrom.ChangeProfileDisclosure
-import com.into.websoso.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
+import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.databinding.ActivitySettingBinding
 import com.into.websoso.ui.accountInfo.AccountInfoActivity
 import com.into.websoso.ui.profileDisclosure.ProfileDisclosureActivity
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
     private val startActivityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         when (result.resultCode) {
             ChangeProfileDisclosure.RESULT_OK -> showEditProfileDisclosureSuccessMessage(result)
@@ -60,58 +60,58 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
         binding.lifecycleOwner = this
     }
 
-    private fun onSettingClickListener() = object : SettingClickListener {
+    private fun onSettingClickListener() =
+        object : SettingClickListener {
+            override fun onUserAccountInfoButtonClick() {
+                val intent = AccountInfoActivity.getIntent(this@SettingActivity)
+                startActivity(intent)
+            }
 
-        override fun onUserAccountInfoButtonClick() {
-            val intent = AccountInfoActivity.getIntent(this@SettingActivity)
-            startActivity(intent)
-        }
+            override fun onProfileDisclosureButtonClick() {
+                val intent = ProfileDisclosureActivity.getIntent(this@SettingActivity)
+                startActivityLauncher.launch(intent)
+            }
 
-        override fun onProfileDisclosureButtonClick() {
-            val intent = ProfileDisclosureActivity.getIntent(this@SettingActivity)
-            startActivityLauncher.launch(intent)
-        }
+            override fun onWebsosoOfficialButtonClick() {
+                val officialUrl = getString(websoso_official)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(officialUrl))
+                startActivity(intent)
+            }
 
-        override fun onWebsosoOfficialButtonClick() {
-            val officialUrl = getString(websoso_official)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(officialUrl))
-            startActivity(intent)
-        }
+            override fun onInquireAndFeedbackButtonClick() {
+                val inquireUrl = getString(inquire_link)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+                startActivity(intent)
+            }
 
-        override fun onInquireAndFeedbackButtonClick() {
-            val inquireUrl = getString(inquire_link)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
-            startActivity(intent)
-        }
+            override fun onPrivacyPolicyButtonClick() {
+                val inquireUrl = getString(privacy_policy_link)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+                startActivity(intent)
+            }
 
-        override fun onPrivacyPolicyButtonClick() {
-            val inquireUrl = getString(privacy_policy_link)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
-            startActivity(intent)
-        }
+            override fun onTermsOfUseButtonClick() {
+                val inquireUrl = getString(terms_of_use_link)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+                startActivity(intent)
+            }
 
-        override fun onTermsOfUseButtonClick() {
-            val inquireUrl = getString(terms_of_use_link)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
-            startActivity(intent)
+            override fun onBackButtonClick() {
+                finish()
+            }
         }
-
-        override fun onBackButtonClick() {
-            finish()
-        }
-    }
 
     companion object {
         private const val IS_PROFILE_PUBLIC = "isProfilePublic"
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, SettingActivity::class.java)
-        }
+        fun getIntent(context: Context): Intent = Intent(context, SettingActivity::class.java)
 
-        fun getIntent(context: Context, isProfilePublic: Boolean): Intent {
-            return Intent(context, SettingActivity::class.java).apply {
+        fun getIntent(
+            context: Context,
+            isProfilePublic: Boolean,
+        ): Intent =
+            Intent(context, SettingActivity::class.java).apply {
                 putExtra(IS_PROFILE_PUBLIC, isProfilePublic)
             }
-        }
     }
 }
