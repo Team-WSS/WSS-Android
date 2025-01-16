@@ -111,9 +111,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    val composeBom = libs.compose.bom
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.bom)
 
     implementation(libs.bundles.compose)
 }
