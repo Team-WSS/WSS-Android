@@ -13,6 +13,8 @@ import com.into.websoso.domain.model.Notice
 import com.into.websoso.domain.model.NoticeType
 import com.into.websoso.domain.usecase.GetNoticeListUseCase.Companion.DEFAULT_INTRINSIC_ID
 
+private const val LOAD_THRESHOLD = 5
+
 @Composable
 fun NoticesContainer(
     notices: List<Notice>,
@@ -66,8 +68,6 @@ private fun navigateToDetail(
         NoticeType.NONE -> Unit
     }
 }
-
-private const val LOAD_THRESHOLD = 5
 
 @Preview
 @Composable
