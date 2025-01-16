@@ -18,6 +18,7 @@ fun NoticesContainer(
     updateNotices: () -> Unit,
     onNoticeDetailClick: (Notice) -> Unit,
     onFeedDetailClick: (Notice) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
 
@@ -32,6 +33,7 @@ fun NoticesContainer(
 
     LazyColumn(
         state = listState,
+        modifier = modifier,
     ) {
         notices.forEach { notice ->
             item {

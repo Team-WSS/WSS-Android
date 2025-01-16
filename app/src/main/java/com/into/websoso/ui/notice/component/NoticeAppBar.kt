@@ -21,9 +21,12 @@ import com.into.websoso.designsystem.theme.Black
 import com.into.websoso.designsystem.theme.WebsosoTheme
 
 @Composable
-fun NoticeAppBar(onBackButtonClick: () -> Unit) {
+fun NoticeAppBar(
+    onBackButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 6.dp)
             .height(44.dp),

@@ -23,8 +23,8 @@ import com.into.websoso.domain.model.Notice
 
 @Composable
 fun NoticeCard(
-    modifier: Modifier,
     notice: Notice,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
