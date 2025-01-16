@@ -18,7 +18,9 @@ android {
         applicationId = "com.into.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = libs.versions.versionCode.get().toInt()
+        versionCode = libs.versions.versionCode
+            .get()
+            .toInt()
         versionName = libs.versions.versionName.get()
 
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
@@ -26,7 +28,8 @@ android {
         buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
 
         manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
-            .getProperty("kakao.app.key").replace("\"", "")
+            .getProperty("kakao.app.key")
+            .replace("\"", "")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -107,9 +110,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    val composeBom = libs.compose.bom
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
 
     implementation(libs.bundles.compose)
 }
