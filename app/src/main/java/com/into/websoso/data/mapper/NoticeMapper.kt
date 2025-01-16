@@ -1,7 +1,7 @@
 package com.into.websoso.data.mapper
 
+import com.into.websoso.data.model.NotificationEntity
 import com.into.websoso.data.model.NotificationsEntity
-import com.into.websoso.data.model.NotificationsEntity.NotificationEntity
 import com.into.websoso.data.remote.response.NotificationsResponseDto
 
 fun NotificationsResponseDto.toData(): NotificationsEntity =
