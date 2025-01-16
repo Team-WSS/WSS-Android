@@ -20,15 +20,12 @@ private val DarkColorScheme = darkColorScheme(
     onPrimaryContainer = Gray20,
     secondary = Secondary100,
     onSecondary = White,
-    secondaryContainer = Secondary50,
     onSecondaryContainer = Gray50,
     tertiary = Gray300,
     onTertiary = White,
     background = Black,
     onBackground = Gray20,
-    surface = Gray80,
     onSurface = Gray200,
-    error = Warning,
     onError = White,
 )
 
@@ -39,7 +36,6 @@ private val LightColorScheme = lightColorScheme(
     onPrimaryContainer = Gray20,
     secondary = Secondary100,
     onSecondary = White,
-    secondaryContainer = Secondary50,
     onSecondaryContainer = Gray50,
     tertiary = Gray300,
     onTertiary = Black,
@@ -47,7 +43,6 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Gray300,
     surface = Gray20,
     onSurface = Gray70,
-    error = Warning,
     onError = White,
 )
 
@@ -61,7 +56,10 @@ object WebsosoTheme {
 }
 
 @Composable
-fun ProvideWebsosoTypography(typography: WebsosoTypography, content: @Composable () -> Unit) {
+fun ProvideWebsosoTypography(
+    typography: WebsosoTypography,
+    content: @Composable () -> Unit,
+) {
     val provideTypography = remember { typography.copy() }
     provideTypography.update(typography)
     CompositionLocalProvider(
