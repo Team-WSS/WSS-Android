@@ -7,7 +7,7 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import androidx.activity.addCallback
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.databinding.ActivityNoticeDetailBinding
 
 class NoticeDetailActivity : BaseActivity<ActivityNoticeDetailBinding>(R.layout.activity_notice_detail) {

@@ -14,10 +14,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.model.ResultFrom
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.model.ResultFrom
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.databinding.FragmentMyActivityBinding
 import com.into.websoso.databinding.MenuMyActivityPopupBinding
 import com.into.websoso.ui.activityDetail.ActivityDetailActivity
@@ -36,8 +36,7 @@ import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyActivityFragment :
-    BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
+class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -45,7 +44,10 @@ class MyActivityFragment :
     private var _popupWindow: PopupWindow? = null
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupActivityResultCallback()
         setupMyActivitiesAdapter()
@@ -149,39 +151,52 @@ class MyActivityFragment :
         }
     }
 
-    private fun onClickFeedItem() = object : ActivityItemClickListener {
-        override fun onContentClick(feedId: Long) {
-            activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
-        }
-
-        override fun onNovelInfoClick(novelId: Long) {
-            startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
-        }
-
-        override fun onLikeButtonClick(view: View, feedId: Long) {
-            val likeCount: Int =
-                view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text.toString()
-                    .toInt()
-            val updatedLikeCount: Int = when (view.isSelected) {
-                true -> if (likeCount > 0) likeCount - 1 else 0
-                false -> likeCount + 1
+    private fun onClickFeedItem() =
+        object : ActivityItemClickListener {
+            override fun onContentClick(feedId: Long) {
+                activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
             }
 
-            view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text =
-                updatedLikeCount.toString()
-            view.isSelected = !view.isSelected
+            override fun onNovelInfoClick(novelId: Long) {
+                startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+            }
 
-            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-                myActivityViewModel.updateLike(feedId, view.isSelected, updatedLikeCount)
+            override fun onLikeButtonClick(
+                view: View,
+                feedId: Long,
+            ) {
+                val likeCount: Int =
+                    view
+                        .findViewById<TextView>(R.id.tv_my_activity_thumb_up_count)
+                        .text
+                        .toString()
+                        .toInt()
+                val updatedLikeCount: Int = when (view.isSelected) {
+                    true -> if (likeCount > 0) likeCount - 1 else 0
+                    false -> likeCount + 1
+                }
+
+                view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text =
+                    updatedLikeCount.toString()
+                view.isSelected = !view.isSelected
+
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    myActivityViewModel.updateLike(feedId, view.isSelected, updatedLikeCount)
+                }
+            }
+
+            override fun onMoreButtonClick(
+                view: View,
+                feedId: Long,
+            ) {
+                showPopupMenu(view, feedId)
             }
         }
 
-        override fun onMoreButtonClick(view: View, feedId: Long) {
-            showPopupMenu(view, feedId)
-        }
-    }
-
-    private fun showPopupMenu(view: View, feedId: Long) {
+    private fun showPopupMenu(
+        view: View,
+        feedId: Long,
+    ) {
         val inflater = LayoutInflater.from(requireContext())
         val binding = MenuMyActivityPopupBinding.inflate(inflater)
 
@@ -190,7 +205,7 @@ class MyActivityFragment :
             binding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = POPUP_ELEVATION
             showAsDropDown(view)
@@ -209,7 +224,9 @@ class MyActivityFragment :
 
     private fun navigateToFeedEdit(feedId: Long) {
         val activityModel =
-            myActivityViewModel.uiState.value?.activities?.find { it.feedId == feedId }
+            myActivityViewModel.uiState.value
+                ?.activities
+                ?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
@@ -223,7 +240,7 @@ class MyActivityFragment :
                 CreateFeedActivity.getIntent(
                     requireContext(),
                     editFeedModel,
-                )
+                ),
             )
         } ?: throw IllegalArgumentException("Feed not found")
     }
@@ -233,7 +250,7 @@ class MyActivityFragment :
             menuType = RemoveMenuType.REMOVE_FEED.name,
             event = {
                 myActivityViewModel.updateRemovedFeed(feedId)
-            }
+            },
         )
         dialogFragment.show(parentFragmentManager, FeedRemoveDialogFragment.TAG)
     }

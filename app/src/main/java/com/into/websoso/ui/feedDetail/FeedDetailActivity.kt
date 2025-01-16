@@ -25,24 +25,24 @@ import com.into.websoso.R.id.tv_feed_thumb_up_count
 import com.into.websoso.R.layout.activity_feed_detail
 import com.into.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.into.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.model.ResultFrom.BlockUser
-import com.into.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.into.websoso.common.ui.model.ResultFrom.Feed
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailError
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailRefreshed
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.into.websoso.common.ui.model.ResultFrom.NovelDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
-import com.into.websoso.common.ui.model.ResultFrom.WithdrawUser
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.hideKeyboard
-import com.into.websoso.common.util.showWebsosoSnackBar
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.toIntPxFromDp
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
+import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.ui.model.ResultFrom.Feed
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.hideKeyboard
+import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.toIntPxFromDp
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityFeedDetailBinding
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
@@ -99,38 +99,49 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         ).apply { elevation = 2f }
     }
 
-    private fun onFeedContentClick(): FeedDetailClickListener = object : FeedDetailClickListener {
-        @SuppressLint("CutPasteId")
-        override fun onLikeButtonClick(view: View, feedId: Long) {
-            val likeCount: Int =
-                view.findViewById<TextView>(tv_feed_thumb_up_count).text.toString().toInt()
-            val updatedLikeCount: Int = when (view.isSelected) {
-                true -> if (likeCount > 0) likeCount - 1 else 0
-                false -> likeCount + 1
+    private fun onFeedContentClick(): FeedDetailClickListener =
+        object : FeedDetailClickListener {
+            @SuppressLint("CutPasteId")
+            override fun onLikeButtonClick(
+                view: View,
+                feedId: Long,
+            ) {
+                val likeCount: Int =
+                    view
+                        .findViewById<TextView>(tv_feed_thumb_up_count)
+                        .text
+                        .toString()
+                        .toInt()
+                val updatedLikeCount: Int = when (view.isSelected) {
+                    true -> if (likeCount > 0) likeCount - 1 else 0
+                    false -> likeCount + 1
+                }
+
+                view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
+                view.isSelected = !view.isSelected
+
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    tracker.trackEvent("feed_detail_like")
+                    feedDetailViewModel.updateLike(view.isSelected, updatedLikeCount)
+                }
             }
 
-            view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
-            view.isSelected = !view.isSelected
+            override fun onNovelInfoClick(novelId: Long) {
+                navigateToNovelDetail(novelId)
+            }
 
-            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-                tracker.trackEvent("feed_detail_like")
-                feedDetailViewModel.updateLike(view.isSelected, updatedLikeCount)
+            override fun onProfileClick(
+                userId: Long,
+                isMyFeed: Boolean,
+            ) {
+                if (isMyFeed) return
+                navigateToProfile(userId)
+            }
+
+            override fun onFeedDetailClick(view: View) {
+                view.hideKeyboard()
             }
         }
-
-        override fun onNovelInfoClick(novelId: Long) {
-            navigateToNovelDetail(novelId)
-        }
-
-        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
-            if (isMyFeed) return
-            navigateToProfile(userId)
-        }
-
-        override fun onFeedDetailClick(view: View) {
-            view.hideKeyboard()
-        }
-    }
 
     private fun navigateToNovelDetail(novelId: Long) {
         activityResultCallback.launch(
@@ -141,21 +152,29 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         )
     }
 
-    private fun onCommentClick(): CommentClickListener = object : CommentClickListener {
-        override fun onProfileClick(userId: Long, isMyComment: Boolean) {
-            if (isMyComment) return
-            navigateToProfile(userId)
-        }
+    private fun onCommentClick(): CommentClickListener =
+        object : CommentClickListener {
+            override fun onProfileClick(
+                userId: Long,
+                isMyComment: Boolean,
+            ) {
+                if (isMyComment) return
+                navigateToProfile(userId)
+            }
 
-        override fun onMoreButtonClick(view: View, commentId: Long, isMyComment: Boolean) {
-            popupMenu.showAsDropDown(view)
-            bindMenuByIsMine(commentId, isMyComment, COMMENT)
-        }
+            override fun onMoreButtonClick(
+                view: View,
+                commentId: Long,
+                isMyComment: Boolean,
+            ) {
+                popupMenu.showAsDropDown(view)
+                bindMenuByIsMine(commentId, isMyComment, COMMENT)
+            }
 
-        override fun onCommentsClick(view: View) {
-            view.hideKeyboard()
+            override fun onCommentsClick(view: View) {
+                view.hideKeyboard()
+            }
         }
-    }
 
     private fun navigateToProfile(userId: Long) {
         activityResultCallback.launch(
@@ -166,14 +185,21 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         )
     }
 
-    private fun bindMenuByIsMine(id: Long, isMine: Boolean, menuType: MenuType) {
+    private fun bindMenuByIsMine(
+        id: Long,
+        isMine: Boolean,
+        menuType: MenuType,
+    ) {
         when (isMine) {
             true -> popupBinding.setupMineByMenuType(id, menuType)
             false -> popupBinding.setupNotMineByMenuType(id, menuType)
         }
     }
 
-    private fun MenuFeedPopupBinding.setupMineByMenuType(id: Long, menuType: MenuType) {
+    private fun MenuFeedPopupBinding.setupMineByMenuType(
+        id: Long,
+        menuType: MenuType,
+    ) {
         onFirstItemClick = {
             when (menuType) {
                 FEED -> setupEditingFeed()
@@ -211,9 +237,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun setupEditingComment(commentId: Long) {
         val writtenComment =
-            feedDetailViewModel.feedDetailUiState.value?.feedDetail?.comments?.find {
-                it.commentId == commentId
-            }?.commentContent.orEmpty()
+            feedDetailViewModel.feedDetailUiState.value
+                ?.feedDetail
+                ?.comments
+                ?.find {
+                    it.commentId == commentId
+                }?.commentContent
+                .orEmpty()
 
         feedDetailViewModel.updateCommentId(commentId)
         binding.etFeedDetailInput.setText(writtenComment)
@@ -234,7 +264,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         )
     }
 
-    private fun MenuFeedPopupBinding.setupNotMineByMenuType(id: Long, menuType: MenuType) {
+    private fun MenuFeedPopupBinding.setupNotMineByMenuType(
+        id: Long,
+        menuType: MenuType,
+    ) {
         onFirstItemClick = {
             when (menuType) {
                 FEED -> setupReportingSpoilerFeed()
@@ -293,15 +326,19 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
-                menuType = menuType ?: throw IllegalArgumentException(),
-                event = { event() },
-            ).show(supportFragmentManager, FeedRemoveDialogFragment.TAG)
+            DialogRemovePopupMenuBinding::class ->
+                FeedRemoveDialogFragment
+                    .newInstance(
+                        menuType = menuType ?: throw IllegalArgumentException(),
+                        event = { event() },
+                    ).show(supportFragmentManager, FeedRemoveDialogFragment.TAG)
 
-            DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
-                menuType = menuType ?: throw IllegalArgumentException(),
-                event = { event() },
-            ).show(supportFragmentManager, FeedReportDialogFragment.TAG)
+            DialogReportPopupMenuBinding::class ->
+                FeedReportDialogFragment
+                    .newInstance(
+                        menuType = menuType ?: throw IllegalArgumentException(),
+                        event = { event() },
+                    ).show(supportFragmentManager, FeedReportDialogFragment.TAG)
         }
     }
 
@@ -359,7 +396,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         binding.ivFeedDetailMoreButton.setOnClickListener {
-            val isMyFeed = feedDetailViewModel.feedDetailUiState.value?.feedDetail?.feed?.isMyFeed
+            val isMyFeed = feedDetailViewModel.feedDetailUiState.value
+                ?.feedDetail
+                ?.feed
+                ?.isMyFeed
                 ?: throw IllegalStateException()
 
             popupMenu.showAsDropDown(binding.ivFeedDetailMoreButton)
@@ -367,7 +407,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         binding.ivFeedDetailCommentRegister.setOnClickListener {
-            if (binding.etFeedDetailInput.text.isNullOrBlank().not()) {
+            if (binding.etFeedDetailInput.text
+                    .isNullOrBlank()
+                    .not()
+            ) {
                 binding.etFeedDetailInput.run {
                     tracker.trackEvent("write_comment")
                     when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
@@ -409,11 +452,12 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     binding.wllFeed.setLoadingLayoutVisibility(false)
 
                     when (feedDetailUiState.previousStack.from) {
-                        CreateFeed, FeedDetailRefreshed -> RemovedFeedDialogFragment
-                            .newInstance {
-                                setResult(CreateFeed.RESULT_OK)
-                                if (!isFinishing) finish()
-                            }.show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
+                        CreateFeed, FeedDetailRefreshed ->
+                            RemovedFeedDialogFragment
+                                .newInstance {
+                                    setResult(CreateFeed.RESULT_OK)
+                                    if (!isFinishing) finish()
+                                }.show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
 
                         else -> {
                             setResult(FeedDetailRemoved.RESULT_OK)
@@ -437,7 +481,12 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
         binding.etFeedDetailInput.addTextChangedListener(
             object : TextWatcher {
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun onTextChanged(
+                    p0: CharSequence?,
+                    p1: Int,
+                    p2: Int,
+                    p3: Int,
+                ) {
                     when (p0?.trim().isNullOrBlank()) {
                         true -> binding.ivFeedDetailCommentRegister.isSelected = false
                         false -> binding.ivFeedDetailCommentRegister.isSelected = true
@@ -485,7 +534,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         private const val DEFAULT_FEED_ID: Long = -1
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
-        fun getIntent(context: Context, feedId: Long): Intent =
-            Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
+        fun getIntent(
+            context: Context,
+            feedId: Long,
+        ): Intent = Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
     }
 }

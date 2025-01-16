@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.common.ui.model.Gender.FEMALE
-import com.into.websoso.common.ui.model.Gender.MALE
+import com.into.websoso.core.common.ui.model.Gender.FEMALE
+import com.into.websoso.core.common.ui.model.Gender.MALE
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.domain.usecase.GetFeedsUseCase

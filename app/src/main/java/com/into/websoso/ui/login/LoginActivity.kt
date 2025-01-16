@@ -13,8 +13,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.analytics.logEvent
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.custom.WebsosoCustomToast
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
 import com.into.websoso.data.remote.api.OAuthService
 import com.into.websoso.databinding.ActivityLoginBinding
 import com.into.websoso.ui.login.adapter.ImageViewPagerAdapter

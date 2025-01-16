@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.common.ui.model.ResultFrom
+import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.data.model.CommentsEntity
 import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.MyProfileEntity

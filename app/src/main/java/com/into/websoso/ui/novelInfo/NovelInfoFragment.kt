@@ -12,9 +12,9 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentNovelInfoBinding
 import com.into.websoso.ui.novelInfo.component.NovelInfoPlatformsContainer
 import com.into.websoso.ui.novelInfo.model.ExpandTextUiModel
@@ -86,23 +86,24 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
     private fun setupKeywordChip(keywords: List<KeywordModel>) {
         if (binding.wcgNovelInfoKeyword.childCount > 0) return
         keywords.forEach { keyword ->
-            WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(
-                    getString(
-                        R.string.novel_info_keyword_chip_text,
-                        keyword.keywordName,
-                        keyword.keywordCount,
-                    ),
-                )
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipStrokeColor(R.color.transparent)
-                setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
-                isEnabled = false
-            }.also { websosoChip -> binding.wcgNovelInfoKeyword.addChip(websosoChip) }
+            WebsosoChip(requireContext())
+                .apply {
+                    setWebsosoChipText(
+                        getString(
+                            R.string.novel_info_keyword_chip_text,
+                            keyword.keywordName,
+                            keyword.keywordCount,
+                        ),
+                    )
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                    setWebsosoChipStrokeColor(R.color.transparent)
+                    setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    isEnabled = false
+                }.also { websosoChip -> binding.wcgNovelInfoKeyword.addChip(websosoChip) }
         }
     }
 
@@ -193,7 +194,10 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
         }
     }
 
-    private fun updateGraphHeight(view: View, height: Int) {
+    private fun updateGraphHeight(
+        view: View,
+        height: Int,
+    ) {
         view.layoutParams.height = height
         view.requestLayout()
     }
@@ -209,10 +213,11 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
     }
 
     private fun updateUsersReadStatusText(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        val color = AppCompatResources.getColorStateList(
-            requireContext(),
-            R.color.primary_100_6A5DFD,
-        ).defaultColor
+        val color = AppCompatResources
+            .getColorStateList(
+                requireContext(),
+                R.color.primary_100_6A5DFD,
+            ).defaultColor
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
                 val watchingCountText = getString(
@@ -272,10 +277,11 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
         binding.tvNovelInfoCharmPointsBody.text = getColoredText(
             getString(R.string.novel_info_charm_points_body, charmPoints),
             listOf(charmPoints),
-            AppCompatResources.getColorStateList(
-                requireContext(),
-                R.color.primary_100_6A5DFD,
-            ).defaultColor,
+            AppCompatResources
+                .getColorStateList(
+                    requireContext(),
+                    R.color.primary_100_6A5DFD,
+                ).defaultColor,
         )
     }
 
@@ -305,10 +311,9 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
 
         private const val NOVEL_ID = "NOVEL_ID"
 
-        fun newInstance(novelId: Long): NovelInfoFragment {
-            return NovelInfoFragment().also {
+        fun newInstance(novelId: Long): NovelInfoFragment =
+            NovelInfoFragment().also {
                 it.arguments = Bundle().apply { putLong(NOVEL_ID, novelId) }
             }
-        }
     }
 }

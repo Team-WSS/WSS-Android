@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.databinding.ActivityLoginBinding
 import com.into.websoso.ui.login.LoginActivity
 import com.into.websoso.ui.main.MainActivity

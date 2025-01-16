@@ -9,11 +9,11 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.model.ResultFrom.NormalExploreBack
-import com.into.websoso.common.util.InfiniteScrollListener
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
+import com.into.websoso.core.common.util.InfiniteScrollListener
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNormalExploreBinding
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
@@ -25,8 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NormalExploreActivity :
-    BaseActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
+class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -55,8 +54,10 @@ class NormalExploreActivity :
             rvNormalExploreResult.apply {
                 adapter = normalExploreAdapter
                 addOnScrollListener(
-                    InfiniteScrollListener.of(singleEventHandler = singleEventHandler,
-                        event = { normalExploreViewModel?.updateSearchResult(false) })
+                    InfiniteScrollListener.of(
+                        singleEventHandler = singleEventHandler,
+                        event = { normalExploreViewModel?.updateSearchResult(false) },
+                    ),
                 )
             }
             onClick = onNormalExploreButtonClick()
@@ -88,36 +89,36 @@ class NormalExploreActivity :
         )
     }
 
-    private fun onNormalExploreButtonClick() = object : NormalExploreClickListener {
+    private fun onNormalExploreButtonClick() =
+        object : NormalExploreClickListener {
+            override fun onBackButtonClick() {
+                setResult(NormalExploreBack.RESULT_OK)
+                finish()
+            }
 
-        override fun onBackButtonClick() {
-            setResult(NormalExploreBack.RESULT_OK)
-            finish()
-        }
+            override fun onSearchButtonClick() {
+                singleEventHandler.throttleFirst {
+                    tracker.trackEvent("click_search_result")
+                    normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
+                    binding.etNormalExploreSearchContent.clearFocus()
+                    hideKeyboard()
+                }
+            }
 
-        override fun onSearchButtonClick() {
-            singleEventHandler.throttleFirst {
-                tracker.trackEvent("click_search_result")
-                normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
-                binding.etNormalExploreSearchContent.clearFocus()
-                hideKeyboard()
+            override fun onSearchCancelButtonClick() {
+                singleEventHandler.throttleFirst {
+                    normalExploreViewModel.updateSearchWordEmpty()
+                    showKeyboard()
+                }
+            }
+
+            override fun onNovelInquireButtonClick() {
+                tracker.trackEvent("contact_novel_search")
+                val inquireUrl = getString(R.string.inquire_link)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+                startActivity(intent)
             }
         }
-
-        override fun onSearchCancelButtonClick() {
-            singleEventHandler.throttleFirst {
-                normalExploreViewModel.updateSearchWordEmpty()
-                showKeyboard()
-            }
-        }
-
-        override fun onNovelInquireButtonClick() {
-            tracker.trackEvent("contact_novel_search")
-            val inquireUrl = getString(R.string.inquire_link)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
-            startActivity(intent)
-        }
-    }
 
     private fun showKeyboard() {
         val inputMethodManager =

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.common.ui.model.CategoriesModel
+import com.into.websoso.core.common.ui.model.CategoriesModel
 import com.into.websoso.data.repository.KeywordRepository
 import com.into.websoso.domain.usecase.GetDetailExploreResultUseCase
 import com.into.websoso.ui.detailExplore.info.model.Genre

@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.into.websoso.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.domain.model.Notice
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.noticeDetail.NoticeDetailActivity
