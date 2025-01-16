@@ -6,7 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.into.websoso.common.util.clickableWithoutRipple
+import com.into.websoso.designsystem.theme.WebsosoTheme
 import com.into.websoso.domain.model.Notice
 import com.into.websoso.domain.model.NoticeType
 import com.into.websoso.domain.usecase.GetNoticeListUseCase.Companion.DEFAULT_INTRINSIC_ID
@@ -66,3 +68,17 @@ private fun navigateToDetail(
 }
 
 private const val LOAD_THRESHOLD = 5
+
+@Preview
+@Composable
+private fun NoticesContainerPreview() {
+    WebsosoTheme {
+        NoticesContainer(
+            notices = emptyList(),
+            isLoadable = true,
+            updateNotices = {},
+            onNoticeDetailClick = {},
+            onFeedDetailClick = {},
+        )
+    }
+}

@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.R
 import com.into.websoso.common.util.clickableWithoutRipple
@@ -49,5 +50,13 @@ fun NoticeAppBar(
                 .weight(1f)
                 .padding(end = 44.dp),
         )
+    }
+}
+
+@Preview
+@Composable
+private fun NoticeAppBarPreview() {
+    WebsosoTheme {
+        NoticeAppBar(onBackButtonClick = {})
     }
 }

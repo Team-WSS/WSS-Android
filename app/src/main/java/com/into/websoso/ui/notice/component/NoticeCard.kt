@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.common.ui.component.AdaptationImage
 import com.into.websoso.designsystem.theme.Black
@@ -20,6 +21,7 @@ import com.into.websoso.designsystem.theme.Primary20
 import com.into.websoso.designsystem.theme.WebsosoTheme
 import com.into.websoso.designsystem.theme.White
 import com.into.websoso.domain.model.Notice
+import com.into.websoso.domain.model.NoticeType
 
 @Composable
 fun NoticeCard(
@@ -62,5 +64,24 @@ fun NoticeCard(
                     .padding(top = 14.dp),
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun NoticeCardPreview() {
+    WebsosoTheme {
+        NoticeCard(
+            notice = Notice(
+                id = 0,
+                noticeType = NoticeType.NOTICE,
+                noticeTitle = "Notice Title",
+                noticeDescription = "Notice Description",
+                noticeIconImage = "",
+                createdDate = "2021-01-01",
+                isRead = false,
+                intrinsicId = 0,
+            ),
+        )
     }
 }
