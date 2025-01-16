@@ -25,6 +25,7 @@ class NoticeActivity : ComponentActivity() {
                     viewModel = noticeViewModel,
                     navigateToNoticeDetail = ::navigateToNoticeDetail,
                     navigateToFeedDetail = ::navigateToFeedDetail,
+                    navigateToBack = { finish() },
                 )
             }
         }

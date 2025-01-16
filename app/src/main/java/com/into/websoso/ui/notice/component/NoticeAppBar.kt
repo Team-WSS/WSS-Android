@@ -1,6 +1,5 @@
 package com.into.websoso.ui.notice.component
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -23,16 +21,12 @@ import com.into.websoso.designsystem.theme.Black
 import com.into.websoso.designsystem.theme.WebsosoTheme
 
 @Composable
-fun NoticeAppBar() {
-    val activity = LocalContext.current as Activity?
+fun NoticeAppBar(navigateToBack: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 6.dp)
-            .height(44.dp)
-            .clickableWithoutRipple {
-                activity?.finish()
-            },
+            .height(44.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
@@ -40,7 +34,8 @@ fun NoticeAppBar() {
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
-                .size(44.dp),
+                .size(44.dp)
+                .clickableWithoutRipple { navigateToBack() },
         )
         Text(
             text = stringResource(R.string.notice_notification),

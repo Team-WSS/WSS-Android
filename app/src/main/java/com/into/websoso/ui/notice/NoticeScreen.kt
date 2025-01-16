@@ -15,11 +15,12 @@ fun NoticeScreen(
     viewModel: NoticeViewModel,
     navigateToNoticeDetail: (Notice) -> Unit,
     navigateToFeedDetail: (Notice) -> Unit,
+    navigateToBack: () -> Unit,
 ) {
     val uiState by viewModel.noticeUiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        NoticeAppBar()
+        NoticeAppBar(navigateToBack)
         NoticesContainer(
             notices = uiState.notices,
             isLoadable = uiState.isLoadable,
