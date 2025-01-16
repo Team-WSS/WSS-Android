@@ -9,11 +9,11 @@ import com.into.websoso.common.util.getS3ImageUrl
 
 @Composable
 fun AdaptationImage(
-    modifier: Modifier = Modifier,
     contentDescription: String? = null,
     imageUrl: String,
     contentScale: ContentScale = ContentScale.Fit,
     alignment: Alignment = Alignment.Center,
+    modifier: Modifier = Modifier,
 ) {
     val urlRegex = Regex("^(https?://).*")
     val formattedUrl = when (urlRegex.matches(imageUrl)) {

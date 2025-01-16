@@ -8,17 +8,17 @@ import coil.compose.AsyncImage
 
 @Composable
 fun ExternalImage(
-    modifier: Modifier = Modifier,
     contentDescription: String? = null,
     imageUrl: String,
     contentScale: ContentScale = ContentScale.Fit,
     alignment: Alignment = Alignment.Center,
+    modifier: Modifier = Modifier,
 ) {
     AsyncImage(
-        modifier = modifier,
         contentDescription = contentDescription,
         model = imageUrl,
         contentScale = contentScale,
         alignment = alignment,
+        modifier = modifier,
     )
 }

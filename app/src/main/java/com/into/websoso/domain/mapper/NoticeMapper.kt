@@ -8,7 +8,7 @@ import com.into.websoso.domain.model.NoticeInfo
 fun NotificationsEntity.toDomain(): NoticeInfo =
     NoticeInfo(
         isLoadable = isLoadable,
-        lastNoticeId = notifications.maxOf { it.notificationId },
+        lastNoticeId = notifications.last().notificationId,
         notices = notifications.map { it.toDomain() },
     )
 
