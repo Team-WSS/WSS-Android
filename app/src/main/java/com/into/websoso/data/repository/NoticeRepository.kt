@@ -14,4 +14,6 @@ class NoticeRepository
             lastNotificationId: Long,
             size: Int,
         ): NotificationsEntity = noticeApi.getNotices(lastNotificationId, size).toData()
+
+        suspend fun fetchNoticeUnread(): Boolean = noticeApi.getNoticeUnread().hasUnreadNotifications
     }
