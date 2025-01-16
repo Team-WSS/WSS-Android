@@ -6,14 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.into.websoso.domain.model.Notice
 import com.into.websoso.ui.notice.component.NoticeAppBar
 import com.into.websoso.ui.notice.component.NoticesContainer
 
 @Composable
 fun NoticeScreen(
     viewModel: NoticeViewModel,
-    navigateToNoticeDetail: (Long) -> Unit,
-    navigateToFeedDetail: (Long) -> Unit,
+    navigateToNoticeDetail: (Notice) -> Unit,
+    navigateToFeedDetail: (Notice) -> Unit,
 ) {
     val uiState by viewModel.noticeUiState.collectAsStateWithLifecycle()
 

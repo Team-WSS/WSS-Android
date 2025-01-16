@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.into.websoso.designsystem.theme.WebsosoTheme
+import com.into.websoso.domain.model.Notice
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.noticeDetail.NoticeDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,12 +30,14 @@ class NoticeActivity : ComponentActivity() {
         }
     }
 
-    private fun navigateToNoticeDetail(noticeId: Long) {
-        startActivity(NoticeDetailActivity.getIntent(this, noticeId))
+    private fun navigateToNoticeDetail(notice: Notice) {
+        noticeViewModel.updateReadNotice(notice.id)
+        startActivity(NoticeDetailActivity.getIntent(this, notice.intrinsicId))
     }
 
-    private fun navigateToFeedDetail(feedId: Long) {
-        startActivity(FeedDetailActivity.getIntent(this, feedId))
+    private fun navigateToFeedDetail(notice: Notice) {
+        noticeViewModel.updateReadNotice(notice.id)
+        startActivity(FeedDetailActivity.getIntent(this, notice.intrinsicId))
     }
 
     companion object {

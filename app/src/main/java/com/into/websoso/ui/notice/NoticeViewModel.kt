@@ -63,4 +63,12 @@ class NoticeViewModel
                 isError = true,
             )
         }
+
+        fun updateReadNotice(noticeId: Long) {
+            _noticeUiState.value = noticeUiState.value.copy(
+                notices = noticeUiState.value.notices.map {
+                    if (it.id == noticeId) it.copy(isRead = true) else it
+                },
+            )
+        }
     }
