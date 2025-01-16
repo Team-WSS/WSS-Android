@@ -16,8 +16,8 @@ fun NoticesContainer(
     notices: List<Notice>,
     isLoadable: Boolean,
     updateNotices: () -> Unit,
-    navigateToNoticeDetail: (Notice) -> Unit,
-    navigateToFeedDetail: (Notice) -> Unit,
+    onNoticeDetailClick: (Notice) -> Unit,
+    onFeedDetailClick: (Notice) -> Unit,
 ) {
     val listState = rememberLazyListState()
 
@@ -40,8 +40,8 @@ fun NoticesContainer(
                     modifier = Modifier.clickableWithoutRipple {
                         navigateToDetail(
                             notice = notice,
-                            navigateToNoticeDetail = navigateToNoticeDetail,
-                            navigateToFeedDetail = navigateToFeedDetail,
+                            onNoticeDetailClick = onNoticeDetailClick,
+                            onFeedDetailClick = onFeedDetailClick,
                         )
                     },
                 )
@@ -52,13 +52,13 @@ fun NoticesContainer(
 
 private fun navigateToDetail(
     notice: Notice,
-    navigateToNoticeDetail: (Notice) -> Unit,
-    navigateToFeedDetail: (Notice) -> Unit,
+    onNoticeDetailClick: (Notice) -> Unit,
+    onFeedDetailClick: (Notice) -> Unit,
 ) {
     if (notice.intrinsicId == DEFAULT_INTRINSIC_ID) return
     when (notice.noticeType) {
-        NoticeType.NOTICE -> navigateToNoticeDetail(notice)
-        NoticeType.FEED -> navigateToFeedDetail(notice)
+        NoticeType.NOTICE -> onNoticeDetailClick(notice)
+        NoticeType.FEED -> onFeedDetailClick(notice)
         NoticeType.NONE -> Unit
     }
 }

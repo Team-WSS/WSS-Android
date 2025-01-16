@@ -21,7 +21,7 @@ import com.into.websoso.designsystem.theme.Black
 import com.into.websoso.designsystem.theme.WebsosoTheme
 
 @Composable
-fun NoticeAppBar(navigateToBack: () -> Unit) {
+fun NoticeAppBar(onBackButtonClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,7 +35,7 @@ fun NoticeAppBar(navigateToBack: () -> Unit) {
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
                 .size(44.dp)
-                .clickableWithoutRipple { navigateToBack() },
+                .clickableWithoutRipple { onBackButtonClick() },
         )
         Text(
             text = stringResource(R.string.notice_notification),

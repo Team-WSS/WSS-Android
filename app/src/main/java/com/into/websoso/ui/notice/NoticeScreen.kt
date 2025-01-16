@@ -13,20 +13,20 @@ import com.into.websoso.ui.notice.component.NoticesContainer
 @Composable
 fun NoticeScreen(
     viewModel: NoticeViewModel,
-    navigateToNoticeDetail: (Notice) -> Unit,
-    navigateToFeedDetail: (Notice) -> Unit,
-    navigateToBack: () -> Unit,
+    onNoticeDetailClick: (Notice) -> Unit,
+    onFeedDetailClick: (Notice) -> Unit,
+    onBackButtonClick: () -> Unit,
 ) {
     val uiState by viewModel.noticeUiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        NoticeAppBar(navigateToBack)
+        NoticeAppBar(onBackButtonClick)
         NoticesContainer(
             notices = uiState.notices,
             isLoadable = uiState.isLoadable,
             updateNotices = viewModel::updateNotices,
-            navigateToNoticeDetail = navigateToNoticeDetail,
-            navigateToFeedDetail = navigateToFeedDetail,
+            onNoticeDetailClick = onNoticeDetailClick,
+            onFeedDetailClick = onFeedDetailClick,
         )
     }
 }

@@ -23,9 +23,9 @@ class NoticeActivity : ComponentActivity() {
             WebsosoTheme {
                 NoticeScreen(
                     viewModel = noticeViewModel,
-                    navigateToNoticeDetail = ::navigateToNoticeDetail,
-                    navigateToFeedDetail = ::navigateToFeedDetail,
-                    navigateToBack = { finish() },
+                    onNoticeDetailClick = ::navigateToNoticeDetail,
+                    onFeedDetailClick = ::navigateToFeedDetail,
+                    onBackButtonClick = { finish() },
                 )
             }
         }
