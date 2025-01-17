@@ -35,21 +35,55 @@ android {
 
     buildTypes {
         debug {
+            // 디버그 버전, 빌드 세팅(디버깅 가능 여부, 앱 네임, 아이콘, 패키지)
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders.putAll(
+                mapOf(
+                    "appName" to "@string/app_name_debug",
+                    "appIcon" to "@mipmap/ic_wss_logo_debug",
+                    "roundIcon" to "@mipmap/ic_wss_logo_debug_round",
+                ),
+            )
+
+            // 프로가드 세팅, 앱 용량 축소
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("debug.base.url"))
+
+            // 디버그 버전, 공용 프로퍼티(BASE URL)
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                gradleLocalProperties(rootDir).getProperty("debug.base.url"),
+            )
         }
         release {
+            // 릴리즈 버전, 빌드 세팅(앱 네임, 아이콘)
+            manifestPlaceholders.putAll(
+                mapOf(
+                    "appName" to "@string/app_name",
+                    "appIcon" to "@mipmap/ic_wss_logo",
+                    "roundIcon" to "@mipmap/ic_wss_logo_round",
+                ),
+            )
+
+            // 프로가드 세팅, 앱 용량 축소
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("release.base.url"))
+
+            // 릴리즈 버전, 공용 프로퍼티(BASE URL)
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                gradleLocalProperties(rootDir).getProperty("release.base.url"),
+            )
         }
     }
     compileOptions {
