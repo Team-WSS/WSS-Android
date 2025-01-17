@@ -144,6 +144,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                            binding.ivHomeNotice.isSelected = uiState.isNoticeUnread
                         }
                     }
                 }
@@ -254,7 +255,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun onNoticeButtonClick() {
-        binding.ivHomeNotification.setOnClickListener {
+        binding.ivHomeNotice.setOnClickListener {
             startActivity(NoticeActivity.getIntent(requireContext()))
         }
     }
