@@ -12,8 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.model.ResultFrom
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.databinding.FragmentOtherUserActivityBinding
 import com.into.websoso.databinding.MenuOtherUserActivityPopupBinding
 import com.into.websoso.ui.activityDetail.ActivityDetailActivity

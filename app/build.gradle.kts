@@ -112,7 +112,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.compose.bom)
+    androidTestImplementation(platform(libs.compose.bom))
 
     implementation(libs.bundles.compose)
 }

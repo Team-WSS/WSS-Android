@@ -6,9 +6,9 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.hideKeyboard
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.hideKeyboard
 import com.into.websoso.databinding.FragmentOnboardingFirstBinding
 import com.into.websoso.ui.onboarding.OnboardingViewModel
 import com.into.websoso.ui.onboarding.first.model.NicknameInputType
@@ -16,12 +16,14 @@ import com.into.websoso.ui.onboarding.first.model.onboardingFirstUiModelMap
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OnboardingFirstFragment :
-    BaseFragment<FragmentOnboardingFirstBinding>(R.layout.fragment_onboarding_first) {
+class OnboardingFirstFragment : BaseFragment<FragmentOnboardingFirstBinding>(R.layout.fragment_onboarding_first) {
     private val viewModel by activityViewModels<OnboardingViewModel>()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
@@ -81,10 +83,10 @@ class OnboardingFirstFragment :
                 clOnBoardingFirstNicknameInput.background =
                     requireContext().getDrawable(res.editTextBackgroundRes)
                 ivOnboardingFirstNicknameInputClear.setImageDrawable(
-                    requireContext().getDrawable(res.clearIconRes)
+                    requireContext().getDrawable(res.clearIconRes),
                 )
                 tvOnBoardingFirstMessage.setTextColor(
-                    requireContext().getColor(res.messageColorRes)
+                    requireContext().getColor(res.messageColorRes),
                 )
             }
         }

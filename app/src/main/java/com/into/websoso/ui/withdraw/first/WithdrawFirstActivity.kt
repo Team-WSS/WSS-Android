@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.databinding.ActivityWithdrawFirstBinding
 import com.into.websoso.ui.withdraw.first.model.UserNovelStatsModel
 import com.into.websoso.ui.withdraw.second.WithdrawSecondActivity

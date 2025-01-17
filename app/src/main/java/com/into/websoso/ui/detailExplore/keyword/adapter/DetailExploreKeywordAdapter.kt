@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
 import com.into.websoso.databinding.ItemCommonKeywordBinding
 
 class DetailExploreKeywordAdapter(

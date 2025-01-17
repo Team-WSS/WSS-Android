@@ -8,21 +8,23 @@ import androidx.fragment.app.commit
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseBottomSheetDialog
-import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.DialogDetailExploreBinding
 import com.into.websoso.ui.detailExplore.model.SelectedFragmentTitle
 import com.into.websoso.ui.detailExplore.model.SelectedFragmentTitle.INFO
 import com.into.websoso.ui.detailExplore.model.SelectedFragmentTitle.KEYWORD
 
-class DetailExploreResultDialogBottomSheet :
-    BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
+class DetailExploreResultDialogBottomSheet : BaseBottomSheetDialog<DialogDetailExploreBinding>(R.layout.dialog_detail_explore) {
     private val detailExploreResultInfoFragment: DetailExploreResultInfoFragment by lazy { DetailExploreResultInfoFragment() }
     private val detailExploreResultKeywordFragment: DetailExploreResultKeywordFragment by lazy { DetailExploreResultKeywordFragment() }
     private val detailExploreResultViewModel: DetailExploreResultViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupBottomSheet()
@@ -133,9 +135,6 @@ class DetailExploreResultDialogBottomSheet :
     }
 
     companion object {
-
-        fun newInstance(): DetailExploreResultDialogBottomSheet {
-            return DetailExploreResultDialogBottomSheet()
-        }
+        fun newInstance(): DetailExploreResultDialogBottomSheet = DetailExploreResultDialogBottomSheet()
     }
 }

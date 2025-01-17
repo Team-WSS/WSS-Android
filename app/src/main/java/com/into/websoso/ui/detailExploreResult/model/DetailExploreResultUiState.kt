@@ -1,6 +1,6 @@
 package com.into.websoso.ui.detailExploreResult.model
 
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
 import com.into.websoso.ui.normalExplore.model.NormalExploreModel
 
 data class DetailExploreResultUiState(

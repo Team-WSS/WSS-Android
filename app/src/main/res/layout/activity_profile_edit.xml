@@ -296,7 +296,7 @@
             app:layout_constraintStart_toStartOf="@id/tv_profile_edit_prefer_genre"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_prefer_genre" />
 
-        <com.into.websoso.common.ui.custom.WebsosoChipGroup
+        <com.into.websoso.core.common.ui.custom.WebsosoChipGroup
             android:id="@+id/wcg_profile_edit_prefer_genre"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -308,7 +308,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_prefer_genre_description"
             app:singleSelection="false" />
 
-        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_profile_edit"
             android:layout_width="0dp"
             android:layout_height="0dp"

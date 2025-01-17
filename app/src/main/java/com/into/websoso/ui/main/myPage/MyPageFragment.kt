@@ -10,10 +10,10 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentMyPageBinding
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
@@ -32,7 +32,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     private val viewPagerAdapter by lazy { MyPageViewPagerAdapter(this) }
 
     private val startActivityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         when (result.resultCode) {
             ProfileEditSuccess.RESULT_OK -> {
@@ -42,7 +42,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupViewPager()
@@ -89,7 +92,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 ContextCompat.getColor(
                     requireContext(),
                     color,
-                )
+                ),
             )
 
             tvMyPageStickyTitle.isVisible = isCollapsed
@@ -132,7 +135,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             startActivityLauncher.launch(
                 ProfileEditActivity.getIntent(
                     requireContext(),
-                )
+                ),
             )
         }
     }

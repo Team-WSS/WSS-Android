@@ -10,14 +10,14 @@ import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
-import com.into.websoso.common.ui.model.CategoriesModel.Companion.findKeywordByName
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.Companion.findKeywordByName
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentDetailExploreResultKeywordBinding
 import com.into.websoso.ui.detailExplore.keyword.DetailExploreClickListener
 import com.into.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
@@ -37,7 +37,10 @@ class DetailExploreResultKeywordFragment :
         DetailExploreKeywordAdapter(detailExploreResultViewModel::updateClickedChipState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
@@ -55,28 +58,28 @@ class DetailExploreResultKeywordFragment :
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    private fun onDetailExploreKeywordButtonClick() = object : DetailExploreClickListener {
+    private fun onDetailExploreKeywordButtonClick() =
+        object : DetailExploreClickListener {
+            override fun onNovelInquireButtonClick() {
+                val inquireUrl = getString(R.string.inquire_link)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+                startActivity(intent)
+            }
 
-        override fun onNovelInquireButtonClick() {
-            val inquireUrl = getString(R.string.inquire_link)
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
-            startActivity(intent)
-        }
+            override fun onDetailSearchNovelButtonClick() {
+                singleEventHandler.throttleFirst {
+                    detailExploreResultViewModel.updateSearchResult(true)
 
-        override fun onDetailSearchNovelButtonClick() {
-            singleEventHandler.throttleFirst {
-                detailExploreResultViewModel.updateSearchResult(true)
+                    (parentFragment as? DetailExploreResultDialogBottomSheet)?.dismiss()
 
-                (parentFragment as? DetailExploreResultDialogBottomSheet)?.dismiss()
+                    detailExploreResultViewModel.updateIsBottomSheetOpen(false)
+                }
+            }
 
-                detailExploreResultViewModel.updateIsBottomSheetOpen(false)
+            override fun onKeywordResetButtonClick() {
+                detailExploreResultViewModel.updateSelectedKeywordValueClear()
             }
         }
-
-        override fun onKeywordResetButtonClick() {
-            detailExploreResultViewModel.updateSelectedKeywordValueClear()
-        }
-    }
 
     private fun setupAdapter() {
         binding.rvDetailExploreKeywordList.apply {
@@ -102,12 +105,18 @@ class DetailExploreResultKeywordFragment :
 
     private fun setupSelectedChips(categories: List<CategoryModel>) {
         val currentChipKeywords =
-            binding.wcgDetailExploreKeywordSelectedKeyword.children.filterIsInstance<WebsosoChip>()
-                .map { it.text.toString() }.toList()
+            binding.wcgDetailExploreKeywordSelectedKeyword.children
+                .filterIsInstance<WebsosoChip>()
+                .map { it.text.toString() }
+                .toList()
 
         val selectedKeywords =
-            categories.asSequence().flatMap { it.keywords.asSequence() }.filter { it.isSelected }
-                .map { it.keywordName }.toList()
+            categories
+                .asSequence()
+                .flatMap { it.keywords.asSequence() }
+                .filter { it.isSelected }
+                .map { it.keywordName }
+                .toList()
 
         val chipsToRemove = currentChipKeywords - selectedKeywords.toSet()
         val chipsToAdd = selectedKeywords - currentChipKeywords.toSet()
@@ -119,7 +128,7 @@ class DetailExploreResultKeywordFragment :
         chipsToAdd.forEach { keywordName ->
             createSelectedChip(
                 categories.findKeywordByName(keywordName)
-                    ?: throw IllegalArgumentException("Keyword not found: $keywordName")
+                    ?: throw IllegalArgumentException("Keyword not found: $keywordName"),
             )
         }
     }
@@ -134,33 +143,36 @@ class DetailExploreResultKeywordFragment :
     }
 
     private fun createSelectedChip(selectedKeyword: KeywordModel) {
-        WebsosoChip(requireContext()).apply {
-            setWebsosoChipText(selectedKeyword.keywordName)
-            setWebsosoChipTextAppearance(R.style.body2)
-            setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-            setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-            setWebsosoChipBackgroundColor(R.color.white)
-            setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-            setWebsosoChipPaddingHorizontal(4f.toFloatPxFromDp())
-            setWebsosoChipRadius(20f.toFloatPxFromDp())
-            setOnCloseIconClickListener {
-                detailExploreResultViewModel.updateClickedChipState(
-                    selectedKeyword.keywordId
-                )
+        WebsosoChip(requireContext())
+            .apply {
+                setWebsosoChipText(selectedKeyword.keywordName)
+                setWebsosoChipTextAppearance(R.style.body2)
+                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipBackgroundColor(R.color.white)
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(4f.toFloatPxFromDp())
+                setWebsosoChipRadius(20f.toFloatPxFromDp())
+                setOnCloseIconClickListener {
+                    detailExploreResultViewModel.updateClickedChipState(
+                        selectedKeyword.keywordId,
+                    )
+                }
+                setWebsosoChipCloseIconVisibility(true)
+                setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                setWebsosoChipCloseIconSize(20f)
+                setWebsosoChipCloseIconEndPadding(18f)
+                setCloseIconTintResource(R.color.primary_100_6A5DFD)
+            }.also { websosoChip ->
+                binding.wcgDetailExploreKeywordSelectedKeyword.addChip(websosoChip)
             }
-            setWebsosoChipCloseIconVisibility(true)
-            setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
-            setWebsosoChipCloseIconSize(20f)
-            setWebsosoChipCloseIconEndPadding(18f)
-            setCloseIconTintResource(R.color.primary_100_6A5DFD)
-        }.also { websosoChip ->
-            binding.wcgDetailExploreKeywordSelectedKeyword.addChip(websosoChip)
-        }
     }
 
     private fun updateSearchKeywordResult(uiState: DetailExploreResultUiState) {
         val previousSearchResultKeywords =
-            binding.wcgDetailExploreKeywordResult.children.toList().map { it as WebsosoChip }
+            binding.wcgDetailExploreKeywordResult.children
+                .toList()
+                .map { it as WebsosoChip }
 
         when {
             !uiState.isSearchKeywordProceeding -> return
@@ -179,13 +191,15 @@ class DetailExploreResultKeywordFragment :
         }
     }
 
-
     private fun updateSearchKeywordResultIsSelected(uiState: DetailExploreResultUiState) {
         binding.wcgDetailExploreKeywordResult.forEach { view ->
             val chip = view as? WebsosoChip ?: return@forEach
 
             val isSelected =
-                uiState.categories.asSequence().flatMap { it.keywords }.filter { it.isSelected }
+                uiState.categories
+                    .asSequence()
+                    .flatMap { it.keywords }
+                    .filter { it.isSelected }
                     .any { it.keywordName == chip.text.toString() }
 
             chip.isSelected = isSelected
@@ -194,25 +208,28 @@ class DetailExploreResultKeywordFragment :
 
     private fun updateSearchKeywordResultWebsosoChips(uiState: DetailExploreResultUiState) {
         uiState.searchResultKeywords.forEach { keyword ->
-            val isSelected = uiState.categories.asSequence().flatMap { it.keywords }
+            val isSelected = uiState.categories
+                .asSequence()
+                .flatMap { it.keywords }
                 .any { it.keywordId == keyword.keywordId && it.isSelected }
 
-            WebsosoChip(binding.root.context).apply {
-                setWebsosoChipText(keyword.keywordName)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
-                setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick {
-                    detailExploreResultViewModel.updateClickedChipState(keyword.keywordId)
+            WebsosoChip(binding.root.context)
+                .apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
+                    setOnWebsosoChipClick {
+                        detailExploreResultViewModel.updateClickedChipState(keyword.keywordId)
+                    }
+                    this.isSelected = isSelected
+                }.also { websosoChip ->
+                    binding.wcgDetailExploreKeywordResult.addChip(websosoChip)
                 }
-                this.isSelected = isSelected
-            }.also { websosoChip ->
-                binding.wcgDetailExploreKeywordResult.addChip(websosoChip)
-            }
         }
     }
 
@@ -262,7 +279,8 @@ class DetailExploreResultKeywordFragment :
                         requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
                 }
-            })
+            },
+        )
     }
 
     override fun onDestroyView() {

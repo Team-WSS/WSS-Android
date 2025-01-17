@@ -3,11 +3,11 @@ package com.into.websoso.ui.novelRating.adapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.R
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.toIntPxFromDp
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
+import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.databinding.ItemCommonKeywordBinding
 
 class NovelRatingKeywordViewHolder(
@@ -27,8 +27,9 @@ class NovelRatingKeywordViewHolder(
             val layoutParams = wcgNovelRatingKeyword.layoutParams as ConstraintLayout.LayoutParams
 
             when (ivNovelRatingKeywordToggle.isSelected) {
-                true -> layoutParams.matchConstraintMaxHeight =
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+                true ->
+                    layoutParams.matchConstraintMaxHeight =
+                        ConstraintLayout.LayoutParams.WRAP_CONTENT
 
                 false -> layoutParams.matchConstraintMaxHeight = 92.toIntPxFromDp()
             }
@@ -54,20 +55,21 @@ class NovelRatingKeywordViewHolder(
     private fun ItemCommonKeywordBinding.setupWebsosoChips(category: CategoryModel) {
         wcgNovelRatingKeyword.removeAllViews()
         category.keywords.forEach { keyword ->
-            WebsosoChip(binding.root.context).apply {
-                setWebsosoChipText(keyword.keywordName)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
-                setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick {
-                    onKeywordClick(keyword, this.isSelected)
-                }
-                isSelected = keyword.isSelected
-            }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
+            WebsosoChip(binding.root.context)
+                .apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
+                    setOnWebsosoChipClick {
+                        onKeywordClick(keyword, this.isSelected)
+                    }
+                    isSelected = keyword.isSelected
+                }.also { websosoChip -> wcgNovelRatingKeyword.addChip(websosoChip) }
         }
     }
 

@@ -6,10 +6,10 @@ import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.databinding.FragmentDetailExploreInfoBinding
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel
 import com.into.websoso.ui.detailExplore.info.model.Genre
@@ -20,12 +20,14 @@ import com.into.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailExploreInfoFragment :
-    BaseFragment<FragmentDetailExploreInfoBinding>(R.layout.fragment_detail_explore_info) {
+class DetailExploreInfoFragment : BaseFragment<FragmentDetailExploreInfoBinding>(R.layout.fragment_detail_explore_info) {
     private val detailExploreViewModel: DetailExploreViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
@@ -55,19 +57,21 @@ class DetailExploreInfoFragment :
                 val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
                 val novelRating = detailExploreViewModel.selectedRating.value
 
-                val keywordIds = detailExploreViewModel.uiState.value?.categories
+                val keywordIds = detailExploreViewModel.uiState.value
+                    ?.categories
                     ?.flatMap { it.keywords.asSequence() }
                     ?.filter { it.isSelected }
                     ?.map { it.keywordId }
                     ?.toList() ?: emptyList()
 
                 val intent = DetailExploreResultActivity.getIntent(
-                    context = requireContext(), DetailExploreFilteredModel(
+                    context = requireContext(),
+                    DetailExploreFilteredModel(
                         genres = selectedGenres,
                         isCompleted = isCompleted,
                         novelRating = novelRating,
                         keywordIds = keywordIds,
-                    )
+                    ),
                 )
 
                 startActivity(intent)
@@ -78,17 +82,18 @@ class DetailExploreInfoFragment :
     private fun setupGenreChips() {
         val genres = Genre.entries
         genres.forEach { genre ->
-            WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(genre.titleKr)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
-                setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
-                setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre) }
-            }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
+            WebsosoChip(requireContext())
+                .apply {
+                    setWebsosoChipText(genre.titleKr)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_detail_explore_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_detail_explore_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_detail_explore_chip_background_selector)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
+                    setOnWebsosoChipClick { detailExploreViewModel.updateSelectedGenres(genre) }
+                }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
 
@@ -111,7 +116,6 @@ class DetailExploreInfoFragment :
                     false -> {
                         detailExploreViewModel.updateSelectedSeriesStatus(null)
                     }
-
                 }
             }
         }
@@ -143,7 +147,10 @@ class DetailExploreInfoFragment :
         }
     }
 
-    private fun setupChipCheckListener(chip: Chip, onCheckedChange: (Boolean) -> Unit) {
+    private fun setupChipCheckListener(
+        chip: Chip,
+        onCheckedChange: (Boolean) -> Unit,
+    ) {
         chip.setOnCheckedChangeListener(null)
         chip.isChecked = false
         chip.setOnCheckedChangeListener { _, isChecked -> onCheckedChange(isChecked) }
@@ -151,8 +158,10 @@ class DetailExploreInfoFragment :
 
     private fun setupObserver() {
         detailExploreViewModel.selectedGenres.observe(viewLifecycleOwner) { genres ->
-            if (genres.isNullOrEmpty()) binding.wcgDetailExploreInfoGenre.forEach {
-                it.isSelected = false
+            if (genres.isNullOrEmpty()) {
+                binding.wcgDetailExploreInfoGenre.forEach {
+                    it.isSelected = false
+                }
             }
         }
 

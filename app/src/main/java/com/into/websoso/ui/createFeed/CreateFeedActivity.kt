@@ -17,13 +17,13 @@ import com.into.websoso.R.layout.activity_create_feed
 import com.into.websoso.R.string.wset_create_feed_search_novel
 import com.into.websoso.R.style.body2
 import com.into.websoso.R.style.body4
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.getAdaptedParcelableExtra
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.getAdaptedParcelableExtra
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityCreateFeedBinding
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
@@ -82,7 +82,8 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
                 if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
-                    CreatingFeedDialogFragment.newInstance(event = ::finish)
+                    CreatingFeedDialogFragment
+                        .newInstance(event = ::finish)
                         .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
                     return@throttleFirst
                 }
@@ -119,7 +120,8 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
                 if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
-                    CreatingFeedDialogFragment.newInstance(event = ::finish)
+                    CreatingFeedDialogFragment
+                        .newInstance(event = ::finish)
                         .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
                     return@throttleFirst
                 }
@@ -152,18 +154,19 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
     private fun List<CreatedFeedCategoryModel>.setupCategoryChips() {
         forEach { category ->
-            WebsosoChip(this@CreateFeedActivity).apply {
-                setWebsosoChipText(category.category.krTitle)
-                setWebsosoChipTextAppearance(body2)
-                setWebsosoChipTextColor(bg_detail_explore_chip_text_selector)
-                setWebsosoChipStrokeColor(bg_detail_explore_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(bg_detail_explore_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(6.7f.toFloatPxFromDp())
-                setWebsosoChipSelected(category.isSelected)
-                setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.enTitle) }
-            }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
+            WebsosoChip(this@CreateFeedActivity)
+                .apply {
+                    setWebsosoChipText(category.category.krTitle)
+                    setWebsosoChipTextAppearance(body2)
+                    setWebsosoChipTextColor(bg_detail_explore_chip_text_selector)
+                    setWebsosoChipStrokeColor(bg_detail_explore_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(bg_detail_explore_chip_background_selector)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6.7f.toFloatPxFromDp())
+                    setWebsosoChipSelected(category.isSelected)
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
+                    setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.enTitle) }
+                }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
 
@@ -173,7 +176,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
         fun getIntent(context: Context): Intent = Intent(context, CreateFeedActivity::class.java)
 
-        fun getIntent(context: Context, editFeedModel: EditFeedModel): Intent =
+        fun getIntent(
+            context: Context,
+            editFeedModel: EditFeedModel,
+        ): Intent =
             Intent(context, CreateFeedActivity::class.java).apply {
                 putExtra(FEED, editFeedModel)
             }

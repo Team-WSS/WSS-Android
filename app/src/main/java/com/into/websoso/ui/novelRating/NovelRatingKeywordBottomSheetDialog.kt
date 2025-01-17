@@ -11,12 +11,12 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseBottomSheetDialog
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.ui.custom.WebsosoCustomToast
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
-import com.into.websoso.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.into.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.into.websoso.ui.novelRating.model.NovelRatingKeywordsModel
@@ -52,32 +52,32 @@ class NovelRatingKeywordBottomSheetDialog :
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    private fun onNovelRatingButtonClick() = object : NovelRatingClickListener {
+    private fun onNovelRatingButtonClick() =
+        object : NovelRatingClickListener {
+            override fun onDateEditClick() {}
 
-        override fun onDateEditClick() {}
+            override fun onKeywordEditClick() {}
 
-        override fun onKeywordEditClick() {}
+            override fun onNavigateBackClick() {}
 
-        override fun onNavigateBackClick() {}
+            override fun onSaveClick() {
+                novelRatingViewModel.saveSelectedKeywords()
+                dismiss()
+            }
 
-        override fun onSaveClick() {
-            novelRatingViewModel.saveSelectedKeywords()
-            dismiss()
+            override fun onCancelClick() {
+                novelRatingViewModel.cancelEditingKeyword()
+                dismiss()
+            }
+
+            override fun onClearClick() {
+                novelRatingViewModel.clearEditingKeyword()
+            }
+
+            override fun onReportKeywordClick() {
+                navigateToReportKeyword()
+            }
         }
-
-        override fun onCancelClick() {
-            novelRatingViewModel.cancelEditingKeyword()
-            dismiss()
-        }
-
-        override fun onClearClick() {
-            novelRatingViewModel.clearEditingKeyword()
-        }
-
-        override fun onReportKeywordClick() {
-            navigateToReportKeyword()
-        }
-    }
 
     private fun navigateToReportKeyword() {
         val inquireUrl = getString(R.string.inquire_link)
@@ -121,7 +121,8 @@ class NovelRatingKeywordBottomSheetDialog :
             removeCurrentSelectedKeywordChip(keyword)
         }
 
-        currentSelectedKeywords.filterNot { it.keywordName in existingKeywords }
+        currentSelectedKeywords
+            .filterNot { it.keywordName in existingKeywords }
             .forEach { keyword ->
                 addCurrentSelectedKeywordChip(keyword)
             }
@@ -134,27 +135,28 @@ class NovelRatingKeywordBottomSheetDialog :
     }
 
     private fun addCurrentSelectedKeywordChip(keyword: KeywordModel) {
-        WebsosoChip(binding.root.context).apply {
-            setWebsosoChipText(keyword.keywordName)
-            setWebsosoChipTextAppearance(R.style.body2)
-            setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-            setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-            setWebsosoChipBackgroundColor(R.color.white)
-            setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-            setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
-            setWebsosoChipRadius(20f.toFloatPxFromDp())
-            setOnCloseIconClickListener {
-                novelRatingViewModel.updateSelectedKeywords(keyword = keyword, isSelected = false)
+        WebsosoChip(binding.root.context)
+            .apply {
+                setWebsosoChipText(keyword.keywordName)
+                setWebsosoChipTextAppearance(R.style.body2)
+                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
+                setWebsosoChipBackgroundColor(R.color.white)
+                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                setWebsosoChipRadius(20f.toFloatPxFromDp())
+                setOnCloseIconClickListener {
+                    novelRatingViewModel.updateSelectedKeywords(keyword = keyword, isSelected = false)
+                }
+                setWebsosoChipCloseIconVisibility(true)
+                setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
+                setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
+                setCloseIconTintResource(R.color.primary_100_6A5DFD)
+                tag = keyword.keywordName
+            }.also { websosoChip ->
+                binding.wcgNovelRatingKeywordSelectedKeyword.addView(websosoChip)
             }
-            setWebsosoChipCloseIconVisibility(true)
-            setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
-            setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
-            setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
-            setCloseIconTintResource(R.color.primary_100_6A5DFD)
-            tag = keyword.keywordName
-        }.also { websosoChip ->
-            binding.wcgNovelRatingKeywordSelectedKeyword.addView(websosoChip)
-        }
     }
 
     private fun updateKeywordRecyclerView(category: List<CategoryModel>) {
@@ -163,7 +165,9 @@ class NovelRatingKeywordBottomSheetDialog :
 
     private fun updateSearchKeywordResult(keywords: NovelRatingKeywordsModel) {
         val previousSearchResultKeywords =
-            binding.wcgNovelRatingKeywordSearchResult.children.toList().map { it as WebsosoChip }
+            binding.wcgNovelRatingKeywordSearchResult.children
+                .toList()
+                .map { it as WebsosoChip }
         if (!keywords.isSearchKeywordProceeding || keywords.isSearchResultKeywordsEmpty) return
         if (keywords.searchResultKeywords.map { it.keywordName } == previousSearchResultKeywords.map { it.text.toString() }) {
             updateSearchKeywordResultIsSelected(keywords)
@@ -182,27 +186,29 @@ class NovelRatingKeywordBottomSheetDialog :
 
     private fun updateSearchKeywordResultWebsosoChips(keywords: NovelRatingKeywordsModel) {
         keywords.searchResultKeywords.forEach { keyword ->
-            WebsosoChip(binding.root.context).apply {
-                setWebsosoChipText(keyword.keywordName)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
-                setWebsosoChipRadius(20f.toFloatPxFromDp())
-                setOnWebsosoChipClick {
-                    novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
-                }
-                isSelected =
-                    keywords.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
-            }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
+            WebsosoChip(binding.root.context)
+                .apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
+                    setWebsosoChipRadius(20f.toFloatPxFromDp())
+                    setOnWebsosoChipClick {
+                        novelRatingViewModel.updateSelectedKeywords(keyword, isSelected)
+                    }
+                    isSelected =
+                        keywords.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
+                }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
         }
     }
 
     private fun checkSelectedKeywordExceedMaxCount(keywords: NovelRatingKeywordsModel) {
         if (keywords.isSearchKeywordExceed) {
-            WebsosoCustomToast.make(requireContext())
+            WebsosoCustomToast
+                .make(requireContext())
                 .setText(getString(R.string.novel_rating_keyword_exceed))
                 .setIcon(R.drawable.ic_novel_rating_alert)
                 .show()
@@ -210,11 +216,13 @@ class NovelRatingKeywordBottomSheetDialog :
                 keyword = keywords.currentSelectedKeywords.last(),
                 isSelected = false,
             )
-            novelRatingKeywordAdapter.notifyItemChanged(keywords.categories.indexOfFirst { category ->
-                category.keywords.find { keyword ->
-                    keyword.keywordId == keywords.currentSelectedKeywords.last().keywordId
-                } != null
-            })
+            novelRatingKeywordAdapter.notifyItemChanged(
+                keywords.categories.indexOfFirst { category ->
+                    category.keywords.find { keyword ->
+                        keyword.keywordId == keywords.currentSelectedKeywords.last().keywordId
+                    } != null
+                },
+            )
         }
     }
 
@@ -254,12 +262,16 @@ class NovelRatingKeywordBottomSheetDialog :
     private fun setupBackButtonListener() {
         dialog?.setOnKeyListener { _, keyCode, event ->
             when {
-                binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() && keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP -> {
+                binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() &&
+                    keyCode == KeyEvent.KEYCODE_BACK &&
+                    event.action == KeyEvent.ACTION_UP -> {
                     initSearchKeyword()
                     true
                 }
 
-                !binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() && keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP -> {
+                !binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() &&
+                    keyCode == KeyEvent.KEYCODE_BACK &&
+                    event.action == KeyEvent.ACTION_UP -> {
                     dismiss()
                     false
                 }
