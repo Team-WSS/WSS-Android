@@ -43,7 +43,8 @@ android {
             buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("debug.base.url"))
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
