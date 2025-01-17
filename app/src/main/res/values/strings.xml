@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">웹소소</string>
+    <string name="app_name_debug">안드소소</string>
 
     <!-- 에러 메시지 -->
     <string name="base_fragment_null_error">bindingException: binding is null in BindingFragment</string>
