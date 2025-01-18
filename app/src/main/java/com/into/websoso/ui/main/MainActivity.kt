@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.databinding.ActivityMainBinding
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
@@ -108,17 +108,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    enum class FragmentType(@IntegerRes private val resId: Int) {
+    enum class FragmentType(
+        @IntegerRes private val resId: Int,
+    ) {
         HOME(R.id.menu_home),
         EXPLORE(R.id.menu_explore),
         FEED(R.id.menu_feed),
-        MY_PAGE(R.id.menu_my_page)
+        MY_PAGE(R.id.menu_my_page),
         ;
 
         companion object {
-            fun valueOf(id: Int): FragmentType = entries.find { fragmentView ->
-                fragmentView.resId == id
-            } ?: throw IllegalArgumentException()
+            fun valueOf(id: Int): FragmentType =
+                entries.find { fragmentView ->
+                    fragmentView.resId == id
+                } ?: throw IllegalArgumentException()
         }
     }
 
@@ -173,17 +176,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         fun getIntent(
             context: Context,
             destination: FragmentType = HOME,
-        ): Intent {
-            return Intent(context, MainActivity::class.java).apply {
+        ): Intent =
+            Intent(context, MainActivity::class.java).apply {
                 putExtra(DESTINATION_KEY, destination)
             }
-        }
 
-        fun getIntent(context: Context, isLogin: Boolean): Intent {
-            return Intent(context, MainActivity::class.java).apply {
+        fun getIntent(
+            context: Context,
+            isLogin: Boolean,
+        ): Intent =
+            Intent(context, MainActivity::class.java).apply {
                 putExtra(IS_LOGIN_KEY, isLogin)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
-        }
     }
 }

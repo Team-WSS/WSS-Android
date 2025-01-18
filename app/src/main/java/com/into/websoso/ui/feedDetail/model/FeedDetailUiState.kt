@@ -1,7 +1,7 @@
 package com.into.websoso.ui.feedDetail.model
 
-import com.into.websoso.common.ui.model.ResultFrom
-import com.into.websoso.common.ui.model.ResultFrom.Feed
+import com.into.websoso.core.common.ui.model.ResultFrom
+import com.into.websoso.core.common.ui.model.ResultFrom.Feed
 
 data class FeedDetailUiState(
     val loading: Boolean = true,

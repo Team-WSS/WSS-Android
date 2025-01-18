@@ -11,13 +11,13 @@ import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
 import com.into.websoso.R
 import com.into.websoso.R.string.home_nickname_interest_feed
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.into.websoso.common.ui.model.ResultFrom.NormalExploreBack
-import com.into.websoso.common.ui.model.ResultFrom.NovelDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.ProfileEditSuccess
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
+import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
@@ -78,7 +78,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             getFCMToken()
         }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         bindViewModel()
@@ -121,8 +124,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         mainViewModel.isLogin.observe(viewLifecycleOwner) { isLogin ->
             homeViewModel.updateHomeData(isLogin = isLogin)
 
-            if (isLogin.not()) binding.tvHomeInterestFeed.text =
-                getString(R.string.home_interest_feed_text)
+            if (isLogin.not()) {
+                binding.tvHomeInterestFeed.text =
+                    getString(R.string.home_interest_feed_text)
+            }
         }
 
         mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->

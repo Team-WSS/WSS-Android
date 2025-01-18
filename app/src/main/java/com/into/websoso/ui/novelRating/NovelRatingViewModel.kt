@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.data.model.NovelRatingEntity
 import com.into.websoso.data.repository.KeywordRepository
 import com.into.websoso.data.repository.UserNovelRepository

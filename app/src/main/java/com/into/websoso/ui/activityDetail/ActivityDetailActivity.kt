@@ -16,9 +16,9 @@ import androidx.databinding.ViewDataBinding
 import com.into.websoso.R
 import com.into.websoso.R.string.my_activity_detail_title
 import com.into.websoso.R.string.other_user_page_activity
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.model.ResultFrom
-import com.into.websoso.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.ResultFrom
+import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.databinding.ActivityActivityDetailBinding
 import com.into.websoso.databinding.MenuMyActivityPopupBinding
 import com.into.websoso.databinding.MenuOtherUserActivityPopupBinding
@@ -44,12 +44,11 @@ import com.into.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ActivityDetailActivity :
-    BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
+class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(R.layout.activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
     private val activityDetailAdapter: ActivityDetailAdapter by lazy {
         ActivityDetailAdapter(
-            onClickFeedItem()
+            onClickFeedItem(),
         )
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
@@ -157,7 +156,7 @@ class ActivityDetailActivity :
 
     private fun updateAdapterWithActivitiesAndProfile(
         activities: List<ActivitiesModel.ActivityModel>?,
-        userProfile: UserProfileModel?
+        userProfile: UserProfileModel?,
     ) {
         if (activities != null && userProfile != null) {
             val userActivityModels = activities.map { activity ->
@@ -169,17 +168,20 @@ class ActivityDetailActivity :
         }
     }
 
-    private fun getUserProfile(): UserProfileModel? {
-        return when (activityDetailViewModel.source) {
+    private fun getUserProfile(): UserProfileModel? =
+        when (activityDetailViewModel.source) {
             SOURCE_MY_ACTIVITY -> {
-                myPageViewModel.uiState.value?.myProfile?.toUserProfileModel()
+                myPageViewModel.uiState.value
+                    ?.myProfile
+                    ?.toUserProfileModel()
             }
             SOURCE_OTHER_USER_ACTIVITY -> {
-                otherUserPageViewModel.uiState.value?.otherUserProfile?.toUserProfileModel()
+                otherUserPageViewModel.uiState.value
+                    ?.otherUserProfile
+                    ?.toUserProfileModel()
             }
             else -> null
         }
-    }
 
     private fun onBackButtonClick() {
         binding.ivActivityDetailBackButton.setOnClickListener {
@@ -188,37 +190,47 @@ class ActivityDetailActivity :
         }
     }
 
-    private fun onClickFeedItem() = object : ActivityItemClickListener {
-        override fun onContentClick(feedId: Long) {
-            activityResultCallback.launch(FeedDetailActivity.getIntent(this@ActivityDetailActivity, feedId))
-        }
-
-        override fun onNovelInfoClick(novelId: Long) {
-            startActivity(NovelDetailActivity.getIntent(this@ActivityDetailActivity, novelId))
-        }
-
-        override fun onLikeButtonClick(view: View, feedId: Long) {
-            val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
-            val currentLikeCount = likeCountTextView.text.toString().toInt()
-
-            val updatedLikeCount: Int = if (view.isSelected) {
-                if (currentLikeCount > 0) currentLikeCount - 1 else 0
-            } else {
-                currentLikeCount + 1
+    private fun onClickFeedItem() =
+        object : ActivityItemClickListener {
+            override fun onContentClick(feedId: Long) {
+                activityResultCallback.launch(FeedDetailActivity.getIntent(this@ActivityDetailActivity, feedId))
             }
 
-            likeCountTextView.text = updatedLikeCount.toString()
-            view.isSelected = !view.isSelected
+            override fun onNovelInfoClick(novelId: Long) {
+                startActivity(NovelDetailActivity.getIntent(this@ActivityDetailActivity, novelId))
+            }
 
-            activityDetailViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
+            override fun onLikeButtonClick(
+                view: View,
+                feedId: Long,
+            ) {
+                val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
+                val currentLikeCount = likeCountTextView.text.toString().toInt()
+
+                val updatedLikeCount: Int = if (view.isSelected) {
+                    if (currentLikeCount > 0) currentLikeCount - 1 else 0
+                } else {
+                    currentLikeCount + 1
+                }
+
+                likeCountTextView.text = updatedLikeCount.toString()
+                view.isSelected = !view.isSelected
+
+                activityDetailViewModel.updateActivityLike(view.isSelected, feedId, updatedLikeCount)
+            }
+
+            override fun onMoreButtonClick(
+                view: View,
+                feedId: Long,
+            ) {
+                showPopupMenu(view, feedId)
+            }
         }
 
-        override fun onMoreButtonClick(view: View, feedId: Long) {
-            showPopupMenu(view, feedId)
-        }
-    }
-
-    private fun showPopupMenu(view: View, feedId: Long) {
+    private fun showPopupMenu(
+        view: View,
+        feedId: Long,
+    ) {
         val inflater = LayoutInflater.from(this)
         val binding = when (source) {
             SOURCE_MY_ACTIVITY -> MenuMyActivityPopupBinding.inflate(inflater)
@@ -231,7 +243,7 @@ class ActivityDetailActivity :
             binding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = 2f
             showAsDropDown(view)
@@ -239,7 +251,10 @@ class ActivityDetailActivity :
         setupPopupMenuClickListeners(binding, feedId)
     }
 
-    private fun setupPopupMenuClickListeners(binding: ViewDataBinding, feedId: Long) {
+    private fun setupPopupMenuClickListeners(
+        binding: ViewDataBinding,
+        feedId: Long,
+    ) {
         when (binding) {
             is MenuMyActivityPopupBinding -> {
                 binding.tvMyActivityModification.setOnClickListener {
@@ -267,7 +282,9 @@ class ActivityDetailActivity :
 
     private fun navigateToFeedEdit(feedId: Long) {
         val activityModel =
-            activityDetailViewModel.uiState.value?.activities?.find { it.feedId == feedId }
+            activityDetailViewModel.uiState.value
+                ?.activities
+                ?.find { it.feedId == feedId }
         activityModel?.let { feed ->
             val editFeedModel = EditFeedModel(
                 feedId = feed.feedId,
@@ -286,12 +303,15 @@ class ActivityDetailActivity :
             menuType = RemoveMenuType.REMOVE_FEED.name,
             event = {
                 activityDetailViewModel.updateRemovedFeed(feedId)
-            }
+            },
         )
         dialogFragment.show(supportFragmentManager, FeedRemoveDialogFragment.TAG)
     }
 
-    private fun showReportDialog(feedId: Long, menuType: String) {
+    private fun showReportDialog(
+        feedId: Long,
+        menuType: String,
+    ) {
         val dialogFragment = FeedReportDialogFragment.newInstance(
             menuType = menuType,
             event = {
@@ -305,7 +325,7 @@ class ActivityDetailActivity :
                     )
                 }
                 showReportDoneDialog(menuType)
-            }
+            },
         )
         dialogFragment.show(supportFragmentManager, FeedReportDialogFragment.TAG)
     }
@@ -324,8 +344,6 @@ class ActivityDetailActivity :
         const val SOURCE_MY_ACTIVITY = "myActivity"
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, ActivityDetailActivity::class.java)
-        }
+        fun getIntent(context: Context): Intent = Intent(context, ActivityDetailActivity::class.java)
     }
 }

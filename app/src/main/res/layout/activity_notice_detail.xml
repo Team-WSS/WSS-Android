@@ -5,9 +5,9 @@
 
     <data>
 
-        <variable
-            name="noticeItem"
-            type="com.into.websoso.ui.notice.model.NoticeModel" />
+        <!--        <variable-->
+        <!--            name="noticeItem"-->
+        <!--            type="com.into.websoso.ui.notice.model.NoticeModel" />-->
 
     </data>
 
@@ -45,24 +45,24 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="@{noticeItem.noticeTitle}"
             android:textAppearance="@style/headline1"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_notice_detail_notice"
             tools:text="리뷰 기능 변경 관련 공지" />
+        <!--        android:text="@{noticeItem.noticeTitle}"-->
 
         <TextView
             android:id="@+id/tv_notice_detail_notice_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@{noticeItem.createDate}"
             android:textAppearance="@style/body5"
             android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="@id/tv_notice_detail_notice_title"
             app:layout_constraintTop_toBottomOf="@id/tv_notice_detail_notice_title"
             tools:text="2024.06.22" />
+        <!--        android:text="@{noticeItem.createDate}"-->
 
         <View
             android:id="@+id/v_notice_detail_divider"
@@ -78,10 +78,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
+            android:autoLink="web"
             android:paddingHorizontal="20dp"
             android:scrollbars="vertical"
-            android:autoLink="web"
-            android:text="@{noticeItem.noticeContent}"
             android:textAppearance="@style/body2"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -91,6 +90,7 @@
             app:layout_constraintTop_toBottomOf="@id/v_notice_detail_divider"
             app:layout_constraintVertical_bias="0.0"
             tools:text="아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n아\n" />
+        <!--        android:text="@{noticeItem.noticeContent}"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
