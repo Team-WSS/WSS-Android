@@ -1,10 +1,14 @@
 package com.into.websoso.ui.main.home
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.firebase.messaging.FirebaseMessaging
 import com.into.websoso.R
 import com.into.websoso.R.string.home_nickname_interest_feed
 import com.into.websoso.common.ui.base.BaseFragment
@@ -53,7 +57,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private val startActivityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         when (result.resultCode) {
             FeedDetailBack.RESULT_OK, FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
@@ -68,6 +72,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             }
         }
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            getFCMToken()
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,8 +110,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         with(binding) {
             rvHomeTodayPopularNovel.addItemDecoration(
                 HomeCustomItemDecoration(
-                    TODAY_POPULAR_NOVEL_MARGIN
-                )
+                    TODAY_POPULAR_NOVEL_MARGIN,
+                ),
             )
             rvUserInterestFeed.addItemDecoration(HomeCustomItemDecoration(USER_INTEREST_MARGIN))
         }
@@ -144,6 +153,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 }
             }
         }
+
+        homeViewModel.isNotificationPermissionFirstLaunched.observe(viewLifecycleOwner) { isFirstLaunch ->
+            if (isFirstLaunch) showNotificationPermissionDialog()
+        }
     }
 
     private fun updateUserInterestFeedsVisibility(isUserInterestEmpty: Boolean) {
@@ -184,6 +197,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun showNotificationPermissionDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
+    }
+
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            val token = task.result
+
+            if (task.isSuccessful) {
+                homeViewModel.updateFCMToken(token)
+            }
+        }
+    }
+
     private fun setupDotsIndicator() {
         binding.dotsIndicatorHome.attachTo(binding.vpHomePopularFeed)
     }
@@ -208,7 +239,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             NovelDetailActivity.getIntent(
                 requireContext(),
                 novelId,
-            )
+            ),
         )
     }
 
@@ -222,7 +253,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             FeedDetailActivity.getIntent(
                 requireContext(),
                 feedId,
-            )
+            ),
         )
     }
 
@@ -232,7 +263,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             startActivityLauncher.launch(
                 NormalExploreActivity.getIntent(
                     requireContext(),
-                )
+                ),
             )
         }
     }
@@ -243,7 +274,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             startActivityLauncher.launch(
                 ProfileEditActivity.getIntent(
                     requireContext(),
-                )
+                ),
             )
         }
     }

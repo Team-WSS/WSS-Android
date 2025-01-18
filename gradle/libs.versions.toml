@@ -120,7 +120,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 # Firebase Libraries
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx"}
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 # Amplitude Libraries
 amplitude = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }

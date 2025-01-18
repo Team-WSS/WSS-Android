@@ -106,6 +106,16 @@ class UserRepository @Inject constructor(
         }
     }
 
+    suspend fun saveNotificationPermissionFirstLaunched(value: Boolean) {
+        userStorage.edit { preferences ->
+            preferences[NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY] = value
+        }
+    }
+
+    suspend fun fetchNotificationPermissionFirstLaunched(): Boolean {
+        return userStorage.data.first()[NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY] ?: true
+    }
+
     suspend fun fetchUserId(): Long {
         val preferences = userStorage.data.first()
         return preferences[USER_ID_KEY]?.toLongOrNull() ?: DEFAULT_USER_ID
@@ -113,11 +123,6 @@ class UserRepository @Inject constructor(
 
     suspend fun fetchIsLogin(): Boolean {
         return fetchUserId() != DEFAULT_USER_ID
-    }
-
-    suspend fun fetchNickname(): String {
-        val preferences = userStorage.data.first()
-        return preferences[USER_NICKNAME_KEY] ?: DEFAULT_USER_NICKNAME
     }
 
     suspend fun fetchGender(): String {
@@ -166,10 +171,11 @@ class UserRepository @Inject constructor(
 
     companion object {
         val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
+        val NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY =
+            booleanPreferencesKey("NOTIFICATION_PERMISSION_FIRST_LAUNCHED")
         val USER_ID_KEY = stringPreferencesKey("USER_ID")
         val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")
         val USER_GENDER_KEY = stringPreferencesKey("USER_GENDER")
-        const val DEFAULT_USER_NICKNAME = "웹소소"
         const val DEFAULT_USER_ID = -1L
         const val DEFAULT_USER_GENDER = "F"
     }
