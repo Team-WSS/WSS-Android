@@ -33,13 +33,13 @@ class NotificationDetailViewModel
             val notificationId =
                 savedStateHandle.get<Long>(NotificationDetailActivity.NOTIFICATION_DETAIL_KEY) ?: -1L
             if (notificationId != -1L) {
-                getNoticeDetail(notificationId)
+                getNotificationDetail(notificationId)
             } else {
                 handleInvalidNotificationId()
             }
         }
 
-        private fun getNoticeDetail(notificationId: Long) {
+        private fun getNotificationDetail(notificationId: Long) {
             viewModelScope.launch {
                 runCatching {
                     noticeRepository.fetchNotificationDetail(notificationId)
