@@ -1,5 +1,6 @@
 package com.into.websoso.ui.main.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.UserInterestFeedMessage
 import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
+import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.UserRepository
@@ -25,6 +27,7 @@ class HomeViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val feedRepository: FeedRepository,
     private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
     val uiState: LiveData<HomeUiState> get() = _uiState
@@ -188,6 +191,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateFCMToken(token: String) {
-        // TODO: 서버로 토큰 업데이트
+        viewModelScope.launch {
+            runCatching {
+                authRepository.saveFCMToken(token)
+            }.onSuccess {
+                Log.d("moongchi", "updateFCMToken: 업데이트 성공! $token")
+            }
+        }
     }
 }
