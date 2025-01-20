@@ -72,8 +72,8 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.noticeDetail.NoticeDetailActivity"
-            android:exported="false"
+            android:name=".ui.notificationDetail.NotificationDetailActivity"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.feedDetail.FeedDetailActivity"
