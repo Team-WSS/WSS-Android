@@ -6,13 +6,11 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
-
 
 class FirebaseMessagingService : FirebaseMessagingService() {
 
@@ -65,7 +63,6 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setContentIntent(pendingIntent)
 
         notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
