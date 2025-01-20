@@ -17,10 +17,11 @@ import com.into.websoso.ui.notificationDetail.model.NotificationDetailUiState
 fun NotificationDetailScreen(
     viewModel: NotificationDetailViewModel,
     onBackButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.notificationDetailUiState.collectAsStateWithLifecycle()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         NoticeAppBar(onBackButtonClick)
         NotificationDetailBody(
             uiState = uiState,
