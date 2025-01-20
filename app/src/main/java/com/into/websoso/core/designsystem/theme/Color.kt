@@ -33,3 +33,5 @@ val BgGradientGray = Brush.linearGradient(
     start = Offset(0f, 0f),
     end = Offset(0f, Float.POSITIVE_INFINITY),
 )
+
+val HyperlinkBlue = Color(0xFF0645AD)

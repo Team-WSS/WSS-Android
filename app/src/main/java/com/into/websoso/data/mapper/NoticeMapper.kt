@@ -1,7 +1,9 @@
 package com.into.websoso.data.mapper
 
+import com.into.websoso.data.model.NotificationDetailEntity
 import com.into.websoso.data.model.NotificationEntity
 import com.into.websoso.data.model.NotificationsEntity
+import com.into.websoso.data.remote.response.NotificationDetailResponseDto
 import com.into.websoso.data.remote.response.NotificationsResponseDto
 
 fun NotificationsResponseDto.toData(): NotificationsEntity =
@@ -19,4 +21,11 @@ fun NotificationsResponseDto.toData(): NotificationsEntity =
                 feedId = it.feedId,
             )
         },
+    )
+
+fun NotificationDetailResponseDto.toData(): NotificationDetailEntity =
+    NotificationDetailEntity(
+        notificationTitle = notificationTitle,
+        notificationCreatedDate = notificationCreatedDate,
+        notificationDetail = notificationDetail,
     )

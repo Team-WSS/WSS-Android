@@ -21,7 +21,7 @@ val PretendardRegular = FontFamily(Font(R.font.pretendard_regular, FontWeight.No
 
 @Stable
 class WebsosoTypography internal constructor(
-    headline: TextStyle,
+    headline1: TextStyle,
     title1: TextStyle,
     title2: TextStyle,
     title3: TextStyle,
@@ -35,7 +35,7 @@ class WebsosoTypography internal constructor(
     label1: TextStyle,
     label2: TextStyle,
 ) {
-    var headline: TextStyle by mutableStateOf(headline)
+    var headline1: TextStyle by mutableStateOf(headline1)
         private set
     var title1: TextStyle by mutableStateOf(title1)
         private set
@@ -63,7 +63,7 @@ class WebsosoTypography internal constructor(
         private set
 
     fun copy(
-        headline: TextStyle = this.headline,
+        headline1: TextStyle = this.headline1,
         title1: TextStyle = this.title1,
         title2: TextStyle = this.title2,
         title3: TextStyle = this.title3,
@@ -78,7 +78,7 @@ class WebsosoTypography internal constructor(
         label2: TextStyle = this.label2,
     ): WebsosoTypography =
         WebsosoTypography(
-            headline,
+            headline1,
             title1,
             title2,
             title3,
@@ -94,7 +94,7 @@ class WebsosoTypography internal constructor(
         )
 
     fun update(other: WebsosoTypography) {
-        headline = other.headline
+        headline1 = other.headline1
         title1 = other.title1
         title2 = other.title2
         title3 = other.title3
@@ -128,7 +128,7 @@ fun websosoTypography(): WebsosoTypography {
         )
 
     return WebsosoTypography(
-        headline = textStyle(PretendardBold, FontWeight.Bold, 20.dp, 28.dp),
+        headline1 = textStyle(PretendardBold, FontWeight.Bold, 20.dp, 28.dp),
         title1 = textStyle(PretendardBold, FontWeight.Bold, 18.dp, 25.dp),
         title2 = textStyle(PretendardSemiBold, FontWeight.SemiBold, 16.dp, 22.dp),
         title3 = textStyle(PretendardMedium, FontWeight.Medium, 14.dp, 14.dp),
