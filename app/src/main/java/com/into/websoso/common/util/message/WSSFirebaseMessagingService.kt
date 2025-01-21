@@ -9,6 +9,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.into.websoso.R
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
 
@@ -18,48 +19,66 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         val receivedData = message.data
-
         if (receivedData.isEmpty()) return
 
-        val title = receivedData["title"] ?: "웹소소"
-        val body = receivedData["body"] ?: "푸시 알림 메시지입니다"
-        val feedId = receivedData["feedId"] ?: ""
+        val title = receivedData["title"] ?: DEFAULT_TITLE
+        val body = receivedData["body"] ?: DEFAULT_BODY
+        val feedId = receivedData["feedId"]?.toLongOrNull() ?: return
 
-        val channelId = "웹소소"
+        setupNotificationChannel()
+        val pendingIntent = createPendingIntent(feedId)
+        showNotification(title, body, pendingIntent)
+    }
 
+    private fun setupNotificationChannel() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        val channelName = "Channel Name"
-        val channelDescription = "Channel Description"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(channelId, channelName, importance)
-        channel.description = channelDescription
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT,
+        ).apply {
+            description = CHANNEL_DESCRIPTION
+        }
         notificationManager.createNotificationChannel(channel)
+    }
 
+    private fun createPendingIntent(feedId: Long): PendingIntent {
         val mainIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         }
+        val detailIntent = FeedDetailActivity.getIntent(this, feedId)
 
-        val detailIntent = FeedDetailActivity.getIntent(this, feedId.toLong())
-
-        val pendingIntent = TaskStackBuilder.create(this).run {
+        return TaskStackBuilder.create(this).run {
             addNextIntent(mainIntent)
             addNextIntentWithParentStack(detailIntent)
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
+    }
 
-        val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(com.into.websoso.R.mipmap.ic_wss_logo)
+    private fun showNotification(title: String, body: String, pendingIntent: PendingIntent) {
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_wss_logo)
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
+            .build()
 
-        notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(System.currentTimeMillis().toInt(), notification)
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+    }
+
+    companion object {
+        private const val DEFAULT_TITLE = "웹소소"
+        private const val DEFAULT_BODY = "푸시 알림 메시지입니다"
+        private const val CHANNEL_ID = "websoso"
+        private const val CHANNEL_NAME = "웹소소"
+        private const val CHANNEL_DESCRIPTION = "웹소소 알림입니다."
     }
 }
