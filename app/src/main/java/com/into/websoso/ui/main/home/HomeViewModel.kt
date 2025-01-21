@@ -35,7 +35,11 @@ class HomeViewModel @Inject constructor(
     private val _isNotificationPermissionFirstLaunched: MutableLiveData<Boolean> = MutableLiveData()
     val isNotificationPermissionFirstLaunched: LiveData<Boolean> get() = _isNotificationPermissionFirstLaunched
 
-    fun updateHomeData(isLogin: Boolean) {
+    init {
+        updateHomeData(true)
+    }
+
+    private fun updateHomeData(isLogin: Boolean) {
         viewModelScope.launch {
             if (isLogin) {
                 fetchUserHomeData()
