@@ -112,9 +112,7 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchNotificationPermissionFirstLaunched(): Boolean {
-        return userStorage.data.first()[NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY] ?: true
-    }
+    suspend fun fetchNotificationPermissionFirstLaunched() = userStorage.data.first()[NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY] ?: true
 
     suspend fun fetchUserId(): Long {
         val preferences = userStorage.data.first()
