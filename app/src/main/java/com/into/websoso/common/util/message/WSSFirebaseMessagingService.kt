@@ -12,14 +12,18 @@ import com.google.firebase.messaging.RemoteMessage
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
 
-class FirebaseMessagingService : FirebaseMessagingService() {
+class WSSFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        val title = message.notification?.title ?: "웹소소"
-        val messageBody = message.notification?.body ?: "푸시 알림 메시지입니다"
-        val feedId = message.data["feedId"] ?: ""
+        val receivedData = message.data
+
+        if (receivedData.isEmpty()) return
+
+        val title = receivedData["title"] ?: "웹소소"
+        val body = receivedData["body"] ?: "푸시 알림 메시지입니다"
+        val feedId = receivedData["feedId"] ?: ""
 
         val channelId = "웹소소"
 
@@ -34,34 +38,21 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.createNotificationChannel(channel)
 
         val mainIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
-        val detailIntent = if (feedId.isNotEmpty()) {
-            FeedDetailActivity.getIntent(this, feedId.toLong())
-        } else {
-            null
-        }
+        val detailIntent = FeedDetailActivity.getIntent(this, feedId.toLong())
 
-        val pendingIntent = if (detailIntent != null) {
-            TaskStackBuilder.create(this).run {
-                addNextIntent(mainIntent)
-                addNextIntentWithParentStack(detailIntent)
-                getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
-            }
-        } else {
-            PendingIntent.getActivity(
-                this,
-                0,
-                mainIntent,
-                PendingIntent.FLAG_IMMUTABLE,
-            )
+        val pendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntent(mainIntent)
+            addNextIntentWithParentStack(detailIntent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(com.into.websoso.R.mipmap.ic_wss_logo)
             .setContentTitle(title)
-            .setContentText(messageBody)
+            .setContentText(body)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
