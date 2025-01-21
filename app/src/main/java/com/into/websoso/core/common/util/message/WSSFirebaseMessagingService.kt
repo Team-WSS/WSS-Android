@@ -1,4 +1,4 @@
-package com.into.websoso.common.util.message
+package com.into.websoso.core.common.util.message
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
