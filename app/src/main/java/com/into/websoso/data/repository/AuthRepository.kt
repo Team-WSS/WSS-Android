@@ -110,7 +110,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun saveFCMToken(fcmToken: String) {
         authApi.postFCMToken(
-            authorization = accessToken,
+            authorization = "Bearer $accessToken",
             FCMTokenRequestDto(fcmToken = fcmToken),
         )
     }
