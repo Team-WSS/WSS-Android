@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
-import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -43,9 +42,7 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun createPendingIntent(feedId: Long): PendingIntent {
-        val mainIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        }
+        val mainIntent = MainActivity.getIntent(this)
         val detailIntent = FeedDetailActivity.getIntent(this, feedId)
 
         return TaskStackBuilder.create(this).run {
