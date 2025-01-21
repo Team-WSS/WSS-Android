@@ -14,7 +14,6 @@ import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
 
 class WSSFirebaseMessagingService : FirebaseMessagingService() {
-
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
@@ -56,8 +55,13 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun showNotification(title: String, body: String, pendingIntent: PendingIntent) {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+    private fun showNotification(
+        title: String,
+        body: String,
+        pendingIntent: PendingIntent,
+    ) {
+        val notification = NotificationCompat
+            .Builder(this, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_wss_logo)
             .setContentTitle(title)
             .setContentText(body)

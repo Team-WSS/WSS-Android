@@ -136,9 +136,8 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchNovelDetailFirstLaunched(): Boolean {
-        return userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
-    }
+    suspend fun fetchNovelDetailFirstLaunched() =
+        userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
 
     suspend fun fetchNicknameValidity(nickname: String): Boolean {
         return userApi.getNicknameValidity(nickname).isValid
