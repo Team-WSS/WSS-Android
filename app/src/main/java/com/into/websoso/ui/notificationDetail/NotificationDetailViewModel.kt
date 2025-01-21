@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class NotificationDetailViewModel
     ) : ViewModel() {
         private val _notificationDetailUiState: MutableStateFlow<NotificationDetailUiState> =
             MutableStateFlow(NotificationDetailUiState())
-        val notificationDetailUiState: StateFlow<NotificationDetailUiState> = _notificationDetailUiState
+        val notificationDetailUiState: StateFlow<NotificationDetailUiState> = _notificationDetailUiState.asStateFlow()
 
         // TODO: 에러처리 회의 종료 후 반영 필요
         private val _errorFlow = MutableSharedFlow<Throwable>()
@@ -31,8 +32,8 @@ class NotificationDetailViewModel
 
         init {
             val notificationId =
-                savedStateHandle.get<Long>(NotificationDetailActivity.NOTIFICATION_DETAIL_KEY) ?: -1L
-            if (notificationId != -1L) {
+                savedStateHandle.get<Long>(NotificationDetailActivity.NOTIFICATION_DETAIL_KEY) ?: DEFAULT_NOTIFICATION_ID
+            if (notificationId != DEFAULT_NOTIFICATION_ID) {
                 getNotificationDetail(notificationId)
             } else {
                 handleInvalidNotificationId()
@@ -59,5 +60,9 @@ class NotificationDetailViewModel
             viewModelScope.launch {
                 _errorFlow.emit(IllegalArgumentException("Invalid notification ID"))
             }
+        }
+
+        companion object {
+            private const val DEFAULT_NOTIFICATION_ID = -1L
         }
     }
