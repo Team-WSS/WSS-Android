@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.LoginEntity
 import com.into.websoso.data.remote.api.AuthApi
+import com.into.websoso.data.remote.request.FCMTokenRequestDto
 import com.into.websoso.data.remote.request.LogoutRequestDto
 import com.into.websoso.data.remote.request.TokenReissueRequestDto
 import com.into.websoso.data.remote.request.UserProfileRequestDto
@@ -47,7 +48,7 @@ class AuthRepository @Inject constructor(
     ) {
         authApi.postUserProfile(
             "Bearer $authorization",
-            UserProfileRequestDto(nickname, gender, birth, genrePreferences)
+            UserProfileRequestDto(nickname, gender, birth, genrePreferences),
         )
     }
 
@@ -105,6 +106,13 @@ class AuthRepository @Inject constructor(
 
     fun updateIsAutoLogin(isAutoLogin: Boolean) {
         this.isAutoLogin = isAutoLogin
+    }
+
+    suspend fun saveFCMToken(fcmToken: String) {
+        authApi.postFCMToken(
+            authorization = "Bearer $accessToken",
+            FCMTokenRequestDto(fcmToken = fcmToken),
+        )
     }
 
     companion object {

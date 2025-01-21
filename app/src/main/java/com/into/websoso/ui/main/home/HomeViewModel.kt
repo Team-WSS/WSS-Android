@@ -1,5 +1,6 @@
 package com.into.websoso.ui.main.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +11,10 @@ import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.UserInterestFeedMessage
 import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
+import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NovelRepository
+import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -23,15 +26,24 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val novelRepository: NovelRepository,
     private val feedRepository: FeedRepository,
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
-
     private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
     val uiState: LiveData<HomeUiState> get() = _uiState
 
-    fun updateHomeData(isLogin: Boolean) {
+    private val _isNotificationPermissionFirstLaunched: MutableLiveData<Boolean> = MutableLiveData()
+    val isNotificationPermissionFirstLaunched: LiveData<Boolean> get() = _isNotificationPermissionFirstLaunched
+
+    init {
+        updateHomeData(true)
+    }
+
+    private fun updateHomeData(isLogin: Boolean) {
         viewModelScope.launch {
             if (isLogin) {
                 fetchUserHomeData()
+                checkIsNotificationPermissionFirstLaunched()
             } else {
                 fetchGuestData()
             }
@@ -45,7 +57,7 @@ class HomeViewModel @Inject constructor(
                     async { runCatching { novelRepository.fetchPopularNovels() } },
                     async { runCatching { feedRepository.fetchPopularFeeds() } },
                     async { runCatching { feedRepository.fetchUserInterestFeeds() } },
-                    async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
+                    async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } },
                 ).awaitAll()
 
                 // 실패가 하나라도 있다면 상위 onFailure로 예외 전파
@@ -72,7 +84,7 @@ class HomeViewModel @Inject constructor(
                     popularFeeds = popularFeeds.popularFeeds.chunked(3),
                     isInterestNovel = isUserInterestedInNovels(userInterestFeeds.message),
                     userInterestFeeds = userInterestFeeds.userInterestFeeds,
-                    recommendedNovelsByUserTaste = recommendedNovels.tasteNovels
+                    recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
@@ -83,12 +95,32 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun checkIsNotificationPermissionFirstLaunched() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchNotificationPermissionFirstLaunched()
+            }.onSuccess { isFirstLaunched ->
+                _isNotificationPermissionFirstLaunched.value = isFirstLaunched
+            }
+        }
+    }
+
+    fun updateIsNotificationPermissionFirstLaunched(isFirstLaunched: Boolean) {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.saveNotificationPermissionFirstLaunched(isFirstLaunched)
+            }.onSuccess {
+                _isNotificationPermissionFirstLaunched.value = isFirstLaunched
+            }
+        }
+    }
+
     private suspend fun fetchGuestData() {
         viewModelScope.launch {
             runCatching {
                 listOf(
                     async { novelRepository.fetchPopularNovels() },
-                    async { feedRepository.fetchPopularFeeds() }
+                    async { feedRepository.fetchPopularFeeds() },
                 ).awaitAll()
             }.onSuccess { responses ->
                 val popularNovels = responses[0] as PopularNovelsEntity
@@ -113,7 +145,7 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 listOf(
                     async { feedRepository.fetchPopularFeeds() },
-                    async { feedRepository.fetchUserInterestFeeds() }
+                    async { feedRepository.fetchUserInterestFeeds() },
                 ).awaitAll()
             }.onSuccess { responses ->
                 val popularFeeds = responses[0] as PopularFeedsEntity
@@ -122,7 +154,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = uiState.value?.copy(
                     popularFeeds = popularFeeds.popularFeeds.chunked(3),
                     isInterestNovel = isUserInterestedInNovels(userInterestFeeds.message),
-                    userInterestFeeds = userInterestFeeds.userInterestFeeds
+                    userInterestFeeds = userInterestFeeds.userInterestFeeds,
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
@@ -137,7 +169,7 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 listOf(
                     async { novelRepository.fetchPopularNovels() },
-                    async { novelRepository.fetchRecommendedNovelsByUserTaste() }
+                    async { novelRepository.fetchRecommendedNovelsByUserTaste() },
                 ).awaitAll()
             }.onSuccess { responses ->
                 val popularNovels = responses[0] as PopularNovelsEntity
@@ -145,7 +177,7 @@ class HomeViewModel @Inject constructor(
 
                 _uiState.value = uiState.value?.copy(
                     popularNovels = popularNovels.popularNovels,
-                    recommendedNovelsByUserTaste = recommendedNovels.tasteNovels
+                    recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                 )
             }.onFailure {
                 _uiState.value = uiState.value?.copy(
@@ -159,6 +191,16 @@ class HomeViewModel @Inject constructor(
         return when (UserInterestFeedMessage.fromMessage(userInterestFeedMessage)) {
             NO_INTEREST_NOVELS -> false
             else -> true
+        }
+    }
+
+    fun updateFCMToken(token: String) {
+        viewModelScope.launch {
+            runCatching {
+                authRepository.saveFCMToken(token)
+            }.onSuccess {
+                Log.d("moongchi", "updateFCMToken: 업데이트 성공! $token")
+            }
         }
     }
 }
