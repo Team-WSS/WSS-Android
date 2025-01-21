@@ -21,7 +21,7 @@ import com.into.websoso.data.model.NotificationDetailEntity
 import com.into.websoso.ui.notificationDetail.model.NotificationDetailUiState
 
 @Composable
-fun NotificationDetailBody(
+fun NotificationDetailContent(
     uiState: NotificationDetailUiState,
     modifier: Modifier = Modifier,
 ) {
@@ -68,7 +68,7 @@ fun NotificationDetailBodyPreview() {
     )
 
     WebsosoTheme {
-        NotificationDetailBody(
+        NotificationDetailContent(
             uiState,
         )
     }

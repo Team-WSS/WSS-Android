@@ -10,7 +10,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.data.model.NotificationDetailEntity
 import com.into.websoso.ui.notice.component.NoticeAppBar
-import com.into.websoso.ui.notificationDetail.component.NotificationDetailBody
+import com.into.websoso.ui.notificationDetail.component.NotificationDetailContent
 import com.into.websoso.ui.notificationDetail.model.NotificationDetailUiState
 
 @Composable
@@ -23,7 +23,7 @@ fun NotificationDetailScreen(
 
     Column(modifier = modifier.fillMaxSize()) {
         NoticeAppBar(onBackButtonClick)
-        NotificationDetailBody(
+        NotificationDetailContent(
             uiState = uiState,
         )
     }
@@ -39,7 +39,7 @@ fun NotificationDetailScreenPreview() {
     WebsosoTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             NoticeAppBar(onBackButtonClick = {})
-            NotificationDetailBody(
+            NotificationDetailContent(
                 uiState,
             )
         }
