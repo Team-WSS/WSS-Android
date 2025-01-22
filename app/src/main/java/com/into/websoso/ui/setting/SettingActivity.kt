@@ -72,6 +72,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 startActivityLauncher.launch(intent)
             }
 
+            override fun onNotificiationSettingButtonClick() {
+                // TODO: 권한 확인 로직 추가 및 알림 뷰 이동
+            }
+
             override fun onWebsosoOfficialButtonClick() {
                 val officialUrl = getString(websoso_official)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(officialUrl))
