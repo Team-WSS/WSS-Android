@@ -1,4 +1,4 @@
-package com.into.websoso.core.common.ui.component
+package com.into.websoso.ui.notificationDetail.component
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
