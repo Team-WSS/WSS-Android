@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="notificationSettingViewModel"
+            type="com.into.websoso.ui.notificationSetting.NotificationSettingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/notification_setting_button_title"
-                android:textAppearance="@style/body1"
+                android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -74,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="@string/notification_setting_description"
-                android:textAppearance="@style/body4"
+                android:textAppearance="@style/body3"
                 android:textColor="@color/gray_200_AEADB3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_notification_setting_button_title"
@@ -85,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:checked="@{notificationSettingViewModel.isNotificationEnabled}"
                 android:thumb="@drawable/bg_create_feed_toggle_thumb"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
