@@ -1,10 +1,13 @@
 package com.into.websoso.ui.main.home
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.firebase.messaging.FirebaseMessaging
 import com.into.websoso.R
 import com.into.websoso.R.string.home_nickname_interest_feed
 import com.into.websoso.core.common.ui.base.BaseFragment
@@ -69,6 +72,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            getFCMToken()
+        }
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -112,15 +120,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun setupObserver() {
-        mainViewModel.isLogin.observe(viewLifecycleOwner) { isLogin ->
-            homeViewModel.updateHomeData(isLogin = isLogin)
-
-            if (isLogin.not()) {
-                binding.tvHomeInterestFeed.text =
-                    getString(R.string.home_interest_feed_text)
-            }
-        }
-
         mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
             binding.tvHomeInterestFeed.text =
                 getString(home_nickname_interest_feed, uiState.nickname)
@@ -149,6 +148,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     }
                 }
             }
+        }
+
+        homeViewModel.isNotificationPermissionFirstLaunched.observe(viewLifecycleOwner) { isFirstLaunch ->
+            if (isFirstLaunch) showNotificationPermissionDialog()
         }
     }
 
@@ -186,6 +189,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             } else {
                 clHomeUserRecommendNovel.visibility = View.VISIBLE
                 clHomeRecommendNovel.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun showNotificationPermissionDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
+            return
+        }
+        getFCMToken()
+        homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
+    }
+
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            val token = task.result
+
+            if (task.isSuccessful) {
+                homeViewModel.updateFCMToken(token)
             }
         }
     }

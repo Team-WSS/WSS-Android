@@ -1,6 +1,7 @@
 package com.into.websoso.data.repository
 
 import com.into.websoso.data.mapper.toData
+import com.into.websoso.data.model.NotificationDetailEntity
 import com.into.websoso.data.model.NotificationsEntity
 import com.into.websoso.data.remote.api.NoticeApi
 import javax.inject.Inject
@@ -14,6 +15,9 @@ class NoticeRepository
             lastNotificationId: Long,
             size: Int,
         ): NotificationsEntity = noticeApi.getNotices(lastNotificationId, size).toData()
+
+        suspend fun fetchNotificationDetail(notificationId: Long): NotificationDetailEntity =
+            noticeApi.getNotificationDetail(notificationId).toData()
 
         suspend fun fetchNoticeUnread(): Boolean = noticeApi.getNoticeUnread().hasUnreadNotifications
     }
