@@ -1,4 +1,4 @@
-package com.into.websoso.ui.notice
+package com.into.websoso.ui.notification
 
 import android.content.Context
 import android.content.Intent
@@ -7,23 +7,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.domain.model.Notice
+import com.into.websoso.domain.model.Notification
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.notificationDetail.NotificationDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NoticeActivity : ComponentActivity() {
-    private val noticeViewModel: NoticeViewModel by viewModels()
+class NotificationActivity : ComponentActivity() {
+    private val notificationViewModel: NotificationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             WebsosoTheme {
-                NoticeScreen(
-                    viewModel = noticeViewModel,
-                    onNoticeDetailClick = ::navigateToNotificationDetail,
+                NotificationScreen(
+                    viewModel = notificationViewModel,
+                    onNotificationDetailClick = ::navigateToNotificationDetail,
                     onFeedDetailClick = ::navigateToFeedDetail,
                     onBackButtonClick = { finish() },
                 )
@@ -31,17 +31,17 @@ class NoticeActivity : ComponentActivity() {
         }
     }
 
-    private fun navigateToNotificationDetail(notification: Notice) {
-        noticeViewModel.updateReadNotice(notification.id)
+    private fun navigateToNotificationDetail(notification: Notification) {
+        notificationViewModel.updateReadNotification(notification.id)
         startActivity(NotificationDetailActivity.getIntent(this, notification.intrinsicId))
     }
 
-    private fun navigateToFeedDetail(notice: Notice) {
-        noticeViewModel.updateReadNotice(notice.id)
-        startActivity(FeedDetailActivity.getIntent(this, notice.intrinsicId))
+    private fun navigateToFeedDetail(notification: Notification) {
+        notificationViewModel.updateReadNotification(notification.id)
+        startActivity(FeedDetailActivity.getIntent(this, notification.intrinsicId))
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, NoticeActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, NotificationActivity::class.java)
     }
 }

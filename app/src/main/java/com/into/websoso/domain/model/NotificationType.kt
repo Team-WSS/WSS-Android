@@ -1,13 +1,13 @@
 package com.into.websoso.domain.model
 
-enum class NoticeType {
+enum class NotificationType {
     NOTICE,
     FEED,
     NONE,
     ;
 
     companion object {
-        fun from(value: String): NoticeType =
+        fun from(value: String): NotificationType =
             when (value) {
                 "NOTICE" -> NOTICE
                 "FEED" -> FEED

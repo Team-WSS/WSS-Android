@@ -18,8 +18,8 @@ data class NotificationsResponseDto(
         val notificationImage: String,
         @SerialName("notificationTitle")
         val notificationTitle: String,
-        @SerialName("notificationDescription")
-        val notificationDescription: String,
+        @SerialName("notificationBody")
+        val notificationBody: String,
         @SerialName("createdDate")
         val createdDate: String,
         @SerialName("isRead")
