@@ -196,9 +196,9 @@ class HomeViewModel
             viewModelScope.launch {
                 runCatching {
                     notificationRepository.fetchNotificationUnread()
-                }.onSuccess {
+                }.onSuccess { isNotificationUnread ->
                     _uiState.value = uiState.value?.copy(
-                        isNotificationUnread = it,
+                        isNotificationUnread = isNotificationUnread,
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(
