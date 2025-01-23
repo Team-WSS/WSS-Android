@@ -198,11 +198,8 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         }
 
     private fun onStorageButtonClick() {
-        binding.clMyLibraryTopBar.setOnClickListener {
-            navigateToStorageActivity(StorageTab.INTEREST.readStatus)
-        }
-
         val tabClickMappings = mapOf(
+            binding.clMyLibraryTopBar to StorageTab.INTEREST.readStatus,
             binding.llMyLibraryStorageInteresting to StorageTab.INTEREST.readStatus,
             binding.llMyLibraryStorageWatching to StorageTab.WATCHING.readStatus,
             binding.llMyLibraryStorageWatched to StorageTab.WATCHED.readStatus,
@@ -219,13 +216,14 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     }
 
     private fun navigateToStorageActivity(readStatus: String) {
-        val intent = UserStorageActivity.getIntent(
-            context = requireContext(),
-            source = UserStorageActivity.SOURCE_MY_LIBRARY,
-            userId = myLibraryViewModel.userId,
-            readStatus = readStatus,
+        userStorageResultLauncher.launch(
+            UserStorageActivity.getIntent(
+                context = requireContext(),
+                source = UserStorageActivity.SOURCE_MY_LIBRARY,
+                userId = myLibraryViewModel.userId,
+                readStatus = readStatus,
+            ),
         )
-        userStorageResultLauncher.launch(intent)
     }
 
     private fun updateDominantGenres(topGenres: List<GenrePreferenceEntity>) {
