@@ -17,7 +17,7 @@ fun NotificationsResponseDto.toData(): NotificationsEntity =
                 notificationBody = it.notificationBody,
                 createdDate = it.createdDate,
                 isRead = it.isRead,
-                isNotification = it.isNotification,
+                isNotice = it.isNotice,
                 feedId = it.feedId,
             )
         },

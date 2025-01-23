@@ -10,20 +10,20 @@ data class NotificationEntity(
     val notificationBody: String,
     val createdDate: String,
     val isRead: Boolean,
-    val isNotification: Boolean,
+    val isNotice: Boolean,
     val feedId: Long?,
 ) {
     fun getNotificationType(): NotificationType =
         NotificationType.from(
             when {
-                isNotification -> "NOTICE"
+                isNotice -> "NOTICE"
                 else -> "FEED"
             },
         )
 
     fun getIntrinsicId(): Long =
         when {
-            isNotification -> notificationId
+            isNotice -> notificationId
             feedId != null -> feedId
             else -> GetNotificationListUseCase.DEFAULT_INTRINSIC_ID
         }

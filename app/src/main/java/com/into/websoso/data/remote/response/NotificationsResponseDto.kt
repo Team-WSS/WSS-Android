@@ -24,8 +24,8 @@ data class NotificationsResponseDto(
         val createdDate: String,
         @SerialName("isRead")
         val isRead: Boolean,
-        @SerialName("isNotification")
-        val isNotification: Boolean,
+        @SerialName("isNotice")
+        val isNotice: Boolean,
         @SerialName("feedId")
         val feedId: Long?,
     )
