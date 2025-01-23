@@ -18,14 +18,14 @@ data class NotificationsResponseDto(
         val notificationImage: String,
         @SerialName("notificationTitle")
         val notificationTitle: String,
-        @SerialName("notificationDescription")
-        val notificationDescription: String,
+        @SerialName("notificationBody")
+        val notificationBody: String,
         @SerialName("createdDate")
         val createdDate: String,
         @SerialName("isRead")
         val isRead: Boolean,
-        @SerialName("isNotice")
-        val isNotice: Boolean,
+        @SerialName("isNotification")
+        val isNotification: Boolean,
         @SerialName("feedId")
         val feedId: Long?,
     )

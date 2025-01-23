@@ -13,7 +13,7 @@ import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
 import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.data.repository.FeedRepository
-import com.into.websoso.data.repository.NoticeRepository
+import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.home.model.HomeUiState
@@ -31,7 +31,7 @@ class HomeViewModel
         private val feedRepository: FeedRepository,
         private val userRepository: UserRepository,
         private val authRepository: AuthRepository,
-        private val noticeRepository: NoticeRepository,
+        private val notificationRepository: NotificationRepository,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
         val uiState: LiveData<HomeUiState> get() = _uiState
@@ -41,7 +41,7 @@ class HomeViewModel
 
         init {
             updateHomeData(true)
-            updateNoticeUnread()
+            updateNotificationUnread()
         }
 
         private fun updateHomeData(isLogin: Boolean) {
@@ -192,13 +192,13 @@ class HomeViewModel
             }
         }
 
-        private fun updateNoticeUnread() {
+        private fun updateNotificationUnread() {
             viewModelScope.launch {
                 runCatching {
-                    noticeRepository.fetchNoticeUnread()
+                    notificationRepository.fetchNotificationUnread()
                 }.onSuccess {
                     _uiState.value = uiState.value?.copy(
-                        isNoticeUnread = it,
+                        isNotificationUnread = it,
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(

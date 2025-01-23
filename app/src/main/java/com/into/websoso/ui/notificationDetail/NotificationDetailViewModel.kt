@@ -3,7 +3,7 @@ package com.into.websoso.ui.notificationDetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.repository.NoticeRepository
+import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.ui.notificationDetail.model.NotificationDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class NotificationDetailViewModel
     @Inject
     constructor(
-        private val noticeRepository: NoticeRepository,
+        private val notificationRepository: NotificationRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _notificationDetailUiState: MutableStateFlow<NotificationDetailUiState> =
@@ -43,11 +43,11 @@ class NotificationDetailViewModel
         private fun getNotificationDetail(notificationId: Long) {
             viewModelScope.launch {
                 runCatching {
-                    noticeRepository.fetchNotificationDetail(notificationId)
-                }.onSuccess { noticeDetail ->
+                    notificationRepository.fetchNotificationDetail(notificationId)
+                }.onSuccess { notificationDetail ->
                     _notificationDetailUiState.update { uiState ->
                         uiState.copy(
-                            noticeDetail = noticeDetail,
+                            notificationDetail = notificationDetail,
                         )
                     }
                 }.onFailure { throwable ->

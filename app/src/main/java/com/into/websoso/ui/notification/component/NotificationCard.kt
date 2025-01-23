@@ -1,4 +1,4 @@
-package com.into.websoso.ui.notice.component
+package com.into.websoso.ui.notification.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,23 +20,23 @@ import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Primary20
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
-import com.into.websoso.domain.model.Notice
-import com.into.websoso.domain.model.NoticeType
+import com.into.websoso.domain.model.Notification
+import com.into.websoso.domain.model.NotificationType
 
 @Composable
-fun NoticeCard(
-    notice: Notice,
+fun NotificationCard(
+    notification: Notification,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
-            .background(if (notice.isRead) White else Primary20)
+            .background(if (notification.isRead) White else Primary20)
             .padding(20.dp)
             .fillMaxWidth()
             .wrapContentHeight(),
     ) {
         AdaptationImage(
-            imageUrl = notice.noticeIconImage,
+            imageUrl = notification.notificationIconImage,
             modifier = Modifier
                 .size(36.dp)
                 .clip(shape = RoundedCornerShape(12.dp)),
@@ -45,19 +45,19 @@ fun NoticeCard(
             modifier = Modifier.padding(start = 14.dp),
         ) {
             Text(
-                text = notice.noticeTitle,
+                text = notification.notificationTitle,
                 style = WebsosoTheme.typography.title2,
                 color = Black,
             )
             Text(
-                text = notice.noticeDescription,
+                text = notification.notificationDescription,
                 style = WebsosoTheme.typography.body5,
                 color = Gray200,
                 modifier = Modifier
                     .padding(top = 2.dp),
             )
             Text(
-                text = notice.createdDate,
+                text = notification.createdDate,
                 style = WebsosoTheme.typography.body5,
                 color = Gray200,
                 modifier = Modifier
@@ -69,15 +69,15 @@ fun NoticeCard(
 
 @Preview
 @Composable
-private fun NoticeCardPreview() {
+private fun NotificationCardPreview() {
     WebsosoTheme {
-        NoticeCard(
-            notice = Notice(
+        NotificationCard(
+            notification = Notification(
                 id = 0,
-                noticeType = NoticeType.NOTICE,
-                noticeTitle = "Notice Title",
-                noticeDescription = "Notice Description",
-                noticeIconImage = "",
+                notificationType = NotificationType.NOTICE,
+                notificationTitle = "Notification Title",
+                notificationDescription = "Notification Description",
+                notificationIconImage = "",
                 createdDate = "2021-01-01",
                 isRead = false,
                 intrinsicId = 0,

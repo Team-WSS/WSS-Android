@@ -14,10 +14,10 @@ fun NotificationsResponseDto.toData(): NotificationsEntity =
                 notificationId = it.notificationId,
                 notificationImage = it.notificationImage,
                 notificationTitle = it.notificationTitle,
-                notificationDescription = it.notificationDescription,
+                notificationBody = it.notificationBody,
                 createdDate = it.createdDate,
                 isRead = it.isRead,
-                isNotice = it.isNotice,
+                isNotification = it.isNotification,
                 feedId = it.feedId,
             )
         },

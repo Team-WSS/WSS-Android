@@ -7,9 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface NoticeApi {
+interface NotificationApi {
     @GET("notifications")
-    suspend fun getNotices(
+    suspend fun getNotifications(
         @Query("lastNotificationId") lastNotificationId: Long,
         @Query("size") size: Int,
     ): NotificationsResponseDto
@@ -20,5 +20,5 @@ interface NoticeApi {
     ): NotificationDetailResponseDto
 
     @GET("notifications/unread")
-    suspend fun getNoticeUnread(): NotificationUnreadResponseDto
+    suspend fun getNotificationUnread(): NotificationUnreadResponseDto
 }

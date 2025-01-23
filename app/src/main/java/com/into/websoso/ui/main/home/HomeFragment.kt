@@ -25,7 +25,7 @@ import com.into.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.into.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.into.websoso.ui.main.home.adpater.UserInterestFeedAdapter
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
-import com.into.websoso.ui.notice.NoticeActivity
+import com.into.websoso.ui.notification.NotificationActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.profileEdit.ProfileEditActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,7 +90,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         setupDotsIndicator()
         onPostInterestNovelClick()
         onSettingPreferenceGenreClick()
-        onNoticeButtonClick()
+        onNotificationButtonClick()
         tracker.trackEvent("home")
     }
 
@@ -143,7 +143,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
-                            binding.ivHomeNotice.isSelected = uiState.isNoticeUnread
+                            binding.ivHomeNotification.isSelected = uiState.isNotificationUnread
                         }
                     }
                 }
@@ -277,9 +277,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun onNoticeButtonClick() {
-        binding.ivHomeNotice.setOnClickListener {
-            startActivity(NoticeActivity.getIntent(requireContext()))
+    private fun onNotificationButtonClick() {
+        binding.ivHomeNotification.setOnClickListener {
+            startActivity(NotificationActivity.getIntent(requireContext()))
         }
     }
 

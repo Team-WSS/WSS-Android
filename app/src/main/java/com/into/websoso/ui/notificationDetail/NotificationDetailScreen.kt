@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.data.model.NotificationDetailEntity
-import com.into.websoso.ui.notice.component.NoticeAppBar
+import com.into.websoso.ui.notification.component.NotificationAppBar
 import com.into.websoso.ui.notificationDetail.component.NotificationDetailContent
 import com.into.websoso.ui.notificationDetail.model.NotificationDetailUiState
 
@@ -22,7 +22,7 @@ fun NotificationDetailScreen(
     val uiState by viewModel.notificationDetailUiState.collectAsStateWithLifecycle()
 
     Column(modifier = modifier.fillMaxSize()) {
-        NoticeAppBar(onBackButtonClick)
+        NotificationAppBar(onBackButtonClick)
         NotificationDetailContent(
             uiState = uiState,
         )
@@ -33,12 +33,12 @@ fun NotificationDetailScreen(
 @Composable
 fun NotificationDetailScreenPreview() {
     val uiState = NotificationDetailUiState(
-        noticeDetail = NotificationDetailEntity.DEFAULT,
+        notificationDetail = NotificationDetailEntity.DEFAULT,
     )
 
     WebsosoTheme {
         Column(modifier = Modifier.fillMaxSize()) {
-            NoticeAppBar(onBackButtonClick = {})
+            NotificationAppBar(onBackButtonClick = {})
             NotificationDetailContent(
                 uiState,
             )

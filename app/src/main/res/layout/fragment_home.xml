@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_home_notice"
+            android:id="@+id/iv_home_notification"
             android:layout_width="28dp"
             android:layout_height="0dp"
             android:layout_marginEnd="20dp"

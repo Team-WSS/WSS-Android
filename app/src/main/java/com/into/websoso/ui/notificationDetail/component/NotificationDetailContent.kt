@@ -33,14 +33,14 @@ fun NotificationDetailContent(
                 .padding(20.dp),
         ) {
             Text(
-                text = uiState.noticeDetail.notificationTitle,
+                text = uiState.notificationDetail.notificationTitle,
                 style = WebsosoTheme.typography.headline1,
                 color = Black,
                 textAlign = TextAlign.Start,
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = uiState.noticeDetail.notificationCreatedDate,
+                text = uiState.notificationDetail.notificationCreatedDate,
                 style = WebsosoTheme.typography.body5,
                 color = Gray200,
                 textAlign = TextAlign.Start,
@@ -48,7 +48,7 @@ fun NotificationDetailContent(
         }
         HorizontalDivider(thickness = 1.dp, color = Gray50)
         HyperlinkText(
-            uiState.noticeDetail.notificationDetail,
+            uiState.notificationDetail.notificationDetail,
             style =
                 WebsosoTheme.typography.body2,
             textColor = Black,
@@ -63,7 +63,7 @@ fun NotificationDetailContent(
 @Composable
 fun NotificationDetailBodyPreview() {
     val uiState = NotificationDetailUiState(
-        noticeDetail = NotificationDetailEntity.DEFAULT,
+        notificationDetail = NotificationDetailEntity.DEFAULT,
     )
 
     WebsosoTheme {
