@@ -91,10 +91,12 @@ class AuthRepository @Inject constructor(
             refreshToken = response.refreshToken
             response.authorization
         }.getOrElse {
+
             it.printStackTrace()
             null
         }
     }
+
 
     fun updateAccessToken(accessToken: String) {
         this.accessToken = accessToken
