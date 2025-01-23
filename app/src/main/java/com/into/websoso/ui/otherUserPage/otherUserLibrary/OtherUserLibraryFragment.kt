@@ -210,13 +210,13 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
         clickMappings.forEach { (view, readStatus) ->
             view.setOnClickListener {
                 singleEventHandler.throttleFirst {
-                    startUserStorageActivity(userId, readStatus)
+                    navigateToUserStorageActivity(userId, readStatus)
                 }
             }
         }
     }
 
-    private fun startUserStorageActivity(userId: Long, readStatus: String) {
+    private fun navigateToUserStorageActivity(userId: Long, readStatus: String) {
         startActivity(
             UserStorageActivity.getIntent(
                 context = requireContext(),

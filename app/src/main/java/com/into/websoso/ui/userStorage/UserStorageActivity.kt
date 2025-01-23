@@ -74,7 +74,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         binding.vpStorage.adapter = userStorageAdapter
     }
 
-    private fun setupInitialReadStatusTab(){
+    private fun setupInitialReadStatusTab() {
         val readStatus = intent.getStringExtra(READ_STATUS) ?: StorageTab.INTEREST.readStatus
         userStorageViewModel.updateReadStatus(readStatus, forceLoad = true)
 
