@@ -32,11 +32,12 @@ class UserStorageViewModel @Inject constructor(
     fun updateUserStorage(
         source: String,
         receivedUserId: Long,
+        readStatus: String = StorageTab.INTEREST.readStatus,
     ) {
         this.source = source
         this.userId = receivedUserId
 
-        updateReadStatus(StorageTab.INTEREST.readStatus, forceLoad = true)
+        updateReadStatus(readStatus, forceLoad = true)
     }
 
     fun updateRatingChanged() {
