@@ -293,6 +293,12 @@
     <string name="notification_setting_button_title">활동 알림</string>
     <string name="notification_setting_description">댓글, 좋아요 등 알림</string>
 
+    <!-- 알림 설정 다이얼로그 뷰 -->
+    <string name="notification_permission_title">앱 알림을 켤까요?</string>
+    <string name="notification_permission_description">웹소소 알림을 받으려면,\n기기 설정에서 알림 허용이 필요해요.</string>
+    <string name="notification_permission_next_time">다음에 하기</string>
+    <string name="notification_permission_to_set_up">설정하러 가기</string>
+
     <!-- 로그아웃 다이얼로그 뷰 -->
     <string name="logout_title">로그아웃 할까요?</string>
     <string name="logout_cancel">취소</string>

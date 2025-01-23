@@ -8,7 +8,9 @@ import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.ActivityNotificationSettingBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NotificationSettingActivity :
     BaseActivity<ActivityNotificationSettingBinding>(R.layout.activity_notification_setting) {
     private val notificationSettingViewModel: NotificationSettingViewModel by viewModels()
