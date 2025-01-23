@@ -18,7 +18,7 @@ android {
         applicationId = "com.into.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = 9
+        versionCode = 10011
         versionName = "1.0.9"
 
         buildConfigField(
