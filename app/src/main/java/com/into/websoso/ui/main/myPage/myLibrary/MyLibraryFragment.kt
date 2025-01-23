@@ -24,6 +24,7 @@ import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyLibraryBinding
 import com.into.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import com.into.websoso.ui.userStorage.UserStorageActivity
+import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -197,27 +198,34 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         }
 
     private fun onStorageButtonClick() {
-        binding.ivMyLibraryGoToStorage.setOnClickListener {
-            singleEventHandler.throttleFirst {
-                val intent = UserStorageActivity.getIntent(
-                    context = requireContext(),
-                    source = UserStorageActivity.SOURCE_MY_LIBRARY,
-                    userId = myLibraryViewModel.userId,
-                )
-                userStorageResultLauncher.launch(intent)
-            }
+        binding.clMyLibraryTopBar.setOnClickListener {
+            navigateToStorageActivity(StorageTab.INTEREST.readStatus)
         }
 
-        binding.llMyLibraryStorage.setOnClickListener {
-            singleEventHandler.throttleFirst {
-                val intent = UserStorageActivity.getIntent(
-                    context = requireContext(),
-                    source = UserStorageActivity.SOURCE_MY_LIBRARY,
-                    userId = myLibraryViewModel.userId,
-                )
-                userStorageResultLauncher.launch(intent)
+        val tabClickMappings = mapOf(
+            binding.llMyLibraryStorageInteresting to StorageTab.INTEREST.readStatus,
+            binding.llMyLibraryStorageWatching to StorageTab.WATCHING.readStatus,
+            binding.llMyLibraryStorageWatched to StorageTab.WATCHED.readStatus,
+            binding.llMyLibraryStorageQuit to StorageTab.QUIT.readStatus,
+        )
+
+        tabClickMappings.forEach { (view, readStatus) ->
+            view.setOnClickListener {
+                singleEventHandler.throttleFirst {
+                    navigateToStorageActivity(readStatus)
+                }
             }
         }
+    }
+
+    private fun navigateToStorageActivity(readStatus: String) {
+        val intent = UserStorageActivity.getIntent(
+            context = requireContext(),
+            source = UserStorageActivity.SOURCE_MY_LIBRARY,
+            userId = myLibraryViewModel.userId,
+            readStatus = readStatus,
+        )
+        userStorageResultLauncher.launch(intent)
     }
 
     private fun updateDominantGenres(topGenres: List<GenrePreferenceEntity>) {
