@@ -18,13 +18,29 @@ android {
         applicationId = "com.into.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = 10008
-        versionName = "1.0.8"
+        versionCode = 9
+        versionName = "1.0.9"
 
-        buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
-        buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
-        buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("kakao.app.key"))
-        buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            gradleLocalProperties(rootDir).getProperty("base.url")
+        )
+        buildConfigField(
+            "String",
+            "S3_BASE_URL",
+            gradleLocalProperties(rootDir).getProperty("s3.url")
+        )
+        buildConfigField(
+            "String",
+            "KAKAO_APP_KEY",
+            gradleLocalProperties(rootDir).getProperty("kakao.app.key")
+        )
+        buildConfigField(
+            "String",
+            "AMPLITUDE_KEY",
+            gradleLocalProperties(rootDir).getProperty("amplitude.key")
+        )
 
         manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
             .getProperty("kakao.app.key").replace("\"", "")
