@@ -3,6 +3,7 @@ package com.into.websoso.ui.main.home
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -150,7 +151,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
 
         homeViewModel.isNotificationPermissionFirstLaunched.observe(viewLifecycleOwner) { isFirstLaunch ->
-            if (isFirstLaunch) showNotificationPermissionDialog()
+            if (isFirstLaunch) {
+                showNotificationPermissionDialog()
+            }
         }
     }
 
@@ -207,7 +210,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             val token = task.result
 
             if (task.isSuccessful) {
-                homeViewModel.updateFCMToken(token)
+                val ssaid = Settings.Secure.getString(
+                    requireContext().contentResolver,
+                    Settings.Secure.ANDROID_ID,
+                )
+                homeViewModel.updateFCMToken(token, ssaid)
             }
         }
     }

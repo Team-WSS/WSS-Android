@@ -134,7 +134,8 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchNovelDetailFirstLaunched() = userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
+    suspend fun fetchNovelDetailFirstLaunched() =
+        userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
 
     suspend fun fetchNicknameValidity(nickname: String): Boolean {
         return userApi.getNicknameValidity(nickname).isValid
@@ -165,6 +166,17 @@ class UserRepository @Inject constructor(
         return fetchUserFeeds(myUserId, lastFeedId, size)
     }
 
+    suspend fun fetchUserDeviceIdentifier(): String {
+        val preferences = userStorage.data.first()
+        return preferences[USER_DEVICE_IDENTIFIER_KEY] ?: ""
+    }
+
+    suspend fun saveUserDeviceIdentifier(deviceIdentifier: String) {
+        userStorage.edit { preferences ->
+            preferences[USER_DEVICE_IDENTIFIER_KEY] = deviceIdentifier
+        }
+    }
+
     companion object {
         val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
         val NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY =
@@ -172,6 +184,7 @@ class UserRepository @Inject constructor(
         val USER_ID_KEY = stringPreferencesKey("USER_ID")
         val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")
         val USER_GENDER_KEY = stringPreferencesKey("USER_GENDER")
+        val USER_DEVICE_IDENTIFIER_KEY = stringPreferencesKey("USER_DEVICE_IDENTIFIER")
         const val DEFAULT_USER_ID = -1L
         const val DEFAULT_USER_GENDER = "F"
     }

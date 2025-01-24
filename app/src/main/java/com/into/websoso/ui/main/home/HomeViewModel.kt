@@ -1,6 +1,5 @@
 package com.into.websoso.ui.main.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -194,12 +193,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun updateFCMToken(token: String) {
+    fun updateFCMToken(token: String, deviceId: String) {
         viewModelScope.launch {
             runCatching {
-                authRepository.saveFCMToken(token)
+                authRepository.saveFCMToken(token, deviceId)
             }.onSuccess {
-                Log.d("moongchi", "updateFCMToken: 업데이트 성공! $token")
+                userRepository.saveUserDeviceIdentifier(deviceId)
             }
         }
     }
