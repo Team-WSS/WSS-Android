@@ -12,7 +12,6 @@ import javax.inject.Inject
 class NotificationSettingViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
-    private val _isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
     val isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
@@ -24,19 +23,19 @@ class NotificationSettingViewModel @Inject constructor(
             runCatching {
                 notificationRepository.fetchPushSetting()
             }.onSuccess { isEnabled ->
-                _isNotificationEnabled.value = isEnabled
+                isNotificationEnabled.value = isEnabled
             }
         }
     }
 
     fun updateNotificationEnabled(isEnabled: Boolean) {
-        _isNotificationEnabled.value = isEnabled
+        isNotificationEnabled.value = isEnabled
 
         viewModelScope.launch {
             runCatching {
                 notificationRepository.savePushSetting(isEnabled)
             }.onFailure {
-                _isNotificationEnabled.value = !isEnabled
+                isNotificationEnabled.value = !isEnabled
             }
         }
     }
