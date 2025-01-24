@@ -78,7 +78,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         val readStatus = intent.getStringExtra(READ_STATUS) ?: StorageTab.INTEREST.readStatus
         userStorageViewModel.updateReadStatus(readStatus, forceLoad = true)
 
-        val initialTabIndex = StorageTab.values().indexOfFirst { it.readStatus == readStatus }
+        val initialTabIndex = StorageTab.entries.indexOfFirst { it.readStatus == readStatus }
         binding.tlStorage.selectTab(binding.tlStorage.getTabAt(initialTabIndex.coerceAtLeast(0)))
     }
 
