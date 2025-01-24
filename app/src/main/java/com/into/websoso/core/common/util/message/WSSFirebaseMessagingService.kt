@@ -9,10 +9,22 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.into.websoso.R
+import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class WSSFirebaseMessagingService : FirebaseMessagingService() {
+@AndroidEntryPoint
+class WSSFirebaseMessagingService(
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
+) : FirebaseMessagingService() {
+    private var userDeviceId: String = ""
+
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
@@ -74,6 +86,26 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            runCatching {
+                updateUserDeviceIdentifier()
+                authRepository.saveFCMToken(
+                    fcmToken = token,
+                    deviceIdentifier = userDeviceId,
+                )
+            }.onFailure {
+                it.printStackTrace()
+            }
+        }
+    }
+
+    private suspend fun updateUserDeviceIdentifier() {
+        runCatching {
+            userRepository.fetchUserDeviceIdentifier()
+        }.onSuccess { deviceId ->
+            userDeviceId = deviceId
+        }
     }
 
     companion object {
