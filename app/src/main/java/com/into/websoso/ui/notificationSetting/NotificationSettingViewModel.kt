@@ -1,6 +1,5 @@
 package com.into.websoso.ui.notificationSetting
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,10 +12,8 @@ import javax.inject.Inject
 class NotificationSettingViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
 ) : ViewModel() {
+    private val _isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
     val isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
-
-    private val _isConnecting: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isConnecting: LiveData<Boolean> get() = _isConnecting
 
     init {
         updateInitializeNotificationEnabled()
@@ -27,21 +24,19 @@ class NotificationSettingViewModel @Inject constructor(
             runCatching {
                 notificationRepository.fetchPushSetting()
             }.onSuccess { isEnabled ->
-                isNotificationEnabled.value = isEnabled
+                _isNotificationEnabled.value = isEnabled
             }
         }
     }
 
-    fun updateNotificationEnabled() {
-        _isConnecting.value = true
+    fun updateNotificationEnabled(isEnabled: Boolean) {
+        _isNotificationEnabled.value = isEnabled
+
         viewModelScope.launch {
             runCatching {
-                notificationRepository.savePushSetting(isNotificationEnabled.value?.not() ?: true)
-            }.onSuccess {
-                isNotificationEnabled.value = isNotificationEnabled.value?.not()
-                _isConnecting.value = false
+                notificationRepository.savePushSetting(isEnabled)
             }.onFailure {
-                _isConnecting.value = false
+                _isNotificationEnabled.value = !isEnabled
             }
         }
     }
