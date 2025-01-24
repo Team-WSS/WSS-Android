@@ -1,23 +1,23 @@
 package com.into.websoso.domain.usecase
 
-import com.into.websoso.data.repository.NoticeRepository
+import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.domain.mapper.toDomain
-import com.into.websoso.domain.model.NoticeInfo
+import com.into.websoso.domain.model.NotificationInfo
 import javax.inject.Inject
 
-class GetNoticeListUseCase
+class GetNotificationListUseCase
     @Inject
     constructor(
-        private val noticeRepository: NoticeRepository,
+        private val notificationRepository: NotificationRepository,
     ) {
-        suspend operator fun invoke(lastNoticeId: Long = DEFAULT_LAST_NOTICE_ID): Result<NoticeInfo> =
+        suspend operator fun invoke(lastNotificationId: Long = DEFAULT_LAST_NOTICE_ID): Result<NotificationInfo> =
             try {
-                val size = when (lastNoticeId == DEFAULT_LAST_NOTICE_ID) {
+                val size = when (lastNotificationId == DEFAULT_LAST_NOTICE_ID) {
                     true -> DEFAULT_LOAD_SIZE
                     false -> ADDITIONAL_LOAD_SIZE
                 }
-                val notices = noticeRepository.fetchNotices(lastNoticeId, size).toDomain()
-                Result.success(notices)
+                val notifications = notificationRepository.fetchNotifications(lastNotificationId, size).toDomain()
+                Result.success(notifications)
             } catch (e: Exception) {
                 Result.failure(e)
             }

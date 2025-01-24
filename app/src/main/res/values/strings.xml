@@ -200,7 +200,7 @@
     <string name="login_request_dismiss">닫기</string>
 
     <!-- 알림 뷰 -->
-    <string name="notice_notification">알림</string>
+    <string name="notification_notification">알림</string>
 
     <!-- 로드 뷰 -->
     <string name="load_load_title">로딩 중</string>

@@ -1,4 +1,4 @@
-package com.into.websoso.ui.notice.component
+package com.into.websoso.ui.notification.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
@@ -22,7 +22,7 @@ import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 
 @Composable
-fun NoticeAppBar(
+fun NotificationAppBar(
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -34,7 +34,7 @@ fun NoticeAppBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_notice_back),
+            painter = painterResource(id = R.drawable.ic_notification_back),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
@@ -42,7 +42,7 @@ fun NoticeAppBar(
                 .clickableWithoutRipple { onBackButtonClick() },
         )
         Text(
-            text = stringResource(R.string.notice_notification),
+            text = stringResource(R.string.notification_notification),
             style = WebsosoTheme.typography.title2,
             color = Black,
             textAlign = TextAlign.Center,
@@ -55,8 +55,8 @@ fun NoticeAppBar(
 
 @Preview
 @Composable
-private fun NoticeAppBarPreview() {
+private fun NotificationAppBarPreview() {
     WebsosoTheme {
-        NoticeAppBar(onBackButtonClick = {})
+        NotificationAppBar(onBackButtonClick = {})
     }
 }

@@ -30,7 +30,7 @@
             android:layout_width="28dp"
             android:layout_height="0dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_home_notification"
+            android:src="@drawable/ic_home_notification_selector"
             app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="parent"
