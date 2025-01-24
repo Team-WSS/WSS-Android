@@ -93,7 +93,6 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
                     val selectedTab = requireNotNull(tab) { "Tab must not be null" }
                     onReadingStatusTabSelected(selectedTab.position)
                 }
-
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
             },
