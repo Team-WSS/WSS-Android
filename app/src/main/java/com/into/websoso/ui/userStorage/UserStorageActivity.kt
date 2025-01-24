@@ -192,12 +192,10 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             source: String,
             userId: Long,
             readStatus: String = StorageTab.INTEREST.readStatus,
-        ): Intent {
-            return Intent(context, UserStorageActivity::class.java).apply {
-                putExtra(EXTRA_SOURCE, source)
-                putExtra(USER_ID_KEY, userId)
-                putExtra(READ_STATUS, readStatus)
-            }
+        ): Intent = Intent(context, UserStorageActivity::class.java).apply {
+            putExtra(EXTRA_SOURCE, source)
+            putExtra(USER_ID_KEY, userId)
+            putExtra(READ_STATUS, readStatus)
         }
     }
 }
