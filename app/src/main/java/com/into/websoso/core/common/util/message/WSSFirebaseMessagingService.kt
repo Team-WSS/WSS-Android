@@ -17,12 +17,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class WSSFirebaseMessagingService(
-    private val userRepository: UserRepository,
-    private val authRepository: AuthRepository,
-) : FirebaseMessagingService() {
+class WSSFirebaseMessagingService : FirebaseMessagingService() {
+    @Inject
+    lateinit var userRepository: UserRepository
+
+    @Inject
+    lateinit var authRepository: AuthRepository
+
     private var userDeviceId: String = ""
 
     override fun onMessageReceived(message: RemoteMessage) {
