@@ -94,7 +94,7 @@
                     app:layout_constraintStart_toEndOf="@+id/iv_create_feed_star_essential"
                     app:layout_constraintTop_toTopOf="@+id/tv_create_feed_category" />
 
-                <com.into.websoso.common.ui.custom.WebsosoChipGroup
+                <com.into.websoso.core.common.ui.custom.WebsosoChipGroup
                     android:id="@+id/wcg_detail_explore_info_genre"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_create_feed_content" />
 
-                <com.into.websoso.common.ui.custom.WebsosoSearchEditText
+                <com.into.websoso.core.common.ui.custom.WebsosoSearchEditText
                     android:id="@+id/wset_create_feed_search_novel"
                     android:layout_width="0dp"
                     android:layout_height="52dp"

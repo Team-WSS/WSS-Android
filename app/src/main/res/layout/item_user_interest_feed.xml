@@ -33,7 +33,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/img_normal_explore_test_cover" />
+            tools:src="@drawable/img_loading_thumbnail" />
 
         <LinearLayout
             android:id="@+id/ll_user_interest_rating"

@@ -12,29 +12,30 @@ import androidx.fragment.app.viewModels
 import coil.load
 import com.google.android.material.chip.Chip
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.setListViewHeightBasedOnChildren
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentOtherUserLibraryBinding
 import com.into.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
 import com.into.websoso.ui.userStorage.UserStorageActivity
-import com.into.websoso.ui.userStorage.UserStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OtherUserLibraryFragment :
-    BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
+class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
     private val otherUserLibraryViewModel: OtherUserLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         updateUserId()
@@ -106,7 +107,9 @@ class OtherUserLibraryFragment :
             uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
             updateDominantGenres(uiState.topGenres)
 
-            applyTextColors(uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
+            applyTextColors(
+                uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text),
+            )
         }
     }
 
@@ -134,7 +137,7 @@ class OtherUserLibraryFragment :
                         ForegroundColorSpan(primary100),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(attractivePoints)
@@ -145,7 +148,7 @@ class OtherUserLibraryFragment :
                         ForegroundColorSpan(gray300),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(fixedSpannable)
@@ -170,8 +173,8 @@ class OtherUserLibraryFragment :
         }
     }
 
-    private fun createKeywordChip(data: NovelPreferenceEntity.KeywordEntity): Chip {
-        return WebsosoChip(requireContext()).apply {
+    private fun createKeywordChip(data: NovelPreferenceEntity.KeywordEntity): Chip =
+        WebsosoChip(requireContext()).apply {
             text = "${data.keywordName} ${data.keywordCount}"
             isChecked = false
 
@@ -179,7 +182,6 @@ class OtherUserLibraryFragment :
             setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
             setTextAppearance(R.style.body2)
         }
-    }
 
     private fun updateDominantGenres(topGenres: List<GenrePreferenceEntity>) {
         topGenres.forEachIndexed { index, genrePreferenceEntity ->
@@ -194,15 +196,28 @@ class OtherUserLibraryFragment :
     }
 
     private fun onStorageButtonClick() {
+        val userId = requireNotNull(otherUserLibraryViewModel.userId.value)
+
         binding.ivOtherUserLibraryGoToStorage.setOnClickListener {
             singleEventHandler.throttleFirst {
                 startActivity(
                     UserStorageActivity.getIntent(
                         requireContext(),
                         UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
-                        otherUserLibraryViewModel.userId.value
-                            ?: UserStorageViewModel.DEFAULT_USER_ID,
-                    )
+                        userId,
+                    ),
+                )
+            }
+        }
+
+        binding.llOtherUserLibraryStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                startActivity(
+                    UserStorageActivity.getIntent(
+                        requireContext(),
+                        UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
+                        userId,
+                    ),
                 )
             }
         }
@@ -217,10 +232,11 @@ class OtherUserLibraryFragment :
     companion object {
         private const val USER_ID_KEY = "USER_ID"
 
-        fun newInstance(userId: Long) = OtherUserLibraryFragment().apply {
-            arguments = Bundle().apply {
-                putLong(USER_ID_KEY, userId)
+        fun newInstance(userId: Long) =
+            OtherUserLibraryFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(USER_ID_KEY, userId)
+                }
             }
-        }
     }
 }

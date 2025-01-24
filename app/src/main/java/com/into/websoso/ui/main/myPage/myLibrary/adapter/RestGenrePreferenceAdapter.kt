@@ -4,17 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.into.websoso.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.databinding.ItemRestGenreBinding
 
 class RestGenrePreferenceAdapter(
     items: List<GenrePreferenceEntity> = emptyList(),
 ) : BaseAdapter() {
-
     private var items: List<GenrePreferenceEntity> = items
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup,
+    ): View {
         val binding: ItemRestGenreBinding = if (convertView == null) {
             ItemRestGenreBinding.inflate(LayoutInflater.from(parent.context), parent, false).also {
                 it.root.tag = it
@@ -32,17 +35,11 @@ class RestGenrePreferenceAdapter(
         return binding.root
     }
 
-    override fun getCount(): Int {
-        return items.size
-    }
+    override fun getCount(): Int = items.size
 
-    override fun getItem(position: Int): GenrePreferenceEntity {
-        return items[position]
-    }
+    override fun getItem(position: Int): GenrePreferenceEntity = items[position]
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+    override fun getItemId(position: Int): Long = position.toLong()
 
     fun updateRestGenrePreferenceData(newItems: List<GenrePreferenceEntity>) {
         items = newItems

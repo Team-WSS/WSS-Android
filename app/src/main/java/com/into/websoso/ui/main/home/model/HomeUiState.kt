@@ -9,6 +9,7 @@ data class HomeUiState(
     val loading: Boolean = true,
     val error: Boolean = false,
     val isInterestNovel: Boolean = false,
+    val isNotificationUnread: Boolean = false,
     val popularNovels: List<PopularNovelEntity> = listOf(),
     val popularFeeds: List<List<PopularFeedEntity>> = listOf(),
     val userInterestFeeds: List<UserInterestFeedEntity> = listOf(),

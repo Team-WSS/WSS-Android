@@ -5,16 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.databinding.ActivityBlockedUsersBinding
 import com.into.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BlockedUsersActivity :
-    BaseActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
+class BlockedUsersActivity : BaseActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
     private val blockedUsersAdapter: BlockedUsersAdapter by lazy {
         BlockedUsersAdapter(::onUnblockedUserButtonClick)
     }
@@ -72,9 +71,6 @@ class BlockedUsersActivity :
     }
 
     companion object {
-
-        fun getIntent(context: Context): Intent {
-            return Intent(context, BlockedUsersActivity::class.java)
-        }
+        fun getIntent(context: Context): Intent = Intent(context, BlockedUsersActivity::class.java)
     }
 }

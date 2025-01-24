@@ -14,11 +14,11 @@ import androidx.fragment.app.viewModels
 import coil.load
 import com.google.android.material.chip.Chip
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.setListViewHeightBasedOnChildren
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyLibraryBinding
@@ -40,7 +40,10 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             }
         }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.myLibraryViewModel = myLibraryViewModel
@@ -81,6 +84,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                     binding.clMyLibraryNovelPreference.visibility = View.VISIBLE
                     binding.clMyLibraryUnknownNovelPreference.visibility = View.GONE
                 }
+
                 false -> {
                     binding.clMyLibraryNovelPreference.visibility = View.GONE
                     binding.clMyLibraryUnknownNovelPreference.visibility = View.VISIBLE
@@ -91,6 +95,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                 true -> {
                     binding.clMyLibraryAttractivePoints.visibility = View.VISIBLE
                 }
+
                 false -> {
                     binding.clMyLibraryAttractivePoints.visibility = View.GONE
                 }
@@ -102,7 +107,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
             updateDominantGenres(uiState.topGenres)
 
-            applyTextColors(uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text))
+            applyTextColors(
+                uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text),
+            )
         }
     }
 
@@ -130,7 +137,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                         ForegroundColorSpan(primary100),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(attractivePoints)
@@ -141,7 +148,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                         ForegroundColorSpan(gray300),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(fixedSpannable)
@@ -151,7 +158,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                     ForegroundColorSpan(primary100),
                     0,
                     length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
             }
             spannableStringBuilder.append(spannable)
@@ -177,8 +184,8 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         }
     }
 
-    private fun createKeywordChip(data: NovelPreferenceEntity.KeywordEntity): Chip {
-        return WebsosoChip(requireContext()).apply {
+    private fun createKeywordChip(data: NovelPreferenceEntity.KeywordEntity): Chip =
+        WebsosoChip(requireContext()).apply {
             text = "${data.keywordName} ${data.keywordCount}"
             isCheckable = false
             isChecked = false
@@ -188,10 +195,20 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
             setTextAppearance(R.style.body2)
         }
-    }
 
     private fun onStorageButtonClick() {
         binding.ivMyLibraryGoToStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                val intent = UserStorageActivity.getIntent(
+                    context = requireContext(),
+                    source = UserStorageActivity.SOURCE_MY_LIBRARY,
+                    userId = myLibraryViewModel.userId,
+                )
+                userStorageResultLauncher.launch(intent)
+            }
+        }
+
+        binding.llMyLibraryStorage.setOnClickListener {
             singleEventHandler.throttleFirst {
                 val intent = UserStorageActivity.getIntent(
                     context = requireContext(),

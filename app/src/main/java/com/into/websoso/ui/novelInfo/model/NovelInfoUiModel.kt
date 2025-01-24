@@ -17,10 +17,9 @@ data class NovelInfoUiModel(
 }
 
 data class PlatformModel(
-    val platform: Platform = Platform.INVALID_PLATFORM,
+    val platformName: String = "",
     val platformImage: String = "",
     val platformUrl: String = "",
-    val isVisible: Boolean = false,
 )
 
 data class KeywordModel(
