@@ -7,6 +7,10 @@
         <variable
             name="notificationSettingViewModel"
             type="com.into.websoso.ui.notificationSetting.NotificationSettingViewModel" />
+
+        <variable
+            name="onToggleClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,6 +47,7 @@
             android:id="@+id/cl_notification_setting_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onToggleClick.invoke()}"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:checked="@{notificationSettingViewModel.isNotificationEnabled}"
+                android:clickable="false"
+                android:checked="@={notificationSettingViewModel.isNotificationEnabled}"
                 android:thumb="@drawable/bg_create_feed_toggle_thumb"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

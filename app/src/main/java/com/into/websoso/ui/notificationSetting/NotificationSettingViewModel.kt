@@ -4,14 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.repository.NotificationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NotificationSettingViewModel @Inject constructor() : ViewModel() {
-    private val _isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isNotificationEnabled: LiveData<Boolean> get() = _isNotificationEnabled
+class NotificationSettingViewModel @Inject constructor(
+    private val notificationRepository: NotificationRepository,
+) : ViewModel() {
+    val isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
+
+    private val _isConnecting: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isConnecting: LiveData<Boolean> get() = _isConnecting
 
     init {
         updateInitializeNotificationEnabled()
@@ -20,19 +25,23 @@ class NotificationSettingViewModel @Inject constructor() : ViewModel() {
     private fun updateInitializeNotificationEnabled() {
         viewModelScope.launch {
             runCatching {
-                // TODO: 알림 설정 상태 가져오기
-            }.onSuccess {
-                // TODO: _isNotificationEnabled 에 상태 저장
+                notificationRepository.fetchPushSetting()
+            }.onSuccess { isEnabled ->
+                isNotificationEnabled.value = isEnabled
             }
         }
     }
 
     fun updateNotificationEnabled() {
+        _isConnecting.value = true
         viewModelScope.launch {
             runCatching {
-                // TODO: 알림 설정 상태 업데이트
+                notificationRepository.savePushSetting(isNotificationEnabled.value?.not() ?: true)
             }.onSuccess {
-                _isNotificationEnabled.value = _isNotificationEnabled.value?.not()
+                isNotificationEnabled.value = isNotificationEnabled.value?.not()
+                _isConnecting.value = false
+            }.onFailure {
+                _isConnecting.value = false
             }
         }
     }
