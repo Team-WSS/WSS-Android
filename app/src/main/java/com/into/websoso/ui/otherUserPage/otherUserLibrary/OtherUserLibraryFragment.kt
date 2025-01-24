@@ -26,7 +26,8 @@ import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
+class OtherUserLibraryFragment :
+    BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
     private val otherUserLibraryViewModel: OtherUserLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
@@ -74,6 +75,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
                     binding.clOtherUserLibraryKnownPreference.visibility = View.GONE
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.VISIBLE
                 }
+
                 false -> {
                     binding.clOtherUserLibraryKnownPreference.visibility = View.VISIBLE
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.GONE
@@ -216,7 +218,10 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
         }
     }
 
-    private fun navigateToUserStorageActivity(userId: Long, readStatus: String) {
+    private fun navigateToUserStorageActivity(
+        userId: Long,
+        readStatus: String,
+    ) {
         startActivity(
             UserStorageActivity.getIntent(
                 context = requireContext(),
