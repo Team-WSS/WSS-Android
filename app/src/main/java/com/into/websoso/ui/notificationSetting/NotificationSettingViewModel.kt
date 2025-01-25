@@ -14,30 +14,30 @@ class NotificationSettingViewModel
     constructor(
         private val notificationRepository: NotificationRepository,
     ) : ViewModel() {
-        val isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
+        val isNotificationPushEnabled: MutableLiveData<Boolean> = MutableLiveData()
 
         init {
-            updateInitializeNotificationEnabled()
+            updateInitializeNotificationPushEnabled()
         }
 
-        private fun updateInitializeNotificationEnabled() {
+        private fun updateInitializeNotificationPushEnabled() {
             viewModelScope.launch {
                 runCatching {
-                    notificationRepository.fetchPushSetting()
+                    notificationRepository.fetchUserPushEnabled()
                 }.onSuccess { isEnabled ->
-                    isNotificationEnabled.value = isEnabled
+                    isNotificationPushEnabled.value = isEnabled
                 }
             }
         }
 
-        fun updateNotificationEnabled(isEnabled: Boolean) {
-            isNotificationEnabled.value = isEnabled
+        fun updateNotificationPushEnabled(isEnabled: Boolean) {
+            isNotificationPushEnabled.value = isEnabled
 
             viewModelScope.launch {
                 runCatching {
-                    notificationRepository.savePushSetting(isEnabled)
+                    notificationRepository.saveUserPushEnabled(isEnabled)
                 }.onFailure {
-                    isNotificationEnabled.value = !isEnabled
+                    isNotificationPushEnabled.value = !isEnabled
                 }
             }
         }

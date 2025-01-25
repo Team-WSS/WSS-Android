@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:background="@null"
-                android:checked="@{notificationSettingViewModel.isNotificationEnabled}"
+                android:checked="@{notificationSettingViewModel.isNotificationPushEnabled}"
                 android:clickable="false"
                 android:thumb="@drawable/bg_notification_setting_toggle_thumb"
                 app:layout_constraintBottom_toBottomOf="parent"

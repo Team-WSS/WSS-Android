@@ -1,10 +1,10 @@
 package com.into.websoso.data.remote.api
 
-import com.into.websoso.data.remote.request.PushSettingRequestDto
+import com.into.websoso.data.remote.request.NotificationPushEnabledRequestDto
 import com.into.websoso.data.remote.response.NotificationDetailResponseDto
+import com.into.websoso.data.remote.response.NotificationPushEnabledResponseDto
 import com.into.websoso.data.remote.response.NotificationUnreadResponseDto
 import com.into.websoso.data.remote.response.NotificationsResponseDto
-import com.into.websoso.data.remote.response.PushSettingResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -27,11 +27,11 @@ interface NotificationApi {
     suspend fun getNotificationUnread(): NotificationUnreadResponseDto
 
     @GET("users/push-settings")
-    suspend fun getUserPushSettings(): PushSettingResponseDto
+    suspend fun getUserPushEnabled(): NotificationPushEnabledResponseDto
 
     @POST("users/push-settings")
-    suspend fun postUserPushSettings(
-        @Body pushSettingRequestDto: PushSettingRequestDto,
+    suspend fun postUserPushEnabled(
+        @Body notificationPushEnabledRequestDto: NotificationPushEnabledRequestDto,
     )
 
     @POST("notifications/{notificationId}/read")

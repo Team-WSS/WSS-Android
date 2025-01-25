@@ -34,7 +34,7 @@ class NotificationSettingActivity : BaseActivity<ActivityNotificationSettingBind
         binding.scNotificationSettingToggle.isChecked = newCheckedState
 
         singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-            notificationSettingViewModel.updateNotificationEnabled(newCheckedState)
+            notificationSettingViewModel.updateNotificationPushEnabled(newCheckedState)
         }
     }
 

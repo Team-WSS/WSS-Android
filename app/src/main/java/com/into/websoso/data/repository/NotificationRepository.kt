@@ -4,7 +4,7 @@ import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.NotificationDetailEntity
 import com.into.websoso.data.model.NotificationsEntity
 import com.into.websoso.data.remote.api.NotificationApi
-import com.into.websoso.data.remote.request.PushSettingRequestDto
+import com.into.websoso.data.remote.request.NotificationPushEnabledRequestDto
 import javax.inject.Inject
 
 class NotificationRepository
@@ -20,11 +20,11 @@ class NotificationRepository
         suspend fun fetchNotificationDetail(notificationId: Long): NotificationDetailEntity =
             notificationApi.getNotificationDetail(notificationId).toData()
 
-        suspend fun fetchPushSetting(): Boolean = notificationApi.getUserPushSettings().isPushEnabled
+        suspend fun fetchUserPushEnabled(): Boolean = notificationApi.getUserPushEnabled().isPushEnabled
 
-        suspend fun savePushSetting(isEnabled: Boolean) {
-            notificationApi.postUserPushSettings(
-                pushSettingRequestDto = PushSettingRequestDto(
+        suspend fun saveUserPushEnabled(isEnabled: Boolean) {
+            notificationApi.postUserPushEnabled(
+                notificationPushEnabledRequestDto = NotificationPushEnabledRequestDto(
                     isPushEnabled = isEnabled,
                 ),
             )

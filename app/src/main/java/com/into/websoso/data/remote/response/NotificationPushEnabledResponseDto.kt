@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PushSettingResponseDto(
+data class NotificationPushEnabledResponseDto(
     @SerialName("isPushEnabled")
     val isPushEnabled: Boolean,
 )
