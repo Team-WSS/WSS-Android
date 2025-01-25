@@ -33,4 +33,9 @@ interface NotificationApi {
     suspend fun postUserPushSettings(
         @Body pushSettingRequestDto: PushSettingRequestDto,
     )
+
+    @POST("notifications/{notificationId}/read")
+    suspend fun readNotification(
+        @Path("notificationId") notificationId: Long,
+    )
 }

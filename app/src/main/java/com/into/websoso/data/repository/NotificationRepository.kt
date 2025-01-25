@@ -19,9 +19,6 @@ class NotificationRepository
     suspend fun fetchNotificationDetail(notificationId: Long): NotificationDetailEntity =
         notificationApi.getNotificationDetail(notificationId).toData()
 
-    suspend fun fetchNotificationUnread(): Boolean =
-        notificationApi.getNotificationUnread().hasUnreadNotifications
-
     suspend fun fetchPushSetting(): Boolean = notificationApi.getUserPushSettings().isPushEnabled
 
     suspend fun savePushSetting(isEnabled: Boolean) {
@@ -30,5 +27,12 @@ class NotificationRepository
                 isPushEnabled = isEnabled,
             ),
         )
+    }
+
+    suspend fun fetchNotificationUnread(): Boolean =
+        notificationApi.getNotificationUnread().hasUnreadNotifications
+
+    suspend fun fetchNotificationRead(notificationId: Long) {
+        notificationApi.readNotification(notificationId)
     }
 }
