@@ -213,13 +213,16 @@ class HomeViewModel
                 else -> true
             }
 
-    fun updateFCMToken(token: String, deviceId: String) {
-        viewModelScope.launch {
-            runCatching {
-                authRepository.saveFCMToken(token, deviceId)
-            }.onSuccess {
-                userRepository.saveUserDeviceIdentifier(deviceId)
+        fun updateFCMToken(
+            token: String,
+            deviceId: String,
+        ) {
+            viewModelScope.launch {
+                runCatching {
+                    authRepository.saveFCMToken(token, deviceId)
+                }.onSuccess {
+                    userRepository.saveUserDeviceIdentifier(deviceId)
+                }
             }
         }
     }
-}

@@ -108,7 +108,10 @@ class AuthRepository @Inject constructor(
         this.isAutoLogin = isAutoLogin
     }
 
-    suspend fun saveFCMToken(fcmToken: String, deviceIdentifier: String) {
+    suspend fun saveFCMToken(
+        fcmToken: String,
+        deviceIdentifier: String,
+    ) {
         authApi.postFCMToken(
             authorization = "Bearer $accessToken",
             FCMTokenRequestDto(
