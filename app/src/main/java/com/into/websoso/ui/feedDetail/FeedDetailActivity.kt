@@ -50,6 +50,7 @@ import com.into.websoso.databinding.MenuFeedPopupBinding
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
+import com.into.websoso.ui.feedDetail.FeedDetailViewModel.Companion.DEFAULT_NOTIFICATION_ID
 import com.into.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.into.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.into.websoso.ui.feedDetail.adapter.FeedDetailType.Header
@@ -349,6 +350,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         setupObserver()
         onFeedDetailClick()
         refreshView()
+        updateNotificationRead()
         tracker.trackEvent("feed_detail")
     }
 
@@ -380,6 +382,11 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                 }
             }
         }
+    }
+
+    private fun updateNotificationRead() {
+        val notificationId = intent.getLongExtra(NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID)
+        feedDetailViewModel.updateNotificationRead(notificationId)
     }
 
     private fun onFeedDetailClick() {
@@ -532,11 +539,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     companion object {
         private const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
+        private const val NOTIFICATION_ID: String = "NOTIFICATION_ID"
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(
             context: Context,
             feedId: Long,
-        ): Intent = Intent(context, FeedDetailActivity::class.java).apply { putExtra(FEED_ID, feedId) }
+            notificationId: Long? = null,
+        ): Intent =
+            Intent(context, FeedDetailActivity::class.java).apply {
+                putExtra(FEED_ID, feedId)
+                putExtra(NOTIFICATION_ID, notificationId)
+            }
     }
 }
