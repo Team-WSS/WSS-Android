@@ -78,15 +78,15 @@
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/sc_notification_setting_toggle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:background="@null"
                 android:checked="@{notificationSettingViewModel.isNotificationEnabled}"
                 android:clickable="false"
-                android:thumb="@drawable/bg_create_feed_toggle_thumb"
+                android:thumb="@drawable/bg_notification_setting_toggle_thumb"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:track="@drawable/bg_create_feed_toggle" />
+                app:track="@drawable/bg_notification_setting_toggle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
