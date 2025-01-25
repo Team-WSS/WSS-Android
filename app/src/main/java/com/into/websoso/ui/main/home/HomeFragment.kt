@@ -3,7 +3,6 @@ package com.into.websoso.ui.main.home
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
