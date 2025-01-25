@@ -9,34 +9,36 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NotificationSettingViewModel @Inject constructor(
-    private val notificationRepository: NotificationRepository,
-) : ViewModel() {
-    val isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
+class NotificationSettingViewModel
+    @Inject
+    constructor(
+        private val notificationRepository: NotificationRepository,
+    ) : ViewModel() {
+        val isNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData()
 
-    init {
-        updateInitializeNotificationEnabled()
-    }
+        init {
+            updateInitializeNotificationEnabled()
+        }
 
-    private fun updateInitializeNotificationEnabled() {
-        viewModelScope.launch {
-            runCatching {
-                notificationRepository.fetchPushSetting()
-            }.onSuccess { isEnabled ->
-                isNotificationEnabled.value = isEnabled
+        private fun updateInitializeNotificationEnabled() {
+            viewModelScope.launch {
+                runCatching {
+                    notificationRepository.fetchPushSetting()
+                }.onSuccess { isEnabled ->
+                    isNotificationEnabled.value = isEnabled
+                }
+            }
+        }
+
+        fun updateNotificationEnabled(isEnabled: Boolean) {
+            isNotificationEnabled.value = isEnabled
+
+            viewModelScope.launch {
+                runCatching {
+                    notificationRepository.savePushSetting(isEnabled)
+                }.onFailure {
+                    isNotificationEnabled.value = !isEnabled
+                }
             }
         }
     }
-
-    fun updateNotificationEnabled(isEnabled: Boolean) {
-        isNotificationEnabled.value = isEnabled
-
-        viewModelScope.launch {
-            runCatching {
-                notificationRepository.savePushSetting(isEnabled)
-            }.onFailure {
-                isNotificationEnabled.value = !isEnabled
-            }
-        }
-    }
-}

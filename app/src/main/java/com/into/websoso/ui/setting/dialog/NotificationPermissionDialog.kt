@@ -11,9 +11,11 @@ import com.into.websoso.databinding.DialogNotificationPermissionBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NotificationPermissionDialog :
-    BaseDialogFragment<DialogNotificationPermissionBinding>(R.layout.dialog_notification_permission) {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+class NotificationPermissionDialog : BaseDialogFragment<DialogNotificationPermissionBinding>(R.layout.dialog_notification_permission) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         onNextTimeButtonClick()
@@ -39,8 +41,6 @@ class NotificationPermissionDialog :
     companion object {
         const val NOTIFICATION_PERMISSION_DIALOG_TAG = "NotificationPermissionDialog"
 
-        fun newInstance(): NotificationPermissionDialog {
-            return NotificationPermissionDialog()
-        }
+        fun newInstance(): NotificationPermissionDialog = NotificationPermissionDialog()
     }
 }

@@ -12,8 +12,7 @@ import com.into.websoso.databinding.ActivityNotificationSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NotificationSettingActivity :
-    BaseActivity<ActivityNotificationSettingBinding>(R.layout.activity_notification_setting) {
+class NotificationSettingActivity : BaseActivity<ActivityNotificationSettingBinding>(R.layout.activity_notification_setting) {
     private val notificationSettingViewModel: NotificationSettingViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
