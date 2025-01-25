@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
@@ -141,7 +142,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                             updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
                             userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                             recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
-                            binding.ivHomeNotification.isSelected = uiState.isNotificationUnread
+                            updateHasNotificationUnread(uiState.isNotificationUnread)
                         }
                     }
                 }
@@ -191,6 +192,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 clHomeRecommendNovel.visibility = View.GONE
             }
         }
+    }
+
+    private fun updateHasNotificationUnread(hasUnread: Boolean) {
+        val drawable = if (hasUnread) {
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_notification_unread)
+        } else {
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_notification_read)
+        }
+        binding.ivHomeNotification.setImageDrawable(drawable)
     }
 
     private fun showNotificationPermissionDialog() {
