@@ -9,8 +9,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.into.websoso.R
-import com.into.websoso.data.repository.AuthRepository
-import com.into.websoso.data.repository.UserRepository
+import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,12 +21,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class WSSFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
-    lateinit var userRepository: UserRepository
-
-    @Inject
-    lateinit var authRepository: AuthRepository
-
-    private var userDeviceId: String = ""
+    lateinit var pushMessageRepository: PushMessageRepository
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -99,22 +93,8 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
 
         CoroutineScope(Dispatchers.IO).launch {
             runCatching {
-                updateUserDeviceIdentifier()
-                authRepository.saveFCMToken(
-                    fcmToken = token,
-                    deviceIdentifier = userDeviceId,
-                )
-            }.onFailure {
-                it.printStackTrace()
+                pushMessageRepository.updateUserFCMToken(token)
             }
-        }
-    }
-
-    private suspend fun updateUserDeviceIdentifier() {
-        runCatching {
-            userRepository.fetchUserDeviceIdentifier()
-        }.onSuccess { deviceId ->
-            userDeviceId = deviceId
         }
     }
 

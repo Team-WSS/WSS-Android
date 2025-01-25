@@ -1,5 +1,6 @@
 package com.into.websoso.data.repository
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -101,15 +102,6 @@ class UserRepository
             }
         }
 
-        suspend fun saveNotificationPermissionFirstLaunched(value: Boolean) {
-            userStorage.edit { preferences ->
-                preferences[NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY] = value
-            }
-        }
-
-        suspend fun fetchNotificationPermissionFirstLaunched() =
-            userStorage.data.first()[NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY] ?: true
-
         suspend fun fetchUserId(): Long {
             val preferences = userStorage.data.first()
             return preferences[USER_ID_KEY]?.toLongOrNull() ?: DEFAULT_USER_ID
@@ -175,8 +167,6 @@ class UserRepository
 
         companion object {
             val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
-            val NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY =
-                booleanPreferencesKey("NOTIFICATION_PERMISSION_FIRST_LAUNCHED")
             val USER_ID_KEY = stringPreferencesKey("USER_ID")
             val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")
             val USER_GENDER_KEY = stringPreferencesKey("USER_GENDER")

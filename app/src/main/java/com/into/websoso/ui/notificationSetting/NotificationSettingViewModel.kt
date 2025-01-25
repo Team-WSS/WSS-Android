@@ -3,7 +3,7 @@ package com.into.websoso.ui.notificationSetting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.repository.NotificationRepository
+import com.into.websoso.data.repository.PushMessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class NotificationSettingViewModel
     @Inject
     constructor(
-        private val notificationRepository: NotificationRepository,
+        private val pushMessageRepository: PushMessageRepository,
     ) : ViewModel() {
         val isNotificationPushEnabled: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -23,7 +23,7 @@ class NotificationSettingViewModel
         private fun updateInitializeNotificationPushEnabled() {
             viewModelScope.launch {
                 runCatching {
-                    notificationRepository.fetchUserPushEnabled()
+                    pushMessageRepository.fetchUserPushEnabled()
                 }.onSuccess { isEnabled ->
                     isNotificationPushEnabled.value = isEnabled
                 }
@@ -35,7 +35,7 @@ class NotificationSettingViewModel
 
             viewModelScope.launch {
                 runCatching {
-                    notificationRepository.saveUserPushEnabled(isEnabled)
+                    pushMessageRepository.saveUserPushEnabled(isEnabled)
                 }.onFailure {
                     isNotificationPushEnabled.value = !isEnabled
                 }

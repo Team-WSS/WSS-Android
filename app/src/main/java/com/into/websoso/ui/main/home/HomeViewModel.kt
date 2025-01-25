@@ -10,11 +10,10 @@ import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.UserInterestFeedMessage
 import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
-import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.data.repository.NovelRepository
-import com.into.websoso.data.repository.UserRepository
+import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.ui.main.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -28,8 +27,7 @@ class HomeViewModel
     constructor(
         private val novelRepository: NovelRepository,
         private val feedRepository: FeedRepository,
-        private val userRepository: UserRepository,
-        private val authRepository: AuthRepository,
+        private val pushMessageRepository: PushMessageRepository,
         private val notificationRepository: NotificationRepository,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
@@ -102,7 +100,7 @@ class HomeViewModel
         private fun checkIsNotificationPermissionFirstLaunched() {
             viewModelScope.launch {
                 runCatching {
-                    userRepository.fetchNotificationPermissionFirstLaunched()
+                    pushMessageRepository.fetchNotificationPermissionFirstLaunched()
                 }.onSuccess { isFirstLaunched ->
                     _isNotificationPermissionFirstLaunched.value = isFirstLaunched
                 }
@@ -112,7 +110,7 @@ class HomeViewModel
         fun updateIsNotificationPermissionFirstLaunched(isFirstLaunched: Boolean) {
             viewModelScope.launch {
                 runCatching {
-                    userRepository.saveNotificationPermissionFirstLaunched(isFirstLaunched)
+                    pushMessageRepository.saveNotificationPermissionFirstLaunched(isFirstLaunched)
                 }.onSuccess {
                     _isNotificationPermissionFirstLaunched.value = isFirstLaunched
                 }
@@ -213,15 +211,10 @@ class HomeViewModel
                 else -> true
             }
 
-        fun updateFCMToken(
-            token: String,
-            deviceId: String,
-        ) {
+        fun updateFCMToken(token: String) {
             viewModelScope.launch {
                 runCatching {
-                    authRepository.saveFCMToken(token, deviceId)
-                }.onSuccess {
-                    userRepository.saveUserDeviceIdentifier(deviceId)
+                    pushMessageRepository.saveUserFCMToken(token)
                 }
             }
         }

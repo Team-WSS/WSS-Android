@@ -3,7 +3,7 @@ package com.into.websoso.ui.main.home
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -74,9 +74,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            getFCMToken()
-        }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { updateFCMToken() }
 
     override fun onViewCreated(
         view: View,
@@ -202,20 +200,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
             return
         }
-        getFCMToken()
+        updateFCMToken()
         homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
     }
 
-    private fun getFCMToken() {
+    private fun updateFCMToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             val token = task.result
 
             if (task.isSuccessful) {
-                val ssaid = Settings.Secure.getString(
-                    requireContext().contentResolver,
-                    Settings.Secure.ANDROID_ID,
-                )
-                homeViewModel.updateFCMToken(token, ssaid)
+                homeViewModel.updateFCMToken(token)
             }
         }
     }
