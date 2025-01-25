@@ -22,6 +22,7 @@ import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentOtherUserLibraryBinding
 import com.into.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
 import com.into.websoso.ui.userStorage.UserStorageActivity
+import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,6 +74,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
                     binding.clOtherUserLibraryKnownPreference.visibility = View.GONE
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.VISIBLE
                 }
+
                 false -> {
                     binding.clOtherUserLibraryKnownPreference.visibility = View.VISIBLE
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.GONE
@@ -198,29 +200,35 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
     private fun onStorageButtonClick() {
         val userId = requireNotNull(otherUserLibraryViewModel.userId.value)
 
-        binding.ivOtherUserLibraryGoToStorage.setOnClickListener {
-            singleEventHandler.throttleFirst {
-                startActivity(
-                    UserStorageActivity.getIntent(
-                        requireContext(),
-                        UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
-                        userId,
-                    ),
-                )
-            }
-        }
+        val clickMappings = mapOf(
+            binding.clOtherUserLibraryTopBar to StorageTab.INTEREST.readStatus,
+            binding.llOtherUserLibraryStorageInteresting to StorageTab.INTEREST.readStatus,
+            binding.llOtherUserLibraryStorageWatching to StorageTab.WATCHING.readStatus,
+            binding.llOtherUserLibraryStorageWatched to StorageTab.WATCHED.readStatus,
+            binding.llOtherUserLibraryStorageQuit to StorageTab.QUIT.readStatus,
+        )
 
-        binding.llOtherUserLibraryStorage.setOnClickListener {
-            singleEventHandler.throttleFirst {
-                startActivity(
-                    UserStorageActivity.getIntent(
-                        requireContext(),
-                        UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
-                        userId,
-                    ),
-                )
+        clickMappings.forEach { (view, readStatus) ->
+            view.setOnClickListener {
+                singleEventHandler.throttleFirst {
+                    navigateToUserStorageActivity(userId, readStatus)
+                }
             }
         }
+    }
+
+    private fun navigateToUserStorageActivity(
+        userId: Long,
+        readStatus: String,
+    ) {
+        startActivity(
+            UserStorageActivity.getIntent(
+                context = requireContext(),
+                source = UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
+                userId = userId,
+                readStatus = readStatus,
+            ),
+        )
     }
 
     override fun onResume() {

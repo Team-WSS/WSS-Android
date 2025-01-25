@@ -44,6 +44,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         setupUserId()
         bindViewModel()
         setupViewPagerAndTabLayout()
+        setupInitialReadStatusTab()
         onBackButtonClick()
         onSortTypeButtonClick()
         onExploreButton()
@@ -52,8 +53,9 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private fun setupUserId() {
         val source = intent.getStringExtra(EXTRA_SOURCE) ?: SOURCE_MY_LIBRARY
         val userId = intent.getLongExtra(USER_ID_KEY, UserStorageViewModel.DEFAULT_USER_ID)
+        val readStatus = intent.getStringExtra(READ_STATUS) ?: StorageTab.INTEREST.readStatus
 
-        userStorageViewModel.updateUserStorage(source, userId)
+        userStorageViewModel.updateUserStorage(source, userId, readStatus)
     }
 
     private fun bindViewModel() {
@@ -72,20 +74,31 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         binding.vpStorage.adapter = userStorageAdapter
     }
 
+    private fun setupInitialReadStatusTab() {
+        val readStatus = intent.getStringExtra(READ_STATUS) ?: StorageTab.INTEREST.readStatus
+        userStorageViewModel.updateReadStatus(readStatus, forceLoad = true)
+
+        val initialTabIndex = StorageTab.entries.indexOfFirst { it.readStatus == readStatus }
+        binding.tlStorage.selectTab(binding.tlStorage.getTabAt(initialTabIndex.coerceAtLeast(0)))
+    }
+
     private fun setupTabLayoutWithViewPager() {
         TabLayoutMediator(binding.tlStorage, binding.vpStorage) { tab, position ->
             tab.text = StorageTab.fromPosition(position).title
         }.attach()
 
-        binding.tlStorage.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val selectedTab = requireNotNull(tab) { "Tab must not be null" }
-                onReadingStatusTabSelected(selectedTab.position)
-            }
+        binding.tlStorage.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    val selectedTab = requireNotNull(tab) { "Tab must not be null" }
+                    onReadingStatusTabSelected(selectedTab.position)
+                }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+            },
+        )
     }
 
     private fun onReadingStatusTabSelected(position: Int) {
@@ -172,12 +185,20 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         const val USER_ID_KEY = "userId"
         const val SOURCE_MY_LIBRARY = "myLibrary"
         const val SOURCE_OTHER_USER_LIBRARY = "otherUserLibrary"
+        const val READ_STATUS = "read_status"
 
-        fun getIntent(context: Context, source: String, userId: Long): Intent {
-            return Intent(context, UserStorageActivity::class.java).apply {
-                putExtra(EXTRA_SOURCE, source)
-                putExtra(USER_ID_KEY, userId)
-            }
+        fun getIntent(
+            context: Context,
+            source: String,
+            userId: Long,
+            readStatus: String = StorageTab.INTEREST.readStatus,
+        ) = Intent(
+            context,
+            UserStorageActivity::class.java,
+        ).apply {
+            putExtra(EXTRA_SOURCE, source)
+            putExtra(USER_ID_KEY, userId)
+            putExtra(READ_STATUS, readStatus)
         }
     }
 }
