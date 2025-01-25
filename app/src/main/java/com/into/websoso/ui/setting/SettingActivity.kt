@@ -1,11 +1,15 @@
 package com.into.websoso.ui.setting
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.into.websoso.R
 import com.into.websoso.R.drawable.ic_novel_detail_check
 import com.into.websoso.R.string.inquire_link
@@ -20,8 +24,12 @@ import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.databinding.ActivitySettingBinding
 import com.into.websoso.ui.accountInfo.AccountInfoActivity
+import com.into.websoso.ui.notificationSetting.NotificationSettingActivity
 import com.into.websoso.ui.profileDisclosure.ProfileDisclosureActivity
+import com.into.websoso.ui.setting.dialog.NotificationPermissionDialog
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
     private val startActivityLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
@@ -72,6 +80,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 startActivityLauncher.launch(intent)
             }
 
+            override fun onNotificiationSettingButtonClick() {
+                checkNotificationPermission()
+            }
+
             override fun onWebsosoOfficialButtonClick() {
                 val officialUrl = getString(websoso_official)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(officialUrl))
@@ -100,6 +112,41 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_s
                 finish()
             }
         }
+
+    private fun checkNotificationPermission() {
+        val isNotificationPermissionGranted =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS,
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                val notificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.areNotificationsEnabled()
+            }
+
+        if (isNotificationPermissionGranted) {
+            navigateToNotificationSetting()
+            return
+        }
+
+        showNotificationSettingDialog()
+    }
+
+    private fun showNotificationSettingDialog() {
+        val dialog = NotificationPermissionDialog.newInstance()
+        dialog.isCancelable = false
+        dialog.show(
+            supportFragmentManager,
+            NotificationPermissionDialog.NOTIFICATION_PERMISSION_DIALOG_TAG,
+        )
+    }
+
+    private fun navigateToNotificationSetting() {
+        val intent = NotificationSettingActivity.getIntent(this)
+        startActivity(intent)
+    }
 
     companion object {
         private const val IS_PROFILE_PUBLIC = "isProfilePublic"

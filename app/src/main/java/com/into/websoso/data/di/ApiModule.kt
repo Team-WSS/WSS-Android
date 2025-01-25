@@ -8,6 +8,7 @@ import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.api.KeywordApi
 import com.into.websoso.data.remote.api.NotificationApi
 import com.into.websoso.data.remote.api.NovelApi
+import com.into.websoso.data.remote.api.PushMessageApi
 import com.into.websoso.data.remote.api.UserApi
 import com.into.websoso.data.remote.api.UserNovelApi
 import com.into.websoso.data.remote.api.VersionApi
@@ -74,4 +75,10 @@ object ApiModule {
     fun provideVersionApi(
         @Secured retrofit: Retrofit,
     ): VersionApi = retrofit.create(VersionApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providePushMessageApi(
+        @Secured retrofit: Retrofit,
+    ): PushMessageApi = retrofit.create(PushMessageApi::class.java)
 }

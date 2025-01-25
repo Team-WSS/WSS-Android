@@ -9,10 +9,20 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.into.websoso.R
+import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class WSSFirebaseMessagingService : FirebaseMessagingService() {
+    @Inject
+    lateinit var pushMessageRepository: PushMessageRepository
+
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
@@ -22,9 +32,13 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         val title = receivedData["title"] ?: DEFAULT_TITLE
         val body = receivedData["body"] ?: DEFAULT_BODY
         val feedId = receivedData["feedId"]?.toLongOrNull() ?: return
+        val notificationId = receivedData["notificationId"]?.toLongOrNull() ?: return
 
         setupNotificationChannel()
-        val pendingIntent = createPendingIntent(feedId)
+        val pendingIntent = createPendingIntent(
+            feedId,
+            notificationId,
+        )
         showNotification(title, body, pendingIntent)
     }
 
@@ -41,9 +55,12 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createPendingIntent(feedId: Long): PendingIntent {
+    private fun createPendingIntent(
+        feedId: Long,
+        notificationId: Long,
+    ): PendingIntent {
         val mainIntent = MainActivity.getIntent(this)
-        val detailIntent = FeedDetailActivity.getIntent(this, feedId)
+        val detailIntent = FeedDetailActivity.getIntent(this, feedId, notificationId)
 
         return TaskStackBuilder.create(this).run {
             addNextIntent(mainIntent)
@@ -73,6 +90,12 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            runCatching {
+                pushMessageRepository.updateUserFCMToken(token)
+            }
+        }
     }
 
     companion object {

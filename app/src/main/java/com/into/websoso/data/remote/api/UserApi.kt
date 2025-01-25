@@ -2,7 +2,6 @@ package com.into.websoso.data.remote.api
 
 import com.into.websoso.data.remote.request.UserInfoRequestDto
 import com.into.websoso.data.remote.request.UserProfileEditRequestDto
-import com.into.websoso.data.remote.request.UserProfileRequestDto
 import com.into.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.into.websoso.data.remote.response.BlockedUsersResponseDto
 import com.into.websoso.data.remote.response.GenrePreferenceResponseDto
@@ -91,11 +90,6 @@ interface UserApi {
     suspend fun getOtherUserProfile(
         @Path("userId") userId: Long,
     ): OtherUserProfileResponseDto
-
-    @POST("users/profile")
-    suspend fun postUserProfile(
-        @Body userProfileRequestDto: UserProfileRequestDto,
-    )
 
     @GET("users/{userId}/novels")
     suspend fun getUserStorage(
