@@ -18,6 +18,15 @@ class PushMessageRepository
         private val userStorage: DataStore<Preferences>,
         private val pushMessageApi: PushMessageApi,
     ) {
+        suspend fun updateUserFCMToken(fcmToken: String) {
+            val storedToken = fetchUserFCMToken()
+            if (fcmToken == storedToken) {
+                return
+            }
+
+            saveUserFCMToken(fcmToken)
+        }
+
         suspend fun saveUserFCMToken(fcmToken: String) {
             userStorage.edit { preferences ->
                 preferences[USER_FCM_TOKEN_KEY] = fcmToken
@@ -26,23 +35,14 @@ class PushMessageRepository
             saveUserFCMTokenToRemote(fcmToken)
         }
 
-        suspend fun updateUserFCMToken(fcmToken: String) {
-            val storedToken = fetchUserFCMToken()
-            if (fcmToken == storedToken) {
-                return
-            }
-
-            saveUserFCMTokenToRemote(fcmToken)
+        private suspend fun saveUserFCMTokenToRemote(fcmToken: String) {
+            val deviceIdentifier = userRepository.fetchUserDeviceIdentifier()
+            authRepository.saveFCMToken(fcmToken, deviceIdentifier)
         }
 
         private suspend fun fetchUserFCMToken(): String {
             val preferences = userStorage.data.first()
             return preferences[USER_FCM_TOKEN_KEY] ?: ""
-        }
-
-        private suspend fun saveUserFCMTokenToRemote(fcmToken: String) {
-            val deviceIdentifier = userRepository.fetchUserDeviceIdentifier()
-            authRepository.saveFCMToken(fcmToken, deviceIdentifier)
         }
 
         suspend fun saveNotificationPermissionFirstLaunched(value: Boolean) {
