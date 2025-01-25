@@ -41,7 +41,10 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         val notificationId = receivedData["notificationId"]?.toLongOrNull() ?: return
 
         setupNotificationChannel()
-        val pendingIntent = createPendingIntent(feedId, notificationId)
+        val pendingIntent = createPendingIntent(
+            feedId,
+            notificationId,
+        )
         showNotification(title, body, pendingIntent)
     }
 
@@ -58,9 +61,12 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createPendingIntent(feedId: Long, notificationId: Long): PendingIntent {
+    private fun createPendingIntent(
+        feedId: Long,
+        notificationId: Long,
+    ): PendingIntent {
         val mainIntent = MainActivity.getIntent(this)
-        val detailIntent = FeedDetailActivity.getIntent(this, feedId)
+        val detailIntent = FeedDetailActivity.getIntent(this, feedId, notificationId)
 
         return TaskStackBuilder.create(this).run {
             addNextIntent(mainIntent)
