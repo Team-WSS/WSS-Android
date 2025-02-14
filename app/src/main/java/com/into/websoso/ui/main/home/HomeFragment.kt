@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
@@ -195,12 +194,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun updateHasNotificationUnread(hasUnread: Boolean) {
-        val drawable = if (hasUnread) {
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_notification_unread)
-        } else {
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_notification_read)
-        }
-        binding.ivHomeNotification.setImageDrawable(drawable)
+        binding.ivHomeNotification.isSelected = hasUnread
     }
 
     private fun showNotificationPermissionDialog() {
