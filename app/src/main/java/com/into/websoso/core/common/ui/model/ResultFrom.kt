@@ -16,6 +16,7 @@ enum class ResultFrom {
     OtherUserProfileBack,
     NovelRating,
     WithdrawUser,
+    Notification,
     ;
 
     val RESULT_OK: Int = ordinal + 1
