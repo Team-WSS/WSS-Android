@@ -35,7 +35,6 @@ class AccountInfoViewModel
                     userRepository.fetchUserInfoDetail()
                 }.onSuccess { userInfo ->
                     _userEmail.value = userInfo.email
-                }.onFailure {
                 }
             }
         }
