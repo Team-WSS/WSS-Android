@@ -38,8 +38,8 @@ class TermsAgreementViewModel @Inject constructor() : ViewModel() {
     }
 
     fun updateTermsAgreementsAll() {
-        val newStatus = agreementStatus.value.values.any { !it }
-        _agreementStatus.update { status -> status.mapValues { newStatus } }
+        val newStatus = _agreementStatus.value.values.any { !it }
+        _agreementStatus.update { it.mapValues { _ -> newStatus } }
     }
 
     fun updateTermsAgreements(agreementType: AgreementType) {

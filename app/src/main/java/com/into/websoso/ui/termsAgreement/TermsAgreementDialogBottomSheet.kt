@@ -105,10 +105,17 @@ class TermsAgreementDialogBottomSheet :
     }
 
     private fun setupViewModel() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch { termsAgreementViewModel.agreementStatus.collect { updateAgreementIcons(it) } }
-            launch { termsAgreementViewModel.isAllChecked.collect { updateAllAgreementIcon(it) } }
-            launch { termsAgreementViewModel.isRequiredAgreementsChecked.collect { updateCompleteButtonState(it) }
+        viewLifecycleOwner.lifecycleScope.launch {
+            termsAgreementViewModel.agreementStatus.collect { status ->
+                updateAgreementIcons(status)
+
+                updateAllAgreementIcon(status.values.all { it })
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            termsAgreementViewModel.isRequiredAgreementsChecked.collect {
+                updateCompleteButtonState(it)
             }
         }
     }
