@@ -74,7 +74,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { updateFCMToken(true) }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            updateFCMToken(
+                isFirstLaunch = true,
+            )
+        }
 
     override fun onViewCreated(
         view: View,
@@ -211,7 +215,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
             return
         }
-        updateFCMToken(true)
+        updateFCMToken(isFirstLaunch = true)
         homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
     }
 
