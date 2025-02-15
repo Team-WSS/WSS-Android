@@ -144,6 +144,10 @@
             android:name=".ui.userStorage.UserStorageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.notificationSetting.NotificationSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

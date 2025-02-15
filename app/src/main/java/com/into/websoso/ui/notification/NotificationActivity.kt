@@ -38,7 +38,7 @@ class NotificationActivity : ComponentActivity() {
 
     private fun navigateToFeedDetail(notification: Notification) {
         notificationViewModel.updateReadNotification(notification.id)
-        startActivity(FeedDetailActivity.getIntent(this, notification.intrinsicId))
+        startActivity(FeedDetailActivity.getIntent(this, notification.intrinsicId, notification.id))
     }
 
     companion object {

@@ -20,4 +20,8 @@ class NotificationRepository
             notificationApi.getNotificationDetail(notificationId).toData()
 
         suspend fun fetchNotificationUnread(): Boolean = notificationApi.getNotificationUnread().hasUnreadNotifications
+
+        suspend fun fetchNotificationRead(notificationId: Long) {
+            notificationApi.readNotification(notificationId)
+        }
     }
