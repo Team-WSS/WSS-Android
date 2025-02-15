@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,16 +39,13 @@ class TermsAgreementViewModel @Inject constructor() : ViewModel() {
 
     fun updateTermsAgreementsAll() {
         val newStatus = agreementStatus.value.values.any { !it }
-        _agreementStatus.value = agreementStatus.value.mapValues { newStatus }
+        _agreementStatus.update { status -> status.mapValues { newStatus } }
     }
 
     fun updateTermsAgreements(agreementType: AgreementType) {
         _agreementStatus.value[agreementType]?.let { currentValue ->
-            val newValue = !currentValue
-            if (newValue != currentValue) {
-                _agreementStatus.value = _agreementStatus.value.toMutableMap().apply {
-                    this[agreementType] = newValue
-                }
+            _agreementStatus.value = _agreementStatus.value.toMutableMap().apply {
+                this[agreementType] = !currentValue
             }
         }
     }

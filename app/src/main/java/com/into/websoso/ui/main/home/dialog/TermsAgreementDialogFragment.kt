@@ -12,11 +12,11 @@ class TermsAgreementDialogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupClickListeners()
+        isCancelable = false
+        onTermsAgreementPopupMenuUpdateClick()
     }
 
-    private fun setupClickListeners() {
+    private fun onTermsAgreementPopupMenuUpdateClick() {
         binding.tvTermsAgreementPopupMenuUpdate.setOnClickListener {
             showTermsAgreementBottomSheet()
             dismiss()
@@ -29,6 +29,8 @@ class TermsAgreementDialogFragment :
     }
 
     companion object {
+        const val TERMS_AGREEMENT_TAG = "TermsAgreementDialog"
+
         fun newInstance(): TermsAgreementDialogFragment {
             return TermsAgreementDialogFragment()
         }
