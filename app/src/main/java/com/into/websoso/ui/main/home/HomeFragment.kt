@@ -74,7 +74,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { updateFCMToken() }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { updateFCMToken(true) }
 
     override fun onViewCreated(
         view: View,
@@ -152,7 +152,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeViewModel.isNotificationPermissionFirstLaunched.observe(viewLifecycleOwner) { isFirstLaunch ->
             if (isFirstLaunch) {
                 showNotificationPermissionDialog()
+                return@observe
             }
+            updateFCMToken(isFirstLaunch = false)
         }
     }
 
@@ -209,15 +211,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
             return
         }
-        updateFCMToken()
+        updateFCMToken(true)
         homeViewModel.updateIsNotificationPermissionFirstLaunched(false)
     }
 
-    private fun updateFCMToken() {
+    private fun updateFCMToken(isFirstLaunch: Boolean) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             val token = task.result
 
             if (task.isSuccessful) {
+                if (isFirstLaunch) {
+                    homeViewModel.saveFCMToken(token)
+                    return@addOnCompleteListener
+                }
                 homeViewModel.updateFCMToken(token)
             }
         }
