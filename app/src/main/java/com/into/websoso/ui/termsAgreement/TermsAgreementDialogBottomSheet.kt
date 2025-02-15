@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
@@ -106,16 +108,19 @@ class TermsAgreementDialogBottomSheet :
 
     private fun setupViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            termsAgreementViewModel.agreementStatus.collect { status ->
-                updateAgreementIcons(status)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    termsAgreementViewModel.agreementStatus.collect { status ->
+                        updateAgreementIcons(status)
+                        updateAllAgreementIcon(status.values.all { it })
+                    }
+                }
 
-                updateAllAgreementIcon(status.values.all { it })
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            termsAgreementViewModel.isRequiredAgreementsChecked.collect {
-                updateCompleteButtonState(it)
+                launch {
+                    termsAgreementViewModel.isRequiredAgreementsChecked.collect {
+                        updateCompleteButtonState(it)
+                    }
+                }
             }
         }
     }
