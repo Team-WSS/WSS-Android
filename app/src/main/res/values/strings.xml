@@ -407,4 +407,12 @@
     <string name="minimum_version_popup_menu_title">업데이트 알림</string>
     <string name="minimum_version_popup_menu_description">웹소소 세계에 변화가 생겼어요!\n지금 업데이트해보세요.</string>
     <string name="minimum_version_popup_menu_update">업데이트</string>
+
+    <string name="string_terms_agreement_service"><u>서비스 이용약관 동의</u> (필수)</string>
+    <string name="string_terms_agreement_privacy"><u>개인정보 수집 및 이용 안내</u> (필수)</string>
+    <string name="string_terms_agreement_marketing">마켓팅 정보 수신 동의 (선택)</string>
+    <string name="string_terms_agreement_next">다음으로</string>
+    <string name="string_terms_agreement_popup_menu_update">동의하러 가기</string>
+    <string name="string_terms_agreement_popup_menu_description">더 안전하고 원활한 웹소소를 위해\n업데이트된 약관에 동의해주세요.</string>
+    <string name="string_terms_agreement_popup_menu_title">약관 동의가 필요해요!</string>
 </resources>
