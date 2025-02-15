@@ -25,6 +25,7 @@ import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.into.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.into.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.into.websoso.ui.main.home.adpater.UserInterestFeedAdapter
+import com.into.websoso.ui.main.home.dialog.TermsAgreementDialogFragment
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.notification.NotificationActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
@@ -90,6 +91,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         onPostInterestNovelClick()
         onSettingPreferenceGenreClick()
         onNotificationButtonClick()
+        showTermsAgreementDialog()
         tracker.trackEvent("home")
     }
 
@@ -291,6 +293,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.ivHomeNotification.setOnClickListener {
             startActivity(NotificationActivity.getIntent(requireContext()))
         }
+    }
+
+    private fun showTermsAgreementDialog() {
+        val dialog = TermsAgreementDialogFragment.newInstance()
+        dialog.show(parentFragmentManager, TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
     }
 
     companion object {

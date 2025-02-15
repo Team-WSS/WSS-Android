@@ -65,7 +65,10 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         return TaskStackBuilder.create(this).run {
             addNextIntent(mainIntent)
             addNextIntentWithParentStack(detailIntent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            getPendingIntent(
+                notificationId.toInt(),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
         }
     }
 

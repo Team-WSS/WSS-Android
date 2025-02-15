@@ -12,6 +12,7 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.ActivityOnboardingBinding
 import com.into.websoso.ui.onboarding.model.OnboardingPage
 import com.into.websoso.ui.onboarding.welcome.WelcomeActivity
+import com.into.websoso.ui.termsAgreement.TermsAgreementDialogBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +27,7 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingBinding>(R.layout.acti
         setupViewPager()
         setupObserver()
         onSkipGeneralButtonClick()
+        showTermsAgreementDialog()
     }
 
     private fun bindViewModel() {
@@ -78,6 +80,11 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingBinding>(R.layout.acti
                 viewModel.submitUserProfile()
             }
         }
+    }
+
+    private fun showTermsAgreementDialog() {
+        TermsAgreementDialogBottomSheet.newInstance()
+            .show(supportFragmentManager, "TermsAgreementDialog")
     }
 
     companion object {
