@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_novel_detail_white_radius_14dp">
+
+        <ImageView
+            android:id="@+id/iv_terms_agreement_popup_menu_warning"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="100dp"
+            android:layout_marginStart="116dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="116dp"
+            android:src="@drawable/ic_novel_detail_warning"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_terms_agreement_popup_menu_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="약관 동의가 필요해요!"
+            android:textAlignment="center"
+            android:textAppearance="@style/title1"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/iv_terms_agreement_popup_menu_warning"
+            app:layout_constraintStart_toStartOf="@+id/iv_terms_agreement_popup_menu_warning"
+            app:layout_constraintTop_toBottomOf="@id/iv_terms_agreement_popup_menu_warning" />
+
+        <TextView
+            android:id="@+id/tv_terms_agreement_popup_menu_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="더 안전하고 원활한 웹소소를 위해\n업데이트된 약관에 동의해주세요."
+            android:textAlignment="center"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_300_52515F"
+            app:layout_constraintEnd_toEndOf="@+id/tv_terms_agreement_popup_menu_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_terms_agreement_popup_menu_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_terms_agreement_popup_menu_title" />
+
+        <TextView
+            android:id="@+id/tv_terms_agreement_popup_menu_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginHorizontal="22dp"
+            android:background="@drawable/bg_home_primary100_radius_8dp"
+            android:gravity="center"
+            android:paddingVertical="12dp"
+            android:text="동의하러 가기"
+            android:textAlignment="center"
+            android:textAppearance="@style/label1"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_terms_agreement_popup_menu_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
