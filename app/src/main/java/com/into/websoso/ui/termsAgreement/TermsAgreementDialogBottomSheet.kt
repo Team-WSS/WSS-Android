@@ -6,9 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
@@ -19,10 +16,10 @@ import com.into.websoso.R.drawable.ic_terms_agreement_unselected
 import com.into.websoso.R.string.string_terms_agreement_complete
 import com.into.websoso.R.string.string_terms_agreement_next
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.databinding.DialogTermsAgreementBinding
 import com.into.websoso.ui.termsAgreement.model.AgreementType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TermsAgreementDialogBottomSheet :
@@ -107,21 +104,13 @@ class TermsAgreementDialogBottomSheet :
     }
 
     private fun setupViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    termsAgreementViewModel.agreementStatus.collect { status ->
-                        updateAgreementIcons(status)
-                        updateAllAgreementIcon(status.values.all { it })
-                    }
-                }
+        termsAgreementViewModel.agreementStatus.collectWithLifecycle(viewLifecycleOwner) { status ->
+            updateAgreementIcons(status)
+            updateAllAgreementIcon(status.values.all { it })
+        }
 
-                launch {
-                    termsAgreementViewModel.isRequiredAgreementsChecked.collect {
-                        updateCompleteButtonState(it)
-                    }
-                }
-            }
+        termsAgreementViewModel.isRequiredAgreementsChecked.collectWithLifecycle(viewLifecycleOwner) {
+            updateCompleteButtonState(it)
         }
     }
 
