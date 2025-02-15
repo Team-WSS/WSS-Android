@@ -15,19 +15,19 @@ class AuthRepository
     @Inject
     constructor(
         private val authApi: AuthApi,
-        private val preferences: SharedPreferences,
+        private val authStorage: SharedPreferences,
     ) {
         var accessToken: String
-            get() = preferences.getString(ACCESS_TOKEN_KEY, "").orEmpty()
-            private set(value) = preferences.edit().putString(ACCESS_TOKEN_KEY, value).apply()
+            get() = authStorage.getString(ACCESS_TOKEN_KEY, "").orEmpty()
+            private set(value) = authStorage.edit().putString(ACCESS_TOKEN_KEY, value).apply()
 
         var refreshToken: String
-            get() = preferences.getString(REFRESH_TOKEN_KEY, "").orEmpty()
-            private set(value) = preferences.edit().putString(REFRESH_TOKEN_KEY, value).apply()
+            get() = authStorage.getString(REFRESH_TOKEN_KEY, "").orEmpty()
+            private set(value) = authStorage.edit().putString(REFRESH_TOKEN_KEY, value).apply()
 
         var isAutoLogin: Boolean
-            get() = preferences.getBoolean(AUTO_LOGIN_KEY, false)
-            private set(value) = preferences.edit().putBoolean(AUTO_LOGIN_KEY, value).apply()
+            get() = authStorage.getBoolean(AUTO_LOGIN_KEY, false)
+            private set(value) = authStorage.edit().putBoolean(AUTO_LOGIN_KEY, value).apply()
 
         suspend fun loginWithKakao(accessToken: String): LoginEntity {
             val response = authApi.loginWithKakao(accessToken)
@@ -82,7 +82,7 @@ class AuthRepository
         }
 
         fun clearTokens() {
-            preferences.edit().apply {
+            authStorage.edit().apply {
                 remove(ACCESS_TOKEN_KEY)
                 remove(REFRESH_TOKEN_KEY)
                 apply()
