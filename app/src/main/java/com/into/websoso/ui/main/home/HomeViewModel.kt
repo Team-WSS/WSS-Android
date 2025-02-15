@@ -211,10 +211,18 @@ class HomeViewModel
                 else -> true
             }
 
-        fun updateFCMToken(token: String) {
+        fun saveFCMToken(token: String) {
             viewModelScope.launch {
                 runCatching {
                     pushMessageRepository.saveUserFCMToken(token)
+                }
+            }
+        }
+
+        fun updateFCMToken(token: String) {
+            viewModelScope.launch {
+                runCatching {
+                    pushMessageRepository.updateUserFCMToken(token)
                 }
             }
         }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ class AccountInfoViewModel
     constructor(
         private val userRepository: UserRepository,
         private val authRepository: AuthRepository,
+        private val pushMessageRepository: PushMessageRepository,
     ) : ViewModel() {
         private val _userEmail: MutableLiveData<String> = MutableLiveData()
         val userEmail: LiveData<String> get() = _userEmail
@@ -46,6 +48,7 @@ class AccountInfoViewModel
                 }.onSuccess {
                     _isLogoutSuccess.value = true
                     authRepository.updateIsAutoLogin(false)
+                    pushMessageRepository.clearFCMToken()
                 }.onFailure {
                     _isLogoutSuccess.value = false
                 }
