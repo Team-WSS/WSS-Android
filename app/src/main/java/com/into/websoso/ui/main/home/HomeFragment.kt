@@ -1,11 +1,12 @@
 package com.into.websoso.ui.main.home
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
@@ -15,6 +16,7 @@ import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
+import com.into.websoso.core.common.ui.model.ResultFrom.Notification
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.tracker.Tracker
@@ -39,6 +41,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+
+    private val homeResultLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                Notification.RESULT_OK -> {
+                    homeViewModel.updateNotificationUnread()
+                }
+            }
+        }
 
     private val popularNovelsAdapter: PopularNovelsAdapter by lazy {
         PopularNovelsAdapter(::onPopularNovelClick)
@@ -195,12 +206,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     private fun updateHasNotificationUnread(hasUnread: Boolean) {
-        val drawable = if (hasUnread) {
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_notification_unread)
-        } else {
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_notification_read)
-        }
-        binding.ivHomeNotification.setImageDrawable(drawable)
+        binding.ivHomeNotification.isSelected = hasUnread
     }
 
     private fun showNotificationPermissionDialog() {
@@ -289,7 +295,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun onNotificationButtonClick() {
         binding.ivHomeNotification.setOnClickListener {
-            startActivity(NotificationActivity.getIntent(requireContext()))
+            val intent = NotificationActivity.getIntent(requireContext())
+            homeResultLauncher.launch(intent)
         }
     }
 
