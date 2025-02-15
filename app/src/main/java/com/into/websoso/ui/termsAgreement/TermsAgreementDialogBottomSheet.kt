@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
@@ -17,10 +16,10 @@ import com.into.websoso.R.drawable.ic_terms_agreement_unselected
 import com.into.websoso.R.string.string_terms_agreement_complete
 import com.into.websoso.R.string.string_terms_agreement_next
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.databinding.DialogTermsAgreementBinding
 import com.into.websoso.ui.termsAgreement.model.AgreementType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TermsAgreementDialogBottomSheet :
@@ -34,15 +33,15 @@ class TermsAgreementDialogBottomSheet :
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupBottomSheet()
-        onRequireTermsAgreementClick()
+        setupBottomSheetDialog()
+        onRequiredTermsAgreementClick()
         onTermsAgreementToggleClick()
         onTermsAgreementCompleteButtonClick()
         setupViewModel()
         updateCompleteButtonText()
     }
 
-    private fun setupBottomSheet() {
+    private fun setupBottomSheetDialog() {
         (dialog as BottomSheetDialog).apply {
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
             behavior.isDraggable = false
@@ -51,12 +50,12 @@ class TermsAgreementDialogBottomSheet :
         }
     }
 
-    private fun onRequireTermsAgreementClick() {
+    private fun onRequiredTermsAgreementClick() {
         binding.tvTermsAgreementService.setOnClickListener {
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://www.notion.so/websoso/143600bd74688050be18f4da31d9403e?pvs=4"),
+                    Uri.parse(getString(R.string.terms_agreement_service)),
                 ),
             )
         }
@@ -65,7 +64,7 @@ class TermsAgreementDialogBottomSheet :
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://www.notion.so/kimmjabc/18e9e64a45328048842ed4dd7b17e5b3?pvs=25"),
+                    Uri.parse(getString(R.string.terms_agreement_privacy)),
                 ),
             )
         }
@@ -105,23 +104,26 @@ class TermsAgreementDialogBottomSheet :
     }
 
     private fun setupViewModel() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch { termsAgreementViewModel.agreementStatus.collect { updateAgreementIcons(it) } }
-            launch { termsAgreementViewModel.isAllChecked.collect { updateAllAgreementIcon(it) } }
-            launch { termsAgreementViewModel.isRequiredAgreementsChecked.collect { updateCompleteButtonState(it) }
-            }
+        termsAgreementViewModel.agreementStatus.collectWithLifecycle(viewLifecycleOwner) { status ->
+            updateAgreementIcons(status)
+            updateAllAgreementIcon(status.values.all { it })
+        }
+
+        termsAgreementViewModel.isRequiredAgreementsChecked.collectWithLifecycle(viewLifecycleOwner) {
+            updateCompleteButtonState(it)
         }
     }
 
     private fun updateAgreementIcons(status: Map<AgreementType, Boolean>) {
-        fun getIcon(isChecked: Boolean) = if (isChecked)
-            ic_terms_agreement_selected else ic_terms_agreement_unselected
-
         binding.apply {
-            ivTermsAgreementService.setImageResource(getIcon(status[AgreementType.SERVICE] == true))
-            ivTermsAgreementPrivacy.setImageResource(getIcon(status[AgreementType.PRIVACY] == true))
-            ivTermsAgreementMarketing.setImageResource(getIcon(status[AgreementType.MARKETING] == true))
+            ivTermsAgreementService.setImageResource(getToggleIcon(status[AgreementType.SERVICE] == true))
+            ivTermsAgreementPrivacy.setImageResource(getToggleIcon(status[AgreementType.PRIVACY] == true))
+            ivTermsAgreementMarketing.setImageResource(getToggleIcon(status[AgreementType.MARKETING] == true))
         }
+    }
+
+    private fun getToggleIcon(isChecked: Boolean): Int {
+        return if (isChecked) ic_terms_agreement_selected else ic_terms_agreement_unselected
     }
 
     private fun updateAllAgreementIcon(isChecked: Boolean) {
@@ -132,10 +134,9 @@ class TermsAgreementDialogBottomSheet :
 
     private fun updateCompleteButtonState(isEnabled: Boolean) {
         binding.btnTermsAgreementComplete.setBackgroundResource(
-            if (isEnabled) {
-                bg_novel_rating_date_primary_100_radius_12dp
-            } else {
-                (bg_profile_edit_gray_70_radius_12dp)
+            when (isEnabled) {
+                true -> bg_novel_rating_date_primary_100_radius_12dp
+                false -> bg_profile_edit_gray_70_radius_12dp
             },
         )
     }

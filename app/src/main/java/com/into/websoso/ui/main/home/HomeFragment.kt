@@ -297,13 +297,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private fun showTermsAgreementDialog() {
         val dialog = TermsAgreementDialogFragment.newInstance()
-        dialog.isCancelable = false
-        dialog.show(parentFragmentManager, TERMS_AGREEMENT_TAG)
+        dialog.show(parentFragmentManager, TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
     }
 
     companion object {
         private const val TODAY_POPULAR_NOVEL_MARGIN = 15
         private const val USER_INTEREST_MARGIN = 14
-        private const val TERMS_AGREEMENT_TAG = "TermsAgreementDialog"
     }
 }

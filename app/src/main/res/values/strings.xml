@@ -425,7 +425,9 @@
     <string name="string_terms_agreement_marketing">마켓팅 정보 수신 동의 (선택)</string>
     <string name="string_terms_agreement_next">다음으로</string>
     <string name="string_terms_agreement_complete">완료</string>
-
+    <string name="string_terms_agreement_title">웹소소 세계로 들어가는 중...</string>
+    <string name="string_terms_agreement_sub_title">아래 약관 내용에 동의 후 서비스 이용이 가능해요</string>
+    <string name="string_terms_agreement_all">전체 동의</string>
 
     <!-- 약관동의 팝업 뷰-->
     <string name="string_terms_agreement_popup_menu_update">동의하러 가기</string>
