@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
+import com.into.websoso.data.model.TermsAgreementEntity
 import com.into.websoso.data.model.UserInterestFeedMessage
 import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
@@ -14,10 +15,14 @@ import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.PushMessageRepository
+import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +34,7 @@ class HomeViewModel
         private val feedRepository: FeedRepository,
         private val pushMessageRepository: PushMessageRepository,
         private val notificationRepository: NotificationRepository,
+        private val userRepository: UserRepository,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
         val uiState: LiveData<HomeUiState> get() = _uiState
@@ -36,9 +42,16 @@ class HomeViewModel
         private val _isNotificationPermissionFirstLaunched: MutableLiveData<Boolean> = MutableLiveData()
         val isNotificationPermissionFirstLaunched: LiveData<Boolean> get() = _isNotificationPermissionFirstLaunched
 
+        private val _termsAgreementState = MutableStateFlow<TermsAgreementEntity?>(null)
+        val termsAgreementState: StateFlow<TermsAgreementEntity?> = _termsAgreementState.asStateFlow()
+
+        private val _showTermsAgreementDialog = MutableStateFlow(false)
+        val showTermsAgreementDialog: StateFlow<Boolean> = _showTermsAgreementDialog.asStateFlow()
+
         init {
             updateHomeData(true)
             updateNotificationUnread()
+            checkTermsAgreement()
         }
 
         private fun updateHomeData(isLogin: Boolean) {
@@ -216,6 +229,27 @@ class HomeViewModel
                 runCatching {
                     pushMessageRepository.saveUserFCMToken(token)
                 }
+            }
+        }
+
+        private fun checkTermsAgreement() {
+            viewModelScope.launch {
+                userRepository.isTermsAgreementChecked.collect { checked ->
+                    if (!checked) {
+                        updateTermsAgreement()
+                    }
+                }
+            }
+        }
+
+        private fun updateTermsAgreement() {
+            viewModelScope.launch {
+                runCatching { userRepository.fetchTermsAgreements() }
+                    .onSuccess { terms ->
+
+                        _termsAgreementState.value = terms
+                        _showTermsAgreementDialog.value = !(terms.serviceAgreed && terms.privacyAgreed)
+                    }
             }
         }
 

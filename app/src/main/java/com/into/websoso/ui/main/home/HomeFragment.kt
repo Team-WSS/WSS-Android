@@ -19,6 +19,7 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.ui.model.ResultFrom.Notification
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
@@ -27,6 +28,7 @@ import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.into.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.into.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.into.websoso.ui.main.home.adpater.UserInterestFeedAdapter
+import com.into.websoso.ui.main.home.dialog.TermsAgreementDialogFragment
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.notification.NotificationActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
@@ -171,6 +173,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             }
             updateFCMToken(isFirstLaunch = false)
         }
+
+        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { shouldShow ->
+            if (shouldShow) {
+                showTermsAgreementDialog()
+            }
+        }
     }
 
     private fun updateUserInterestFeedsVisibility(isUserInterestEmpty: Boolean) {
@@ -308,6 +316,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             val intent = NotificationActivity.getIntent(requireContext())
             homeResultLauncher.launch(intent)
         }
+    }
+
+    private fun showTermsAgreementDialog() {
+        val dialog = TermsAgreementDialogFragment.newInstance()
+        dialog.show(parentFragmentManager, TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
     }
 
     companion object {

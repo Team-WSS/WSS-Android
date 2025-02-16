@@ -21,9 +21,15 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.into.websoso.BuildConfig
 import com.into.websoso.core.common.ui.custom.WebsosoCustomSnackBar
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.io.Serializable
 
 fun Float.toFloatPxFromDp(): Float = this * Resources.getSystem().displayMetrics.density
@@ -96,7 +102,8 @@ inline fun <reified T : Serializable> Intent.getAdaptedSerializableExtra(key: St
         getSerializableExtra(key, T::class.java)
     } else {
         @Suppress("DEPRECATION")
-        getSerializableExtra(key) as? T
+        getSerializableExtra(key)
+            as? T
     }
 
 inline fun <reified T : Parcelable> Intent.getAdaptedParcelableExtra(key: String): T? =
@@ -104,7 +111,8 @@ inline fun <reified T : Parcelable> Intent.getAdaptedParcelableExtra(key: String
         getParcelableExtra(key, T::class.java)
     } else {
         @Suppress("DEPRECATION")
-        getParcelableExtra(key) as? T
+        getParcelableExtra(key)
+            as? T
     }
 
 inline fun <reified T : Parcelable> Bundle.getAdaptedParcelable(key: String): T? =
@@ -112,7 +120,8 @@ inline fun <reified T : Parcelable> Bundle.getAdaptedParcelable(key: String): T?
         getParcelable(key, T::class.java)
     } else {
         @Suppress("DEPRECATION")
-        getParcelable(key) as? T
+        getParcelable(key)
+            as? T
     }
 
 fun Context.createDataStore(preferencesName: String): DataStore<Preferences> =
@@ -136,4 +145,16 @@ fun Modifier.clickableWithoutRipple(
         indication = null,
         onClick = onClick,
     )
+}
+
+fun <T> Flow<T>.collectWithLifecycle(
+    lifecycleOwner: LifecycleOwner,
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+    collector: suspend (T) -> Unit,
+) {
+    lifecycleOwner.lifecycleScope.launch {
+        lifecycleOwner.repeatOnLifecycle(state) {
+            collect { collector(it) }
+        }
+    }
 }
