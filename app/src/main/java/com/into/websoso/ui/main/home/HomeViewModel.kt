@@ -202,7 +202,7 @@ class HomeViewModel
             }
         }
 
-        private fun updateNotificationUnread() {
+        fun updateNotificationUnread() {
             viewModelScope.launch {
                 runCatching {
                     notificationRepository.fetchNotificationUnread()

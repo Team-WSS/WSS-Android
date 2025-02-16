@@ -26,15 +26,14 @@ class TermsAgreementDialogFragment :
     }
 
     private fun showTermsAgreementBottomSheet() {
-        TermsAgreementDialogBottomSheet.newInstance(isFromHome = true)
+        TermsAgreementDialogBottomSheet
+            .newInstance(isFromHome = true)
             .show(parentFragmentManager, "TermsAgreementDialogBottomSheet")
     }
 
     companion object {
         const val TERMS_AGREEMENT_TAG = "TermsAgreementDialog"
 
-        fun newInstance(): TermsAgreementDialogFragment {
-            return TermsAgreementDialogFragment()
-        }
+        fun newInstance(): TermsAgreementDialogFragment = TermsAgreementDialogFragment()
     }
 }

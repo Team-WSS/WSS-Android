@@ -31,56 +31,52 @@ import com.into.websoso.data.remote.response.UserStorageResponseDto
 import com.into.websoso.data.remote.response.UserStorageResponseDto.StorageNovelDto
 import com.into.websoso.ui.main.myPage.myActivity.model.Genres
 
-fun UserInfoResponseDto.toData(): UserInfoEntity {
-    return UserInfoEntity(
+fun UserInfoResponseDto.toData(): UserInfoEntity =
+    UserInfoEntity(
         userId = this.userId,
         nickname = this.nickname,
         gender = this.gender,
     )
-}
 
-fun UserInfoDetailResponseDto.toData(): UserInfoDetailEntity {
-    return UserInfoDetailEntity(
+fun UserInfoDetailResponseDto.toData(): UserInfoDetailEntity =
+    UserInfoDetailEntity(
         email = email,
         gender = gender,
         birthYear = birth,
     )
-}
 
-fun BlockedUsersResponseDto.toData(): BlockedUsersEntity {
-    return BlockedUsersEntity(blockedUsers = blocks.map { blockedUser ->
-        BlockedUserEntity(
-            blockId = blockedUser.blockId,
-            userId = blockedUser.userId,
-            nickName = blockedUser.nickName,
-            avatarImage = blockedUser.avatarImage,
-        )
-    })
-}
+fun BlockedUsersResponseDto.toData(): BlockedUsersEntity =
+    BlockedUsersEntity(
+        blockedUsers = blocks.map { blockedUser ->
+            BlockedUserEntity(
+                blockId = blockedUser.blockId,
+                userId = blockedUser.userId,
+                nickName = blockedUser.nickName,
+                avatarImage = blockedUser.avatarImage,
+            )
+        },
+    )
 
-fun UserNovelStatsResponseDto.toData(): UserNovelStatsEntity {
-    return UserNovelStatsEntity(
+fun UserNovelStatsResponseDto.toData(): UserNovelStatsEntity =
+    UserNovelStatsEntity(
         interestNovelCount = interestNovelCount,
         watchingNovelCount = watchingNovelCount,
         watchedNovelCount = watchedNovelCount,
         quitNovelCount = quitNovelCount,
     )
-}
 
-fun UserProfileStatusResponseDto.toData(): UserProfileStatusEntity {
-    return UserProfileStatusEntity(
+fun UserProfileStatusResponseDto.toData(): UserProfileStatusEntity =
+    UserProfileStatusEntity(
         isProfilePublic = isProfilePublic,
     )
-}
 
-fun MyProfileResponseDto.toData(): MyProfileEntity {
-    return MyProfileEntity(
+fun MyProfileResponseDto.toData(): MyProfileEntity =
+    MyProfileEntity(
         nickname = this.nickname,
         intro = this.intro,
         avatarImage = this.avatarImage,
         genrePreferences = this.genrePreferences,
     )
-}
 
 fun GenrePreferenceResponseDto.GenrePreferenceDto.toData(): GenrePreferenceEntity {
     val koreanGenreName = Genres.from(this.genreName)?.korean ?: this.genreName
@@ -91,41 +87,37 @@ fun GenrePreferenceResponseDto.GenrePreferenceDto.toData(): GenrePreferenceEntit
     )
 }
 
-fun NovelPreferenceResponseDto.toData(): NovelPreferenceEntity {
-    return NovelPreferenceEntity(
+fun NovelPreferenceResponseDto.toData(): NovelPreferenceEntity =
+    NovelPreferenceEntity(
         attractivePoints = this.attractivePoints,
         keywords = this.keywords.map { it.toData() },
     )
-}
 
-fun NovelPreferenceResponseDto.AttractivePointKeywordDto.toData(): NovelPreferenceEntity.KeywordEntity {
-    return NovelPreferenceEntity.KeywordEntity(
+fun NovelPreferenceResponseDto.AttractivePointKeywordDto.toData(): NovelPreferenceEntity.KeywordEntity =
+    NovelPreferenceEntity.KeywordEntity(
         keywordName = this.keywordName,
         keywordCount = this.keywordCount,
     )
-}
 
-fun OtherUserProfileResponseDto.toData(): OtherUserProfileEntity {
-    return OtherUserProfileEntity(
+fun OtherUserProfileResponseDto.toData(): OtherUserProfileEntity =
+    OtherUserProfileEntity(
         nickname = this.nickname,
         intro = this.intro,
         avatarImage = this.avatarImage,
         isProfilePublic = this.isProfilePublic,
         genrePreferences = this.genrePreferences,
     )
-}
 
-fun UserStorageResponseDto.toData(): UserStorageEntity {
-    return UserStorageEntity(
+fun UserStorageResponseDto.toData(): UserStorageEntity =
+    UserStorageEntity(
         isLoadable = this.isLoadable,
         userNovelRating = this.userNovelRating,
         userNovelCount = this.userNovelCount,
         userNovels = this.userNovels.map { it.toData() },
     )
-}
 
-fun StorageNovelDto.toData(): StorageNovelEntity {
-    return StorageNovelEntity(
+fun StorageNovelDto.toData(): StorageNovelEntity =
+    StorageNovelEntity(
         author = this.author,
         userNovelId = this.userNovelId,
         novelId = this.novelId,
@@ -133,17 +125,15 @@ fun StorageNovelDto.toData(): StorageNovelEntity {
         novelImage = this.novelImage,
         title = this.title,
     )
-}
 
-fun UserFeedsResponseDto.toData(): UserFeedsEntity {
-    return UserFeedsEntity(
+fun UserFeedsResponseDto.toData(): UserFeedsEntity =
+    UserFeedsEntity(
         isLoadable = this.isLoadable,
         feeds = this.feeds.map { it.toData() },
     )
-}
 
-fun UserFeedResponseDto.toData(): UserFeedEntity {
-    return UserFeedEntity(
+fun UserFeedResponseDto.toData(): UserFeedEntity =
+    UserFeedEntity(
         feedId = this.feedId,
         isSpoiler = this.isSpoiler,
         feedContent = this.feedContent,
@@ -158,7 +148,6 @@ fun UserFeedResponseDto.toData(): UserFeedEntity {
         novelRating = this.novelRating,
         relevantCategories = this.relevantCategories,
     )
-}
 
 fun TermsAgreementResponseDto.toData(): TermsAgreementEntity =
     TermsAgreementEntity(

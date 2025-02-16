@@ -27,7 +27,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserApi {
-
     @GET("users/me")
     suspend fun getUserInfo(): UserInfoResponseDto
 

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -23,9 +22,7 @@ import com.into.websoso.ui.termsAgreement.model.AgreementType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TermsAgreementDialogBottomSheet :
-    BaseBottomSheetDialog<DialogTermsAgreementBinding>(R.layout.dialog_terms_agreement) {
-
+class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreementBinding>(R.layout.dialog_terms_agreement) {
     private val termsAgreementViewModel: TermsAgreementViewModel by viewModels()
 
     override fun onViewCreated(
@@ -91,7 +88,6 @@ class TermsAgreementDialogBottomSheet :
                 AgreementType.MARKETING,
             )
         }
-
     }
 
     private fun onTermsAgreementCompleteButtonClick() {
@@ -129,9 +125,7 @@ class TermsAgreementDialogBottomSheet :
         }
     }
 
-    private fun getToggleIcon(isChecked: Boolean): Int {
-        return if (isChecked) ic_terms_agreement_selected else ic_terms_agreement_unselected
-    }
+    private fun getToggleIcon(isChecked: Boolean): Int = if (isChecked) ic_terms_agreement_selected else ic_terms_agreement_unselected
 
     private fun updateAllAgreementIcon(isChecked: Boolean) {
         binding.ivTermsAgreementAll.setImageResource(
@@ -152,17 +146,19 @@ class TermsAgreementDialogBottomSheet :
         val isFromHome = arguments?.getBoolean(IS_FROM_HOME_TAG, false) ?: false
 
         binding.btnTermsAgreementComplete.text =
-            if (isFromHome) getString(string_terms_agreement_complete)
-            else getString(string_terms_agreement_next)
+            if (isFromHome) {
+                getString(string_terms_agreement_complete)
+            } else {
+                getString(string_terms_agreement_next)
+            }
     }
 
     companion object {
         private const val IS_FROM_HOME_TAG = "IS_FROM_HOME"
 
-        fun newInstance(isFromHome: Boolean = false): TermsAgreementDialogBottomSheet {
-            return TermsAgreementDialogBottomSheet().apply {
+        fun newInstance(isFromHome: Boolean = false): TermsAgreementDialogBottomSheet =
+            TermsAgreementDialogBottomSheet().apply {
                 arguments = bundleOf(IS_FROM_HOME_TAG to isFromHome)
             }
-        }
     }
 }

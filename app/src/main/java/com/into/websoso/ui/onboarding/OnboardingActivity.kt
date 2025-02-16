@@ -83,7 +83,8 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingBinding>(R.layout.acti
     }
 
     private fun showTermsAgreementDialog() {
-        TermsAgreementDialogBottomSheet.newInstance()
+        TermsAgreementDialogBottomSheet
+            .newInstance()
             .show(supportFragmentManager, "TermsAgreementDialog")
     }
 
