@@ -46,8 +46,8 @@ class TermsAgreementViewModel
 
 
         fun updateTermsAgreementsAll() {
-                val newStatus = _agreementStatus.value.values.any { !it }
-                _agreementStatus.update { it.mapValues { _ -> newStatus } }
+            val newStatus = _agreementStatus.value.values.any { !it }
+            _agreementStatus.update { it.mapValues { _ -> newStatus } }
         }
 
         fun updateTermsAgreements(agreementType: AgreementType) {
