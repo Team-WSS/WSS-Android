@@ -160,10 +160,9 @@ fun UserFeedResponseDto.toData(): UserFeedEntity {
     )
 }
 
-fun TermsAgreementResponseDto.toData(): TermsAgreementEntity {
-    return TermsAgreementEntity(
+fun TermsAgreementResponseDto.toData(): TermsAgreementEntity =
+    TermsAgreementEntity(
         serviceAgreed = this.serviceAgreed,
         privacyAgreed = this.privacyAgreed,
         marketingAgreed = this.marketingAgreed,
     )
-}

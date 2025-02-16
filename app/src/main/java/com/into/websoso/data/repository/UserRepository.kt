@@ -28,9 +28,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UserRepository
-@Inject
-constructor(
+class UserRepository @Inject constructor(
     private val userApi: UserApi,
     private val userStorage: DataStore<Preferences>,
 ) {
@@ -183,7 +181,7 @@ constructor(
         marketingAgreed: Boolean,
     ) {
         userApi.patchTermsAgreement(
-            TermsAgreementRequestDto(serviceAgreed, privacyAgreed, marketingAgreed)
+            TermsAgreementRequestDto(serviceAgreed, privacyAgreed, marketingAgreed),
         )
         saveTermsAgreementChecked(serviceAgreed, privacyAgreed)
     }
