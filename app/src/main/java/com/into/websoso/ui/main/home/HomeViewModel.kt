@@ -228,28 +228,28 @@ class HomeViewModel
             viewModelScope.launch {
                 runCatching {
                     pushMessageRepository.saveUserFCMToken(token)
-                }
-            }
-        }
-
-        private fun checkTermsAgreement() {
-            viewModelScope.launch {
-                userRepository.isTermsAgreementChecked.collect { checked ->
-                    if (!checked) {
-                        updateTermsAgreement()
-                    }
-                }
-            }
-        }
-
-        private fun updateTermsAgreement() {
-            viewModelScope.launch {
-                runCatching { userRepository.fetchTermsAgreements() }
-                    .onSuccess { terms ->
-
-                        _termsAgreementState.value = terms
-                        _showTermsAgreementDialog.value = !(terms.serviceAgreed && terms.privacyAgreed)
-                    }
             }
         }
     }
+
+    private fun checkTermsAgreement() {
+        viewModelScope.launch {
+            userRepository.isTermsAgreementChecked.collect { checked ->
+                if (!checked) {
+                    updateTermsAgreement()
+                }
+            }
+        }
+    }
+
+    private fun updateTermsAgreement() {
+        viewModelScope.launch {
+            runCatching { userRepository.fetchTermsAgreements() }
+                .onSuccess { terms ->
+
+                    _termsAgreementState.value = terms
+                    _showTermsAgreementDialog.value = !(terms.serviceAgreed && terms.privacyAgreed)
+                }
+        }
+    }
+}
