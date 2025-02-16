@@ -17,6 +17,7 @@ import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
@@ -91,7 +92,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         onPostInterestNovelClick()
         onSettingPreferenceGenreClick()
         onNotificationButtonClick()
-        showTermsAgreementDialog()
         tracker.trackEvent("home")
     }
 
@@ -154,6 +154,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeViewModel.isNotificationPermissionFirstLaunched.observe(viewLifecycleOwner) { isFirstLaunch ->
             if (isFirstLaunch) {
                 showNotificationPermissionDialog()
+            }
+        }
+
+        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { shouldShow ->
+            if (shouldShow) {
+                showTermsAgreementDialog()
             }
         }
     }

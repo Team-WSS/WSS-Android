@@ -6,6 +6,7 @@ import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.MyProfileEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.data.model.OtherUserProfileEntity
+import com.into.websoso.data.model.TermsAgreementEntity
 import com.into.websoso.data.model.UserFeedsEntity
 import com.into.websoso.data.model.UserFeedsEntity.UserFeedEntity
 import com.into.websoso.data.model.UserInfoDetailEntity
@@ -19,6 +20,7 @@ import com.into.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.into.websoso.data.remote.response.MyProfileResponseDto
 import com.into.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.into.websoso.data.remote.response.OtherUserProfileResponseDto
+import com.into.websoso.data.remote.response.TermsAgreementResponseDto
 import com.into.websoso.data.remote.response.UserFeedsResponseDto
 import com.into.websoso.data.remote.response.UserFeedsResponseDto.UserFeedResponseDto
 import com.into.websoso.data.remote.response.UserInfoDetailResponseDto
@@ -155,5 +157,13 @@ fun UserFeedResponseDto.toData(): UserFeedEntity {
         novelRatingCount = this.novelRatingCount,
         novelRating = this.novelRating,
         relevantCategories = this.relevantCategories,
+    )
+}
+
+fun TermsAgreementResponseDto.toData(): TermsAgreementEntity {
+    return TermsAgreementEntity(
+        serviceAgreed = this.serviceAgreed,
+        privacyAgreed = this.privacyAgreed,
+        marketingAgreed = this.marketingAgreed,
     )
 }

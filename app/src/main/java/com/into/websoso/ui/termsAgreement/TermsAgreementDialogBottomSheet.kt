@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -94,13 +95,13 @@ class TermsAgreementDialogBottomSheet :
     }
 
     private fun onTermsAgreementCompleteButtonClick() {
-        binding.btnTermsAgreementComplete.setOnClickListener { dismissIfAgreementsCompleted() }
+        binding.btnTermsAgreementComplete.setOnClickListener { sendTermsAgreement() }
     }
 
-    private fun dismissIfAgreementsCompleted() {
-        if (termsAgreementViewModel.isRequiredAgreementsChecked.value) {
-            dismiss()
-        }
+    private fun sendTermsAgreement() {
+        if (!termsAgreementViewModel.isRequiredAgreementsChecked.value) return // 필수 항목 미체크 시 요청 안 함
+
+        termsAgreementViewModel.saveTermsAgreements()
     }
 
     private fun setupViewModel() {
@@ -111,6 +112,12 @@ class TermsAgreementDialogBottomSheet :
 
         termsAgreementViewModel.isRequiredAgreementsChecked.collectWithLifecycle(viewLifecycleOwner) {
             updateCompleteButtonState(it)
+        }
+
+        termsAgreementViewModel.saveAgreementResult.collectWithLifecycle(viewLifecycleOwner) { result ->
+            result?.onSuccess {
+                dismiss()
+            }
         }
     }
 
