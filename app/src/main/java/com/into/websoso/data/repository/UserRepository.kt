@@ -34,6 +34,9 @@ class UserRepository
         private val userApi: UserApi,
         private val userStorage: DataStore<Preferences>,
     ) {
+        val isTermsAgreementChecked: Flow<Boolean> = userStorage.data
+            .map { preferences -> preferences[TERMS_AGREEMENT_CHECKED_KEY] ?: false }
+
         suspend fun fetchUserInfo(): UserInfoEntity {
             val userInfo = userApi.getUserInfo().toData()
             saveUserInfo(userInfo.userId, userInfo.nickname, userInfo.gender)
@@ -167,9 +170,6 @@ class UserRepository
                 preferences[USER_DEVICE_IDENTIFIER_KEY] = deviceIdentifier
             }
         }
-
-        val isTermsAgreementChecked: Flow<Boolean> = userStorage.data
-            .map { preferences -> preferences[TERMS_AGREEMENT_CHECKED_KEY] ?: false }
 
         suspend fun saveTermsAgreements(
             serviceAgreed: Boolean,
