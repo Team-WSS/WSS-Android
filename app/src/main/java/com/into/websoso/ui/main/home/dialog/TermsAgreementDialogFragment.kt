@@ -9,8 +9,10 @@ import com.into.websoso.ui.termsAgreement.TermsAgreementDialogBottomSheet
 
 class TermsAgreementDialogFragment :
     BaseDialogFragment<DialogTermsAgreementPopupMenuBinding>(R.layout.dialog_terms_agreement_popup_menu) {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = false
         onTermsAgreementPopupMenuUpdateClick()

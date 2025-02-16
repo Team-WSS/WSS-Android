@@ -55,7 +55,6 @@ class HomeViewModel
         }
 
         private fun updateHomeData(isLogin: Boolean) {
-
             viewModelScope.launch {
                 if (isLogin) {
                     fetchUserHomeData()
