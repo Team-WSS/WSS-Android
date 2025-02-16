@@ -44,7 +44,6 @@ class TermsAgreementViewModel
         private fun isRequiredAgreementChecked(status: Map<AgreementType, Boolean>): Boolean =
             status[AgreementType.SERVICE] == true && status[AgreementType.PRIVACY] == true
 
-
         fun updateTermsAgreementsAll() {
             val newStatus = _agreementStatus.value.values.any { !it }
             _agreementStatus.update { it.mapValues { _ -> newStatus } }
