@@ -1,5 +1,6 @@
 package com.into.websoso.ui.notification
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -18,6 +19,10 @@ fun NotificationScreen(
     onBackButtonClick: () -> Unit,
 ) {
     val uiState by viewModel.notificationUiState.collectAsStateWithLifecycle()
+
+    BackHandler {
+        onBackButtonClick()
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         NotificationAppBar(onBackButtonClick)

@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.domain.model.Notification
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
@@ -25,7 +26,10 @@ class NotificationActivity : ComponentActivity() {
                     viewModel = notificationViewModel,
                     onNotificationDetailClick = ::navigateToNotificationDetail,
                     onFeedDetailClick = ::navigateToFeedDetail,
-                    onBackButtonClick = { finish() },
+                    onBackButtonClick = {
+                        setResult(ResultFrom.Notification.RESULT_OK)
+                        finish()
+                    },
                 )
             }
         }
