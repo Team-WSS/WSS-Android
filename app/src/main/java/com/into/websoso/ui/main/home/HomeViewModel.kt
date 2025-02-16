@@ -224,7 +224,7 @@ class HomeViewModel
                 else -> true
             }
 
-        fun updateFCMToken(token: String) {
+        fun saveFCMToken(token: String) {
             viewModelScope.launch {
                 runCatching {
                     pushMessageRepository.saveUserFCMToken(token)
@@ -250,6 +250,14 @@ class HomeViewModel
                         _termsAgreementState.value = terms
                         _showTermsAgreementDialog.value = !(terms.serviceAgreed && terms.privacyAgreed)
                     }
+            }
+        }
+        
+        fun updateFCMToken(token: String) {
+            viewModelScope.launch {
+                runCatching {
+                    pushMessageRepository.updateUserFCMToken(token)
+                }
             }
         }
     }

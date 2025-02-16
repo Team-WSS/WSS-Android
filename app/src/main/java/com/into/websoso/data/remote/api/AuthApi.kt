@@ -15,7 +15,6 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AuthApi {
-
     @POST("auth/login/kakao")
     suspend fun loginWithKakao(
         @Header("Kakao-Access-Token") accessToken: String,

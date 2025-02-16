@@ -4,7 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LogoutRequestDto (
+data class LogoutRequestDto(
     @SerialName("refreshToken")
     val refreshToken: String,
+    @SerialName("deviceIdentifier")
+    val deviceIdentifier: String,
 )
