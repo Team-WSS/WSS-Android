@@ -64,6 +64,12 @@ class PushMessageRepository
             )
         }
 
+        suspend fun clearFCMToken() {
+            userStorage.edit { preferences ->
+                preferences.remove(USER_FCM_TOKEN_KEY)
+            }
+        }
+
         companion object {
             val USER_FCM_TOKEN_KEY = stringPreferencesKey("USER_FCM_TOKEN")
             val NOTIFICATION_PERMISSION_FIRST_LAUNCHED_KEY =
