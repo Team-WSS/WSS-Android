@@ -252,7 +252,7 @@ class HomeViewModel
                     }
             }
         }
-        
+
         fun updateFCMToken(token: String) {
             viewModelScope.launch {
                 runCatching {
