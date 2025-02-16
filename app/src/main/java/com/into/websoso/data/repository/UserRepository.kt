@@ -23,7 +23,9 @@ import com.into.websoso.data.remote.request.TermsAgreementRequestDto
 import com.into.websoso.data.remote.request.UserInfoRequestDto
 import com.into.websoso.data.remote.request.UserProfileEditRequestDto
 import com.into.websoso.data.remote.request.UserProfileStatusRequestDto
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserRepository
@@ -172,18 +174,35 @@ constructor(
         }
     }
 
+    val isTermsAgreementChecked: Flow<Boolean> = userStorage.data
+        .map { preferences -> preferences[TERMS_AGREEMENT_CHECKED_KEY] ?: false }
+
     suspend fun saveTermsAgreements(
         serviceAgreed: Boolean,
         privacyAgreed: Boolean,
         marketingAgreed: Boolean,
     ) {
-        userApi.patchTermsAgreement(TermsAgreementRequestDto( serviceAgreed,privacyAgreed,marketingAgreed))
+        userApi.patchTermsAgreement(
+            TermsAgreementRequestDto(serviceAgreed, privacyAgreed, marketingAgreed)
+        )
+        saveTermsAgreementChecked(serviceAgreed, privacyAgreed)
     }
 
-    suspend fun fetchTermsAgreements(): TermsAgreementEntity = userApi.getTermsAgreement().toData()
+    suspend fun fetchTermsAgreements(): TermsAgreementEntity {
+        val termsAgreement = userApi.getTermsAgreement().toData()
+        saveTermsAgreementChecked(termsAgreement.serviceAgreed, termsAgreement.privacyAgreed)
+        return termsAgreement
+    }
+
+    private suspend fun saveTermsAgreementChecked(serviceAgreed: Boolean, privacyAgreed: Boolean) {
+        userStorage.edit { preferences ->
+            preferences[TERMS_AGREEMENT_CHECKED_KEY] = serviceAgreed && privacyAgreed
+        }
+    }
 
     companion object {
         val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
+        val TERMS_AGREEMENT_CHECKED_KEY = booleanPreferencesKey("terms_agreement_checked")
         val USER_ID_KEY = stringPreferencesKey("USER_ID")
         val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")
         val USER_GENDER_KEY = stringPreferencesKey("USER_GENDER")
