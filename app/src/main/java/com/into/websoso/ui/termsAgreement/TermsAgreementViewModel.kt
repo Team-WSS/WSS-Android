@@ -41,13 +41,13 @@ class TermsAgreementViewModel
             .map { isRequiredAgreementChecked(it) }
             .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
-        private fun isRequiredAgreementChecked(status: Map<AgreementType, Boolean>): Boolean {
-            return status[AgreementType.SERVICE] == true && status[AgreementType.PRIVACY] == true
-        }
+        private fun isRequiredAgreementChecked(status: Map<AgreementType, Boolean>): Boolean =
+            status[AgreementType.SERVICE] == true && status[AgreementType.PRIVACY] == true
+
 
         fun updateTermsAgreementsAll() {
-            val newStatus = _agreementStatus.value.values.any { !it }
-            _agreementStatus.update { it.mapValues { _ -> newStatus } }
+                val newStatus = _agreementStatus.value.values.any { !it }
+                _agreementStatus.update { it.mapValues { _ -> newStatus } }
         }
 
         fun updateTermsAgreements(agreementType: AgreementType) {
