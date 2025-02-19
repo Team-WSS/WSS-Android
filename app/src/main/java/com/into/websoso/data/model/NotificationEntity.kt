@@ -13,7 +13,7 @@ data class NotificationEntity(
     val isNotice: Boolean,
     val feedId: Long?,
 ) {
-    fun getLineChangeIgnoredTitle(): String = notificationTitle.replace(Regex(LINE_CHANGE), " ").trim()
+    fun getIgnoreLineChangeTitle(): String = notificationTitle.replace(Regex(LINE_CHANGE), " ").trim()
 
     fun getNotificationType(): NotificationType =
         NotificationType.from(
