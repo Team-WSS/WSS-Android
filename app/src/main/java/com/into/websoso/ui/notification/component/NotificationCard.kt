@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.ui.component.AdaptationImage
@@ -22,6 +23,8 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.model.Notification
 import com.into.websoso.domain.model.NotificationType
+
+private const val MAX_NOTIFICATION_LINES = 1
 
 @Composable
 fun NotificationCard(
@@ -48,6 +51,8 @@ fun NotificationCard(
                 text = notification.notificationTitle,
                 style = WebsosoTheme.typography.title2,
                 color = Black,
+                maxLines = MAX_NOTIFICATION_LINES,
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = notification.notificationDescription,
@@ -55,6 +60,8 @@ fun NotificationCard(
                 color = Gray200,
                 modifier = Modifier
                     .padding(top = 2.dp),
+                maxLines = MAX_NOTIFICATION_LINES,
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = notification.createdDate,
