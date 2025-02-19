@@ -16,7 +16,7 @@ fun NotificationEntity.toDomain(): Notification =
     Notification(
         id = notificationId,
         notificationIconImage = notificationImage,
-        notificationTitle = notificationTitle,
+        notificationTitle = getLineChangeIgnoredTitle(),
         notificationType = getNotificationType(),
         notificationDescription = notificationBody,
         createdDate = createdDate,
