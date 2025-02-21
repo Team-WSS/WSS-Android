@@ -8,8 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.domain.model.Notification
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
+import com.into.websoso.ui.notification.model.NotificationModel
 import com.into.websoso.ui.notificationDetail.NotificationDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,12 +35,12 @@ class NotificationActivity : ComponentActivity() {
         }
     }
 
-    private fun navigateToNotificationDetail(notification: Notification) {
+    private fun navigateToNotificationDetail(notification: NotificationModel) {
         notificationViewModel.updateReadNotification(notification.id)
         startActivity(NotificationDetailActivity.getIntent(this, notification.intrinsicId))
     }
 
-    private fun navigateToFeedDetail(notification: Notification) {
+    private fun navigateToFeedDetail(notification: NotificationModel) {
         notificationViewModel.updateReadNotification(notification.id)
         startActivity(FeedDetailActivity.getIntent(this, notification.intrinsicId, notification.id))
     }
