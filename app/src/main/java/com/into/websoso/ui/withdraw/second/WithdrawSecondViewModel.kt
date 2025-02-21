@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.data.repository.PushMessageRepository
+import com.into.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +18,7 @@ class WithdrawSecondViewModel
     constructor(
         private val authRepository: AuthRepository,
         private val pushMessageRepository: PushMessageRepository,
+        private val userRepository: UserRepository,
     ) : ViewModel() {
         private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
         val withdrawReason: LiveData<String> get() = _withdrawReason
@@ -24,20 +26,20 @@ class WithdrawSecondViewModel
         private val _isWithdrawAgreementChecked: MutableLiveData<Boolean> = MutableLiveData(false)
         val isWithdrawAgreementChecked: LiveData<Boolean> get() = _isWithdrawAgreementChecked
 
-        private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
-        val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
+    private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+    val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
 
-        private val _isWithDrawSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
-        val isWithDrawSuccess: LiveData<Boolean> get() = _isWithDrawSuccess
+    private val _isWithDrawSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithDrawSuccess: LiveData<Boolean> get() = _isWithDrawSuccess
 
-        val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
+    val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
 
-        val withdrawEtcReasonCount: MediatorLiveData<Int> = MediatorLiveData()
+    val withdrawEtcReasonCount: MediatorLiveData<Int> = MediatorLiveData()
 
-        init {
-            withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
-                withdrawEtcReasonCount.value = reason.length
-            }
+    init {
+        withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
+            withdrawEtcReasonCount.value = reason.length
+        }
 
             _isWithdrawButtonEnabled.addSource(withdrawReason) {
                 _isWithdrawButtonEnabled.value = isEnabled()
@@ -63,9 +65,9 @@ class WithdrawSecondViewModel
             }
         }
 
-        fun updateWithdrawReason(reason: String) {
-            _withdrawReason.value = reason
-        }
+    fun updateWithdrawReason(reason: String) {
+        _withdrawReason.value = reason
+    }
 
         fun updateIsWithdrawAgreementChecked() {
             _isWithdrawAgreementChecked.value = isWithdrawAgreementChecked.value?.not()
@@ -82,6 +84,7 @@ class WithdrawSecondViewModel
                 }.onSuccess {
                     _isWithDrawSuccess.value = true
                     authRepository.updateIsAutoLogin(false)
+                    userRepository.removeTermsAgreementChecked()
                     pushMessageRepository.clearFCMToken()
                 }.onFailure {
                     _isWithDrawSuccess.value = false
@@ -89,7 +92,7 @@ class WithdrawSecondViewModel
             }
         }
 
-        companion object {
-            private const val ETC_INPUT_REASON = "직접입력"
-        }
+    companion object {
+        private const val ETC_INPUT_REASON = "직접입력"
     }
+}
