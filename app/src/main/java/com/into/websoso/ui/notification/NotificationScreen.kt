@@ -18,7 +18,7 @@ fun NotificationScreen(
     onFeedDetailClick: (NotificationModel) -> Unit,
     onBackButtonClick: () -> Unit,
 ) {
-    val uiState by viewModel.notificationUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.notificationUIState.collectAsStateWithLifecycle()
 
     BackHandler {
         onBackButtonClick()
