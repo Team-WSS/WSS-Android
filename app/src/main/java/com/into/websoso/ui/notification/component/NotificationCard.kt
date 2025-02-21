@@ -21,14 +21,14 @@ import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Primary20
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
-import com.into.websoso.domain.model.Notification
 import com.into.websoso.domain.model.NotificationType
+import com.into.websoso.ui.notification.model.NotificationModel
 
 private const val MAX_NOTIFICATION_LINES = 1
 
 @Composable
 fun NotificationCard(
-    notification: Notification,
+    notification: NotificationModel,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -79,7 +79,7 @@ fun NotificationCard(
 private fun NotificationCardPreview() {
     WebsosoTheme {
         NotificationCard(
-            notification = Notification(
+            notification = NotificationModel(
                 id = 0,
                 notificationType = NotificationType.NOTICE,
                 notificationTitle = "Notification Title",

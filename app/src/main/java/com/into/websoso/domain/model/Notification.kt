@@ -1,12 +1,22 @@
 package com.into.websoso.domain.model
 
 data class Notification(
-    val id: Long,
+    val notificationId: Long,
     val notificationIconImage: String,
     val notificationTitle: String,
-    val notificationType: NotificationType,
     val notificationDescription: String,
     val createdDate: String,
     val isRead: Boolean,
+    val isNotice: Boolean,
+    val feedId: Long?,
     val intrinsicId: Long,
-)
+) {
+    fun getNotificationType(): NotificationType =
+        NotificationType.from(
+            when {
+                isNotice -> "NOTICE"
+                feedId != null -> "FEED"
+                else -> "NONE"
+            },
+        )
+}
