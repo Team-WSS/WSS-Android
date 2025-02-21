@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.domain.model.NotificationInfo
 import com.into.websoso.domain.usecase.GetNotificationListUseCase
+import com.into.websoso.ui.mapper.toUi
+import com.into.websoso.ui.notification.model.NotificationInfoModel
 import com.into.websoso.ui.notification.model.NotificationUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +35,7 @@ class NotificationViewModel
 
             viewModelScope.launch {
                 runCatching { getNotificationListUseCase(notificationUiState.value.lastNotificationId) }
-                    .onSuccess { handleSuccessState(it.getOrDefault(NotificationInfo())) }
+                    .onSuccess { handleSuccessState(it.getOrDefault(NotificationInfo()).toUi()) }
                     .onFailure { handleFailureState() }
             }
         }
@@ -45,7 +47,7 @@ class NotificationViewModel
             )
         }
 
-        private fun handleSuccessState(notificationInfo: NotificationInfo) {
+        private fun handleSuccessState(notificationInfo: NotificationInfoModel) {
             val currentUiState = notificationUiState.value
             _notificationUiState.value = currentUiState.copy(
                 isLoadable = notificationInfo.isLoadable,

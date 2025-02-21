@@ -5,5 +5,5 @@ data class NotificationUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val lastNotificationId: Long = 0,
-    val notifications: List<NotificationModel> = emptyList(),
+    val notifications: List<NotificationUiModel> = emptyList(),
 )
