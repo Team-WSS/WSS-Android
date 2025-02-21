@@ -152,16 +152,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     binding.wllHome.setWebsosoLoadingVisibility(false)
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
-
-                    mainViewModel.isLogin.value?.let { isLogin ->
-                        if (isLogin) {
-                            updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
-                            updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
-                            userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
-                            recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
-                            updateHasNotificationUnread(uiState.isNotificationUnread)
-                        }
-                    }
+                    updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+                    updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
+                    userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
+                    recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    updateHasNotificationUnread(uiState.isNotificationUnread)
                 }
             }
         }
