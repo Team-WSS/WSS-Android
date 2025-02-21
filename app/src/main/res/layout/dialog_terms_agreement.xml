@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_terms_agreement_All">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ll_terms_agreement_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +91,9 @@
                     android:paddingVertical="8dp"
                     android:text="@string/string_terms_agreement_service"
                     android:textAppearance="@style/body2"
-                    android:textColor="@color/gray_200_AEADB3" />
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
                 <ImageView
                     android:id="@+id/iv_terms_agreement_service"
@@ -98,10 +101,12 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
-                    android:src="@drawable/ic_terms_agreement_unselected" />
-            </LinearLayout>
+                    android:src="@drawable/ic_terms_agreement_unselected"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ll_terms_agreement_privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,7 +124,9 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
                     android:textAppearance="@style/body2"
-                    android:textColor="@color/gray_200_AEADB3"/>
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
                 <ImageView
                     android:id="@+id/iv_terms_agreement_privacy"
@@ -127,10 +134,12 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
-                    android:src="@drawable/ic_terms_agreement_unselected" />
-            </LinearLayout>
+                    android:src="@drawable/ic_terms_agreement_unselected"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ll_terms_agreement_marketing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,7 +157,9 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
                     android:textAppearance="@style/body2"
-                    android:textColor="@color/gray_200_AEADB3"/>
+                    android:textColor="@color/gray_200_AEADB3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
                 <ImageView
                     android:id="@+id/iv_terms_agreement_marketing"
@@ -156,8 +167,10 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
-                    android:src="@drawable/ic_terms_agreement_unselected" />
-            </LinearLayout>
+                    android:src="@drawable/ic_terms_agreement_unselected"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
