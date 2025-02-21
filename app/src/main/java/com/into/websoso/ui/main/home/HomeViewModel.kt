@@ -42,8 +42,7 @@ class HomeViewModel
         private val _isNotificationPermissionFirstLaunched: MutableLiveData<Boolean> = MutableLiveData()
         val isNotificationPermissionFirstLaunched: LiveData<Boolean> get() = _isNotificationPermissionFirstLaunched
 
-        private val _termsAgreementState = MutableStateFlow<TermsAgreementEntity?>(null)
-        val termsAgreementState: StateFlow<TermsAgreementEntity?> = _termsAgreementState.asStateFlow()
+        private val termsAgreementState = MutableStateFlow<TermsAgreementEntity?>(null)
 
         private val _showTermsAgreementDialog = MutableStateFlow(false)
         val showTermsAgreementDialog: StateFlow<Boolean> = _showTermsAgreementDialog.asStateFlow()
@@ -247,7 +246,7 @@ class HomeViewModel
                 runCatching { userRepository.fetchTermsAgreements() }
                     .onSuccess { terms ->
 
-                        _termsAgreementState.value = terms
+                        termsAgreementState.value = terms
                         _showTermsAgreementDialog.value = !(terms.serviceAgreed && terms.privacyAgreed)
                     }
             }
