@@ -5,10 +5,10 @@ import com.into.websoso.domain.model.NotificationType
 data class NotificationInfoModel(
     val isLoadable: Boolean = true,
     val lastNotificationId: Long = 0,
-    val notifications: List<NotificationUiModel> = emptyList(),
+    val notifications: List<NotificationModel> = emptyList(),
 )
 
-data class NotificationUiModel(
+data class NotificationModel(
     val id: Long,
     val notificationIconImage: String,
     val notificationTitle: String,
