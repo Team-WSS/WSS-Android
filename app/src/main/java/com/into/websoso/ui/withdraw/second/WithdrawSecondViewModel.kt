@@ -21,8 +21,8 @@ class WithdrawSecondViewModel
         private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
         val withdrawReason: LiveData<String> get() = _withdrawReason
 
-        private val _isWithdrawCheckAgree: MutableLiveData<Boolean> = MutableLiveData(false)
-        val isWithdrawCheckAgree: LiveData<Boolean> get() = _isWithdrawCheckAgree
+        private val _isWithdrawAgreementChecked: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isWithdrawAgreementChecked: LiveData<Boolean> get() = _isWithdrawAgreementChecked
 
         private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
         val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
@@ -42,7 +42,7 @@ class WithdrawSecondViewModel
             _isWithdrawButtonEnabled.addSource(withdrawReason) {
                 _isWithdrawButtonEnabled.value = isEnabled()
             }
-            _isWithdrawButtonEnabled.addSource(isWithdrawCheckAgree) {
+            _isWithdrawButtonEnabled.addSource(isWithdrawAgreementChecked) {
                 _isWithdrawButtonEnabled.value = isEnabled()
             }
             _isWithdrawButtonEnabled.addSource(withdrawEtcReason) {
@@ -52,13 +52,13 @@ class WithdrawSecondViewModel
 
         private fun isEnabled(): Boolean {
             val isReasonNotBlank: Boolean = _withdrawReason.value?.isNotBlank() == true
-            val isWithdrawAgree: Boolean = _isWithdrawCheckAgree.value == true
+            val isWithdrawAgreement: Boolean = _isWithdrawAgreementChecked.value == true
             val isEtcReasonValid =
                 _withdrawReason.value == ETC_INPUT_REASON && withdrawEtcReason.value?.isNotBlank() == true
 
             return when {
-                _withdrawReason.value == ETC_INPUT_REASON -> isEtcReasonValid && isWithdrawAgree
-                isReasonNotBlank && isWithdrawAgree -> true
+                _withdrawReason.value == ETC_INPUT_REASON -> isEtcReasonValid && isWithdrawAgreement
+                isReasonNotBlank && isWithdrawAgreement -> true
                 else -> false
             }
         }
@@ -67,8 +67,8 @@ class WithdrawSecondViewModel
             _withdrawReason.value = reason
         }
 
-        fun updateIsWithdrawCheckAgree() {
-            _isWithdrawCheckAgree.value = isWithdrawCheckAgree.value?.not()
+        fun updateIsWithdrawCheckAgreement() {
+            _isWithdrawAgreementChecked.value = isWithdrawAgreementChecked.value?.not()
         }
 
         fun withdraw() {
