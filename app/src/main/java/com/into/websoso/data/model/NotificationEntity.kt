@@ -1,6 +1,6 @@
 package com.into.websoso.data.model
 
-import com.into.websoso.domain.usecase.GetNotificationListUseCase.Companion.DEFAULT_INTRINSIC_ID
+import com.into.websoso.data.repository.NotificationRepository.Companion.DEFAULT_INTRINSIC_ID
 
 data class NotificationEntity(
     val notificationId: Long,
