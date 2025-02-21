@@ -180,7 +180,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             val existingDialog =
                 parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
             val existingBottomSheet =
-                parentFragmentManager.findFragmentByTag("TermsAgreementDialogBottomSheet")
+                parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_BOTTOM_SHEET_TAG)
 
             if (existingDialog != null || existingBottomSheet != null) return@collectWithLifecycle
 
