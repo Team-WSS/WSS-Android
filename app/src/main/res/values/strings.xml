@@ -421,7 +421,7 @@
 
     <!-- 약관동의 바텀시트 뷰-->
     <string name="string_terms_agreement_service"><u>서비스 이용약관 동의</u> (필수)</string>
-    <string name="string_terms_agreement_privacy"><u>개인정보 수집 및 이용 동의</u> (필수)</string>
+    <string name="string_terms_agreement_privacy"><u>개인정보 수집 및 이용 안내</u> (필수)</string>
     <string name="string_terms_agreement_marketing">마켓팅 정보 수신 동의 (선택)</string>
     <string name="string_terms_agreement_next">다음으로</string>
     <string name="string_terms_agreement_complete">완료</string>

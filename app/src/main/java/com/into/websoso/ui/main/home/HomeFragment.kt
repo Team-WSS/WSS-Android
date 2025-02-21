@@ -174,17 +174,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             updateFCMToken(isFirstLaunch = false)
         }
 
-        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { isShown ->
-            if (!isShown) return@collectWithLifecycle
-
-            val existingDialog =
-                parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
-            val existingBottomSheet =
-                parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_BOTTOM_SHEET_TAG)
-
-            if (existingDialog != null || existingBottomSheet != null) return@collectWithLifecycle
-
-            showTermsAgreementDialog()
+        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { shouldShow ->
+            if (shouldShow) {
+                showTermsAgreementDialog()
+            }
         }
     }
 
