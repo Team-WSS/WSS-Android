@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WithdrawSecondViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
     val withdrawReason: LiveData<String> get() = _withdrawReason
@@ -77,6 +79,7 @@ class WithdrawSecondViewModel @Inject constructor(
                 authRepository.withdraw(withdrawReason)
             }.onSuccess {
                 _isWithDrawSuccess.value = true
+                userRepository.removeTermsAgreementChecked()
                 authRepository.updateIsAutoLogin(false)
             }.onFailure {
                 _isWithDrawSuccess.value = false
