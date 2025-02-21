@@ -430,7 +430,7 @@
     <string name="string_terms_agreement_all">전체 동의</string>
 
     <!-- 약관동의 팝업 뷰-->
-    <string name="string_terms_agreement_popup_menu_update">의하러 가기</string>
+    <string name="string_terms_agreement_popup_menu_update">동의하러 가기</string>
     <string name="string_terms_agreement_popup_menu_description">더 안전하고 원활한 웹소소를 위해\n업데이트된 약관에 동의해주세요.</string>
     <string name="string_terms_agreement_popup_menu_title">약관 동의가 필요해요!</string>
 </resources>
