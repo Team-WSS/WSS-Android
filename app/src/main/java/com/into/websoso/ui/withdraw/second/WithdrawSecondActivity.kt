@@ -59,7 +59,7 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
             }
 
             override fun onWithdrawCheckAgreeButtonClick() {
-                withdrawSecondViewModel.updateIsWithdrawCheckAgreement()
+                withdrawSecondViewModel.updateIsWithdrawAgreementChecked()
             }
 
             override fun onWithdrawButtonClick() {
