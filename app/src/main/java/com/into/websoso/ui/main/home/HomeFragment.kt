@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -178,8 +177,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { shouldShow ->
             if (!shouldShow) return@collectWithLifecycle
 
-            val existingDialog = parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
-            val existingBottomSheet = parentFragmentManager.findFragmentByTag("TermsAgreementDialogBottomSheet")
+            val existingDialog =
+                parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
+            val existingBottomSheet =
+                parentFragmentManager.findFragmentByTag("TermsAgreementDialogBottomSheet")
 
             if (existingDialog != null || existingBottomSheet != null) return@collectWithLifecycle
 
