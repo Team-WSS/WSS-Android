@@ -26,20 +26,20 @@ class WithdrawSecondViewModel
         private val _isWithdrawAgreementChecked: MutableLiveData<Boolean> = MutableLiveData(false)
         val isWithdrawAgreementChecked: LiveData<Boolean> get() = _isWithdrawAgreementChecked
 
-    private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
-    val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
+        private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+        val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
 
-    private val _isWithDrawSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isWithDrawSuccess: LiveData<Boolean> get() = _isWithDrawSuccess
+        private val _isWithDrawSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isWithDrawSuccess: LiveData<Boolean> get() = _isWithDrawSuccess
 
-    val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
+        val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
 
-    val withdrawEtcReasonCount: MediatorLiveData<Int> = MediatorLiveData()
+        val withdrawEtcReasonCount: MediatorLiveData<Int> = MediatorLiveData()
 
-    init {
-        withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
-            withdrawEtcReasonCount.value = reason.length
-        }
+        init {
+            withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
+                withdrawEtcReasonCount.value = reason.length
+            }
 
             _isWithdrawButtonEnabled.addSource(withdrawReason) {
                 _isWithdrawButtonEnabled.value = isEnabled()
@@ -65,9 +65,9 @@ class WithdrawSecondViewModel
             }
         }
 
-    fun updateWithdrawReason(reason: String) {
-        _withdrawReason.value = reason
-    }
+        fun updateWithdrawReason(reason: String) {
+            _withdrawReason.value = reason
+        }
 
         fun updateIsWithdrawAgreementChecked() {
             _isWithdrawAgreementChecked.value = isWithdrawAgreementChecked.value?.not()
@@ -92,7 +92,7 @@ class WithdrawSecondViewModel
             }
         }
 
-    companion object {
-        private const val ETC_INPUT_REASON = "직접입력"
+        companion object {
+            private const val ETC_INPUT_REASON = "직접입력"
+        }
     }
-}
