@@ -1,6 +1,5 @@
 package com.into.websoso.ui.main.home.dialog
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import com.into.websoso.R
