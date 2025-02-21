@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreementBinding>(R.layout.dialog_terms_agreement) {
     private val termsAgreementViewModel: TermsAgreementViewModel by viewModels()
-    var onDismissListener: (() -> Unit)? = null
+    private var onDismissListener: (() -> Unit)? = null
 
     override fun onViewCreated(
         view: View,

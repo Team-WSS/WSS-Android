@@ -10,8 +10,6 @@ import com.into.websoso.ui.termsAgreement.TermsAgreementDialogBottomSheet
 
 class TermsAgreementDialogFragment :
     BaseDialogFragment<DialogTermsAgreementPopupMenuBinding>(R.layout.dialog_terms_agreement_popup_menu) {
-    private var isBottomSheetShown = false
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -29,20 +27,15 @@ class TermsAgreementDialogFragment :
     }
 
     private fun showTermsAgreementBottomSheet() {
-        isBottomSheetShown = true
+        val isBottomSheetShown =
+            parentFragmentManager.findFragmentByTag("TermsAgreementDialogBottomSheet")
 
-        val bottomSheet = TermsAgreementDialogBottomSheet.newInstance(isFromHome = true)
-        bottomSheet.show(parentFragmentManager, "TermsAgreementDialogBottomSheet")
-
-        bottomSheet.onDismissListener = {
-            isBottomSheetShown = false
+        if (isBottomSheetShown == null) {
+            TermsAgreementDialogBottomSheet
+                .newInstance(isFromHome = true)
+                .show(parentFragmentManager, "TermsAgreementDialogBottomSheet")
         }
         dismiss()
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        isBottomSheetShown = false
     }
 
     companion object {

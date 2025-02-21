@@ -174,8 +174,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             updateFCMToken(isFirstLaunch = false)
         }
 
-        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { shouldShow ->
-            if (!shouldShow) return@collectWithLifecycle
+        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { isShown ->
+            if (!isShown) return@collectWithLifecycle
 
             val existingDialog =
                 parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
