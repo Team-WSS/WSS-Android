@@ -2,7 +2,13 @@ package com.into.websoso.ui.notification.model
 
 import com.into.websoso.domain.model.NotificationType
 
-data class NotificationModel(
+data class NotificationInfoModel(
+    val isLoadable: Boolean = true,
+    val lastNotificationId: Long = 0,
+    val notifications: List<NotificationUiModel> = emptyList(),
+)
+
+data class NotificationUiModel(
     val id: Long,
     val notificationIconImage: String,
     val notificationTitle: String,
