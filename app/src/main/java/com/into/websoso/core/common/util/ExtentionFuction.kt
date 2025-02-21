@@ -1,5 +1,6 @@
 package com.into.websoso.core.common.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -14,6 +15,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.view.WindowCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.SharedPreferencesMigration
@@ -28,6 +31,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.into.websoso.BuildConfig
 import com.into.websoso.core.common.ui.custom.WebsosoCustomSnackBar
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
+import com.into.websoso.core.designsystem.theme.White
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -156,5 +160,13 @@ fun <T> Flow<T>.collectWithLifecycle(
         lifecycleOwner.repeatOnLifecycle(state) {
             collect { collector(it) }
         }
+    }
+}
+
+fun Activity.setupWhiteStatusBar() {
+    this.window.statusBarColor = White.toArgb()
+
+    WindowCompat.getInsetsController(this.window, this.window.decorView).apply {
+        isAppearanceLightStatusBars = true
     }
 }

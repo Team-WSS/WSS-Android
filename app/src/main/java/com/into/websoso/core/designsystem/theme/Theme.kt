@@ -16,34 +16,13 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = Primary100,
     onPrimary = White,
-    primaryContainer = Primary200,
-    onPrimaryContainer = Gray20,
-    secondary = Secondary100,
-    onSecondary = White,
-    onSecondaryContainer = Gray50,
-    tertiary = Gray300,
     onTertiary = White,
-    background = Black,
-    onBackground = Gray20,
-    onSurface = Gray200,
-    onError = White,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Primary100,
     onPrimary = White,
-    primaryContainer = Primary50,
-    onPrimaryContainer = Gray20,
-    secondary = Secondary100,
-    onSecondary = White,
-    onSecondaryContainer = Gray50,
-    tertiary = Gray300,
     onTertiary = Black,
-    background = White,
-    onBackground = Gray300,
-    surface = Gray20,
-    onSurface = Gray70,
-    onError = White,
 )
 
 private val LocalWebsosoTypography = staticCompositionLocalOf<WebsosoTypography> {
