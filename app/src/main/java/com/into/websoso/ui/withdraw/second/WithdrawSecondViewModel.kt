@@ -67,7 +67,7 @@ class WithdrawSecondViewModel
             _withdrawReason.value = reason
         }
 
-        fun updateIsWithdrawCheckAgreement() {
+        fun updateIsWithdrawAgreementChecked() {
             _isWithdrawAgreementChecked.value = isWithdrawAgreementChecked.value?.not()
         }
 
