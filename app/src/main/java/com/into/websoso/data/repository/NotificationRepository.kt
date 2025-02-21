@@ -24,4 +24,8 @@ class NotificationRepository
         suspend fun fetchNotificationRead(notificationId: Long) {
             notificationApi.readNotification(notificationId)
         }
+
+        companion object {
+            const val DEFAULT_INTRINSIC_ID = -1L
+        }
     }

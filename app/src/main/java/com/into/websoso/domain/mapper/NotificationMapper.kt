@@ -14,12 +14,13 @@ fun NotificationsEntity.toDomain(): NotificationInfo =
 
 fun NotificationEntity.toDomain(): Notification =
     Notification(
-        id = notificationId,
+        notificationId = notificationId,
         notificationIconImage = notificationImage,
         notificationTitle = notificationTitle,
-        notificationType = getNotificationType(),
         notificationDescription = notificationBody,
         createdDate = createdDate,
         isRead = isRead,
+        isNotice = isNotice,
+        feedId = feedId,
         intrinsicId = getIntrinsicId(),
     )

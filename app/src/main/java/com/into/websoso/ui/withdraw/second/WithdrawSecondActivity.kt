@@ -59,7 +59,7 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
             }
 
             override fun onWithdrawCheckAgreeButtonClick() {
-                withdrawSecondViewModel.updateIsWithdrawCheckAgree()
+                withdrawSecondViewModel.updateIsWithdrawAgreementChecked()
             }
 
             override fun onWithdrawButtonClick() {
@@ -78,7 +78,7 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
     }
 
     private fun setupObserver() {
-        withdrawSecondViewModel.isWithdrawCheckAgree.observe(this) { isAgree ->
+        withdrawSecondViewModel.isWithdrawAgreementChecked.observe(this) { isAgree ->
             updateWithdrawCheckAgreeButtonImage(isAgree)
         }
 
