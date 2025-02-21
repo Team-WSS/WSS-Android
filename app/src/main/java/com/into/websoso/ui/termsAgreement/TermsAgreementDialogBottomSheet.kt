@@ -71,7 +71,7 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
     }
 
     private fun onTermsAgreementToggleClick() {
-        binding.ivTermsAgreementAll.setOnClickListener { termsAgreementViewModel.updateTermsAgreementsAll() }
+        binding.llTermsAgreementAll.setOnClickListener { termsAgreementViewModel.updateTermsAgreementsAll() }
 
         binding.ivTermsAgreementService.setOnClickListener {
             termsAgreementViewModel.updateTermsAgreements(
