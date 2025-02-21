@@ -1,6 +1,7 @@
 package com.into.websoso.ui.notification.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import com.into.websoso.R
 import com.into.websoso.core.common.util.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
 
 @Composable
 fun NotificationAppBar(
@@ -28,6 +30,7 @@ fun NotificationAppBar(
 ) {
     Row(
         modifier = modifier
+            .background(White)
             .fillMaxWidth()
             .padding(horizontal = 6.dp)
             .height(44.dp),

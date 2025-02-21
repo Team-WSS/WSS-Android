@@ -17,7 +17,6 @@ class NotificationDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         handleBackPressed()
-
         setContent {
             WebsosoTheme {
                 NotificationDetailScreen(
