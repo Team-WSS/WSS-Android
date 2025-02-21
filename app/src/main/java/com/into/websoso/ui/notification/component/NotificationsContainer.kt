@@ -11,17 +11,17 @@ import com.into.websoso.core.common.util.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.data.repository.NotificationRepository.Companion.DEFAULT_INTRINSIC_ID
 import com.into.websoso.domain.model.NotificationType
-import com.into.websoso.ui.notification.model.NotificationUiModel
+import com.into.websoso.ui.notification.model.NotificationModel
 
 private const val LOAD_THRESHOLD = 5
 
 @Composable
 fun NotificationsContainer(
-    notifications: List<NotificationUiModel>,
+    notifications: List<NotificationModel>,
     isLoadable: Boolean,
     updateNotifications: () -> Unit,
-    onNotificationDetailClick: (NotificationUiModel) -> Unit,
-    onFeedDetailClick: (NotificationUiModel) -> Unit,
+    onNotificationDetailClick: (NotificationModel) -> Unit,
+    onFeedDetailClick: (NotificationModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -57,9 +57,9 @@ fun NotificationsContainer(
 }
 
 private fun navigateToDetail(
-    notification: NotificationUiModel,
-    onNotificationDetailClick: (NotificationUiModel) -> Unit,
-    onFeedDetailClick: (NotificationUiModel) -> Unit,
+    notification: NotificationModel,
+    onNotificationDetailClick: (NotificationModel) -> Unit,
+    onFeedDetailClick: (NotificationModel) -> Unit,
 ) {
     if (notification.intrinsicId == DEFAULT_INTRINSIC_ID) return
     when (notification.notificationType) {

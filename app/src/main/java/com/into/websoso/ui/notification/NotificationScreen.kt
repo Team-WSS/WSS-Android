@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.ui.notification.component.NotificationAppBar
 import com.into.websoso.ui.notification.component.NotificationsContainer
-import com.into.websoso.ui.notification.model.NotificationUiModel
+import com.into.websoso.ui.notification.model.NotificationModel
 
 @Composable
 fun NotificationScreen(
     viewModel: NotificationViewModel,
-    onNotificationDetailClick: (NotificationUiModel) -> Unit,
-    onFeedDetailClick: (NotificationUiModel) -> Unit,
+    onNotificationDetailClick: (NotificationModel) -> Unit,
+    onFeedDetailClick: (NotificationModel) -> Unit,
     onBackButtonClick: () -> Unit,
 ) {
     val uiState by viewModel.notificationUiState.collectAsStateWithLifecycle()
