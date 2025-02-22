@@ -14,8 +14,13 @@ class TermsAgreementDialogFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        isCancelable = false
+        setupDialog()
         onTermsAgreementPopupMenuUpdateClick()
+    }
+
+    private fun setupDialog() {
+        isCancelable = false
+        setCancelable(false)
     }
 
     private fun onTermsAgreementPopupMenuUpdateClick() {
