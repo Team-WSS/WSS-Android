@@ -1,6 +1,5 @@
 package com.into.websoso.ui.termsAgreement
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -25,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreementBinding>(R.layout.dialog_terms_agreement) {
     private val termsAgreementViewModel: TermsAgreementViewModel by viewModels()
-    private var onDismissListener: (() -> Unit)? = null
 
     override fun onViewCreated(
         view: View,
@@ -71,7 +69,7 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
     }
 
     private fun onTermsAgreementToggleClick() {
-        binding.llTermsAgreementAll.setOnClickListener { termsAgreementViewModel.updateTermsAgreementsAll() }
+        binding.ivTermsAgreementAll.setOnClickListener { termsAgreementViewModel.updateTermsAgreementsAll() }
 
         binding.ivTermsAgreementService.setOnClickListener {
             termsAgreementViewModel.updateTermsAgreements(
@@ -97,7 +95,7 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
     }
 
     private fun sendTermsAgreement() {
-        if (!termsAgreementViewModel.isRequiredAgreementsChecked.value) return
+        if (!termsAgreementViewModel.isRequiredAgreementsChecked.value) return // 필수 항목 미체크 시 요청 안 함
 
         termsAgreementViewModel.saveTermsAgreements()
     }
@@ -153,11 +151,6 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
             } else {
                 getString(string_terms_agreement_next)
             }
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        onDismissListener?.invoke()
     }
 
     companion object {
