@@ -9,15 +9,15 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.forEach
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
-import com.into.websoso.common.ui.model.ResultFrom.NovelRating
-import com.into.websoso.common.util.getAdaptedSerializableExtra
-import com.into.websoso.common.util.showWebsosoSnackBar
-import com.into.websoso.common.util.showWebsosoToast
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.into.websoso.core.common.ui.model.ResultFrom.NovelRating
+import com.into.websoso.core.common.util.getAdaptedSerializableExtra
+import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.util.showWebsosoToast
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNovelRatingBinding
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
@@ -30,8 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NovelRatingActivity :
-    BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
+class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -245,7 +244,7 @@ class NovelRatingActivity :
         if (existingDialog == null) {
             NovelRatingDateBottomSheetDialog().show(
                 supportFragmentManager,
-                NovelRatingDateBottomSheetDialog.TAG
+                NovelRatingDateBottomSheetDialog.TAG,
             )
         }
     }
@@ -269,11 +268,14 @@ class NovelRatingActivity :
     }
 
     private fun setupBackPressCallback() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                showCancelNovelRatingAlertDialog()
-            }
-        })
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showCancelNovelRatingAlertDialog()
+                }
+            },
+        )
     }
 
     companion object {
@@ -281,23 +283,24 @@ class NovelRatingActivity :
         private const val READ_STATUS = "READ_STATUS"
         private const val IS_INTEREST = "IS_INTEREST"
 
-        fun getIntent(context: Context, novelId: Long): Intent {
-            return Intent(context, NovelRatingActivity::class.java).apply {
+        fun getIntent(
+            context: Context,
+            novelId: Long,
+        ): Intent =
+            Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
             }
-        }
 
         fun getIntent(
             context: Context,
             novelId: Long,
             readStatus: ReadStatus,
             isInterest: Boolean,
-        ): Intent {
-            return Intent(context, NovelRatingActivity::class.java).apply {
+        ): Intent =
+            Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
                 putExtra(READ_STATUS, readStatus)
                 putExtra(IS_INTEREST, isInterest)
             }
-        }
     }
 }

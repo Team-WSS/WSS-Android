@@ -1,14 +1,15 @@
 package com.into.websoso.data.remote.api
 
+import com.into.websoso.data.remote.request.TermsAgreementRequestDto
 import com.into.websoso.data.remote.request.UserInfoRequestDto
 import com.into.websoso.data.remote.request.UserProfileEditRequestDto
-import com.into.websoso.data.remote.request.UserProfileRequestDto
 import com.into.websoso.data.remote.request.UserProfileStatusRequestDto
 import com.into.websoso.data.remote.response.BlockedUsersResponseDto
 import com.into.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.into.websoso.data.remote.response.MyProfileResponseDto
 import com.into.websoso.data.remote.response.NovelPreferenceResponseDto
 import com.into.websoso.data.remote.response.OtherUserProfileResponseDto
+import com.into.websoso.data.remote.response.TermsAgreementResponseDto
 import com.into.websoso.data.remote.response.UserFeedsResponseDto
 import com.into.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.into.websoso.data.remote.response.UserInfoResponseDto
@@ -26,7 +27,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserApi {
-
     @GET("users/me")
     suspend fun getUserInfo(): UserInfoResponseDto
 
@@ -92,11 +92,6 @@ interface UserApi {
         @Path("userId") userId: Long,
     ): OtherUserProfileResponseDto
 
-    @POST("users/profile")
-    suspend fun postUserProfile(
-        @Body userProfileRequestDto: UserProfileRequestDto,
-    )
-
     @GET("users/{userId}/novels")
     suspend fun getUserStorage(
         @Path("userId") userId: Long,
@@ -112,4 +107,12 @@ interface UserApi {
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
     ): UserFeedsResponseDto
+
+    @PATCH("users/terms-settings")
+    suspend fun patchTermsAgreement(
+        @Body termsAgreementRequestDto: TermsAgreementRequestDto,
+    )
+
+    @GET("users/terms-settings")
+    suspend fun getTermsAgreement(): TermsAgreementResponseDto
 }

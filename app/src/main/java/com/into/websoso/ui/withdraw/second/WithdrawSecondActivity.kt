@@ -6,15 +6,14 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.util.SingleEventHandler
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.ActivityWithdrawSecondBinding
 import com.into.websoso.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WithdrawSecondActivity :
-    BaseActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
+class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
     private val withdrawSecondViewModel: WithdrawSecondViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -32,43 +31,43 @@ class WithdrawSecondActivity :
         binding.lifecycleOwner = this
     }
 
-    private fun onWithdrawClick() = object : WithdrawClickListener {
+    private fun onWithdrawClick() =
+        object : WithdrawClickListener {
+            override fun onBackButtonClick() {
+                finish()
+            }
 
-        override fun onBackButtonClick() {
-            finish()
-        }
+            override fun onWithdrawReasonRarelyUsingButtonClick() {
+                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_rarely_using))
+            }
 
-        override fun onWithdrawReasonRarelyUsingButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_rarely_using))
-        }
+            override fun onWithdrawReasonInconvenientButtonClick() {
+                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_inconvenient))
+            }
 
-        override fun onWithdrawReasonInconvenientButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_inconvenient))
-        }
+            override fun onWithdrawReasonWantToDeleteContentButtonClick() {
+                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_want_to_delete_content))
+            }
 
-        override fun onWithdrawReasonWantToDeleteContentButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_want_to_delete_content))
-        }
+            override fun onWithdrawReasonNotExistAnyWantedNovelButtonClick() {
+                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_not_exist_any_wanted_novel))
+            }
 
-        override fun onWithdrawReasonNotExistAnyWantedNovelButtonClick() {
-            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_not_exist_any_wanted_novel))
-        }
+            override fun onWithdrawReasonEtcButtonClick() {
+                binding.etWithdrawEtc.requestFocus()
+                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_etc))
+            }
 
-        override fun onWithdrawReasonEtcButtonClick() {
-            binding.etWithdrawEtc.requestFocus()
-            withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_etc))
-        }
+            override fun onWithdrawCheckAgreeButtonClick() {
+                withdrawSecondViewModel.updateIsWithdrawAgreementChecked()
+            }
 
-        override fun onWithdrawCheckAgreeButtonClick() {
-            withdrawSecondViewModel.updateIsWithdrawCheckAgree()
-        }
-
-        override fun onWithdrawButtonClick() {
-            singleEventHandler.throttleFirst {
-                withdrawSecondViewModel.withdraw()
+            override fun onWithdrawButtonClick() {
+                singleEventHandler.throttleFirst {
+                    withdrawSecondViewModel.withdraw()
+                }
             }
         }
-    }
 
     private fun onWithdrawEtcEditTextFocusListener() {
         binding.etWithdrawEtc.setOnFocusChangeListener { view, hasFocus ->
@@ -79,7 +78,7 @@ class WithdrawSecondActivity :
     }
 
     private fun setupObserver() {
-        withdrawSecondViewModel.isWithdrawCheckAgree.observe(this) { isAgree ->
+        withdrawSecondViewModel.isWithdrawAgreementChecked.observe(this) { isAgree ->
             updateWithdrawCheckAgreeButtonImage(isAgree)
         }
 
@@ -149,9 +148,6 @@ class WithdrawSecondActivity :
     }
 
     companion object {
-
-        fun getIntent(context: Context): Intent {
-            return Intent(context, WithdrawSecondActivity::class.java)
-        }
+        fun getIntent(context: Context): Intent = Intent(context, WithdrawSecondActivity::class.java)
     }
 }

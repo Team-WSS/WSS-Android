@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_popular_novel_title"
-            tools:src="@drawable/img_normal_explore_test_cover" />
+            tools:src="@drawable/img_loading_thumbnail" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_popular_novel_in_short"

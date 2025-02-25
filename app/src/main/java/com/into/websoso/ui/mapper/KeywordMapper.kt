@@ -1,6 +1,6 @@
 package com.into.websoso.ui.mapper
 
-import com.into.websoso.common.ui.model.CategoriesModel
+import com.into.websoso.core.common.ui.model.CategoriesModel
 import com.into.websoso.data.model.CategoriesEntity
 
 fun CategoriesEntity.CategoryEntity.toUi(): CategoriesModel.CategoryModel {

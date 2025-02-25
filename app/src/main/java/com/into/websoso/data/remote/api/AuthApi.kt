@@ -1,5 +1,6 @@
 package com.into.websoso.data.remote.api
 
+import com.into.websoso.data.remote.request.FCMTokenRequestDto
 import com.into.websoso.data.remote.request.LogoutRequestDto
 import com.into.websoso.data.remote.request.TokenReissueRequestDto
 import com.into.websoso.data.remote.request.UserProfileRequestDto
@@ -14,7 +15,6 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AuthApi {
-
     @POST("auth/login/kakao")
     suspend fun loginWithKakao(
         @Header("Kakao-Access-Token") accessToken: String,
@@ -47,5 +47,11 @@ interface AuthApi {
     suspend fun withdraw(
         @Header("Authorization") authorization: String,
         @Body withdrawRequestDto: WithdrawRequestDto,
+    )
+
+    @POST("users/fcm-token")
+    suspend fun postFCMToken(
+        @Header("Authorization") authorization: String,
+        @Body fcmTokenRequestDto: FCMTokenRequestDto,
     )
 }

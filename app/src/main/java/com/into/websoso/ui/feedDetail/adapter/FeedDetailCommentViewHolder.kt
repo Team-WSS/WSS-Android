@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.R.color.black
 import com.into.websoso.R.color.gray_200_AEADB3
 import com.into.websoso.R.color.secondary_100_FF675D
-import com.into.websoso.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.databinding.ItemFeedDetailCommentBinding
 import com.into.websoso.ui.feedDetail.CommentClickListener
 import com.into.websoso.ui.feedDetail.model.CommentModel
@@ -17,7 +17,6 @@ class FeedDetailCommentViewHolder(
     commentClickListener: CommentClickListener,
     private val binding: ItemFeedDetailCommentBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
         binding.onClick = commentClickListener
     }
@@ -65,17 +64,17 @@ class FeedDetailCommentViewHolder(
     private fun Int.color(): Int = binding.root.context.getColor(this)
 
     companion object {
-
         fun from(
             parent: ViewGroup,
             commentClickListener: CommentClickListener,
-        ): FeedDetailCommentViewHolder = FeedDetailCommentViewHolder(
-            commentClickListener,
-            ItemFeedDetailCommentBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            ),
-        )
+        ): FeedDetailCommentViewHolder =
+            FeedDetailCommentViewHolder(
+                commentClickListener,
+                ItemFeedDetailCommentBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false,
+                ),
+            )
     }
 }

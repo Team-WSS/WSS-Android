@@ -1,13 +1,13 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
-    id("com.google.dagger.hilt.android")
-    id("kotlin-parcelize")
-    id("com.google.gms.google-services")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.parcelize)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -18,25 +18,71 @@ android {
         applicationId = "com.into.websoso"
         minSdk = 30
         targetSdk = 34
-        versionCode = 10006
-        versionName = "1.0.6"
+        versionCode = libs.versions.versionCode
+            .get()
+            .toInt()
+        versionName = libs.versions.versionName.get()
 
-        buildConfigField("String", "BASE_URL", gradleLocalProperties(rootDir).getProperty("base.url"))
         buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
         buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("kakao.app.key"))
         buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
 
         manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
-            .getProperty("kakao.app.key").replace("\"", "")
+            .getProperty("kakao.app.key")
+            .replace("\"", "")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
+        debug {
+            // 디버그 버전, 빌드 세팅(디버깅 가능 여부, 앱 네임, 아이콘, 패키지)
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders.putAll(
+                mapOf(
+                    "appName" to "@string/app_name_debug",
+                    "appIcon" to "@mipmap/ic_wss_logo_debug",
+                    "roundIcon" to "@mipmap/ic_wss_logo_debug_round",
+                ),
+            )
+
+            // 프로가드 세팅, 앱 용량 축소
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
+            )
+
+            // 디버그 버전, 공용 프로퍼티(BASE URL)
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                gradleLocalProperties(rootDir).getProperty("debug.base.url"),
+            )
+        }
+        release {
+            // 릴리즈 버전, 빌드 세팅(앱 네임, 아이콘)
+            manifestPlaceholders.putAll(
+                mapOf(
+                    "appName" to "@string/app_name",
+                    "appIcon" to "@mipmap/ic_wss_logo",
+                    "roundIcon" to "@mipmap/ic_wss_logo_round",
+                ),
+            )
+
+            // 프로가드 세팅, 앱 용량 축소
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+
+            // 릴리즈 버전, 공용 프로퍼티(BASE URL)
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                gradleLocalProperties(rootDir).getProperty("release.base.url"),
             )
         }
     }
@@ -51,74 +97,57 @@ android {
         buildConfig = true
         dataBinding = true
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
 }
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
+    implementation(libs.viewpager2)
+    implementation(libs.fragment.ktx)
+    implementation(libs.lifecycle.extensions)
+    implementation(libs.datastore.preferences)
+    implementation(libs.security.crypto)
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.espresso.core)
 
-    // Retrofit2
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization)
+    implementation(libs.serialization.json)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.coroutines)
 
-    // Kotlinx Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation(libs.coil)
+    implementation(libs.coil.gif)
+    implementation(libs.coil.svg)
+    implementation(libs.coil.transformers)
 
-    // Okhttp3
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation(libs.dots.indicator)
+    implementation(libs.lottie)
+    implementation(libs.pull.to.refresh)
 
-    // ViewPager2
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation(libs.kakao)
 
-    // coroutine
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
 
-    // fragment-ktx
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation(libs.amplitude)
 
-    // viewModel
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    // coil
-    implementation("io.coil-kt:coil:2.6.0")
-    implementation("io.coil-kt:coil-gif:2.6.0")
-    implementation("io.coil-kt:coil-svg:2.6.0")
-    implementation("jp.wasabeef.transformers:coil:1.0.6")
+    implementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
 
-    // Pager Dots Indicator
-    implementation("com.tbuonomo:dotsindicator:5.0")
-
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-compiler:2.48")
-
-    // lottie
-    implementation("com.airbnb.android:lottie:5.0.2")
-
-    // SwipeRefreshLayout
-    implementation("com.github.SimformSolutionsPvtLtd:SSPullToRefresh:1.5.2")
-
-    // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
-
-    // KAKAO
-    implementation("com.kakao.sdk:v2-user:2.15.0")
-
-    // Security
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
-
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-analytics")
-
-    // Amplitude
-    implementation("com.amplitude:analytics-android:1.+")
+    implementation(libs.bundles.compose)
 }

@@ -5,4 +5,7 @@
     <string name="terms_of_use_link">https://websoso.notion.site/143600bd74688050be18f4da31d9403e?pvs=4</string>
     <string name="privacy_policy_link">https://websoso.notion.site/143600bd746880668556fb005fcef491?pvs=4</string>
     <string name="minimum_version_popup_menu_url">https://play.google.com/store/apps/details?id=com.into.websoso</string>
+    <string name="terms_agreement_service">https://www.notion.so/websoso/143600bd74688050be18f4da31d9403e?pvs=4</string>
+    <string name="terms_agreement_privacy">https://websoso.notion.site/198600bd746880699fd6f22dd42a7215?pvs=4</string>
+
 </resources>

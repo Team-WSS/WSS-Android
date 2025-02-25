@@ -6,17 +6,17 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Patterns
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentNovelInfoBinding
+import com.into.websoso.ui.novelInfo.component.NovelInfoPlatformsContainer
 import com.into.websoso.ui.novelInfo.model.ExpandTextUiModel
 import com.into.websoso.ui.novelInfo.model.KeywordModel
 import com.into.websoso.ui.novelInfo.model.PlatformModel
@@ -61,6 +61,7 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             when {
                 uiState.novelInfoModel.novelDescription.isNotBlank() -> {
                     setupKeywordChip(uiState.keywords)
+                    setupPlatforms(uiState.platforms)
                     updateExpandTextToggle(uiState.expandTextModel)
                     updateExpandTextToggleVisibility(uiState.expandTextModel)
                     updateGraphHeightValue(uiState.novelInfoModel.unifiedReviewCount)
@@ -68,7 +69,6 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
                     updateUsersReadStatusText(uiState.novelInfoModel.unifiedReviewCount)
                     updateUsersCharmPointBody(uiState.novelInfoModel.formatAttractivePoints())
                     binding.wllNovelInfo.setWebsosoLoadingVisibility(false)
-                    uiState.platforms.forEach { updatePlatformImage(it) }
                 }
 
                 uiState.loading -> {
@@ -86,23 +86,33 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
     private fun setupKeywordChip(keywords: List<KeywordModel>) {
         if (binding.wcgNovelInfoKeyword.childCount > 0) return
         keywords.forEach { keyword ->
-            WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(
-                    getString(
-                        R.string.novel_info_keyword_chip_text,
-                        keyword.keywordName,
-                        keyword.keywordCount
+            WebsosoChip(requireContext())
+                .apply {
+                    setWebsosoChipText(
+                        getString(
+                            R.string.novel_info_keyword_chip_text,
+                            keyword.keywordName,
+                            keyword.keywordCount,
+                        ),
                     )
-                )
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipStrokeColor(R.color.transparent)
-                setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
-                setWebsosoChipPaddingVertical(20f)
-                setWebsosoChipPaddingHorizontal(12f)
-                setWebsosoChipRadius(40f)
-                isEnabled = false
-            }.also { websosoChip -> binding.wcgNovelInfoKeyword.addChip(websosoChip) }
+                    setWebsosoChipTextAppearance(R.style.body2)
+                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
+                    setWebsosoChipStrokeColor(R.color.transparent)
+                    setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
+                    setWebsosoChipPaddingVertical(20f)
+                    setWebsosoChipPaddingHorizontal(12f)
+                    setWebsosoChipRadius(40f)
+                    isEnabled = false
+                }.also { websosoChip -> binding.wcgNovelInfoKeyword.addChip(websosoChip) }
+        }
+    }
+
+    private fun setupPlatforms(platforms: List<PlatformModel>) {
+        binding.cvNovelInfoPlatforms.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                NovelInfoPlatformsContainer(platforms, ::navigateToWebView)
+            }
         }
     }
 
@@ -147,36 +157,36 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             ReadStatus.WATCHING -> {
                 updateGraphHeight(
                     binding.viewNovelInfoReadStatusWatching,
-                    unifiedReviewCountModel.watchingCount.graphHeight
+                    unifiedReviewCountModel.watchingCount.graphHeight,
                 )
                 updateGraphSelection(
                     binding.viewNovelInfoReadStatusWatching,
                     binding.tvNovelInfoReadStatusWatchingCount,
-                    binding.tvNovelInfoReadStatusWatching
+                    binding.tvNovelInfoReadStatusWatching,
                 )
             }
 
             ReadStatus.WATCHED -> {
                 updateGraphHeight(
                     binding.viewNovelInfoReadStatusWatched,
-                    unifiedReviewCountModel.watchedCount.graphHeight
+                    unifiedReviewCountModel.watchedCount.graphHeight,
                 )
                 updateGraphSelection(
                     binding.viewNovelInfoReadStatusWatched,
                     binding.tvNovelInfoReadStatusWatchedCount,
-                    binding.tvNovelInfoReadStatusWatched
+                    binding.tvNovelInfoReadStatusWatched,
                 )
             }
 
             ReadStatus.QUIT -> {
                 updateGraphHeight(
                     binding.viewNovelInfoReadStatusQuit,
-                    unifiedReviewCountModel.quitCount.graphHeight
+                    unifiedReviewCountModel.quitCount.graphHeight,
                 )
                 updateGraphSelection(
                     binding.viewNovelInfoReadStatusQuit,
                     binding.tvNovelInfoReadStatusQuitCount,
-                    binding.tvNovelInfoReadStatusQuit
+                    binding.tvNovelInfoReadStatusQuit,
                 )
             }
 
@@ -184,7 +194,10 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
         }
     }
 
-    private fun updateGraphHeight(view: View, height: Int) {
+    private fun updateGraphHeight(
+        view: View,
+        height: Int,
+    ) {
         view.layoutParams.height = height
         view.requestLayout()
     }
@@ -200,15 +213,16 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
     }
 
     private fun updateUsersReadStatusText(unifiedReviewCountModel: UnifiedReviewCountModel) {
-        val color = AppCompatResources.getColorStateList(
-            requireContext(),
-            R.color.primary_100_6A5DFD
-        ).defaultColor
+        val color = AppCompatResources
+            .getColorStateList(
+                requireContext(),
+                R.color.primary_100_6A5DFD,
+            ).defaultColor
         when (unifiedReviewCountModel.maxCountReadStatus()) {
             ReadStatus.WATCHING -> {
                 val watchingCountText = getString(
                     R.string.novel_info_read_status_watching_count,
-                    unifiedReviewCountModel.watchingCount.count
+                    unifiedReviewCountModel.watchingCount.count,
                 )
                 val coloredWatchingCountText =
                     unifiedReviewCountModel.watchingCount.count.toString() + getString(R.string.novel_info_user_unit)
@@ -219,7 +233,7 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             ReadStatus.WATCHED -> {
                 val watchedCountText = getString(
                     R.string.novel_info_read_status_watched_count,
-                    unifiedReviewCountModel.watchedCount.count
+                    unifiedReviewCountModel.watchedCount.count,
                 )
                 val coloredWatchedText =
                     unifiedReviewCountModel.watchedCount.count.toString() + getString(R.string.novel_info_user_unit)
@@ -230,7 +244,7 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             ReadStatus.QUIT -> {
                 val quitCountText = getString(
                     R.string.novel_info_read_status_quit_count,
-                    unifiedReviewCountModel.quitCount.count
+                    unifiedReviewCountModel.quitCount.count,
                 )
                 val coloredQuitText =
                     unifiedReviewCountModel.quitCount.count.toString() + getString(R.string.novel_info_user_unit)
@@ -263,10 +277,11 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
         binding.tvNovelInfoCharmPointsBody.text = getColoredText(
             getString(R.string.novel_info_charm_points_body, charmPoints),
             listOf(charmPoints),
-            AppCompatResources.getColorStateList(
-                requireContext(),
-                R.color.primary_100_6A5DFD
-            ).defaultColor,
+            AppCompatResources
+                .getColorStateList(
+                    requireContext(),
+                    R.color.primary_100_6A5DFD,
+                ).defaultColor,
         )
     }
 
@@ -275,14 +290,6 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
             novelInfoViewModel.updateNovelInfo(novelId)
             binding.wllNovelInfo.setErrorLayoutVisibility(false)
         }
-    }
-
-    private fun updatePlatformImage(platformModel: PlatformModel) {
-        if (platformModel.platformImage.isEmpty() || Patterns.WEB_URL.matcher(platformModel.platformImage)
-                .matches()
-        ) return
-        val updatedPlatformImage = binding.root.getS3ImageUrl(platformModel.platformImage)
-        novelInfoViewModel.updatePlatformImage(platformModel.platform, updatedPlatformImage)
     }
 
     override fun onResume() {
@@ -304,10 +311,9 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(R.layout.fragme
 
         private const val NOVEL_ID = "NOVEL_ID"
 
-        fun newInstance(novelId: Long): NovelInfoFragment {
-            return NovelInfoFragment().also {
+        fun newInstance(novelId: Long): NovelInfoFragment =
+            NovelInfoFragment().also {
                 it.arguments = Bundle().apply { putLong(NOVEL_ID, novelId) }
             }
-        }
     }
 }

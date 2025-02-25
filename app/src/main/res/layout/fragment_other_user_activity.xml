@@ -65,17 +65,19 @@
                     android:elevation="0dp"
                     android:stateListAnimator="@null"
                     android:text="@string/my_activity_more"
+                    android:textAppearance="@style/title2"
                     android:visibility="gone"
                     android:textColor="@color/primary_100_6A5DFD" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
+        <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_other_user_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="100dp"
+
             android:visibility="invisible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

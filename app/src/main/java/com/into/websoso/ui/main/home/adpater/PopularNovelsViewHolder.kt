@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.into.websoso.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 import com.into.websoso.databinding.ItemPopularNovelBinding
 
@@ -12,7 +12,6 @@ class PopularNovelsViewHolder(
     private val binding: ItemPopularNovelBinding,
     onPopularNovelClick: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
         binding.onClick = onPopularNovelClick
     }
@@ -36,13 +35,14 @@ class PopularNovelsViewHolder(
     }
 
     companion object {
-
         fun of(
             parent: ViewGroup,
             onPopularNovelClick: (novelId: Long) -> Unit,
         ): PopularNovelsViewHolder {
             val binding = ItemPopularNovelBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false,
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
             )
             return PopularNovelsViewHolder(binding, onPopularNovelClick)
         }

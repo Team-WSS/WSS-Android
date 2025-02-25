@@ -7,7 +7,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.databinding.DialogNovelRatingDateBinding
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel

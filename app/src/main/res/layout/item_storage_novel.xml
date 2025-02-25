@@ -25,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/img_normal_explore_test_cover" />
+            tools:src="@drawable/img_loading_thumbnail" />
 
         <TextView
             android:id="@+id/tv_storage_novel_title"
@@ -38,7 +38,7 @@
             android:lineSpacingExtra="5sp"
             android:maxLines="2"
             android:text='@{novel.title}'
-            android:textAppearance="@style/body2"
+            android:textAppearance="@style/body4"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/iv_storage_novel_cover"
             app:layout_constraintStart_toStartOf="@id/iv_storage_novel_cover"
@@ -52,6 +52,7 @@
             android:text='@{novel.author}'
             android:textAppearance="@style/label1"
             android:textColor="@color/gray_200_AEADB3"
+            android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="@+id/tv_storage_novel_title"
             app:layout_constraintTop_toBottomOf="@id/tv_storage_novel_title"
             tools:text="이보라" />

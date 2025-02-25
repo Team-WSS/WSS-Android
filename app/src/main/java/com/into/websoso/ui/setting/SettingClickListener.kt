@@ -6,6 +6,8 @@ interface SettingClickListener {
 
     fun onProfileDisclosureButtonClick()
 
+    fun onNotificiationSettingButtonClick()
+
     fun onWebsosoOfficialButtonClick()
 
     fun onInquireAndFeedbackButtonClick()

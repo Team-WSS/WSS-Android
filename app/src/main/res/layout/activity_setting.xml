@@ -120,13 +120,53 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_setting_notification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> onClick.onNotificiationSettingButtonClick()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_setting_profile_disclosure">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/setting_notification"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@id/view_setting_notification"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/btn_setting_right"
+                app:layout_constraintBottom_toTopOf="@id/view_setting_notification"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view_setting_notification"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray_50_F4F5F8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_setting_websoso_account"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{() -> onClick.onWebsosoOfficialButtonClick()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_setting_profile_disclosure">
+            app:layout_constraintTop_toBottomOf="@id/cl_setting_notification">
 
             <TextView
                 android:layout_width="wrap_content"
