@@ -2,12 +2,12 @@ package com.into.websoso.ui.main.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
-import com.into.websoso.data.model.TermsAgreementEntity
 import com.into.websoso.data.model.UserInterestFeedMessage
 import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
@@ -35,6 +35,7 @@ class HomeViewModel
         private val pushMessageRepository: PushMessageRepository,
         private val notificationRepository: NotificationRepository,
         private val userRepository: UserRepository,
+        private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
         val uiState: LiveData<HomeUiState> get() = _uiState
@@ -42,7 +43,11 @@ class HomeViewModel
         private val _isNotificationPermissionFirstLaunched: MutableLiveData<Boolean> = MutableLiveData()
         val isNotificationPermissionFirstLaunched: LiveData<Boolean> get() = _isNotificationPermissionFirstLaunched
 
-        private val termsAgreementState = MutableStateFlow<TermsAgreementEntity?>(null)
+        private var isTermsAgreementChecked: Boolean
+            get() = savedStateHandle["isTermsAgreementChecked"] ?: false
+            set(value) {
+                savedStateHandle["isTermsAgreementChecked"] = value
+            }
 
         private val _showTermsAgreementDialog = MutableStateFlow(false)
         val showTermsAgreementDialog: StateFlow<Boolean> = _showTermsAgreementDialog.asStateFlow()
@@ -245,11 +250,17 @@ class HomeViewModel
             viewModelScope.launch {
                 runCatching { userRepository.fetchTermsAgreements() }
                     .onSuccess { terms ->
-
-                        termsAgreementState.value = terms
-                        _showTermsAgreementDialog.value = !(terms.serviceAgreed && terms.privacyAgreed)
+                        val isShownDialog = !(terms.serviceAgreed && terms.privacyAgreed)
+                        _showTermsAgreementDialog.value = isShownDialog
+                        if (!isShownDialog) {
+                            isTermsAgreementChecked = true
+                        }
                     }
             }
+        }
+
+        fun updateTermsAgreementDialogState() {
+            _showTermsAgreementDialog.value = false
         }
 
         fun updateFCMToken(token: String) {
