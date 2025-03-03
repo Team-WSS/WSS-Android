@@ -316,6 +316,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private fun showTermsAgreementDialog() {
         val dialog = TermsAgreementDialogFragment.newInstance()
         dialog.show(parentFragmentManager, TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
+
+        dialog.onDismissListener = {
+            homeViewModel.updateTermsAgreementDialogState()
+        }
     }
 
     companion object {
