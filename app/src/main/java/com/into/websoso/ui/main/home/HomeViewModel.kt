@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
+import com.into.websoso.data.model.TermsAgreementEntity
 import com.into.websoso.data.model.UserInterestFeedMessage
 import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
 import com.into.websoso.data.model.UserInterestFeedsEntity
@@ -43,14 +44,16 @@ class HomeViewModel
         private val _isNotificationPermissionFirstLaunched: MutableLiveData<Boolean> = MutableLiveData()
         val isNotificationPermissionFirstLaunched: LiveData<Boolean> get() = _isNotificationPermissionFirstLaunched
 
+        private val termsAgreementState = MutableStateFlow<TermsAgreementEntity?>(null)
+
+        private val _showTermsAgreementDialog = MutableStateFlow(false)
+        val showTermsAgreementDialog: StateFlow<Boolean> = _showTermsAgreementDialog.asStateFlow()
+
         private var isTermsAgreementChecked: Boolean
             get() = savedStateHandle["isTermsAgreementChecked"] ?: false
             set(value) {
                 savedStateHandle["isTermsAgreementChecked"] = value
             }
-
-        private val _showTermsAgreementDialog = MutableStateFlow(false)
-        val showTermsAgreementDialog: StateFlow<Boolean> = _showTermsAgreementDialog.asStateFlow()
 
         init {
             updateHomeData(true)
@@ -250,8 +253,11 @@ class HomeViewModel
             viewModelScope.launch {
                 runCatching { userRepository.fetchTermsAgreements() }
                     .onSuccess { terms ->
+                        termsAgreementState.value = terms
                         val isShownDialog = !(terms.serviceAgreed && terms.privacyAgreed)
+
                         _showTermsAgreementDialog.value = isShownDialog
+
                         if (!isShownDialog) {
                             isTermsAgreementChecked = true
                         }
