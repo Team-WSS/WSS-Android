@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.into.websoso.core.common.util.setupWhiteStatusBar
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,6 +17,8 @@ class NotificationDetailActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.setupWhiteStatusBar()
+
         handleBackPressed()
 
         setContent {

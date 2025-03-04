@@ -152,16 +152,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     binding.wllHome.setWebsosoLoadingVisibility(false)
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
-
-                    mainViewModel.isLogin.value?.let { isLogin ->
-                        if (isLogin) {
-                            updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
-                            updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
-                            userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
-                            recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
-                            updateHasNotificationUnread(uiState.isNotificationUnread)
-                        }
-                    }
+                    updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
+                    updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
+                    userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
+                    recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    updateHasNotificationUnread(uiState.isNotificationUnread)
                 }
             }
         }
@@ -174,10 +169,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             updateFCMToken(isFirstLaunch = false)
         }
 
-        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { shouldShow ->
-            if (shouldShow) {
-                showTermsAgreementDialog()
-            }
+        homeViewModel.showTermsAgreementDialog.collectWithLifecycle(viewLifecycleOwner) { isShown ->
+            if (!isShown) return@collectWithLifecycle
+
+            val existingDialog =
+                parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_TAG)
+            val existingBottomSheet =
+                parentFragmentManager.findFragmentByTag(TermsAgreementDialogFragment.TERMS_AGREEMENT_BOTTOM_SHEET_TAG)
+
+            if (existingDialog != null || existingBottomSheet != null) return@collectWithLifecycle
+
+            showTermsAgreementDialog()
         }
     }
 

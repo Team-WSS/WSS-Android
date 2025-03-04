@@ -26,6 +26,5 @@ class GetNotificationListUseCase
             private const val DEFAULT_LOAD_SIZE = 20
             private const val ADDITIONAL_LOAD_SIZE = 10
             private const val DEFAULT_LAST_NOTICE_ID = 0L
-            const val DEFAULT_INTRINSIC_ID = -1L
         }
     }

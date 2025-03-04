@@ -1,7 +1,6 @@
 package com.into.websoso.data.model
 
-import com.into.websoso.domain.model.NotificationType
-import com.into.websoso.domain.usecase.GetNotificationListUseCase
+import com.into.websoso.data.repository.NotificationRepository.Companion.DEFAULT_INTRINSIC_ID
 
 data class NotificationEntity(
     val notificationId: Long,
@@ -13,18 +12,10 @@ data class NotificationEntity(
     val isNotice: Boolean,
     val feedId: Long?,
 ) {
-    fun getNotificationType(): NotificationType =
-        NotificationType.from(
-            when {
-                isNotice -> "NOTICE"
-                else -> "FEED"
-            },
-        )
-
     fun getIntrinsicId(): Long =
         when {
             isNotice -> notificationId
             feedId != null -> feedId
-            else -> GetNotificationListUseCase.DEFAULT_INTRINSIC_ID
+            else -> DEFAULT_INTRINSIC_ID
         }
 }
