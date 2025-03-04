@@ -197,6 +197,12 @@ class UserRepository
             }
         }
 
+        suspend fun removeTermsAgreementChecked() {
+            userStorage.edit { preferences ->
+                preferences.remove(TERMS_AGREEMENT_CHECKED_KEY)
+            }
+        }
+
         companion object {
             val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
             val TERMS_AGREEMENT_CHECKED_KEY = booleanPreferencesKey("terms_agreement_checked")

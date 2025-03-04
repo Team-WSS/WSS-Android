@@ -34,9 +34,15 @@ class TermsAgreementDialogFragment :
     }
 
     private fun showTermsAgreementBottomSheet() {
-        TermsAgreementDialogBottomSheet
-            .newInstance(isFromHome = true)
-            .show(parentFragmentManager, "TermsAgreementDialogBottomSheet")
+        val isBottomSheetShown =
+            parentFragmentManager.findFragmentByTag(TERMS_AGREEMENT_BOTTOM_SHEET_TAG)
+
+        if (isBottomSheetShown == null) {
+            TermsAgreementDialogBottomSheet
+                .newInstance(isFromHome = true)
+                .show(parentFragmentManager, TERMS_AGREEMENT_BOTTOM_SHEET_TAG)
+        }
+        dismiss()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -46,6 +52,7 @@ class TermsAgreementDialogFragment :
 
     companion object {
         const val TERMS_AGREEMENT_TAG = "TermsAgreementDialog"
+        const val TERMS_AGREEMENT_BOTTOM_SHEET_TAG = "TermsAgreementDialogBottomSheet"
 
         fun newInstance(): TermsAgreementDialogFragment = TermsAgreementDialogFragment()
     }
