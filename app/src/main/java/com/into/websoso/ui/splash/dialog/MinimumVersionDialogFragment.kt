@@ -5,7 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseDialogFragment
+import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.databinding.DialogMinimumVersionPopupMenuBinding
 
 class MinimumVersionDialogFragment :

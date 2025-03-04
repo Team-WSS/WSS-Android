@@ -1,10 +1,11 @@
 package com.into.websoso.ui.splash
 
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.databinding.ActivityLoginBinding
 import com.into.websoso.ui.login.LoginActivity
 import com.into.websoso.ui.main.MainActivity
@@ -21,7 +22,16 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        updateUserDeviceIdentifier()
         setupObserver()
+    }
+
+    private fun updateUserDeviceIdentifier() {
+        val ssaid = Settings.Secure.getString(
+            this.contentResolver,
+            Settings.Secure.ANDROID_ID,
+        )
+        splashViewModel.updateUserDeviceIdentifier(deviceIdentifier = ssaid)
     }
 
     private fun setupObserver() {

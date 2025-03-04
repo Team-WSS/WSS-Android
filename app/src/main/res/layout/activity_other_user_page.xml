@@ -222,7 +222,7 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
+            <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
                 android:id="@+id/wll_other_user_page"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

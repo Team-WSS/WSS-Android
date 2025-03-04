@@ -5,24 +5,26 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseDialogFragment
-import com.into.websoso.common.ui.model.ResultFrom.BlockUser
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseDialogFragment
+import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogBlockUserBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class BlockUserDialogFragment :
-    BaseDialogFragment<DialogBlockUserBinding>(R.layout.dialog_block_user) {
+class BlockUserDialogFragment : BaseDialogFragment<DialogBlockUserBinding>(R.layout.dialog_block_user) {
     @Inject
     lateinit var tracker: Tracker
 
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         onCancelButtonClick()
@@ -53,7 +55,9 @@ class BlockUserDialogFragment :
                 val intent = Intent().apply {
                     putExtra(
                         USER_NICKNAME,
-                        otherUserPageViewModel.uiState.value?.otherUserProfile?.nickname
+                        otherUserPageViewModel.uiState.value
+                            ?.otherUserProfile
+                            ?.nickname,
                     )
                 }
                 activity?.setResult(BlockUser.RESULT_OK, intent)

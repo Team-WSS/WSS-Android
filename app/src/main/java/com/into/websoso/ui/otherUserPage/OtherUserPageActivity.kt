@@ -14,14 +14,14 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
-import com.into.websoso.common.ui.model.ResultFrom.WithdrawUser
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.toIntPxFromDp
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.toIntPxFromDp
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityOtherUserPageBinding
 import com.into.websoso.databinding.MenuOtherUserPagePopupBinding
 import com.into.websoso.ui.otherUserPage.adapter.OtherUserPageViewPagerAdapter
@@ -29,8 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OtherUserPageActivity :
-    BaseActivity<ActivityOtherUserPageBinding>(R.layout.activity_other_user_page) {
+class OtherUserPageActivity : BaseActivity<ActivityOtherUserPageBinding>(R.layout.activity_other_user_page) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -149,7 +148,7 @@ class OtherUserPageActivity :
                 ContextCompat.getColor(
                     this@OtherUserPageActivity,
                     color,
-                )
+                ),
             )
             tvOtherUserPageStickyTitle.isVisible = isCollapsed
             clOtherUserPageUserProfile.isVisible = !isCollapsed
@@ -200,10 +199,12 @@ class OtherUserPageActivity :
         private const val POPUP_MARGIN_TOP = 0
         private const val USER_ID = "USER_ID"
 
-        fun getIntent(context: Context, userId: Long): Intent {
-            return Intent(context, OtherUserPageActivity::class.java).apply {
+        fun getIntent(
+            context: Context,
+            userId: Long,
+        ): Intent =
+            Intent(context, OtherUserPageActivity::class.java).apply {
                 putExtra(USER_ID, userId)
             }
-        }
     }
 }

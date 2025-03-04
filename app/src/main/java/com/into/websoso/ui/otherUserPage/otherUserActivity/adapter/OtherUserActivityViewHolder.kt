@@ -3,7 +3,7 @@ package com.into.websoso.ui.otherUserPage.otherUserActivity.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.into.websoso.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.databinding.ItemMyActivityBinding
 import com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.into.websoso.ui.main.myPage.myActivity.model.UserActivityModel
@@ -12,7 +12,6 @@ class OtherUserActivityViewHolder(
     private val binding: ItemMyActivityBinding,
     activityItemClickListener: ActivityItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
         binding.onClick = activityItemClickListener
     }
@@ -23,7 +22,7 @@ class OtherUserActivityViewHolder(
 
         binding.activity = activity
         binding.userProfile = userProfile.copy(
-            avatarImage = itemView.getS3ImageUrl(userProfile.avatarImage)
+            avatarImage = itemView.getS3ImageUrl(userProfile.avatarImage),
         )
         binding.clMyActivityLike.isSelected = activity.isLiked
     }
@@ -31,7 +30,7 @@ class OtherUserActivityViewHolder(
     companion object {
         fun from(
             parent: ViewGroup,
-            onClick: ActivityItemClickListener
+            onClick: ActivityItemClickListener,
         ): OtherUserActivityViewHolder =
             OtherUserActivityViewHolder(
                 ItemMyActivityBinding.inflate(

@@ -28,22 +28,22 @@ import com.into.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.into.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.into.websoso.R.string.feed_removed_feed_snackbar
 import com.into.websoso.R.string.feed_server_error
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.custom.WebsosoChip
-import com.into.websoso.common.ui.model.ResultFrom.BlockUser
-import com.into.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailError
-import com.into.websoso.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.into.websoso.common.ui.model.ResultFrom.NovelDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
-import com.into.websoso.common.ui.model.ResultFrom.WithdrawUser
-import com.into.websoso.common.util.InfiniteScrollListener
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.showWebsosoSnackBar
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.toIntPxFromDp
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
+import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
+import com.into.websoso.core.common.util.InfiniteScrollListener
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.toIntPxFromDp
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
@@ -92,59 +92,81 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
-            singleEventHandler.throttleFirst(300) { navigateToProfile(userId, isMyFeed) }
-        }
-
-        override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
-            singleEventHandler.throttleFirst { showMenu(view, feedId, isMyFeed) }
-        }
-
-        override fun onContentClick(feedId: Long) {
-            singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId) }
-        }
-
-        override fun onNovelInfoClick(novelId: Long) {
-            singleEventHandler.throttleFirst(300) { navigateToNovelDetail(novelId) }
-        }
-
-        @SuppressLint("CutPasteId")
-        override fun onLikeButtonClick(view: View, id: Long) {
-            tracker.trackEvent("feed_like")
-            val likeCount: Int =
-                view.findViewById<TextView>(tv_feed_thumb_up_count).text.toString().toInt()
-            val updatedLikeCount: Int = when (view.isSelected) {
-                true -> if (likeCount > 0) likeCount - 1 else 0
-                false -> likeCount + 1
+    private fun onClickFeedItem() =
+        object : FeedItemClickListener {
+            override fun onProfileClick(
+                userId: Long,
+                isMyFeed: Boolean,
+            ) {
+                singleEventHandler.throttleFirst(300) { navigateToProfile(userId, isMyFeed) }
             }
 
-            view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
-            view.isSelected = !view.isSelected
+            override fun onMoreButtonClick(
+                view: View,
+                feedId: Long,
+                isMyFeed: Boolean,
+            ) {
+                singleEventHandler.throttleFirst { showMenu(view, feedId, isMyFeed) }
+            }
 
-            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-                feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
+            override fun onContentClick(feedId: Long) {
+                singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId) }
+            }
+
+            override fun onNovelInfoClick(novelId: Long) {
+                singleEventHandler.throttleFirst(300) { navigateToNovelDetail(novelId) }
+            }
+
+            @SuppressLint("CutPasteId")
+            override fun onLikeButtonClick(
+                view: View,
+                id: Long,
+            ) {
+                tracker.trackEvent("feed_like")
+                val likeCount: Int =
+                    view
+                        .findViewById<TextView>(tv_feed_thumb_up_count)
+                        .text
+                        .toString()
+                        .toInt()
+                val updatedLikeCount: Int = when (view.isSelected) {
+                    true -> if (likeCount > 0) likeCount - 1 else 0
+                    false -> likeCount + 1
+                }
+
+                view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
+                view.isSelected = !view.isSelected
+
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
+                }
             }
         }
-    }
 
-    private fun navigateToProfile(userId: Long, isMyFeed: Boolean) {
+    private fun navigateToProfile(
+        userId: Long,
+        isMyFeed: Boolean,
+    ) {
         if (isMyFeed) return
 
         activityResultCallback.launch(
             OtherUserPageActivity.getIntent(
                 requireContext(),
                 userId,
-            )
+            ),
         )
     }
 
-    private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
+    private fun showMenu(
+        view: View,
+        feedId: Long,
+        isMyFeed: Boolean,
+    ) {
         val popupWindow: PopupWindow = PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = 2f
             showAsDropDown(view)
@@ -153,7 +175,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         bindMenuByIsMyFeed(popupWindow, isMyFeed, feedId)
     }
 
-    private fun bindMenuByIsMyFeed(popup: PopupWindow, isMyFeed: Boolean, feedId: Long) {
+    private fun bindMenuByIsMyFeed(
+        popup: PopupWindow,
+        isMyFeed: Boolean,
+        feedId: Long,
+    ) {
         with(popupBinding) {
             when (isMyFeed) {
                 true -> setupMyFeed(feedId, popup)
@@ -162,7 +188,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
     }
 
-    private fun MenuFeedPopupBinding.setupMyFeed(feedId: Long, popup: PopupWindow) {
+    private fun MenuFeedPopupBinding.setupMyFeed(
+        feedId: Long,
+        popup: PopupWindow,
+    ) {
         onFirstItemClick = {
             singleEventHandler.throttleFirst {
                 navigateToFeedEdit(feedId)
@@ -183,7 +212,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         tvFeedPopupSecondItem.isSelected = true
     }
 
-    private fun MenuFeedPopupBinding.setupNotMyFeed(feedId: Long, popup: PopupWindow) {
+    private fun MenuFeedPopupBinding.setupNotMyFeed(
+        feedId: Long,
+        popup: PopupWindow,
+    ) {
         onFirstItemClick = {
             singleEventHandler.throttleFirst {
                 showDialog<DialogReportPopupMenuBinding>(
@@ -212,13 +244,19 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
-                menuType = menuType, event = { event() },
-            ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+            DialogRemovePopupMenuBinding::class ->
+                FeedRemoveDialogFragment
+                    .newInstance(
+                        menuType = menuType,
+                        event = { event() },
+                    ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
 
-            DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
-                menuType = menuType, event = { event() },
-            ).show(childFragmentManager, FeedReportDialogFragment.TAG)
+            DialogReportPopupMenuBinding::class ->
+                FeedReportDialogFragment
+                    .newInstance(
+                        menuType = menuType,
+                        event = { event() },
+                    ).show(childFragmentManager, FeedReportDialogFragment.TAG)
         }
     }
 
@@ -250,7 +288,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         activityResultCallback.launch(NovelDetailActivity.getIntent(requireContext(), novelId))
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
@@ -341,7 +382,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 InfiniteScrollListener.of(
                     singleEventHandler = singleEventHandler,
                     event = feedViewModel::updateFeeds,
-                )
+                ),
             )
             setHasFixedSize(true)
         }
@@ -352,8 +393,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             singleEventHandler.throttleFirst {
                 setRefreshViewParams(
                     params = ViewGroup.LayoutParams(
-                        30.toIntPxFromDp(), 30.toIntPxFromDp(),
-                    )
+                        30.toIntPxFromDp(),
+                        30.toIntPxFromDp(),
+                    ),
                 )
                 setLottieAnimation("lottie_websoso_loading.json")
                 setOnRefreshListener {
@@ -377,10 +419,15 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
 
         feedViewModel.categories.observe(viewLifecycleOwner) { category ->
-            if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
+            if (binding.wcgFeed.children
+                    .toList()
+                    .isEmpty()
+            ) {
+                category.setUpChips()
+            }
 
             val selectedCategory = category.find { it.isSelected } ?: category.first()
-            tracker.trackEvent("feed_${selectedCategory.category.enTitle}")
+            tracker.trackEvent("feed_${selectedCategory.category.shortCode}")
 
             binding.wcgFeed.children.forEach {
                 val chip = it as Chip
@@ -393,17 +440,18 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun List<CategoryModel>.setUpChips() {
         forEach { categoryUiState ->
-            WebsosoChip(requireContext()).apply {
-                setWebsosoChipText(categoryUiState.category.krTitle)
-                setWebsosoChipTextAppearance(R.style.title3)
-                setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
-                setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
-                setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
-                setWebsosoChipRadius(18f.toFloatPxFromDp())
-                setWebsosoChipSelected(categoryUiState.isSelected)
-                setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
-            }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
+            WebsosoChip(requireContext())
+                .apply {
+                    setWebsosoChipText(categoryUiState.category.krTitle)
+                    setWebsosoChipTextAppearance(R.style.title3)
+                    setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
+                    setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
+                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
+                    setWebsosoChipRadius(18f.toFloatPxFromDp())
+                    setWebsosoChipSelected(categoryUiState.isSelected)
+                    setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
+                }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
         }
     }
 

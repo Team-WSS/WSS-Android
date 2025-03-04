@@ -227,7 +227,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_pick_description"
                 tools:listitem="@layout/item_soso_pick" />
 
-            <com.into.websoso.common.ui.custom.WebsosoLoadingLayout
+            <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
                 android:id="@+id/wll_explore"
                 android:layout_width="0dp"
                 android:layout_height="712dp"

@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.model.ResultFrom.ChangeProfileDisclosure
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
 import com.into.websoso.databinding.ActivityProfileDisclosureBinding
 import com.into.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint

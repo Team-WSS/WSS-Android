@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentExploreBinding
 import com.into.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
 import com.into.websoso.ui.main.explore.adapter.SosoPickAdapter
@@ -24,7 +24,10 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val exploreViewModel: ExploreViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         initSosoPickAdapter()
@@ -43,7 +46,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     private fun navigateToNovelDetail(novelId: Long) {
         tracker.trackEvent(
             eventName = "soso_pick",
-            properties = mapOf("novelId" to novelId)
+            properties = mapOf("novelId" to novelId),
         )
         val intent = NovelDetailActivity.getIntent(requireContext(), novelId)
         startActivity(intent)

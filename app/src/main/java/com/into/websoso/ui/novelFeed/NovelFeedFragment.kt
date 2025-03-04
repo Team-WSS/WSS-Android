@@ -21,14 +21,14 @@ import com.into.websoso.R.string.block_user_success_message
 import com.into.websoso.R.string.feed_popup_menu_content_isMyFeed
 import com.into.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.into.websoso.R.string.other_user_page_withdraw_user
-import com.into.websoso.common.ui.base.BaseFragment
-import com.into.websoso.common.ui.model.ResultFrom.BlockUser
-import com.into.websoso.common.ui.model.ResultFrom.OtherUserProfileBack
-import com.into.websoso.common.ui.model.ResultFrom.WithdrawUser
-import com.into.websoso.common.util.InfiniteScrollListener
-import com.into.websoso.common.util.SingleEventHandler
-import com.into.websoso.common.util.showWebsosoSnackBar
-import com.into.websoso.common.util.toIntPxFromDp
+import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
+import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
+import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
+import com.into.websoso.core.common.util.InfiniteScrollListener
+import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentNovelFeedBinding
@@ -72,68 +72,83 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private fun onClickFeedItem() = object : FeedItemClickListener {
-        override fun onProfileClick(userId: Long, isMyFeed: Boolean) {
-            if (isMyFeed) return
+    private fun onClickFeedItem() =
+        object : FeedItemClickListener {
+            override fun onProfileClick(
+                userId: Long,
+                isMyFeed: Boolean,
+            ) {
+                if (isMyFeed) return
 
-            activityResultCallback.launch(
-                OtherUserPageActivity.getIntent(
-                    requireContext(),
-                    userId,
+                activityResultCallback.launch(
+                    OtherUserPageActivity.getIntent(
+                        requireContext(),
+                        userId,
+                    ),
                 )
-            )
-        }
-
-        override fun onMoreButtonClick(view: View, feedId: Long, isMyFeed: Boolean) {
-            if (novelFeedViewModel.isLogin.value == false) {
-                showLoginRequestDialog()
-                return
-            }
-            showMenu(view, feedId, isMyFeed)
-        }
-
-        override fun onContentClick(feedId: Long) {
-            navigateToFeedDetail(feedId)
-        }
-
-        override fun onNovelInfoClick(novelId: Long) {
-            if (novelId == this@NovelFeedFragment.novelId) return
-            startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
-        }
-
-        override fun onLikeButtonClick(view: View, id: Long) {
-            if (novelFeedViewModel.isLogin.value == false) {
-                showLoginRequestDialog()
-                return
-            }
-            val likeTextView = view.requireViewById<TextView>(R.id.tv_feed_thumb_up_count)
-            val likeCount: Int = likeTextView.text.toString().toInt()
-
-            val updatedLikeCount: Int = when (view.isSelected) {
-                true -> if (likeCount > 0) likeCount - 1 else 0
-                false -> likeCount + 1
             }
 
-            likeTextView.text = updatedLikeCount.toString()
-            view.isSelected = !view.isSelected
+            override fun onMoreButtonClick(
+                view: View,
+                feedId: Long,
+                isMyFeed: Boolean,
+            ) {
+                if (novelFeedViewModel.isLogin.value == false) {
+                    showLoginRequestDialog()
+                    return
+                }
+                showMenu(view, feedId, isMyFeed)
+            }
 
-            singleEventHandler.debounce(coroutineScope = lifecycleScope) {
-                novelFeedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
+            override fun onContentClick(feedId: Long) {
+                navigateToFeedDetail(feedId)
+            }
+
+            override fun onNovelInfoClick(novelId: Long) {
+                if (novelId == this@NovelFeedFragment.novelId) return
+                startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+            }
+
+            override fun onLikeButtonClick(
+                view: View,
+                id: Long,
+            ) {
+                if (novelFeedViewModel.isLogin.value == false) {
+                    showLoginRequestDialog()
+                    return
+                }
+                val likeTextView = view.requireViewById<TextView>(R.id.tv_feed_thumb_up_count)
+                val likeCount: Int = likeTextView.text.toString().toInt()
+
+                val updatedLikeCount: Int = when (view.isSelected) {
+                    true -> if (likeCount > 0) likeCount - 1 else 0
+                    false -> likeCount + 1
+                }
+
+                likeTextView.text = updatedLikeCount.toString()
+                view.isSelected = !view.isSelected
+
+                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                    novelFeedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
+                }
             }
         }
-    }
 
     private fun showLoginRequestDialog() {
         val dialog = LoginRequestDialogFragment.newInstance()
         dialog.show(childFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
-    private fun showMenu(view: View, feedId: Long, isMyFeed: Boolean) {
+    private fun showMenu(
+        view: View,
+        feedId: Long,
+        isMyFeed: Boolean,
+    ) {
         val popupWindow: PopupWindow = PopupWindow(
             popupBinding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = 2f
             showAsDropDown(view)
@@ -142,7 +157,11 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         bindMenuByIsMyFeed(popupWindow, isMyFeed, feedId)
     }
 
-    private fun bindMenuByIsMyFeed(popup: PopupWindow, isMyFeed: Boolean, feedId: Long) {
+    private fun bindMenuByIsMyFeed(
+        popup: PopupWindow,
+        isMyFeed: Boolean,
+        feedId: Long,
+    ) {
         with(popupBinding) {
             when (isMyFeed) {
                 true -> setupMyFeed(feedId, popup)
@@ -201,13 +220,19 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class -> FeedRemoveDialogFragment.newInstance(
-                menuType = menuType, event = { event() },
-            ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+            DialogRemovePopupMenuBinding::class ->
+                FeedRemoveDialogFragment
+                    .newInstance(
+                        menuType = menuType,
+                        event = { event() },
+                    ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
 
-            DialogReportPopupMenuBinding::class -> FeedReportDialogFragment.newInstance(
-                menuType = menuType, event = { event() },
-            ).show(childFragmentManager, FeedReportDialogFragment.TAG)
+            DialogReportPopupMenuBinding::class ->
+                FeedReportDialogFragment
+                    .newInstance(
+                        menuType = menuType,
+                        event = { event() },
+                    ).show(childFragmentManager, FeedReportDialogFragment.TAG)
         }
     }
 
@@ -235,14 +260,17 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         activityResultCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
                     OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
-                        novelId
+                        novelId,
                     )
 
                     BlockUser.RESULT_OK -> {
@@ -290,7 +318,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                 InfiniteScrollListener.of(
                     singleEventHandler = singleEventHandler,
                     event = { novelFeedViewModel.updateFeeds(novelId) },
-                )
+                ),
             )
             setHasFixedSize(true)
         }
@@ -300,8 +328,9 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         binding.sptrNovelFeedRefresh.apply {
             setRefreshViewParams(
                 params = ViewGroup.LayoutParams(
-                    30.toIntPxFromDp(), 30.toIntPxFromDp(),
-                )
+                    30.toIntPxFromDp(),
+                    30.toIntPxFromDp(),
+                ),
             )
             setLottieAnimation("lottie_websoso_loading.json")
             setOnRefreshListener {
@@ -348,8 +377,13 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
 
     override fun onResume() {
         super.onResume()
-        if (novelFeedViewModel.feedUiState.value?.feeds.isNullOrEmpty().not())
+        if (novelFeedViewModel.feedUiState.value
+                ?.feeds
+                .isNullOrEmpty()
+                .not()
+        ) {
             novelFeedViewModel.updateRefreshedFeeds(novelId)
+        }
     }
 
     override fun onDestroyView() {
@@ -360,10 +394,9 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
 
-        fun newInstance(novelId: Long): NovelFeedFragment {
-            return NovelFeedFragment().also {
+        fun newInstance(novelId: Long): NovelFeedFragment =
+            NovelFeedFragment().also {
                 it.arguments = Bundle().apply { putLong(NOVEL_ID, novelId) }
             }
-        }
     }
 }

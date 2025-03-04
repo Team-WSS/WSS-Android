@@ -18,15 +18,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.into.websoso.R
-import com.into.websoso.common.ui.base.BaseActivity
-import com.into.websoso.common.ui.model.ResultFrom.CreateFeed
-import com.into.websoso.common.ui.model.ResultFrom.NovelDetailBack
-import com.into.websoso.common.ui.model.ResultFrom.NovelRating
-import com.into.websoso.common.util.getS3ImageUrl
-import com.into.websoso.common.util.showWebsosoSnackBar
-import com.into.websoso.common.util.toFloatPxFromDp
-import com.into.websoso.common.util.toIntPxFromDp
-import com.into.websoso.common.util.tracker.Tracker
+import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.NovelRating
+import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.common.util.toIntPxFromDp
+import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.ActivityNovelDetailBinding
 import com.into.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.into.websoso.databinding.MenuNovelDetailPopupBinding
@@ -43,8 +43,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NovelDetailActivity :
-    BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
+class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -127,7 +126,8 @@ class NovelDetailActivity :
             cancelButtonText = getString(R.string.novel_detail_remove_cancel),
             onAcceptClick = { deleteUserNovel() },
         )
-        NovelAlertDialogFragment.newInstance(novelAlertModel)
+        NovelAlertDialogFragment
+            .newInstance(novelAlertModel)
             .show(supportFragmentManager, NovelAlertDialogFragment.TAG)
         menuPopupWindow?.dismiss()
     }
@@ -276,58 +276,67 @@ class NovelDetailActivity :
         }
     }
 
-    private fun onNovelDetailButtonClick() = object : NovelDetailClickListener {
-        override fun onNavigateBackClick() {
-            setResult(NovelDetailBack.RESULT_OK)
-            finish()
-        }
-
-        override fun onShowMenuClick() {
-            showPopupWindow()
-        }
-
-        override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
-            if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
-                binding.tgNovelDetailReadStatus.clearChecked()
-                showLoginRequestDialog()
-                return
+    private fun onNovelDetailButtonClick() =
+        object : NovelDetailClickListener {
+            override fun onNavigateBackClick() {
+                setResult(NovelDetailBack.RESULT_OK)
+                finish()
             }
-            navigateToNovelRating(readStatus)
-        }
 
-        override fun onNovelCoverClick(novelImageUrl: String) {
-            NovelDetailCoverDialogFragment.newInstance(novelImageUrl)
-                .show(supportFragmentManager, NovelDetailCoverDialogFragment.TAG)
-        }
-
-        override fun onNovelFeedWriteClick() {
-            if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
-                showLoginRequestDialog()
-                return
+            override fun onShowMenuClick() {
+                showPopupWindow()
             }
-            tracker.trackEvent("novel_write_btn")
-            val editFeedModel = EditFeedModel(
-                novelId = novelId,
-                novelTitle = binding.tvNovelDetailTitle.text.toString(),
-                feedCategory = novelDetailViewModel.novelDetailModel.value?.novel?.getGenres
-                    ?: emptyList(),
-            )
-            val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
-            novelDetailResultLauncher.launch(intent)
-        }
 
-        override fun onNovelInterestClick() {
-            if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
-                showLoginRequestDialog()
-                return
+            override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
+                if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                    binding.tgNovelDetailReadStatus.clearChecked()
+                    showLoginRequestDialog()
+                    return
+                }
+                navigateToNovelRating(readStatus)
             }
-            tracker.trackEvent("rate_love")
-            novelDetailViewModel.updateUserInterest(novelId)
+
+            override fun onNovelCoverClick(novelImageUrl: String) {
+                NovelDetailCoverDialogFragment
+                    .newInstance(novelImageUrl)
+                    .show(supportFragmentManager, NovelDetailCoverDialogFragment.TAG)
+            }
+
+            override fun onNovelFeedWriteClick() {
+                if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                    showLoginRequestDialog()
+                    return
+                }
+                tracker.trackEvent("novel_write_btn")
+                val editFeedModel = EditFeedModel(
+                    novelId = novelId,
+                    novelTitle = binding.tvNovelDetailTitle.text.toString(),
+                    feedCategory = novelDetailViewModel.novelDetailModel.value
+                        ?.novel
+                        ?.getGenres
+                        ?: emptyList(),
+                )
+                val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
+                novelDetailResultLauncher.launch(intent)
+            }
+
+            override fun onNovelInterestClick() {
+                if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                    showLoginRequestDialog()
+                    return
+                }
+                tracker.trackEvent("rate_love")
+                novelDetailViewModel.updateUserInterest(novelId)
+            }
         }
-    }
 
     private fun navigateToNovelRating(readStatus: ReadStatus) {
-        if (novelDetailViewModel.novelDetailModel.value?.novel?.isNovelNotBlank != true) return
+        if (novelDetailViewModel.novelDetailModel.value
+                ?.novel
+                ?.isNovelNotBlank != true
+        ) {
+            return
+        }
         val intent = NovelRatingActivity.getIntent(
             context = this,
             novelId = novelId,
@@ -368,10 +377,12 @@ class NovelDetailActivity :
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
 
-        fun getIntent(context: Context, novelId: Long): Intent {
-            return Intent(context, NovelDetailActivity::class.java).apply {
+        fun getIntent(
+            context: Context,
+            novelId: Long,
+        ): Intent =
+            Intent(context, NovelDetailActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
             }
-        }
     }
 }
