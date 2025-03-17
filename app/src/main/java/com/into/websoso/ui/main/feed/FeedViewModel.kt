@@ -51,6 +51,10 @@ class FeedViewModel @Inject constructor(
     }
 
     fun updateFeeds(isRefreshed: Boolean = false) {
+        // 피드 아이템 더 불러오기 함수
+        // 카테고리 누를 시 init 함수
+        // 새로고침 함수
+        // 모두 분리하기
         feedUiState.value?.let { feedUiState ->
             if (!feedUiState.isLoadable) return
 
@@ -63,7 +67,7 @@ class FeedViewModel @Inject constructor(
                     when (feedUiState.feeds.isNotEmpty()) {
                         true -> getFeedsUseCase(
                             selectedCategory.enTitle,
-                            feedUiState.feeds.minOf { it.id }
+                            feedUiState.feeds.minOf { it.id },
                         )
 
                         false -> getFeedsUseCase(selectedCategory.enTitle)
@@ -147,6 +151,14 @@ class FeedViewModel @Inject constructor(
         }
     }
 
+    fun updateRefreshedFeeds(feedId: Long) {
+        feedUiState.value?.let { feedUiState ->
+            _feedUiState.value = feedUiState.copy(
+                feeds = feedUiState.feeds.filterNot { it.id == feedId },
+            )
+        }
+    }
+
     fun updateLike(selectedFeedId: Long, isLiked: Boolean, updatedLikeCount: Int) {
         feedUiState.value?.let { feedUiState ->
             val selectedFeed = feedUiState.feeds.find { feedModel ->
@@ -227,7 +239,7 @@ class FeedViewModel @Inject constructor(
                 }.onSuccess {
                     _feedUiState.value = feedUiState.copy(
                         loading = false,
-                        feeds = feedUiState.feeds.filter { it.id != feedId }
+                        feeds = feedUiState.feeds.filter { it.id != feedId },
                     )
                 }.onFailure {
                     _feedUiState.value = feedUiState.copy(
