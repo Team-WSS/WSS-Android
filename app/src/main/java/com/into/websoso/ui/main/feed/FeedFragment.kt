@@ -87,7 +87,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         when (result.resultCode) {
             CreateFeed.RESULT_OK -> {
                 feedViewModel.updateRefreshedFeeds(true)
-                // 피드 아예 초기화
+                // TODO: 피드 아예 초기화
 
                 showWebsosoSnackBar(
                     view = binding.root,
@@ -430,9 +430,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 val chip = it as Chip
                 chip.isSelected = chip.text == selectedCategory.category.krTitle
             }
-
-            // 최초로 init할 때 전체상태로 updateFeeds 호출함 -> 리프레시되어야하기 때문에 true 설정
-            // 뷰모델 init으로 옮기기, isRefreshed 상태 없애기
+            // TODO: 최초로 init할 때 전체상태로 updateFeeds 호출함 -> 리프레시되어야하기 때문에 true 설정
+            // TODO: 뷰모델 init으로 옮기기, isRefreshed 상태 없애기
             feedViewModel.updateFeeds(true)
         }
     }

@@ -51,10 +51,10 @@ class FeedViewModel @Inject constructor(
     }
 
     fun updateFeeds(isRefreshed: Boolean = false) {
-        // 피드 아이템 더 불러오기 함수
-        // 카테고리 누를 시 init 함수
-        // 새로고침 함수
-        // 모두 분리하기
+        // TODO: 피드 아이템 더 불러오기 함수
+        // TODO: 카테고리 누를 시 init 함수
+        // TODO: 새로고침 함수
+        // TODO: 모두 분리하기
         feedUiState.value?.let { feedUiState ->
             if (!feedUiState.isLoadable) return
 
