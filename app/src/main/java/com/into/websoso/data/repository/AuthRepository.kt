@@ -1,6 +1,7 @@
 package com.into.websoso.data.repository
 
 import android.content.SharedPreferences
+import com.into.websoso.data.authenticator.AuthFailureHandler
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.LoginEntity
 import com.into.websoso.data.remote.api.AuthApi
@@ -17,6 +18,7 @@ class AuthRepository
         private val authApi: AuthApi,
         private val authStorage: SharedPreferences,
     ) {
+        var authFailureHandler: AuthFailureHandler? = null
         var accessToken: String
             get() = authStorage.getString(ACCESS_TOKEN_KEY, "").orEmpty()
             private set(value) = authStorage.edit().putString(ACCESS_TOKEN_KEY, value).apply()
@@ -97,6 +99,7 @@ class AuthRepository
                 response.authorization
             }.getOrElse {
                 it.printStackTrace()
+                authFailureHandler?.onAuthFailed()
                 null
             }
 
