@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/bg_profile_edit_white_stroke_gray_70_radius_12dp" android:state_selected="true" />
-    <item android:drawable="@drawable/bg_profile_edit_gray_50_radius_12dp" android:state_selected="false" />
-</selector>

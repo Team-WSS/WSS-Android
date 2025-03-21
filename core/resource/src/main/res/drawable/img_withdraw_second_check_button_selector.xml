@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/img_account_info_check_unselected" android:state_activated="false" />
-    <item android:drawable="@drawable/img_account_info_check_selected" android:state_activated="true" />
-</selector>
