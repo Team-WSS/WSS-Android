@@ -32,6 +32,7 @@ import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
 import com.into.websoso.core.common.util.InfiniteScrollListener
@@ -85,6 +86,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun handleActivityResult(result: ActivityResult) {
         when (result.resultCode) {
+            FeedDetailRefreshed.RESULT_OK -> {
+                val removedFeedId = result.data?.getLongExtra(FEED_ID, -1) ?: -1
+                feedViewModel.updateRefreshedFeeds(removedFeedId)
+            }
+
             CreateFeed.RESULT_OK -> {
                 feedViewModel.updateRefreshedFeeds(true)
                 // TODO: 피드 아예 초기화
@@ -356,8 +362,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
         initView()
         setupObserver()
-        activityResultCallback
         tracker.trackEvent("feed_all")
+        activityResultCallback
     }
 
     private fun initView() {
