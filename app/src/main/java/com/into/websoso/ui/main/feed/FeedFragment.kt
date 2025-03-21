@@ -29,11 +29,7 @@ import com.into.websoso.R.string.feed_removed_feed_snackbar
 import com.into.websoso.R.string.feed_server_error
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
-import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
-import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
-import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
-import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
+import com.into.websoso.core.common.ui.model.ResultFrom.*
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.showWebsosoSnackBar
@@ -85,6 +81,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun handleActivityResult(result: ActivityResult) {
         when (result.resultCode) {
+            FeedDetailRefreshed.RESULT_OK -> {
+                val removedFeedId = result.data?.getLongExtra(FEED_ID, -1) ?: -1
+                feedViewModel.updateRefreshedFeeds(removedFeedId)
+            }
+
             CreateFeed.RESULT_OK -> {
                 feedViewModel.updateRefreshedFeeds(true)
                 // TODO: 피드 아예 초기화
@@ -356,8 +357,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
         initView()
         setupObserver()
-        activityResultCallback
         tracker.trackEvent("feed_all")
+        activityResultCallback
     }
 
     private fun initView() {
