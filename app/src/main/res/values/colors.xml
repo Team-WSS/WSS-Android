@@ -26,5 +26,4 @@
     <drawable name="selected_bg">@drawable/bg_selected_gradient</drawable>
 
     <color name="transparent">#00000000</color>
-    <color name="ic_wss_logo_background">#6A5DFD</color>
 </resources>
