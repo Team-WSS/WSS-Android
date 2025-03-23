@@ -2,8 +2,8 @@ package com.into.websoso
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.kakao.sdk.common.KakaoSdk
 import com.into.websoso.BuildConfig.KAKAO_APP_KEY
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

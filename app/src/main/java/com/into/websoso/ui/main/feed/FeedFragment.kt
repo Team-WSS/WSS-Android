@@ -17,7 +17,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
-import com.into.websoso.R
 import com.into.websoso.R.color.bg_feed_chip_background_selector
 import com.into.websoso.R.color.bg_feed_chip_text_selector
 import com.into.websoso.R.id.tv_feed_thumb_up_count

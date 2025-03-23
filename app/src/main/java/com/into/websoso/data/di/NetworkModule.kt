@@ -1,6 +1,5 @@
 package com.into.websoso.data.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.into.websoso.BuildConfig
 import com.into.websoso.data.authenticator.WebsosoAuthenticator
 import com.into.websoso.data.interceptor.AuthInterceptor
@@ -8,6 +7,7 @@ import com.into.websoso.data.qualifier.Auth
 import com.into.websoso.data.qualifier.Logging
 import com.into.websoso.data.qualifier.Secured
 import com.into.websoso.data.qualifier.Unsecured
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
