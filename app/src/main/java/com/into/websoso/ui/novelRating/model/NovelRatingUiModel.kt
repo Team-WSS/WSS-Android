@@ -1,7 +1,11 @@
 package com.into.websoso.ui.novelRating.model
 
-import com.into.websoso.R
 import com.into.websoso.core.common.ui.model.CategoriesModel
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
+import com.into.websoso.resource.R.string.novel_rating_add_date
+import com.into.websoso.resource.R.string.novel_rating_display_date
+import com.into.websoso.resource.R.string.novel_rating_display_date_with_tilde
+import com.into.websoso.ui.novelRating.model.ReadStatus.WATCHING
 import java.util.Locale
 
 data class NovelRatingModel(
@@ -12,8 +16,8 @@ data class NovelRatingModel(
     val userNovelRating: Float = 0f,
     val charmPoints: List<CharmPoint> = emptyList(),
     val isCharmPointExceed: Boolean = false,
-    val userKeywords: Set<CategoriesModel.CategoryModel.KeywordModel> = setOf(),
-    val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus ?: ReadStatus.WATCHING.name),
+    val userKeywords: Set<KeywordModel> = setOf(),
+    val uiReadStatus: ReadStatus = ReadStatus.valueOf(readStatus ?: WATCHING.name),
     val ratingDateModel: RatingDateModel =
         RatingDateModel(
             currentStartDate = startDate.toFormattedDate(),
@@ -42,9 +46,9 @@ data class RatingDateModel(
     fun formatDisplayDate(ratingDateModel: RatingDateModel): Pair<Int, Array<Int>> {
         val (currentStartDate, currentEndDate) = ratingDateModel
         return when {
-            currentStartDate == null && currentEndDate == null -> R.string.novel_rating_add_date to arrayOf()
+            currentStartDate == null && currentEndDate == null -> novel_rating_add_date to arrayOf()
             currentStartDate != null && currentEndDate != null ->
-                R.string.novel_rating_display_date_with_tilde to
+                novel_rating_display_date_with_tilde to
                         arrayOf(
                             currentStartDate.first,
                             currentStartDate.second,
@@ -55,7 +59,7 @@ data class RatingDateModel(
                         )
 
             currentStartDate != null ->
-                R.string.novel_rating_display_date to
+                novel_rating_display_date to
                         arrayOf(
                             currentStartDate.first,
                             currentStartDate.second,
@@ -63,14 +67,14 @@ data class RatingDateModel(
                         )
 
             currentEndDate != null ->
-                R.string.novel_rating_display_date to
+                novel_rating_display_date to
                         arrayOf(
                             currentEndDate.first,
                             currentEndDate.second,
                             currentEndDate.third,
                         )
 
-            else -> R.string.novel_rating_add_date to arrayOf()
+            else -> novel_rating_add_date to arrayOf()
         }
     }
 
@@ -83,15 +87,15 @@ data class RatingDateModel(
 
 data class NovelRatingKeywordsModel(
     val categories: List<CategoriesModel.CategoryModel> = emptyList(),
-    val currentSelectedKeywords: Set<CategoriesModel.CategoryModel.KeywordModel> = mutableSetOf(),
+    val currentSelectedKeywords: Set<KeywordModel> = mutableSetOf(),
     val isCurrentSelectedKeywordsEmpty: Boolean = currentSelectedKeywords.isEmpty(),
     val isSearchKeywordProceeding: Boolean = false,
     val isInitialSearchKeyword: Boolean = true,
-    val searchResultKeywords: List<CategoriesModel.CategoryModel.KeywordModel> = emptyList(),
+    val searchResultKeywords: List<KeywordModel> = emptyList(),
     val isSearchResultKeywordsEmpty: Boolean = false,
     val isSearchKeywordExceed: Boolean = false,
 ) {
-    private fun updatedCategories(keyword: CategoriesModel.CategoryModel.KeywordModel): List<CategoriesModel.CategoryModel> {
+    private fun updatedCategories(keyword: KeywordModel): List<CategoriesModel.CategoryModel> {
         return categories.map { category ->
             val updatedKeywords = category.keywords.map { previousKeyword ->
                 if (previousKeyword.keywordId == keyword.keywordId) keyword
@@ -102,7 +106,7 @@ data class NovelRatingKeywordsModel(
     }
 
     fun updateSelectedKeywords(
-        keyword: CategoriesModel.CategoryModel.KeywordModel,
+        keyword: KeywordModel,
         isSelected: Boolean,
     ): NovelRatingKeywordsModel {
         val newSelectedKeywords = currentSelectedKeywords.toMutableSet().apply {
@@ -113,7 +117,7 @@ data class NovelRatingKeywordsModel(
         }
 
         return this.copy(
-            categories = this.updatedCategories(keyword.copy(isSelected = isSelected)),
+            categories = updatedCategories(keyword.copy(isSelected = isSelected)),
             currentSelectedKeywords = newSelectedKeywords,
             isCurrentSelectedKeywordsEmpty = newSelectedKeywords.isEmpty(),
             isSearchKeywordExceed = newSelectedKeywords.size > MAX_KEYWORD_COUNT && isSelected,

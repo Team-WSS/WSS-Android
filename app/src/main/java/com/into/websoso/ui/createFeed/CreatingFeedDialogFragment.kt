@@ -3,15 +3,16 @@ package com.into.websoso.ui.createFeed
 import android.os.Bundle
 import android.view.View
 import com.into.websoso.R.layout.dialog_report_popup_menu
-import com.into.websoso.R.string.remove_popup_menu_keep_creating
-import com.into.websoso.R.string.remove_popup_menu_stop_creating
-import com.into.websoso.R.string.tv_remove_popup_menu_stop_creating
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
+import com.into.websoso.resource.R.string.remove_popup_menu_keep_creating
+import com.into.websoso.resource.R.string.remove_popup_menu_stop_creating
+import com.into.websoso.resource.R.string.tv_remove_popup_menu_stop_creating
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 
-class CreatingFeedDialogFragment : BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
+class CreatingFeedDialogFragment :
+    BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val onRemoveClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener

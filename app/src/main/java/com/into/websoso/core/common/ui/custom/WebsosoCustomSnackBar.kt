@@ -1,5 +1,6 @@
 package com.into.websoso.core.common.ui.custom
 
+import android.R.color.transparent
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -7,7 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.into.websoso.databinding.CustomSnackBarBinding
 
 class WebsosoCustomSnackBar(
-    private val view: View,
+    view: View,
 ) {
     private val snackBar: Snackbar = Snackbar.make(view, "", Snackbar.LENGTH_SHORT)
     private val binding: CustomSnackBarBinding
@@ -20,8 +21,8 @@ class WebsosoCustomSnackBar(
         snackBarLayout.setBackgroundColor(
             ContextCompat.getColor(
                 view.context,
-                android.R.color.transparent,
-            )
+                transparent,
+            ),
         )
         snackBarLayout.addView(binding.root, 0)
     }

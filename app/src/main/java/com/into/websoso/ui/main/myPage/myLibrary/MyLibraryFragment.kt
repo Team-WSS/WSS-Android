@@ -4,7 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.Spanned
+import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,7 +13,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import coil.load
 import com.google.android.material.chip.Chip
-import com.into.websoso.R
+import com.into.websoso.R.color.gray_300_52515F
+import com.into.websoso.R.color.primary_100_6A5DFD
+import com.into.websoso.R.color.primary_50_F1EFFF
+import com.into.websoso.R.layout.fragment_my_library
+import com.into.websoso.R.style.body2
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.util.SingleEventHandler
@@ -22,13 +26,14 @@ import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyLibraryBinding
+import com.into.websoso.resource.R.string.my_library_attractive_point_fixed_text
 import com.into.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import com.into.websoso.ui.userStorage.UserStorageActivity
 import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragment_my_library) {
+class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(fragment_my_library) {
     private val myLibraryViewModel: MyLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
@@ -109,7 +114,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             updateDominantGenres(uiState.topGenres)
 
             applyTextColors(
-                uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text),
+                uiState.translatedAttractivePoints.joinToString(", ") + getString(
+                    my_library_attractive_point_fixed_text,
+                ),
             )
         }
     }
@@ -122,12 +129,12 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
     }
 
     private fun applyTextColors(combinedText: String) {
-        val primary100 = requireContext().getColor(R.color.primary_100_6A5DFD)
-        val gray300 = requireContext().getColor(R.color.gray_300_52515F)
+        val primary100 = requireContext().getColor(primary_100_6A5DFD)
+        val gray300 = requireContext().getColor(gray_300_52515F)
 
         val spannableStringBuilder = SpannableStringBuilder()
 
-        val fixedText = getString(R.string.my_library_attractive_point_fixed_text)
+        val fixedText = getString(my_library_attractive_point_fixed_text)
 
         val splitText = combinedText.split(fixedText)
 
@@ -138,7 +145,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                         ForegroundColorSpan(primary100),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                        SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(attractivePoints)
@@ -149,7 +156,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                         ForegroundColorSpan(gray300),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                        SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(fixedSpannable)
@@ -159,7 +166,7 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
                     ForegroundColorSpan(primary100),
                     0,
                     length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
             }
             spannableStringBuilder.append(spannable)
@@ -192,9 +199,9 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
             isChecked = false
             isEnabled = false
 
-            setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
-            setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
-            setTextAppearance(R.style.body2)
+            setChipBackgroundColorResource(primary_50_F1EFFF)
+            setTextColor(ContextCompat.getColor(requireContext(), primary_100_6A5DFD))
+            setTextAppearance(body2)
         }
 
     private fun onStorageButtonClick() {

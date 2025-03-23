@@ -7,7 +7,7 @@ import coil.decode.SvgDecoder
 import coil.load
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
-import com.into.websoso.R
+import com.into.websoso.resource.R.drawable.img_loading_thumbnail
 import jp.wasabeef.transformers.coil.BlurTransformation
 
 object BindingAdapter {
@@ -30,7 +30,7 @@ object BindingAdapter {
             if (cornerRadius != null) transformations(RoundedCornersTransformation(cornerRadius.toFloatPxFromDp()))
             if (blurRadius != null) transformations(BlurTransformation(view.context, blurRadius))
             if (isCircularImage == true) transformations(CircleCropTransformation())
-            error(R.drawable.img_loading_thumbnail)
+            error(img_loading_thumbnail)
         }
     }
 

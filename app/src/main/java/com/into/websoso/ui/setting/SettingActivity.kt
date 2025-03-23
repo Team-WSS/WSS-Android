@@ -8,21 +8,21 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.content.ContextCompat
-import com.into.websoso.R
-import com.into.websoso.R.drawable.ic_novel_detail_check
-import com.into.websoso.R.string.inquire_link
-import com.into.websoso.R.string.privacy_policy_link
-import com.into.websoso.R.string.profile_disclosure_message
-import com.into.websoso.R.string.profile_disclosure_private
-import com.into.websoso.R.string.profile_disclosure_public
-import com.into.websoso.R.string.terms_of_use_link
-import com.into.websoso.R.string.websoso_official
+import com.into.websoso.R.layout.activity_setting
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.databinding.ActivitySettingBinding
+import com.into.websoso.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.resource.R.string.inquire_link
+import com.into.websoso.resource.R.string.privacy_policy_link
+import com.into.websoso.resource.R.string.profile_disclosure_message
+import com.into.websoso.resource.R.string.profile_disclosure_private
+import com.into.websoso.resource.R.string.profile_disclosure_public
+import com.into.websoso.resource.R.string.terms_of_use_link
+import com.into.websoso.resource.R.string.websoso_official
 import com.into.websoso.ui.accountInfo.AccountInfoActivity
 import com.into.websoso.ui.notificationSetting.NotificationSettingActivity
 import com.into.websoso.ui.profileDisclosure.ProfileDisclosureActivity
@@ -30,9 +30,9 @@ import com.into.websoso.ui.setting.dialog.NotificationPermissionDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingActivity : BaseActivity<ActivitySettingBinding>(R.layout.activity_setting) {
+class SettingActivity : BaseActivity<ActivitySettingBinding>(activity_setting) {
     private val startActivityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
+        StartActivityForResult(),
     ) { result ->
         when (result.resultCode) {
             ChangeProfileDisclosure.RESULT_OK -> showEditProfileDisclosureSuccessMessage(result)

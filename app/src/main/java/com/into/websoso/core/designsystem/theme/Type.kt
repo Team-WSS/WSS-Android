@@ -12,12 +12,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.into.websoso.R
+import com.into.websoso.resource.R.font.pretendard_bold
+import com.into.websoso.resource.R.font.pretendard_medium
+import com.into.websoso.resource.R.font.pretendard_regular
+import com.into.websoso.resource.R.font.pretendard_semibold
 
-val PretendardBold = FontFamily(Font(R.font.pretendard_bold, FontWeight.Bold))
-val PretendardSemiBold = FontFamily(Font(R.font.pretendard_semibold, FontWeight.SemiBold))
-val PretendardMedium = FontFamily(Font(R.font.pretendard_medium, FontWeight.Medium))
-val PretendardRegular = FontFamily(Font(R.font.pretendard_regular, FontWeight.Normal))
+val PretendardBold = FontFamily(Font(pretendard_bold, FontWeight.Bold))
+val PretendardSemiBold = FontFamily(Font(pretendard_semibold, FontWeight.SemiBold))
+val PretendardMedium = FontFamily(Font(pretendard_medium, FontWeight.Medium))
+val PretendardRegular = FontFamily(Font(pretendard_regular, FontWeight.Normal))
 
 @Stable
 class WebsosoTypography internal constructor(

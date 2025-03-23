@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import coil.load
-import com.into.websoso.R
 import com.into.websoso.databinding.ItemFeedLoadingBinding
+import com.into.websoso.resource.R.drawable.ic_load_load
 
 class NormalExploreLoadingViewHolder(
     binding: ItemFeedLoadingBinding,
@@ -18,7 +18,7 @@ class NormalExploreLoadingViewHolder(
             .components {
                 add(ImageDecoderDecoder.Factory())
             }.build()
-        binding.ivFeedLoading.load(R.drawable.ic_load_load, gifImageLoader)
+        binding.ivFeedLoading.load(ic_load_load, gifImageLoader)
     }
 
     companion object {
@@ -29,7 +29,7 @@ class NormalExploreLoadingViewHolder(
                     LayoutInflater.from(parent.context),
                     parent,
                     false,
-                )
+                ),
             )
     }
 }

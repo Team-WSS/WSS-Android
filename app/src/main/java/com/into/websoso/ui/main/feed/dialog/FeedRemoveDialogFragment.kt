@@ -2,19 +2,20 @@ package com.into.websoso.ui.main.feed.dialog
 
 import android.os.Bundle
 import android.view.View
-import com.into.websoso.R
-import com.into.websoso.R.string.remove_popup_menu_description
-import com.into.websoso.R.string.remove_popup_menu_description_comment
-import com.into.websoso.R.string.remove_popup_menu_title
-import com.into.websoso.R.string.remove_popup_menu_title_comment
+import com.into.websoso.R.layout.dialog_remove_popup_menu
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
+import com.into.websoso.resource.R.string.remove_popup_menu_description
+import com.into.websoso.resource.R.string.remove_popup_menu_description_comment
+import com.into.websoso.resource.R.string.remove_popup_menu_title
+import com.into.websoso.resource.R.string.remove_popup_menu_title_comment
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
 import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 
-class FeedRemoveDialogFragment : BaseDialogFragment<DialogRemovePopupMenuBinding>(R.layout.dialog_remove_popup_menu) {
+class FeedRemoveDialogFragment :
+    BaseDialogFragment<DialogRemovePopupMenuBinding>(dialog_remove_popup_menu) {
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val menuType: String? by lazy { arguments?.getString(MENU_TYPE) }
     private val onRemoveClick: FeedDialogClickListener by lazy {

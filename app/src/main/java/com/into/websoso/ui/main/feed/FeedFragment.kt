@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -17,16 +18,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.into.websoso.R
-import com.into.websoso.R.drawable.ic_blocked_user_snack_bar
-import com.into.websoso.R.drawable.ic_novel_detail_check
+import com.into.websoso.R.color.bg_feed_chip_background_selector
+import com.into.websoso.R.color.bg_feed_chip_text_selector
 import com.into.websoso.R.id.tv_feed_thumb_up_count
 import com.into.websoso.R.layout.fragment_feed
-import com.into.websoso.R.string.block_user_success_message
-import com.into.websoso.R.string.feed_create_done
-import com.into.websoso.R.string.feed_popup_menu_content_isMyFeed
-import com.into.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
-import com.into.websoso.R.string.feed_removed_feed_snackbar
-import com.into.websoso.R.string.feed_server_error
+import com.into.websoso.R.style.title3
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
@@ -44,6 +40,15 @@ import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
+import com.into.websoso.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.resource.R.string.block_user_success_message
+import com.into.websoso.resource.R.string.feed_create_done
+import com.into.websoso.resource.R.string.feed_popup_menu_content_isMyFeed
+import com.into.websoso.resource.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.into.websoso.resource.R.string.feed_removed_feed_snackbar
+import com.into.websoso.resource.R.string.feed_server_error
+import com.into.websoso.resource.R.string.other_user_page_withdraw_user
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_ID
@@ -134,7 +139,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             WithdrawUser.RESULT_OK -> {
                 showWebsosoSnackBar(
                     view = binding.root,
-                    message = getString(R.string.other_user_page_withdraw_user),
+                    message = getString(other_user_page_withdraw_user),
                     icon = ic_blocked_user_snack_bar,
                 )
             }
@@ -182,12 +187,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 id: Long,
             ) {
                 tracker.trackEvent("feed_like")
-                val likeCount: Int =
-                    view
-                        .findViewById<TextView>(tv_feed_thumb_up_count)
-                        .text
-                        .toString()
-                        .toInt()
+                val likeCount: Int = view.findViewById<TextView>(tv_feed_thumb_up_count)
+                    .text
+                    .toString()
+                    .toInt()
                 val updatedLikeCount: Int = when (view.isSelected) {
                     true -> if (likeCount > 0) likeCount - 1 else 0
                     false -> likeCount + 1
@@ -389,7 +392,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         binding.sptrFeedRefresh.apply {
             singleEventHandler.throttleFirst {
                 setRefreshViewParams(
-                    params = ViewGroup.LayoutParams(
+                    params = LayoutParams(
                         30.toIntPxFromDp(),
                         30.toIntPxFromDp(),
                     ),
@@ -416,12 +419,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
 
         feedViewModel.categories.observe(viewLifecycleOwner) { category ->
-            if (binding.wcgFeed.children
-                    .toList()
-                    .isEmpty()
-            ) {
-                category.setUpChips()
-            }
+            if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
 
             val selectedCategory = category.find { it.isSelected } ?: category.first()
             tracker.trackEvent("feed_${selectedCategory.category.shortCode}")
@@ -441,9 +439,9 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             WebsosoChip(requireContext())
                 .apply {
                     setWebsosoChipText(categoryUiState.category.krTitle)
-                    setWebsosoChipTextAppearance(R.style.title3)
-                    setWebsosoChipTextColor(R.color.bg_feed_chip_text_selector)
-                    setWebsosoChipBackgroundColor(R.color.bg_feed_chip_background_selector)
+                    setWebsosoChipTextAppearance(title3)
+                    setWebsosoChipTextColor(bg_feed_chip_text_selector)
+                    setWebsosoChipBackgroundColor(bg_feed_chip_background_selector)
                     setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                     setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
                     setWebsosoChipRadius(18f.toFloatPxFromDp())

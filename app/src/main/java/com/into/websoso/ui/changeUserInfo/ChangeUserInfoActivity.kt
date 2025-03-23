@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.into.websoso.R
+import com.into.websoso.R.layout.activity_change_user_info
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeUserInfo
 import com.into.websoso.core.common.util.SingleEventHandler
@@ -12,7 +12,8 @@ import com.into.websoso.databinding.ActivityChangeUserInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChangeUserInfoActivity : BaseActivity<ActivityChangeUserInfoBinding>(R.layout.activity_change_user_info) {
+class ChangeUserInfoActivity :
+    BaseActivity<ActivityChangeUserInfoBinding>(activity_change_user_info) {
     private val changeUserInfoViewModel: ChangeUserInfoViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -88,6 +89,7 @@ class ChangeUserInfoActivity : BaseActivity<ActivityChangeUserInfoBinding>(R.lay
     companion object {
         private const val BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG = "BirthYearBottomSheetDialog"
 
-        fun getIntent(context: Context): Intent = Intent(context, ChangeUserInfoActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, ChangeUserInfoActivity::class.java)
     }
 }

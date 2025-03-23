@@ -3,6 +3,6 @@ plugins {
 }
 
 android {
-    namespace = "com.into.websoso"
+    namespace = "com.into.websoso.resource"
     compileSdk = 34
 }

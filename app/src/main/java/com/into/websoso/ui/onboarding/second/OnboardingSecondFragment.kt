@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import com.into.websoso.R
+import com.into.websoso.R.color.black
+import com.into.websoso.R.color.gray_200_AEADB3
+import com.into.websoso.R.layout.fragment_onboarding_second
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.databinding.FragmentOnboardingSecondBinding
+import com.into.websoso.resource.R.string.onboarding_second_input_birth_year
 import com.into.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 import com.into.websoso.ui.onboarding.OnboardingViewModel
 import com.into.websoso.ui.onboarding.model.UserModel
@@ -14,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingSecondFragment :
-    BaseFragment<FragmentOnboardingSecondBinding>(R.layout.fragment_onboarding_second) {
+    BaseFragment<FragmentOnboardingSecondBinding>(fragment_onboarding_second) {
 
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 
@@ -36,17 +39,19 @@ class OnboardingSecondFragment :
 
     private fun updateBirthYearTextUi(userModelInfo: UserModel) {
         val birthYearText =
-            if (userModelInfo.birthYear != 0) userModelInfo.birthYear.toString() else getString(R.string.onboarding_second_input_birth_year)
+            if (userModelInfo.birthYear != 0) userModelInfo.birthYear.toString() else getString(
+                onboarding_second_input_birth_year,
+            )
         with(binding.tvOnboardingSecondBirthYearHint) {
             text = birthYearText
             setTextColor(
                 ContextCompat.getColor(
                     context,
                     when (userModelInfo.birthYear) {
-                        0 -> R.color.gray_200_AEADB3
-                        else -> R.color.black
-                    }
-                )
+                        0 -> gray_200_AEADB3
+                        else -> black
+                    },
+                ),
             )
         }
     }
@@ -63,7 +68,7 @@ class OnboardingSecondFragment :
         if (existingDialog == null) {
             OnboardingBirthYearBottomSheetDialog().show(
                 parentFragmentManager,
-                BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG
+                BIRTH_YEAR_BOTTOM_SHEET_DIALOG_TAG,
             )
         }
     }

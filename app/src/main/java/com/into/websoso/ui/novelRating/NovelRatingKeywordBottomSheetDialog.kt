@@ -1,6 +1,7 @@
 package com.into.websoso.ui.novelRating
 
 import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
@@ -10,7 +11,13 @@ import androidx.core.view.forEach
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.into.websoso.R
+import com.into.websoso.R.color.bg_novel_rating_chip_background_selector
+import com.into.websoso.R.color.bg_novel_rating_chip_stroke_selector
+import com.into.websoso.R.color.bg_novel_rating_chip_text_selector
+import com.into.websoso.R.color.primary_100_6A5DFD
+import com.into.websoso.R.color.white
+import com.into.websoso.R.layout.dialog_novel_rating_keyword
+import com.into.websoso.R.style.body2
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
@@ -18,11 +25,16 @@ import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.databinding.DialogNovelRatingKeywordBinding
+import com.into.websoso.resource.R.drawable.ic_novel_rating_alert
+import com.into.websoso.resource.R.drawable.ic_novel_rating_keword_remove
+import com.into.websoso.resource.R.string.inquire_link
+import com.into.websoso.resource.R.string.novel_rating_keyword_exceed
+import com.into.websoso.resource.R.string.novel_rating_keyword_search_hint
 import com.into.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.into.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 
 class NovelRatingKeywordBottomSheetDialog :
-    BaseBottomSheetDialog<DialogNovelRatingKeywordBinding>(R.layout.dialog_novel_rating_keyword) {
+    BaseBottomSheetDialog<DialogNovelRatingKeywordBinding>(dialog_novel_rating_keyword) {
     private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
     private val novelRatingKeywordAdapter by lazy {
         NovelRatingKeywordAdapter(
@@ -80,8 +92,8 @@ class NovelRatingKeywordBottomSheetDialog :
         }
 
     private fun navigateToReportKeyword() {
-        val inquireUrl = getString(R.string.inquire_link)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+        val inquireUrl = getString(inquire_link)
+        val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
 
@@ -138,21 +150,24 @@ class NovelRatingKeywordBottomSheetDialog :
         WebsosoChip(binding.root.context)
             .apply {
                 setWebsosoChipText(keyword.keywordName)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipBackgroundColor(R.color.white)
+                setWebsosoChipTextAppearance(body2)
+                setWebsosoChipTextColor(primary_100_6A5DFD)
+                setWebsosoChipStrokeColor(primary_100_6A5DFD)
+                setWebsosoChipBackgroundColor(white)
                 setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                 setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                 setWebsosoChipRadius(20f.toFloatPxFromDp())
                 setOnCloseIconClickListener {
-                    novelRatingViewModel.updateSelectedKeywords(keyword = keyword, isSelected = false)
+                    novelRatingViewModel.updateSelectedKeywords(
+                        keyword = keyword,
+                        isSelected = false,
+                    )
                 }
                 setWebsosoChipCloseIconVisibility(true)
-                setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                setWebsosoChipCloseIconDrawable(ic_novel_rating_keword_remove)
                 setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
                 setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
-                setCloseIconTintResource(R.color.primary_100_6A5DFD)
+                setCloseIconTintResource(primary_100_6A5DFD)
                 tag = keyword.keywordName
             }.also { websosoChip ->
                 binding.wcgNovelRatingKeywordSelectedKeyword.addView(websosoChip)
@@ -189,10 +204,10 @@ class NovelRatingKeywordBottomSheetDialog :
             WebsosoChip(binding.root.context)
                 .apply {
                     setWebsosoChipText(keyword.keywordName)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipTextAppearance(body2)
+                    setWebsosoChipTextColor(bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(bg_novel_rating_chip_background_selector)
                     setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                     setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                     setWebsosoChipRadius(20f.toFloatPxFromDp())
@@ -201,7 +216,8 @@ class NovelRatingKeywordBottomSheetDialog :
                     }
                     isSelected =
                         keywords.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
-                }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
+                }
+                .also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
         }
     }
 
@@ -209,8 +225,8 @@ class NovelRatingKeywordBottomSheetDialog :
         if (keywords.isSearchKeywordExceed) {
             WebsosoCustomToast
                 .make(requireContext())
-                .setText(getString(R.string.novel_rating_keyword_exceed))
-                .setIcon(R.drawable.ic_novel_rating_alert)
+                .setText(getString(novel_rating_keyword_exceed))
+                .setIcon(ic_novel_rating_alert)
                 .show()
             novelRatingViewModel.updateSelectedKeywords(
                 keyword = keywords.currentSelectedKeywords.last(),
@@ -256,22 +272,24 @@ class NovelRatingKeywordBottomSheetDialog :
     }
 
     private fun setupWebsosoSearchEditHint() {
-        binding.wsetRatingKeywordSearch.setWebsosoSearchHint(getString(R.string.novel_rating_keyword_search_hint))
+        binding.wsetRatingKeywordSearch.setWebsosoSearchHint(
+            getString(novel_rating_keyword_search_hint),
+        )
     }
 
     private fun setupBackButtonListener() {
         dialog?.setOnKeyListener { _, keyCode, event ->
             when {
                 binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() &&
-                    keyCode == KeyEvent.KEYCODE_BACK &&
-                    event.action == KeyEvent.ACTION_UP -> {
+                        keyCode == KeyEvent.KEYCODE_BACK &&
+                        event.action == KeyEvent.ACTION_UP -> {
                     initSearchKeyword()
                     true
                 }
 
                 !binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() &&
-                    keyCode == KeyEvent.KEYCODE_BACK &&
-                    event.action == KeyEvent.ACTION_UP -> {
+                        keyCode == KeyEvent.KEYCODE_BACK &&
+                        event.action == KeyEvent.ACTION_UP -> {
                     dismiss()
                     false
                 }
