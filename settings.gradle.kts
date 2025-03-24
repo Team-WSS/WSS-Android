@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Websoso"
 include(":app")
+include(":core:resource")

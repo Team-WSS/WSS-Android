@@ -8,8 +8,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.ViewGroup.LayoutParams
+import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.addCallback
@@ -20,11 +20,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.into.websoso.R
 import com.into.websoso.R.id.tv_feed_thumb_up_count
 import com.into.websoso.R.layout.activity_feed_detail
-import com.into.websoso.R.string.feed_popup_menu_content_isMyFeed
-import com.into.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
@@ -47,6 +44,10 @@ import com.into.websoso.databinding.ActivityFeedDetailBinding
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
+import com.into.websoso.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.resource.R.string.feed_popup_menu_content_isMyFeed
+import com.into.websoso.resource.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.into.websoso.resource.R.string.other_user_page_withdraw_user
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
@@ -92,12 +93,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
     }
     private val popupMenu: PopupWindow by lazy {
-        PopupWindow(
-            popupBinding.root,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            true,
-        ).apply { elevation = 2f }
+        PopupWindow(popupBinding.root, WRAP_CONTENT, WRAP_CONTENT, true).apply { elevation = 2f }
     }
 
     private fun onFeedContentClick(): FeedDetailClickListener =
@@ -147,10 +143,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun navigateToNovelDetail(novelId: Long) {
         activityResultCallback.launch(
-            NovelDetailActivity.getIntent(
-                this@FeedDetailActivity,
-                novelId,
-            ),
+            NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId),
         )
     }
 
@@ -180,10 +173,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun navigateToProfile(userId: Long) {
         activityResultCallback.launch(
-            OtherUserPageActivity.getIntent(
-                this@FeedDetailActivity,
-                userId,
-            ),
+            OtherUserPageActivity.getIntent(this@FeedDetailActivity, userId),
         )
     }
 
@@ -377,8 +367,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     WithdrawUser.RESULT_OK -> {
                         showWebsosoSnackBar(
                             view = binding.root,
-                            message = getString(R.string.other_user_page_withdraw_user),
-                            icon = R.drawable.ic_blocked_user_snack_bar,
+                            message = getString(other_user_page_withdraw_user),
+                            icon = ic_blocked_user_snack_bar,
                         )
                     }
                 }
@@ -416,10 +406,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         binding.ivFeedDetailCommentRegister.setOnClickListener {
-            if (binding.etFeedDetailInput.text
-                    .isNullOrBlank()
-                    .not()
-            ) {
+            if (binding.etFeedDetailInput.text.isNullOrBlank().not()) {
                 binding.etFeedDetailInput.run {
                     tracker.trackEvent("write_comment")
                     when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {
@@ -445,7 +432,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun setupRefreshView() {
         binding.sptrFeedRefresh.apply {
-            setRefreshViewParams(ViewGroup.LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
+            setRefreshViewParams(LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
             setLottieAnimation(LOTTIE_IMAGE)
             setOnRefreshListener {
                 feedDetailViewModel.updateFeedDetail(feedId, FeedDetailRefreshed)

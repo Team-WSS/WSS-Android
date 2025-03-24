@@ -6,12 +6,12 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
-import com.into.websoso.R
-import com.into.websoso.R.string.home_nickname_interest_feed
+import com.into.websoso.R.layout.fragment_home
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
@@ -21,7 +21,9 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.databinding.FragmentHomeBinding
+import com.into.websoso.resource.R.string.home_nickname_interest_feed
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
@@ -37,15 +39,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
     @Inject
     lateinit var tracker: Tracker
 
+    @Inject
+    lateinit var authRepository: AuthRepository
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
     private val homeResultLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        registerForActivityResult(StartActivityForResult()) { result ->
             when (result.resultCode) {
                 Notification.RESULT_OK -> {
                     homeViewModel.updateNotificationUnread()
@@ -69,25 +73,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         RecommendedNovelsByUserTasteAdapter(::onRecommendedNovelClick)
     }
 
-    private val startActivityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        when (result.resultCode) {
-            FeedDetailBack.RESULT_OK, FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
-            NormalExploreBack.RESULT_OK, NovelDetailBack.RESULT_OK -> {
-                homeViewModel.updateFeed()
-                homeViewModel.updateNovel()
-            }
+    private val startActivityLauncher =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                FeedDetailBack.RESULT_OK, FeedDetailRemoved.RESULT_OK -> homeViewModel.updateFeed()
+                NormalExploreBack.RESULT_OK, NovelDetailBack.RESULT_OK -> {
+                    homeViewModel.updateFeed()
+                    homeViewModel.updateNovel()
+                }
 
-            ProfileEditSuccess.RESULT_OK -> {
-                mainViewModel.updateUserInfo()
-                homeViewModel.updateNovel()
+                ProfileEditSuccess.RESULT_OK -> {
+                    mainViewModel.updateUserInfo()
+                    homeViewModel.updateNovel()
+                }
             }
         }
-    }
 
     private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        registerForActivityResult(RequestPermission()) {
             updateFCMToken(
                 isFirstLaunch = true,
             )

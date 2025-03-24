@@ -5,11 +5,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.analytics.logEvent
+import com.into.websoso.data.mapper.toOAuthToken
+import com.into.websoso.data.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.into.websoso.data.mapper.toOAuthToken
-import com.into.websoso.data.model.OAuthToken
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject

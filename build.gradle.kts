@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.parcelize) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.android.library) apply false
 }

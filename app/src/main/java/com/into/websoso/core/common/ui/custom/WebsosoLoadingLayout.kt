@@ -7,8 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import coil.load
-import com.into.websoso.R
 import com.into.websoso.databinding.LayoutLoadingBinding
+import com.into.websoso.resource.R.drawable.ic_load_load
 
 class WebsosoLoadingLayout @JvmOverloads constructor(
     context: Context,
@@ -33,7 +33,7 @@ class WebsosoLoadingLayout @JvmOverloads constructor(
                 add(ImageDecoderDecoder.Factory())
             }
             .build()
-        binding.ivLoadLoad.load(R.drawable.ic_load_load, gifImageLoader)
+        binding.ivLoadLoad.load(ic_load_load, gifImageLoader)
     }
 
     /**

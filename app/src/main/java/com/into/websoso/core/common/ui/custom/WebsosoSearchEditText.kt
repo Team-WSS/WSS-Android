@@ -9,7 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.into.websoso.R
+import com.into.websoso.R.drawable.bg_novel_rating_gray_50_radius_14dp
+import com.into.websoso.R.drawable.bg_novel_rating_keyword_white_radius_14dp
 import com.into.websoso.databinding.LayoutSearchBinding
 
 class WebsosoSearchEditText @JvmOverloads constructor(
@@ -35,15 +36,23 @@ class WebsosoSearchEditText @JvmOverloads constructor(
 
     /* Sets up a listener to detect changes in the text input */
     private fun setupWebsosoSearchTextChangedListener() {
-        binding.etCommonSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        binding.etCommonSearch.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {
+                }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateWebsosoSearchClearVisibility()
-            }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    updateWebsosoSearchClearVisibility()
+                }
 
-            override fun afterTextChanged(s: Editable?) {}
-        })
+                override fun afterTextChanged(s: Editable?) {}
+            },
+        )
     }
 
     /* Updates the visibility of the clear button based on whether there is text in the input */
@@ -91,9 +100,9 @@ class WebsosoSearchEditText @JvmOverloads constructor(
     /* Updates the background of the search input field based on its focus state */
     private fun updateSearchBackground(input: CharSequence?, isFocused: Boolean) {
         when (isFocused) {
-            true -> this.setBackgroundResource(R.drawable.bg_novel_rating_keyword_white_radius_14dp)
+            true -> this.setBackgroundResource(bg_novel_rating_keyword_white_radius_14dp)
 
-            false -> this.setBackgroundResource(R.drawable.bg_novel_rating_gray_50_radius_14dp)
+            false -> this.setBackgroundResource(bg_novel_rating_gray_50_radius_14dp)
         }
     }
 

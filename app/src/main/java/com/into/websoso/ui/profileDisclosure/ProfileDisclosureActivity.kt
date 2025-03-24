@@ -4,16 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.into.websoso.R
+import com.into.websoso.R.layout.activity_profile_disclosure
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
 import com.into.websoso.databinding.ActivityProfileDisclosureBinding
+import com.into.websoso.resource.R.drawable.img_account_info_check_selected
+import com.into.websoso.resource.R.drawable.img_account_info_check_unselected
 import com.into.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProfileDisclosureActivity :
-    BaseActivity<ActivityProfileDisclosureBinding>(R.layout.activity_profile_disclosure) {
+    BaseActivity<ActivityProfileDisclosureBinding>(activity_profile_disclosure) {
     private val profileDisclosureViewModel: ProfileDisclosureViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,8 +89,8 @@ class ProfileDisclosureActivity :
 
     private fun updateProfileDisclosureStatusButton(isProfilePublic: Boolean) {
         val buttonImage = when (isProfilePublic) {
-            true -> R.drawable.img_account_info_check_unselected
-            false -> R.drawable.img_account_info_check_selected
+            true -> img_account_info_check_unselected
+            false -> img_account_info_check_selected
         }
         binding.ivProfileDisclosureStatusButton.setImageResource(buttonImage)
     }

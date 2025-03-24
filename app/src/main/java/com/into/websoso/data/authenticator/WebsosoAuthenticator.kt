@@ -1,9 +1,9 @@
 package com.into.websoso.data.authenticator
 
 import android.content.Context
-import com.kakao.sdk.user.UserApiClient
 import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.ui.login.LoginActivity
+import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
