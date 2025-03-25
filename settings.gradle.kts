@@ -18,3 +18,4 @@ dependencyResolutionManagement {
 rootProject.name = "Websoso"
 include(":app")
 include(":core:resource")
+include(":build-logic")
