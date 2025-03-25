@@ -219,7 +219,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             OtherUserPageActivity.getIntent(
                 requireContext(),
                 userId,
-            ),
+            )
         )
     }
 
