@@ -118,7 +118,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     false -> likeCount + 1
                 }
 
-                view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
+                view.findViewById<TextView>(tv_feed_thumb_up_count).text =
+                    updatedLikeCount.toString()
                 view.isSelected = !view.isSelected
 
                 singleEventHandler.debounce(coroutineScope = lifecycleScope) {
@@ -367,6 +368,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
                         val intent = Intent().apply {
                             putExtra(USER_NICKNAME, nickname)
+                            putExtra(FEED_ID, feedId)
                         }
                         setResult(BlockUser.RESULT_OK, intent)
                         if (!isFinishing) finish()
@@ -462,19 +464,22 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                         CreateFeed, FeedDetailRefreshed ->
                             RemovedFeedDialogFragment
                                 .newInstance {
-                                    setResult(CreateFeed.RESULT_OK)
+                                    val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
+                                    setResult(FeedDetailRefreshed.RESULT_OK, extraIntent)
                                     if (!isFinishing) finish()
                                 }.show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
 
                         else -> {
-                            setResult(FeedDetailRemoved.RESULT_OK)
+                            val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
+                            setResult(FeedDetailRemoved.RESULT_OK, extraIntent)
                             if (!isFinishing) finish()
                         }
                     }
                 }
 
                 feedDetailUiState.isServerError -> {
-                    setResult(FeedDetailError.RESULT_OK)
+                    val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
+                    setResult(FeedDetailError.RESULT_OK, extraIntent)
                     if (!isFinishing) finish()
                 }
 
@@ -537,7 +542,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     companion object {
-        private const val FEED_ID: String = "FEED_ID"
+        const val FEED_ID: String = "FEED_ID"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val NOTIFICATION_ID: String = "NOTIFICATION_ID"
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"

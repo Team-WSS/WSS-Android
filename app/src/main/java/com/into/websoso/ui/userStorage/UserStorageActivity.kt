@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayout
@@ -166,6 +167,11 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     private fun onBackButtonClick() {
         binding.ivStorageDetailBackButton.setOnClickListener {
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
             setResult(Activity.RESULT_OK)
             finish()
         }

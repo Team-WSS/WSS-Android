@@ -1,7 +1,6 @@
 package com.into.websoso.ui.main.feed
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -32,11 +31,9 @@ import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
-import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
-import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
-import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
@@ -50,6 +47,7 @@ import com.into.websoso.databinding.FragmentFeedBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
+import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_ID
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.main.feed.adapter.FeedAdapter
 import com.into.websoso.ui.main.feed.adapter.FeedType.Feed
@@ -80,7 +78,74 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     private val feedViewModel: FeedViewModel by viewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
+    private val activityResultCallback by lazy {
+        registerForActivityResult(StartActivityForResult()) { result ->
+            handleActivityResult(result)
+        }
+    }
+
+    private fun handleActivityResult(result: ActivityResult) {
+        when (result.resultCode) {
+            FeedDetailRefreshed.RESULT_OK -> {
+                val removedFeedId = result.data?.getLongExtra(FEED_ID, -1) ?: -1
+                feedViewModel.updateRefreshedFeeds(removedFeedId)
+            }
+
+            CreateFeed.RESULT_OK -> {
+                feedViewModel.updateRefreshedFeeds(true)
+                // TODO: 피드 아예 초기화
+
+                showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(feed_create_done),
+                    icon = ic_novel_detail_check,
+                )
+            }
+
+            FeedDetailRemoved.RESULT_OK -> {
+                val removedFeedId = result.data?.getLongExtra(FEED_ID, -1) ?: -1
+                feedViewModel.updateRefreshedFeeds(removedFeedId)
+
+                showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(feed_removed_feed_snackbar),
+                    icon = ic_blocked_user_snack_bar,
+                )
+            }
+
+            FeedDetailError.RESULT_OK -> {
+                val removedFeedId = result.data?.getLongExtra(FEED_ID, -1) ?: -1
+                feedViewModel.updateRefreshedFeeds(removedFeedId)
+
+                showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(feed_server_error),
+                    icon = ic_blocked_user_snack_bar,
+                )
+            }
+
+            BlockUser.RESULT_OK -> {
+                val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
+                val removedFeedId = result.data?.getLongExtra(FEED_ID, -1) ?: -1
+
+                feedViewModel.updateRefreshedFeeds(removedFeedId)
+
+                showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(block_user_success_message, nickname),
+                    icon = ic_novel_detail_check,
+                )
+            }
+
+            WithdrawUser.RESULT_OK -> {
+                showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(R.string.other_user_page_withdraw_user),
+                    icon = ic_blocked_user_snack_bar,
+                )
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -134,7 +199,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     false -> likeCount + 1
                 }
 
-                view.findViewById<TextView>(tv_feed_thumb_up_count).text = updatedLikeCount.toString()
+                view.findViewById<TextView>(tv_feed_thumb_up_count).text =
+                    updatedLikeCount.toString()
                 view.isSelected = !view.isSelected
 
                 singleEventHandler.debounce(coroutineScope = lifecycleScope) {
@@ -296,71 +362,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
         initView()
         setupObserver()
-        refreshView()
         tracker.trackEvent("feed_all")
-    }
-
-    private fun refreshView() {
-        if (::activityResultCallback.isInitialized.not()) {
-            activityResultCallback = registerForActivityResult(StartActivityForResult()) { result ->
-                when (result.resultCode) {
-                    FeedDetailBack.RESULT_OK,
-                    NovelDetailBack.RESULT_OK,
-                    OtherUserProfileBack.RESULT_OK,
-                    -> feedViewModel.updateRefreshedFeeds(false)
-
-                    CreateFeed.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds(true)
-
-                        showWebsosoSnackBar(
-                            view = binding.root,
-                            message = getString(feed_create_done),
-                            icon = ic_novel_detail_check,
-                        )
-                    }
-
-                    FeedDetailRemoved.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds(false)
-
-                        showWebsosoSnackBar(
-                            view = binding.root,
-                            message = getString(feed_removed_feed_snackbar),
-                            icon = ic_blocked_user_snack_bar,
-                        )
-                    }
-
-                    FeedDetailError.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds(false)
-
-                        showWebsosoSnackBar(
-                            view = binding.root,
-                            message = getString(feed_server_error),
-                            icon = ic_blocked_user_snack_bar,
-                        )
-                    }
-
-                    BlockUser.RESULT_OK -> {
-                        feedViewModel.updateRefreshedFeeds(false)
-
-                        val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
-
-                        showWebsosoSnackBar(
-                            view = binding.root,
-                            message = getString(block_user_success_message, nickname),
-                            icon = ic_novel_detail_check,
-                        )
-                    }
-
-                    WithdrawUser.RESULT_OK -> {
-                        showWebsosoSnackBar(
-                            view = binding.root,
-                            message = getString(R.string.other_user_page_withdraw_user),
-                            icon = ic_blocked_user_snack_bar,
-                        )
-                    }
-                }
-            }
-        }
+        activityResultCallback
     }
 
     private fun initView() {
@@ -433,7 +436,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 val chip = it as Chip
                 chip.isSelected = chip.text == selectedCategory.category.krTitle
             }
-
+            // TODO: 최초로 init할 때 전체상태로 updateFeeds 호출함 -> 리프레시되어야하기 때문에 true 설정
+            // TODO: 뷰모델 init으로 옮기기, isRefreshed 상태 없애기
             feedViewModel.updateFeeds(true)
         }
     }

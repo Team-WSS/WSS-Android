@@ -2,6 +2,7 @@ package com.into.websoso.ui.main.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.model.PopularFeedsEntity
@@ -35,6 +36,7 @@ class HomeViewModel
         private val pushMessageRepository: PushMessageRepository,
         private val notificationRepository: NotificationRepository,
         private val userRepository: UserRepository,
+        private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
         val uiState: LiveData<HomeUiState> get() = _uiState
@@ -46,6 +48,12 @@ class HomeViewModel
 
         private val _showTermsAgreementDialog = MutableStateFlow(false)
         val showTermsAgreementDialog: StateFlow<Boolean> = _showTermsAgreementDialog.asStateFlow()
+
+        private var isTermsAgreementChecked: Boolean
+            get() = savedStateHandle["isTermsAgreementChecked"] ?: false
+            set(value) {
+                savedStateHandle["isTermsAgreementChecked"] = value
+            }
 
         init {
             updateHomeData(true)
@@ -245,11 +253,20 @@ class HomeViewModel
             viewModelScope.launch {
                 runCatching { userRepository.fetchTermsAgreements() }
                     .onSuccess { terms ->
-
                         termsAgreementState.value = terms
-                        _showTermsAgreementDialog.value = !(terms.serviceAgreed && terms.privacyAgreed)
+                        val isShownDialog = !(terms.serviceAgreed && terms.privacyAgreed)
+
+                        _showTermsAgreementDialog.value = isShownDialog
+
+                        if (!isShownDialog) {
+                            isTermsAgreementChecked = true
+                        }
                     }
             }
+        }
+
+        fun updateTermsAgreementDialogState() {
+            _showTermsAgreementDialog.value = false
         }
 
         fun updateFCMToken(token: String) {
