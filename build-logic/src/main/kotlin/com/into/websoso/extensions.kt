@@ -1,19 +1,37 @@
 package com.into.websoso
 
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import kotlin.jvm.optionals.getOrNull
 
-internal val ExtensionContainer.libs: VersionCatalog
-    get() = getByType<VersionCatalogsExtension>().named("libs")
+internal fun Project.websosoDependencies(block: CustomDependencyScope.() -> Unit) {
+    dependencies {
+        CustomDependencyScope(this@websosoDependencies, this).apply(block)
+    }
+}
 
-internal val Project.libs: VersionCatalog
-    get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
+internal class CustomDependencyScope(
+    project: Project,
+    private val dependencies: DependencyHandlerScope,
+) {
+    private val libs = project
+        .extensions
+        .getByType<VersionCatalogsExtension>()
+        .named("libs")
 
-internal fun DependencyHandlerScope.implementation(dependencyNotation: String) {
-    val dependency = extensions.libs.findLibrary(dependencyNotation).get()
-    add("implementation", dependency)
+    private fun safeFindLibrary(alias: String) = libs
+        .findLibrary(alias)
+        .getOrNull()
+        ?: error("'$alias' not found in libs.versions.toml.")
+
+    fun implementation(dependencyNotation: String) {
+        dependencies.add("implementation", safeFindLibrary(dependencyNotation))
+    }
+
+    fun kapt(dependencyNotation: String) {
+        dependencies.add("kapt", safeFindLibrary(dependencyNotation))
+    }
 }
