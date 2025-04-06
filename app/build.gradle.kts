@@ -4,10 +4,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.parcelize)
-    alias(libs.plugins.kotlin.kapt)
+    id("websoso.android.hilt")
 }
 
 android {
@@ -23,9 +22,21 @@ android {
             .toInt()
         versionName = libs.versions.versionName.get()
 
-        buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
-        buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("kakao.app.key"))
-        buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
+        buildConfigField(
+            "String",
+            "S3_BASE_URL",
+            gradleLocalProperties(rootDir).getProperty("s3.url"),
+        )
+        buildConfigField(
+            "String",
+            "KAKAO_APP_KEY",
+            gradleLocalProperties(rootDir).getProperty("kakao.app.key"),
+        )
+        buildConfigField(
+            "String",
+            "AMPLITUDE_KEY",
+            gradleLocalProperties(rootDir).getProperty("amplitude.key"),
+        )
 
         manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
             .getProperty("kakao.app.key")
@@ -144,9 +155,6 @@ dependencies {
     implementation(libs.firebase.messaging)
 
     implementation(libs.amplitude)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
 
     implementation(platform(libs.compose.bom))
     androidTestImplementation(platform(libs.compose.bom))
