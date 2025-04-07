@@ -3,13 +3,22 @@ package com.into.websoso
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependencyBundle
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
+import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.project
 import kotlin.jvm.optionals.getOrNull
 
-internal class CustomDependencyScope(
+internal fun Project.websosoDependencies(block: WebsosoDependencyScope.() -> Unit) {
+    dependencies {
+        WebsosoDependencyScope(this@websosoDependencies, this).apply(block)
+    }
+}
+
+internal class WebsosoDependencyScope(
     private val project: Project,
     private val dependencies: DependencyHandlerScope,
 ) {
@@ -44,6 +53,10 @@ internal class CustomDependencyScope(
     fun platform(alias: String): Provider<MinimalExternalModuleDependency> {
         val dependency = safeFindLibrary(alias)
         return project.dependencies.platform(dependency)
+    }
+
+    fun project(path: String): ProjectDependency {
+        return project.dependencies.project(path)
     }
 
     fun kapt(alias: Any) {

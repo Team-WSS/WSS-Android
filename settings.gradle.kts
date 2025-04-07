@@ -2,7 +2,6 @@ rootProject.name = "Websoso"
 
 pluginManagement {
     includeBuild("build-logic")
-
     repositories {
         google()
         mavenCentral()

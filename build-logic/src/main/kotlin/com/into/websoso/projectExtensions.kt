@@ -4,12 +4,11 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-internal fun Project.websosoDependencies(block: CustomDependencyScope.() -> Unit) {
-    dependencies {
-        CustomDependencyScope(this@websosoDependencies, this).apply(block)
+fun Project.setNamespace(name: String) {
+    androidExtension.apply {
+        namespace = "com.into.websoso.$name"
     }
 }
 
