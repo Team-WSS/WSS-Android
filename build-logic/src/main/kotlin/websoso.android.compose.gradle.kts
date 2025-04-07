@@ -2,9 +2,8 @@ import com.into.websoso.androidExtension
 import com.into.websoso.websosoDependencies
 
 androidExtension.apply {
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures.compose = true
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.2"
 }
 
 websosoDependencies {

@@ -76,9 +76,6 @@ android {
         dataBinding = true
         viewBinding = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
-    }
 }
 
 dependencies {
