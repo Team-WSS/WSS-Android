@@ -1,22 +1,20 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("websoso.android.application")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.parcelize)
     id("websoso.android.hilt")
+    id("websoso.android.compose")
+    id("websoso.android.coroutines")
 }
 
 android {
     namespace = "com.into.websoso"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.into.websoso"
-        minSdk = 30
-        targetSdk = 34
         versionCode = libs.versions.versionCode
             .get()
             .toInt()
@@ -97,18 +95,10 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         buildConfig = true
         dataBinding = true
         viewBinding = true
-        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.2"
@@ -137,7 +127,6 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.coroutines)
 
     implementation(libs.coil)
     implementation(libs.coil.gif)
@@ -155,9 +144,4 @@ dependencies {
     implementation(libs.firebase.messaging)
 
     implementation(libs.amplitude)
-
-    implementation(platform(libs.compose.bom))
-    androidTestImplementation(platform(libs.compose.bom))
-
-    implementation(libs.bundles.compose)
 }

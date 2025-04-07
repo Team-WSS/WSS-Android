@@ -1,11 +1,11 @@
 package com.into.websoso
 
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import kotlin.jvm.optionals.getOrNull
 
 internal fun Project.websosoDependencies(block: CustomDependencyScope.() -> Unit) {
     dependencies {
@@ -13,25 +13,14 @@ internal fun Project.websosoDependencies(block: CustomDependencyScope.() -> Unit
     }
 }
 
-internal class CustomDependencyScope(
-    project: Project,
-    private val dependencies: DependencyHandlerScope,
-) {
-    private val libs = project
-        .extensions
-        .getByType<VersionCatalogsExtension>()
-        .named("libs")
+internal val Project.applicationExtension: CommonExtension<*, *, *, *, *>
+    get() = extensions.getByType<ApplicationExtension>()
 
-    private fun safeFindLibrary(alias: String) = libs
-        .findLibrary(alias)
-        .getOrNull()
-        ?: error("'$alias' not found in libs.versions.toml.")
+internal val Project.libraryExtension: CommonExtension<*, *, *, *, *>
+    get() = extensions.getByType<LibraryExtension>()
 
-    fun implementation(dependencyNotation: String) {
-        dependencies.add("implementation", safeFindLibrary(dependencyNotation))
-    }
-
-    fun kapt(dependencyNotation: String) {
-        dependencies.add("kapt", safeFindLibrary(dependencyNotation))
-    }
-}
+internal val Project.androidExtension: CommonExtension<*, *, *, *, *>
+    get() = runCatching { libraryExtension }
+        .recoverCatching { applicationExtension }
+        .onFailure { println("Could not find Library or Application extension from this project") }
+        .getOrThrow()
