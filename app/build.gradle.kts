@@ -1,12 +1,12 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.into.websoso.buildConfigs
+import com.into.websoso.getLocalProperty
+import com.into.websoso.manifestPlaceholders
 
 plugins {
     id("websoso.android.application")
     id("websoso.android.hilt")
     id("websoso.android.compose")
     id("websoso.android.coroutines")
-
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.parcelize)
@@ -19,6 +19,7 @@ android {
         applicationId = "com.into.websoso"
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigs(rootDir) {
             string(name = "S3_BASE_URL", key = "s3.url")
@@ -26,61 +27,50 @@ android {
             string(name = "AMPLITUDE_KEY", key = "amplitude.key")
         }
 
-        manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
-            .getProperty("kakao.app.key")
-            .replace("\"", "")
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders {
+            "kakaoAppKey" to getLocalProperty(rootDir, "kakao.app.key")
+        }
     }
 
     buildTypes {
+
         debug {
-            // 디버그 버전, 빌드 세팅(디버깅 가능 여부, 앱 네임, 아이콘, 패키지)
+            isMinifyEnabled = false
             isDebuggable = true
             applicationIdSuffix = ".debug"
-            manifestPlaceholders.putAll(
-                mapOf(
-                    "appName" to "@string/app_name_debug",
-                    "appIcon" to "@mipmap/ic_wss_logo_debug",
-                    "roundIcon" to "@mipmap/ic_wss_logo_debug_round",
-                ),
-            )
 
-            // 프로가드 세팅, 앱 용량 축소
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+            manifestPlaceholders {
+                "appName" to "@string/app_name_debug"
+                "appIcon" to "@mipmap/ic_wss_logo_debug"
+                "roundIcon" to "@mipmap/ic_wss_logo_debug_round"
+            }
 
-            // 디버그 버전, 공용 프로퍼티(BASE URL)
             buildConfigs(rootDir) {
                 string(name = "BASE_URL", key = "debug.base.url")
             }
         }
-        release {
-            // 릴리즈 버전, 빌드 세팅(앱 네임, 아이콘)
-            manifestPlaceholders.putAll(
-                mapOf(
-                    "appName" to "@string/app_name",
-                    "appIcon" to "@mipmap/ic_wss_logo",
-                    "roundIcon" to "@mipmap/ic_wss_logo_round",
-                ),
-            )
 
-            // 프로가드 세팅, 앱 용량 축소
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
 
-            // 릴리즈 버전, 공용 프로퍼티(BASE URL)
+            manifestPlaceholders {
+                "appName" to "@string/app_name"
+                "appIcon" to "@mipmap/ic_wss_logo"
+                "roundIcon" to "@mipmap/ic_wss_logo_round"
+            }
+
             buildConfigs(rootDir) {
                 string(name = "BASE_URL", key = "release.base.url")
             }
         }
     }
+
     buildFeatures {
         buildConfig = true
         dataBinding = true
