@@ -85,6 +85,8 @@ dependencies {
     implementation(projects.core.resource)
     implementation(projects.core.designsystem)
 
+    implementation(projects.feature.signin)
+
     // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
