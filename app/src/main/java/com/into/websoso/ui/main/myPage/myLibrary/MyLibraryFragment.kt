@@ -245,8 +245,4 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
 
         view?.requestLayout()
     }
-
-    companion object {
-        const val EXTRA_SOURCE = "source"
-    }
 }
