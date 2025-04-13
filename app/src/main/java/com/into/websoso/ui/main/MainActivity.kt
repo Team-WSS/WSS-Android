@@ -20,6 +20,7 @@ import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.into.websoso.ui.main.MainActivity.FragmentType.HOME
 import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
+import com.into.websoso.ui.main.MainActivity.FragmentType.LIBRARY
 import com.into.websoso.ui.main.explore.ExploreFragment
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
@@ -97,7 +98,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             HOME -> replaceFragment<HomeFragment>()
             EXPLORE -> replaceFragment<ExploreFragment>()
             FEED -> replaceFragment<FeedFragment>()
-            FragmentType.LIBRARY -> replaceFragment<LibraryFragment>()
+            LIBRARY -> replaceFragment<LibraryFragment>()
             MY_PAGE -> replaceFragment<MyPageFragment>()
         }
         return true
@@ -137,7 +138,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             EXPLORE -> selectFragment(EXPLORE)
             MY_PAGE -> selectFragment(MY_PAGE)
             FEED -> selectFragment(FEED)
-            FragmentType.LIBRARY -> selectFragment(FragmentType.LIBRARY)
+            LIBRARY -> selectFragment(LIBRARY)
             HOME, null -> selectFragment(HOME)
         }
     }
@@ -159,7 +160,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 replaceFragment<FeedFragment>()
             }
 
-            FragmentType.LIBRARY -> {
+            LIBRARY -> {
                 binding.bnvMain.selectedItemId = R.id.menu_library
                 replaceFragment<LibraryFragment>()
             }
