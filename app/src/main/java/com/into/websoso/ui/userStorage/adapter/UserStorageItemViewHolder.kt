@@ -8,7 +8,6 @@ class UserStorageItemViewHolder(
     private val binding: ItemStorageNovelBinding,
     private var novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     private var novelId: Long? = null
 
     init {

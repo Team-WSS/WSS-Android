@@ -9,7 +9,6 @@ class UserStorageViewPagerViewHolder(
     private val binding: ItemStorageBinding,
     private val novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     private val adapter: UserStorageItemAdapter by lazy {
         UserStorageItemAdapter(emptyList(), novelClickListener)
     }
