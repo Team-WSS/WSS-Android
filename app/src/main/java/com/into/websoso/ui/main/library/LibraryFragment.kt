@@ -103,7 +103,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
     }
 
     private fun setupObserver() {
-        libraryViewModel.uiState.observe(this) { uiState ->
+        libraryViewModel.uiState.observe(requireActivity()) { uiState ->
             when {
                 uiState.loading -> binding.wllLibrary.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllLibrary.setLoadingLayoutVisibility(false)
@@ -123,7 +123,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
                 if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
         }
 
-        libraryViewModel.isRatingChanged.observe(this) { isChanged ->
+        libraryViewModel.isRatingChanged.observe(requireActivity()) { isChanged ->
             if (isChanged) {
                 val currentReadStatus =
                     libraryViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
