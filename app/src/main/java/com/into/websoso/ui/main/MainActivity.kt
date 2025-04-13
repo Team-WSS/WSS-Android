@@ -23,6 +23,7 @@ import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.into.websoso.ui.main.explore.ExploreFragment
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
+import com.into.websoso.ui.main.library.LibraryFragment
 import com.into.websoso.ui.main.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -96,6 +97,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             HOME -> replaceFragment<HomeFragment>()
             EXPLORE -> replaceFragment<ExploreFragment>()
             FEED -> replaceFragment<FeedFragment>()
+            FragmentType.LIBRARY -> replaceFragment<LibraryFragment>()
             MY_PAGE -> replaceFragment<MyPageFragment>()
         }
         return true
@@ -114,14 +116,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         HOME(R.id.menu_home),
         EXPLORE(R.id.menu_explore),
         FEED(R.id.menu_feed),
+        LIBRARY(R.id.menu_library),
         MY_PAGE(R.id.menu_my_page),
         ;
 
         companion object {
             fun valueOf(id: Int): FragmentType =
-                entries.find { fragmentView ->
-                    fragmentView.resId == id
-                } ?: throw IllegalArgumentException()
+                entries.find { it.resId == id }
+                    ?: throw IllegalArgumentException()
         }
     }
 
@@ -135,6 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             EXPLORE -> selectFragment(EXPLORE)
             MY_PAGE -> selectFragment(MY_PAGE)
             FEED -> selectFragment(FEED)
+            FragmentType.LIBRARY -> selectFragment(FragmentType.LIBRARY)
             HOME, null -> selectFragment(HOME)
         }
     }
@@ -156,6 +159,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 replaceFragment<FeedFragment>()
             }
 
+            FragmentType.LIBRARY -> {
+                binding.bnvMain.selectedItemId = R.id.menu_library
+                replaceFragment<LibraryFragment>()
+            }
+
             MY_PAGE -> {
                 binding.bnvMain.selectedItemId = R.id.menu_my_page
                 replaceFragment<MyPageFragment>()
@@ -167,11 +175,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         private const val DESTINATION_KEY = "destination"
         const val IS_LOGIN_KEY = "isLogin"
 
-        fun getIntent(context: Context): Intent {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            return intent
-        }
+        fun getIntent(context: Context): Intent =
+            Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
 
         fun getIntent(
             context: Context,
