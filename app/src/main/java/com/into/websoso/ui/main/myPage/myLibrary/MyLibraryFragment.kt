@@ -22,8 +22,9 @@ import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyLibraryBinding
+import com.into.websoso.ui.main.MainActivity
+import com.into.websoso.ui.main.library.LibraryFragment
 import com.into.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
-import com.into.websoso.ui.userStorage.UserStorageActivity
 import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -209,20 +210,21 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(R.layout.fragme
         tabClickMappings.forEach { (view, readStatus) ->
             view.setOnClickListener {
                 singleEventHandler.throttleFirst {
-                    navigateToStorageActivity(readStatus)
+                    navigateToLibraryFragment(readStatus)
                 }
             }
         }
     }
 
-    private fun navigateToStorageActivity(readStatus: String) {
-        userStorageResultLauncher.launch(
-            UserStorageActivity.getIntent(
-                context = requireContext(),
-                source = UserStorageActivity.SOURCE_MY_LIBRARY,
-                userId = myLibraryViewModel.userId,
-                readStatus = readStatus,
-            ),
+    private fun navigateToLibraryFragment(readStatus: String) {
+        startActivity(
+            MainActivity
+                .getIntent(
+                    context = requireContext(),
+                    destination = MainActivity.FragmentType.LIBRARY,
+                ).apply {
+                    putExtra(LibraryFragment.READ_STATUS, readStatus)
+                },
         )
     }
 
