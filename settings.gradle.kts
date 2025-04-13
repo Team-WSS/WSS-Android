@@ -26,6 +26,7 @@ include(
     ":core:resource",
     ":core:designsystem",
     ":core:network",
+    ":core:common",
 )
 
 include(":feature:signin")
