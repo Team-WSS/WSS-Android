@@ -95,6 +95,5 @@ class LibraryViewModel
 
         companion object {
             const val STORAGE_NOVEL_SIZE = 100
-            const val DEFAULT_USER_ID = -1L
         }
     }
