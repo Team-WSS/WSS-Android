@@ -212,7 +212,7 @@
 
     <!-- 마이페이지 뷰 -->
     <string name="my_page_title">마이페이지</string>
-    <string name="my_page_library">내 서재</string>
+    <string name="my_page_library">내 통계</string>
     <string name="my_page_activity">내 활동</string>
 
     <!-- 마이페이지 내 서재 뷰 -->
