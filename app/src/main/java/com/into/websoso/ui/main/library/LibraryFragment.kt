@@ -43,12 +43,12 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupViewPagerAndTabLayout()
+        setupObserver()
         setupInitialReadStatusTab()
         onSortTypeButtonClick()
-        onExploreButton()
+        onExploreButtonClick()
     }
 
     private fun bindViewModel() {
@@ -60,7 +60,6 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
     private fun setupViewPagerAndTabLayout() {
         setupViewPager()
         setupTabLayoutWithViewPager()
-        setupObserver()
     }
 
     private fun setupViewPager() {
@@ -103,7 +102,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
     }
 
     private fun setupObserver() {
-        libraryViewModel.uiState.observe(requireActivity()) { uiState ->
+        libraryViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.loading -> binding.wllLibrary.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllLibrary.setLoadingLayoutVisibility(false)
@@ -112,18 +111,17 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
                     updateStorageNovel(uiState)
                 }
             }
-
             binding.clLibraryNull.visibility =
-                if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
+                if (uiState.userNovelCount == EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
 
             binding.vpLibrary.visibility =
-                if (uiState.userNovelCount > 0L) View.VISIBLE else View.GONE
+                if (uiState.userNovelCount > EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
 
             binding.btnLibraryGoToSearchNovel.visibility =
-                if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
+                if (uiState.userNovelCount == EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
         }
 
-        libraryViewModel.isRatingChanged.observe(requireActivity()) { isChanged ->
+        libraryViewModel.isRatingChanged.observe(viewLifecycleOwner) { isChanged ->
             if (isChanged) {
                 val currentReadStatus =
                     libraryViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
@@ -139,7 +137,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
         }
     }
 
-    private fun onExploreButton() {
+    private fun onExploreButtonClick() {
         binding.btnLibraryGoToSearchNovel.setOnClickListener {
             navigateToExploreFragment()
         }
@@ -165,6 +163,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
     }
 
     companion object {
+        const val EMPTY_NOVEL_COUNT = 0L
         const val READ_STATUS = "read_status"
     }
 }

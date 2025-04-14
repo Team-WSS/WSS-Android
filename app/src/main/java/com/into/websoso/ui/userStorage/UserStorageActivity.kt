@@ -14,6 +14,7 @@ import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.databinding.ActivityStorageBinding
+import com.into.websoso.ui.main.library.LibraryFragment.Companion.EMPTY_NOVEL_COUNT
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.userStorage.adapter.UserStorageViewPagerAdapter
 import com.into.websoso.ui.userStorage.model.StorageTab
@@ -43,6 +44,7 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         setupUserId()
         bindViewModel()
         setupViewPagerAndTabLayout()
+        setupObserver()
         setupInitialReadStatusTab()
         onBackButtonClick()
         onSortTypeButtonClick()
@@ -63,7 +65,6 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private fun setupViewPagerAndTabLayout() {
         setupViewPager()
         setupTabLayoutWithViewPager()
-        setupObserver()
     }
 
     private fun setupViewPager() {
@@ -117,10 +118,10 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             }
 
             binding.clStorageNull.visibility =
-                if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
+                if (uiState.userNovelCount == EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
 
             binding.vpStorage.visibility =
-                if (uiState.userNovelCount > 0L) View.VISIBLE else View.GONE
+                if (uiState.userNovelCount > EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
         }
     }
 
