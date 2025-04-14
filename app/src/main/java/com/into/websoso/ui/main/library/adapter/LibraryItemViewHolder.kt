@@ -1,10 +1,10 @@
-package com.into.websoso.ui.userStorage.adapter
+package com.into.websoso.ui.main.library.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.databinding.ItemStorageNovelBinding
 import com.into.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
-class UserStorageItemViewHolder(
+class LibraryItemViewHolder(
     private val binding: ItemStorageNovelBinding,
     private var novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {

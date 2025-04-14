@@ -8,6 +8,7 @@
     <!-- 메인 뷰 -->
     <string name="main_ic_home">홈</string>
     <string name="main_ic_explore">탐색</string>
+    <string name="main_ic_library">서재</string>
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">My</string>
     <string name="main_back_press">뒤로가기를 한번 더 누르면 종료됩니다</string>
@@ -211,11 +212,11 @@
 
     <!-- 마이페이지 뷰 -->
     <string name="my_page_title">마이페이지</string>
-    <string name="my_page_library">내 서재</string>
+    <string name="my_page_library">내 통계</string>
     <string name="my_page_activity">내 활동</string>
 
     <!-- 마이페이지 내 서재 뷰 -->
-    <string name="my_library_storage">보관함</string>
+    <string name="my_library_storage">서재</string>
     <string name="my_library_preference_analysis">취향 분석</string>
     <string name="my_library_interesting">관심</string>
     <string name="my_library_watching">보는중</string>
@@ -369,7 +370,7 @@
     <string name="block_user_success_message">%s님을 차단했어요</string>
 
     <!-- 다른 유저 서재 뷰 -->
-    <string name="other_user_library_storage">보관함</string>
+    <string name="other_user_library_storage">서재</string>
     <string name="other_user_library_preference_analysis">취향 분석</string>
     <string name="other_user_library_interesting">관심</string>
     <string name="other_user_library_watching">보는중</string>
@@ -397,13 +398,13 @@
     <string name="remove_popup_menu_stop_creating">그만하기</string>
     <string name="remove_popup_menu_keep_creating">계속 작성</string>
 
-    <!-- 보관함 뷰 -->
-    <string name="storage_storage">보관함</string>
+    <!-- 서재 뷰 -->
+    <string name="storage_storage">서재</string>
     <string name="storage_interesting">관심</string>
     <string name="storage_watching">보는중</string>
     <string name="storage_watched">봤어요</string>
     <string name="storage_quitting">하차</string>
-    <string name="storage_empty_status">보관함이 비어있어요</string>
+    <string name="storage_empty_status">서재가 비어있어요</string>
     <string name="storage_find_novel">웹소설 찾으러 가기</string>
     <string name="storage_oldest">오래된 순</string>
     <string name="storage_newest">최신 순</string>
@@ -433,4 +434,7 @@
     <string name="string_terms_agreement_popup_menu_update">동의하러 가기</string>
     <string name="string_terms_agreement_popup_menu_description">더 안전하고 원활한 웹소소를 위해\n업데이트된 약관에 동의해주세요.</string>
     <string name="string_terms_agreement_popup_menu_title">약관 동의가 필요해요!</string>
+
+    <!-- 서재 뷰-->
+    <string name="library">서재</string>
 </resources>

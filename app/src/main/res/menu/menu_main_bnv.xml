@@ -16,6 +16,11 @@
         android:title="@string/main_ic_feed" />
 
     <item
+        android:id="@+id/menu_library"
+        android:icon="@drawable/ic_main_library"
+        android:title="@string/main_ic_library" />
+
+    <item
         android:id="@+id/menu_my_page"
         android:icon="@drawable/ic_main_my_page"
         android:title="@string/main_ic_my_page" />

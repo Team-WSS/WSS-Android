@@ -224,7 +224,6 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
         startActivity(
             UserStorageActivity.getIntent(
                 context = requireContext(),
-                source = UserStorageActivity.SOURCE_OTHER_USER_LIBRARY,
                 userId = userId,
                 readStatus = readStatus,
             ),
