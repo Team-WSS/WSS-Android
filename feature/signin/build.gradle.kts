@@ -7,6 +7,3 @@ plugins {
 android {
     setNamespace("feature.signin")
 }
-
-dependencies {
-}
