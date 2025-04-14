@@ -123,7 +123,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         companion object {
             fun valueOf(id: Int): FragmentType =
-                entries.find { it.resId == id }
+                entries.find { fragmentType -> fragmentType.resId == id }
                     ?: throw IllegalArgumentException()
         }
     }
