@@ -11,10 +11,10 @@ import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.databinding.FragmentLibraryBinding
 import com.into.websoso.ui.main.MainActivity
+import com.into.websoso.ui.main.library.adapter.LibraryViewPagerAdapter
 import com.into.websoso.ui.main.library.model.LibraryUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.userStorage.SortMenuHandler
-import com.into.websoso.ui.main.library.adapter.LibraryViewPagerAdapter
 import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
