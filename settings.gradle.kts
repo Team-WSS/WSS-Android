@@ -27,3 +27,5 @@ include(
     ":core:designsystem",
     ":core:network",
 )
+
+include(":feature:signin")
