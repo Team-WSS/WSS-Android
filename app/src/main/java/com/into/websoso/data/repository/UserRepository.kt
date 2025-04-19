@@ -16,7 +16,6 @@ import com.into.websoso.data.model.UserFeedsEntity
 import com.into.websoso.data.model.UserInfoDetailEntity
 import com.into.websoso.data.model.UserInfoEntity
 import com.into.websoso.data.model.UserNovelStatsEntity
-import com.into.websoso.data.model.UserProfileStatusEntity
 import com.into.websoso.data.model.UserStorageEntity
 import com.into.websoso.data.remote.api.UserApi
 import com.into.websoso.data.remote.request.TermsAgreementRequestDto
@@ -69,7 +68,7 @@ class UserRepository
 
         suspend fun fetchUserNovelStats(userId: Long): UserNovelStatsEntity = userApi.getUserNovelStats(userId).toData()
 
-        suspend fun fetchUserProfileStatus(): UserProfileStatusEntity = userApi.getProfileStatus().toData()
+        suspend fun fetchUserProfileStatus(): Boolean = userApi.getProfileStatus().isProfilePublic
 
         suspend fun saveUserProfileStatus(isProfilePublic: Boolean) {
             userApi.patchProfileStatus(UserProfileStatusRequestDto(isProfilePublic))
