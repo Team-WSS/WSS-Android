@@ -32,6 +32,7 @@ class CreateFeedViewModel @Inject constructor(
     val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
     val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
     val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isPublic: MutableLiveData<Boolean> = MutableLiveData(true)
     val content: MutableLiveData<String> = MutableLiveData("")
     private var novelId: Long? = null
     private var searchedText = ""
@@ -50,6 +51,7 @@ class CreateFeedViewModel @Inject constructor(
             _selectedNovelTitle.value = feed.novelTitle.orEmpty()
             content.value = feed.feedContent
             isSpoiled.value = feed.isSpoiler
+            isPublic.value = feed.isPublic
             _categories.addAll(createCategories(feed.feedCategory))
         } ?: _categories.addAll(createCategories())
 
@@ -70,6 +72,7 @@ class CreateFeedViewModel @Inject constructor(
                     feedContent = content.value.orEmpty(),
                     novelId = novelId,
                     isSpoiler = isSpoiled.value ?: false,
+                    isPublic = isPublic.value ?: true,
                 )
             }.onSuccess { }.onFailure { }
         }
@@ -85,6 +88,7 @@ class CreateFeedViewModel @Inject constructor(
                     feedContent = content.value.orEmpty(),
                     novelId = novelId,
                     isSpoiler = isSpoiled.value ?: false,
+                    isPublic = isPublic.value ?: true,
                 )
             }.onSuccess { }.onFailure { }
         }

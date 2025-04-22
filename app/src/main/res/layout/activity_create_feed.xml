@@ -85,6 +85,7 @@
                 android:id="@+id/sc_create_feed_lock_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="@={!viewModel.isPublic}"
                 android:background="@null"
                 android:thumb="@drawable/bg_create_feed_toggle_thumb"
                 app:track="@drawable/bg_create_feed_toggle" />
