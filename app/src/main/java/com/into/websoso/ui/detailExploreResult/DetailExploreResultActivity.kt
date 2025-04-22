@@ -2,11 +2,13 @@ package com.into.websoso.ui.detailExploreResult
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.into.websoso.R
+import com.into.websoso.R.string.inquire_link
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
@@ -27,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DetailExploreResultActivity : BaseActivity<ActivityDetailExploreResultBinding>(R.layout.activity_detail_explore_result) {
     private val detailExploreResultAdapter: DetailExploreResultAdapter by lazy {
-        DetailExploreResultAdapter(::navigateToNovelDetail)
+        DetailExploreResultAdapter(::navigateToNovelDetail, ::navigateToInquire)
     }
     private val detailExploreResultViewModel: DetailExploreResultViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -158,6 +160,12 @@ class DetailExploreResultActivity : BaseActivity<ActivityDetailExploreResultBind
 
     private fun navigateToNovelDetail(novelId: Long) {
         val intent = NovelDetailActivity.getIntent(this, novelId)
+        startActivity(intent)
+    }
+
+    private fun navigateToInquire() {
+        val inquireUrl = getString(inquire_link)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
 

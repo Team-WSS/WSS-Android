@@ -6,8 +6,15 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.databinding.ItemDetailExploreResultHeaderBinding
 
-class DetailExploreResultHeaderViewHolder(private val binding: ItemDetailExploreResultHeaderBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class DetailExploreResultHeaderViewHolder(
+    private val binding: ItemDetailExploreResultHeaderBinding,
+    onInquireClick: () -> Unit,
+) : RecyclerView.ViewHolder(binding.root) {
+    init {
+        binding.clDetailExploreInquireButton.setOnClickListener {
+            onInquireClick.invoke()
+        }
+    }
 
     fun bind(novelCount: Long) {
         binding.apply {
@@ -19,13 +26,17 @@ class DetailExploreResultHeaderViewHolder(private val binding: ItemDetailExplore
     companion object {
         private const val NOVEL_COUNT_INVISIBLE_THRESHOLD = 0
 
-        fun from(parent: ViewGroup): DetailExploreResultHeaderViewHolder =
+        fun from(
+            parent: ViewGroup,
+            onInquireClickListener: () -> Unit,
+        ): DetailExploreResultHeaderViewHolder =
             DetailExploreResultHeaderViewHolder(
                 ItemDetailExploreResultHeaderBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false,
-                )
+                ),
+                onInquireClickListener,
             )
     }
 }
