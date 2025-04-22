@@ -18,6 +18,7 @@
     <string name="normal_explore_novel_rating">%.1f (%d)</string>
     <string name="normal_explore_not_exist_result">해당 검색어를 가진 작품은\n아직 등록되지 않았어요...</string>
     <string name="normal_explore_add_novel_inquire">작품 추가 문의하기</string>
+    <string name="normal_explore_result_inquire">찾는 작품이 없다면?</string>
 
     <!-- 탐색 뷰 -->
     <string name="explore_title">탐색하기</string>
@@ -56,6 +57,7 @@
     <string name="detail_explore_result_filter_description">\u00A0적용</string>
     <string name="detail_explore_result_novel">작품</string>
     <string name="detail_explore_result_not_exist">해당하는 작품이 없어요\n검색의 범위를 더 넓혀보세요</string>
+    <string name="detail_explore_result_inquire">찾는 작품이 없다면?</string>
 
     <!-- 작품 상세 -->
     <string name="novel_detail_review">나도 한마디</string>
