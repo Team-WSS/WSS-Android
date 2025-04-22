@@ -40,7 +40,6 @@ class ProfileDisclosureActivity : BaseActivity<ActivityProfileDisclosureBinding>
                 )
                 setResult(ChangeProfileDisclosure.RESULT_OK, intent)
                 finish()
-                return@setOnClickListener
             }
             finish()
         }
