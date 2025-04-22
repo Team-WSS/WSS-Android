@@ -39,7 +39,6 @@ class ProfileDisclosureActivity : BaseActivity<ActivityProfileDisclosureBinding>
                     profileDisclosureViewModel.isProfilePrivate.value?.not() ?: true,
                 )
                 setResult(ChangeProfileDisclosure.RESULT_OK, intent)
-                finish()
             }
             finish()
         }
