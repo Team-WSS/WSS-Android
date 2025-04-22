@@ -50,12 +50,52 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_create_feed_lock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_300_52515F"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_create_feed_toolbar">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_create_novel_lock" />
+
+            <TextView
+                android:id="@+id/tv_create_feed_lock_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="비공개 기록"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sc_create_feed_lock_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:thumb="@drawable/bg_create_feed_toggle_thumb"
+                app:track="@drawable/bg_create_feed_toggle" />
+        </LinearLayout>
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_create_feed_toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/ll_create_feed_lock">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -66,33 +106,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/tv_create_feed_category"
+                    android:layout_marginTop="36dp"
+                    android:text="@string/tv_create_feed_write_content"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_create_feed_star_essential"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:src="@drawable/ic_star_essential"
-                    app:layout_constraintStart_toEndOf="@+id/tv_create_feed_category"
-                    app:layout_constraintTop_toTopOf="@+id/tv_create_feed_category" />
-
-                <TextView
-                    android:id="@+id/tv_create_feed_multiple_choice_guide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="@string/tv_create_feed_multiple_choice_guide"
-                    android:textAppearance="@style/label1"
-                    android:textColor="@color/gray_200_AEADB3"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_create_feed_category"
-                    app:layout_constraintStart_toEndOf="@+id/iv_create_feed_star_essential"
-                    app:layout_constraintTop_toTopOf="@+id/tv_create_feed_category" />
 
                 <com.into.websoso.core.common.ui.custom.WebsosoChipGroup
                     android:id="@+id/wcg_detail_explore_info_genre"
@@ -108,57 +127,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_category"
                     app:singleSelection="false" />
 
-                <TextView
-                    android:id="@+id/tv_create_feed_write_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="44dp"
-                    android:text="@string/tv_create_feed_write_content"
-                    android:textAppearance="@style/title2"
-                    android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/wcg_detail_explore_info_genre" />
-
-                <ImageView
-                    android:id="@+id/iv_create_feed_star_essential2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:src="@drawable/ic_star_essential"
-                    app:layout_constraintStart_toEndOf="@+id/tv_create_feed_write_content"
-                    app:layout_constraintTop_toTopOf="@+id/tv_create_feed_write_content" />
-
-                <TextView
-                    android:id="@+id/tv_create_feed_spoiler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/tv_create_feed_spoiler"
-                    android:textAppearance="@style/body4"
-                    android:textColor="@color/gray_300_52515F"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_create_feed_write_content"
-                    app:layout_constraintEnd_toStartOf="@+id/sc_create_feed_toggle"
-                    app:layout_constraintTop_toTopOf="@+id/tv_create_feed_write_content" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/sc_create_feed_toggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:background="@null"
-                    android:checked="@={viewModel.isSpoiled}"
-                    android:thumb="@drawable/bg_create_feed_toggle_thumb"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_create_feed_spoiler"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_create_feed_spoiler"
-                    app:track="@drawable/bg_create_feed_toggle" />
 
                 <EditText
                     android:id="@+id/et_create_feed_content"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/bg_create_feed_edit_text_radius_14dp"
                     android:gravity="top"
@@ -176,7 +151,7 @@
                     android:textColorHint="@color/gray_200_AEADB3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/sc_create_feed_toggle" />
+                    app:layout_constraintTop_toBottomOf="@id/wcg_detail_explore_info_genre" />
 
                 <TextView
                     android:id="@+id/tv_create_feed_characters_count"
@@ -189,6 +164,59 @@
                     app:layout_constraintBottom_toBottomOf="@+id/et_create_feed_content"
                     app:layout_constraintEnd_toEndOf="@+id/et_create_feed_content" />
 
+                <LinearLayout
+                    android:id="@+id/ll_create_feed_spoiler"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="40dp"
+                    android:background="@drawable/bg_create_feed_white_radius_14dp_stroke_gray70_1dp"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_create_feed_content">
+
+                    <TextView
+                        android:id="@+id/tv_create_feed_spoiler_wait"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_create_feed_spoiler_wait"
+                        android:textAppearance="@style/body3"
+                        android:textColor="@color/gray_200_AEADB3" />
+
+                    <TextView
+                        android:id="@+id/tv_create_feed_spoiler_spoiler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_create_feed_spoiler_spoiler"
+                        android:textAppearance="@style/body3"
+                        android:textColor="@color/gray_200_AEADB3"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_create_feed_spoiler_ask"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_create_feed_spoiler_ask"
+                        android:textAppearance="@style/body3"
+                        android:textColor="@color/gray_200_AEADB3" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sc_create_feed_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:checked="@={viewModel.isSpoiled}"
+                        android:thumb="@drawable/bg_create_feed_toggle_thumb"
+                        app:track="@drawable/bg_create_feed_toggle" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tv_create_feed_connect_novel"
                     android:layout_width="wrap_content"
@@ -199,7 +227,7 @@
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_create_feed_content" />
+                    app:layout_constraintTop_toBottomOf="@id/ll_create_feed_spoiler" />
 
                 <com.into.websoso.core.common.ui.custom.WebsosoSearchEditText
                     android:id="@+id/wset_create_feed_search_novel"
@@ -211,7 +239,7 @@
                     android:paddingVertical="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_connect_novel" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_create_feed_connect_novel" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_create_feed_novel_info"
@@ -226,7 +254,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/wset_create_feed_search_novel">
+                    app:layout_constraintTop_toBottomOf="@id/wset_create_feed_search_novel">
 
                     <ImageView
                         android:id="@+id/iv_create_feed_link"
@@ -250,10 +278,10 @@
                         android:maxLines="1"
                         android:textAppearance="@style/title3"
                         android:textColor="@color/black"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_create_feed_link"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_create_feed_remove_button"
-                        app:layout_constraintStart_toEndOf="@+id/iv_create_feed_link"
-                        app:layout_constraintTop_toTopOf="@+id/iv_create_feed_link"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_create_feed_link"
+                        app:layout_constraintEnd_toStartOf="@id/iv_create_feed_remove_button"
+                        app:layout_constraintStart_toEndOf="@id/iv_create_feed_link"
+                        app:layout_constraintTop_toTopOf="@id/iv_create_feed_link"
                         tools:text="화산귀한화산귀한화산귀한화산귀한" />
 
                     <ImageView
