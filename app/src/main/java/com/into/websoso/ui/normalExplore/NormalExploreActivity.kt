@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.into.websoso.R
-import com.into.websoso.R.string.inquire_link
+import com.into.websoso.R.string.novel_inquire_link
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
@@ -120,7 +120,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
 
             override fun onNovelInquireButtonClick() {
                 tracker.trackEvent("contact_novel_search")
-                val inquireUrl = getString(inquire_link)
+                val inquireUrl = getString(novel_inquire_link)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
                 startActivity(intent)
             }
@@ -144,7 +144,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
     }
 
     private fun navigateToInquire() {
-        val inquireUrl = getString(inquire_link)
+        val inquireUrl = getString(novel_inquire_link)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
