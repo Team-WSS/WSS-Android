@@ -17,7 +17,7 @@
     <string name="normal_explore_novel_count_title">작품</string>
     <string name="normal_explore_novel_rating">%.1f (%d)</string>
     <string name="normal_explore_not_exist_result">해당 검색어를 가진 작품은\n아직 등록되지 않았어요...</string>
-    <string name="normal_explore_add_novel_inquire">작품 추가 문의하기</string>
+    <string name="normal_explore_add_novel_inquire">작품 문의하러 가기</string>
     <string name="normal_explore_result_inquire">찾는 작품이 없다면?</string>
 
     <!-- 탐색 뷰 -->
