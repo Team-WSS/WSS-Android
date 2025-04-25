@@ -12,17 +12,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter.State
-import coil.compose.AsyncImagePainter.State.Empty
-import coil.compose.AsyncImagePainter.State.Loading
-import coil.compose.AsyncImagePainter.State.Success
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.into.websoso.resource.R.drawable.img_my_library_empty_cat
 
 @Composable
@@ -31,44 +29,33 @@ fun NetworkImage(
     imageUrl: String,
     contentScale: ContentScale = Fit,
     alignment: Alignment = Center,
+    placeholder: Painter = painterResource(id = img_my_library_empty_cat),
     modifier: Modifier = Modifier,
 ) {
-    if (LocalInspectionMode.current) {
+    val isPreview = LocalInspectionMode.current
+    var isLoading by remember { mutableStateOf(true) }
+    var isError by remember { mutableStateOf(false) }
+    val painter = rememberAsyncImagePainter(
+        model = imageUrl,
+        onState = { state ->
+            isLoading = state is AsyncImagePainter.State.Loading
+            isError = state is AsyncImagePainter.State.Error
+        },
+    )
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Center,
+    ) {
+        if (isLoading && !isPreview) CircularProgressIndicator(modifier = Modifier.size(size = 48.dp))
+
         Image(
-            painter = painterResource(id = img_my_library_empty_cat),
+            painter = if (!isError && !isPreview) painter else placeholder,
             contentDescription = contentDescription,
             contentScale = contentScale,
-            modifier = modifier,
+            alignment = alignment,
+            modifier = Modifier.matchParentSize(),
         )
-        return
-    }
-
-    var imagePainterState by remember { mutableStateOf<State>(Empty) }
-
-    Box {
-        when (imagePainterState) {
-            is Success -> {
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = contentDescription,
-                    contentScale = contentScale,
-                    alignment = alignment,
-                    onState = { state -> imagePainterState = state },
-                    modifier = modifier,
-                )
-            }
-
-            is Loading -> CircularProgressIndicator()
-
-            else -> {
-                Image(
-                    painter = painterResource(id = img_my_library_empty_cat),
-                    contentDescription = contentDescription,
-                    contentScale = contentScale,
-                    modifier = modifier,
-                )
-            }
-        }
     }
 }
 
