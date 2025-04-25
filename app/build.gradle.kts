@@ -42,7 +42,7 @@ android {
             buildConfigs(rootDir) {
                 string(name = "BASE_URL", key = "debug.base.url")
             }
-            
+
             manifestPlaceholders {
                 "appName" to "@string/app_name_debug"
                 "appIcon" to "@mipmap/ic_wss_logo_debug"
@@ -59,14 +59,14 @@ android {
                 "proguard-rules.pro",
             )
 
+            buildConfigs(rootDir) {
+                string(name = "BASE_URL", key = "release.base.url")
+            }
+
             manifestPlaceholders {
                 "appName" to "@string/app_name"
                 "appIcon" to "@mipmap/ic_wss_logo"
                 "roundIcon" to "@mipmap/ic_wss_logo_round"
-            }
-
-            buildConfigs(rootDir) {
-                string(name = "BASE_URL", key = "release.base.url")
             }
         }
     }
@@ -81,6 +81,7 @@ android {
 dependencies {
     // 프로젝트 의존성
     implementation(projects.core.resource)
+    implementation(projects.core.designsystem)
 
     // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)
