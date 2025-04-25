@@ -1,7 +1,5 @@
 package com.into.websoso.designsystem.theme
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -10,6 +8,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.into.websoso.resource.R.font.pretendard_bold
@@ -37,9 +36,7 @@ data class WebsosoTypography(
     val label2: TextStyle,
 )
 
-@Composable
-internal fun WebsosoTypography(): WebsosoTypography {
-    val density = LocalDensity.current
+internal fun WebsosoTypography(density: Density): WebsosoTypography {
     val textStyle =
         { fontFamily: FontFamily, fontWeight: FontWeight, fontSizeDp: Dp, lineHeightDp: Dp ->
             TextStyle(
