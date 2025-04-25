@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.into.websoso.core.designsystem.theme.Black
-import com.into.websoso.core.designsystem.theme.Gray200
-import com.into.websoso.core.designsystem.theme.Gray50
-import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.data.model.NotificationDetailEntity
+import com.into.websoso.designsystem.theme.Black
+import com.into.websoso.designsystem.theme.Gray200
+import com.into.websoso.designsystem.theme.Gray50
+import com.into.websoso.designsystem.theme.WebsosoTheme
 import com.into.websoso.ui.notificationDetail.model.NotificationDetailUiState
 
 @Composable
@@ -50,7 +50,7 @@ fun NotificationDetailContent(
         HyperlinkText(
             uiState.notificationDetail.notificationDetail,
             style =
-                WebsosoTheme.typography.body2,
+            WebsosoTheme.typography.body2,
             textColor = Black,
             modifier = Modifier
                 .padding(top = 24.dp, start = 20.dp, end = 20.dp)

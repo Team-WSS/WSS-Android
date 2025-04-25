@@ -18,9 +18,9 @@ import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.util.clickableWithoutRipple
-import com.into.websoso.core.designsystem.theme.Black
-import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.designsystem.theme.Black
+import com.into.websoso.designsystem.theme.WebsosoTheme
+import com.into.websoso.designsystem.theme.White
 import com.into.websoso.resource.R.drawable.ic_notification_back
 import com.into.websoso.resource.R.string.notification_notification
 

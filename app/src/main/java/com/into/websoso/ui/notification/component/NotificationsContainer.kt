@@ -8,8 +8,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.into.websoso.core.common.util.clickableWithoutRipple
-import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.data.repository.NotificationRepository.Companion.DEFAULT_INTRINSIC_ID
+import com.into.websoso.designsystem.theme.WebsosoTheme
 import com.into.websoso.domain.model.NotificationType
 import com.into.websoso.ui.notification.model.NotificationModel
 

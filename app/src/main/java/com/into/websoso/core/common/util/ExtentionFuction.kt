@@ -31,7 +31,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.into.websoso.BuildConfig
 import com.into.websoso.core.common.ui.custom.WebsosoCustomSnackBar
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
-import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.designsystem.theme.White
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -107,7 +107,7 @@ inline fun <reified T : Serializable> Intent.getAdaptedSerializableExtra(key: St
     } else {
         @Suppress("DEPRECATION")
         getSerializableExtra(key)
-            as? T
+                as? T
     }
 
 inline fun <reified T : Parcelable> Intent.getAdaptedParcelableExtra(key: String): T? =
@@ -116,7 +116,7 @@ inline fun <reified T : Parcelable> Intent.getAdaptedParcelableExtra(key: String
     } else {
         @Suppress("DEPRECATION")
         getParcelableExtra(key)
-            as? T
+                as? T
     }
 
 inline fun <reified T : Parcelable> Bundle.getAdaptedParcelable(key: String): T? =
@@ -125,7 +125,7 @@ inline fun <reified T : Parcelable> Bundle.getAdaptedParcelable(key: String): T?
     } else {
         @Suppress("DEPRECATION")
         getParcelable(key)
-            as? T
+                as? T
     }
 
 fun Context.createDataStore(preferencesName: String): DataStore<Preferences> =
