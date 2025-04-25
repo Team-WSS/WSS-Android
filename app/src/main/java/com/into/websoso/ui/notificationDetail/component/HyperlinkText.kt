@@ -13,9 +13,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
-import com.into.websoso.core.designsystem.theme.Black
-import com.into.websoso.core.designsystem.theme.HyperlinkBlue
-import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.designsystem.theme.Black
+import com.into.websoso.designsystem.theme.HyperlinkBlue
+import com.into.websoso.designsystem.theme.WebsosoTheme
 
 private const val URL_REGEX = "(https?://[\\w./?=&%#-]+|www\\.[\\w./?=&%#-]+)"
 
