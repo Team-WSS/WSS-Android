@@ -23,10 +23,10 @@ import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.string.feed_removed_feed_snackbar
 import com.into.websoso.databinding.FragmentMyActivityBinding
 import com.into.websoso.databinding.MenuMyActivityPopupBinding
-import com.into.websoso.resource.R.drawable.ic_blocked_user_snack_bar
-import com.into.websoso.resource.R.string.feed_removed_feed_snackbar
 import com.into.websoso.ui.activityDetail.ActivityDetailActivity
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity

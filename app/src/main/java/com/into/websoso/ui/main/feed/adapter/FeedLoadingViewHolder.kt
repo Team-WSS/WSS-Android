@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import coil.load
+import com.into.websoso.core.resource.R.drawable.ic_load_load
 import com.into.websoso.databinding.ItemFeedLoadingBinding
-import com.into.websoso.resource.R.drawable.ic_load_load
 
 class FeedLoadingViewHolder(
     binding: ItemFeedLoadingBinding,

@@ -8,8 +8,8 @@ import com.into.websoso.R.color.black
 import com.into.websoso.R.color.gray_200_AEADB3
 import com.into.websoso.R.layout.fragment_onboarding_second
 import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.resource.R.string.onboarding_second_input_birth_year
 import com.into.websoso.databinding.FragmentOnboardingSecondBinding
-import com.into.websoso.resource.R.string.onboarding_second_input_birth_year
 import com.into.websoso.ui.onboarding.OnboardingBirthYearBottomSheetDialog
 import com.into.websoso.ui.onboarding.OnboardingViewModel
 import com.into.websoso.ui.onboarding.model.UserModel

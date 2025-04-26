@@ -1,14 +1,14 @@
 package com.into.websoso.ui.onboarding.third.model
 
-import com.into.websoso.resource.R.drawable.ic_onboarding_bl
-import com.into.websoso.resource.R.drawable.ic_onboarding_drama
-import com.into.websoso.resource.R.drawable.ic_onboarding_fantasy
-import com.into.websoso.resource.R.drawable.ic_onboarding_light_novel
-import com.into.websoso.resource.R.drawable.ic_onboarding_modern_fantasy
-import com.into.websoso.resource.R.drawable.ic_onboarding_mystery
-import com.into.websoso.resource.R.drawable.ic_onboarding_romance
-import com.into.websoso.resource.R.drawable.ic_onboarding_romance_fantasy
-import com.into.websoso.resource.R.drawable.ic_onboarding_wuxia
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_bl
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_drama
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_fantasy
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_light_novel
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_modern_fantasy
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_mystery
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_romance
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_romance_fantasy
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_wuxia
 
 enum class Genre(val displayName: String, val tag: String, val drawableRes: Int) {
     ROMANCE("로맨스", "romance", ic_onboarding_romance),

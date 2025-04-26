@@ -5,9 +5,9 @@ import android.view.View
 import com.into.websoso.R.layout.dialog_report_done_popup_menu
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.resource.R.string.report_popup_menu_description
+import com.into.websoso.core.resource.R.string.report_popup_menu_description_comment
 import com.into.websoso.databinding.DialogReportDonePopupMenuBinding
-import com.into.websoso.resource.R.string.report_popup_menu_description
-import com.into.websoso.resource.R.string.report_popup_menu_description_comment
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED

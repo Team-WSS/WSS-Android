@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.View
 import com.into.websoso.R.layout.dialog_minimum_version_popup_menu
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
+import com.into.websoso.core.resource.R.string.minimum_version_popup_menu_url
 import com.into.websoso.databinding.DialogMinimumVersionPopupMenuBinding
-import com.into.websoso.resource.R.string.minimum_version_popup_menu_url
 
 class MinimumVersionDialogFragment :
     BaseDialogFragment<DialogMinimumVersionPopupMenuBinding>(dialog_minimum_version_popup_menu) {

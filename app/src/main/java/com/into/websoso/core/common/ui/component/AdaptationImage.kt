@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.designsystem.component.NetworkImage
 
 @Composable
 fun AdaptationImage(
@@ -21,7 +22,7 @@ fun AdaptationImage(
         false -> LocalView.current.getS3ImageUrl(imageUrl)
     }
 
-    ExternalImage(
+    NetworkImage(
         modifier = modifier,
         contentDescription = contentDescription,
         imageUrl = formattedUrl,

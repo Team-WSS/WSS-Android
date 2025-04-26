@@ -10,9 +10,9 @@ import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeUserInfo
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.core.resource.R.string.change_user_info_message
 import com.into.websoso.databinding.ActivityAccountInfoBinding
-import com.into.websoso.resource.R.drawable.ic_novel_detail_check
-import com.into.websoso.resource.R.string.change_user_info_message
 import com.into.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.into.websoso.ui.changeUserInfo.ChangeUserInfoActivity
 import com.into.websoso.ui.withdraw.first.WithdrawFirstActivity

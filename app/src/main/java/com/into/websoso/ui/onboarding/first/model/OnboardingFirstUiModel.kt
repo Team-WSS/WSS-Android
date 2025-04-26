@@ -6,9 +6,9 @@ import com.into.websoso.R.drawable.bg_onboarding_gray50_radius_12dp
 import com.into.websoso.R.drawable.bg_onboarding_white_stroke_gray_70_radius_12dp
 import com.into.websoso.R.drawable.bg_onboarding_white_stroke_primary_100_radius_12dp
 import com.into.websoso.R.drawable.bg_onboarding_white_stroke_secondary_100_radius_12dp
-import com.into.websoso.resource.R.drawable.ic_onboarding_first_input_clear_complete
-import com.into.websoso.resource.R.drawable.ic_onboarding_first_input_clear_default
-import com.into.websoso.resource.R.drawable.ic_onboarding_first_input_clear_error
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_first_input_clear_complete
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_first_input_clear_default
+import com.into.websoso.core.resource.R.drawable.ic_onboarding_first_input_clear_error
 
 data class OnboardingFirstUiModel(
     val editTextBackgroundRes: Int,

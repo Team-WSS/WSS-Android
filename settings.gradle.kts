@@ -20,5 +20,7 @@ dependencyResolutionManagement {
 
 include(":app")
 
-include(":core:resource")
-
+include(
+    ":core:resource",
+    ":core:designsystem",
+)

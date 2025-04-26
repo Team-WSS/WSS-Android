@@ -1,11 +1,11 @@
 package com.into.websoso.ui.profileEdit.model
 
-import com.into.websoso.resource.R.raw.lottie_regressor_0
-import com.into.websoso.resource.R.raw.lottie_regressor_1
-import com.into.websoso.resource.R.raw.lottie_sosocat_0
-import com.into.websoso.resource.R.raw.lottie_sosocat_1
-import com.into.websoso.resource.R.raw.lottie_villainess_0
-import com.into.websoso.resource.R.raw.lottie_villainess_1
+import com.into.websoso.core.resource.R.raw.lottie_regressor_0
+import com.into.websoso.core.resource.R.raw.lottie_regressor_1
+import com.into.websoso.core.resource.R.raw.lottie_sosocat_0
+import com.into.websoso.core.resource.R.raw.lottie_sosocat_1
+import com.into.websoso.core.resource.R.raw.lottie_villainess_0
+import com.into.websoso.core.resource.R.raw.lottie_villainess_1
 
 enum class Avatar(val avatarId: Int, val firstAnimationId: Int, val secondAnimationId: Int) {
     SOSOCAT(1, lottie_sosocat_0, lottie_sosocat_1),

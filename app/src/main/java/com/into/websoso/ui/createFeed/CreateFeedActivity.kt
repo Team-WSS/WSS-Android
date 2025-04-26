@@ -22,9 +22,9 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getAdaptedParcelableExtra
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.tv_create_feed_characters_count
+import com.into.websoso.core.resource.R.string.wset_create_feed_search_novel
 import com.into.websoso.databinding.ActivityCreateFeedBinding
-import com.into.websoso.resource.R.string.tv_create_feed_characters_count
-import com.into.websoso.resource.R.string.wset_create_feed_search_novel
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint

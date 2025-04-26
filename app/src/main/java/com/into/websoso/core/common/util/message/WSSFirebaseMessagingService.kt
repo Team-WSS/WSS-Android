@@ -8,8 +8,8 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.into.websoso.core.resource.R.mipmap.ic_wss_logo
 import com.into.websoso.data.repository.PushMessageRepository
-import com.into.websoso.resource.R.mipmap.ic_wss_logo
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint

@@ -14,13 +14,13 @@ import com.into.websoso.R.drawable.bg_profile_edit_gray_70_radius_12dp
 import com.into.websoso.R.layout.dialog_terms_agreement
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.core.resource.R.drawable.ic_terms_agreement_selected
+import com.into.websoso.core.resource.R.drawable.ic_terms_agreement_unselected
+import com.into.websoso.core.resource.R.string.string_terms_agreement_complete
+import com.into.websoso.core.resource.R.string.string_terms_agreement_next
+import com.into.websoso.core.resource.R.string.terms_agreement_privacy
+import com.into.websoso.core.resource.R.string.terms_agreement_service
 import com.into.websoso.databinding.DialogTermsAgreementBinding
-import com.into.websoso.resource.R.drawable.ic_terms_agreement_selected
-import com.into.websoso.resource.R.drawable.ic_terms_agreement_unselected
-import com.into.websoso.resource.R.string.string_terms_agreement_complete
-import com.into.websoso.resource.R.string.string_terms_agreement_next
-import com.into.websoso.resource.R.string.terms_agreement_privacy
-import com.into.websoso.resource.R.string.terms_agreement_service
 import com.into.websoso.ui.termsAgreement.model.AgreementType
 import dagger.hilt.android.AndroidEntryPoint
 

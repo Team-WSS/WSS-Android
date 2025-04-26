@@ -7,8 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import coil.load
+import com.into.websoso.core.resource.R.drawable.ic_load_load
 import com.into.websoso.databinding.LayoutLoadingBinding
-import com.into.websoso.resource.R.drawable.ic_load_load
 
 class WebsosoLoadingLayout @JvmOverloads constructor(
     context: Context,

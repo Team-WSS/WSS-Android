@@ -7,4 +7,5 @@ plugins {
 
 websosoDependencies {
     implementation(project(":core:resource"))
+    implementation(project(":core:designsystem"))
 }
