@@ -24,11 +24,11 @@ import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
+import com.into.websoso.core.resource.R.string.other_user_page_activity
+import com.into.websoso.core.resource.R.string.other_user_page_library
 import com.into.websoso.databinding.ActivityOtherUserPageBinding
 import com.into.websoso.databinding.MenuOtherUserPagePopupBinding
-import com.into.websoso.resource.R.drawable.img_loading_thumbnail
-import com.into.websoso.resource.R.string.other_user_page_activity
-import com.into.websoso.resource.R.string.other_user_page_library
 import com.into.websoso.ui.otherUserPage.adapter.OtherUserPageViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

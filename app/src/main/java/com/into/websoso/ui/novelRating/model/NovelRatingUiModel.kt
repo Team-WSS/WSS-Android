@@ -2,9 +2,9 @@ package com.into.websoso.ui.novelRating.model
 
 import com.into.websoso.core.common.ui.model.CategoriesModel
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
-import com.into.websoso.resource.R.string.novel_rating_add_date
-import com.into.websoso.resource.R.string.novel_rating_display_date
-import com.into.websoso.resource.R.string.novel_rating_display_date_with_tilde
+import com.into.websoso.core.resource.R.string.novel_rating_add_date
+import com.into.websoso.core.resource.R.string.novel_rating_display_date
+import com.into.websoso.core.resource.R.string.novel_rating_display_date_with_tilde
 import com.into.websoso.ui.novelRating.model.ReadStatus.WATCHING
 import java.util.Locale
 

@@ -16,10 +16,10 @@ import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
+import com.into.websoso.core.resource.R.string.my_page_activity
+import com.into.websoso.core.resource.R.string.my_page_library
 import com.into.websoso.databinding.FragmentMyPageBinding
-import com.into.websoso.resource.R.drawable.img_loading_thumbnail
-import com.into.websoso.resource.R.string.my_page_activity
-import com.into.websoso.resource.R.string.my_page_library
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
 import com.into.websoso.ui.profileEdit.ProfileEditActivity

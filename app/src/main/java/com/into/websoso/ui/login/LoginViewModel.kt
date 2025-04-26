@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.core.resource.R.drawable.img_login_1
+import com.into.websoso.core.resource.R.drawable.img_login_2
+import com.into.websoso.core.resource.R.drawable.img_login_3
+import com.into.websoso.core.resource.R.drawable.img_login_4
 import com.into.websoso.data.repository.AuthRepository
-import com.into.websoso.resource.R.drawable.img_login_1
-import com.into.websoso.resource.R.drawable.img_login_2
-import com.into.websoso.resource.R.drawable.img_login_3
-import com.into.websoso.resource.R.drawable.img_login_4
 import com.into.websoso.ui.login.model.LoginUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

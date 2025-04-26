@@ -24,12 +24,12 @@ import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_keword_remove
+import com.into.websoso.core.resource.R.string.inquire_link
+import com.into.websoso.core.resource.R.string.novel_rating_keyword_exceed
+import com.into.websoso.core.resource.R.string.novel_rating_keyword_search_hint
 import com.into.websoso.databinding.DialogNovelRatingKeywordBinding
-import com.into.websoso.resource.R.drawable.ic_novel_rating_alert
-import com.into.websoso.resource.R.drawable.ic_novel_rating_keword_remove
-import com.into.websoso.resource.R.string.inquire_link
-import com.into.websoso.resource.R.string.novel_rating_keyword_exceed
-import com.into.websoso.resource.R.string.novel_rating_keyword_search_hint
 import com.into.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.into.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 

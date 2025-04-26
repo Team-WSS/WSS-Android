@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.into.websoso.R.layout.activity_welcome
 import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.resource.R.string.welcome_hello_user
 import com.into.websoso.databinding.ActivityWelcomeBinding
-import com.into.websoso.resource.R.string.welcome_hello_user
 import com.into.websoso.ui.main.MainActivity
 
 class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(activity_welcome) {

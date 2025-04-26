@@ -7,9 +7,9 @@ import androidx.activity.viewModels
 import com.into.websoso.R.layout.activity_profile_disclosure
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
+import com.into.websoso.core.resource.R.drawable.img_account_info_check_selected
+import com.into.websoso.core.resource.R.drawable.img_account_info_check_unselected
 import com.into.websoso.databinding.ActivityProfileDisclosureBinding
-import com.into.websoso.resource.R.drawable.img_account_info_check_selected
-import com.into.websoso.resource.R.drawable.img_account_info_check_unselected
 import com.into.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 

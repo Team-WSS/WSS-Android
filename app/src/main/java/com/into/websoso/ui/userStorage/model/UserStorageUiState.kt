@@ -1,7 +1,7 @@
 package com.into.websoso.ui.userStorage.model
 
 import android.content.Context
-import com.into.websoso.resource.R.string.storage_novel_count
+import com.into.websoso.core.resource.R.string.storage_novel_count
 import com.into.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
 data class UserStorageUiState(
