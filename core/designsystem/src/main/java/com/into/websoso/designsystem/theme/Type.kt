@@ -11,10 +11,10 @@ import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.into.websoso.resource.R.font.pretendard_bold
-import com.into.websoso.resource.R.font.pretendard_medium
-import com.into.websoso.resource.R.font.pretendard_regular
-import com.into.websoso.resource.R.font.pretendard_semibold
+import com.into.websoso.core.resource.R.font.pretendard_bold
+import com.into.websoso.core.resource.R.font.pretendard_medium
+import com.into.websoso.core.resource.R.font.pretendard_regular
+import com.into.websoso.core.resource.R.font.pretendard_semibold
 
 data class WebsosoTypography(
     val headline1: TextStyle,

@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import com.into.websoso.resource.R.drawable.img_my_library_empty_cat
+import com.into.websoso.core.resource.R.drawable.img_my_library_empty_cat
 
 @Composable
 fun NetworkImage(
