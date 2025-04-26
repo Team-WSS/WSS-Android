@@ -17,9 +17,9 @@ import com.google.firebase.analytics.logEvent
 import com.into.websoso.R.layout.activity_login
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.data.remote.api.OAuthService
 import com.into.websoso.databinding.ActivityLoginBinding
-import com.into.websoso.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.ui.login.adapter.ImageViewPagerAdapter
 import com.into.websoso.ui.login.model.LoginUiState
 import com.into.websoso.ui.main.MainActivity

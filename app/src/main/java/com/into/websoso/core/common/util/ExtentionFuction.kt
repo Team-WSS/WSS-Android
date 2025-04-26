@@ -31,7 +31,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.into.websoso.BuildConfig
 import com.into.websoso.core.common.ui.custom.WebsosoCustomSnackBar
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
-import com.into.websoso.designsystem.theme.White
+import com.into.websoso.core.designsystem.theme.White
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.Serializable

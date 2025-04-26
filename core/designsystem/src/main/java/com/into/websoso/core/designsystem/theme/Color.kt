@@ -1,4 +1,4 @@
-package com.into.websoso.designsystem.theme
+package com.into.websoso.core.designsystem.theme
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush

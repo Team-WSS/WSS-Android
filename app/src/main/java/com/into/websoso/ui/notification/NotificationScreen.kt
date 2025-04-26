@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.into.websoso.designsystem.theme.White
+import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.ui.notification.component.NotificationAppBar
 import com.into.websoso.ui.notification.component.NotificationsContainer
 import com.into.websoso.ui.notification.model.NotificationModel

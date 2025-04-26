@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.data.model.NotificationDetailEntity
-import com.into.websoso.designsystem.theme.WebsosoTheme
-import com.into.websoso.designsystem.theme.White
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.ui.notification.component.NotificationAppBar
 import com.into.websoso.ui.notificationDetail.component.NotificationDetailContent
 import com.into.websoso.ui.notificationDetail.model.NotificationDetailUiState

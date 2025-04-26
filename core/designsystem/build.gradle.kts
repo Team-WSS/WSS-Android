@@ -1,3 +1,5 @@
+import com.into.websoso.setNamespace
+
 plugins {
     alias(libs.plugins.android.library)
     id("websoso.android.compose")
@@ -5,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.into.websoso.designsystem"
+    setNamespace("core.designsystem")
 }
 
 dependencies {

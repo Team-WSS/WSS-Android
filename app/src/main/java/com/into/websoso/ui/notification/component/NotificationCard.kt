@@ -16,11 +16,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.ui.component.AdaptationImage
-import com.into.websoso.designsystem.theme.Black
-import com.into.websoso.designsystem.theme.Gray200
-import com.into.websoso.designsystem.theme.Primary20
-import com.into.websoso.designsystem.theme.WebsosoTheme
-import com.into.websoso.designsystem.theme.White
+import com.into.websoso.core.designsystem.theme.Black
+import com.into.websoso.core.designsystem.theme.Gray200
+import com.into.websoso.core.designsystem.theme.Primary20
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.model.NotificationType
 import com.into.websoso.ui.notification.model.NotificationModel
 

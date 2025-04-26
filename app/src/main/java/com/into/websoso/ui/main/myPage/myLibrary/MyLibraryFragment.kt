@@ -23,10 +23,10 @@ import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
+import com.into.websoso.core.resource.R.string.my_library_attractive_point_fixed_text
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyLibraryBinding
-import com.into.websoso.resource.R.string.my_library_attractive_point_fixed_text
 import com.into.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import com.into.websoso.ui.userStorage.UserStorageActivity
 import com.into.websoso.ui.userStorage.model.StorageTab

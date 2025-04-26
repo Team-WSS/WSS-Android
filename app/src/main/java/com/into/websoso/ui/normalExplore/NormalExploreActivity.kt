@@ -15,8 +15,8 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
-import com.into.websoso.resource.R.string.inquire_link
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading

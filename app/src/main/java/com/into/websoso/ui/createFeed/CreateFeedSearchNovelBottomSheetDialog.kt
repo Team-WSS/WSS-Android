@@ -12,8 +12,8 @@ import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.inquire_link
 import com.into.websoso.databinding.DialogCreateFeedSearchNovelBinding
-import com.into.websoso.resource.R.string.inquire_link
 import com.into.websoso.ui.createFeed.adapter.SearchNovelAdapter
 import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Loading
 import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Novels

@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.core.common.util.setupWhiteStatusBar
-import com.into.websoso.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.notification.model.NotificationModel
 import com.into.websoso.ui.notificationDetail.NotificationDetailActivity

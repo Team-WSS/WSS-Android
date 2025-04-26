@@ -21,9 +21,9 @@ import com.into.websoso.R.id.menu_my_page
 import com.into.websoso.R.layout.activity_main
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.string.main_back_press
 import com.into.websoso.databinding.ActivityMainBinding
-import com.into.websoso.resource.R.drawable.ic_blocked_user_snack_bar
-import com.into.websoso.resource.R.string.main_back_press
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED

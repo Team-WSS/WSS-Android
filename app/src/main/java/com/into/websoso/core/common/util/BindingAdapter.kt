@@ -7,7 +7,7 @@ import coil.decode.SvgDecoder
 import coil.load
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
-import com.into.websoso.resource.R.drawable.img_loading_thumbnail
+import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
 import jp.wasabeef.transformers.coil.BlurTransformation
 
 object BindingAdapter {

@@ -5,11 +5,11 @@ import android.view.View
 import com.into.websoso.R.layout.dialog_remove_popup_menu
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.resource.R.string.remove_popup_menu_description
+import com.into.websoso.core.resource.R.string.remove_popup_menu_description_comment
+import com.into.websoso.core.resource.R.string.remove_popup_menu_title
+import com.into.websoso.core.resource.R.string.remove_popup_menu_title_comment
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
-import com.into.websoso.resource.R.string.remove_popup_menu_description
-import com.into.websoso.resource.R.string.remove_popup_menu_description_comment
-import com.into.websoso.resource.R.string.remove_popup_menu_title
-import com.into.websoso.resource.R.string.remove_popup_menu_title_comment
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_COMMENT
 import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED

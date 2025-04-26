@@ -8,10 +8,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R.layout.dialog_novel_rating_date
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.resource.R.string.novel_rating_date_remove_alert_accept
+import com.into.websoso.core.resource.R.string.novel_rating_date_remove_alert_cancel
+import com.into.websoso.core.resource.R.string.novel_rating_date_remove_alert_title
 import com.into.websoso.databinding.DialogNovelRatingDateBinding
-import com.into.websoso.resource.R.string.novel_rating_date_remove_alert_accept
-import com.into.websoso.resource.R.string.novel_rating_date_remove_alert_cancel
-import com.into.websoso.resource.R.string.novel_rating_date_remove_alert_title
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelRating.model.RatingDateModel

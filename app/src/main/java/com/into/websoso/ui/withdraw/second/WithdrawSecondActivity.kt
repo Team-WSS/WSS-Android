@@ -8,14 +8,14 @@ import androidx.activity.viewModels
 import com.into.websoso.R.layout.activity_withdraw_second
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.resource.R.drawable.img_account_info_check_selected
+import com.into.websoso.core.resource.R.drawable.img_account_info_check_unselected
+import com.into.websoso.core.resource.R.string.withdraw_reason_etc
+import com.into.websoso.core.resource.R.string.withdraw_reason_inconvenient
+import com.into.websoso.core.resource.R.string.withdraw_reason_not_exist_any_wanted_novel
+import com.into.websoso.core.resource.R.string.withdraw_reason_rarely_using
+import com.into.websoso.core.resource.R.string.withdraw_reason_want_to_delete_content
 import com.into.websoso.databinding.ActivityWithdrawSecondBinding
-import com.into.websoso.resource.R.drawable.img_account_info_check_selected
-import com.into.websoso.resource.R.drawable.img_account_info_check_unselected
-import com.into.websoso.resource.R.string.withdraw_reason_etc
-import com.into.websoso.resource.R.string.withdraw_reason_inconvenient
-import com.into.websoso.resource.R.string.withdraw_reason_not_exist_any_wanted_novel
-import com.into.websoso.resource.R.string.withdraw_reason_rarely_using
-import com.into.websoso.resource.R.string.withdraw_reason_want_to_delete_content
 import com.into.websoso.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
