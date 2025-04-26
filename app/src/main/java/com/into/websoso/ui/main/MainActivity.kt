@@ -15,6 +15,7 @@ import com.into.websoso.R.id.fcv_main
 import com.into.websoso.R.id.menu_explore
 import com.into.websoso.R.id.menu_feed
 import com.into.websoso.R.id.menu_home
+import com.into.websoso.R.id.menu_library
 import com.into.websoso.R.id.menu_my_page
 import com.into.websoso.R.layout.activity_main
 import com.into.websoso.core.common.ui.base.BaseActivity
@@ -26,8 +27,8 @@ import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.into.websoso.ui.main.MainActivity.FragmentType.HOME
-import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.into.websoso.ui.main.MainActivity.FragmentType.LIBRARY
+import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.into.websoso.ui.main.explore.ExploreFragment
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
@@ -121,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     enum class FragmentType(
         @IntegerRes private val resId: Int,
     ) {
-        LIBRARY(R.id.menu_library),
+        LIBRARY(menu_library),
         HOME(menu_home),
         EXPLORE(menu_explore),
         FEED(menu_feed),
@@ -168,7 +169,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
             }
 
             LIBRARY -> {
-                binding.bnvMain.selectedItemId = R.id.menu_library
+                binding.bnvMain.selectedItemId = menu_library
                 replaceFragment<LibraryFragment>()
             }
 

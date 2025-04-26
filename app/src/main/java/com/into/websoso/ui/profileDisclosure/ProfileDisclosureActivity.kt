@@ -6,19 +6,16 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.into.websoso.R.layout.activity_profile_disclosure
-import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
 import com.into.websoso.core.common.util.SingleEventHandler
-
-import com.into.websoso.core.resource.R.drawable.img_account_info_check_selected
-import com.into.websoso.core.resource.R.drawable.img_account_info_check_unselected
 import com.into.websoso.databinding.ActivityProfileDisclosureBinding
 import com.into.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileDisclosureActivity : BaseActivity<ActivityProfileDisclosureBinding>(activity_profile_disclosure) {
+class ProfileDisclosureActivity :
+    BaseActivity<ActivityProfileDisclosureBinding>(activity_profile_disclosure) {
     private val profileDisclosureViewModel: ProfileDisclosureViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -60,6 +57,7 @@ class ProfileDisclosureActivity : BaseActivity<ActivityProfileDisclosureBinding>
     companion object {
         const val IS_PROFILE_PUBLIC = "isProfilePublic"
 
-        fun getIntent(context: Context): Intent = Intent(context, ProfileDisclosureActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, ProfileDisclosureActivity::class.java)
     }
 }
