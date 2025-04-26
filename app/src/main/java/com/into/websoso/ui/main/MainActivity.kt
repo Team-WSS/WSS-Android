@@ -2,8 +2,6 @@ package com.into.websoso.ui.main
 
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -29,9 +27,11 @@ import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.into.websoso.ui.main.MainActivity.FragmentType.HOME
 import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
+import com.into.websoso.ui.main.MainActivity.FragmentType.LIBRARY
 import com.into.websoso.ui.main.explore.ExploreFragment
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
+import com.into.websoso.ui.main.library.LibraryFragment
 import com.into.websoso.ui.main.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -105,6 +105,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
             HOME -> replaceFragment<HomeFragment>()
             EXPLORE -> replaceFragment<ExploreFragment>()
             FEED -> replaceFragment<FeedFragment>()
+            LIBRARY -> replaceFragment<LibraryFragment>()
             MY_PAGE -> replaceFragment<MyPageFragment>()
         }
         return true
@@ -120,6 +121,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     enum class FragmentType(
         @IntegerRes private val resId: Int,
     ) {
+        LIBRARY(R.id.menu_library),
         HOME(menu_home),
         EXPLORE(menu_explore),
         FEED(menu_feed),
@@ -128,9 +130,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
         companion object {
             fun valueOf(id: Int): FragmentType =
-                entries.find { fragmentView ->
-                    fragmentView.resId == id
-                } ?: throw IllegalArgumentException()
+                entries.find { fragmentType -> fragmentType.resId == id }
+                    ?: throw IllegalArgumentException()
         }
     }
 
@@ -144,6 +145,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
             EXPLORE -> selectFragment(EXPLORE)
             MY_PAGE -> selectFragment(MY_PAGE)
             FEED -> selectFragment(FEED)
+            LIBRARY -> selectFragment(LIBRARY)
             HOME, null -> selectFragment(HOME)
         }
     }
@@ -165,6 +167,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
                 replaceFragment<FeedFragment>()
             }
 
+            LIBRARY -> {
+                binding.bnvMain.selectedItemId = R.id.menu_library
+                replaceFragment<LibraryFragment>()
+            }
+
             MY_PAGE -> {
                 binding.bnvMain.selectedItemId = menu_my_page
                 replaceFragment<MyPageFragment>()
@@ -176,11 +183,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         private const val DESTINATION_KEY = "destination"
         const val IS_LOGIN_KEY = "isLogin"
 
-        fun getIntent(context: Context): Intent {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
-            return intent
-        }
+        fun getIntent(context: Context): Intent =
+            Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
 
         fun getIntent(
             context: Context,
@@ -196,7 +202,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         ): Intent =
             Intent(context, MainActivity::class.java).apply {
                 putExtra(IS_LOGIN_KEY, isLogin)
-                flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
     }
 }

@@ -5,86 +5,46 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.repository.UserRepository
-import com.into.websoso.ui.profileDisclosure.model.ProfileDisclosureUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileDisclosureViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<ProfileDisclosureUiState> =
-        MutableLiveData(ProfileDisclosureUiState())
-    val uiState: LiveData<ProfileDisclosureUiState> get() = _uiState
+class ProfileDisclosureViewModel
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+    ) : ViewModel() {
+        private var isInitializeOfProfilePrivate: Boolean = false
 
-    private val _isProfilePublic: MutableLiveData<Boolean> = MutableLiveData()
-    val isProfilePublic: LiveData<Boolean> get() = _isProfilePublic
+        private var _isChangedStatus: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isChangedStatus: LiveData<Boolean> get() = _isChangedStatus
 
-    private val _isCompleteButtonEnabled: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isCompleteButtonEnabled: LiveData<Boolean> get() = _isCompleteButtonEnabled
+        val isProfilePrivate: MutableLiveData<Boolean> = MutableLiveData()
 
-    private var isInitializeOfProfilePublic: Boolean = false
+        init {
+            updateInitialProfileStatus()
+        }
 
-    private val _isSaveStatusComplete: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isSaveStatusComplete: LiveData<Boolean> get() = _isSaveStatusComplete
+        private fun updateInitialProfileStatus() {
+            viewModelScope.launch {
+                runCatching {
+                    userRepository.fetchUserProfileStatus()
+                }.onSuccess { isPublic ->
+                    isProfilePrivate.value = !isPublic
+                    isInitializeOfProfilePrivate = !isPublic
+                }
+            }
+        }
 
-    init {
-        updateProfileDisclosureStatus()
-    }
-
-    private fun updateProfileDisclosureStatus() {
-        viewModelScope.launch {
-            runCatching {
-                userRepository.fetchUserProfileStatus()
-            }.onSuccess { userProfileStatusEntity ->
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                )
-                _isProfilePublic.value = userProfileStatusEntity.isProfilePublic
-                isInitializeOfProfilePublic = userProfileStatusEntity.isProfilePublic
-                updateIsCompleteButtonEnabled()
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
-                )
+        fun updateProfileStatus(isPrivate: Boolean) {
+            viewModelScope.launch {
+                runCatching {
+                    userRepository.saveUserProfileStatus(isPrivate.not())
+                }.onSuccess {
+                    _isChangedStatus.value = isInitializeOfProfilePrivate == !isPrivate
+                    isProfilePrivate.value = isPrivate
+                }
             }
         }
     }
-
-    private fun updateIsCompleteButtonEnabled() {
-        when (isInitializeOfProfilePublic == isProfilePublic.value) {
-            true -> _isCompleteButtonEnabled.value = false
-            false -> _isCompleteButtonEnabled.value = true
-        }
-    }
-
-    fun updateProfileStatus() {
-        _isProfilePublic.value = _isProfilePublic.value?.not()
-        updateIsCompleteButtonEnabled()
-    }
-
-    fun saveProfileDisclosureStatus() {
-        _uiState.value = uiState.value?.copy(
-            loading = true,
-        )
-        viewModelScope.launch {
-            runCatching {
-                val isProfilePublicValue =
-                    isProfilePublic.value ?: isInitializeOfProfilePublic.not()
-                userRepository.saveUserProfileStatus(isProfilePublicValue)
-            }.onSuccess {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                )
-                _isSaveStatusComplete.value = true
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
-                )
-            }
-        }
-    }
-}

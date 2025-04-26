@@ -14,25 +14,29 @@ import com.into.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemTy
 
 class DetailExploreResultAdapter(
     private val onNovelClick: (novelId: Long) -> (Unit),
+    private val onInquireClick: () -> Unit,
 ) : ListAdapter<DetailExploreResultItemType, RecyclerView.ViewHolder>(diffCallBack) {
-
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
             is Header -> HEADER.ordinal
             is Novels -> NOVELS.ordinal
             is Loading -> LOADING.ordinal
         }
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (ItemType.valueOf(viewType)) {
-            HEADER -> DetailExploreResultHeaderViewHolder.from(parent)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): RecyclerView.ViewHolder =
+        when (ItemType.valueOf(viewType)) {
+            HEADER -> DetailExploreResultHeaderViewHolder.from(parent, onInquireClick)
             NOVELS -> DetailExploreResultViewHolder.of(parent, onNovelClick)
             LOADING -> DetailExploreLoadingViewHolder.from(parent)
         }
-    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+    ) {
         when (holder) {
             is DetailExploreResultHeaderViewHolder -> holder.bind((getItem(position) as Header).novelCount)
             is DetailExploreResultViewHolder -> holder.bind((getItem(position) as Novels).novel)
@@ -42,24 +46,20 @@ class DetailExploreResultAdapter(
 
     companion object {
         private val diffCallBack = object : DiffUtil.ItemCallback<DetailExploreResultItemType>() {
-
             override fun areItemsTheSame(
                 oldItem: DetailExploreResultItemType,
                 newItem: DetailExploreResultItemType,
-            ): Boolean {
-                return when {
+            ): Boolean =
+                when {
                     oldItem is Novels && newItem is Novels -> oldItem.novel.id == newItem.novel.id
                     oldItem is Header && newItem is Header -> oldItem.novelCount == newItem.novelCount
                     else -> false
                 }
-            }
 
             override fun areContentsTheSame(
                 oldItem: DetailExploreResultItemType,
                 newItem: DetailExploreResultItemType,
-            ): Boolean {
-                return oldItem == newItem
-            }
+            ): Boolean = oldItem == newItem
         }
     }
 }

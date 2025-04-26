@@ -451,7 +451,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                         CreateFeed, FeedDetailRefreshed ->
                             RemovedFeedDialogFragment
                                 .newInstance {
-                                    setResult(CreateFeed.RESULT_OK)
+                                    val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
+                                    setResult(FeedDetailRefreshed.RESULT_OK, extraIntent)
                                     if (!isFinishing) finish()
                                 }.show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
 

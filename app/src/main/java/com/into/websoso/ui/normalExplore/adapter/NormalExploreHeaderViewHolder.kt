@@ -6,8 +6,15 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.databinding.ItemNormalExploreHeaderBinding
 
-class NormalExploreHeaderViewHolder(private val binding: ItemNormalExploreHeaderBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class NormalExploreHeaderViewHolder(
+    private val binding: ItemNormalExploreHeaderBinding,
+    onInquireClick: () -> Unit,
+) : RecyclerView.ViewHolder(binding.root) {
+    init {
+        binding.clNormalExploreInquireButton.setOnClickListener {
+            onInquireClick.invoke()
+        }
+    }
 
     fun bind(novelCount: Long) {
         binding.apply {
@@ -19,13 +26,17 @@ class NormalExploreHeaderViewHolder(private val binding: ItemNormalExploreHeader
     companion object {
         private const val NOVEL_COUNT_INVISIBLE_THRESHOLD = 0
 
-        fun from(parent: ViewGroup): NormalExploreHeaderViewHolder =
+        fun from(
+            parent: ViewGroup,
+            onInquireClickListener: () -> Unit,
+        ): NormalExploreHeaderViewHolder =
             NormalExploreHeaderViewHolder(
                 ItemNormalExploreHeaderBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false,
-                )
+                ),
+                onInquireClickListener,
             )
     }
 }

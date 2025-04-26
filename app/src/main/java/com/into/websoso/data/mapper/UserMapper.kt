@@ -12,7 +12,6 @@ import com.into.websoso.data.model.UserFeedsEntity.UserFeedEntity
 import com.into.websoso.data.model.UserInfoDetailEntity
 import com.into.websoso.data.model.UserInfoEntity
 import com.into.websoso.data.model.UserNovelStatsEntity
-import com.into.websoso.data.model.UserProfileStatusEntity
 import com.into.websoso.data.model.UserStorageEntity
 import com.into.websoso.data.model.UserStorageEntity.StorageNovelEntity
 import com.into.websoso.data.remote.response.BlockedUsersResponseDto
@@ -26,7 +25,6 @@ import com.into.websoso.data.remote.response.UserFeedsResponseDto.UserFeedRespon
 import com.into.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.into.websoso.data.remote.response.UserInfoResponseDto
 import com.into.websoso.data.remote.response.UserNovelStatsResponseDto
-import com.into.websoso.data.remote.response.UserProfileStatusResponseDto
 import com.into.websoso.data.remote.response.UserStorageResponseDto
 import com.into.websoso.data.remote.response.UserStorageResponseDto.StorageNovelDto
 import com.into.websoso.ui.main.myPage.myActivity.model.Genres
@@ -63,11 +61,6 @@ fun UserNovelStatsResponseDto.toData(): UserNovelStatsEntity =
         watchingNovelCount = watchingNovelCount,
         watchedNovelCount = watchedNovelCount,
         quitNovelCount = quitNovelCount,
-    )
-
-fun UserProfileStatusResponseDto.toData(): UserProfileStatusEntity =
-    UserProfileStatusEntity(
-        isProfilePublic = isProfilePublic,
     )
 
 fun MyProfileResponseDto.toData(): MyProfileEntity =

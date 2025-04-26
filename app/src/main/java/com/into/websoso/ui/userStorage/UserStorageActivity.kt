@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayout
@@ -13,8 +14,7 @@ import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.databinding.ActivityStorageBinding
-import com.into.websoso.ui.main.MainActivity
-import com.into.websoso.ui.main.myPage.myLibrary.MyLibraryFragment.Companion.EXTRA_SOURCE
+import com.into.websoso.ui.main.library.LibraryFragment.Companion.EMPTY_NOVEL_COUNT
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.userStorage.adapter.UserStorageViewPagerAdapter
 import com.into.websoso.ui.userStorage.model.StorageTab
@@ -44,18 +44,16 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         setupUserId()
         bindViewModel()
         setupViewPagerAndTabLayout()
+        setupObserver()
         setupInitialReadStatusTab()
         onBackButtonClick()
         onSortTypeButtonClick()
-        onExploreButton()
     }
 
     private fun setupUserId() {
-        val source = intent.getStringExtra(EXTRA_SOURCE) ?: SOURCE_MY_LIBRARY
-        val userId = intent.getLongExtra(USER_ID_KEY, UserStorageViewModel.DEFAULT_USER_ID)
+        val userId = intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID)
         val readStatus = intent.getStringExtra(READ_STATUS) ?: StorageTab.INTEREST.readStatus
-
-        userStorageViewModel.updateUserStorage(source, userId, readStatus)
+        userStorageViewModel.updateUserStorage(userId, readStatus)
     }
 
     private fun bindViewModel() {
@@ -67,7 +65,6 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
     private fun setupViewPagerAndTabLayout() {
         setupViewPager()
         setupTabLayoutWithViewPager()
-        setupObserver()
     }
 
     private fun setupViewPager() {
@@ -121,25 +118,10 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
             }
 
             binding.clStorageNull.visibility =
-                if (uiState.userNovelCount == 0L) View.VISIBLE else View.GONE
+                if (uiState.userNovelCount == EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
+
             binding.vpStorage.visibility =
-                if (uiState.userNovelCount > 0L) View.VISIBLE else View.GONE
-
-            binding.btnStorageGoToSearchNovel.visibility =
-                if (uiState.userNovelCount == 0L && intent.getStringExtra(EXTRA_SOURCE) == SOURCE_MY_LIBRARY) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
-        }
-
-        userStorageViewModel.isRatingChanged.observe(this) { isChanged ->
-            if (isChanged) {
-                val currentReadStatus =
-                    userStorageViewModel.uiState.value?.readStatus ?: StorageTab.INTEREST.readStatus
-                userStorageViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
-                userStorageViewModel.updateRatingChanged()
-            }
+                if (uiState.userNovelCount > EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
         }
     }
 
@@ -149,16 +131,6 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
         }
     }
 
-    private fun onExploreButton() {
-        binding.btnStorageGoToSearchNovel.setOnClickListener {
-            navigateToExploreFragment()
-        }
-    }
-
-    private fun navigateToExploreFragment() {
-        startActivity(MainActivity.getIntent(this, MainActivity.FragmentType.EXPLORE))
-    }
-
     private fun navigateToNovelDetail(novelId: Long) {
         val intent = NovelDetailActivity.getIntent(this, novelId)
         novelDetailResultLauncher.launch(intent)
@@ -166,6 +138,11 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     private fun onBackButtonClick() {
         binding.ivStorageDetailBackButton.setOnClickListener {
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
             setResult(Activity.RESULT_OK)
             finish()
         }
@@ -183,20 +160,14 @@ class UserStorageActivity : BaseActivity<ActivityStorageBinding>(R.layout.activi
 
     companion object {
         const val USER_ID_KEY = "userId"
-        const val SOURCE_MY_LIBRARY = "myLibrary"
-        const val SOURCE_OTHER_USER_LIBRARY = "otherUserLibrary"
         const val READ_STATUS = "read_status"
+        const val DEFAULT_USER_ID = 0L
 
         fun getIntent(
             context: Context,
-            source: String,
             userId: Long,
             readStatus: String = StorageTab.INTEREST.readStatus,
-        ) = Intent(
-            context,
-            UserStorageActivity::class.java,
-        ).apply {
-            putExtra(EXTRA_SOURCE, source)
+        ) = Intent(context, UserStorageActivity::class.java).apply {
             putExtra(USER_ID_KEY, userId)
             putExtra(READ_STATUS, readStatus)
         }
