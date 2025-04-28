@@ -18,20 +18,16 @@ import com.into.websoso.core.resource.R.font.pretendard_semibold
 
 data class WebsosoTypography(
     val headline1: TextStyle,
-
     val title1: TextStyle,
     val title2: TextStyle,
     val title3: TextStyle,
-
     val body1: TextStyle,
     val body2: TextStyle,
     val body3: TextStyle,
     val body4: TextStyle,
     val body5: TextStyle,
-
     val body4Secondary: TextStyle,
     val body5Secondary: TextStyle,
-
     val label1: TextStyle,
     val label2: TextStyle,
 )
@@ -49,20 +45,16 @@ internal fun WebsosoTypography(density: Density): WebsosoTypography {
 
     return WebsosoTypography(
         headline1 = textStyle(PretendardBold, Bold, 20.dp, 28.dp),
-
         title1 = textStyle(PretendardBold, Bold, 18.dp, 25.dp),
         title2 = textStyle(PretendardSemiBold, SemiBold, 16.dp, 22.dp),
         title3 = textStyle(PretendardMedium, Medium, 14.dp, 14.dp),
-
         body1 = textStyle(PretendardRegular, Normal, 17.dp, 24.dp),
         body2 = textStyle(PretendardRegular, Normal, 15.dp, 23.dp),
         body3 = textStyle(PretendardRegular, Normal, 14.dp, 21.dp),
         body4 = textStyle(PretendardMedium, Medium, 13.dp, 19.dp),
         body5 = textStyle(PretendardRegular, Normal, 12.dp, 17.dp),
-
         body4Secondary = textStyle(PretendardRegular, Normal, 13.dp, 19.dp),
         body5Secondary = textStyle(PretendardMedium, Medium, 12.dp, 17.dp),
-
         label1 = textStyle(PretendardMedium, Medium, 13.dp, 19.dp),
         label2 = textStyle(PretendardRegular, Normal, 10.dp, 10.dp),
     )

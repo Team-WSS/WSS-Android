@@ -59,7 +59,7 @@ class DetailExploreResultViewModel
         private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
         val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-        private val _isBottomSheetOpen = MutableLiveData(false)
+        private val isBottomSheetOpen = MutableLiveData(false)
 
         init {
             _appliedFiltersMessage.apply {
@@ -80,7 +80,7 @@ class DetailExploreResultViewModel
         }
 
         private fun updateMessage() {
-            if (_isBottomSheetOpen.value == true) return
+            if (isBottomSheetOpen.value == true) return
 
             val appliedFilters = mutableListOf<String>()
 
@@ -332,7 +332,7 @@ class DetailExploreResultViewModel
         }
 
         fun updateIsBottomSheetOpen(isBottomSheetOpen: Boolean) {
-            _isBottomSheetOpen.value = isBottomSheetOpen
+            this.isBottomSheetOpen.value = isBottomSheetOpen
 
             if (!isBottomSheetOpen) updateMessage()
         }

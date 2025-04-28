@@ -28,8 +28,7 @@ fun PlatformCard(
                 shape = RoundedCornerShape(12.dp),
                 width = 1.dp,
                 color = Color.Transparent,
-            )
-            .clickableWithoutRipple { onClick() },
+            ).clickableWithoutRipple { onClick() },
     )
 }
 

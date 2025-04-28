@@ -26,7 +26,7 @@ class ActivityDetailViewModel
         private val _uiState = MutableLiveData<ActivityDetailUiState>()
         val uiState: LiveData<ActivityDetailUiState> get() = _uiState
 
-        private val _likeState = MutableLiveData<ActivityLikeState>()
+        private val likeState = MutableLiveData<ActivityLikeState>()
 
         private val size: Int = ACTIVITY_LOAD_SIZE
 
@@ -129,7 +129,7 @@ class ActivityDetailViewModel
                     }
                 }.onSuccess {
                     val newLikeCount = if (isLiked) currentLikeCount - 1 else currentLikeCount + 1
-                    _likeState.value = ActivityLikeState(feedId, !isLiked, newLikeCount)
+                    likeState.value = ActivityLikeState(feedId, !isLiked, newLikeCount)
                     updateLikeStateInUi(feedId, !isLiked, newLikeCount)
                 }.onFailure {
                 }

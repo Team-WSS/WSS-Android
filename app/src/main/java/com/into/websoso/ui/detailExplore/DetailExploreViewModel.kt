@@ -26,8 +26,8 @@ class DetailExploreViewModel
             MutableLiveData(mutableListOf())
         val selectedGenres: LiveData<List<Genre>> get() = _selectedGenres.map { it.toList() }
 
-        private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
-        val selectedStatus: LiveData<SeriesStatus?> get() = _selectedSeriesStatus
+        private val _selectedStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
+        val selectedStatus: LiveData<SeriesStatus?> get() = _selectedStatus
 
         private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
         val selectedRating: LiveData<Float?> get() = _selectedRating
@@ -48,7 +48,7 @@ class DetailExploreViewModel
             _isInfoChipSelected.addSource(_selectedGenres) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
-            _isInfoChipSelected.addSource(_selectedSeriesStatus) {
+            _isInfoChipSelected.addSource(_selectedStatus) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
             _isInfoChipSelected.addSource(_selectedRating) {
@@ -60,7 +60,7 @@ class DetailExploreViewModel
 
         private fun isInfoChipSelectedEnabled(): Boolean {
             val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
-            val isStatusChipSelected: Boolean = _selectedSeriesStatus.value != null
+            val isStatusChipSelected: Boolean = _selectedStatus.value != null
             val isRatingChipSelected: Boolean = _selectedRating.value != null
 
             return isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
@@ -68,7 +68,7 @@ class DetailExploreViewModel
 
         fun updateSelectedInfoValueClear() {
             _selectedGenres.value = mutableListOf()
-            _selectedSeriesStatus.value = null
+            _selectedStatus.value = null
             _selectedRating.value = null
         }
 
@@ -89,7 +89,7 @@ class DetailExploreViewModel
         }
 
         fun updateSelectedSeriesStatus(status: SeriesStatus?) {
-            _selectedSeriesStatus.value = status
+            _selectedStatus.value = status
         }
 
         fun updateSelectedRating(rating: Float?) {
