@@ -27,17 +27,17 @@ class OnboardingPage(
         val FIRST = OnboardingPage(
             progressPercent = 33,
             isBackButtonVisible = false,
-            isSkipTextVisible = false
+            isSkipTextVisible = false,
         )
         val SECOND = OnboardingPage(
             progressPercent = 66,
             isBackButtonVisible = true,
-            isSkipTextVisible = false
+            isSkipTextVisible = false,
         )
         val THIRD = OnboardingPage(
             progressPercent = 100,
             isBackButtonVisible = true,
-            isSkipTextVisible = true
+            isSkipTextVisible = true,
         )
 
         val pages = listOf(FIRST, SECOND, THIRD)

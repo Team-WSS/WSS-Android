@@ -1,8 +1,8 @@
 package com.into.websoso.data.di
 
-import com.kakao.sdk.user.UserApiClient
 import com.into.websoso.data.remote.api.KakaoAuthService
 import com.into.websoso.data.remote.api.OAuthService
+import com.kakao.sdk.user.UserApiClient
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -13,7 +13,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object OAuthModule {
-
     @Provides
     fun provideKakaoApiClient(): UserApiClient = UserApiClient.instance
 

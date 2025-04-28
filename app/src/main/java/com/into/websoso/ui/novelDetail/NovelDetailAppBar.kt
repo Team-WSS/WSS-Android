@@ -25,13 +25,15 @@ class NovelDetailAppBar(
     }
 
     private fun setupAppBarTitle() {
-        viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                navigateBackBtn = findViewById(R.id.tv_novel_detail_app_bar_title)
-                viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
+        viewTreeObserver.addOnGlobalLayoutListener(
+            object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    navigateBackBtn = findViewById(R.id.tv_novel_detail_app_bar_title)
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            },
+        )
     }
 
     private fun setupAppBarOnOffListener() {

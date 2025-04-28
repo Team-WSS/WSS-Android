@@ -8,13 +8,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
-import com.into.websoso.R
 import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_text_selector
 import com.into.websoso.R.color.gray_200_AEADB3
 import com.into.websoso.R.layout.activity_create_feed
-import com.into.websoso.R.string.wset_create_feed_search_novel
 import com.into.websoso.R.style.body2
 import com.into.websoso.R.style.body4
 import com.into.websoso.core.common.ui.base.BaseActivity
@@ -24,6 +22,8 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getAdaptedParcelableExtra
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.tv_create_feed_characters_count
+import com.into.websoso.core.resource.R.string.wset_create_feed_search_novel
 import com.into.websoso.databinding.ActivityCreateFeedBinding
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
@@ -148,7 +148,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         }
         createFeedViewModel.content.observe(this) {
             binding.tvCreateFeedCharactersCount.text =
-                getString(R.string.tv_create_feed_characters_count, it.length)
+                getString(tv_create_feed_characters_count, it.length)
         }
     }
 

@@ -19,7 +19,8 @@ class NotificationViewModel
     constructor(
         private val getNotificationListUseCase: GetNotificationListUseCase,
     ) : ViewModel() {
-        private val _notificationUIState: MutableStateFlow<NotificationUIState> = MutableStateFlow(NotificationUIState())
+        private val _notificationUIState: MutableStateFlow<NotificationUIState> =
+            MutableStateFlow(NotificationUIState())
         val notificationUIState: StateFlow<NotificationUIState> get() = _notificationUIState
 
         init {

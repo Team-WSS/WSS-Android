@@ -13,7 +13,9 @@ import androidx.core.view.isVisible
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
-import com.into.websoso.R
+import com.into.websoso.R.color.transparent
+import com.into.websoso.R.color.white
+import com.into.websoso.R.layout.activity_other_user_page
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
@@ -22,6 +24,9 @@ import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
+import com.into.websoso.core.resource.R.string.other_user_page_activity
+import com.into.websoso.core.resource.R.string.other_user_page_library
 import com.into.websoso.databinding.ActivityOtherUserPageBinding
 import com.into.websoso.databinding.MenuOtherUserPagePopupBinding
 import com.into.websoso.ui.otherUserPage.adapter.OtherUserPageViewPagerAdapter
@@ -29,7 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OtherUserPageActivity : BaseActivity<ActivityOtherUserPageBinding>(R.layout.activity_other_user_page) {
+class OtherUserPageActivity : BaseActivity<ActivityOtherUserPageBinding>(activity_other_user_page) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -114,7 +119,7 @@ class OtherUserPageActivity : BaseActivity<ActivityOtherUserPageBinding>(R.layou
         val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(otherUserProfileUrl)
         binding.ivOtherUserPageUserProfile.load(updatedMyProfileImageUrl) {
             crossfade(true)
-            error(R.drawable.img_loading_thumbnail)
+            error(img_loading_thumbnail)
             transformations(CircleCropTransformation())
         }
     }
@@ -123,8 +128,8 @@ class OtherUserPageActivity : BaseActivity<ActivityOtherUserPageBinding>(R.layou
         val userId = intent.getLongExtra(USER_ID, 0L)
 
         val tabTitleItems = listOf(
-            getText(R.string.other_user_page_library),
-            getText(R.string.other_user_page_activity),
+            getText(other_user_page_library),
+            getText(other_user_page_activity),
         )
         binding.vpOtherUserPage.adapter = OtherUserPageViewPagerAdapter(this, userId)
 
@@ -143,7 +148,7 @@ class OtherUserPageActivity : BaseActivity<ActivityOtherUserPageBinding>(R.layou
 
     private fun updateToolbarUi(isCollapsed: Boolean) {
         with(binding) {
-            val color = if (isCollapsed) R.color.white else R.color.transparent
+            val color = if (isCollapsed) white else transparent
             tbOtherUserPage.setBackgroundColor(
                 ContextCompat.getColor(
                     this@OtherUserPageActivity,

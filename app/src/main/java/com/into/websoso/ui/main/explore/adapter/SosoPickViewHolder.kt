@@ -8,7 +8,6 @@ class SosoPickViewHolder(
     private val binding: ItemSosoPickBinding,
     sosoPickItemClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
         binding.sosoPickItemClickListener = sosoPickItemClickListener
     }

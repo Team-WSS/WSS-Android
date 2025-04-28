@@ -12,12 +12,10 @@ enum class Genre(
     MYSTERY("미스터리", "mystery"),
     DRAMA("드라마", "drama"),
     LIGHT_NOVEL("라노벨", "lightNovel"),
-    BOYS_LOVE("BL", "bl");
+    BOYS_LOVE("BL", "bl"),
+    ;
 
     companion object {
-
-        fun from(title: String): Genre {
-            return entries.find { it.titleKr == title } ?: throw IllegalArgumentException()
-        }
+        fun from(title: String): Genre = entries.find { it.titleKr == title } ?: throw IllegalArgumentException()
     }
 }

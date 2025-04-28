@@ -18,10 +18,9 @@ data class CategoriesModel(
     }
 
     companion object {
-
-        fun List<CategoryModel>.findKeywordByName(keywordName: String): KeywordModel? {
-            return this.flatMap { it.keywords }
+        fun List<CategoryModel>.findKeywordByName(keywordName: String): KeywordModel? =
+            this
+                .flatMap { it.keywords }
                 .find { it.keywordName == keywordName }
-        }
     }
 }

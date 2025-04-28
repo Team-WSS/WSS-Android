@@ -1,110 +1,91 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.into.websoso.buildConfigs
+import com.into.websoso.getLocalProperty
+import com.into.websoso.manifestPlaceholders
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("websoso.android.application")
+    id("websoso.android.hilt")
+    id("websoso.android.compose")
+    id("websoso.android.coroutines")
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.parcelize)
-    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
     namespace = "com.into.websoso"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.into.websoso"
-        minSdk = 30
-        targetSdk = 34
         versionCode = libs.versions.versionCode
             .get()
             .toInt()
         versionName = libs.versions.versionName.get()
-
-        buildConfigField("String", "S3_BASE_URL", gradleLocalProperties(rootDir).getProperty("s3.url"))
-        buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("kakao.app.key"))
-        buildConfigField("String", "AMPLITUDE_KEY", gradleLocalProperties(rootDir).getProperty("amplitude.key"))
-
-        manifestPlaceholders["kakaoAppKey"] = gradleLocalProperties(rootDir)
-            .getProperty("kakao.app.key")
-            .replace("\"", "")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigs(rootDir) {
+            string(name = "S3_BASE_URL", key = "s3.url")
+            string(name = "KAKAO_APP_KEY", key = "kakao.app.key")
+            string(name = "AMPLITUDE_KEY", key = "amplitude.key")
+        }
+
+        manifestPlaceholders {
+            "kakaoAppKey" to getLocalProperty(rootDir, "kakao.app.key")
+        }
     }
 
     buildTypes {
+
         debug {
-            // 디버그 버전, 빌드 세팅(디버깅 가능 여부, 앱 네임, 아이콘, 패키지)
+            isMinifyEnabled = false
             isDebuggable = true
             applicationIdSuffix = ".debug"
-            manifestPlaceholders.putAll(
-                mapOf(
-                    "appName" to "@string/app_name_debug",
-                    "appIcon" to "@mipmap/ic_wss_logo_debug",
-                    "roundIcon" to "@mipmap/ic_wss_logo_debug_round",
-                ),
-            )
 
-            // 프로가드 세팅, 앱 용량 축소
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+            buildConfigs(rootDir) {
+                string(name = "BASE_URL", key = "debug.base.url")
+            }
 
-            // 디버그 버전, 공용 프로퍼티(BASE URL)
-            buildConfigField(
-                "String",
-                "BASE_URL",
-                gradleLocalProperties(rootDir).getProperty("debug.base.url"),
-            )
+            manifestPlaceholders {
+                "appName" to "@string/app_name_debug"
+                "appIcon" to "@mipmap/ic_wss_logo_debug"
+                "roundIcon" to "@mipmap/ic_wss_logo_debug_round"
+            }
         }
-        release {
-            // 릴리즈 버전, 빌드 세팅(앱 네임, 아이콘)
-            manifestPlaceholders.putAll(
-                mapOf(
-                    "appName" to "@string/app_name",
-                    "appIcon" to "@mipmap/ic_wss_logo",
-                    "roundIcon" to "@mipmap/ic_wss_logo_round",
-                ),
-            )
 
-            // 프로가드 세팅, 앱 용량 축소
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
 
-            // 릴리즈 버전, 공용 프로퍼티(BASE URL)
-            buildConfigField(
-                "String",
-                "BASE_URL",
-                gradleLocalProperties(rootDir).getProperty("release.base.url"),
-            )
+            buildConfigs(rootDir) {
+                string(name = "BASE_URL", key = "release.base.url")
+            }
+
+            manifestPlaceholders {
+                "appName" to "@string/app_name"
+                "appIcon" to "@mipmap/ic_wss_logo"
+                "roundIcon" to "@mipmap/ic_wss_logo_round"
+            }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+
     buildFeatures {
         buildConfig = true
         dataBinding = true
         viewBinding = true
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
     }
 }
 
 dependencies {
+    // 프로젝트 의존성
+    implementation(projects.core.resource)
+    implementation(projects.core.designsystem)
+
+    // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -112,42 +93,40 @@ dependencies {
     implementation(libs.viewpager2)
     implementation(libs.fragment.ktx)
     implementation(libs.lifecycle.extensions)
-    implementation(libs.datastore.preferences)
-    implementation(libs.security.crypto)
 
+    // 테스트 관련 라이브러리
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.espresso.core)
 
+    // 보안 및 데이터 저장 관련 라이브러리
+    implementation(libs.datastore.preferences)
+    implementation(libs.security.crypto)
+
+    // 네트워크 관련 라이브러리
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.serialization.json)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.coroutines)
 
+    // 이미지 로딩 관련 라이브러리
     implementation(libs.coil)
     implementation(libs.coil.gif)
     implementation(libs.coil.svg)
     implementation(libs.coil.transformers)
 
-    implementation(libs.dots.indicator)
-    implementation(libs.lottie)
-    implementation(libs.pull.to.refresh)
+    // UI 관련 유틸 라이브러리
+    implementation(libs.dots.indicator) // ViewPager2 indicator
+    implementation(libs.lottie) // Lottie 애니메이션
+    implementation(libs.pull.to.refresh) // Pull 새로고침
 
-    implementation(libs.kakao)
+    // Third-party SDK
+    implementation(libs.kakao) // 카카오 로그인 API
+    implementation(libs.amplitude) // Amplitude
 
+    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging)
-
-    implementation(libs.amplitude)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-
-    implementation(platform(libs.compose.bom))
-    androidTestImplementation(platform(libs.compose.bom))
-
-    implementation(libs.bundles.compose)
 }

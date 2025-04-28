@@ -5,22 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.ViewGroup.LayoutParams
+import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.view.isVisible
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.into.websoso.R
-import com.into.websoso.R.drawable.ic_blocked_user_snack_bar
-import com.into.websoso.R.drawable.ic_novel_detail_check
-import com.into.websoso.R.string.block_user_success_message
-import com.into.websoso.R.string.feed_popup_menu_content_isMyFeed
-import com.into.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
-import com.into.websoso.R.string.other_user_page_withdraw_user
+import com.into.websoso.R.id.tv_feed_thumb_up_count
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
@@ -29,6 +25,12 @@ import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toIntPxFromDp
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.core.resource.R.string.block_user_success_message
+import com.into.websoso.core.resource.R.string.feed_popup_menu_content_isMyFeed
+import com.into.websoso.core.resource.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.into.websoso.core.resource.R.string.other_user_page_withdraw_user
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentNovelFeedBinding
@@ -117,7 +119,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                     showLoginRequestDialog()
                     return
                 }
-                val likeTextView = view.requireViewById<TextView>(R.id.tv_feed_thumb_up_count)
+                val likeTextView = view.requireViewById<TextView>(tv_feed_thumb_up_count)
                 val likeCount: Int = likeTextView.text.toString().toInt()
 
                 val updatedLikeCount: Int = when (view.isSelected) {
@@ -144,15 +146,11 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         feedId: Long,
         isMyFeed: Boolean,
     ) {
-        val popupWindow: PopupWindow = PopupWindow(
-            popupBinding.root,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            true,
-        ).apply {
-            elevation = 2f
-            showAsDropDown(view)
-        }
+        val popupWindow: PopupWindow =
+            PopupWindow(popupBinding.root, WRAP_CONTENT, WRAP_CONTENT, true).apply {
+                elevation = 2f
+                showAsDropDown(view)
+            }
 
         bindMenuByIsMyFeed(popupWindow, isMyFeed, feedId)
     }
@@ -267,7 +265,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         super.onViewCreated(view, savedInstanceState)
 
         activityResultCallback =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
                     OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
                         novelId,
@@ -327,7 +325,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     private fun setupRefreshView() {
         binding.sptrNovelFeedRefresh.apply {
             setRefreshViewParams(
-                params = ViewGroup.LayoutParams(
+                params = LayoutParams(
                     30.toIntPxFromDp(),
                     30.toIntPxFromDp(),
                 ),

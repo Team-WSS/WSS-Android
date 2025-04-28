@@ -16,84 +16,86 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChangeUserInfoViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<ChangeUserInfoUiState> =
-        MutableLiveData(ChangeUserInfoUiState())
-    val uiState: LiveData<ChangeUserInfoUiState> get() = _uiState
+class ChangeUserInfoViewModel
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+    ) : ViewModel() {
+        private val _uiState: MutableLiveData<ChangeUserInfoUiState> =
+            MutableLiveData(ChangeUserInfoUiState())
+        val uiState: LiveData<ChangeUserInfoUiState> get() = _uiState
 
-    private var isInitializeOfGender: Gender = FEMALE
-    private var isInitializeOfBirthYear: Int = 2000
+        private var isInitializeOfGender: Gender = FEMALE
+        private var isInitializeOfBirthYear: Int = 2000
 
-    private val _isCompleteButtonEnabled = MediatorLiveData<Boolean>()
-    val isCompleteButtonEnabled: LiveData<Boolean> get() = _isCompleteButtonEnabled
+        private val _isCompleteButtonEnabled = MediatorLiveData<Boolean>()
+        val isCompleteButtonEnabled: LiveData<Boolean> get() = _isCompleteButtonEnabled
 
-    init {
-        _isCompleteButtonEnabled.addSource(_uiState) {
-            _isCompleteButtonEnabled.value = updateCompleteButtonEnabled()
+        init {
+            _isCompleteButtonEnabled.addSource(_uiState) {
+                _isCompleteButtonEnabled.value = updateCompleteButtonEnabled()
+            }
+
+            updateUserInfoDetail()
         }
 
-        updateUserInfoDetail()
-    }
+        private fun updateUserInfoDetail() {
+            viewModelScope.launch {
+                runCatching {
+                    userRepository.fetchUserInfoDetail()
+                }.onSuccess { userInfo ->
+                    isInitializeOfGender = Gender.from(userInfo.gender)
+                    isInitializeOfBirthYear = userInfo.birthYear
 
-    private fun updateUserInfoDetail() {
-        viewModelScope.launch {
-            runCatching {
-                userRepository.fetchUserInfoDetail()
-            }.onSuccess { userInfo ->
-                isInitializeOfGender = Gender.from(userInfo.gender)
-                isInitializeOfBirthYear = userInfo.birthYear
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        gender = isInitializeOfGender,
+                        birthYear = userInfo.birthYear,
+                        isMaleButtonSelected = isInitializeOfGender == MALE,
+                        isFemaleButtonSelected = isInitializeOfGender == FEMALE,
+                    )
+                }
+            }
+        }
 
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    gender = isInitializeOfGender,
-                    birthYear = userInfo.birthYear,
-                    isMaleButtonSelected = isInitializeOfGender == MALE,
-                    isFemaleButtonSelected = isInitializeOfGender == FEMALE,
-                )
+        private fun updateCompleteButtonEnabled(): Boolean {
+            val genderSelected = uiState.value?.gender != isInitializeOfGender
+            val birthYearSelected = uiState.value?.birthYear != isInitializeOfBirthYear
+            return genderSelected || birthYearSelected
+        }
+
+        fun updateUserGender(isMaleSelected: Boolean) {
+            val updatedGender = if (isMaleSelected) MALE else FEMALE
+            _uiState.value = _uiState.value?.copy(
+                gender = updatedGender,
+                isMaleButtonSelected = updatedGender == MALE,
+                isFemaleButtonSelected = updatedGender == FEMALE,
+            )
+        }
+
+        fun updateBirthYear(birthYear: Int) {
+            _uiState.value = uiState.value?.copy(birthYear = birthYear)
+        }
+
+        fun saveUserInfo() {
+            viewModelScope.launch {
+                _uiState.value = uiState.value?.copy(loading = true)
+                runCatching {
+                    userRepository.saveUserInfoDetail(
+                        gender = uiState.value?.gender?.genderCode
+                            ?: isInitializeOfGender.getOppositeGender().genderCode,
+                        birthYear = uiState.value?.birthYear ?: isInitializeOfBirthYear,
+                    )
+                }.onSuccess {
+                    userRepository.saveGender(
+                        uiState.value?.gender?.genderCode
+                            ?: isInitializeOfGender.getOppositeGender().genderCode,
+                    )
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        isSaveStatusComplete = true,
+                    )
+                }
             }
         }
     }
-
-    private fun updateCompleteButtonEnabled(): Boolean {
-        val genderSelected = uiState.value?.gender != isInitializeOfGender
-        val birthYearSelected = uiState.value?.birthYear != isInitializeOfBirthYear
-        return genderSelected || birthYearSelected
-    }
-
-    fun updateUserGender(isMaleSelected: Boolean) {
-        val updatedGender = if (isMaleSelected) MALE else FEMALE
-        _uiState.value = _uiState.value?.copy(
-            gender = updatedGender,
-            isMaleButtonSelected = updatedGender == MALE,
-            isFemaleButtonSelected = updatedGender == FEMALE,
-        )
-    }
-
-    fun updateBirthYear(birthYear: Int) {
-        _uiState.value = uiState.value?.copy(birthYear = birthYear)
-    }
-
-    fun saveUserInfo() {
-        viewModelScope.launch {
-            _uiState.value = uiState.value?.copy(loading = true)
-            runCatching {
-                userRepository.saveUserInfoDetail(
-                    gender = uiState.value?.gender?.genderCode
-                        ?: isInitializeOfGender.getOppositeGender().genderCode,
-                    birthYear = uiState.value?.birthYear ?: isInitializeOfBirthYear,
-                )
-            }.onSuccess {
-                userRepository.saveGender(
-                    uiState.value?.gender?.genderCode
-                        ?: isInitializeOfGender.getOppositeGender().genderCode,
-                )
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    isSaveStatusComplete = true,
-                )
-            }
-        }
-    }
-}

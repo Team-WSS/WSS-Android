@@ -16,13 +16,14 @@ data class UserInterestFeedsEntity(
     )
 }
 
-enum class UserInterestFeedMessage(val message: String) {
+enum class UserInterestFeedMessage(
+    val message: String,
+) {
     NO_INTEREST_NOVELS("NO_INTEREST_NOVELS"),
-    NO_ASSOCIATED_FEEDS("NO_ASSOCIATED_FEEDS");
+    NO_ASSOCIATED_FEEDS("NO_ASSOCIATED_FEEDS"),
+    ;
 
     companion object {
-        fun fromMessage(message: String): UserInterestFeedMessage? {
-            return entries.find { it.message == message }
-        }
+        fun fromMessage(message: String): UserInterestFeedMessage? = entries.find { it.message == message }
     }
 }

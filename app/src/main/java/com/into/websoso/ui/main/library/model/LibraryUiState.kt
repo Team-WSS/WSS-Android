@@ -1,7 +1,7 @@
 package com.into.websoso.ui.main.library.model
 
 import android.content.Context
-import com.into.websoso.R
+import com.into.websoso.core.resource.R.string.storage_novel_count
 import com.into.websoso.ui.userStorage.model.SortType
 import com.into.websoso.ui.userStorage.model.StorageTab
 import com.into.websoso.ui.userStorage.model.UserStorageModel
@@ -17,5 +17,5 @@ data class LibraryUiState(
     val readStatus: String = StorageTab.INTEREST.readStatus,
     val sortType: SortType = SortType.NEWEST,
 ) {
-    fun getUserNovelCountText(context: Context): String = context.getString(R.string.storage_novel_count, userNovelCount)
+    fun getUserNovelCountText(context: Context): String = context.getString(storage_novel_count, userNovelCount)
 }

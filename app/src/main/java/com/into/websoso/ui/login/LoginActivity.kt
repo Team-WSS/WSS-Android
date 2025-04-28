@@ -2,6 +2,8 @@ package com.into.websoso.ui.login
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,9 +14,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.analytics.logEvent
-import com.into.websoso.R
+import com.into.websoso.R.layout.activity_login
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.data.remote.api.OAuthService
 import com.into.websoso.databinding.ActivityLoginBinding
 import com.into.websoso.ui.login.adapter.ImageViewPagerAdapter
@@ -23,10 +26,11 @@ import com.into.websoso.ui.main.MainActivity
 import com.into.websoso.ui.onboarding.OnboardingActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.lang.System.currentTimeMillis
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
+class LoginActivity : BaseActivity<ActivityLoginBinding>(activity_login) {
     private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
     private val viewModel: LoginViewModel by viewModels()
     private var currentPage = 0
@@ -73,7 +77,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                                     this@LoginActivity,
                                     viewModel.accessToken,
                                     viewModel.refreshToken,
-                                )
+                                ),
                             )
                         }
                     }
@@ -84,7 +88,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     binding.wllLogin.visibility = View.INVISIBLE
                     firebaseAnalytics.logEvent("login_failure") {
                         param("error_message", state.error.message ?: "Unknown Error")
-                        param("timestamp", System.currentTimeMillis().toString())
+                        param("timestamp", currentTimeMillis().toString())
                     }
                 }
 
@@ -113,9 +117,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 }.onSuccess { token ->
                     viewModel.loginWithKakao(token.accessToken)
                 }.onFailure {
-                    WebsosoCustomToast.make(this@LoginActivity)
+                    WebsosoCustomToast
+                        .make(this@LoginActivity)
                         .setText("카카오톡 소셜 로그인에 실패했어요")
-                        .setIcon(R.drawable.ic_novel_rating_alert)
+                        .setIcon(ic_novel_rating_alert)
                         .show()
                 }
             }
@@ -147,10 +152,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     companion object {
         private const val PAGE_SCROLL_DELAY = 2000L
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        fun getIntent(context: Context): Intent =
+            Intent(context, LoginActivity::class.java).apply {
+                flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
             }
-        }
     }
 }

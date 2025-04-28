@@ -9,8 +9,10 @@ class GenreViewHolder(
     private val binding: ItemOnboardingGenreBinding,
     private val onGenreToggle: (String) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(genre: Genre, isSelected: Boolean) {
+    fun bind(
+        genre: Genre,
+        isSelected: Boolean,
+    ) {
         binding.genre = genre
         binding.isSelected = isSelected
         with(binding) {
