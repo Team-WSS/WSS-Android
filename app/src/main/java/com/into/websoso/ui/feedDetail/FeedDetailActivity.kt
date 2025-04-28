@@ -406,7 +406,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         }
 
         binding.ivFeedDetailCommentRegister.setOnClickListener {
-            if (binding.etFeedDetailInput.text.isNullOrBlank().not()) {
+            if (binding.etFeedDetailInput.text
+                    .isNullOrBlank()
+                    .not()
+            ) {
                 binding.etFeedDetailInput.run {
                     tracker.trackEvent("write_comment")
                     when (feedDetailViewModel.commentId == DEFAULT_FEED_ID) {

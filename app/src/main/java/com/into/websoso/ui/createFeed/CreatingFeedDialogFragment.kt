@@ -11,8 +11,7 @@ import com.into.websoso.core.resource.R.string.tv_remove_popup_menu_stop_creatin
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 
-class CreatingFeedDialogFragment :
-    BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
+class CreatingFeedDialogFragment : BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val onRemoveClick: FeedDialogClickListener by lazy {
         arguments?.getSerializable(EVENT) as FeedDialogClickListener

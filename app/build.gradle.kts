@@ -17,7 +17,9 @@ android {
 
     defaultConfig {
         applicationId = "com.into.websoso"
-        versionCode = libs.versions.versionCode.get().toInt()
+        versionCode = libs.versions.versionCode
+            .get()
+            .toInt()
         versionName = libs.versions.versionName.get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -115,13 +117,13 @@ dependencies {
     implementation(libs.coil.transformers)
 
     // UI 관련 유틸 라이브러리
-    implementation(libs.dots.indicator)   // ViewPager2 indicator
-    implementation(libs.lottie)           // Lottie 애니메이션
-    implementation(libs.pull.to.refresh)  // Pull 새로고침
+    implementation(libs.dots.indicator) // ViewPager2 indicator
+    implementation(libs.lottie) // Lottie 애니메이션
+    implementation(libs.pull.to.refresh) // Pull 새로고침
 
     // Third-party SDK
-    implementation(libs.kakao)            // 카카오 로그인 API
-    implementation(libs.amplitude)        // Amplitude
+    implementation(libs.kakao) // 카카오 로그인 API
+    implementation(libs.amplitude) // Amplitude
 
     // Firebase
     implementation(platform(libs.firebase.bom))

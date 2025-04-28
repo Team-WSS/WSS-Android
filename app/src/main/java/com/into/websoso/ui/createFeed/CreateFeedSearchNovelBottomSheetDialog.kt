@@ -140,7 +140,6 @@ class CreateFeedSearchNovelBottomSheetDialog :
     companion object {
         const val CREATE_FEED_SEARCH_NOVEL_TAG = "CREATE_FEED_SEARCH_NOVEL_TAG"
 
-        fun newInstance(): CreateFeedSearchNovelBottomSheetDialog =
-            CreateFeedSearchNovelBottomSheetDialog()
+        fun newInstance(): CreateFeedSearchNovelBottomSheetDialog = CreateFeedSearchNovelBottomSheetDialog()
     }
 }

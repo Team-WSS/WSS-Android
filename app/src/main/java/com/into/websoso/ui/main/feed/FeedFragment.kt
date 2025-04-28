@@ -192,7 +192,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 id: Long,
             ) {
                 tracker.trackEvent("feed_like")
-                val likeCount: Int = view.findViewById<TextView>(tv_feed_thumb_up_count)
+                val likeCount: Int = view
+                    .findViewById<TextView>(tv_feed_thumb_up_count)
                     .text
                     .toString()
                     .toInt()
@@ -424,7 +425,12 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
 
         feedViewModel.categories.observe(viewLifecycleOwner) { category ->
-            if (binding.wcgFeed.children.toList().isEmpty()) category.setUpChips()
+            if (binding.wcgFeed.children
+                    .toList()
+                    .isEmpty()
+            ) {
+                category.setUpChips()
+            }
 
             val selectedCategory = category.find { it.isSelected } ?: category.first()
             tracker.trackEvent("feed_${selectedCategory.category.shortCode}")

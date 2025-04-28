@@ -12,11 +12,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
 @AndroidEntryPoint
-class ChangeBirthYearBottomSheetDialog :
-    BaseBottomSheetDialog<DialogOnboardingBirthYearBinding>(dialog_onboarding_birth_year) {
+class ChangeBirthYearBottomSheetDialog : BaseBottomSheetDialog<DialogOnboardingBirthYearBinding>(dialog_onboarding_birth_year) {
     private val changeUserInfoViewModel: ChangeUserInfoViewModel by activityViewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupDialogBehavior()

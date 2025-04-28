@@ -52,8 +52,7 @@ import com.into.websoso.ui.otherUserPage.OtherUserPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ActivityDetailActivity :
-    BaseActivity<ActivityActivityDetailBinding>(activity_activity_detail) {
+class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activity_activity_detail) {
     private val activityDetailViewModel: ActivityDetailViewModel by viewModels()
     private val activityDetailAdapter: ActivityDetailAdapter by lazy {
         ActivityDetailAdapter(
@@ -355,7 +354,6 @@ class ActivityDetailActivity :
         const val SOURCE_MY_ACTIVITY = "myActivity"
         const val SOURCE_OTHER_USER_ACTIVITY = "otherUserActivity"
 
-        fun getIntent(context: Context): Intent =
-            Intent(context, ActivityDetailActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, ActivityDetailActivity::class.java)
     }
 }
