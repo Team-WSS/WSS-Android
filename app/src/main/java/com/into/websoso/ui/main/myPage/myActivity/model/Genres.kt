@@ -1,6 +1,8 @@
 package com.into.websoso.ui.main.myPage.myActivity.model
 
-enum class Genres(val korean: String) {
+enum class Genres(
+    val korean: String,
+) {
     ALL("전체"),
     ROMANCE("로맨스"),
     ROMANCEFANTASY("로판"),
@@ -11,13 +13,13 @@ enum class Genres(val korean: String) {
     DRAMA("드라마"),
     MYSTERY("미스터리"),
     LIGHTNOVEL("라노벨"),
-    ETC("기타");
+    ETC("기타"),
+    ;
 
     companion object {
-        fun from(value: String): Genres? {
-            return Genres.entries.find {
+        fun from(value: String): Genres? =
+            Genres.entries.find {
                 it.name.equals(value, ignoreCase = true)
             }
-        }
     }
 }

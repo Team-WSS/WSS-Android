@@ -8,66 +8,69 @@ import com.into.websoso.ui.main.feed.model.FeedModel
 import com.into.websoso.ui.main.feed.model.FeedModel.NovelModel
 import com.into.websoso.ui.main.feed.model.FeedModel.UserModel
 
-fun Feed.toUi(): FeedModel = FeedModel(
-    user = UserModel(
-        id = user.id,
-        nickname = user.nickname,
-        avatarImage = user.avatarImage,
-    ),
-    createdDate = createdDate,
-    id = id,
-    content = content,
-    relevantCategories = relevantCategories,
-    likeCount = likeCount,
-    commentCount = commentCount,
-    isModified = isModified,
-    isSpoiler = isSpoiler,
-    isLiked = isLiked,
-    isMyFeed = isMyFeed,
-    novel = NovelModel(
-        id = novel.id,
-        title = novel.title,
-        rating = novel.rating,
-        ratingCount = novel.ratingCount,
-    ),
-)
+fun Feed.toUi(): FeedModel =
+    FeedModel(
+        user = UserModel(
+            id = user.id,
+            nickname = user.nickname,
+            avatarImage = user.avatarImage,
+        ),
+        createdDate = createdDate,
+        id = id,
+        content = content,
+        relevantCategories = relevantCategories,
+        likeCount = likeCount,
+        commentCount = commentCount,
+        isModified = isModified,
+        isSpoiler = isSpoiler,
+        isLiked = isLiked,
+        isMyFeed = isMyFeed,
+        novel = NovelModel(
+            id = novel.id,
+            title = novel.title,
+            rating = novel.rating,
+            ratingCount = novel.ratingCount,
+        ),
+    )
 
-fun FeedEntity.toUi(): FeedModel = FeedModel(
-    user = UserModel(
-        id = user.id,
-        nickname = user.nickname,
-        avatarImage = user.avatarImage,
-    ),
-    createdDate = createdDate,
-    id = id,
-    content = content,
-    relevantCategories = relevantCategories,
-    likeCount = likeCount,
-    commentCount = commentCount,
-    isModified = isModified,
-    isSpoiler = isSpoiler,
-    isLiked = isLiked,
-    isMyFeed = isMyFeed,
-    novel = NovelModel(
-        id = novel.id,
-        title = novel.title,
-        rating = novel.rating,
-        ratingCount = novel.ratingCount,
-    ),
-)
+fun FeedEntity.toUi(): FeedModel =
+    FeedModel(
+        user = UserModel(
+            id = user.id,
+            nickname = user.nickname,
+            avatarImage = user.avatarImage,
+        ),
+        createdDate = createdDate,
+        id = id,
+        content = content,
+        relevantCategories = relevantCategories,
+        likeCount = likeCount,
+        commentCount = commentCount,
+        isModified = isModified,
+        isSpoiler = isSpoiler,
+        isLiked = isLiked,
+        isMyFeed = isMyFeed,
+        novel = NovelModel(
+            id = novel.id,
+            title = novel.title,
+            rating = novel.rating,
+            ratingCount = novel.ratingCount,
+        ),
+    )
 
-fun CommentEntity.toUi(): CommentModel = CommentModel(
-    user = UserModel(
-        id = user.id,
-        nickname = user.nickname,
-        avatarImage = user.avatarImage,
-    ),
-    commentContent = commentContent,
-    commentId = commentId,
-    createdDate = createdDate,
-    isModified = isModified,
-    isMyComment = isMyComment,
-    isHidden = isHidden,
-    isSpoiler = isSpoiler,
-    isBlocked = isBlocked,
-)
+fun CommentEntity.toUi(): CommentModel =
+    CommentModel(
+        user = UserModel(
+            id = user.id,
+            nickname = user.nickname,
+            avatarImage = user.avatarImage,
+        ),
+        commentContent = commentContent,
+        commentId = commentId,
+        createdDate = createdDate,
+        isModified = isModified,
+        isMyComment = isMyComment,
+        isHidden = isHidden,
+        isSpoiler = isSpoiler,
+        isBlocked = isBlocked,
+    )

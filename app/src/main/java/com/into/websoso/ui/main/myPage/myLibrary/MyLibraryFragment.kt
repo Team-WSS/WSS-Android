@@ -1,13 +1,11 @@
 package com.into.websoso.ui.main.myPage.myLibrary
 
-import android.app.Activity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -40,12 +38,6 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(fragment_my_lib
         RestGenrePreferenceAdapter()
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private val userStorageResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                myLibraryViewModel.updateMyLibrary()
-            }
-        }
 
     override fun onViewCreated(
         view: View,

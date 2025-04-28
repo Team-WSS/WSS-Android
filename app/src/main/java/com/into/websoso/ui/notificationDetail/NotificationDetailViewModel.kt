@@ -24,7 +24,8 @@ class NotificationDetailViewModel
     ) : ViewModel() {
         private val _notificationDetailUiState: MutableStateFlow<NotificationDetailUiState> =
             MutableStateFlow(NotificationDetailUiState())
-        val notificationDetailUiState: StateFlow<NotificationDetailUiState> = _notificationDetailUiState.asStateFlow()
+        val notificationDetailUiState: StateFlow<NotificationDetailUiState> =
+            _notificationDetailUiState.asStateFlow()
 
         // TODO: 에러처리 회의 종료 후 반영 필요
         private val _errorFlow = MutableSharedFlow<Throwable>()
@@ -32,7 +33,8 @@ class NotificationDetailViewModel
 
         init {
             val notificationId =
-                savedStateHandle.get<Long>(NotificationDetailActivity.NOTIFICATION_DETAIL_KEY) ?: DEFAULT_NOTIFICATION_ID
+                savedStateHandle.get<Long>(NotificationDetailActivity.NOTIFICATION_DETAIL_KEY)
+                    ?: DEFAULT_NOTIFICATION_ID
             if (notificationId != DEFAULT_NOTIFICATION_ID) {
                 getNotificationDetail(notificationId)
             } else {

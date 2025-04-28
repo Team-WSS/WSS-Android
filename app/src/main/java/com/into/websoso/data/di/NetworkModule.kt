@@ -34,9 +34,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideJsonConverterFactory(json: Json): Converter.Factory {
-        return json.asConverterFactory(CONTENT_TYPE.toMediaType())
-    }
+    fun provideJsonConverterFactory(json: Json): Converter.Factory = json.asConverterFactory(CONTENT_TYPE.toMediaType())
 
     @Provides
     @Singleton
@@ -62,48 +60,56 @@ object NetworkModule {
         @Logging loggingInterceptor: Interceptor,
         @Auth authInterceptor: Interceptor,
         websosoAuthenticator: WebsosoAuthenticator,
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .addInterceptor(authInterceptor)
-        .authenticator(websosoAuthenticator)
-        .connectTimeout(60, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS)
-        .build()
+    ): OkHttpClient =
+        OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
+            .authenticator(websosoAuthenticator)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .build()
 
     @Provides
     @Singleton
     @Unsecured
     fun provideUnsecuredOkHttpClient(
         @Logging loggingInterceptor: Interceptor,
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .connectTimeout(60, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS)
-        .build()
+    ): OkHttpClient =
+        OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .build()
 
     @Provides
     @Singleton
     @Secured
     fun provideSecuredRetrofit(
         @Secured client: OkHttpClient,
-        converterFactory: Converter.Factory
-    ): Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(client)
-        .addConverterFactory(converterFactory)
-        .build()
+        converterFactory: Converter.Factory,
+    ): Retrofit =
+        Retrofit
+            .Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(converterFactory)
+            .build()
 
     @Provides
     @Singleton
     @Unsecured
     fun provideUnsecuredRetrofit(
         @Unsecured client: OkHttpClient,
-        converterFactory: Converter.Factory
-    ): Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(client)
-        .addConverterFactory(converterFactory)
-        .build()
+        converterFactory: Converter.Factory,
+    ): Retrofit =
+        Retrofit
+            .Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(converterFactory)
+            .build()
 }

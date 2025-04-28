@@ -13,7 +13,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object OAuthModule {
-
     @Provides
     fun provideKakaoApiClient(): UserApiClient = UserApiClient.instance
 

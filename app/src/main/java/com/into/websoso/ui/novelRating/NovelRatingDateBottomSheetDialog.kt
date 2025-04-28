@@ -16,8 +16,7 @@ import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelRating.model.RatingDateModel
 
-class NovelRatingDateBottomSheetDialog :
-    BaseBottomSheetDialog<DialogNovelRatingDateBinding>(dialog_novel_rating_date) {
+class NovelRatingDateBottomSheetDialog : BaseBottomSheetDialog<DialogNovelRatingDateBinding>(dialog_novel_rating_date) {
     private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onViewCreated(
@@ -46,11 +45,14 @@ class NovelRatingDateBottomSheetDialog :
             )
             initNumberPickerRange(uiState?.maxDayValue ?: MAX_DAY_VALUE)
             binding.npRatingDateYear.value =
-                uiState.novelRatingModel.ratingDateModel.currentStartDate?.first ?: 1
+                uiState.novelRatingModel.ratingDateModel.currentStartDate
+                    ?.first ?: 1
             binding.npRatingDateMonth.value =
-                uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
+                uiState.novelRatingModel.ratingDateModel.currentStartDate
+                    ?.second ?: 1
             binding.npRatingDateDay.value =
-                uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
+                uiState.novelRatingModel.ratingDateModel.currentStartDate
+                    ?.third ?: 1
             initNumberPickerValue(
                 uiState.novelRatingModel.ratingDateModel,
                 uiState.isEditingStartDate,
@@ -96,7 +98,6 @@ class NovelRatingDateBottomSheetDialog :
         NovelAlertDialogFragment
             .newInstance(novelAlertModel)
             .show(parentFragmentManager, NovelAlertDialogFragment.TAG)
-
     }
 
     private fun setupDialogBehavior() {

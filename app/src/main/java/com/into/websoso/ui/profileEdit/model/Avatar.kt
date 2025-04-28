@@ -7,7 +7,11 @@ import com.into.websoso.core.resource.R.raw.lottie_sosocat_1
 import com.into.websoso.core.resource.R.raw.lottie_villainess_0
 import com.into.websoso.core.resource.R.raw.lottie_villainess_1
 
-enum class Avatar(val avatarId: Int, val firstAnimationId: Int, val secondAnimationId: Int) {
+enum class Avatar(
+    val avatarId: Int,
+    val firstAnimationId: Int,
+    val secondAnimationId: Int,
+) {
     SOSOCAT(1, lottie_sosocat_0, lottie_sosocat_1),
     REGRESSOR(2, lottie_regressor_0, lottie_regressor_1),
     VILLAINESS(3, lottie_villainess_0, lottie_villainess_1),

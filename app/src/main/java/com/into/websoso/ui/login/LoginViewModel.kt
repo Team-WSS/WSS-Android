@@ -15,51 +15,52 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-) : ViewModel() {
+class LoginViewModel
+    @Inject
+    constructor(
+        private val authRepository: AuthRepository,
+    ) : ViewModel() {
+        private val _loginUiState = MutableLiveData<LoginUiState>()
+        val loginUiState: LiveData<LoginUiState> get() = _loginUiState
 
-    private val _loginUiState = MutableLiveData<LoginUiState>()
-    val loginUiState: LiveData<LoginUiState> get() = _loginUiState
+        private val _loginImages = MutableLiveData<List<Int>>()
+        val loginImages: LiveData<List<Int>> = _loginImages
 
-    private val _loginImages = MutableLiveData<List<Int>>()
-    val loginImages: LiveData<List<Int>> = _loginImages
+        lateinit var accessToken: String
+            private set
+        lateinit var refreshToken: String
+            private set
 
-    lateinit var accessToken: String
-        private set
-    lateinit var refreshToken: String
-        private set
+        init {
+            _loginImages.value = listOf(
+                img_login_1,
+                img_login_2,
+                img_login_3,
+                img_login_4,
+            )
+        }
 
-    init {
-        _loginImages.value = listOf(
-            img_login_1,
-            img_login_2,
-            img_login_3,
-            img_login_4,
-        )
-    }
+        fun loginWithKakao(kakaoAccessToken: String) {
+            viewModelScope.launch {
+                _loginUiState.value = LoginUiState.Loading
+                runCatching {
+                    authRepository.loginWithKakao(kakaoAccessToken)
+                }.onSuccess { loginEntity ->
+                    accessToken = loginEntity.authorization
+                    refreshToken = loginEntity.refreshToken
 
-    fun loginWithKakao(kakaoAccessToken: String) {
-        viewModelScope.launch {
-            _loginUiState.value = LoginUiState.Loading
-            runCatching {
-                authRepository.loginWithKakao(kakaoAccessToken)
-            }.onSuccess { loginEntity ->
-                accessToken = loginEntity.authorization
-                refreshToken = loginEntity.refreshToken
+                    if (loginEntity.isRegister) {
+                        authRepository.updateAccessToken(loginEntity.authorization)
+                        authRepository.updateRefreshToken(loginEntity.refreshToken)
+                        authRepository.updateIsAutoLogin(true)
+                    }
 
-                if (loginEntity.isRegister) {
-                    authRepository.updateAccessToken(loginEntity.authorization)
-                    authRepository.updateRefreshToken(loginEntity.refreshToken)
-                    authRepository.updateIsAutoLogin(true)
+                    _loginUiState.value = LoginUiState.Success(
+                        isRegistered = loginEntity.isRegister,
+                    )
+                }.onFailure { error ->
+                    _loginUiState.value = LoginUiState.Failure(error)
                 }
-
-                _loginUiState.value = LoginUiState.Success(
-                    isRegistered = loginEntity.isRegister,
-                )
-            }.onFailure { error ->
-                _loginUiState.value = LoginUiState.Failure(error)
             }
         }
     }
-}

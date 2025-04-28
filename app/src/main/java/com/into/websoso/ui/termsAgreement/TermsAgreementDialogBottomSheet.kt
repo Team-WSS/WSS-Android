@@ -25,8 +25,7 @@ import com.into.websoso.ui.termsAgreement.model.AgreementType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TermsAgreementDialogBottomSheet :
-    BaseBottomSheetDialog<DialogTermsAgreementBinding>(dialog_terms_agreement) {
+class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreementBinding>(dialog_terms_agreement) {
     private val termsAgreementViewModel: TermsAgreementViewModel by viewModels()
     private var onDismissListener: (() -> Unit)? = null
 
@@ -130,8 +129,7 @@ class TermsAgreementDialogBottomSheet :
         }
     }
 
-    private fun getToggleIcon(isChecked: Boolean): Int =
-        if (isChecked) ic_terms_agreement_selected else ic_terms_agreement_unselected
+    private fun getToggleIcon(isChecked: Boolean): Int = if (isChecked) ic_terms_agreement_selected else ic_terms_agreement_unselected
 
     private fun updateAllAgreementIcon(isChecked: Boolean) {
         binding.ivTermsAgreementAll.setImageResource(

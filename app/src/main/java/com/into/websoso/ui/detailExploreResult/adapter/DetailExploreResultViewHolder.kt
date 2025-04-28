@@ -10,7 +10,6 @@ class DetailExploreResultViewHolder(
     private val binding: ItemDetailExploreResultBinding,
     onNovelClick: (novelId: Long) -> (Unit),
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
         binding.onClick = onNovelClick
     }
@@ -20,12 +19,14 @@ class DetailExploreResultViewHolder(
     }
 
     companion object {
-
         fun of(
-            parent: ViewGroup, novelItemClickListener: (novelId: Long) -> Unit,
+            parent: ViewGroup,
+            novelItemClickListener: (novelId: Long) -> Unit,
         ): DetailExploreResultViewHolder {
             val binding = ItemDetailExploreResultBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false,
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
             )
             return DetailExploreResultViewHolder(binding, novelItemClickListener)
         }

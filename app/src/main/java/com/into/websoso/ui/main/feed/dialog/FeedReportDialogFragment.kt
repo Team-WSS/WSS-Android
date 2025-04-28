@@ -20,8 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeedReportDialogFragment :
-    BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
+class FeedReportDialogFragment : BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
     @Inject
     lateinit var tracker: Tracker
 

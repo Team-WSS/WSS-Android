@@ -20,12 +20,16 @@ data class NicknameModel(
 
 sealed interface ProfileEditResult {
     data object Loading : ProfileEditResult
+
     data object Success : ProfileEditResult
+
     data object Error : ProfileEditResult
 }
 
 sealed interface LoadProfileResult {
     data object Success : LoadProfileResult
+
     data object Loading : LoadProfileResult
+
     data object Error : LoadProfileResult
 }

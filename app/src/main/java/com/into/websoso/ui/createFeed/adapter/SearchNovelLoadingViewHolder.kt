@@ -12,18 +12,16 @@ import com.into.websoso.databinding.ItemFeedLoadingBinding
 class SearchNovelLoadingViewHolder(
     binding: ItemFeedLoadingBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
-        val gifImageLoader = ImageLoader.Builder(binding.root.context)
+        val gifImageLoader = ImageLoader
+            .Builder(binding.root.context)
             .components {
                 add(ImageDecoderDecoder.Factory())
-            }
-            .build()
+            }.build()
         binding.ivFeedLoading.load(ic_load_load, gifImageLoader)
     }
 
     companion object {
-
         fun from(parent: ViewGroup): SearchNovelLoadingViewHolder =
             SearchNovelLoadingViewHolder(
                 ItemFeedLoadingBinding.inflate(

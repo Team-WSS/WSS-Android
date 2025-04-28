@@ -42,9 +42,6 @@ class WebsosoCustomSnackBar(
     }
 
     companion object {
-
-        fun make(view: View): WebsosoCustomSnackBar {
-            return WebsosoCustomSnackBar(view)
-        }
+        fun make(view: View): WebsosoCustomSnackBar = WebsosoCustomSnackBar(view)
     }
 }

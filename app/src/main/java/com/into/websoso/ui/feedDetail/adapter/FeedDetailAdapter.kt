@@ -16,28 +16,35 @@ class FeedDetailAdapter(
     private val feedDetailClickListener: FeedDetailClickListener,
     private val commentClickListener: CommentClickListener,
 ) : ListAdapter<FeedDetailType, ViewHolder>(diffCallBack) {
-
     init {
         setHasStableIds(true)
     }
 
-    override fun getItemViewType(position: Int): Int = when (getItem(position)) {
-        is Header -> HEADER.ordinal
-        is Comment -> COMMENT.ordinal
-    }
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
+            is Header -> HEADER.ordinal
+            is Comment -> COMMENT.ordinal
+        }
 
-    override fun getItemId(position: Int): Long = when (getItem(position)) {
-        is Header -> super.getItemId(position)
-        is Comment -> (getItem(position) as Comment).comment.commentId
-    }
+    override fun getItemId(position: Int): Long =
+        when (getItem(position)) {
+            is Header -> super.getItemId(position)
+            is Comment -> (getItem(position) as Comment).comment.commentId
+        }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder =
         when (ItemType.valueOf(viewType)) {
             HEADER -> FeedDetailContentViewHolder.from(parent, feedDetailClickListener)
             COMMENT -> FeedDetailCommentViewHolder.from(parent, commentClickListener)
         }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         when (holder) {
             is FeedDetailCommentViewHolder -> holder.bind((getItem(position) as Comment).comment)
             is FeedDetailContentViewHolder -> holder.bind((getItem(position) as Header).feed)
@@ -49,12 +56,13 @@ class FeedDetailAdapter(
             override fun areItemsTheSame(
                 oldItem: FeedDetailType,
                 newItem: FeedDetailType,
-            ): Boolean = when {
-                (oldItem is Comment) and (newItem is Comment) ->
-                    (oldItem as Comment).comment.commentId == (newItem as Comment).comment.commentId
+            ): Boolean =
+                when {
+                    (oldItem is Comment) and (newItem is Comment) ->
+                        (oldItem as Comment).comment.commentId == (newItem as Comment).comment.commentId
 
-                else -> oldItem == newItem
-            }
+                    else -> oldItem == newItem
+                }
 
             override fun areContentsTheSame(
                 oldItem: FeedDetailType,

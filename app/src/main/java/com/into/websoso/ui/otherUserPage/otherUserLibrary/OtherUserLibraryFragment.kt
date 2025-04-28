@@ -31,8 +31,7 @@ import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OtherUserLibraryFragment :
-    BaseFragment<FragmentOtherUserLibraryBinding>(fragment_other_user_library) {
+class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(fragment_other_user_library) {
     private val otherUserLibraryViewModel: OtherUserLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()

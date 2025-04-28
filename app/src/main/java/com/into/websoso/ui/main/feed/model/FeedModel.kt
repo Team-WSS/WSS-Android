@@ -30,7 +30,6 @@ data class FeedModel(
         val rating: Float?,
         val ratingCount: Int?,
     ) {
-
         val isNothing: Boolean = id == null
     }
 }

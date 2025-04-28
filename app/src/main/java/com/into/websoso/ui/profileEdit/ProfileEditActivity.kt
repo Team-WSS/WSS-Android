@@ -285,8 +285,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(activity_pr
                 InputFilter { source, start, end, dest, dstart, dend ->
 
                     val newText = dest.toString().substring(0, dstart) +
-                            source.toString().substring(start, end) +
-                            dest.toString().substring(dend)
+                        source.toString().substring(start, end) +
+                        dest.toString().substring(dend)
 
                     if (newText.length > MAX_LENGTH || newText.lines().size > MAX_LINES) {
                         ""

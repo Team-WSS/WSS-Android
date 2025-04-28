@@ -10,7 +10,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface UserNovelApi {
-
     @DELETE("user-novels/{novelId}")
     suspend fun deleteUserNovel(
         @Path("novelId") novelId: Long,

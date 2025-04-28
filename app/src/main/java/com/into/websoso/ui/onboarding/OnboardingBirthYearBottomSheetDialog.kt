@@ -12,7 +12,7 @@ import java.time.LocalDate
 
 class OnboardingBirthYearBottomSheetDialog :
     BaseBottomSheetDialog<DialogOnboardingBirthYearBinding>(
-        R.layout.dialog_onboarding_birth_year
+        R.layout.dialog_onboarding_birth_year,
     ) {
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 

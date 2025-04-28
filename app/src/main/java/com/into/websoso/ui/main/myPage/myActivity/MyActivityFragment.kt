@@ -177,7 +177,8 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(fragment_my_a
                 view: View,
                 feedId: Long,
             ) {
-                val likeCount: Int = view.findViewById<TextView>(tv_my_activity_thumb_up_count)
+                val likeCount: Int = view
+                    .findViewById<TextView>(tv_my_activity_thumb_up_count)
                     .text
                     .toString()
                     .toInt()

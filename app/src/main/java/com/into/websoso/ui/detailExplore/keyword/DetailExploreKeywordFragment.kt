@@ -37,8 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DetailExploreKeywordFragment :
-    BaseFragment<FragmentDetailExploreKeywordBinding>(fragment_detail_explore_keyword) {
+class DetailExploreKeywordFragment : BaseFragment<FragmentDetailExploreKeywordBinding>(fragment_detail_explore_keyword) {
     @Inject
     lateinit var tracker: Tracker
 

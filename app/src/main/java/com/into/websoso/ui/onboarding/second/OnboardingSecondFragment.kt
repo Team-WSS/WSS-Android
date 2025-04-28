@@ -16,12 +16,13 @@ import com.into.websoso.ui.onboarding.model.UserModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OnboardingSecondFragment :
-    BaseFragment<FragmentOnboardingSecondBinding>(fragment_onboarding_second) {
-
+class OnboardingSecondFragment : BaseFragment<FragmentOnboardingSecondBinding>(fragment_onboarding_second) {
     private val onboardingViewModel: OnboardingViewModel by activityViewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewModel = onboardingViewModel
@@ -39,9 +40,13 @@ class OnboardingSecondFragment :
 
     private fun updateBirthYearTextUi(userModelInfo: UserModel) {
         val birthYearText =
-            if (userModelInfo.birthYear != 0) userModelInfo.birthYear.toString() else getString(
-                onboarding_second_input_birth_year,
-            )
+            if (userModelInfo.birthYear != 0) {
+                userModelInfo.birthYear.toString()
+            } else {
+                getString(
+                    onboarding_second_input_birth_year,
+                )
+            }
         with(binding.tvOnboardingSecondBirthYearHint) {
             text = birthYearText
             setTextColor(

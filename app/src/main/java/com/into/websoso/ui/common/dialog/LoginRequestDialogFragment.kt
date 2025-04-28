@@ -7,10 +7,11 @@ import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.databinding.DialogLoginRequestBinding
 import com.into.websoso.ui.login.LoginActivity
 
-class LoginRequestDialogFragment :
-    BaseDialogFragment<DialogLoginRequestBinding>(dialog_login_request) {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+class LoginRequestDialogFragment : BaseDialogFragment<DialogLoginRequestBinding>(dialog_login_request) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         dialog?.setCanceledOnTouchOutside(false)

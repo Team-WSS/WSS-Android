@@ -117,7 +117,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(activity_login) {
                 }.onSuccess { token ->
                     viewModel.loginWithKakao(token.accessToken)
                 }.onFailure {
-                    WebsosoCustomToast.make(this@LoginActivity)
+                    WebsosoCustomToast
+                        .make(this@LoginActivity)
                         .setText("카카오톡 소셜 로그인에 실패했어요")
                         .setIcon(ic_novel_rating_alert)
                         .show()
@@ -151,10 +152,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(activity_login) {
     companion object {
         private const val PAGE_SCROLL_DELAY = 2000L
 
-        fun getIntent(context: Context): Intent {
-            return Intent(context, LoginActivity::class.java).apply {
+        fun getIntent(context: Context): Intent =
+            Intent(context, LoginActivity::class.java).apply {
                 flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
             }
-        }
     }
 }

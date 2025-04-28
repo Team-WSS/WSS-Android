@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MinimumVersionResponseDto (
+data class MinimumVersionResponseDto(
     @SerialName("minimumVersion")
     val minimumVersion: String,
     @SerialName("updateDate")

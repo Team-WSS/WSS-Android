@@ -33,8 +33,7 @@ import com.into.websoso.databinding.DialogNovelRatingKeywordBinding
 import com.into.websoso.ui.novelRating.adapter.NovelRatingKeywordAdapter
 import com.into.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 
-class NovelRatingKeywordBottomSheetDialog :
-    BaseBottomSheetDialog<DialogNovelRatingKeywordBinding>(dialog_novel_rating_keyword) {
+class NovelRatingKeywordBottomSheetDialog : BaseBottomSheetDialog<DialogNovelRatingKeywordBinding>(dialog_novel_rating_keyword) {
     private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
     private val novelRatingKeywordAdapter by lazy {
         NovelRatingKeywordAdapter(
@@ -216,8 +215,7 @@ class NovelRatingKeywordBottomSheetDialog :
                     }
                     isSelected =
                         keywords.currentSelectedKeywords.any { it.keywordId == keyword.keywordId }
-                }
-                .also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
+                }.also { websosoChip -> binding.wcgNovelRatingKeywordSearchResult.addChip(websosoChip) }
         }
     }
 
@@ -281,15 +279,15 @@ class NovelRatingKeywordBottomSheetDialog :
         dialog?.setOnKeyListener { _, keyCode, event ->
             when {
                 binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() &&
-                        keyCode == KeyEvent.KEYCODE_BACK &&
-                        event.action == KeyEvent.ACTION_UP -> {
+                    keyCode == KeyEvent.KEYCODE_BACK &&
+                    event.action == KeyEvent.ACTION_UP -> {
                     initSearchKeyword()
                     true
                 }
 
                 !binding.wsetRatingKeywordSearch.getIsWebsosoSearchFocused() &&
-                        keyCode == KeyEvent.KEYCODE_BACK &&
-                        event.action == KeyEvent.ACTION_UP -> {
+                    keyCode == KeyEvent.KEYCODE_BACK &&
+                    event.action == KeyEvent.ACTION_UP -> {
                     dismiss()
                     false
                 }

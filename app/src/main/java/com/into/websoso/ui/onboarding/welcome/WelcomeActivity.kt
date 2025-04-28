@@ -33,7 +33,10 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(activity_welcome) {
     companion object {
         private const val NICKNAME_KEY = "nickname"
 
-        fun getIntent(context: Context, nickname: String): Intent =
+        fun getIntent(
+            context: Context,
+            nickname: String,
+        ): Intent =
             Intent(context, WelcomeActivity::class.java).apply {
                 putExtra(NICKNAME_KEY, nickname)
             }

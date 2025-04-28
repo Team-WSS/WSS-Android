@@ -20,8 +20,7 @@ import com.into.websoso.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WithdrawSecondActivity :
-    BaseActivity<ActivityWithdrawSecondBinding>(activity_withdraw_second) {
+class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(activity_withdraw_second) {
     private val withdrawSecondViewModel: WithdrawSecondViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -164,7 +163,6 @@ class WithdrawSecondActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent =
-            Intent(context, WithdrawSecondActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, WithdrawSecondActivity::class.java)
     }
 }

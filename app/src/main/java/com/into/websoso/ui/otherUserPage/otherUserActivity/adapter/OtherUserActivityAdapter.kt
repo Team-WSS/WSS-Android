@@ -9,22 +9,27 @@ import com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
 import com.into.websoso.ui.main.myPage.myActivity.model.UserActivityModel
 
 class OtherUserActivityAdapter(
-    private val activityItemClickListener: ActivityItemClickListener
+    private val activityItemClickListener: ActivityItemClickListener,
 ) : ListAdapter<UserActivityModel, OtherUserActivityViewHolder>(diffCallback) {
-
     init {
         setHasStableIds(true)
     }
 
     override fun getItemId(position: Int): Long = getItem(position).activity.feedId.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherUserActivityViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): OtherUserActivityViewHolder {
         val binding =
             ItemMyActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return OtherUserActivityViewHolder(binding, activityItemClickListener)
     }
 
-    override fun onBindViewHolder(holder: OtherUserActivityViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: OtherUserActivityViewHolder,
+        position: Int,
+    ) {
         val userActivityModel = getItem(position)
         holder.bind(userActivityModel)
     }

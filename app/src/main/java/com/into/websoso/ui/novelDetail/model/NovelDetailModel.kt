@@ -48,7 +48,10 @@ data class NovelDetailModel(
     )
 
     companion object {
-        fun formattedDateRange(startDate: String?, endDate: String?): String {
+        fun formattedDateRange(
+            startDate: String?,
+            endDate: String?,
+        ): String {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val outputFormat = SimpleDateFormat("yy. MM. dd", Locale.getDefault())
             val start = startDate?.let { inputFormat.parse(it) }
@@ -57,7 +60,7 @@ data class NovelDetailModel(
             return when {
                 start != null && end != null -> "${outputFormat.format(start)} ~ ${
                     outputFormat.format(
-                        end
+                        end,
                     )
                 }"
 

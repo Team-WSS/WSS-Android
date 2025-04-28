@@ -12,9 +12,9 @@ import com.into.websoso.databinding.ItemFeedLoadingBinding
 class DetailExploreLoadingViewHolder(
     binding: ItemFeedLoadingBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
-        val gifImageLoader = ImageLoader.Builder(binding.root.context)
+        val gifImageLoader = ImageLoader
+            .Builder(binding.root.context)
             .components {
                 add(ImageDecoderDecoder.Factory())
             }.build()
@@ -22,7 +22,6 @@ class DetailExploreLoadingViewHolder(
     }
 
     companion object {
-
         fun from(parent: ViewGroup): DetailExploreLoadingViewHolder =
             DetailExploreLoadingViewHolder(
                 ItemFeedLoadingBinding.inflate(

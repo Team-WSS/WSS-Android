@@ -27,9 +27,14 @@ fun BuildType.buildConfigs(
     }.apply(block)
 }
 
-fun getLocalProperty(rootDir: File, key: String): String =
-    gradleLocalProperties(rootDir).getProperty(key)
+fun getLocalProperty(
+    rootDir: File,
+    key: String,
+): String = gradleLocalProperties(rootDir).getProperty(key)
 
 fun interface BuildConfigScope {
-    fun string(name: String, key: String)
+    fun string(
+        name: String,
+        key: String,
+    )
 }

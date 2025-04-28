@@ -32,8 +32,7 @@ data class NovelRatingModel(
             return Triple(date[0].toInt(), date[1].toInt(), date[2].toInt())
         }
 
-        fun String.toCharmPoint(): CharmPoint =
-            CharmPoint.entries.find { it.value == this } ?: CharmPoint.WORLDVIEW
+        fun String.toCharmPoint(): CharmPoint = CharmPoint.entries.find { it.value == this } ?: CharmPoint.WORLDVIEW
     }
 }
 
@@ -49,39 +48,37 @@ data class RatingDateModel(
             currentStartDate == null && currentEndDate == null -> novel_rating_add_date to arrayOf()
             currentStartDate != null && currentEndDate != null ->
                 novel_rating_display_date_with_tilde to
-                        arrayOf(
-                            currentStartDate.first,
-                            currentStartDate.second,
-                            currentStartDate.third,
-                            currentEndDate.first,
-                            currentEndDate.second,
-                            currentEndDate.third,
-                        )
+                    arrayOf(
+                        currentStartDate.first,
+                        currentStartDate.second,
+                        currentStartDate.third,
+                        currentEndDate.first,
+                        currentEndDate.second,
+                        currentEndDate.third,
+                    )
 
             currentStartDate != null ->
                 novel_rating_display_date to
-                        arrayOf(
-                            currentStartDate.first,
-                            currentStartDate.second,
-                            currentStartDate.third,
-                        )
+                    arrayOf(
+                        currentStartDate.first,
+                        currentStartDate.second,
+                        currentStartDate.third,
+                    )
 
             currentEndDate != null ->
                 novel_rating_display_date to
-                        arrayOf(
-                            currentEndDate.first,
-                            currentEndDate.second,
-                            currentEndDate.third,
-                        )
+                    arrayOf(
+                        currentEndDate.first,
+                        currentEndDate.second,
+                        currentEndDate.third,
+                    )
 
             else -> novel_rating_add_date to arrayOf()
         }
     }
 
     companion object {
-        fun Triple<Int, Int, Int>.toFormattedDate(): String {
-            return String.format(Locale.getDefault(), "%04d-%02d-%02d", first, second, third)
-        }
+        fun Triple<Int, Int, Int>.toFormattedDate(): String = String.format(Locale.getDefault(), "%04d-%02d-%02d", first, second, third)
     }
 }
 
@@ -95,15 +92,17 @@ data class NovelRatingKeywordsModel(
     val isSearchResultKeywordsEmpty: Boolean = false,
     val isSearchKeywordExceed: Boolean = false,
 ) {
-    private fun updatedCategories(keyword: KeywordModel): List<CategoriesModel.CategoryModel> {
-        return categories.map { category ->
+    private fun updatedCategories(keyword: KeywordModel): List<CategoriesModel.CategoryModel> =
+        categories.map { category ->
             val updatedKeywords = category.keywords.map { previousKeyword ->
-                if (previousKeyword.keywordId == keyword.keywordId) keyword
-                else previousKeyword
+                if (previousKeyword.keywordId == keyword.keywordId) {
+                    keyword
+                } else {
+                    previousKeyword
+                }
             }
             category.copy(keywords = updatedKeywords)
         }
-    }
 
     fun updateSelectedKeywords(
         keyword: KeywordModel,

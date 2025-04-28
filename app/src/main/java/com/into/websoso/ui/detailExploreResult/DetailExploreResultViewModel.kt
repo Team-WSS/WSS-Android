@@ -19,324 +19,329 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailExploreResultViewModel @Inject constructor(
-    private val getDetailExploreResultUseCase: GetDetailExploreResultUseCase,
-    private val keywordRepository: KeywordRepository,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<DetailExploreResultUiState> =
-        MutableLiveData(DetailExploreResultUiState())
-    val uiState: LiveData<DetailExploreResultUiState> get() = _uiState
+class DetailExploreResultViewModel
+    @Inject
+    constructor(
+        private val getDetailExploreResultUseCase: GetDetailExploreResultUseCase,
+        private val keywordRepository: KeywordRepository,
+    ) : ViewModel() {
+        private val _uiState: MutableLiveData<DetailExploreResultUiState> =
+            MutableLiveData(DetailExploreResultUiState())
+        val uiState: LiveData<DetailExploreResultUiState> get() = _uiState
 
-    private val _selectedGenres: MutableLiveData<MutableList<Genre>?> =
-        MutableLiveData(mutableListOf())
-    val selectedGenres: LiveData<List<Genre>?> get() = _selectedGenres.map { it?.toList() }
+        private val _selectedGenres: MutableLiveData<MutableList<Genre>?> =
+            MutableLiveData(mutableListOf())
+        val selectedGenres: LiveData<List<Genre>?> get() = _selectedGenres.map { it?.toList() }
 
-    private val _isNovelCompleted: MutableLiveData<Boolean?> = MutableLiveData()
-    val isNovelCompleted: LiveData<Boolean?> get() = _isNovelCompleted
+        private val _isNovelCompleted: MutableLiveData<Boolean?> = MutableLiveData()
+        val isNovelCompleted: LiveData<Boolean?> get() = _isNovelCompleted
 
-    private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
+        private val _selectedSeriesStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
 
-    private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
-    val selectedRating: LiveData<Float?> get() = _selectedRating
+        private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
+        val selectedRating: LiveData<Float?> get() = _selectedRating
 
-    val ratings: List<Float> = listOf(3.5f, 4.0f, 4.5f, 4.8f)
+        val ratings: List<Float> = listOf(3.5f, 4.0f, 4.5f, 4.8f)
 
-    private val _selectedKeywordIds: MutableLiveData<MutableList<Int>?> =
-        MutableLiveData(mutableListOf())
-    val selectedKeywordIds: LiveData<List<Int>?> get() = _selectedKeywordIds.map { it?.toList() }
+        private val _selectedKeywordIds: MutableLiveData<MutableList<Int>?> =
+            MutableLiveData(mutableListOf())
+        val selectedKeywordIds: LiveData<List<Int>?> get() = _selectedKeywordIds.map { it?.toList() }
 
-    private val _appliedFiltersMessage: MediatorLiveData<String?> = MediatorLiveData()
-    val appliedFiltersMessage: LiveData<String?> get() = _appliedFiltersMessage
+        private val _appliedFiltersMessage: MediatorLiveData<String?> = MediatorLiveData()
+        val appliedFiltersMessage: LiveData<String?> get() = _appliedFiltersMessage
 
-    private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
-    val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
+        private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
+        val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
 
-    private val _isKeywordChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
-    val isKeywordChipSelected: LiveData<Boolean> get() = _isKeywordChipSelected
+        private val _isKeywordChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
+        val isKeywordChipSelected: LiveData<Boolean> get() = _isKeywordChipSelected
 
-    private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
+        private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-    private val _isBottomSheetOpen = MutableLiveData(false)
+        private val _isBottomSheetOpen = MutableLiveData(false)
 
-    init {
-        _appliedFiltersMessage.apply {
-            addSource(_selectedGenres) { updateMessage() }
-            addSource(_isNovelCompleted) { updateMessage() }
-            addSource(_selectedRating) { updateMessage() }
-            addSource(_selectedKeywordIds) { updateMessage() }
-        }
-
-        _isInfoChipSelected.apply {
-            addSource(_selectedGenres) { isInfoChipSelectedEnabled() }
-            addSource(_isNovelCompleted) { isInfoChipSelectedEnabled() }
-            addSource(_selectedRating) { isInfoChipSelectedEnabled() }
-        }
-
-        _isKeywordChipSelected.addSource(_selectedKeywordIds) { isKeywordChipSelectedEnabled() }
-        updateKeyword(null)
-    }
-
-    private fun updateMessage() {
-        if (_isBottomSheetOpen.value == true) return
-
-        val appliedFilters = mutableListOf<String>()
-
-        _selectedGenres.value?.let { genres ->
-            if (genres.isNotEmpty()) {
-                appliedFilters.add(GENRES_LABEL)
+        init {
+            _appliedFiltersMessage.apply {
+                addSource(_selectedGenres) { updateMessage() }
+                addSource(_isNovelCompleted) { updateMessage() }
+                addSource(_selectedRating) { updateMessage() }
+                addSource(_selectedKeywordIds) { updateMessage() }
             }
-        }
 
-        _isNovelCompleted.value?.let {
-            appliedFilters.add(NOVEL_COMPLETED_LABEL)
-        }
-
-        _selectedRating.value?.let {
-            appliedFilters.add(RATING_LABEL)
-        }
-
-        _selectedKeywordIds.value?.let { keywords ->
-            if (keywords.isNotEmpty()) {
-                appliedFilters.add(KEYWORDS_LABEL)
+            _isInfoChipSelected.apply {
+                addSource(_selectedGenres) { isInfoChipSelectedEnabled() }
+                addSource(_isNovelCompleted) { isInfoChipSelectedEnabled() }
+                addSource(_selectedRating) { isInfoChipSelectedEnabled() }
             }
+
+            _isKeywordChipSelected.addSource(_selectedKeywordIds) { isKeywordChipSelectedEnabled() }
+            updateKeyword(null)
         }
 
-        _appliedFiltersMessage.value = appliedFilters.joinToString(FILTER_SEPARATOR)
-    }
+        private fun updateMessage() {
+            if (_isBottomSheetOpen.value == true) return
 
-    private fun isInfoChipSelectedEnabled() {
-        val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
-        val isStatusChipSelected: Boolean = _isNovelCompleted.value != null
-        val isRatingChipSelected: Boolean = _selectedRating.value != null
+            val appliedFilters = mutableListOf<String>()
 
-        _isInfoChipSelected.value =
-            isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
-    }
-
-    private fun isKeywordChipSelectedEnabled() {
-        _isKeywordChipSelected.value = selectedKeywordIds.value?.isNotEmpty()
-    }
-
-    fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
-        _selectedGenres.value = detailExploreFilteredModel.genres?.toMutableList()
-        _isNovelCompleted.value = detailExploreFilteredModel.isCompleted
-        _selectedRating.value = detailExploreFilteredModel.novelRating
-        _selectedKeywordIds.value = detailExploreFilteredModel.keywordIds?.toMutableList()
-
-        val currentUiState = _uiState.value ?: return
-        val selectedKeywordIds = _selectedKeywordIds.value.orEmpty()
-
-        val updatedCategories = currentUiState.categories.map { category ->
-            val updatedKeywords = category.keywords.map { existingKeyword ->
-                if (selectedKeywordIds.contains(existingKeyword.keywordId)) {
-                    existingKeyword.copy(isSelected = !existingKeyword.isSelected)
-                } else {
-                    existingKeyword
+            _selectedGenres.value?.let { genres ->
+                if (genres.isNotEmpty()) {
+                    appliedFilters.add(GENRES_LABEL)
                 }
             }
-            category.copy(keywords = updatedKeywords)
+
+            _isNovelCompleted.value?.let {
+                appliedFilters.add(NOVEL_COMPLETED_LABEL)
+            }
+
+            _selectedRating.value?.let {
+                appliedFilters.add(RATING_LABEL)
+            }
+
+            _selectedKeywordIds.value?.let { keywords ->
+                if (keywords.isNotEmpty()) {
+                    appliedFilters.add(KEYWORDS_LABEL)
+                }
+            }
+
+            _appliedFiltersMessage.value = appliedFilters.joinToString(FILTER_SEPARATOR)
         }
 
-        updateSearchResult(true)
-        _uiState.value = currentUiState.copy(categories = updatedCategories)
-    }
+        private fun isInfoChipSelectedEnabled() {
+            val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
+            val isStatusChipSelected: Boolean = _isNovelCompleted.value != null
+            val isRatingChipSelected: Boolean = _selectedRating.value != null
 
+            _isInfoChipSelected.value =
+                isGenreChipSelected ||
+                isStatusChipSelected ||
+                isRatingChipSelected
+        }
 
-    fun updateSearchResult(isSearchButtonClick: Boolean) {
-        if (uiState.value?.isLoadable == false && !isSearchButtonClick) return
+        private fun isKeywordChipSelectedEnabled() {
+            _isKeywordChipSelected.value = selectedKeywordIds.value?.isNotEmpty()
+        }
 
-        viewModelScope.launch {
-            runCatching {
-                getDetailExploreResultUseCase(
-                    genres = selectedGenres.value?.map { it.titleEn },
-                    isCompleted = isNovelCompleted.value,
-                    novelRating = selectedRating.value,
-                    keywordIds = selectedKeywordIds.value,
-                    isSearchButtonClick = isSearchButtonClick,
-                )
-            }.onSuccess { results ->
-                when (results.novels.isNotEmpty()) {
-                    true -> {
-                        _uiState.value = uiState.value?.copy(
-                            loading = false,
-                            isLoadable = results.isLoadable,
-                            novels = results.novels.map { it.toUi() },
-                            novelCount = results.resultCount,
-                        )
-                        _isNovelResultEmptyBoxVisibility.value = false
-                    }
+        fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
+            _selectedGenres.value = detailExploreFilteredModel.genres?.toMutableList()
+            _isNovelCompleted.value = detailExploreFilteredModel.isCompleted
+            _selectedRating.value = detailExploreFilteredModel.novelRating
+            _selectedKeywordIds.value = detailExploreFilteredModel.keywordIds?.toMutableList()
 
-                    false -> {
-                        _uiState.value = uiState.value?.copy(
-                            loading = false,
-                            isLoadable = results.isLoadable,
-                            novelCount = results.resultCount,
-                            novels = emptyList(),
-                        )
-                        _isNovelResultEmptyBoxVisibility.value = true
+            val currentUiState = _uiState.value ?: return
+            val selectedKeywordIds = _selectedKeywordIds.value.orEmpty()
+
+            val updatedCategories = currentUiState.categories.map { category ->
+                val updatedKeywords = category.keywords.map { existingKeyword ->
+                    if (selectedKeywordIds.contains(existingKeyword.keywordId)) {
+                        existingKeyword.copy(isSelected = !existingKeyword.isSelected)
+                    } else {
+                        existingKeyword
                     }
                 }
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
-                )
-                _isNovelResultEmptyBoxVisibility.value = false
+                category.copy(keywords = updatedKeywords)
             }
+
+            updateSearchResult(true)
+            _uiState.value = currentUiState.copy(categories = updatedCategories)
         }
-    }
 
-    fun updateSelectedInfoValueClear() {
-        _selectedGenres.value = mutableListOf()
-        _isNovelCompleted.value = null
-        _selectedRating.value = null
-    }
+        fun updateSearchResult(isSearchButtonClick: Boolean) {
+            if (uiState.value?.isLoadable == false && !isSearchButtonClick) return
 
-    fun updateSelectedGenres(genre: Genre) {
-        val currentGenres = _selectedGenres.value?.toMutableList() ?: mutableListOf()
+            viewModelScope.launch {
+                runCatching {
+                    getDetailExploreResultUseCase(
+                        genres = selectedGenres.value?.map { it.titleEn },
+                        isCompleted = isNovelCompleted.value,
+                        novelRating = selectedRating.value,
+                        keywordIds = selectedKeywordIds.value,
+                        isSearchButtonClick = isSearchButtonClick,
+                    )
+                }.onSuccess { results ->
+                    when (results.novels.isNotEmpty()) {
+                        true -> {
+                            _uiState.value = uiState.value?.copy(
+                                loading = false,
+                                isLoadable = results.isLoadable,
+                                novels = results.novels.map { it.toUi() },
+                                novelCount = results.resultCount,
+                            )
+                            _isNovelResultEmptyBoxVisibility.value = false
+                        }
 
-        _selectedGenres.value = when (currentGenres.contains(genre)) {
-            true -> {
-                currentGenres.remove(genre)
-                currentGenres
-            }
-
-            false -> {
-                currentGenres.add(genre)
-                currentGenres
-            }
-        }
-    }
-
-    fun updateSelectedSeriesStatus(status: SeriesStatus?) {
-        _selectedSeriesStatus.value = status
-        _isNovelCompleted.value = status?.isCompleted
-    }
-
-    fun updateSelectedRating(rating: Float?) {
-        _selectedRating.value = rating
-    }
-
-    fun updateKeyword(searchWord: String?) {
-        viewModelScope.launch {
-            runCatching {
-                keywordRepository.fetchKeywords(searchWord)
-            }.onSuccess { keywordsList ->
-                val categoriesModel =
-                    CategoriesModel(categories = keywordsList.categories.map { it.toUi() })
-
-                val selectedKeywordIds = selectedKeywordIds.value.orEmpty()
-
-                val updatedCategories = categoriesModel.categories.map { category ->
-                    val updatedKeywords = category.keywords.map { keyword ->
-                        if (selectedKeywordIds.contains(keyword.keywordId)) {
-                            keyword.copy(isSelected = true)
-                        } else {
-                            keyword
+                        false -> {
+                            _uiState.value = uiState.value?.copy(
+                                loading = false,
+                                isLoadable = results.isLoadable,
+                                novelCount = results.resultCount,
+                                novels = emptyList(),
+                            )
+                            _isNovelResultEmptyBoxVisibility.value = true
                         }
                     }
-                    category.copy(keywords = updatedKeywords)
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        error = true,
+                    )
+                    _isNovelResultEmptyBoxVisibility.value = false
+                }
+            }
+        }
+
+        fun updateSelectedInfoValueClear() {
+            _selectedGenres.value = mutableListOf()
+            _isNovelCompleted.value = null
+            _selectedRating.value = null
+        }
+
+        fun updateSelectedGenres(genre: Genre) {
+            val currentGenres = _selectedGenres.value?.toMutableList() ?: mutableListOf()
+
+            _selectedGenres.value = when (currentGenres.contains(genre)) {
+                true -> {
+                    currentGenres.remove(genre)
+                    currentGenres
                 }
 
-                _uiState.value = when (searchWord) {
-                    null -> {
-                        uiState.value?.copy(
-                            loading = false,
-                            categories = updatedCategories,
-                        )
+                false -> {
+                    currentGenres.add(genre)
+                    currentGenres
+                }
+            }
+        }
+
+        fun updateSelectedSeriesStatus(status: SeriesStatus?) {
+            _selectedSeriesStatus.value = status
+            _isNovelCompleted.value = status?.isCompleted
+        }
+
+        fun updateSelectedRating(rating: Float?) {
+            _selectedRating.value = rating
+        }
+
+        fun updateKeyword(searchWord: String?) {
+            viewModelScope.launch {
+                runCatching {
+                    keywordRepository.fetchKeywords(searchWord)
+                }.onSuccess { keywordsList ->
+                    val categoriesModel =
+                        CategoriesModel(categories = keywordsList.categories.map { it.toUi() })
+
+                    val selectedKeywordIds = selectedKeywordIds.value.orEmpty()
+
+                    val updatedCategories = categoriesModel.categories.map { category ->
+                        val updatedKeywords = category.keywords.map { keyword ->
+                            if (selectedKeywordIds.contains(keyword.keywordId)) {
+                                keyword.copy(isSelected = true)
+                            } else {
+                                keyword
+                            }
+                        }
+                        category.copy(keywords = updatedKeywords)
                     }
 
-                    else -> {
-                        val results = updatedCategories.flatMap { it.keywords }
-                        uiState.value?.copy(
-                            loading = false,
-                            searchResultKeywords = results,
-                            isInitialSearchKeyword = false,
-                            isSearchResultKeywordsEmpty = results.isEmpty(),
-                        )
+                    _uiState.value = when (searchWord) {
+                        null -> {
+                            uiState.value?.copy(
+                                loading = false,
+                                categories = updatedCategories,
+                            )
+                        }
+
+                        else -> {
+                            val results = updatedCategories.flatMap { it.keywords }
+                            uiState.value?.copy(
+                                loading = false,
+                                searchResultKeywords = results,
+                                isInitialSearchKeyword = false,
+                                isSearchResultKeywordsEmpty = results.isEmpty(),
+                            )
+                        }
+                    }
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
+            }
+        }
+
+        fun updateClickedChipState(keywordId: Int) {
+            val currentUiState = _uiState.value ?: return
+
+            val updatedCategories = currentUiState.categories.map { category ->
+                val updatedKeywords = category.keywords.map { existingKeyword ->
+                    when (existingKeyword.keywordId == keywordId) {
+                        true -> existingKeyword.copy(isSelected = !existingKeyword.isSelected)
+                        false -> existingKeyword
                     }
                 }
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
+                category.copy(keywords = updatedKeywords)
+            }
+
+            val selectedKeywordIds = updatedCategories.flatMap { category ->
+                category.keywords.filter { it.isSelected }.map { it.keywordId }
+            }
+
+            val isAnyKeywordSelected = updatedCategories.any { category ->
+                category.keywords.any { it.isSelected }
+            }
+
+            _selectedKeywordIds.value = selectedKeywordIds.toMutableList()
+            _isKeywordChipSelected.value = isAnyKeywordSelected
+            _uiState.value = currentUiState.copy(categories = updatedCategories)
+        }
+
+        fun updateSelectedKeywordValueClear() {
+            val currentState = _uiState.value ?: return
+            val updatedCategories = currentState.categories
+
+            val resetCategories = updatedCategories.map { category ->
+                category.copy(
+                    keywords = category.keywords.map { keyword ->
+                        keyword.copy(isSelected = false)
+                    },
+                )
+            }
+
+            _selectedKeywordIds.value = mutableListOf()
+            _uiState.value = currentState.copy(categories = resetCategories)
+            _isKeywordChipSelected.value = false
+        }
+
+        fun updateIsSearchKeywordProceeding(isProceeding: Boolean) {
+            uiState.value?.let { uiState ->
+                _uiState.value = uiState.copy(
+                    isSearchKeywordProceeding = isProceeding,
                 )
             }
         }
-    }
 
-    fun updateClickedChipState(keywordId: Int) {
-        val currentUiState = _uiState.value ?: return
-
-        val updatedCategories = currentUiState.categories.map { category ->
-            val updatedKeywords = category.keywords.map { existingKeyword ->
-                when (existingKeyword.keywordId == keywordId) {
-                    true -> existingKeyword.copy(isSelected = !existingKeyword.isSelected)
-                    false -> existingKeyword
-                }
+        fun initSearchKeyword() {
+            uiState.value?.let { uiState ->
+                _uiState.value = uiState.copy(
+                    searchResultKeywords = emptyList(),
+                    isSearchKeywordProceeding = false,
+                    isInitialSearchKeyword = true,
+                    isSearchResultKeywordsEmpty = false,
+                )
             }
-            category.copy(keywords = updatedKeywords)
         }
 
-        val selectedKeywordIds = updatedCategories.flatMap { category ->
-            category.keywords.filter { it.isSelected }.map { it.keywordId }
+        fun updateIsBottomSheetOpen(isBottomSheetOpen: Boolean) {
+            _isBottomSheetOpen.value = isBottomSheetOpen
+
+            if (!isBottomSheetOpen) updateMessage()
         }
 
-        val isAnyKeywordSelected = updatedCategories.any { category ->
-            category.keywords.any { it.isSelected }
-        }
-
-        _selectedKeywordIds.value = selectedKeywordIds.toMutableList()
-        _isKeywordChipSelected.value = isAnyKeywordSelected
-        _uiState.value = currentUiState.copy(categories = updatedCategories)
-    }
-
-    fun updateSelectedKeywordValueClear() {
-        val currentState = _uiState.value ?: return
-        val updatedCategories = currentState.categories
-
-        val resetCategories = updatedCategories.map { category ->
-            category.copy(keywords = category.keywords.map { keyword ->
-                keyword.copy(isSelected = false)
-            })
-        }
-
-        _selectedKeywordIds.value = mutableListOf()
-        _uiState.value = currentState.copy(categories = resetCategories)
-        _isKeywordChipSelected.value = false
-    }
-
-    fun updateIsSearchKeywordProceeding(isProceeding: Boolean) {
-        uiState.value?.let { uiState ->
-            _uiState.value = uiState.copy(
-                isSearchKeywordProceeding = isProceeding,
-            )
+        companion object {
+            private const val GENRES_LABEL = "장르"
+            private const val NOVEL_COMPLETED_LABEL = "연재상태"
+            private const val RATING_LABEL = "별점"
+            private const val KEYWORDS_LABEL = "키워드"
+            private const val FILTER_SEPARATOR = ", "
         }
     }
-
-    fun initSearchKeyword() {
-        uiState.value?.let { uiState ->
-            _uiState.value = uiState.copy(
-                searchResultKeywords = emptyList(),
-                isSearchKeywordProceeding = false,
-                isInitialSearchKeyword = true,
-                isSearchResultKeywordsEmpty = false,
-            )
-        }
-    }
-
-    fun updateIsBottomSheetOpen(isBottomSheetOpen: Boolean) {
-        _isBottomSheetOpen.value = isBottomSheetOpen
-
-        if (!isBottomSheetOpen) updateMessage()
-    }
-
-    companion object {
-        private const val GENRES_LABEL = "장르"
-        private const val NOVEL_COMPLETED_LABEL = "연재상태"
-        private const val RATING_LABEL = "별점"
-        private const val KEYWORDS_LABEL = "키워드"
-        private const val FILTER_SEPARATOR = ", "
-    }
-}

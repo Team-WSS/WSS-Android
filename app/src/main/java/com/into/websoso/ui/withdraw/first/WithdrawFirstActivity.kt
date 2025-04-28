@@ -12,8 +12,7 @@ import com.into.websoso.ui.withdraw.second.WithdrawSecondActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WithdrawFirstActivity :
-    BaseActivity<ActivityWithdrawFirstBinding>(R.layout.activity_withdraw_first) {
+class WithdrawFirstActivity : BaseActivity<ActivityWithdrawFirstBinding>(R.layout.activity_withdraw_first) {
     private val withdrawFirstViewModel: WithdrawFirstViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,9 +68,6 @@ class WithdrawFirstActivity :
     }
 
     companion object {
-
-        fun getIntent(context: Context): Intent {
-            return Intent(context, WithdrawFirstActivity::class.java)
-        }
+        fun getIntent(context: Context): Intent = Intent(context, WithdrawFirstActivity::class.java)
     }
 }

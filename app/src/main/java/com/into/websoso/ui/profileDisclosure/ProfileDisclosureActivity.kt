@@ -14,8 +14,7 @@ import com.into.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileDisclosureActivity :
-    BaseActivity<ActivityProfileDisclosureBinding>(activity_profile_disclosure) {
+class ProfileDisclosureActivity : BaseActivity<ActivityProfileDisclosureBinding>(activity_profile_disclosure) {
     private val profileDisclosureViewModel: ProfileDisclosureViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -57,7 +56,6 @@ class ProfileDisclosureActivity :
     companion object {
         const val IS_PROFILE_PUBLIC = "isProfilePublic"
 
-        fun getIntent(context: Context): Intent =
-            Intent(context, ProfileDisclosureActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, ProfileDisclosureActivity::class.java)
     }
 }

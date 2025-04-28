@@ -50,7 +50,7 @@ fun NotificationDetailContent(
         HyperlinkText(
             uiState.notificationDetail.notificationDetail,
             style =
-            WebsosoTheme.typography.body2,
+                WebsosoTheme.typography.body2,
             textColor = Black,
             modifier = Modifier
                 .padding(top = 24.dp, start = 20.dp, end = 20.dp)
