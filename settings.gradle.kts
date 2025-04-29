@@ -21,6 +21,8 @@ dependencyResolutionManagement {
 include(":app")
 
 include(
+    ":core:auth-kakao",
+    ":core:auth",
     ":core:resource",
     ":core:designsystem",
     ":core:network",
