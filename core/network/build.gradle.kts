@@ -1,3 +1,4 @@
+import com.into.websoso.buildConfigs
 import com.into.websoso.setNamespace
 
 plugins {
@@ -6,6 +7,19 @@ plugins {
 
 android {
     setNamespace("core.network")
+    buildTypes {
+        debug {
+            buildConfigs(rootDir) {
+                string(name = "BASE_URL", key = "debug.base.url")
+            }
+        }
+
+        release {
+            buildConfigs(rootDir) {
+                string(name = "BASE_URL", key = "release.base.url")
+            }
+        }
+    }
     buildFeatures {
         buildConfig = true
     }
