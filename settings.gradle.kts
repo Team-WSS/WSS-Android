@@ -23,4 +23,5 @@ include(":app")
 include(
     ":core:resource",
     ":core:designsystem",
+    ":core:network",
 )
