@@ -30,3 +30,5 @@ include(
 )
 
 include(":feature:signin")
+
+include(":data:account")
