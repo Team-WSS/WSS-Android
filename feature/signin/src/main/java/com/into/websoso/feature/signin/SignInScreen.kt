@@ -13,33 +13,54 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.into.websoso.core.auth.AuthClient
+import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.lifecycle.compose.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.signin.UiEffect.ScrollToPage
+import com.into.websoso.feature.signin.UiEffect.ShowToast
 import com.into.websoso.feature.signin.component.OnboardingDotsIndicator
 import com.into.websoso.feature.signin.component.OnboardingHorizontalPager
 import com.into.websoso.feature.signin.component.Onboarding_Images
 import com.into.websoso.feature.signin.component.SignInButtons
 
 @Composable
-fun SignInRoute(signInViewModel: SignInViewModel = hiltViewModel()) {
+fun SignInRoute(
+    signInViewModel: SignInViewModel = hiltViewModel(),
+    authClient: (platform: AuthPlatform) -> AuthClient,
+) {
     val pagerState = rememberPagerState { Onboarding_Images.size }
 
     signInViewModel.uiEvent.collectAsEventWithLifecycle { event ->
         when (event) {
             is ScrollToPage -> {
-                val nextPage = (pagerState.currentPage + 1) % pagerState.pageCount
-                pagerState.animateScrollToPage(nextPage)
+                pagerState.animateScrollToPage(
+                    page = (pagerState.currentPage + 1) % pagerState.pageCount,
+                )
+            }
+
+            is ShowToast -> {
+                // TODO: 실패 시 커스텀 스낵 바 구현
             }
         }
     }
 
-    SignInScreen(pagerState = pagerState)
+    SignInScreen(
+        pagerState = pagerState,
+        onClick = { platform ->
+            signInViewModel.signIn(platform = platform) {
+                authClient(platform).signIn()
+            }
+        },
+    )
 }
 
 @Composable
-private fun SignInScreen(pagerState: PagerState) {
+private fun SignInScreen(
+    pagerState: PagerState,
+    onClick: (platform: AuthPlatform) -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -51,7 +72,7 @@ private fun SignInScreen(pagerState: PagerState) {
         Spacer(modifier = Modifier.weight(weight = 1f))
         OnboardingDotsIndicator(pagerState = pagerState)
         Spacer(modifier = Modifier.height(height = 32.dp))
-        SignInButtons(onClick = { })
+        SignInButtons(onClick = onClick)
         Spacer(modifier = Modifier.height(height = 24.dp))
     }
 }
@@ -61,6 +82,9 @@ private fun SignInScreen(pagerState: PagerState) {
 private fun SignInScreenPreview() {
     WebsosoTheme {
         val pagerState = rememberPagerState { Onboarding_Images.size }
-        SignInScreen(pagerState = pagerState)
+        SignInScreen(
+            pagerState = pagerState,
+            onClick = {},
+        )
     }
 }

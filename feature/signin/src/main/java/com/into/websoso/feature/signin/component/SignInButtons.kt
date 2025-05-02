@@ -10,12 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_login_kakao
 
 @Composable
 internal fun SignInButtons(
-    onClick: () -> Unit,
+    onClick: (platform: AuthPlatform) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -28,14 +29,14 @@ internal fun SignInButtons(
 
 @Composable
 private fun KakaoSignInButton(
-    onClick: () -> Unit,
+    onClick: (platform: AuthPlatform) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Image(
         imageVector = ImageVector.vectorResource(id = ic_login_kakao),
         contentDescription = null,
         modifier = modifier.clickable {
-            onClick()
+            onClick(AuthPlatform.KAKAO)
         },
     )
 }
