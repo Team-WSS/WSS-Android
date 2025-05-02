@@ -1,7 +1,8 @@
 package com.into.websoso.core.auth
 
-import javax.inject.Qualifier
+import dagger.MapKey
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class KakaoAuth
+@MapKey
+annotation class AuthPlatformKey(
+    val value: AuthPlatform,
+)
