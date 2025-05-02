@@ -1,4 +1,4 @@
-package com.into.websoso.core.common.lifecycle.compose
+package com.into.websoso.core.common.extensions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
