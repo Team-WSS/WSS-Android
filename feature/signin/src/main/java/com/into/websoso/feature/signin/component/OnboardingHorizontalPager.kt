@@ -10,13 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.core.resource.R
+import com.into.websoso.core.resource.R.drawable.img_login_1
+import com.into.websoso.core.resource.R.drawable.img_login_2
+import com.into.websoso.core.resource.R.drawable.img_login_3
+import com.into.websoso.core.resource.R.drawable.img_login_4
 
 internal val Onboarding_Images = arrayOf(
-    R.drawable.img_login_1,
-    R.drawable.img_login_2,
-    R.drawable.img_login_3,
-    R.drawable.img_login_4,
+    img_login_1,
+    img_login_2,
+    img_login_3,
+    img_login_4,
 )
 
 @Composable
