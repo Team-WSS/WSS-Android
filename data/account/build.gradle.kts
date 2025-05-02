@@ -7,3 +7,7 @@ plugins {
 android {
     setNamespace("data.account")
 }
+
+dependencies {
+    implementation(projects.core.auth)
+}

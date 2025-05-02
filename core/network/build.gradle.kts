@@ -3,6 +3,7 @@ import com.into.websoso.setNamespace
 
 plugins {
     id("websoso.android.library")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -31,4 +32,7 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
+
+    implementation(projects.core.auth)
+    implementation(projects.data.account)
 }

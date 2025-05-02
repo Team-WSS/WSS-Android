@@ -7,3 +7,9 @@ plugins {
 android {
     setNamespace("feature.signin")
 }
+
+dependencies {
+    implementation(projects.core.auth)
+
+    implementation(projects.data.account)
+}
