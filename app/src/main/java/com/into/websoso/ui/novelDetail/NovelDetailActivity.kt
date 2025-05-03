@@ -6,18 +6,21 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
 import android.view.Gravity
-import android.view.View
-import android.view.ViewTreeObserver
+import android.view.View.GONE
+import android.view.View.MeasureSpec.UNSPECIFIED
+import android.view.View.VISIBLE
+import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.viewpager2.widget.ViewPager2
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayoutMediator
-import com.into.websoso.R
+import com.into.websoso.R.layout.activity_novel_detail
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
@@ -27,6 +30,16 @@ import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.core.resource.R.string.inquire_link
+import com.into.websoso.core.resource.R.string.novel_detail_feed
+import com.into.websoso.core.resource.R.string.novel_detail_feed_write
+import com.into.websoso.core.resource.R.string.novel_detail_info
+import com.into.websoso.core.resource.R.string.novel_detail_remove_accept
+import com.into.websoso.core.resource.R.string.novel_detail_remove_cancel
+import com.into.websoso.core.resource.R.string.novel_detail_remove_evaluate_alert_message
+import com.into.websoso.core.resource.R.string.novel_detail_remove_evaluate_alert_title
+import com.into.websoso.core.resource.R.string.novel_detail_remove_result
 import com.into.websoso.databinding.ActivityNovelDetailBinding
 import com.into.websoso.databinding.ItemNovelDetailTooltipBinding
 import com.into.websoso.databinding.MenuNovelDetailPopupBinding
@@ -43,7 +56,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.activity_novel_detail) {
+class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_novel_detail) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -60,7 +73,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
     private val novelDetailResultLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        registerForActivityResult(StartActivityForResult()) { result ->
             when (result.resultCode) {
                 NovelRating.RESULT_OK -> {
                     novelInfoViewModel.updateNovelInfoWithDelay(novelId)
@@ -79,8 +92,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
         binding.vpNovelDetail.currentItem = FEED_FRAGMENT_PAGE
         showWebsosoSnackBar(
             view = binding.root,
-            message = getString(R.string.novel_detail_feed_write),
-            icon = R.drawable.ic_novel_detail_check,
+            message = getString(novel_detail_feed_write),
+            icon = ic_novel_detail_check,
         )
     }
 
@@ -113,17 +126,17 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
 
     private fun navigateToReportError() {
         tracker.trackEvent("contact_error")
-        val inquireUrl = getString(R.string.inquire_link)
+        val inquireUrl = getString(inquire_link)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
 
     private fun showDeleteUserNovelAlertDialog() {
         val novelAlertModel = NovelAlertModel(
-            title = getString(R.string.novel_detail_remove_evaluate_alert_title),
-            message = getString(R.string.novel_detail_remove_evaluate_alert_message),
-            acceptButtonText = getString(R.string.novel_detail_remove_accept),
-            cancelButtonText = getString(R.string.novel_detail_remove_cancel),
+            title = getString(novel_detail_remove_evaluate_alert_title),
+            message = getString(novel_detail_remove_evaluate_alert_message),
+            acceptButtonText = getString(novel_detail_remove_accept),
+            cancelButtonText = getString(novel_detail_remove_cancel),
             onAcceptClick = { deleteUserNovel() },
         )
         NovelAlertDialogFragment
@@ -141,8 +154,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
 
         showWebsosoSnackBar(
             view = binding.root,
-            message = getString(R.string.novel_detail_remove_result),
-            icon = R.drawable.ic_novel_detail_check,
+            message = getString(novel_detail_remove_result),
+            icon = ic_novel_detail_check,
         )
     }
 
@@ -155,8 +168,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
     private fun setupTabLayout() {
         TabLayoutMediator(binding.tlNovelDetail, binding.vpNovelDetail) { tab, position ->
             tab.text = when (position) {
-                INFO_FRAGMENT_PAGE -> getString(R.string.novel_detail_info)
-                FEED_FRAGMENT_PAGE -> getString(R.string.novel_detail_feed)
+                INFO_FRAGMENT_PAGE -> getString(novel_detail_info)
+                FEED_FRAGMENT_PAGE -> getString(novel_detail_feed)
                 else -> throw IllegalArgumentException()
             }
         }.attach()
@@ -165,7 +178,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
     private fun setupOnPageChangeCallback() {
         binding.vpNovelDetail.registerOnPageChangeCallback(
             object :
-                ViewPager2.OnPageChangeCallback() {
+                OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     updateNovelFeedWriteButtonVisibility(position)
                 }
@@ -175,8 +188,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
 
     private fun updateNovelFeedWriteButtonVisibility(position: Int) {
         binding.ivNovelFeedWrite.visibility = when (position) {
-            FEED_FRAGMENT_PAGE -> View.VISIBLE
-            else -> View.GONE
+            FEED_FRAGMENT_PAGE -> VISIBLE
+            else -> GONE
         }
     }
 
@@ -211,11 +224,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
     private fun setupTooltipBottomFramePosition() {
         binding.ctlNovelDetail.viewTreeObserver.addOnPreDrawListener(
             object :
-                ViewTreeObserver.OnPreDrawListener {
+                OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     binding.ctlNovelDetail.viewTreeObserver.removeOnPreDrawListener(this)
 
-                    val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
+                    val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as LayoutParams
                     layoutParams.topMargin = binding.ctlNovelDetail.height
                     binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
 
@@ -229,13 +242,13 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
         binding.tgNovelDetailReadStatus.post {
             tooltipPopupWindow = PopupWindow(
                 novelDetailToolTipBinding.root,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                WRAP_CONTENT,
+                WRAP_CONTENT,
                 true,
             ).apply {
                 novelDetailToolTipBinding.root.measure(
-                    View.MeasureSpec.UNSPECIFIED,
-                    View.MeasureSpec.UNSPECIFIED,
+                    UNSPECIFIED,
+                    UNSPECIFIED,
                 )
 
                 val anchorViewWidth = binding.tgNovelDetailReadStatus.measuredWidth
