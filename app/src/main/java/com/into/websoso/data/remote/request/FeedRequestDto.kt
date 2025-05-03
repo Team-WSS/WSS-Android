@@ -13,4 +13,6 @@ data class FeedRequestDto(
     val novelId: Long?,
     @SerialName("isSpoiler")
     val isSpoiler: Boolean,
+    @SerialName("isPublic")
+    val isPublic: Boolean,
 )

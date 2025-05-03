@@ -35,6 +35,7 @@ class FeedRepository @Inject constructor(
         feedContent: String,
         novelId: Long?,
         isSpoiler: Boolean,
+        isPublic: Boolean,
     ) {
         feedApi.postFeed(
             FeedRequestDto(
@@ -42,7 +43,8 @@ class FeedRepository @Inject constructor(
                 feedContent = feedContent,
                 novelId = novelId,
                 isSpoiler = isSpoiler,
-            )
+                isPublic = isPublic,
+            ),
         )
     }
 
@@ -52,6 +54,7 @@ class FeedRepository @Inject constructor(
         feedContent: String,
         novelId: Long?,
         isSpoiler: Boolean,
+        isPublic: Boolean,
     ) {
         feedApi.putFeed(
             feedId,
@@ -60,7 +63,8 @@ class FeedRepository @Inject constructor(
                 feedContent = feedContent,
                 novelId = novelId,
                 isSpoiler = isSpoiler,
-            )
+                isPublic = isPublic,
+            ),
         )
     }
 
