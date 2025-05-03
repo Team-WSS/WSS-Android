@@ -14,16 +14,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyActivityViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val feedRepository: FeedRepository,
-) : ViewModel() {
+class MyActivityViewModel
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+        private val feedRepository: FeedRepository,
+    ) : ViewModel() {
+        private val _uiState: MutableLiveData<MyActivityUiState> = MutableLiveData(MyActivityUiState())
+        val uiState: LiveData<MyActivityUiState> get() = _uiState
 
-    private val _uiState: MutableLiveData<MyActivityUiState> = MutableLiveData(MyActivityUiState())
-    val uiState: LiveData<MyActivityUiState> get() = _uiState
-
-    private val _lastFeedId: MutableLiveData<Long> = MutableLiveData(0L)
-    val lastFeedId: LiveData<Long> get() = _lastFeedId
+        private val _lastFeedId: MutableLiveData<Long> = MutableLiveData(0L)
+        val lastFeedId: LiveData<Long> get() = _lastFeedId
 
     private val _userProfile = MutableLiveData<UserProfileModel>()
     val userProfile: LiveData<UserProfileModel> get() = _userProfile
@@ -52,7 +53,10 @@ class MyActivityViewModel @Inject constructor(
                     isLoading = false,
                     activities = response.feeds.map { it.toUi() }.take(ACTIVITY_LIMIT_COUNT),
                 )
-                _lastFeedId.value = response.feeds.lastOrNull()?.feedId?.toLong() ?: _lastFeedId.value
+                _lastFeedId.value = response.feeds
+                    .lastOrNull()
+                    ?.feedId
+                    ?.toLong() ?: _lastFeedId.value
             }.onFailure {
                 _uiState.value = _uiState.value?.copy(
                     isLoading = false,
@@ -62,7 +66,11 @@ class MyActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateLike(selectedFeedId: Long, isLiked: Boolean, updatedLikeCount: Int) {
+    fun updateLike(
+        selectedFeedId: Long,
+        isLiked: Boolean,
+        updatedLikeCount: Int,
+    ) {
         uiState.value?.let { myActivityUiState ->
             val selectedFeed = myActivityUiState.activities.find { activityModel ->
                 activityModel.feedId == selectedFeedId
@@ -84,7 +92,7 @@ class MyActivityViewModel @Inject constructor(
 
                                 false -> activityModel
                             }
-                        }
+                        },
                     )
                 }.onFailure {
                     _uiState.value = myActivityUiState.copy(

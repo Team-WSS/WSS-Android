@@ -18,23 +18,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateFeedViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val getSearchedNovelsUseCase: GetSearchedNovelsUseCase,
-    private val feedRepository: FeedRepository,
-) : ViewModel() {
-    private val _searchNovelUiState: MutableLiveData<SearchNovelUiState> =
-        MutableLiveData(SearchNovelUiState())
-    val searchNovelUiState: LiveData<SearchNovelUiState> get() = _searchNovelUiState
-    private val _categories: MutableList<CreatedFeedCategoryModel> = mutableListOf()
-    val categories: List<CreatedFeedCategoryModel> get() = _categories.toList()
-    private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
-    val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
-    val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
-    val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isPublic: MutableLiveData<Boolean> = MutableLiveData(true)
-    val content: MutableLiveData<String> = MutableLiveData("")
-    private var novelId: Long? = null
+class CreateFeedViewModel
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val getSearchedNovelsUseCase: GetSearchedNovelsUseCase,
+        private val feedRepository: FeedRepository,
+    ) : ViewModel() {
+        private val _searchNovelUiState: MutableLiveData<SearchNovelUiState> =
+            MutableLiveData(SearchNovelUiState())
+        val searchNovelUiState: LiveData<SearchNovelUiState> get() = _searchNovelUiState
+        private val _categories: MutableList<CreatedFeedCategoryModel> = mutableListOf()
+        val categories: List<CreatedFeedCategoryModel> get() = _categories.toList()
+        private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
+        val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
+        val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
+        val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isPublic: MutableLiveData<Boolean> = MutableLiveData(true)
+        val content: MutableLiveData<String> = MutableLiveData("")
+        private var novelId: Long? = null
     private var searchedText = ""
 
     init {
@@ -67,7 +69,8 @@ class CreateFeedViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 feedRepository.saveFeed(
-                    relevantCategories = categories.filter { it.isSelected }
+                    relevantCategories = categories
+                        .filter { it.isSelected }
                         .map { it.category.enTitle },
                     feedContent = content.value.orEmpty(),
                     novelId = novelId,
@@ -83,7 +86,8 @@ class CreateFeedViewModel @Inject constructor(
             runCatching {
                 feedRepository.saveEditedFeed(
                     feedId = feedId,
-                    relevantCategories = categories.filter { it.isSelected }
+                    relevantCategories = categories
+                        .filter { it.isSelected }
                         .map { it.category.enTitle },
                     feedContent = content.value.orEmpty(),
                     novelId = novelId,
@@ -119,9 +123,13 @@ class CreateFeedViewModel @Inject constructor(
                         isLoadable = result.isLoadable,
                         novelCount = result.resultCount,
                         novels = result.novels.map { novel ->
-                            if (novel.id == novelId) novel.toUi()
-                                .let { it.copy(isSelected = !it.isSelected) }
-                            else novel.toUi()
+                            if (novel.id == novelId) {
+                                novel
+                                    .toUi()
+                                    .let { it.copy(isSelected = !it.isSelected) }
+                            } else {
+                                novel.toUi()
+                            }
                         },
                     )
                     searchedText = typingText
@@ -148,9 +156,13 @@ class CreateFeedViewModel @Inject constructor(
                         isLoadable = result.isLoadable,
                         novelCount = result.resultCount,
                         novels = result.novels.map { novel ->
-                            if (novel.id == novelId) novel.toUi()
-                                .let { it.copy(isSelected = !it.isSelected) }
-                            else novel.toUi()
+                            if (novel.id == novelId) {
+                                novel
+                                    .toUi()
+                                    .let { it.copy(isSelected = !it.isSelected) }
+                            } else {
+                                novel.toUi()
+                            }
                         },
                     )
                 }.onFailure {
@@ -166,8 +178,11 @@ class CreateFeedViewModel @Inject constructor(
     fun updateSelectedNovel(novelId: Long) {
         searchNovelUiState.value?.let { searchNovelUiState ->
             val novels = searchNovelUiState.novels.map { novel ->
-                if (novel.id == novelId) novel.copy(isSelected = !novel.isSelected)
-                else novel.copy(isSelected = false)
+                if (novel.id == novelId) {
+                    novel.copy(isSelected = !novel.isSelected)
+                } else {
+                    novel.copy(isSelected = false)
+                }
             }
             _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
         }
