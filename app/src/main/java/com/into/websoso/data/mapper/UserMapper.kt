@@ -133,6 +133,7 @@ fun UserFeedResponseDto.toData(): UserFeedEntity =
         createdDate = this.createdDate,
         isModified = this.isModified,
         isLiked = this.isLiked,
+        isPublic = this.isPublic,
         likeCount = this.likeCount,
         commentCount = this.commentCount,
         novelId = this.novelId,

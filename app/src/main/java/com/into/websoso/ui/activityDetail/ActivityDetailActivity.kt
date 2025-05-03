@@ -291,6 +291,7 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(R.lay
                 novelId = feed.novelId,
                 novelTitle = feed.title,
                 isSpoiler = feed.isSpoiler,
+                isPublic = feed.isPublic,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )

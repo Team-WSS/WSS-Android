@@ -39,7 +39,7 @@ class MyActivityViewModel @Inject constructor(
         updateMyActivities()
     }
 
-    private fun updateMyActivities() {
+    fun updateMyActivities() {
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(isLoading = true)
             runCatching {

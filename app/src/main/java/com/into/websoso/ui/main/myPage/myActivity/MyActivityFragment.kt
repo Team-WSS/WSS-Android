@@ -233,6 +233,7 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
                 novelId = feed.novelId,
                 novelTitle = feed.title,
                 isSpoiler = feed.isSpoiler,
+                isPublic = feed.isPublic,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
@@ -258,6 +259,7 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
     override fun onResume() {
         super.onResume()
 
+        myActivityViewModel.updateMyActivities()
         view?.requestLayout()
     }
 

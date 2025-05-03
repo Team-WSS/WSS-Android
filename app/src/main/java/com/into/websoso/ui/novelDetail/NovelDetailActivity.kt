@@ -364,8 +364,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         binding.tgNovelDetailReadStatus.clearChecked()
         novelDetailViewModel.updateNovelDetail(novelId)
     }

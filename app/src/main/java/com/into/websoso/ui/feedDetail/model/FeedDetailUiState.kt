@@ -12,7 +12,6 @@ data class FeedDetailUiState(
     val previousStack: PreviousStack = PreviousStack(Feed),
     val feedDetail: FeedDetailModel = FeedDetailModel(),
 ) {
-
     data class PreviousStack(
         val from: ResultFrom,
     )

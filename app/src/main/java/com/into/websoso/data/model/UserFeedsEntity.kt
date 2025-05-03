@@ -11,6 +11,7 @@ data class UserFeedsEntity(
         val createdDate: String,
         val isModified: Boolean,
         val isLiked: Boolean,
+        val isPublic: Boolean,
         val likeCount: Int,
         val commentCount: Int,
         val novelId: Long?,
