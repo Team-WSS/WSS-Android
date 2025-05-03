@@ -163,12 +163,14 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
     }
 
     private fun setupOnPageChangeCallback() {
-        binding.vpNovelDetail.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                updateNovelFeedWriteButtonVisibility(position)
-            }
-        })
+        binding.vpNovelDetail.registerOnPageChangeCallback(
+            object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    updateNovelFeedWriteButtonVisibility(position)
+                }
+            },
+        )
     }
 
     private fun updateNovelFeedWriteButtonVisibility(position: Int) {
@@ -207,18 +209,20 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
     }
 
     private fun setupTooltipBottomFramePosition() {
-        binding.ctlNovelDetail.viewTreeObserver.addOnPreDrawListener(object :
-            ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                binding.ctlNovelDetail.viewTreeObserver.removeOnPreDrawListener(this)
+        binding.ctlNovelDetail.viewTreeObserver.addOnPreDrawListener(
+            object :
+                ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    binding.ctlNovelDetail.viewTreeObserver.removeOnPreDrawListener(this)
 
-                val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
-                layoutParams.topMargin = binding.ctlNovelDetail.height
-                binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
+                    val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as ConstraintLayout.LayoutParams
+                    layoutParams.topMargin = binding.ctlNovelDetail.height
+                    binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
 
-                return true
-            }
-        })
+                    return true
+                }
+            },
+        )
     }
 
     private fun showTooltipWindow() {
@@ -364,8 +368,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(R.layout.ac
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         binding.tgNovelDetailReadStatus.clearChecked()
         novelDetailViewModel.updateNovelDetail(novelId)
     }
