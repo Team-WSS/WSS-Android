@@ -258,8 +258,6 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
 
     override fun onResume() {
         super.onResume()
-
-        myActivityViewModel.updateMyActivities()
         view?.requestLayout()
     }
 
