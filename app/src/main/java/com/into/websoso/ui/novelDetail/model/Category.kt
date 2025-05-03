@@ -16,9 +16,9 @@ enum class Category(
     ;
 
     companion object {
-
-        fun from(title: String): Category = Category.entries.find { category ->
-            title == category.titleEn || title == category.titleKr
-        } ?: throw IllegalArgumentException()
+        fun from(title: String): Category =
+            Category.entries.find { category ->
+                title == category.titleEn || title == category.titleKr
+            } ?: throw IllegalArgumentException()
     }
 }

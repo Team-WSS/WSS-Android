@@ -21,7 +21,4 @@ fun UserFeedEntity.toUi(): ActivityModel =
         relevantCategories = ActivityModel.translateGenres(relevantCategories ?: emptyList()),
     )
 
-fun List<UserFeedEntity>.toUi(): List<ActivityModel> {
-    return map { it.toUi() }
-}
-
+fun List<UserFeedEntity>.toUi(): List<ActivityModel> = map { it.toUi() }

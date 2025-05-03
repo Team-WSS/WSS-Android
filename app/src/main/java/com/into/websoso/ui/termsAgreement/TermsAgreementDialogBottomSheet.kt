@@ -9,21 +9,23 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.into.websoso.R
 import com.into.websoso.R.drawable.bg_novel_rating_date_primary_100_radius_12dp
 import com.into.websoso.R.drawable.bg_profile_edit_gray_70_radius_12dp
-import com.into.websoso.R.drawable.ic_terms_agreement_selected
-import com.into.websoso.R.drawable.ic_terms_agreement_unselected
-import com.into.websoso.R.string.string_terms_agreement_complete
-import com.into.websoso.R.string.string_terms_agreement_next
+import com.into.websoso.R.layout.dialog_terms_agreement
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.core.resource.R.drawable.ic_terms_agreement_selected
+import com.into.websoso.core.resource.R.drawable.ic_terms_agreement_unselected
+import com.into.websoso.core.resource.R.string.string_terms_agreement_complete
+import com.into.websoso.core.resource.R.string.string_terms_agreement_next
+import com.into.websoso.core.resource.R.string.terms_agreement_privacy
+import com.into.websoso.core.resource.R.string.terms_agreement_service
 import com.into.websoso.databinding.DialogTermsAgreementBinding
 import com.into.websoso.ui.termsAgreement.model.AgreementType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreementBinding>(R.layout.dialog_terms_agreement) {
+class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreementBinding>(dialog_terms_agreement) {
     private val termsAgreementViewModel: TermsAgreementViewModel by viewModels()
     private var onDismissListener: (() -> Unit)? = null
 
@@ -55,7 +57,7 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(getString(R.string.terms_agreement_service)),
+                    Uri.parse(getString(terms_agreement_service)),
                 ),
             )
         }
@@ -64,7 +66,7 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(getString(R.string.terms_agreement_privacy)),
+                    Uri.parse(getString(terms_agreement_privacy)),
                 ),
             )
         }

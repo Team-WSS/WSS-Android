@@ -1,7 +1,7 @@
 package com.into.websoso.ui.userStorage.model
 
 import android.content.Context
-import com.into.websoso.R
+import com.into.websoso.core.resource.R.string.storage_novel_count
 import com.into.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
 data class UserStorageUiState(
@@ -15,7 +15,5 @@ data class UserStorageUiState(
     val readStatus: String = StorageTab.INTEREST.readStatus,
     val sortType: SortType = SortType.NEWEST,
 ) {
-    fun getUserNovelCountText(context: Context): String {
-        return context.getString(R.string.storage_novel_count, userNovelCount)
-    }
+    fun getUserNovelCountText(context: Context): String = context.getString(storage_novel_count, userNovelCount)
 }

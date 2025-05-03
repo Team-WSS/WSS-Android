@@ -10,7 +10,6 @@ class NormalExploreViewHolder(
     private val binding: ItemNormalExploreBinding,
     novelItemClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
         binding.onClick = novelItemClickListener
     }
@@ -20,13 +19,14 @@ class NormalExploreViewHolder(
     }
 
     companion object {
-
         fun of(
             parent: ViewGroup,
             novelItemClickListener: (novelId: Long) -> Unit,
         ): NormalExploreViewHolder {
             val binding = ItemNormalExploreBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false,
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
             )
             return NormalExploreViewHolder(binding, novelItemClickListener)
         }

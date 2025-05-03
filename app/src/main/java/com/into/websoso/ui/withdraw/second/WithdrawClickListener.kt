@@ -1,7 +1,6 @@
 package com.into.websoso.ui.withdraw.second
 
 interface WithdrawClickListener {
-
     fun onBackButtonClick()
 
     fun onWithdrawReasonRarelyUsingButtonClick()

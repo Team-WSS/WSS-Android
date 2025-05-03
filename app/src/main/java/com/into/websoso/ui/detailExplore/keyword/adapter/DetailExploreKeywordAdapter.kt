@@ -10,7 +10,6 @@ import com.into.websoso.databinding.ItemCommonKeywordBinding
 class DetailExploreKeywordAdapter(
     private val onKeywordClick: (keywordId: Int) -> (Unit),
 ) : ListAdapter<CategoryModel, DetailExploreKeywordViewHolder>(diffUtil) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -23,7 +22,10 @@ class DetailExploreKeywordAdapter(
         return DetailExploreKeywordViewHolder(binding, onKeywordClick)
     }
 
-    override fun onBindViewHolder(holder: DetailExploreKeywordViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: DetailExploreKeywordViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
         holder.apply {
             when (isChipSetting) {
@@ -36,20 +38,15 @@ class DetailExploreKeywordAdapter(
     companion object {
         private val diffUtil =
             object : DiffUtil.ItemCallback<CategoryModel>() {
-
                 override fun areItemsTheSame(
                     oldItem: CategoryModel,
                     newItem: CategoryModel,
-                ): Boolean {
-                    return oldItem.categoryName == newItem.categoryName
-                }
+                ): Boolean = oldItem.categoryName == newItem.categoryName
 
                 override fun areContentsTheSame(
                     oldItem: CategoryModel,
                     newItem: CategoryModel,
-                ): Boolean {
-                    return oldItem == newItem
-                }
+                ): Boolean = oldItem == newItem
             }
     }
 }

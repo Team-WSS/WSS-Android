@@ -8,11 +8,11 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.into.websoso.R
-import com.into.websoso.R.string.inquire_link
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getAdaptedParcelableExtra
+import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityDetailExploreResultBinding
 import com.into.websoso.ui.detailExploreResult.adapter.DetailExploreResultAdapter
 import com.into.websoso.ui.detailExploreResult.adapter.DetailExploreResultItemType.Header
@@ -164,7 +164,7 @@ class DetailExploreResultActivity : BaseActivity<ActivityDetailExploreResultBind
     }
 
     private fun navigateToInquire() {
-        val inquireUrl = getString(inquire_link)
+        val inquireUrl = getString(novel_inquire_link)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }

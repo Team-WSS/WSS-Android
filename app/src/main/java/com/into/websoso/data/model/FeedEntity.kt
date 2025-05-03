@@ -15,7 +15,6 @@ data class FeedEntity(
     val isPublic: Boolean,
     val novel: NovelEntity,
 ) {
-
     data class UserEntity(
         val id: Long,
         val nickname: String,

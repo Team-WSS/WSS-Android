@@ -4,7 +4,6 @@ import com.into.websoso.ui.feedDetail.model.CommentModel
 import com.into.websoso.ui.main.feed.model.FeedModel
 
 sealed interface FeedDetailType {
-
     data class Header(
         val feed: FeedModel,
     ) : FeedDetailType
@@ -14,12 +13,12 @@ sealed interface FeedDetailType {
     ) : FeedDetailType
 
     enum class ItemType {
-        HEADER, COMMENT;
+        HEADER,
+        COMMENT,
+        ;
 
         companion object {
-
-            fun valueOf(ordinal: Int): ItemType =
-                entries.find { it.ordinal == ordinal } ?: throw IllegalArgumentException()
+            fun valueOf(ordinal: Int): ItemType = entries.find { it.ordinal == ordinal } ?: throw IllegalArgumentException()
         }
     }
 }

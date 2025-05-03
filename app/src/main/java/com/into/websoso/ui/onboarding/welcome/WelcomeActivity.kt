@@ -3,12 +3,13 @@ package com.into.websoso.ui.onboarding.welcome
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.into.websoso.R
+import com.into.websoso.R.layout.activity_welcome
 import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.resource.R.string.welcome_hello_user
 import com.into.websoso.databinding.ActivityWelcomeBinding
 import com.into.websoso.ui.main.MainActivity
 
-class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(R.layout.activity_welcome) {
+class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(activity_welcome) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -19,7 +20,7 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(R.layout.activity_w
     }
 
     private fun setWelcomeUserTextView(nickname: String) {
-        binding.tvWelcomeHelloUser.text = getString(R.string.welcome_hello_user, nickname)
+        binding.tvWelcomeHelloUser.text = getString(welcome_hello_user, nickname)
     }
 
     private fun onCompleteButtonClick() {
@@ -32,7 +33,10 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(R.layout.activity_w
     companion object {
         private const val NICKNAME_KEY = "nickname"
 
-        fun getIntent(context: Context, nickname: String): Intent =
+        fun getIntent(
+            context: Context,
+            nickname: String,
+        ): Intent =
             Intent(context, WelcomeActivity::class.java).apply {
                 putExtra(NICKNAME_KEY, nickname)
             }

@@ -16,7 +16,8 @@ class GetNotificationListUseCase
                     true -> DEFAULT_LOAD_SIZE
                     false -> ADDITIONAL_LOAD_SIZE
                 }
-                val notifications = notificationRepository.fetchNotifications(lastNotificationId, size).toDomain()
+                val notifications =
+                    notificationRepository.fetchNotifications(lastNotificationId, size).toDomain()
                 Result.success(notifications)
             } catch (e: Exception) {
                 Result.failure(e)

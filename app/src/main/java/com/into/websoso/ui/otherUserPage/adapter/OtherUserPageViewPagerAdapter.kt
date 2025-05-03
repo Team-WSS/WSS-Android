@@ -8,18 +8,16 @@ import com.into.websoso.ui.otherUserPage.otherUserLibrary.OtherUserLibraryFragme
 
 class OtherUserPageViewPagerAdapter(
     activity: FragmentActivity,
-    private val userId: Long
+    private val userId: Long,
 ) : FragmentStateAdapter(activity) {
-
     private val fragments = listOf(OtherUserLibraryFragment(), OtherUserActivityFragment())
 
     override fun getItemCount(): Int = fragments.size
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
+    override fun createFragment(position: Int): Fragment =
+        when (position) {
             0 -> OtherUserLibraryFragment.newInstance(userId)
             1 -> OtherUserActivityFragment.newInstance(userId)
             else -> throw IllegalArgumentException("Invalid position")
         }
-    }
 }

@@ -7,10 +7,11 @@ import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.databinding.DialogNovelDetailCoverBinding
 
-class NovelDetailCoverDialogFragment :
-    BaseDialogFragment<DialogNovelDetailCoverBinding>(R.layout.dialog_novel_detail_cover) {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+class NovelDetailCoverDialogFragment : BaseDialogFragment<DialogNovelDetailCoverBinding>(R.layout.dialog_novel_detail_cover) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
@@ -32,12 +33,11 @@ class NovelDetailCoverDialogFragment :
         const val TAG = "NOVEL_COVER_DIALOG_FRAGMENT"
         private const val NOVEL_COVER_URL_KEY = "NOVEL_COVER_URL_KEY"
 
-        fun newInstance(
-            novelImageUrl: String,
-        ): NovelDetailCoverDialogFragment = NovelDetailCoverDialogFragment().apply {
-            arguments = Bundle().apply {
-                putString(NOVEL_COVER_URL_KEY, novelImageUrl)
+        fun newInstance(novelImageUrl: String): NovelDetailCoverDialogFragment =
+            NovelDetailCoverDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString(NOVEL_COVER_URL_KEY, novelImageUrl)
+                }
             }
-        }
     }
 }

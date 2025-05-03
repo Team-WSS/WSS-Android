@@ -9,7 +9,6 @@ class PopularFeedsViewHolder(
     private val binding: ItemPopularFeedBinding,
     private val onFeedClick: (feedId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     private val slots by lazy {
         listOf(
             binding.itemPopularFeesSlot1,

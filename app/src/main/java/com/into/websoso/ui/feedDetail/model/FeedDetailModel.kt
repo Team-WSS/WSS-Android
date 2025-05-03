@@ -7,7 +7,6 @@ data class FeedDetailModel(
     val comments: List<CommentModel> = emptyList(),
     val user: UserModel? = null,
 ) {
-
     data class UserModel(
         val avatarImage: String,
     )

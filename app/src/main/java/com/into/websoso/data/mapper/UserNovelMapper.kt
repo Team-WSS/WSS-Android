@@ -14,12 +14,12 @@ fun NovelRatingResponseDto.toData(): NovelRatingEntity =
         userNovelRating = userNovelRating,
         charmPoints = attractivePoints,
         userKeywords =
-        keywords.map { keyword ->
-            CategoriesEntity.CategoryEntity.KeywordEntity(
-                keywordId = keyword.keywordId,
-                keywordName = keyword.keywordName,
-            )
-        },
+            keywords.map { keyword ->
+                CategoriesEntity.CategoryEntity.KeywordEntity(
+                    keywordId = keyword.keywordId,
+                    keywordName = keyword.keywordName,
+                )
+            },
     )
 
 fun NovelRatingEntity.toData(): NovelRatingRequestDto =

@@ -11,36 +11,38 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-) : ViewModel() {
-    private val _uiState = MutableLiveData<MyPageUiState>()
-    val uiState: LiveData<MyPageUiState> get() = _uiState
+class MyPageViewModel
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+    ) : ViewModel() {
+        private val _uiState = MutableLiveData<MyPageUiState>()
+        val uiState: LiveData<MyPageUiState> get() = _uiState
 
-    init {
-        _uiState.value = MyPageUiState(
-            myProfile = null
-        )
-        updateUserProfile()
-    }
+        init {
+            _uiState.value = MyPageUiState(
+                myProfile = null,
+            )
+            updateUserProfile()
+        }
 
-    fun updateUserProfile() {
-        _uiState.value = uiState.value?.copy(loading = true) ?: MyPageUiState(loading = true)
-        viewModelScope.launch {
-            runCatching {
-                userRepository.fetchMyProfile()
-            }.onSuccess { myProfileEntity ->
-                _uiState.value = uiState.value?.copy(
-                    myProfile = myProfileEntity,
-                    error = false,
-                    loading = false,
-                )
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    error = true,
-                    loading = false,
-                )
+        fun updateUserProfile() {
+            _uiState.value = uiState.value?.copy(loading = true) ?: MyPageUiState(loading = true)
+            viewModelScope.launch {
+                runCatching {
+                    userRepository.fetchMyProfile()
+                }.onSuccess { myProfileEntity ->
+                    _uiState.value = uiState.value?.copy(
+                        myProfile = myProfileEntity,
+                        error = false,
+                        loading = false,
+                    )
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        error = true,
+                        loading = false,
+                    )
+                }
             }
         }
     }
-}

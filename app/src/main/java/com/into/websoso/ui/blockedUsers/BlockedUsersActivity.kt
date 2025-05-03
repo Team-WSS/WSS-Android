@@ -4,16 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.into.websoso.R
+import com.into.websoso.R.layout.activity_blocked_users
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.string.blocked_users_unblocked
 import com.into.websoso.databinding.ActivityBlockedUsersBinding
 import com.into.websoso.ui.blockedUsers.adapter.BlockedUsersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class BlockedUsersActivity : BaseActivity<ActivityBlockedUsersBinding>(R.layout.activity_blocked_users) {
+class BlockedUsersActivity : BaseActivity<ActivityBlockedUsersBinding>(activity_blocked_users) {
     private val blockedUsersAdapter: BlockedUsersAdapter by lazy {
         BlockedUsersAdapter(::onUnblockedUserButtonClick)
     }
@@ -55,8 +57,8 @@ class BlockedUsersActivity : BaseActivity<ActivityBlockedUsersBinding>(R.layout.
     private fun showSnackBar(nickName: String) {
         showWebsosoSnackBar(
             view = binding.root,
-            message = getString(R.string.blocked_users_unblocked, nickName),
-            icon = R.drawable.ic_blocked_user_snack_bar,
+            message = getString(blocked_users_unblocked, nickName),
+            icon = ic_blocked_user_snack_bar,
         )
     }
 

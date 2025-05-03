@@ -11,16 +11,24 @@ import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import com.into.websoso.R
+import com.into.websoso.R.id.fcv_main
+import com.into.websoso.R.id.menu_explore
+import com.into.websoso.R.id.menu_feed
+import com.into.websoso.R.id.menu_home
+import com.into.websoso.R.id.menu_library
+import com.into.websoso.R.id.menu_my_page
+import com.into.websoso.R.layout.activity_main
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.string.main_back_press
 import com.into.websoso.databinding.ActivityMainBinding
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.into.websoso.ui.main.MainActivity.FragmentType.HOME
-import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.into.websoso.ui.main.MainActivity.FragmentType.LIBRARY
+import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.into.websoso.ui.main.explore.ExploreFragment
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
@@ -29,7 +37,7 @@ import com.into.websoso.ui.main.myPage.MyPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     private val mainViewModel: MainViewModel by viewModels()
     private var backPressedTime: Long = 0L
 
@@ -54,8 +62,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     backPressedTime = System.currentTimeMillis()
                     showWebsosoSnackBar(
                         view = binding.root,
-                        message = getString(R.string.main_back_press),
-                        icon = R.drawable.ic_blocked_user_snack_bar,
+                        message = getString(main_back_press),
+                        icon = ic_blocked_user_snack_bar,
                     )
                 }
 
@@ -68,7 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun setBottomNavigationView() {
-        binding.bnvMain.selectedItemId = R.id.menu_home
+        binding.bnvMain.selectedItemId = menu_home
         replaceFragment<HomeFragment>()
 
         binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
@@ -106,7 +114,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private inline fun <reified T : Fragment> replaceFragment() {
         supportFragmentManager.commit {
-            replace<T>(R.id.fcv_main)
+            replace<T>(fcv_main)
             setReorderingAllowed(true)
         }
     }
@@ -114,11 +122,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     enum class FragmentType(
         @IntegerRes private val resId: Int,
     ) {
-        HOME(R.id.menu_home),
-        EXPLORE(R.id.menu_explore),
-        FEED(R.id.menu_feed),
-        LIBRARY(R.id.menu_library),
-        MY_PAGE(R.id.menu_my_page),
+        LIBRARY(menu_library),
+        HOME(menu_home),
+        EXPLORE(menu_explore),
+        FEED(menu_feed),
+        MY_PAGE(menu_my_page),
         ;
 
         companion object {
@@ -146,27 +154,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private fun selectFragment(fragmentType: FragmentType) {
         when (fragmentType) {
             HOME -> {
-                binding.bnvMain.selectedItemId = R.id.menu_home
+                binding.bnvMain.selectedItemId = menu_home
                 replaceFragment<HomeFragment>()
             }
 
             EXPLORE -> {
-                binding.bnvMain.selectedItemId = R.id.menu_explore
+                binding.bnvMain.selectedItemId = menu_explore
                 replaceFragment<ExploreFragment>()
             }
 
             FEED -> {
-                binding.bnvMain.selectedItemId = R.id.menu_feed
+                binding.bnvMain.selectedItemId = menu_feed
                 replaceFragment<FeedFragment>()
             }
 
             LIBRARY -> {
-                binding.bnvMain.selectedItemId = R.id.menu_library
+                binding.bnvMain.selectedItemId = menu_library
                 replaceFragment<LibraryFragment>()
             }
 
             MY_PAGE -> {
-                binding.bnvMain.selectedItemId = R.id.menu_my_page
+                binding.bnvMain.selectedItemId = menu_my_page
                 replaceFragment<MyPageFragment>()
             }
         }

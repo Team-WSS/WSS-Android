@@ -9,11 +9,16 @@ import androidx.fragment.app.activityViewModels
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.tabs.TabLayoutMediator
-import com.into.websoso.R
+import com.into.websoso.R.color.transparent
+import com.into.websoso.R.color.white
+import com.into.websoso.R.layout.fragment_my_page
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
+import com.into.websoso.core.resource.R.string.my_page_activity
+import com.into.websoso.core.resource.R.string.my_page_library
 import com.into.websoso.databinding.FragmentMyPageBinding
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.myPage.adapter.MyPageViewPagerAdapter
@@ -23,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
+class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -69,7 +74,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
     private fun setupViewPager() {
         val tabTitleItems =
-            listOf(getText(R.string.my_page_library), getText(R.string.my_page_activity))
+            listOf(getText(my_page_library), getText(my_page_activity))
         binding.vpMyPage.adapter = viewPagerAdapter
 
         TabLayoutMediator(binding.tlMyPage, binding.vpMyPage) { tab, position ->
@@ -87,7 +92,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
     private fun updateToolbarUi(isCollapsed: Boolean) {
         with(binding) {
-            val color = if (isCollapsed) R.color.white else R.color.transparent
+            val color = if (isCollapsed) white else transparent
             tbMyPage.setBackgroundColor(
                 ContextCompat.getColor(
                     requireContext(),
@@ -125,7 +130,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         val updatedMyProfileImageUrl = binding.root.getS3ImageUrl(myProfileUrl)
         binding.ivMyPageUserProfile.load(updatedMyProfileImageUrl) {
             crossfade(true)
-            error(R.drawable.img_loading_thumbnail)
+            error(img_loading_thumbnail)
             transformations(CircleCropTransformation())
         }
     }

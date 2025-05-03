@@ -16,38 +16,37 @@ import com.into.websoso.data.remote.response.PopularNovelsResponseDto
 import com.into.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto
 import com.into.websoso.data.remote.response.SosoPicksResponseDto
 
-fun NovelDetailResponseDto.toData(): NovelDetailEntity {
-    return NovelDetailEntity(
+fun NovelDetailResponseDto.toData(): NovelDetailEntity =
+    NovelDetailEntity(
         userNovel =
-        NovelDetailEntity.UserNovelEntity(
-            userNovelId = userNovelId,
-            readStatus = readStatus,
-            startDate = startDate,
-            endDate = endDate,
-            isUserNovelInterest = isUserNovelInterest,
-            userNovelRating = userNovelRating,
-        ),
+            NovelDetailEntity.UserNovelEntity(
+                userNovelId = userNovelId,
+                readStatus = readStatus,
+                startDate = startDate,
+                endDate = endDate,
+                isUserNovelInterest = isUserNovelInterest,
+                userNovelRating = userNovelRating,
+            ),
         novel =
-        NovelDetailEntity.NovelEntity(
-            novelTitle = novelTitle,
-            novelImage = novelImage,
-            novelGenres = novelGenres,
-            novelGenreImage = novelGenreImage,
-            isNovelCompleted = isNovelCompleted,
-            author = author,
-        ),
+            NovelDetailEntity.NovelEntity(
+                novelTitle = novelTitle,
+                novelImage = novelImage,
+                novelGenres = novelGenres,
+                novelGenreImage = novelGenreImage,
+                isNovelCompleted = isNovelCompleted,
+                author = author,
+            ),
         userRating =
-        NovelDetailEntity.UserRatingEntity(
-            interestCount = interestCount,
-            novelRating = novelRating,
-            novelRatingCount = novelRatingCount,
-            feedCount = feedCount,
-        ),
+            NovelDetailEntity.UserRatingEntity(
+                interestCount = interestCount,
+                novelRating = novelRating,
+                novelRatingCount = novelRatingCount,
+                feedCount = feedCount,
+            ),
     )
-}
 
-fun NovelInfoResponseDto.toData(): NovelInfoEntity {
-    return NovelInfoEntity(
+fun NovelInfoResponseDto.toData(): NovelInfoEntity =
+    NovelInfoEntity(
         novelDescription = novelDescription,
         platforms = platforms.map {
             NovelInfoEntity.PlatformEntity(
@@ -69,22 +68,20 @@ fun NovelInfoResponseDto.toData(): NovelInfoEntity {
             quitCount = quitCount,
         ),
     )
-}
 
-fun SosoPicksResponseDto.toData(): SosoPickEntity {
-    return SosoPickEntity(
+fun SosoPicksResponseDto.toData(): SosoPickEntity =
+    SosoPickEntity(
         novels = sosoPicks.map { sosoPick ->
             SosoPickEntity.NovelEntity(
                 novelId = sosoPick.novelId,
                 novelTitle = sosoPick.title,
-                novelCover = sosoPick.novelImage
+                novelCover = sosoPick.novelImage,
             )
-        }
+        },
     )
-}
 
-fun ExploreResultResponseDto.toData(): ExploreResultEntity {
-    return ExploreResultEntity(
+fun ExploreResultResponseDto.toData(): ExploreResultEntity =
+    ExploreResultEntity(
         resultCount = resultCount,
         isLoadable = isLoadable,
         novels = novels.map { novel ->
@@ -97,12 +94,11 @@ fun ExploreResultResponseDto.toData(): ExploreResultEntity {
                 rating = novel.novelRating,
                 ratingCount = novel.novelRatingCount,
             )
-        }
+        },
     )
-}
 
-fun PopularNovelsResponseDto.toData(): PopularNovelsEntity {
-    return PopularNovelsEntity(
+fun PopularNovelsResponseDto.toData(): PopularNovelsEntity =
+    PopularNovelsEntity(
         popularNovels = popularNovels.map { novel ->
             PopularNovelsEntity.PopularNovelEntity(
                 avatarImage = novel.avatarImage,
@@ -112,12 +108,11 @@ fun PopularNovelsResponseDto.toData(): PopularNovelsEntity {
                 novelImage = novel.novelImage,
                 title = novel.title,
             )
-        }
+        },
     )
-}
 
-fun RecommendedNovelsByUserTasteResponseDto.toData(): RecommendedNovelsByUserTasteEntity {
-    return RecommendedNovelsByUserTasteEntity(
+fun RecommendedNovelsByUserTasteResponseDto.toData(): RecommendedNovelsByUserTasteEntity =
+    RecommendedNovelsByUserTasteEntity(
         tasteNovels = tasteNovels.map { novel ->
             RecommendedNovelsByUserTasteEntity.RecommendedNovelByUserTasteEntity(
                 novelId = novel.novelId,
@@ -128,15 +123,13 @@ fun RecommendedNovelsByUserTasteResponseDto.toData(): RecommendedNovelsByUserTas
                 novelRating = novel.novelRating,
                 novelRatingCount = novel.novelRatingCount,
             )
-        }
+        },
     )
-}
 
-fun NovelFeedResponseDto.toData(): NovelFeedsEntity {
-    return NovelFeedsEntity(
+fun NovelFeedResponseDto.toData(): NovelFeedsEntity =
+    NovelFeedsEntity(
         isLoadable = isLoadable,
         feeds = feeds.map { feed ->
             feed.toData()
         },
     )
-}
