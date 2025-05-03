@@ -229,6 +229,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
                     isSpoiler = feed.isSpoiler,
+                    isPublic = feed.isPublic,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
                 )

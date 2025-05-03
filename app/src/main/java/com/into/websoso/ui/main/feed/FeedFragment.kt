@@ -338,6 +338,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
                     isSpoiler = feed.isSpoiler,
+                    isPublic = feed.isPublic,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
                 )

@@ -244,6 +244,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
                     isSpoiler = feed.isSpoiler,
+                    isPublic = feed.isPublic,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
                 )
