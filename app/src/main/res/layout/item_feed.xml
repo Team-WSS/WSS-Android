@@ -310,7 +310,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="비공개 기록이에요."
+                android:text="@string/feed_private_label"
                 android:textAppearance="@style/body4"
                 android:textColor="@color/gray_200_AEADB3" />
         </LinearLayout>
