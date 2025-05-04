@@ -21,35 +21,35 @@ class FeedRepository
 
         fun clearCachedFeeds() {
             if (cachedFeeds.isNotEmpty()) _cachedFeeds.clear()
-    }
+        }
 
-    suspend fun fetchFeeds(
-        category: String,
-        lastFeedId: Long,
-        size: Int,
-    ): FeedsEntity =
-        feedApi
-            .getFeeds(
-                category = if (category == "all") null else category,
-                lastFeedId = lastFeedId,
-                size = size,
-            ).toData()
-            .also { _cachedFeeds.addAll(it.feeds) }
-            .copy(feeds = cachedFeeds)
+        suspend fun fetchFeeds(
+            category: String,
+            lastFeedId: Long,
+            size: Int,
+        ): FeedsEntity =
+            feedApi
+                .getFeeds(
+                    category = if (category == "all") null else category,
+                    lastFeedId = lastFeedId,
+                    size = size,
+                ).toData()
+                .also { _cachedFeeds.addAll(it.feeds) }
+                .copy(feeds = cachedFeeds)
 
-    suspend fun saveFeed(
-        relevantCategories: List<String>,
-        feedContent: String,
-        novelId: Long?,
-        isSpoiler: Boolean,
-        isPublic: Boolean,
-    ) {
-        feedApi.postFeed(
-            FeedRequestDto(
-                relevantCategories = relevantCategories,
-                feedContent = feedContent,
-                novelId = novelId,
-                isSpoiler = isSpoiler,
+        suspend fun saveFeed(
+            relevantCategories: List<String>,
+            feedContent: String,
+            novelId: Long?,
+            isSpoiler: Boolean,
+            isPublic: Boolean,
+        ) {
+            feedApi.postFeed(
+                FeedRequestDto(
+                    relevantCategories = relevantCategories,
+                    feedContent = feedContent,
+                    novelId = novelId,
+                    isSpoiler = isSpoiler,
                 isPublic = isPublic,
             ),
         )
