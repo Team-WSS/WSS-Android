@@ -12,6 +12,7 @@ data class FeedModel(
     val isSpoiler: Boolean,
     val isLiked: Boolean,
     val isMyFeed: Boolean,
+    val isPublic: Boolean,
     val novel: NovelModel,
     val categories: String = relevantCategories.joinToString(prefix = "", postfix = ""),
 ) {

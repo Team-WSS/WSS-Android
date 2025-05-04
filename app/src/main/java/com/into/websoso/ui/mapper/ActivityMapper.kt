@@ -11,6 +11,7 @@ fun UserFeedEntity.toUi(): ActivityModel =
         createdDate = ActivityModel.formatDate(createdDate),
         isModified = isModified,
         isLiked = isLiked,
+        isPublic = isPublic,
         likeCount = likeCount,
         commentCount = commentCount,
         novelId = novelId,

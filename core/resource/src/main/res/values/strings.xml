@@ -384,11 +384,12 @@
     <string name="other_user_library_attractive_point_fixed_text">가 매력적인 작품</string>
 
     <!-- 피드 생성 뷰 -->
-    <string name="tv_create_feed_multiple_choice_guide">중복 선택 가능</string>
     <string name="tv_create_feed_category">카테고리</string>
     <string name="tv_create_feed_done_button">완료</string>
-    <string name="tv_create_feed_write_content">내용 작성하기</string>
-    <string name="tv_create_feed_spoiler">스포일러</string>
+    <string name="tv_create_feed_write_content">기록 작성</string>
+    <string name="tv_create_feed_spoiler_wait">잠깐,\u00A0</string>
+    <string name="tv_create_feed_spoiler_spoiler">스포일러</string>
+    <string name="tv_create_feed_spoiler_ask">가 있나요?</string>
     <string name="et_create_feed_content_hint">웹소설과 관련된 글을 자유롭게 남겨보세요\n\n •  작품에 대한 한줄평\n •  여운이 남는 명장면, 명대사\n •  수다 떨고 싶은 작품 이야기\n •  다른 독자들과 공유하고 싶은 작품 정보 등</string>
     <string name="tv_create_feed_characters_count">(%d/2000)</string>
     <string name="tv_create_feed_connect_novel">작품 연결하기</string>

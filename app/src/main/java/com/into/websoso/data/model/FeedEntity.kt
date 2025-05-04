@@ -12,6 +12,7 @@ data class FeedEntity(
     val isModified: Boolean,
     val isSpoiler: Boolean,
     val isMyFeed: Boolean,
+    val isPublic: Boolean,
     val novel: NovelEntity,
 ) {
     data class UserEntity(

@@ -53,11 +53,10 @@ class MyActivityViewModel
                         isLoading = false,
                         activities = response.feeds.map { it.toUi() }.take(ACTIVITY_LIMIT_COUNT),
                     )
-                    _lastFeedId.value =
-                        response.feeds
-                            .lastOrNull()
-                            ?.feedId
-                            ?.toLong() ?: _lastFeedId.value
+                    _lastFeedId.value = response.feeds
+                        .lastOrNull()
+                        ?.feedId
+                        ?.toLong() ?: _lastFeedId.value
                 }.onFailure {
                     _uiState.value = _uiState.value?.copy(
                         isLoading = false,
@@ -113,8 +112,7 @@ class MyActivityViewModel
                 }.onSuccess {
                     _uiState.value = _uiState.value?.copy(
                         isLoading = false,
-                        activities = _uiState.value?.activities?.filter { it.feedId != feedId }
-                            ?: emptyList(),
+                        activities = _uiState.value?.activities?.filter { it.feedId != feedId } ?: emptyList(),
                     )
                 }.onFailure {
                     _uiState.value = _uiState.value?.copy(

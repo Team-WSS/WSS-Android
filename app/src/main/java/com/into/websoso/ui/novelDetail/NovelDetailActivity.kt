@@ -2,7 +2,6 @@ package com.into.websoso.ui.novelDetail
 
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
@@ -11,6 +10,7 @@ import android.view.View.GONE
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.View.VISIBLE
 import android.view.ViewTreeObserver.OnPreDrawListener
+import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import androidx.activity.addCallback
@@ -127,7 +127,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun navigateToReportError() {
         tracker.trackEvent("contact_error")
         val inquireUrl = getString(inquire_link)
-        val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
 
@@ -177,7 +177,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
 
     private fun setupOnPageChangeCallback() {
         binding.vpNovelDetail.registerOnPageChangeCallback(
-            object : OnPageChangeCallback() {
+            object :
+                OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     updateNovelFeedWriteButtonVisibility(position)
                 }
@@ -222,12 +223,12 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
 
     private fun setupTooltipBottomFramePosition() {
         binding.ctlNovelDetail.viewTreeObserver.addOnPreDrawListener(
-            object : OnPreDrawListener {
+            object :
+                OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     binding.ctlNovelDetail.viewTreeObserver.removeOnPreDrawListener(this)
 
-                    val layoutParams =
-                        binding.viewNovelDetailTooltipFrameBottom.layoutParams as LayoutParams
+                    val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as LayoutParams
                     layoutParams.topMargin = binding.ctlNovelDetail.height
                     binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
 
@@ -278,8 +279,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun showPopupWindow() {
         menuPopupWindow = PopupWindow(
             novelDetailMenuPopupBinding.root,
-            WRAP_CONTENT,
-            WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
             true,
         ).apply {
             this.elevation = 14f.toFloatPxFromDp()
