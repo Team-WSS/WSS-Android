@@ -50,94 +50,94 @@ class FeedRepository
                     feedContent = feedContent,
                     novelId = novelId,
                     isSpoiler = isSpoiler,
-                isPublic = isPublic,
-            ),
-        )
-    }
+                    isPublic = isPublic,
+                ),
+            )
+        }
 
-    suspend fun saveEditedFeed(
-        feedId: Long,
-        relevantCategories: List<String>,
-        feedContent: String,
-        novelId: Long?,
-        isSpoiler: Boolean,
-        isPublic: Boolean,
-    ) {
-        feedApi.putFeed(
-            feedId,
-            FeedRequestDto(
-                relevantCategories = relevantCategories,
-                feedContent = feedContent,
-                novelId = novelId,
-                isSpoiler = isSpoiler,
-                isPublic = isPublic,
-            ),
-        )
-    }
+        suspend fun saveEditedFeed(
+            feedId: Long,
+            relevantCategories: List<String>,
+            feedContent: String,
+            novelId: Long?,
+            isSpoiler: Boolean,
+            isPublic: Boolean,
+        ) {
+            feedApi.putFeed(
+                feedId,
+                FeedRequestDto(
+                    relevantCategories = relevantCategories,
+                    feedContent = feedContent,
+                    novelId = novelId,
+                    isSpoiler = isSpoiler,
+                    isPublic = isPublic,
+                ),
+            )
+        }
 
-    suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
+        suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
 
-    suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
+        suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
 
-    suspend fun fetchUserInterestFeeds(): UserInterestFeedsEntity = feedApi.getUserInterestFeeds().toData()
+        suspend fun fetchUserInterestFeeds(): UserInterestFeedsEntity = feedApi.getUserInterestFeeds().toData()
 
-    suspend fun saveRemovedFeed(feedId: Long) {
-        feedApi.deleteFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
-    }
+        suspend fun saveRemovedFeed(feedId: Long) {
+            feedApi.deleteFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
+        }
 
-    suspend fun saveSpoilerFeed(feedId: Long) {
-        feedApi.postSpoilerFeed(feedId)
-    }
+        suspend fun saveSpoilerFeed(feedId: Long) {
+            feedApi.postSpoilerFeed(feedId)
+        }
 
-    suspend fun saveImpertinenceFeed(feedId: Long) {
-        feedApi.postImpertinenceFeed(feedId)
-    }
+        suspend fun saveImpertinenceFeed(feedId: Long) {
+            feedApi.postImpertinenceFeed(feedId)
+        }
 
-    suspend fun saveLike(
-        isLikedOfLikedFeed: Boolean,
-        selectedFeedId: Long,
-    ) {
-        when (isLikedOfLikedFeed) {
-            true -> feedApi.deleteLikes(selectedFeedId)
-            false -> feedApi.postLikes(selectedFeedId)
+        suspend fun saveLike(
+            isLikedOfLikedFeed: Boolean,
+            selectedFeedId: Long,
+        ) {
+            when (isLikedOfLikedFeed) {
+                true -> feedApi.deleteLikes(selectedFeedId)
+                false -> feedApi.postLikes(selectedFeedId)
+            }
+        }
+
+        suspend fun fetchComments(feedId: Long): CommentsEntity = feedApi.getComments(feedId).toData()
+
+        suspend fun saveComment(
+            feedId: Long,
+            comment: String,
+        ) {
+            feedApi.postComment(feedId, CommentRequestDto(comment))
+        }
+
+        suspend fun saveModifiedComment(
+            feedId: Long,
+            commentId: Long,
+            comment: String,
+        ) {
+            feedApi.putComment(feedId, commentId, CommentRequestDto(comment))
+        }
+
+        suspend fun deleteComment(
+            feedId: Long,
+            commentId: Long,
+        ) {
+            feedApi.deleteComment(feedId, commentId)
+        }
+
+        suspend fun saveSpoilerComment(
+            feedId: Long,
+            commentId: Long,
+        ) {
+            feedApi.postSpoilerComment(feedId, commentId)
+        }
+
+        suspend fun saveImpertinenceComment(
+            feedId: Long,
+            commentId: Long,
+        ) {
+            feedApi.postImpertinenceComment(feedId, commentId)
         }
     }
-
-    suspend fun fetchComments(feedId: Long): CommentsEntity = feedApi.getComments(feedId).toData()
-
-    suspend fun saveComment(
-        feedId: Long,
-        comment: String,
-    ) {
-        feedApi.postComment(feedId, CommentRequestDto(comment))
-    }
-
-    suspend fun saveModifiedComment(
-        feedId: Long,
-        commentId: Long,
-        comment: String,
-    ) {
-        feedApi.putComment(feedId, commentId, CommentRequestDto(comment))
-    }
-
-    suspend fun deleteComment(
-        feedId: Long,
-        commentId: Long,
-    ) {
-        feedApi.deleteComment(feedId, commentId)
-    }
-
-    suspend fun saveSpoilerComment(
-        feedId: Long,
-        commentId: Long,
-    ) {
-        feedApi.postSpoilerComment(feedId, commentId)
-    }
-
-    suspend fun saveImpertinenceComment(
-        feedId: Long,
-        commentId: Long,
-    ) {
-        feedApi.postImpertinenceComment(feedId, commentId)
-    }
-}
