@@ -24,8 +24,13 @@ import com.into.websoso.R.layout.fragment_feed
 import com.into.websoso.R.style.title3
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
-import com.into.websoso.core.common.ui.model.ResultFrom
-import com.into.websoso.core.common.ui.model.ResultFrom.*
+import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
+import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
+import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.showWebsosoSnackBar
