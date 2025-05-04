@@ -26,7 +26,6 @@ import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
-import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
@@ -148,10 +147,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     message = getString(other_user_page_withdraw_user),
                     icon = ic_blocked_user_snack_bar,
                 )
-            }
-
-            FeedDetailBack.RESULT_OK -> {
-                feedViewModel.updateRefreshedFeeds(true)
             }
         }
     }
