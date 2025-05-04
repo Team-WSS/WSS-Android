@@ -37,172 +37,172 @@ class CreateFeedViewModel
         val isPublic: MutableLiveData<Boolean> = MutableLiveData(true)
         val content: MutableLiveData<String> = MutableLiveData("")
         private var novelId: Long? = null
-    private var searchedText = ""
+        private var searchedText = ""
 
-    init {
-        fun createCategories(feedCategory: List<String>? = null): List<CreatedFeedCategoryModel> =
-            CreateFeedCategory.entries.map { category ->
-                CreatedFeedCategoryModel(
-                    category = category,
-                    isSelected = feedCategory?.contains(category.krTitle) == true,
-                )
-            }
+        init {
+            fun createCategories(feedCategory: List<String>? = null): List<CreatedFeedCategoryModel> =
+                CreateFeedCategory.entries.map { category ->
+                    CreatedFeedCategoryModel(
+                        category = category,
+                        isSelected = feedCategory?.contains(category.krTitle) == true,
+                    )
+                }
 
-        savedStateHandle.get<EditFeedModel>("FEED")?.let { feed ->
-            novelId = feed.novelId
-            _selectedNovelTitle.value = feed.novelTitle.orEmpty()
-            content.value = feed.feedContent
-            isSpoiled.value = feed.isSpoiler
-            isPublic.value = feed.isPublic
-            _categories.addAll(createCategories(feed.feedCategory))
-        } ?: _categories.addAll(createCategories())
+            savedStateHandle.get<EditFeedModel>("FEED")?.let { feed ->
+                novelId = feed.novelId
+                _selectedNovelTitle.value = feed.novelTitle.orEmpty()
+                content.value = feed.feedContent
+                isSpoiled.value = feed.isSpoiler
+                isPublic.value = feed.isPublic
+                _categories.addAll(createCategories(feed.feedCategory))
+            } ?: _categories.addAll(createCategories())
 
-        isActivated.addSource(content) { updateIsActivated() }
-    }
+            isActivated.addSource(content) { updateIsActivated() }
+        }
 
-    private fun updateIsActivated() {
-        isActivated.value = content.value.isNullOrEmpty().not() &&
+        private fun updateIsActivated() {
+            isActivated.value = content.value.isNullOrEmpty().not() &&
                 categories.any { it.isSelected }
-    }
-
-    fun createFeed() {
-        viewModelScope.launch {
-            runCatching {
-                feedRepository.saveFeed(
-                    relevantCategories = categories
-                        .filter { it.isSelected }
-                        .map { it.category.enTitle },
-                    feedContent = content.value.orEmpty(),
-                    novelId = novelId,
-                    isSpoiler = isSpoiled.value ?: false,
-                    isPublic = isPublic.value ?: true,
-                )
-            }.onSuccess { }.onFailure { }
         }
-    }
 
-    fun editFeed(feedId: Long) {
-        viewModelScope.launch {
-            runCatching {
-                feedRepository.saveEditedFeed(
-                    feedId = feedId,
-                    relevantCategories = categories
-                        .filter { it.isSelected }
-                        .map { it.category.enTitle },
-                    feedContent = content.value.orEmpty(),
-                    novelId = novelId,
-                    isSpoiler = isSpoiled.value ?: false,
-                    isPublic = isPublic.value ?: true,
-                )
-            }.onSuccess { }.onFailure { }
-        }
-    }
-
-    fun updateSelectedCategory(category: String) {
-        categories.forEachIndexed { index, categoryModel ->
-            _categories[index] = when (categoryModel.category.enTitle == category) {
-                true -> categoryModel.copy(isSelected = !categoryModel.isSelected)
-                false -> return@forEachIndexed
+        fun createFeed() {
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.saveFeed(
+                        relevantCategories = categories
+                            .filter { it.isSelected }
+                            .map { it.category.enTitle },
+                        feedContent = content.value.orEmpty(),
+                        novelId = novelId,
+                        isSpoiler = isSpoiled.value ?: false,
+                        isPublic = isPublic.value ?: true,
+                    )
+                }.onSuccess { }.onFailure { }
             }
         }
 
-        updateIsActivated()
-    }
-
-    fun updateSearchedNovels(typingText: String) {
-        searchNovelUiState.value?.let { searchNovelUiState ->
-            if (searchedText == typingText) return
-
+        fun editFeed(feedId: Long) {
             viewModelScope.launch {
-                _searchNovelUiState.value = searchNovelUiState.copy(loading = true)
                 runCatching {
-                    getSearchedNovelsUseCase(typingText)
-                }.onSuccess { result ->
-                    _searchNovelUiState.value = searchNovelUiState.copy(
-                        loading = false,
-                        isLoadable = result.isLoadable,
-                        novelCount = result.resultCount,
-                        novels = result.novels.map { novel ->
-                            if (novel.id == novelId) {
-                                novel
-                                    .toUi()
-                                    .let { it.copy(isSelected = !it.isSelected) }
-                            } else {
-                                novel.toUi()
-                            }
-                        },
+                    feedRepository.saveEditedFeed(
+                        feedId = feedId,
+                        relevantCategories = categories
+                            .filter { it.isSelected }
+                            .map { it.category.enTitle },
+                        feedContent = content.value.orEmpty(),
+                        novelId = novelId,
+                        isSpoiler = isSpoiled.value ?: false,
+                        isPublic = isPublic.value ?: true,
                     )
-                    searchedText = typingText
-                }.onFailure {
-                    _searchNovelUiState.value = searchNovelUiState.copy(
-                        loading = false,
-                        error = true,
-                    )
+                }.onSuccess { }.onFailure { }
+            }
+        }
+
+        fun updateSelectedCategory(category: String) {
+            categories.forEachIndexed { index, categoryModel ->
+                _categories[index] = when (categoryModel.category.enTitle == category) {
+                    true -> categoryModel.copy(isSelected = !categoryModel.isSelected)
+                    false -> return@forEachIndexed
+                }
+            }
+
+            updateIsActivated()
+        }
+
+        fun updateSearchedNovels(typingText: String) {
+            searchNovelUiState.value?.let { searchNovelUiState ->
+                if (searchedText == typingText) return
+
+                viewModelScope.launch {
+                    _searchNovelUiState.value = searchNovelUiState.copy(loading = true)
+                    runCatching {
+                        getSearchedNovelsUseCase(typingText)
+                    }.onSuccess { result ->
+                        _searchNovelUiState.value = searchNovelUiState.copy(
+                            loading = false,
+                            isLoadable = result.isLoadable,
+                            novelCount = result.resultCount,
+                            novels = result.novels.map { novel ->
+                                if (novel.id == novelId) {
+                                    novel
+                                        .toUi()
+                                        .let { it.copy(isSelected = !it.isSelected) }
+                                } else {
+                                    novel.toUi()
+                                }
+                            },
+                        )
+                        searchedText = typingText
+                    }.onFailure {
+                        _searchNovelUiState.value = searchNovelUiState.copy(
+                            loading = false,
+                            error = true,
+                        )
+                    }
                 }
             }
         }
-    }
 
-    fun updateSearchedNovels() {
-        searchNovelUiState.value?.let { searchNovelUiState ->
-            if (!searchNovelUiState.isLoadable) return
+        fun updateSearchedNovels() {
+            searchNovelUiState.value?.let { searchNovelUiState ->
+                if (!searchNovelUiState.isLoadable) return
 
-            viewModelScope.launch {
-                runCatching {
-                    getSearchedNovelsUseCase()
-                }.onSuccess { result ->
-                    _searchNovelUiState.value = searchNovelUiState.copy(
-                        loading = false,
-                        isLoadable = result.isLoadable,
-                        novelCount = result.resultCount,
-                        novels = result.novels.map { novel ->
-                            if (novel.id == novelId) {
-                                novel
-                                    .toUi()
-                                    .let { it.copy(isSelected = !it.isSelected) }
-                            } else {
-                                novel.toUi()
-                            }
-                        },
-                    )
-                }.onFailure {
-                    _searchNovelUiState.value = searchNovelUiState.copy(
-                        loading = false,
-                        error = true,
-                    )
+                viewModelScope.launch {
+                    runCatching {
+                        getSearchedNovelsUseCase()
+                    }.onSuccess { result ->
+                        _searchNovelUiState.value = searchNovelUiState.copy(
+                            loading = false,
+                            isLoadable = result.isLoadable,
+                            novelCount = result.resultCount,
+                            novels = result.novels.map { novel ->
+                                if (novel.id == novelId) {
+                                    novel
+                                        .toUi()
+                                        .let { it.copy(isSelected = !it.isSelected) }
+                                } else {
+                                    novel.toUi()
+                                }
+                            },
+                        )
+                    }.onFailure {
+                        _searchNovelUiState.value = searchNovelUiState.copy(
+                            loading = false,
+                            error = true,
+                        )
+                    }
                 }
             }
         }
-    }
 
-    fun updateSelectedNovel(novelId: Long) {
-        searchNovelUiState.value?.let { searchNovelUiState ->
-            val novels = searchNovelUiState.novels.map { novel ->
-                if (novel.id == novelId) {
-                    novel.copy(isSelected = !novel.isSelected)
-                } else {
+        fun updateSelectedNovel(novelId: Long) {
+            searchNovelUiState.value?.let { searchNovelUiState ->
+                val novels = searchNovelUiState.novels.map { novel ->
+                    if (novel.id == novelId) {
+                        novel.copy(isSelected = !novel.isSelected)
+                    } else {
+                        novel.copy(isSelected = false)
+                    }
+                }
+                _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
+            }
+        }
+
+        fun updateSelectedNovel() {
+            searchNovelUiState.value?.let { searchNovelUiState ->
+                val novel = searchNovelUiState.novels.find { it.isSelected }
+                _selectedNovelTitle.value = novel?.title.orEmpty()
+                novelId = novel?.id
+            }
+        }
+
+        fun updateSelectedNovelClear() {
+            searchNovelUiState.value?.let { searchNovelUiState ->
+                val novels = searchNovelUiState.novels.map { novel ->
                     novel.copy(isSelected = false)
                 }
+                _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
+                _selectedNovelTitle.value = ""
             }
-            _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
         }
     }
-
-    fun updateSelectedNovel() {
-        searchNovelUiState.value?.let { searchNovelUiState ->
-            val novel = searchNovelUiState.novels.find { it.isSelected }
-            _selectedNovelTitle.value = novel?.title.orEmpty()
-            novelId = novel?.id
-        }
-    }
-
-    fun updateSelectedNovelClear() {
-        searchNovelUiState.value?.let { searchNovelUiState ->
-            val novels = searchNovelUiState.novels.map { novel ->
-                novel.copy(isSelected = false)
-            }
-            _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
-            _selectedNovelTitle.value = ""
-        }
-    }
-}
