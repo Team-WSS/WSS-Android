@@ -109,7 +109,7 @@
     <string name="feed_removed_feed_snackbar">해당 글을 찾을 수 없어요</string>
     <string name="feed_no_more_title">게시글이 없어요</string>
     <string name="feed_no_more_content">새 글을 남겨보세요!</string>
-    <string name="feed_private_label">비공개 기록이에요.</string>
+    <string name="feed_private_label">나만 볼 수 있는 글이에요.</string>
 
     <!-- 피드 상세 뷰 -->
     <string name="feed_detail_title">게시글</string>
@@ -400,6 +400,7 @@
     <string name="tv_remove_popup_menu_stop_creating">글 작성을 그만하시겠어요?</string>
     <string name="remove_popup_menu_stop_creating">그만하기</string>
     <string name="remove_popup_menu_keep_creating">계속 작성</string>
+    <string name="create_feed_private">나만 보기</string>
 
     <!-- 서재 뷰 -->
     <string name="storage_storage">서재</string>
