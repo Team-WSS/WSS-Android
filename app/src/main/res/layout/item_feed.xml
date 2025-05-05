@@ -207,7 +207,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="12dp"
             android:onClick="@{(cl_feed_like) -> onClick.onLikeButtonClick(cl_feed_like, feed.id)}"
             app:isVisible="@{feed.isPublic}"
             app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
