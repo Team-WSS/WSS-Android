@@ -5,9 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.into.websoso.core.auth.AuthClient
 import com.into.websoso.core.auth.AuthPlatform
-import com.into.websoso.core.common.lifecycle.compose.collectAsEventWithLifecycle
+import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.signin.UiEffect.ScrollToPage
@@ -27,17 +31,16 @@ import com.into.websoso.feature.signin.component.SignInButtons
 
 @Composable
 fun SignInRoute(
-    signInViewModel: SignInViewModel = hiltViewModel(),
     authClient: (platform: AuthPlatform) -> AuthClient,
+    signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
-    val pagerState = rememberPagerState { Onboarding_Images.size }
+    val latestEvent by rememberUpdatedState(signInViewModel.uiEvent)
+    var isScroll by remember { mutableStateOf(false) }
 
-    signInViewModel.uiEvent.collectAsEventWithLifecycle { event ->
+    latestEvent.collectAsEventWithLifecycle { event ->
         when (event) {
             is ScrollToPage -> {
-                pagerState.animateScrollToPage(
-                    page = (pagerState.currentPage + 1) % pagerState.pageCount,
-                )
+                isScroll = true
             }
 
             is ShowToast -> {
@@ -47,7 +50,8 @@ fun SignInRoute(
     }
 
     SignInScreen(
-        pagerState = pagerState,
+        isScroll = isScroll,
+        onScrollChanged = { isScroll = false },
         onClick = { platform ->
             signInViewModel.signIn(platform = platform) {
                 authClient(platform).signIn()
@@ -58,9 +62,12 @@ fun SignInRoute(
 
 @Composable
 private fun SignInScreen(
-    pagerState: PagerState,
+    isScroll: Boolean,
+    onScrollChanged: () -> Unit,
     onClick: (platform: AuthPlatform) -> Unit,
 ) {
+    val pagerState = rememberPagerState { Onboarding_Images.size }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -68,7 +75,11 @@ private fun SignInScreen(
             .background(color = Gray50),
     ) {
         Spacer(modifier = Modifier.weight(weight = 1f))
-        OnboardingHorizontalPager(pagerState = pagerState)
+        OnboardingHorizontalPager(
+            pagerState = pagerState,
+            isScroll = isScroll,
+            onScrollChanged = onScrollChanged,
+        )
         Spacer(modifier = Modifier.weight(weight = 1f))
         OnboardingDotsIndicator(pagerState = pagerState)
         Spacer(modifier = Modifier.height(height = 32.dp))
@@ -81,9 +92,9 @@ private fun SignInScreen(
 @Composable
 private fun SignInScreenPreview() {
     WebsosoTheme {
-        val pagerState = rememberPagerState { Onboarding_Images.size }
         SignInScreen(
-            pagerState = pagerState,
+            isScroll = true,
+            onScrollChanged = {},
             onClick = {},
         )
     }

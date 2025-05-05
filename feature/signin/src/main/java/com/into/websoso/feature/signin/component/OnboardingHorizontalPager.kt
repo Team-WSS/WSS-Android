@@ -6,6 +6,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,8 +26,20 @@ internal val Onboarding_Images = arrayOf(
 @Composable
 internal fun OnboardingHorizontalPager(
     pagerState: PagerState,
+    isScroll: Boolean,
+    onScrollChanged: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    LaunchedEffect(isScroll) {
+        try {
+            pagerState.animateScrollToPage(
+                page = (pagerState.currentPage + 1) % pagerState.pageCount,
+            )
+        } finally {
+            onScrollChanged()
+        }
+    }
+
     HorizontalPager(
         state = pagerState,
         modifier = modifier.fillMaxWidth(),
@@ -45,6 +58,10 @@ private fun OnboardingHorizontalPagerPreview() {
     WebsosoTheme {
         val pagerState = rememberPagerState { 4 }
 
-        OnboardingHorizontalPager(pagerState = pagerState)
+        OnboardingHorizontalPager(
+            pagerState = pagerState,
+            isScroll = true,
+            onScrollChanged = {},
+        )
     }
 }

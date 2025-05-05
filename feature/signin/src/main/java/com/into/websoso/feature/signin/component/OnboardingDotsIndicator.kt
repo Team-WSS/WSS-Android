@@ -29,6 +29,8 @@ import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import kotlin.math.absoluteValue
 
+private const val DOT_SELECTION_THRESHOLD = 0.5f
+
 @Composable
 internal fun OnboardingDotsIndicator(
     pagerState: PagerState,
@@ -78,7 +80,7 @@ private fun ShiftDotsIndicator(
         List(pagerState.pageCount) { index ->
             val distance = (index - currentPage) - offsetFraction
             val clamped = distance.absoluteValue.coerceIn(0f, 1f)
-            val isSelected = clamped < 0.5f
+            val isSelected = clamped < DOT_SELECTION_THRESHOLD
 
             DotState(
                 width = lerp(indicatorWidth, dotSize, clamped),
@@ -138,8 +140,7 @@ private fun DotStyle(
             .size(
                 height = height,
                 width = width,
-            )
-            .background(
+            ).background(
                 shape = shape,
                 color = color,
             ),
