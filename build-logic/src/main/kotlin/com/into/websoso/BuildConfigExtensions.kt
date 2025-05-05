@@ -30,7 +30,10 @@ fun BuildType.buildConfigs(
 fun getLocalProperty(
     rootDir: File,
     key: String,
-): String = gradleLocalProperties(rootDir).getProperty(key)
+): String {
+    val value = gradleLocalProperties(rootDir).getProperty(key)
+    return value.trim('"')
+}
 
 fun interface BuildConfigScope {
     fun string(
