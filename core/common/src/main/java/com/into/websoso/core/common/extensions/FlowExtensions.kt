@@ -43,7 +43,7 @@ fun <T> Flow<T>.collectAsEventWithLifecycle(
     lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     context: CoroutineContext = EmptyCoroutineContext,
-    onEvent: (T) -> Unit,
+    onEvent: suspend (T) -> Unit,
 ) {
     LaunchedEffect(this, lifecycle, minActiveState, context) {
         lifecycle.repeatOnLifecycle(minActiveState) {

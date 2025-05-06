@@ -16,7 +16,7 @@ import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.databinding.ActivityLoginBinding
-import com.into.websoso.feature.signin.SignInRoute
+import com.into.websoso.feature.signin.SignInScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -34,7 +34,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(activity_login) {
         enableEdgeToEdge()
         setContent {
             WebsosoTheme {
-                SignInRoute(
+                SignInScreen(
                     authClient = { platform ->
                         authClient[platform] ?: throw IllegalStateException()
                     },
