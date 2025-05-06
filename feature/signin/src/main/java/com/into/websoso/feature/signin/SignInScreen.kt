@@ -25,7 +25,7 @@ import com.into.websoso.feature.signin.component.Onboarding_Images
 import com.into.websoso.feature.signin.component.SignInButtons
 
 @Composable
-fun SignInRoute(signInViewModel: SignInViewModel = hiltViewModel()) {
+fun SignInScreen(signInViewModel: SignInViewModel = hiltViewModel()) {
     val latestEvent by rememberUpdatedState(signInViewModel.uiEvent)
     val pagerState = rememberPagerState { Onboarding_Images.size }
 
