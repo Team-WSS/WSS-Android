@@ -28,9 +28,9 @@ object NetworkModule {
     private const val BASE_URL = BuildConfig.BASE_URL
     private const val CONTENT_TYPE = "application/json"
 
-//    @Provides
-//    @Singleton
-//    fun provideJson(): Json = Json { ignoreUnknownKeys = true }
+    @Provides
+    @Singleton
+    fun provideJson(): Json = Json { ignoreUnknownKeys = true }
 
     @Provides
     @Singleton
