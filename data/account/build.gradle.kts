@@ -1,15 +1,13 @@
 import com.into.websoso.setNamespace
 
 plugins {
-    id("websoso.android.feature")
+    id("websoso.android.library")
 }
 
 android {
-    setNamespace("feature.signin")
+    setNamespace("data.account")
 }
 
 dependencies {
     implementation(projects.core.auth)
-
-    implementation(projects.data.account)
 }

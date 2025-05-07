@@ -2,6 +2,9 @@ package com.into.websoso.feature.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.core.auth.AuthPlatform
+import com.into.websoso.core.auth.AuthToken
+import com.into.websoso.data.account.AccountRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -12,12 +15,47 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(
+        private val accountRepository: AccountRepository,
+    ) : ViewModel() {
         private val _uiEvent = Channel<UiEffect>(Channel.CONFLATED)
         val uiEvent = _uiEvent.receiveAsFlow()
 
         init {
             startAutoScroll()
+        }
+
+        fun signIn(
+            platform: AuthPlatform,
+            getToken: suspend () -> AuthToken,
+        ) {
+            viewModelScope.launch {
+                runCatching {
+                    getToken()
+                }.onSuccess { authToken ->
+                    signInWithSuccess(platform, authToken)
+                }.onFailure {
+                    signInWithFailure()
+                }
+            }
+        }
+
+        private fun signInWithSuccess(
+            platform: AuthPlatform,
+            authToken: AuthToken,
+        ) {
+            viewModelScope.launch {
+                accountRepository.saveToken(
+                    platform = platform,
+                    authToken = authToken,
+                )
+            }
+        }
+
+        private fun signInWithFailure() {
+            viewModelScope.launch {
+                _uiEvent.send(UiEffect.ShowToast)
+            }
         }
 
         private fun startAutoScroll() {
@@ -36,4 +74,6 @@ class SignInViewModel
 
 sealed interface UiEffect {
     data object ScrollToPage : UiEffect
+
+    data object ShowToast : UiEffect
 }

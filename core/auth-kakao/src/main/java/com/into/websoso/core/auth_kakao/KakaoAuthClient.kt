@@ -23,7 +23,7 @@ class KakaoAuthClient
         private val isKakaoTalkLoginAvailable: Boolean
             get() = client.isKakaoTalkLoginAvailable(context)
 
-        override suspend fun login(): AuthToken =
+        override suspend fun signIn(): AuthToken =
             suspendCancellableCoroutine { loginContinuation ->
                 if (isKakaoTalkLoginAvailable) {
                     loginWithKakaotalk(loginContinuation)
@@ -32,7 +32,7 @@ class KakaoAuthClient
                 }
             }
 
-        override suspend fun logout() {
+        override suspend fun signOut() {
             suspendCancellableCoroutine {
                 client.logout { error ->
                     if (error != null) {
