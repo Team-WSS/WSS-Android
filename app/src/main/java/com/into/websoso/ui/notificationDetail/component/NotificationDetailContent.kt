@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +26,12 @@ fun NotificationDetailContent(
     uiState: NotificationDetailUiState,
     modifier: Modifier = Modifier,
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(scrollState),
     ) {
         Column(
             modifier = modifier
@@ -56,6 +61,7 @@ fun NotificationDetailContent(
                 .padding(top = 24.dp, start = 20.dp, end = 20.dp)
                 .fillMaxSize(),
         )
+        Spacer(modifier = Modifier.height(40.dp))
     }
 }
 
