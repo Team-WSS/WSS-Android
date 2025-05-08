@@ -1,5 +1,6 @@
 package com.into.websoso.core.datastore.datasource.account
 
+import com.into.websoso.data.account.AccountTokenProvider
 import com.into.websoso.data.account.datasource.AccountLocalDataSource
 import dagger.Binds
 import dagger.Module
@@ -9,8 +10,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal interface AccountDataSourceModule {
+internal interface AccountModule {
     @Binds
     @Singleton
     fun bindAccountLocalDataSource(defaultAccountDataSource: DefaultAccountDataSource): AccountLocalDataSource
+
+    @Binds
+    @Singleton
+    fun bindAccountTokenProvider(accountLocalDataSource: AccountLocalDataSource): AccountTokenProvider
 }
