@@ -1,7 +1,5 @@
 package com.into.websoso.data.di
 
-import com.into.websoso.data.qualifier.Secured
-import com.into.websoso.data.qualifier.Unsecured
 import com.into.websoso.data.remote.api.AuthApi
 import com.into.websoso.data.remote.api.AvatarApi
 import com.into.websoso.data.remote.api.FeedApi
@@ -24,61 +22,41 @@ import javax.inject.Singleton
 object ApiModule {
     @Provides
     @Singleton
-    fun provideAuthApi(
-        @Unsecured retrofit: Retrofit,
-    ): AuthApi = retrofit.create(AuthApi::class.java)
+    fun provideAuthApi(retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
 
     @Provides
     @Singleton
-    fun provideNovelApi(
-        @Secured retrofit: Retrofit,
-    ): NovelApi = retrofit.create(NovelApi::class.java)
+    fun provideNovelApi(retrofit: Retrofit): NovelApi = retrofit.create(NovelApi::class.java)
 
     @Provides
     @Singleton
-    fun provideUserNovelApi(
-        @Secured retrofit: Retrofit,
-    ): UserNovelApi = retrofit.create(UserNovelApi::class.java)
+    fun provideUserNovelApi(retrofit: Retrofit): UserNovelApi = retrofit.create(UserNovelApi::class.java)
 
     @Provides
     @Singleton
-    fun provideNotificationApi(
-        @Secured retrofit: Retrofit,
-    ): NotificationApi = retrofit.create(NotificationApi::class.java)
+    fun provideNotificationApi(retrofit: Retrofit): NotificationApi = retrofit.create(NotificationApi::class.java)
 
     @Provides
     @Singleton
-    fun provideFeedApi(
-        @Secured retrofit: Retrofit,
-    ): FeedApi = retrofit.create(FeedApi::class.java)
+    fun provideFeedApi(retrofit: Retrofit): FeedApi = retrofit.create(FeedApi::class.java)
 
     @Provides
     @Singleton
-    fun provideUserApi(
-        @Secured retrofit: Retrofit,
-    ): UserApi = retrofit.create(UserApi::class.java)
+    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
     @Provides
     @Singleton
-    fun provideKeywordApi(
-        @Secured retrofit: Retrofit,
-    ): KeywordApi = retrofit.create(KeywordApi::class.java)
+    fun provideKeywordApi(retrofit: Retrofit): KeywordApi = retrofit.create(KeywordApi::class.java)
 
     @Provides
     @Singleton
-    fun provideAvatarApi(
-        @Secured retrofit: Retrofit,
-    ): AvatarApi = retrofit.create(AvatarApi::class.java)
+    fun provideAvatarApi(retrofit: Retrofit): AvatarApi = retrofit.create(AvatarApi::class.java)
 
     @Provides
     @Singleton
-    fun provideVersionApi(
-        @Secured retrofit: Retrofit,
-    ): VersionApi = retrofit.create(VersionApi::class.java)
+    fun provideVersionApi(retrofit: Retrofit): VersionApi = retrofit.create(VersionApi::class.java)
 
     @Provides
     @Singleton
-    fun providePushMessageApi(
-        @Secured retrofit: Retrofit,
-    ): PushMessageApi = retrofit.create(PushMessageApi::class.java)
+    fun providePushMessageApi(retrofit: Retrofit): PushMessageApi = retrofit.create(PushMessageApi::class.java)
 }

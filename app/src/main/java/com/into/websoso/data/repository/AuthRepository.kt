@@ -1,8 +1,6 @@
 package com.into.websoso.data.repository
 
 import android.content.SharedPreferences
-import com.into.websoso.data.mapper.toData
-import com.into.websoso.data.model.LoginEntity
 import com.into.websoso.data.remote.api.AuthApi
 import com.into.websoso.data.remote.request.FCMTokenRequestDto
 import com.into.websoso.data.remote.request.LogoutRequestDto
@@ -28,13 +26,6 @@ class AuthRepository
         var isAutoLogin: Boolean
             get() = authStorage.getBoolean(AUTO_LOGIN_KEY, false)
             private set(value) = authStorage.edit().putBoolean(AUTO_LOGIN_KEY, value).apply()
-
-        suspend fun loginWithKakao(accessToken: String): LoginEntity {
-            val response = authApi.loginWithKakao(accessToken)
-            this.accessToken = response.authorization
-            this.refreshToken = response.refreshToken
-            return response.toData()
-        }
 
         suspend fun fetchNicknameValidity(
             authorization: String,
