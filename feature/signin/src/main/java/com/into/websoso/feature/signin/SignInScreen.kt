@@ -52,9 +52,10 @@ fun SignInScreen(
     SignInScreen(
         pagerState = pagerState,
         onClick = { platform ->
-            signInViewModel.signIn(platform = platform) {
-                authClient(platform).signIn()
-            }
+            signInViewModel.signIn(
+                platform = platform,
+                getToken = authClient(platform)::signIn,
+            )
         },
     )
 }
