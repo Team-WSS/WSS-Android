@@ -17,5 +17,5 @@ internal interface AccountModule {
 
     @Binds
     @Singleton
-    fun bindAccountTokenProvider(accountLocalDataSource: AccountLocalDataSource): AccountTokenProvider
+    fun bindAccountTokenProvider(defaultAccountTokenProvider: DefaultAccountTokenProvider): AccountTokenProvider
 }
