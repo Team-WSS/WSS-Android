@@ -1,6 +1,7 @@
 package com.into.websoso.core.network.di
 
 import com.into.websoso.core.network.BuildConfig
+import com.into.websoso.core.network.interceptor.AuthorizationInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -15,13 +16,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+internal object NetworkModule {
     private const val BASE_URL = BuildConfig.BASE_URL
     private const val CONTENT_TYPE = "application/json"
+    private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy {
+        HttpLoggingInterceptor().apply {
+            if (BuildConfig.DEBUG) setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+    }
 
     @Provides
     @Singleton
-    fun provideRetrofit(
+    internal fun provideRetrofit(
         json: Json,
         client: OkHttpClient,
     ): Retrofit =
@@ -38,12 +44,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    internal fun provideOkHttpClient(): OkHttpClient =
+    internal fun provideOkHttpClient(authorizationInterceptor: AuthorizationInterceptor): OkHttpClient =
         OkHttpClient
             .Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    if (BuildConfig.DEBUG) setLevel(HttpLoggingInterceptor.Level.BODY)
-                },
-            ).build()
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(authorizationInterceptor)
+            .build()
 }

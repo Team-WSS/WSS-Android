@@ -13,7 +13,7 @@ internal class KakaoLoginResponseDto(
     @SerialName("isRegister")
     val isRegister: Boolean,
 ) {
-    fun toData(): AccountEntity =
+    internal fun toData(): AccountEntity =
         AccountEntity(
             accessToken = authorization,
             refreshToken = refreshToken,

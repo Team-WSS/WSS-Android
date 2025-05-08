@@ -21,5 +21,5 @@ internal interface AccountApi {
 internal object AccountApiModule {
     @Provides
     @Singleton
-    fun provideAccountApi(retrofit: Retrofit): AccountApi = retrofit.create(AccountApi::class.java)
+    internal fun provideAccountApi(retrofit: Retrofit): AccountApi = retrofit.create(AccountApi::class.java)
 }
