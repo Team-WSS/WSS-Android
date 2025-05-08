@@ -1,26 +1,29 @@
 package com.into.websoso.core.network.interceptor
 
-import com.into.websoso.data.account.AccountTokenProvider
+import com.into.websoso.data.account.AccountRepository
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
 internal class AuthorizationInterceptor
     @Inject
     constructor(
-        private val accountToken: AccountTokenProvider,
+        private val accountRepository: Provider<AccountRepository>,
     ) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
 
             if (isSkippedPath(request)) return chain.proceed(request)
 
+            val token = runBlocking { accountRepository.get().accessToken() }
             val newRequest = request
                 .newBuilder()
-                .addHeader("Authorization", "Bearer $accountToken")
+                .addHeader("Authorization", "Bearer $token")
                 .build()
 
             return chain.proceed(newRequest)

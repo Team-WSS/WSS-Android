@@ -12,6 +12,10 @@ class AccountRepository
         private val accountRemoteDataSource: AccountRemoteDataSource,
         private val accountLocalDataSource: AccountLocalDataSource,
     ) {
+        suspend fun accessToken(): String = accountLocalDataSource.accessToken()
+
+        suspend fun refreshToken(): String = accountLocalDataSource.refreshToken()
+
         suspend fun saveToken(
             platform: AuthPlatform,
             authToken: AuthToken,
@@ -28,3 +32,4 @@ class AccountRepository
             return account.isRegister
         }
     }
+// TODO: 인스턴스 싱글톤 참고하기
