@@ -4,7 +4,7 @@ import com.into.websoso.data.account.AccountTokenProvider
 import com.into.websoso.data.account.datasource.AccountLocalDataSource
 import javax.inject.Inject
 
-class DefaultAccountTokenProvider
+internal class DefaultAccountTokenProvider
     @Inject
     constructor(
         private val accountDataStore: AccountLocalDataSource,

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class DefaultAccountDataSource
+internal class DefaultAccountDataSource
     @Inject
     constructor(
         @AccountDataStore private val accountDataStore: DataStore<Preferences>,

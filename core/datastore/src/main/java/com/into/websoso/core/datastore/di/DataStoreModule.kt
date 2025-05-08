@@ -17,10 +17,10 @@ internal object DataStoreModule {
     private const val ACCOUNT_DATASTORE = "ACCOUNT_DATASTORE"
     private val Context.accountDataStore: DataStore<Preferences> by preferencesDataStore(name = ACCOUNT_DATASTORE)
 
-    @Singleton
     @Provides
+    @Singleton
     @AccountDataStore
-    fun provideAccountPreferencesDataStore(
+    internal fun provideAccountPreferencesDataStore(
         @ApplicationContext context: Context,
     ): DataStore<Preferences> = context.accountDataStore
 }
