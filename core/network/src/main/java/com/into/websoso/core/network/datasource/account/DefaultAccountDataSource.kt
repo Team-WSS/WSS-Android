@@ -5,9 +5,7 @@ import com.into.websoso.core.auth.AuthToken
 import com.into.websoso.data.account.AccountEntity
 import com.into.websoso.data.account.datasource.AccountRemoteDataSource
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class DefaultAccountDataSource
     @Inject
     constructor(
