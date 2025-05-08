@@ -1,7 +1,7 @@
 package com.into.websoso.data.account
 
 data class AccountEntity(
-    val authorization: String,
+    val accessToken: String,
     val refreshToken: String,
     val isRegister: Boolean,
 )

@@ -1,6 +1,6 @@
-package com.into.websoso.core.network.datasource.account
+package com.into.websoso.core.datastore.datasource.account
 
-import com.into.websoso.data.account.datasource.AccountRemoteDataSource
+import com.into.websoso.data.account.datasource.AccountLocalDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,5 +12,5 @@ import javax.inject.Singleton
 internal interface AccountDataSourceModule {
     @Binds
     @Singleton
-    fun bindAccountRemoteDataSource(defaultAccountDataSource: DefaultAccountDataSource): AccountRemoteDataSource
+    fun bindAccountLocalDataSource(defaultAccountDataSource: DefaultAccountDataSource): AccountLocalDataSource
 }

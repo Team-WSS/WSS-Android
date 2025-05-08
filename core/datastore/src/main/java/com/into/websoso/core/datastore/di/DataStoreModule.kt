@@ -19,6 +19,7 @@ internal object DataStoreModule {
 
     @Singleton
     @Provides
+    @AccountDataStore
     fun provideAccountPreferencesDataStore(
         @ApplicationContext context: Context,
     ): DataStore<Preferences> = context.accountDataStore
