@@ -15,7 +15,7 @@ internal class KakaoLoginResponseDto(
 ) {
     fun toData(): AccountEntity =
         AccountEntity(
-            authorization = authorization,
+            accessToken = authorization,
             refreshToken = refreshToken,
             isRegister = isRegister,
         )
