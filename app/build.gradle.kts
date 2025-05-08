@@ -87,6 +87,7 @@ dependencies {
     implementation(projects.core.auth)
     implementation(projects.core.authKakao)
     implementation(projects.core.network)
+    implementation(projects.core.datastore)
 
     implementation(projects.feature.signin)
 

@@ -46,14 +46,17 @@ class SignInViewModel
         ) {
             viewModelScope.launch {
                 runCatching {
-                    // result 객체
                     accountRepository.saveToken(
                         platform = platform,
                         authToken = authToken,
                     )
                 }.onSuccess { isRegister ->
-                    // navigateToHome.emit()
+                    when (isRegister) {
+                        true -> _uiEvent.send(UiEffect.NavigateToHome)
+                        false -> _uiEvent.send(UiEffect.NavigateToOnboarding)
+                    }
                 }.onFailure {
+                    signInWithFailure()
                 }
             }
         }
@@ -82,8 +85,8 @@ sealed interface UiEffect {
     data object ScrollToPage : UiEffect
 
     data object ShowToast : UiEffect
-}
 
-sealed interface UiEvent {
-    data object NavigateToHome : UiEvent
+    data object NavigateToHome : UiEffect
+
+    data object NavigateToOnboarding : UiEffect
 }
