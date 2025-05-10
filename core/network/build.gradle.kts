@@ -32,6 +32,7 @@ dependencies {
 
     // 프로젝트 의존성
     implementation(projects.core.auth)
+    implementation(projects.core.common)
 
     // 네트워크 관련 라이브러리
     implementation(libs.retrofit)
