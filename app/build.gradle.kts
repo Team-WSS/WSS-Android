@@ -76,6 +76,7 @@ dependencies {
     // 프로젝트 의존성
     implementation(projects.core.resource)
     implementation(projects.core.designsystem)
+    implementation(projects.core.common)
     implementation(projects.core.auth)
     implementation(projects.core.authKakao)
     implementation(projects.core.network)
