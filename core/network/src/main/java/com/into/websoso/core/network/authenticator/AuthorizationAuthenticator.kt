@@ -1,8 +1,11 @@
 package com.into.websoso.core.network.authenticator
 
-import com.into.websoso.core.common.navigator.WebsosoNavigatorProvider
+import com.into.websoso.core.auth.AuthSessionManager
+import com.into.websoso.core.auth.SessionState.Expired
+import com.into.websoso.core.common.dispatchers.Dispatcher
+import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
 import com.into.websoso.data.account.AccountRepository
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -15,66 +18,72 @@ import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
-class AuthorizationAuthenticator
+internal class AuthorizationAuthenticator
     @Inject
     constructor(
         private val accountRepository: Provider<AccountRepository>,
-        private val navigator: WebsosoNavigatorProvider,
+        private val sessionManager: AuthSessionManager,
+        @Dispatcher(WebsosoDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     ) : Authenticator {
-        private val mutex = Mutex()
+        private val mutex: Mutex = Mutex()
 
         override fun authenticate(
             route: Route?,
             response: Response,
         ): Request? {
-            if (response.request.header("Authorization").isNullOrBlank() ||
-                responseCount(response) >= MAX_ATTEMPT_COUNT
-            ) {
-                return null
-            }
+            if (shouldSkipCondition(response)) return null
 
-            return runBlocking(Dispatchers.IO) {
+            val renewedToken = runBlocking(dispatcher) {
                 mutex.withLock {
-                    val updatedAccessToken = accountRepository.get().accessToken()
-                    if (updatedAccessToken.isNotBlank()) {
-                        return@runBlocking response.request
-                            .newBuilder()
-                            .header("Authorization", "Bearer $updatedAccessToken")
-                            .build()
-                    }
-
-                    val refreshToken = accountRepository.get().refreshToken()
-                    if (refreshToken.isBlank()) {
-                        navigator.navigateToLoginActivity()
+                    if (accountRepository.get().refreshToken().isBlank()) {
+                        sessionManager.updateSessionState(Expired)
                         return@runBlocking null
                     }
 
-                    return@runBlocking runCatching {
-                        accountRepository.get().renewToken()
-                        val newAccessToken = accountRepository.get().accessToken()
-                        response.request
-                            .newBuilder()
-                            .header("Authorization", "Bearer $newAccessToken")
-                            .build()
-                    }.getOrElse {
-                        navigator.navigateToLoginActivity()
-                        null
+                    if (response.isRefreshNeeded()) {
+                        renewToken(response)
+                    } else {
+                        return@withLock accountRepository.get().accessToken()
                     }
                 }
             }
-        }
 
-        private fun responseCount(response: Response): Int {
-            var count = 1
-            var current = response.priorResponse
-            while (current != null) {
-                count++
-                current = current.priorResponse
+            return renewedToken.let { token ->
+                response.request
+                    .newBuilder()
+                    .header("Authorization", "Bearer $token")
+                    .build()
             }
-            return count
         }
 
-        private fun responseCount2(response: Response): Int = generateSequence(response) { it.priorResponse }.count()
+        private suspend fun Response.isRefreshNeeded(): Boolean {
+            val updatedAccessToken = accountRepository.get().accessToken()
+            val oldAccessToken = request
+                .header("Authorization")
+                ?.removePrefix("Bearer ")
+
+            return oldAccessToken == updatedAccessToken
+        }
+
+        private suspend fun renewToken(response: Response): String? =
+            runCatching {
+                accountRepository.get().renewToken()
+            }.fold(
+                onSuccess = { updatedAccessToken -> updatedAccessToken },
+                onFailure = {
+                    sessionManager.updateSessionState(Expired)
+                    null
+                },
+            )
+
+        private fun shouldSkipCondition(response: Response): Boolean =
+            response.request.header("Authorization").isNullOrBlank() ||
+                response.retryAttemptCount() >= MAX_ATTEMPT_COUNT
+
+        private fun Response.retryAttemptCount(): Int =
+            generateSequence(this) {
+                it.priorResponse
+            }.count()
 
         companion object {
             private const val MAX_ATTEMPT_COUNT = 2
