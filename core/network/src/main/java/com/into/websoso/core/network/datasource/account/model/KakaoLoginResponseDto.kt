@@ -1,6 +1,7 @@
-package com.into.websoso.core.network.datasource.account
+package com.into.websoso.core.network.datasource.account.model
 
-import com.into.websoso.data.account.AccountEntity
+import com.into.websoso.data.account.model.AccountEntity
+import com.into.websoso.data.account.model.TokenEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,8 +16,10 @@ internal class KakaoLoginResponseDto(
 ) {
     internal fun toData(): AccountEntity =
         AccountEntity(
-            accessToken = authorization,
-            refreshToken = refreshToken,
+            token = TokenEntity(
+                accessToken = authorization,
+                refreshToken = refreshToken,
+            ),
             isRegister = isRegister,
         )
 }
