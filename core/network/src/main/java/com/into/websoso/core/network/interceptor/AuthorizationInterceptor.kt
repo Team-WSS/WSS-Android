@@ -1,6 +1,9 @@
 package com.into.websoso.core.network.interceptor
 
+import com.into.websoso.core.common.dispatchers.Dispatcher
+import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
 import com.into.websoso.data.account.AccountRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -14,13 +17,14 @@ internal class AuthorizationInterceptor
     @Inject
     constructor(
         private val accountRepository: Provider<AccountRepository>,
+        @Dispatcher(WebsosoDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     ) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
 
-            if (isSkippedPath(request)) return chain.proceed(request)
+            if (shouldSkipCondition(request)) return chain.proceed(request)
 
-            val token = runBlocking { accountRepository.get().accessToken() }
+            val token = runBlocking(dispatcher) { accountRepository.get().accessToken() }
             val newRequest = request
                 .newBuilder()
                 .addHeader("Authorization", "Bearer $token")
@@ -29,7 +33,7 @@ internal class AuthorizationInterceptor
             return chain.proceed(newRequest)
         }
 
-        private fun isSkippedPath(request: Request): Boolean =
+        private fun shouldSkipCondition(request: Request): Boolean =
             EXCLUDED_PATHS.any { path ->
                 request.url.encodedPath.contains(path)
             }
