@@ -95,15 +95,5 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingBinding>(R.layout.acti
         const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN"
 
         fun getIntent(context: Context): Intent = Intent(context, OnboardingActivity::class.java)
-
-        fun getIntent(
-            context: Context,
-            accessToken: String,
-            refreshToken: String,
-        ): Intent =
-            Intent(context, OnboardingActivity::class.java).apply {
-                putExtra(ACCESS_TOKEN_KEY, accessToken)
-                putExtra(REFRESH_TOKEN_KEY, refreshToken)
-            }
     }
 }

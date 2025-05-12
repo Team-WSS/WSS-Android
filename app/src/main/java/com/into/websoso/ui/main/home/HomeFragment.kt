@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
@@ -22,7 +23,6 @@ import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.home_nickname_interest_feed
-import com.into.websoso.data.repository.AuthRepository
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
@@ -43,8 +43,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
     @Inject
     lateinit var tracker: Tracker
 
-    @Inject
-    lateinit var authRepository: AuthRepository
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -153,6 +151,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
                 !uiState.loading -> {
                     binding.wllHome.setWebsosoLoadingVisibility(false)
+                    Log.d("123123", uiState.popularNovels.toString())
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
                     updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())

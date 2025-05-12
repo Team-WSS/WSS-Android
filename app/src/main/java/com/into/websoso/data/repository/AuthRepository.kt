@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import com.into.websoso.data.remote.api.AuthApi
 import com.into.websoso.data.remote.request.FCMTokenRequestDto
 import com.into.websoso.data.remote.request.LogoutRequestDto
-import com.into.websoso.data.remote.request.TokenReissueRequestDto
 import com.into.websoso.data.remote.request.UserProfileRequestDto
 import com.into.websoso.data.remote.request.WithdrawRequestDto
 import javax.inject.Inject
@@ -79,17 +78,6 @@ class AuthRepository
                 apply()
             }
         }
-
-        suspend fun reissueToken(): String? =
-            runCatching {
-                val response = authApi.reissueToken(TokenReissueRequestDto(refreshToken))
-                accessToken = response.authorization
-                refreshToken = response.refreshToken
-                response.authorization
-            }.getOrElse {
-                it.printStackTrace()
-                null
-            }
 
         fun updateAccessToken(accessToken: String) {
             this.accessToken = accessToken

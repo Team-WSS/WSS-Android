@@ -1,12 +1,10 @@
-package com.into.websoso.data.remote.response
+package com.into.websoso.core.network.datasource.account.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class KakaoTokenReissueResponseDto(
-    @SerialName("Authorization")
-    val authorization: String,
+internal data class TokenReissueRequestDto(
     @SerialName("refreshToken")
     val refreshToken: String,
 )
