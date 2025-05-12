@@ -13,6 +13,7 @@ import com.google.firebase.analytics.analytics
 import com.into.websoso.R.layout.activity_login
 import com.into.websoso.core.auth.AuthClient
 import com.into.websoso.core.auth.AuthPlatform
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.databinding.ActivityLoginBinding
@@ -28,6 +29,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(activity_login) {
     @Inject
     lateinit var authClient: Map<AuthPlatform, @JvmSuppressWildcards AuthClient>
 
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,6 +42,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(activity_login) {
                     authClient = { platform ->
                         authClient[platform] ?: throw IllegalStateException()
                     },
+                    websosoNavigator = websosoNavigator,
                 )
             }
         }

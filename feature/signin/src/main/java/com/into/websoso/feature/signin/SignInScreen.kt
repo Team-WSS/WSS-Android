@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.into.websoso.core.auth.AuthClient
 import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.signin.UiEffect.NavigateToHome
@@ -32,6 +33,7 @@ import com.into.websoso.feature.signin.component.SignInButtons
 @Composable
 fun SignInScreen(
     authClient: (platform: AuthPlatform) -> AuthClient,
+    websosoNavigator: NavigatorProvider,
     signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
     val latestEvent by rememberUpdatedState(signInViewModel.uiEvent)
@@ -49,13 +51,9 @@ fun SignInScreen(
                 // TODO: 실패 시 커스텀 스낵 바 구현
             }
 
-            NavigateToHome -> {
-                // TODO: 홈 이동
-            }
+            NavigateToHome -> websosoNavigator.navigateToMainActivity()
 
-            NavigateToOnboarding -> {
-                // TODO: 온보딩 이동
-            }
+            NavigateToOnboarding -> websosoNavigator.navigateToOnboardingActivity()
         }
     }
 
