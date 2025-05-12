@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.into.websoso.core.datastore.di.AccountDataStore
 import com.into.websoso.data.account.datasource.AccountLocalDataSource
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -20,19 +20,19 @@ internal class DefaultAccountDataSource
             accountDataStore.data
                 .map { preferences ->
                     preferences[ACCESS_TOKEN].orEmpty()
-                }.last()
+                }.first()
 
         override suspend fun refreshToken(): String =
             accountDataStore.data
                 .map { preferences ->
                     preferences[REFRESH_TOKEN].orEmpty()
-                }.last()
+                }.first()
 
         override suspend fun isAutoLogin(): Boolean =
             accountDataStore.data
                 .map { preferences ->
                     preferences[IS_LOGIN] ?: false
-                }.last()
+                }.first()
 
         override suspend fun saveAccessToken(accessToken: String) {
             accountDataStore.edit { preferences ->
