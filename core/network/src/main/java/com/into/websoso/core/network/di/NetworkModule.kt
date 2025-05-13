@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.Dispatcher
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -27,6 +28,11 @@ internal object NetworkModule {
     private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy {
         HttpLoggingInterceptor().apply {
             if (BuildConfig.DEBUG) setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+    }
+    private val dispatcher: Dispatcher by lazy {
+        Dispatcher().apply {
+            maxRequestsPerHost = 20
         }
     }
 
@@ -55,6 +61,7 @@ internal object NetworkModule {
     ): OkHttpClient =
         OkHttpClient
             .Builder()
+            .dispatcher(dispatcher)
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(authorizationInterceptor)
             .authenticator(authorizationAuthenticator)

@@ -10,7 +10,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,14 +31,12 @@ internal class DefaultAccountDataSource
             }
 
         override suspend fun postReissue(refreshToken: String): TokenEntity =
-            withTimeout(2000) {
-                accountApi
-                    .postReissueToken(
-                        tokenReissueRequestDto = TokenReissueRequestDto(
-                            refreshToken = refreshToken,
-                        ),
-                    ).toData()
-            }
+            accountApi
+                .postReissueToken(
+                    tokenReissueRequestDto = TokenReissueRequestDto(
+                        refreshToken = refreshToken,
+                    ),
+                ).toData()
     }
 
 @Module
