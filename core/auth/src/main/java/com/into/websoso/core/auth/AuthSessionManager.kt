@@ -1,17 +1,9 @@
 package com.into.websoso.core.auth
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 interface AuthSessionManager {
-    val sessionState: StateFlow<SessionState>
+    val sessionExpired: SharedFlow<Unit>
 
-    fun clearSessionState()
-
-    suspend fun updateSessionState(sessionState: SessionState)
-}
-
-sealed interface SessionState {
-    data object Expired : SessionState
-
-    data object Idle : SessionState
+    suspend fun onSessionExpired()
 }

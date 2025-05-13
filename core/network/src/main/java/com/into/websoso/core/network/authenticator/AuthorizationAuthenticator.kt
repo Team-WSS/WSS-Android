@@ -1,9 +1,9 @@
 package com.into.websoso.core.network.authenticator
 
 import com.into.websoso.core.auth.AuthSessionManager
-import com.into.websoso.core.auth.SessionState.Expired
 import com.into.websoso.core.common.dispatchers.Dispatcher
 import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
+import com.into.websoso.core.common.extensions.ThrottleHelper
 import com.into.websoso.data.account.AccountRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
@@ -23,6 +23,7 @@ internal class AuthorizationAuthenticator
     constructor(
         private val accountRepository: Provider<AccountRepository>,
         private val sessionManager: AuthSessionManager,
+        private val throttle: ThrottleHelper,
         @Dispatcher(WebsosoDispatchers.IO) private val dispatcher: CoroutineDispatcher,
     ) : Authenticator {
         private val mutex: Mutex = Mutex()
@@ -36,12 +37,12 @@ internal class AuthorizationAuthenticator
             val renewedToken = runBlocking(dispatcher) {
                 mutex.withLock {
                     if (accountRepository.get().refreshToken().isBlank()) {
-                        sessionManager.updateSessionState(Expired)
+                        sessionManager.onSessionExpired()
                         return@runBlocking null
                     }
 
                     if (response.isRefreshNeeded()) {
-                        renewToken(response)
+                        throttle { renewToken() }
                     } else {
                         return@withLock accountRepository.get().accessToken()
                     }
@@ -56,6 +57,15 @@ internal class AuthorizationAuthenticator
             }
         }
 
+        private fun shouldSkipCondition(response: Response): Boolean =
+            response.request.header("Authorization").isNullOrBlank() ||
+                response.retryAttemptCount() >= MAX_ATTEMPT_COUNT
+
+        private fun Response.retryAttemptCount(): Int =
+            generateSequence(this) {
+                it.priorResponse
+            }.count()
+
         private suspend fun Response.isRefreshNeeded(): Boolean {
             val updatedAccessToken = accountRepository.get().accessToken()
             val oldAccessToken = request
@@ -65,25 +75,16 @@ internal class AuthorizationAuthenticator
             return oldAccessToken == updatedAccessToken
         }
 
-        private suspend fun renewToken(response: Response): String? =
+        private suspend fun renewToken(): String? =
             runCatching {
                 accountRepository.get().renewToken()
             }.fold(
                 onSuccess = { updatedAccessToken -> updatedAccessToken },
                 onFailure = {
-                    sessionManager.updateSessionState(Expired)
+                    sessionManager.onSessionExpired()
                     null
                 },
             )
-
-        private fun shouldSkipCondition(response: Response): Boolean =
-            response.request.header("Authorization").isNullOrBlank() ||
-                response.retryAttemptCount() >= MAX_ATTEMPT_COUNT
-
-        private fun Response.retryAttemptCount(): Int =
-            generateSequence(this) {
-                it.priorResponse
-            }.count()
 
         companion object {
             private const val MAX_ATTEMPT_COUNT = 2

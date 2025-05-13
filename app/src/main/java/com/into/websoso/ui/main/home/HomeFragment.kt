@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
@@ -151,7 +150,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
                 !uiState.loading -> {
                     binding.wllHome.setWebsosoLoadingVisibility(false)
-                    Log.d("123123", uiState.popularNovels.toString())
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
                     updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())

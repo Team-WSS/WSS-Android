@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.into.websoso.BuildConfig.KAKAO_APP_KEY
 import com.into.websoso.core.auth.AuthSessionManager
-import com.into.websoso.core.auth.SessionState
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.kakao.sdk.common.KakaoSdk
@@ -29,11 +28,8 @@ class WebsosoApp : Application() {
     }
 
     private fun subscribeSessionState() {
-        sessionManager.sessionState.collectWithLifecycle(ProcessLifecycleOwner.get()) { state ->
-            if (state is SessionState.Expired) {
-                sessionManager.clearSessionState()
-                navigatorProvider.navigateToLoginActivity()
-            }
+        sessionManager.sessionExpired.collectWithLifecycle(ProcessLifecycleOwner.get()) {
+            navigatorProvider.navigateToLoginActivity()
         }
     }
 }
