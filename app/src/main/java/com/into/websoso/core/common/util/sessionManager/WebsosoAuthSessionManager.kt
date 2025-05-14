@@ -14,7 +14,7 @@ import javax.inject.Singleton
 internal class WebsosoAuthSessionManager
     @Inject
     constructor() : AuthSessionManager {
-        private val _sessionExpired = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+        private val _sessionExpired = MutableSharedFlow<Unit>(replay = 1, extraBufferCapacity = 1)
         override val sessionExpired: SharedFlow<Unit> get() = _sessionExpired.asSharedFlow()
 
         override suspend fun onSessionExpired() {
