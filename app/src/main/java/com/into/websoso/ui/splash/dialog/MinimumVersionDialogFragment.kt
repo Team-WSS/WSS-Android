@@ -34,6 +34,8 @@ class MinimumVersionDialogFragment : BaseDialogFragment<DialogMinimumVersionPopu
     }
 
     companion object {
+        const val MINIMUM_VERSION_TAG = "MinimumVersionDialog"
+
         fun newInstance(): MinimumVersionDialogFragment = MinimumVersionDialogFragment()
     }
 }
