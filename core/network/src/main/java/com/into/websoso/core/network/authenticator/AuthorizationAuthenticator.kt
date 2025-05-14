@@ -47,14 +47,12 @@ internal class AuthorizationAuthenticator
                         return@withLock accountRepository.get().accessToken()
                     }
                 }
-            }
+            } ?: return null
 
-            return renewedToken.let { token ->
-                response.request
-                    .newBuilder()
-                    .header("Authorization", "Bearer $token")
-                    .build()
-            }
+            return response.request
+                .newBuilder()
+                .header("Authorization", "Bearer $renewedToken")
+                .build()
         }
 
         private fun shouldSkipCondition(response: Response): Boolean =
