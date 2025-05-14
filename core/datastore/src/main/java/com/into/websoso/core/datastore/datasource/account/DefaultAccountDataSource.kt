@@ -7,9 +7,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.into.websoso.core.datastore.di.AccountDataStore
 import com.into.websoso.data.account.datasource.AccountLocalDataSource
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
 internal class DefaultAccountDataSource
     @Inject
@@ -58,3 +63,11 @@ internal class DefaultAccountDataSource
             private val IS_LOGIN = booleanPreferencesKey("IS_LOGIN")
         }
     }
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal interface AccountDataSourceModule {
+    @Binds
+    @Singleton
+    fun bindAccountLocalDataSource(defaultAccountDataSource: DefaultAccountDataSource): AccountLocalDataSource
+}
