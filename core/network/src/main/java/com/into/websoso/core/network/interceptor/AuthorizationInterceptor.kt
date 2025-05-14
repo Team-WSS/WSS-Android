@@ -25,6 +25,9 @@ internal class AuthorizationInterceptor
             if (shouldSkipCondition(request)) return chain.proceed(request)
 
             val token = runBlocking(dispatcher) { accountRepository.get().accessToken() }
+
+            if (token.isBlank()) return chain.proceed(request)
+
             val newRequest = request
                 .newBuilder()
                 .addHeader("Authorization", "Bearer $token")
