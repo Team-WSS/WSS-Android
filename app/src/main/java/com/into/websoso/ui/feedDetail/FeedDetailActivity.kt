@@ -139,6 +139,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             override fun onFeedDetailClick(view: View) {
                 view.hideKeyboard()
             }
+
+            override fun onFeedImageClick(
+                imageUrls: List<String>,
+                position: Int,
+            ) {
+                navigateToExpandedImage(imageUrls, position)
+            }
         }
 
     private fun navigateToNovelDetail(novelId: Long) {
@@ -175,6 +182,13 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         activityResultCallback.launch(
             OtherUserPageActivity.getIntent(this@FeedDetailActivity, userId),
         )
+    }
+
+    private fun navigateToExpandedImage(
+        imageUrls: List<String>,
+        position: Int,
+    ) {
+        // TODO("Not yet implemented")
     }
 
     private fun bindMenuByIsMine(
