@@ -2,7 +2,6 @@ package com.into.websoso.core.datastore.datasource.account
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.into.websoso.core.datastore.di.AccountDataStore
@@ -33,12 +32,6 @@ internal class DefaultAccountDataSource
                     preferences[REFRESH_TOKEN].orEmpty()
                 }.first()
 
-        override suspend fun isAutoLogin(): Boolean =
-            accountDataStore.data
-                .map { preferences ->
-                    preferences[IS_LOGIN] ?: false
-                }.first()
-
         override suspend fun saveAccessToken(accessToken: String) {
             accountDataStore.edit { preferences ->
                 preferences[ACCESS_TOKEN] = accessToken
@@ -51,16 +44,9 @@ internal class DefaultAccountDataSource
             }
         }
 
-        override suspend fun saveIsAutoLogin(isAutoLogin: Boolean) {
-            accountDataStore.edit { preferences ->
-                preferences[IS_LOGIN] = isAutoLogin
-            }
-        }
-
         companion object {
             private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
             private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
-            private val IS_LOGIN = booleanPreferencesKey("IS_LOGIN")
         }
     }
 
