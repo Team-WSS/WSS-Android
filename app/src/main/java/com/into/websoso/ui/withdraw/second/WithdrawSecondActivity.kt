@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
 import com.into.websoso.R.layout.activity_withdraw_second
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.resource.R.drawable.img_account_info_check_selected
@@ -16,13 +17,16 @@ import com.into.websoso.core.resource.R.string.withdraw_reason_not_exist_any_wan
 import com.into.websoso.core.resource.R.string.withdraw_reason_rarely_using
 import com.into.websoso.core.resource.R.string.withdraw_reason_want_to_delete_content
 import com.into.websoso.databinding.ActivityWithdrawSecondBinding
-import com.into.websoso.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(activity_withdraw_second) {
     private val withdrawSecondViewModel: WithdrawSecondViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +106,7 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(activ
         }
 
         withdrawSecondViewModel.isWithDrawSuccess.observe(this) { isWithdrawSuccess ->
-            if (isWithdrawSuccess) startActivity(LoginActivity.getIntent(this))
+            if (isWithdrawSuccess) websosoNavigator.navigateToLoginActivity()
         }
     }
 
