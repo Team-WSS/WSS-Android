@@ -36,15 +36,9 @@ internal class AuthorizationAuthenticator
 
             val renewedToken = runBlocking(dispatcher) {
                 mutex.withLock {
-                    if (accountRepository.get().refreshToken().isBlank()) {
-                        sessionManager.onSessionExpired()
-                        return@runBlocking null
-                    }
-
-                    if (response.isRefreshNeeded()) {
-                        throttle { renewToken() }
-                    } else {
-                        return@withLock accountRepository.get().accessToken()
+                    when (response.isRefreshNeeded()) {
+                        true -> throttle { renewToken() }
+                        false -> return@withLock accountRepository.get().accessToken()
                     }
                 }
             } ?: return null
