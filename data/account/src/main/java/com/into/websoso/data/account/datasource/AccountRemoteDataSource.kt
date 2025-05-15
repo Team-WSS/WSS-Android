@@ -11,5 +11,10 @@ interface AccountRemoteDataSource {
         authToken: AuthToken,
     ): AccountEntity
 
+    suspend fun postLogout(
+        refreshToken: String,
+        deviceIdentifier: String,
+    )
+
     suspend fun postReissue(refreshToken: String): TokenEntity
 }

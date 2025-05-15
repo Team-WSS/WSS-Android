@@ -2,6 +2,7 @@ package com.into.websoso.core.network.datasource.account
 
 import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.auth.AuthToken
+import com.into.websoso.core.network.datasource.account.model.KakaoLogoutRequestDto
 import com.into.websoso.core.network.datasource.account.model.TokenReissueRequestDto
 import com.into.websoso.data.account.datasource.AccountRemoteDataSource
 import com.into.websoso.data.account.model.AccountEntity
@@ -29,6 +30,18 @@ internal class DefaultAccountDataSource
                             accessToken = authToken.accessToken,
                         ).toData()
             }
+
+        override suspend fun postLogout(
+            refreshToken: String,
+            deviceIdentifier: String,
+        ) {
+            accountApi.postLogoutWithKakao(
+                kakaoLogoutRequestDto = KakaoLogoutRequestDto(
+                    refreshToken = refreshToken,
+                    deviceIdentifier = deviceIdentifier,
+                ),
+            )
+        }
 
         override suspend fun postReissue(refreshToken: String): TokenEntity =
             accountApi
