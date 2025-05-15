@@ -7,7 +7,6 @@ import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.accountInfo.UiEffect.NavigateToLogin
-import com.into.websoso.ui.accountInfo.UiEffect.ShowToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -50,14 +49,14 @@ class AccountInfoViewModel
         fun signOut(signOutToPlatform: suspend (platform: AuthPlatform) -> Unit) {
             viewModelScope.launch {
                 runCatching {
+                    signOutToPlatform(AuthPlatform.KAKAO)
                     val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
                     accountRepository.deleteToken(userDeviceIdentifier)
                 }.onSuccess {
-                    signOutToPlatform(AuthPlatform.KAKAO)
                     pushMessageRepository.clearFCMToken()
                     _uiEffect.send(NavigateToLogin)
                 }.onFailure {
-                    _uiEffect.send(ShowToast)
+                    _uiEffect.send(NavigateToLogin)
                 }
             }
         }
@@ -65,6 +64,4 @@ class AccountInfoViewModel
 
 sealed interface UiEffect {
     data object NavigateToLogin : UiEffect
-
-    data object ShowToast : UiEffect
 }

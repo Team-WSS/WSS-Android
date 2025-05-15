@@ -10,10 +10,11 @@ import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
-import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.databinding.DialogLogoutBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.dialog_logout) {
     private val accountInfoViewModel: AccountInfoViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -38,11 +39,6 @@ class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.di
         accountInfoViewModel.uiEffect.collectWithLifecycle(viewLifecycleOwner) { uiEffect ->
             when (uiEffect) {
                 UiEffect.NavigateToLogin -> websosoNavigator.navigateToLoginActivity()
-                UiEffect.ShowToast -> showWebsosoToast(
-                    requireContext(),
-                    getString(com.into.websoso.core.resource.R.string.novel_rating_save_error),
-                    com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert,
-                )
             }
         }
     }
