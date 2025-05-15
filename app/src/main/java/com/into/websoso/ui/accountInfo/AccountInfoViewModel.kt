@@ -2,7 +2,6 @@ package com.into.websoso.ui.accountInfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
@@ -46,10 +45,9 @@ class AccountInfoViewModel
             }
         }
 
-        fun signOut(signOutToPlatform: suspend (platform: AuthPlatform) -> Unit) {
+        fun signOut() {
             viewModelScope.launch {
                 runCatching {
-                    signOutToPlatform(AuthPlatform.KAKAO)
                     val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
                     accountRepository.deleteToken(userDeviceIdentifier)
                 }.onSuccess {

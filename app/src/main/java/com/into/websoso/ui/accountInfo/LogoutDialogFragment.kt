@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R
-import com.into.websoso.core.auth.AuthClient
-import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
@@ -18,9 +16,6 @@ import javax.inject.Inject
 class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.dialog_logout) {
     private val accountInfoViewModel: AccountInfoViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-
-    @Inject
-    lateinit var authClient: Map<AuthPlatform, @JvmSuppressWildcards AuthClient>
 
     @Inject
     lateinit var websosoNavigator: NavigatorProvider
@@ -49,11 +44,7 @@ class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.di
         }
 
         binding.tvLogoutButton.setOnClickListener {
-            singleEventHandler.throttleFirst {
-                accountInfoViewModel.signOut { platform ->
-                    authClient[platform]?.signOut()
-                }
-            }
+            singleEventHandler.throttleFirst(event = accountInfoViewModel::signOut)
         }
     }
 
