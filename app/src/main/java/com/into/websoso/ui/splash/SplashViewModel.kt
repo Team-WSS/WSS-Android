@@ -9,9 +9,9 @@ import com.into.websoso.ui.splash.UiEffect.NavigateToLogin
 import com.into.websoso.ui.splash.UiEffect.NavigateToMain
 import com.into.websoso.ui.splash.UiEffect.ShowDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,12 +23,15 @@ class SplashViewModel
         private val userRepository: UserRepository,
         private val accountRepository: AccountRepository,
     ) : ViewModel() {
-        private var _uiEffect: MutableSharedFlow<UiEffect> = MutableSharedFlow(replay = 1)
-        val uiEffect: SharedFlow<UiEffect> get() = _uiEffect.asSharedFlow()
+        private var _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+        val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
         init {
-            checkMinimumVersion()
-            handleAutoLogin()
+            viewModelScope.launch {
+                val isUpdateRequired = checkMinimumVersion()
+
+                if (isUpdateRequired.not()) handleAutoLogin()
+            }
         }
 
         fun updateUserDeviceIdentifier(deviceIdentifier: String) {
@@ -41,30 +44,25 @@ class SplashViewModel
             }
         }
 
-        private fun checkMinimumVersion() {
-            viewModelScope.launch {
-                runCatching {
-                    versionRepository.isUpdateRequired()
-                }.onSuccess { isRequired ->
-                    if (isRequired) _uiEffect.emit(ShowDialog)
-                }
+        private suspend fun checkMinimumVersion(): Boolean =
+            runCatching {
+                versionRepository.isUpdateRequired()
+            }.getOrElse { false }.also { isRequired ->
+                if (isRequired) _uiEffect.send(ShowDialog)
             }
-        }
 
-        private fun handleAutoLogin() {
-            viewModelScope.launch {
-                if (shouldRefresh()) {
-                    _uiEffect.emit(NavigateToLogin)
-                    return@launch
-                }
-
-                runCatching { accountRepository.renewToken() }
-                    .onSuccess {
-                        _uiEffect.emit(NavigateToMain)
-                    }.onFailure {
-                        _uiEffect.emit(NavigateToLogin)
-                    }
+        private suspend fun handleAutoLogin() {
+            if (shouldRefresh()) {
+                _uiEffect.send(NavigateToLogin)
+                return
             }
+
+            runCatching { accountRepository.renewToken() }
+                .onSuccess {
+                    _uiEffect.send(NavigateToMain)
+                }.onFailure {
+                    _uiEffect.send(NavigateToLogin)
+                }
         }
 
         private suspend fun shouldRefresh(): Boolean =
