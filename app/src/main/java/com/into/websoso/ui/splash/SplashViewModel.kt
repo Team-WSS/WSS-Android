@@ -29,7 +29,6 @@ class SplashViewModel
         init {
             viewModelScope.launch {
                 val isUpdateRequired = checkMinimumVersion()
-
                 if (isUpdateRequired.not()) handleAutoLogin()
             }
         }

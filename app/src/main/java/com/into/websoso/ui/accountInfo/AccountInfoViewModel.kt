@@ -1,13 +1,21 @@
 package com.into.websoso.ui.accountInfo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.core.auth.AuthPlatform
+import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
+import com.into.websoso.ui.accountInfo.UiEffect.NavigateToLogin
+import com.into.websoso.ui.accountInfo.UiEffect.ShowToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,14 +24,14 @@ class AccountInfoViewModel
     @Inject
     constructor(
         private val userRepository: UserRepository,
-        private val authRepository: AuthRepository,
         private val pushMessageRepository: PushMessageRepository,
+        private val accountRepository: AccountRepository,
     ) : ViewModel() {
-        private val _userEmail: MutableLiveData<String> = MutableLiveData()
-        val userEmail: LiveData<String> get() = _userEmail
+        private val _userEmail: MutableStateFlow<String> = MutableStateFlow("")
+        val userEmail: StateFlow<String> get() = _userEmail.asStateFlow()
 
-        private val _isLogoutSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
-        val isLogoutSuccess: LiveData<Boolean> get() = _isLogoutSuccess
+        private var _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+        val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
         init {
             updateUserEmail()
@@ -34,23 +42,29 @@ class AccountInfoViewModel
                 runCatching {
                     userRepository.fetchUserInfoDetail()
                 }.onSuccess { userInfo ->
-                    _userEmail.value = userInfo.email
+                    _userEmail.update { userInfo.email }
                 }
             }
         }
 
-        fun logout() {
+        fun signOut(signOutToPlatform: suspend (platform: AuthPlatform) -> Unit) {
             viewModelScope.launch {
                 runCatching {
                     val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
-                    authRepository.logout(userDeviceIdentifier)
+                    accountRepository.deleteToken(userDeviceIdentifier)
                 }.onSuccess {
-                    _isLogoutSuccess.value = true
-                    authRepository.updateIsAutoLogin(false)
+                    signOutToPlatform(AuthPlatform.KAKAO)
                     pushMessageRepository.clearFCMToken()
+                    _uiEffect.send(NavigateToLogin)
                 }.onFailure {
-                    _isLogoutSuccess.value = false
+                    _uiEffect.send(ShowToast)
                 }
             }
         }
     }
+
+sealed interface UiEffect {
+    data object NavigateToLogin : UiEffect
+
+    data object ShowToast : UiEffect
+}
