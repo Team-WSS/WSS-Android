@@ -44,6 +44,13 @@ internal class DefaultAccountDataSource
             }
         }
 
+        override suspend fun clearTokens() {
+            accountDataStore.edit { preferences ->
+                preferences.remove(ACCESS_TOKEN)
+                preferences.remove(REFRESH_TOKEN)
+            }
+        }
+
         companion object {
             private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
             private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
