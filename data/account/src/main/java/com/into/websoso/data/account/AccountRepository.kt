@@ -4,7 +4,6 @@ import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.auth.AuthToken
 import com.into.websoso.data.account.datasource.AccountLocalDataSource
 import com.into.websoso.data.account.datasource.AccountRemoteDataSource
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,7 +39,6 @@ class AccountRepository
 
             accountLocalDataSource.saveAccessToken(tokens.accessToken)
             accountLocalDataSource.saveRefreshToken(tokens.refreshToken)
-            delay(100)
 
             return tokens.accessToken
         }
