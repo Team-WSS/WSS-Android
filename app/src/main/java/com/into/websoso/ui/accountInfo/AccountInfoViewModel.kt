@@ -28,7 +28,7 @@ class AccountInfoViewModel
         private val _userEmail: MutableStateFlow<String> = MutableStateFlow("")
         val userEmail: StateFlow<String> get() = _userEmail.asStateFlow()
 
-        private var _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+        private val _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
         val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
         init {
