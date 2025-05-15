@@ -82,9 +82,7 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(activ
             }
 
             override fun onWithdrawButtonClick() {
-                singleEventHandler.throttleFirst {
-                    withdrawSecondViewModel.withdraw()
-                }
+                singleEventHandler.throttleFirst(event = withdrawSecondViewModel::withdraw)
             }
         }
 

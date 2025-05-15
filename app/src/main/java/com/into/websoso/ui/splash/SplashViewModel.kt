@@ -23,7 +23,7 @@ class SplashViewModel
         private val userRepository: UserRepository,
         private val accountRepository: AccountRepository,
     ) : ViewModel() {
-        private var _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+        private val _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
         val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
         init {
