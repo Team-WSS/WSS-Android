@@ -32,7 +32,7 @@ class SplashActivity : AppCompatActivity(R.layout.activity_splash) {
 
     @SuppressLint("HardwareIds")
     private fun updateUserDeviceIdentifier() {
-        val deviceId = getString(contentResolver, ANDROID_ID)
+        val deviceId = getString(contentResolver, ANDROID_ID).orEmpty()
         splashViewModel.updateUserDeviceIdentifier(deviceIdentifier = deviceId)
     }
 
