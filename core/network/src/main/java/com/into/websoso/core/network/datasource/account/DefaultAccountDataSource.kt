@@ -3,6 +3,7 @@ package com.into.websoso.core.network.datasource.account
 import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.auth.AuthToken
 import com.into.websoso.core.network.datasource.account.model.request.KakaoLogoutRequestDto
+import com.into.websoso.core.network.datasource.account.model.request.KakaoWithdrawRequestDto
 import com.into.websoso.core.network.datasource.account.model.request.TokenReissueRequestDto
 import com.into.websoso.data.account.datasource.AccountRemoteDataSource
 import com.into.websoso.data.account.model.AccountEntity
@@ -39,6 +40,14 @@ internal class DefaultAccountDataSource
                 kakaoLogoutRequestDto = KakaoLogoutRequestDto(
                     refreshToken = refreshToken,
                     deviceIdentifier = deviceIdentifier,
+                ),
+            )
+        }
+
+        override suspend fun postWithdraw(reason: String) {
+            accountApi.postWithdrawWithKakao(
+                kakaoWithdrawRequestDto = KakaoWithdrawRequestDto(
+                    reason = reason,
                 ),
             )
         }

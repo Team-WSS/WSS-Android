@@ -1,8 +1,9 @@
 package com.into.websoso.core.network.datasource.account
 
-import com.into.websoso.core.network.datasource.account.model.response.KakaoLoginResponseDto
 import com.into.websoso.core.network.datasource.account.model.request.KakaoLogoutRequestDto
+import com.into.websoso.core.network.datasource.account.model.request.KakaoWithdrawRequestDto
 import com.into.websoso.core.network.datasource.account.model.request.TokenReissueRequestDto
+import com.into.websoso.core.network.datasource.account.model.response.KakaoLoginResponseDto
 import com.into.websoso.core.network.datasource.account.model.response.TokenReissueResponseDto
 import dagger.Module
 import dagger.Provides
@@ -23,6 +24,11 @@ internal interface AccountApi {
     @POST("auth/logout")
     suspend fun postLogoutWithKakao(
         @Body kakaoLogoutRequestDto: KakaoLogoutRequestDto,
+    )
+
+    @POST("auth/withdraw")
+    suspend fun postWithdrawWithKakao(
+        @Body kakaoWithdrawRequestDto: KakaoWithdrawRequestDto,
     )
 
     @POST("reissue")
