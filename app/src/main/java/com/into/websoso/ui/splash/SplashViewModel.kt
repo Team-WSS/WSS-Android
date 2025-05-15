@@ -17,59 +17,59 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel
-@Inject
-constructor(
-    private val versionRepository: VersionRepository,
-    private val userRepository: UserRepository,
-    private val accountRepository: AccountRepository,
-) : ViewModel() {
-    private var _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
-    val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
+    @Inject
+    constructor(
+        private val versionRepository: VersionRepository,
+        private val userRepository: UserRepository,
+        private val accountRepository: AccountRepository,
+    ) : ViewModel() {
+        private var _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+        val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
-    init {
-        viewModelScope.launch {
-            val isUpdateRequired = checkMinimumVersion()
-            if (isUpdateRequired.not()) handleAutoLogin()
+        init {
+            viewModelScope.launch {
+                val isUpdateRequired = checkMinimumVersion()
+                if (isUpdateRequired.not()) handleAutoLogin()
+            }
         }
-    }
 
-    fun updateUserDeviceIdentifier(deviceIdentifier: String) {
-        viewModelScope.launch {
+        fun updateUserDeviceIdentifier(deviceIdentifier: String) {
+            viewModelScope.launch {
+                runCatching {
+                    userRepository.saveUserDeviceIdentifier(deviceIdentifier)
+                }.onFailure {
+                    it.printStackTrace()
+                }
+            }
+        }
+
+        private suspend fun checkMinimumVersion(): Boolean =
             runCatching {
-                userRepository.saveUserDeviceIdentifier(deviceIdentifier)
-            }.onFailure {
-                it.printStackTrace()
+                versionRepository.isUpdateRequired()
+            }.getOrElse { false }.also { isRequired ->
+                if (isRequired) _uiEffect.send(ShowDialog)
             }
-        }
-    }
 
-    private suspend fun checkMinimumVersion(): Boolean =
-        runCatching {
-            versionRepository.isUpdateRequired()
-        }.getOrElse { false }.also { isRequired ->
-            if (isRequired) _uiEffect.send(ShowDialog)
-        }
-
-    private suspend fun handleAutoLogin() {
-        if (shouldRefresh()) {
-            _uiEffect.send(NavigateToLogin)
-            return
-        }
-
-        runCatching { accountRepository.renewToken() }
-            .onSuccess {
-                _uiEffect.send(NavigateToMain)
-            }.onFailure {
+        private suspend fun handleAutoLogin() {
+            if (shouldRefresh()) {
                 _uiEffect.send(NavigateToLogin)
+                return
             }
-    }
 
-    private suspend fun shouldRefresh(): Boolean =
-        accountRepository.accessToken().isBlank() ||
+            runCatching { accountRepository.renewToken() }
+                .onSuccess {
+                    _uiEffect.send(NavigateToMain)
+                }.onFailure {
+                    _uiEffect.send(NavigateToLogin)
+                }
+        }
+
+        private suspend fun shouldRefresh(): Boolean =
+            accountRepository.accessToken().isBlank() ||
                 accountRepository
                     .refreshToken()
                     .isBlank()
-}
+    }
 
 sealed interface UiEffect {
     data object NavigateToLogin : UiEffect
