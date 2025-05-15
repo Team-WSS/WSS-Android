@@ -19,6 +19,7 @@ class AccountRepository
 
         suspend fun refreshToken(): String = accountLocalDataSource.refreshToken()
 
+        // toekns
         suspend fun saveToken(
             platform: AuthPlatform,
             authToken: AuthToken,
@@ -32,6 +33,14 @@ class AccountRepository
             accountLocalDataSource.saveRefreshToken(account.token.refreshToken)
 
             return account.isRegister
+        }
+
+        suspend fun deleteToken(deviceIdentifier: String) {
+            accountRemoteDataSource
+                .postLogout(
+                    refreshToken = refreshToken(),
+                    deviceIdentifier = deviceIdentifier,
+                ).also { accountLocalDataSource.clearTokens() }
         }
 
         suspend fun renewToken(): String {

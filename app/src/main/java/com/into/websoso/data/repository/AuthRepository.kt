@@ -3,7 +3,6 @@ package com.into.websoso.data.repository
 import android.content.SharedPreferences
 import com.into.websoso.data.remote.api.AuthApi
 import com.into.websoso.data.remote.request.FCMTokenRequestDto
-import com.into.websoso.data.remote.request.LogoutRequestDto
 import com.into.websoso.data.remote.request.UserProfileRequestDto
 import com.into.websoso.data.remote.request.WithdrawRequestDto
 import javax.inject.Inject
@@ -42,21 +41,6 @@ class AuthRepository
                 "Bearer $authorization",
                 UserProfileRequestDto(nickname, gender, birth, genrePreferences),
             )
-        }
-
-        suspend fun logout(deviceIdentifier: String) {
-            runCatching {
-                if (accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
-                    authApi.logout(
-                        "Bearer $accessToken",
-                        LogoutRequestDto(refreshToken, deviceIdentifier),
-                    )
-                }
-            }.onSuccess {
-                clearTokens()
-            }.onFailure {
-                it.printStackTrace()
-            }
         }
 
         suspend fun withdraw(reason: String) {
