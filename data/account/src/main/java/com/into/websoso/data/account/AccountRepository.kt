@@ -7,7 +7,7 @@ import com.into.websoso.data.account.datasource.AccountRemoteDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// TODO: 인스턴스 싱글톤 참고하기
+// TODO: 인스턴스 싱글톤 참고하기, tokens 네이밍수정, result 객체 적용
 @Singleton
 class AccountRepository
     @Inject
@@ -32,6 +32,14 @@ class AccountRepository
             accountLocalDataSource.saveRefreshToken(account.token.refreshToken)
 
             return account.isRegister
+        }
+
+        suspend fun deleteToken(deviceIdentifier: String) {
+            accountRemoteDataSource
+                .postLogout(
+                    refreshToken = refreshToken(),
+                    deviceIdentifier = deviceIdentifier,
+                ).also { accountLocalDataSource.clearTokens() }
         }
 
         suspend fun renewToken(): String {

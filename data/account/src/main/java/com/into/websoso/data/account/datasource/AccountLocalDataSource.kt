@@ -8,4 +8,6 @@ interface AccountLocalDataSource {
     suspend fun saveAccessToken(accessToken: String)
 
     suspend fun saveRefreshToken(refreshToken: String)
+
+    suspend fun clearTokens()
 }

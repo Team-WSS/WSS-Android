@@ -32,18 +32,6 @@ class KakaoAuthClient
                 }
             }
 
-        override suspend fun signOut() {
-            suspendCancellableCoroutine {
-                client.logout { error ->
-                    if (error != null) {
-                        it.resumeWithException(error)
-                    } else {
-                        it.resume(Unit)
-                    }
-                }
-            }
-        }
-
         override suspend fun withdraw() {
             suspendCancellableCoroutine {
                 client.unlink { error ->

@@ -1,7 +1,6 @@
 package com.into.websoso.data.remote.api
 
 import com.into.websoso.data.remote.request.FCMTokenRequestDto
-import com.into.websoso.data.remote.request.LogoutRequestDto
 import com.into.websoso.data.remote.request.UserProfileRequestDto
 import com.into.websoso.data.remote.request.WithdrawRequestDto
 import com.into.websoso.data.remote.response.UserNicknameValidityResponseDto
@@ -22,12 +21,6 @@ interface AuthApi {
     suspend fun postUserProfile(
         @Header("Authorization") authorization: String,
         @Body userProfileRequestDto: UserProfileRequestDto,
-    )
-
-    @POST("auth/logout")
-    suspend fun logout(
-        @Header("Authorization") authorization: String,
-        @Body loginResponseDto: LogoutRequestDto,
     )
 
     @POST("auth/withdraw")

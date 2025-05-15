@@ -1,10 +1,10 @@
-package com.into.websoso.data.remote.request
+package com.into.websoso.core.network.datasource.account.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LogoutRequestDto(
+internal data class KakaoLogoutRequestDto(
     @SerialName("refreshToken")
     val refreshToken: String,
     @SerialName("deviceIdentifier")

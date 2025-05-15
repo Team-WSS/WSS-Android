@@ -62,7 +62,7 @@ fun SignInScreen(
         onClick = { platform ->
             signInViewModel.signIn(
                 platform = platform,
-                getToken = authClient(platform)::signIn,
+                signInToPlatform = authClient(platform)::signIn,
             )
         },
     )

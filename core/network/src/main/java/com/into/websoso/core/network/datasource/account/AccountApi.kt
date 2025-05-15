@@ -1,6 +1,7 @@
 package com.into.websoso.core.network.datasource.account
 
 import com.into.websoso.core.network.datasource.account.model.KakaoLoginResponseDto
+import com.into.websoso.core.network.datasource.account.model.KakaoLogoutRequestDto
 import com.into.websoso.core.network.datasource.account.model.TokenReissueRequestDto
 import com.into.websoso.core.network.datasource.account.model.TokenReissueResponseDto
 import dagger.Module
@@ -18,6 +19,11 @@ internal interface AccountApi {
     suspend fun postLoginWithKakao(
         @Header("Kakao-Access-Token") accessToken: String,
     ): KakaoLoginResponseDto
+
+    @POST("auth/logout")
+    suspend fun postLogoutWithKakao(
+        @Body kakaoLogoutRequestDto: KakaoLogoutRequestDto,
+    )
 
     @POST("reissue")
     suspend fun postReissueToken(
