@@ -1,12 +1,9 @@
 package com.into.websoso.data.repository
 
 import android.content.SharedPreferences
-import com.into.websoso.data.mapper.toData
-import com.into.websoso.data.model.LoginEntity
 import com.into.websoso.data.remote.api.AuthApi
 import com.into.websoso.data.remote.request.FCMTokenRequestDto
 import com.into.websoso.data.remote.request.LogoutRequestDto
-import com.into.websoso.data.remote.request.TokenReissueRequestDto
 import com.into.websoso.data.remote.request.UserProfileRequestDto
 import com.into.websoso.data.remote.request.WithdrawRequestDto
 import javax.inject.Inject
@@ -28,13 +25,6 @@ class AuthRepository
         var isAutoLogin: Boolean
             get() = authStorage.getBoolean(AUTO_LOGIN_KEY, false)
             private set(value) = authStorage.edit().putBoolean(AUTO_LOGIN_KEY, value).apply()
-
-        suspend fun loginWithKakao(accessToken: String): LoginEntity {
-            val response = authApi.loginWithKakao(accessToken)
-            this.accessToken = response.authorization
-            this.refreshToken = response.refreshToken
-            return response.toData()
-        }
 
         suspend fun fetchNicknameValidity(
             authorization: String,
@@ -88,17 +78,6 @@ class AuthRepository
                 apply()
             }
         }
-
-        suspend fun reissueToken(): String? =
-            runCatching {
-                val response = authApi.reissueToken(TokenReissueRequestDto(refreshToken))
-                accessToken = response.authorization
-                refreshToken = response.refreshToken
-                response.authorization
-            }.getOrElse {
-                it.printStackTrace()
-                null
-            }
 
         fun updateAccessToken(accessToken: String) {
             this.accessToken = accessToken

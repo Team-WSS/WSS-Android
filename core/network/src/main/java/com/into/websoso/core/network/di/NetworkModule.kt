@@ -1,27 +1,44 @@
 package com.into.websoso.core.network.di
 
 import com.into.websoso.core.network.BuildConfig
+import com.into.websoso.core.network.authenticator.AuthorizationAuthenticator
+import com.into.websoso.core.network.interceptor.AuthorizationInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.Dispatcher
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+internal object NetworkModule {
     private const val BASE_URL = BuildConfig.BASE_URL
+    private const val CONNECT_TIME_LIMIT = 60L
+    private const val READ_TIME_LIMIT = 30L
+    private const val WRITE_TIME_LIMIT = 15L
     private const val CONTENT_TYPE = "application/json"
+    private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy {
+        HttpLoggingInterceptor().apply {
+            if (BuildConfig.DEBUG) setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+    }
+    private val dispatcher: Dispatcher by lazy {
+        Dispatcher().apply {
+            maxRequestsPerHost = 20
+        }
+    }
 
     @Provides
     @Singleton
-    fun provideRetrofit(
+    internal fun provideRetrofit(
         json: Json,
         client: OkHttpClient,
     ): Retrofit =
@@ -38,12 +55,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    internal fun provideOkHttpClient(): OkHttpClient =
+    internal fun provideOkHttpClient(
+        authorizationAuthenticator: AuthorizationAuthenticator,
+        authorizationInterceptor: AuthorizationInterceptor,
+    ): OkHttpClient =
         OkHttpClient
             .Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    if (BuildConfig.DEBUG) setLevel(HttpLoggingInterceptor.Level.BODY)
-                },
-            ).build()
+            .dispatcher(dispatcher)
+            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(authorizationInterceptor)
+            .authenticator(authorizationAuthenticator)
+            .connectTimeout(CONNECT_TIME_LIMIT, TimeUnit.SECONDS)
+            .readTimeout(READ_TIME_LIMIT, TimeUnit.SECONDS)
+            .writeTimeout(WRITE_TIME_LIMIT, TimeUnit.SECONDS)
+            .build()
 }

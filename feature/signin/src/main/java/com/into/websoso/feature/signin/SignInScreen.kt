@@ -18,8 +18,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.into.websoso.core.auth.AuthClient
 import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.feature.signin.UiEffect.NavigateToHome
+import com.into.websoso.feature.signin.UiEffect.NavigateToOnboarding
 import com.into.websoso.feature.signin.UiEffect.ScrollToPage
 import com.into.websoso.feature.signin.UiEffect.ShowToast
 import com.into.websoso.feature.signin.component.OnboardingDotsIndicator
@@ -30,6 +33,7 @@ import com.into.websoso.feature.signin.component.SignInButtons
 @Composable
 fun SignInScreen(
     authClient: (platform: AuthPlatform) -> AuthClient,
+    websosoNavigator: NavigatorProvider,
     signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
     val latestEvent by rememberUpdatedState(signInViewModel.uiEvent)
@@ -37,15 +41,19 @@ fun SignInScreen(
 
     latestEvent.collectAsEventWithLifecycle { event ->
         when (event) {
-            is ScrollToPage -> {
+            ScrollToPage -> {
                 pagerState.animateScrollToPage(
                     page = (pagerState.currentPage + 1) % pagerState.pageCount,
                 )
             }
 
-            is ShowToast -> {
+            ShowToast -> {
                 // TODO: 실패 시 커스텀 스낵 바 구현
             }
+
+            NavigateToHome -> websosoNavigator.navigateToMainActivity()
+
+            NavigateToOnboarding -> websosoNavigator.navigateToOnboardingActivity()
         }
     }
 

@@ -41,10 +41,6 @@ android {
             isDebuggable = true
             applicationIdSuffix = ".debug"
 
-            buildConfigs(rootDir) {
-                string(name = "BASE_URL", key = "debug.base.url")
-            }
-
             manifestPlaceholders {
                 "appName" to "@string/app_name_debug"
                 "appIcon" to "@mipmap/ic_wss_logo_debug"
@@ -60,10 +56,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-
-            buildConfigs(rootDir) {
-                string(name = "BASE_URL", key = "release.base.url")
-            }
 
             manifestPlaceholders {
                 "appName" to "@string/app_name"
@@ -84,9 +76,11 @@ dependencies {
     // 프로젝트 의존성
     implementation(projects.core.resource)
     implementation(projects.core.designsystem)
+    implementation(projects.core.common)
     implementation(projects.core.auth)
     implementation(projects.core.authKakao)
     implementation(projects.core.network)
+    implementation(projects.core.datastore)
 
     implementation(projects.feature.signin)
 

@@ -9,5 +9,9 @@ android {
 }
 
 dependencies {
+    // 데이터 레이어 의존성
+    implementation(projects.data.account)
+
+    // Datastore 라이브러리
     implementation(libs.datastore.preferences)
 }
