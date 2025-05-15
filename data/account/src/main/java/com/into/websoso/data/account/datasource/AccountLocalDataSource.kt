@@ -5,11 +5,7 @@ interface AccountLocalDataSource {
 
     suspend fun refreshToken(): String
 
-    suspend fun isAutoLogin(): Boolean
-
     suspend fun saveAccessToken(accessToken: String)
 
     suspend fun saveRefreshToken(refreshToken: String)
-
-    suspend fun saveIsAutoLogin(isAutoLogin: Boolean)
 }

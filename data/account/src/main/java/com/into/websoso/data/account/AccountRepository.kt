@@ -31,10 +31,6 @@ class AccountRepository
             accountLocalDataSource.saveAccessToken(account.token.accessToken)
             accountLocalDataSource.saveRefreshToken(account.token.refreshToken)
 
-            if (accountLocalDataSource.isAutoLogin().not()) {
-                accountLocalDataSource.saveIsAutoLogin(true)
-            }
-
             return account.isRegister
         }
 

@@ -1,63 +1,47 @@
 package com.into.websoso.ui.splash
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.provider.Settings
+import android.provider.Settings.Secure.ANDROID_ID
+import android.provider.Settings.Secure.getString
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import com.into.websoso.R
-import com.into.websoso.core.common.ui.base.BaseActivity
-import com.into.websoso.databinding.ActivityLoginBinding
-import com.into.websoso.ui.login.LoginActivity
-import com.into.websoso.ui.main.MainActivity
+import com.into.websoso.core.common.navigator.NavigatorProvider
+import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.ui.splash.UiEffect.NavigateToLogin
+import com.into.websoso.ui.splash.UiEffect.NavigateToMain
+import com.into.websoso.ui.splash.UiEffect.ShowDialog
 import com.into.websoso.ui.splash.dialog.MinimumVersionDialogFragment
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_splash) {
+class SplashActivity : AppCompatActivity(R.layout.activity_splash) {
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
+
     private val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         updateUserDeviceIdentifier()
-        setupObserver()
+        collectUiEffect()
     }
 
+    @SuppressLint("HardwareIds")
     private fun updateUserDeviceIdentifier() {
-        val ssaid = Settings.Secure.getString(
-            this.contentResolver,
-            Settings.Secure.ANDROID_ID,
-        )
-        splashViewModel.updateUserDeviceIdentifier(deviceIdentifier = ssaid)
+        val deviceId = getString(contentResolver, ANDROID_ID).orEmpty()
+        splashViewModel.updateUserDeviceIdentifier(deviceIdentifier = deviceId)
     }
 
-    private fun setupObserver() {
-        splashViewModel.isUpdateRequired.observe(this) { isUpdateRequired ->
-            if (isUpdateRequired) {
-                showMinimumVersionDialog()
-                return@observe
-            }
-            splashViewModel.updateMyProfile()
-        }
-
-        splashViewModel.error.observe(this) { isError ->
-            if (isError) {
-                UserApiClient.instance.logout {
-                    startActivity(LoginActivity.getIntent(this))
-                }
-            }
-        }
-
-        splashViewModel.isAutoLogin.observe(this) { isAutoLogin ->
-            lifecycleScope.launch {
-                delay(1000L)
-                when (isAutoLogin) {
-                    true -> navigateToMainActivity()
-                    false -> navigateToLoginActivity()
-                }
+    private fun collectUiEffect() {
+        splashViewModel.uiEffect.collectWithLifecycle(this) { uiEffect ->
+            when (uiEffect) {
+                NavigateToLogin -> websosoNavigator.navigateToLoginActivity()
+                NavigateToMain -> websosoNavigator.navigateToMainActivity()
+                ShowDialog -> showMinimumVersionDialog()
             }
         }
     }
@@ -65,20 +49,6 @@ class SplashActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_spla
     private fun showMinimumVersionDialog() {
         val dialog = MinimumVersionDialogFragment.newInstance()
         dialog.isCancelable = false
-        dialog.show(supportFragmentManager, MINIMUM_VERSION_TAG)
-    }
-
-    private fun navigateToMainActivity() {
-        startActivity(MainActivity.getIntent(this, true))
-        finish()
-    }
-
-    private fun navigateToLoginActivity() {
-        startActivity(LoginActivity.getIntent(this))
-        finish()
-    }
-
-    companion object {
-        private const val MINIMUM_VERSION_TAG = "MinimumVersionDialog"
+        dialog.show(supportFragmentManager, MinimumVersionDialogFragment.MINIMUM_VERSION_TAG)
     }
 }
