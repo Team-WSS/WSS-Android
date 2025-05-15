@@ -42,6 +42,12 @@ class AccountRepository
                 ).also { accountLocalDataSource.clearTokens() }
         }
 
+        suspend fun deleteAccount(reason: String) {
+            accountRemoteDataSource
+                .postWithdraw(reason = reason)
+                .also { accountLocalDataSource.clearTokens() }
+        }
+
         suspend fun renewToken(): String {
             val tokens = accountRemoteDataSource.postReissue(refreshToken = refreshToken())
 
