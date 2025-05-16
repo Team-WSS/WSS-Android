@@ -91,8 +91,6 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingBinding>(R.layout.acti
     companion object {
         private const val ANIMATION_PROPERTY_NAME = "progress"
         private const val ANIMATION_DURATION_TIME = 200L
-        const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN"
-        const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN"
 
         fun getIntent(context: Context): Intent = Intent(context, OnboardingActivity::class.java)
     }

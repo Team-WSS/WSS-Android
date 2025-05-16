@@ -104,7 +104,7 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(activ
         }
 
         withdrawSecondViewModel.isWithDrawSuccess.observe(this) { isWithdrawSuccess ->
-            if (isWithdrawSuccess) websosoNavigator.navigateToLoginActivity()
+            if (isWithdrawSuccess) websosoNavigator.navigateToLoginActivity(::startActivity)
         }
     }
 

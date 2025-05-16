@@ -29,7 +29,7 @@ class WebsosoApp : Application() {
 
     private fun subscribeSessionState() {
         sessionManager.sessionExpired.collectWithLifecycle(ProcessLifecycleOwner.get()) {
-            navigatorProvider.navigateToLoginActivity()
+            navigatorProvider.navigateToLoginActivity(::startActivity)
         }
     }
 }

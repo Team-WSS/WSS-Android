@@ -1,6 +1,7 @@
 package com.into.websoso.core.common.util.navigator
 
 import android.content.Context
+import android.content.Intent
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.ui.login.LoginActivity
 import com.into.websoso.ui.main.MainActivity
@@ -18,19 +19,19 @@ internal class WebsosoNavigator
     constructor(
         @ApplicationContext private val context: Context,
     ) : NavigatorProvider {
-        override fun navigateToLoginActivity() {
+        override fun navigateToLoginActivity(startActivity: (Intent) -> Unit) {
             val intent = LoginActivity.getIntent(context)
-            context.startActivity(intent)
+            startActivity(intent)
         }
 
-        override fun navigateToMainActivity() {
+        override fun navigateToMainActivity(startActivity: (Intent) -> Unit) {
             val intent = MainActivity.getIntent(context, true)
-            context.startActivity(intent)
+            startActivity(intent)
         }
 
-        override fun navigateToOnboardingActivity() {
+        override fun navigateToOnboardingActivity(startActivity: (Intent) -> Unit) {
             val intent = OnboardingActivity.getIntent(context)
-            context.startActivity(intent)
+            startActivity(intent)
         }
     }
 
