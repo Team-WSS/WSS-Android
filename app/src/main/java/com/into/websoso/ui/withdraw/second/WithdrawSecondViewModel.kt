@@ -77,15 +77,16 @@ class WithdrawSecondViewModel
             viewModelScope.launch {
                 val reason =
                     if (withdrawReason.value == ETC_INPUT_REASON) withdrawEtcReason.value else withdrawReason.value
-                runCatching {
-                    accountRepository.deleteAccount(reason.orEmpty())
-                }.onSuccess {
-                    _isWithDrawSuccess.value = true
-                    userRepository.removeTermsAgreementChecked()
-                    pushMessageRepository.clearFCMToken()
-                }.onFailure {
-                    _isWithDrawSuccess.value = false
-                }
+
+                accountRepository
+                    .deleteAccount(reason.orEmpty())
+                    .onSuccess {
+                        _isWithDrawSuccess.value = true
+                        userRepository.removeTermsAgreementChecked()
+                        pushMessageRepository.clearFCMToken()
+                    }.onFailure {
+                        _isWithDrawSuccess.value = false
+                    }
             }
         }
 

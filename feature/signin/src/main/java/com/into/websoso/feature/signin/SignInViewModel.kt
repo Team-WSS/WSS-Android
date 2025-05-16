@@ -53,19 +53,18 @@ class SignInViewModel
             authToken: AuthToken,
         ) {
             viewModelScope.launch {
-                runCatching {
-                    accountRepository.saveToken(
+                accountRepository
+                    .saveTokens(
                         platform = platform,
                         authToken = authToken,
-                    )
-                }.onSuccess { isRegister ->
-                    when (isRegister) {
-                        true -> _uiEvent.send(UiEffect.NavigateToHome)
-                        false -> _uiEvent.send(UiEffect.NavigateToOnboarding)
+                    ).onSuccess { isRegister ->
+                        when (isRegister) {
+                            true -> _uiEvent.send(UiEffect.NavigateToHome)
+                            false -> _uiEvent.send(UiEffect.NavigateToOnboarding)
+                        }
+                    }.onFailure {
+                        signInWithFailure()
                     }
-                }.onFailure {
-                    signInWithFailure()
-                }
             }
         }
 

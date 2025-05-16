@@ -56,7 +56,8 @@ class SplashViewModel
                 return
             }
 
-            runCatching { accountRepository.renewToken() }
+            accountRepository
+                .renewTokens()
                 .onSuccess {
                     _uiEffect.send(NavigateToMain)
                 }.onFailure {

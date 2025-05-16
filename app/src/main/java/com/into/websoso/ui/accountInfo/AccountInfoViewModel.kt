@@ -47,15 +47,16 @@ class AccountInfoViewModel
 
         fun signOut() {
             viewModelScope.launch {
-                runCatching {
-                    val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
-                    accountRepository.deleteToken(userDeviceIdentifier)
-                }.onSuccess {
-                    pushMessageRepository.clearFCMToken()
-                    _uiEffect.send(NavigateToLogin)
-                }.onFailure {
-                    _uiEffect.send(NavigateToLogin)
-                }
+                val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
+
+                accountRepository
+                    .deleteTokens(userDeviceIdentifier)
+                    .onSuccess {
+                        pushMessageRepository.clearFCMToken()
+                        _uiEffect.send(NavigateToLogin)
+                    }.onFailure {
+                        _uiEffect.send(NavigateToLogin)
+                    }
             }
         }
     }

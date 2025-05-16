@@ -7,7 +7,6 @@ import com.into.websoso.data.account.datasource.AccountRemoteDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// TODO: 인스턴스 싱글톤 참고하기, tokens 네이밍수정, result 객체 적용
 @Singleton
 class AccountRepository
     @Inject
@@ -19,41 +18,46 @@ class AccountRepository
 
         suspend fun refreshToken(): String = accountLocalDataSource.refreshToken()
 
-        suspend fun saveToken(
+        suspend fun saveTokens(
             platform: AuthPlatform,
             authToken: AuthToken,
-        ): Boolean {
-            val account = accountRemoteDataSource.postLogin(
-                platform = platform,
-                authToken = authToken,
-            )
+        ): Result<Boolean> =
+            runCatching {
+                val account = accountRemoteDataSource.postLogin(
+                    platform = platform,
+                    authToken = authToken,
+                )
 
-            accountLocalDataSource.saveAccessToken(account.token.accessToken)
-            accountLocalDataSource.saveRefreshToken(account.token.refreshToken)
+                accountLocalDataSource.saveAccessToken(account.token.accessToken)
+                accountLocalDataSource.saveRefreshToken(account.token.refreshToken)
 
-            return account.isRegister
-        }
+                account.isRegister
+            }
 
-        suspend fun deleteToken(deviceIdentifier: String) {
-            accountRemoteDataSource
-                .postLogout(
-                    refreshToken = refreshToken(),
-                    deviceIdentifier = deviceIdentifier,
-                ).also { accountLocalDataSource.clearTokens() }
-        }
+        suspend fun deleteTokens(deviceIdentifier: String): Result<Unit> =
+            runCatching {
+                accountRemoteDataSource
+                    .postLogout(
+                        refreshToken = refreshToken(),
+                        deviceIdentifier = deviceIdentifier,
+                    )
 
-        suspend fun deleteAccount(reason: String) {
-            accountRemoteDataSource
-                .postWithdraw(reason = reason)
-                .also { accountLocalDataSource.clearTokens() }
-        }
+                accountLocalDataSource.clearTokens()
+            }
 
-        suspend fun renewToken(): String {
-            val tokens = accountRemoteDataSource.postReissue(refreshToken = refreshToken())
+        suspend fun deleteAccount(reason: String): Result<Unit> =
+            runCatching {
+                accountRemoteDataSource.postWithdraw(reason = reason)
+                accountLocalDataSource.clearTokens()
+            }
 
-            accountLocalDataSource.saveAccessToken(tokens.accessToken)
-            accountLocalDataSource.saveRefreshToken(tokens.refreshToken)
+        suspend fun renewTokens(): Result<String> =
+            runCatching {
+                val tokens = accountRemoteDataSource.postReissue(refreshToken = refreshToken())
 
-            return tokens.accessToken
-        }
+                accountLocalDataSource.saveAccessToken(tokens.accessToken)
+                accountLocalDataSource.saveRefreshToken(tokens.refreshToken)
+
+                tokens.accessToken
+            }
     }
