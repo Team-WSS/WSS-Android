@@ -16,5 +16,7 @@ interface AccountRemoteDataSource {
         deviceIdentifier: String,
     )
 
+    suspend fun postWithdraw(reason: String)
+
     suspend fun postReissue(refreshToken: String): TokenEntity
 }

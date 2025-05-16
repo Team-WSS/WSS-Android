@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class WithdrawSecondViewModel
     @Inject
     constructor(
-        private val authRepository: AuthRepository,
+        private val accountRepository: AccountRepository,
         private val pushMessageRepository: PushMessageRepository,
         private val userRepository: UserRepository,
     ) : ViewModel() {
@@ -75,15 +75,12 @@ class WithdrawSecondViewModel
 
         fun withdraw() {
             viewModelScope.launch {
+                val reason =
+                    if (withdrawReason.value == ETC_INPUT_REASON) withdrawEtcReason.value else withdrawReason.value
                 runCatching {
-                    val withdrawReason = when (withdrawReason.value) {
-                        ETC_INPUT_REASON -> withdrawEtcReason.value
-                        else -> withdrawReason.value
-                    } ?: ""
-                    authRepository.withdraw(withdrawReason)
+                    accountRepository.deleteAccount(reason.orEmpty())
                 }.onSuccess {
                     _isWithDrawSuccess.value = true
-                    authRepository.updateIsAutoLogin(false)
                     userRepository.removeTermsAgreementChecked()
                     pushMessageRepository.clearFCMToken()
                 }.onFailure {

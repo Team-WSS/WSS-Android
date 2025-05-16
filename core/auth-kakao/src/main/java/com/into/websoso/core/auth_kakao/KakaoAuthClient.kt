@@ -32,18 +32,6 @@ class KakaoAuthClient
                 }
             }
 
-        override suspend fun withdraw() {
-            suspendCancellableCoroutine {
-                client.unlink { error ->
-                    if (error != null) {
-                        it.resumeWithException(error)
-                    } else {
-                        it.resume(Unit)
-                    }
-                }
-            }
-        }
-
         private fun loginWithKakaotalk(loginContinuation: CancellableContinuation<AuthToken>) {
             client.loginWithKakaoTalk(context) { token, error ->
                 if (error != null) {

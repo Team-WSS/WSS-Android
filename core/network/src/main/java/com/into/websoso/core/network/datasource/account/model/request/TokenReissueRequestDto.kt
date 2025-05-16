@@ -1,4 +1,4 @@
-package com.into.websoso.core.network.datasource.account.model
+package com.into.websoso.core.network.datasource.account.model.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
