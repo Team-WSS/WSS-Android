@@ -36,7 +36,7 @@ class KakaoAuthClient
             client.loginWithKakaoTalk(context) { token, error ->
                 if (error != null) {
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                        return@loginWithKakaoTalk
+                        loginContinuation.resumeWithException(error)
                     }
 
                     loginWithKakaoAccount(loginContinuation)
