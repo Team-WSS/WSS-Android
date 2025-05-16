@@ -14,6 +14,10 @@ class AccountRepository
         private val accountRemoteDataSource: AccountRemoteDataSource,
         private val accountLocalDataSource: AccountLocalDataSource,
     ) {
+        // TODO: UserRepository로 이동
+        var isRegisterUser: Boolean = false
+            private set
+
         suspend fun accessToken(): String = accountLocalDataSource.accessToken()
 
         suspend fun refreshToken(): String = accountLocalDataSource.refreshToken()
@@ -21,7 +25,7 @@ class AccountRepository
         suspend fun saveTokens(
             platform: AuthPlatform,
             authToken: AuthToken,
-        ): Result<Boolean> =
+        ): Result<Unit> =
             runCatching {
                 val account = accountRemoteDataSource.postLogin(
                     platform = platform,
@@ -30,8 +34,7 @@ class AccountRepository
 
                 accountLocalDataSource.saveAccessToken(account.token.accessToken)
                 accountLocalDataSource.saveRefreshToken(account.token.refreshToken)
-
-                account.isRegister
+                isRegisterUser = account.isRegister
             }
 
         suspend fun deleteTokens(deviceIdentifier: String): Result<Unit> =
@@ -51,13 +54,11 @@ class AccountRepository
                 accountLocalDataSource.clearTokens()
             }
 
-        suspend fun renewTokens(): Result<String> =
+        suspend fun renewTokens(): Result<Unit> =
             runCatching {
                 val tokens = accountRemoteDataSource.postReissue(refreshToken = refreshToken())
 
                 accountLocalDataSource.saveAccessToken(tokens.accessToken)
                 accountLocalDataSource.saveRefreshToken(tokens.refreshToken)
-
-                tokens.accessToken
             }
     }

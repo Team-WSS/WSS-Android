@@ -57,8 +57,8 @@ class SignInViewModel
                     .saveTokens(
                         platform = platform,
                         authToken = authToken,
-                    ).onSuccess { isRegister ->
-                        when (isRegister) {
+                    ).onSuccess {
+                        when (accountRepository.isRegisterUser) {
                             true -> _uiEvent.send(UiEffect.NavigateToHome)
                             false -> _uiEvent.send(UiEffect.NavigateToOnboarding)
                         }

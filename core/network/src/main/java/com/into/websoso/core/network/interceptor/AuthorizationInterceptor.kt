@@ -1,5 +1,6 @@
 package com.into.websoso.core.network.interceptor
 
+import android.util.Log
 import com.into.websoso.core.common.dispatchers.Dispatcher
 import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
 import com.into.websoso.data.account.AccountRepository
@@ -21,9 +22,9 @@ internal class AuthorizationInterceptor
     ) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
-
+            Log.d("123123", "인터셉터: ${request.url}")
             if (shouldSkipCondition(request)) return chain.proceed(request)
-
+            Log.d("123123", "인터셉터: 뚫림")
             val token = runBlocking(dispatcher) { accountRepository.get().accessToken() }
 
             if (token.isBlank()) return chain.proceed(request)
@@ -38,7 +39,8 @@ internal class AuthorizationInterceptor
 
         private fun shouldSkipCondition(request: Request): Boolean =
             EXCLUDED_PATHS.any { path ->
-                request.url.encodedPath.contains(path)
+                Log.d("123123", request.url.toString())
+                request.url.encodedPath.endsWith("/$path")
             }
 
         companion object {

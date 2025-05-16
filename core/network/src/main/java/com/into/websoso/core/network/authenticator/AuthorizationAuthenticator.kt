@@ -38,7 +38,7 @@ internal class AuthorizationAuthenticator
                 mutex.withLock {
                     when (response.isRefreshNeeded()) {
                         true -> throttle { renewToken() }
-                        false -> return@withLock accountRepository.get().accessToken()
+                        false -> accountRepository.get().accessToken()
                     }
                 }
             } ?: return null
@@ -69,7 +69,7 @@ internal class AuthorizationAuthenticator
 
         private suspend fun renewToken(): String? =
             accountRepository.get().renewTokens().fold(
-                onSuccess = { updatedAccessToken -> updatedAccessToken },
+                onSuccess = { accountRepository.get().accessToken() },
                 onFailure = {
                     sessionManager.onSessionExpired()
                     null
