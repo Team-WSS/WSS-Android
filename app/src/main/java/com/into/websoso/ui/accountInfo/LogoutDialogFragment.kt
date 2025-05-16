@@ -33,7 +33,7 @@ class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.di
     private fun collectUiEffect() {
         accountInfoViewModel.uiEffect.collectWithLifecycle(viewLifecycleOwner) { uiEffect ->
             when (uiEffect) {
-                UiEffect.NavigateToLogin -> websosoNavigator.navigateToLoginActivity()
+                UiEffect.NavigateToLogin -> websosoNavigator.navigateToLoginActivity(::startActivity)
             }
         }
     }

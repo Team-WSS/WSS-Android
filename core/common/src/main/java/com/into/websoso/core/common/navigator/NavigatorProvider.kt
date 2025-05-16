@@ -1,15 +1,16 @@
 package com.into.websoso.core.common.navigator
 
+import android.content.Intent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 interface NavigatorProvider {
-    fun navigateToLoginActivity()
+    fun navigateToLoginActivity(startActivity: (Intent) -> Unit)
 
-    fun navigateToMainActivity()
+    fun navigateToMainActivity(startActivity: (Intent) -> Unit)
 
-    fun navigateToOnboardingActivity()
+    fun navigateToOnboardingActivity(startActivity: (Intent) -> Unit)
 }
 
 @EntryPoint

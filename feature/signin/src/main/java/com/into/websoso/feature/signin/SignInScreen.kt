@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +37,7 @@ fun SignInScreen(
     websosoNavigator: NavigatorProvider,
     signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val latestEvent by rememberUpdatedState(signInViewModel.uiEvent)
     val pagerState = rememberPagerState { Onboarding_Images.size }
 
@@ -51,9 +53,9 @@ fun SignInScreen(
                 // TODO: 실패 시 커스텀 스낵 바 구현
             }
 
-            NavigateToHome -> websosoNavigator.navigateToMainActivity()
+            NavigateToHome -> websosoNavigator.navigateToMainActivity(context::startActivity)
 
-            NavigateToOnboarding -> websosoNavigator.navigateToOnboardingActivity()
+            NavigateToOnboarding -> websosoNavigator.navigateToOnboardingActivity(context::startActivity)
         }
     }
 

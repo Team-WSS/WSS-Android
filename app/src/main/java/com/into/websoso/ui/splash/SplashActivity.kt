@@ -39,8 +39,8 @@ class SplashActivity : AppCompatActivity(R.layout.activity_splash) {
     private fun collectUiEffect() {
         splashViewModel.uiEffect.collectWithLifecycle(this) { uiEffect ->
             when (uiEffect) {
-                NavigateToLogin -> websosoNavigator.navigateToLoginActivity()
-                NavigateToMain -> websosoNavigator.navigateToMainActivity()
+                NavigateToLogin -> websosoNavigator.navigateToLoginActivity(::startActivity)
+                NavigateToMain -> websosoNavigator.navigateToMainActivity(::startActivity)
                 ShowDialog -> showMinimumVersionDialog()
             }
         }
