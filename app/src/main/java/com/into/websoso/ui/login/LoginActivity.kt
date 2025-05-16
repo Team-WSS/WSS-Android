@@ -7,6 +7,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
@@ -14,15 +15,13 @@ import com.into.websoso.R.layout.activity_login
 import com.into.websoso.core.auth.AuthClient
 import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.navigator.NavigatorProvider
-import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.databinding.ActivityLoginBinding
 import com.into.websoso.feature.signin.SignInScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginActivity : BaseActivity<ActivityLoginBinding>(activity_login) {
+class LoginActivity : AppCompatActivity(activity_login) {
     // TODO: CompositionLocal로 주입
     private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
 
