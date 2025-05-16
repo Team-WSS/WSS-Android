@@ -303,6 +303,7 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
                 novelId = feed.novelId,
                 novelTitle = feed.title,
                 isSpoiler = feed.isSpoiler,
+                isPublic = feed.isPublic,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )

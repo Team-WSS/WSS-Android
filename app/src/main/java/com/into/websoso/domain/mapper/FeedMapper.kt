@@ -29,6 +29,7 @@ fun FeedEntity.toDomain(): Feed =
         isModified = isModified,
         isSpoiler = isSpoiler,
         isMyFeed = isMyFeed,
+        isPublic = isPublic,
         novel = Feed.Novel(
             id = novel.id,
             title = novel.title,

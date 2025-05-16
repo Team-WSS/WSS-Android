@@ -26,6 +26,8 @@ data class UserFeedsResponseDto(
         val isModified: Boolean,
         @SerialName("isSpoiler")
         val isSpoiler: Boolean,
+        @SerialName("isPublic")
+        val isPublic: Boolean,
         @SerialName("likeCount")
         val likeCount: Int,
         @SerialName("novelId")
