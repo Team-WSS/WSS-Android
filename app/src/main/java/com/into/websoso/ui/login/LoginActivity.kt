@@ -38,9 +38,7 @@ class LoginActivity : AppCompatActivity(activity_login) {
         setContent {
             WebsosoTheme {
                 SignInScreen(
-                    authClient = { platform ->
-                        authClient[platform] ?: throw IllegalStateException()
-                    },
+                    authClient = { platform -> authClient[platform] },
                     websosoNavigator = websosoNavigator,
                 )
             }
