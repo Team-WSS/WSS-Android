@@ -4,8 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.into.websoso.core.database.WebsosoDatabase
-import com.into.websoso.core.database.entity.NovelEntity
+import com.into.websoso.core.database.entity.InDatabaseNovelEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,31 +17,28 @@ import javax.inject.Singleton
 @Dao
 internal interface NovelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNovels(novels: List<NovelEntity>)
+    suspend fun insertNovels(novels: List<InDatabaseNovelEntity>)
 
-    @Query(
-        value = """
-        SELECT * FROM novels
-        ORDER BY userNovelId
-        DESC
-    """,
-    )
-    fun selectAllNovels(): Flow<List<NovelEntity>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNovel(novel: InDatabaseNovelEntity)
 
-    @Query(
-        value = """
-        SELECT * FROM novels
-        WHERE userNovelId = :id
-    """,
-    )
-    suspend fun selectNovelById(id: Long): NovelEntity?
+    @Query("SELECT * FROM novels ORDER BY userNovelId DESC")
+    fun selectAllNovels(): Flow<List<InDatabaseNovelEntity>>
 
-    @Query(
-        value = """
-        DELETE FROM novels
-    """,
-    )
+    @Query("SELECT * FROM novels WHERE userNovelId = :id")
+    suspend fun selectNovelById(id: Long): InDatabaseNovelEntity
+
+    @Update
+    suspend fun updateNovels(novels: List<InDatabaseNovelEntity>)
+
+    @Update
+    suspend fun updateNovel(novel: InDatabaseNovelEntity)
+
+    @Query("DELETE FROM novels")
     suspend fun deleteAllNovels()
+
+    @Query("DELETE FROM novels WHERE userNovelId = :id")
+    suspend fun deleteNovelById(id: Long)
 }
 
 @Module
