@@ -32,4 +32,7 @@ include(
 
 include(":feature:signin")
 
-include(":data:account")
+include(
+    ":data:account",
+    ":data:library",
+)
