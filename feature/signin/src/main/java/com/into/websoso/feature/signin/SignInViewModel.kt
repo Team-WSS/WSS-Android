@@ -24,7 +24,7 @@ class SignInViewModel
     constructor(
         private val accountRepository: AccountRepository,
     ) : ViewModel() {
-        private val _uiEvent = Channel<UiEffect>(Channel.CONFLATED)
+        private val _uiEvent = Channel<UiEffect>(Channel.BUFFERED)
         private val autoScrollEventFlow = flow(block = ::startAutoScroll).shareIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
@@ -35,11 +35,11 @@ class SignInViewModel
 
         fun signIn(
             platform: AuthPlatform,
-            signInToPlatform: suspend () -> AuthToken,
+            signInToPlatform: (suspend () -> AuthToken)?,
         ) {
             viewModelScope.launch {
                 runCatching {
-                    signInToPlatform()
+                    requireNotNull(signInToPlatform).invoke()
                 }.onSuccess { authToken ->
                     signInWithSuccess(platform, authToken)
                 }.onFailure {

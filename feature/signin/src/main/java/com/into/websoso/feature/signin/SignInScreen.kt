@@ -33,7 +33,7 @@ import com.into.websoso.feature.signin.component.SignInButtons
 
 @Composable
 fun SignInScreen(
-    authClient: (platform: AuthPlatform) -> AuthClient,
+    authClient: (platform: AuthPlatform) -> AuthClient?,
     websosoNavigator: NavigatorProvider,
     signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
@@ -64,7 +64,7 @@ fun SignInScreen(
         onClick = { platform ->
             signInViewModel.signIn(
                 platform = platform,
-                signInToPlatform = authClient(platform)::signIn,
+                signInToPlatform = authClient(platform)?.let { client -> client::signIn },
             )
         },
     )
