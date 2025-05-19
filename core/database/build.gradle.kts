@@ -16,5 +16,5 @@ dependencies {
     // 데이터베이스 관련 라이브러리
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
-    implementation(libs.room.compiler)
+    kapt(libs.room.compiler)
 }
