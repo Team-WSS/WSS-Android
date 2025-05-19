@@ -35,11 +35,11 @@ class SignInViewModel
 
         fun signIn(
             platform: AuthPlatform,
-            signInToPlatform: suspend () -> AuthToken,
+            signInToPlatform: (suspend () -> AuthToken)?,
         ) {
             viewModelScope.launch {
                 runCatching {
-                    signInToPlatform()
+                    requireNotNull(signInToPlatform).invoke()
                 }.onSuccess { authToken ->
                     signInWithSuccess(platform, authToken)
                 }.onFailure {
