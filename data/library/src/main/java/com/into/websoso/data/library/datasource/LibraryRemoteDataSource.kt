@@ -1,5 +1,5 @@
 package com.into.websoso.data.library.datasource
 
 interface LibraryRemoteDataSource {
-    suspend fun getFullLibrary()
+    suspend fun getUserLibrary(userId: Long)
 }

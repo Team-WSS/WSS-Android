@@ -29,6 +29,7 @@ android {
 dependencies {
     // 데이터 레이어 의존성
     implementation(projects.data.account)
+    implementation(projects.data.library)
 
     // 프로젝트 의존성
     implementation(projects.core.auth)
