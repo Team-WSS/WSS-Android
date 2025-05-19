@@ -1,79 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.LoginActivity">
 
-    <data>
-
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray_50_F4F5F8"
-        tools:context=".ui.login.LoginActivity">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/iv_login_kakao"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-            android:id="@+id/dotsIndicator_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:layout_marginBottom="32dp"
-            app:dotsColor="@color/gray_100_CBCBD1"
-            app:dotsCornerRadius="8dp"
-            app:dotsSize="7dp"
-            app:dotsSpacing="5dp"
-            app:dotsWidthFactor="2.5"
-            app:layout_constraintBottom_toTopOf="@id/iv_login_kakao"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:progressMode="false"
-            app:selectedDotColor="@color/primary_100_6A5DFD" />
-
-        <ImageView
-            android:id="@+id/iv_login_kakao"
-            android:layout_width="52dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="42dp"
-            android:layout_marginBottom="26dp"
-            android:src="@drawable/ic_login_kakao"
-            app:layout_constraintBottom_toTopOf="@id/tv_login_without_login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_login_without_login"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/bg_login_white_radius_14dp_stroke_primary100_1dp"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/login_browse_without_signup"
-            android:textAppearance="@style/title1"
-            android:textColor="@color/primary_100_6A5DFD"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
-            android:id="@+id/wll_login"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="100dp"
-            android:visibility="invisible" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

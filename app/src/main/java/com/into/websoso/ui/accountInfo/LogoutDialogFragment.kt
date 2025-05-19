@@ -4,14 +4,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.databinding.DialogLogoutBinding
-import com.into.websoso.ui.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.dialog_logout) {
     private val accountInfoViewModel: AccountInfoViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
 
     override fun onViewCreated(
         view: View,
@@ -19,31 +26,25 @@ class LogoutDialogFragment : BaseDialogFragment<DialogLogoutBinding>(R.layout.di
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.lifecycleOwner = this
-        onCancelButtonClick()
-        onLogoutButtonClick()
-        setupObserver()
+        setClickListener()
+        collectUiEffect()
     }
 
-    private fun setupObserver() {
-        accountInfoViewModel.isLogoutSuccess.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess) {
-                startActivity(LoginActivity.getIntent(requireContext()))
+    private fun collectUiEffect() {
+        accountInfoViewModel.uiEffect.collectWithLifecycle(viewLifecycleOwner) { uiEffect ->
+            when (uiEffect) {
+                UiEffect.NavigateToLogin -> websosoNavigator.navigateToLoginActivity(::startActivity)
             }
         }
     }
 
-    private fun onCancelButtonClick() {
+    private fun setClickListener() {
         binding.tvLogoutCancelButton.setOnClickListener {
             dismiss()
         }
-    }
 
-    private fun onLogoutButtonClick() {
         binding.tvLogoutButton.setOnClickListener {
-            singleEventHandler.throttleFirst {
-                accountInfoViewModel.logout()
-            }
+            singleEventHandler.throttleFirst(event = accountInfoViewModel::signOut)
         }
     }
 
