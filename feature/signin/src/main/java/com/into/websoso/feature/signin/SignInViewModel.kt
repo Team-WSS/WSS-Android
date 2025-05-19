@@ -8,6 +8,7 @@ import com.into.websoso.data.account.AccountRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
@@ -24,14 +25,14 @@ class SignInViewModel
     constructor(
         private val accountRepository: AccountRepository,
     ) : ViewModel() {
-        private val _uiEvent = Channel<UiEffect>(Channel.BUFFERED)
+        private val _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
         private val autoScrollEventFlow = flow(block = ::startAutoScroll).shareIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
             replay = 1,
         )
 
-        val uiEvent = merge(autoScrollEventFlow, _uiEvent.receiveAsFlow())
+        val uiEffect: Flow<UiEffect> = merge(autoScrollEventFlow, _uiEffect.receiveAsFlow())
 
         fun signIn(
             platform: AuthPlatform,
@@ -59,8 +60,8 @@ class SignInViewModel
                         authToken = authToken,
                     ).onSuccess {
                         when (accountRepository.isRegisterUser) {
-                            true -> _uiEvent.send(UiEffect.NavigateToHome)
-                            false -> _uiEvent.send(UiEffect.NavigateToOnboarding)
+                            true -> _uiEffect.send(UiEffect.NavigateToHome)
+                            false -> _uiEffect.send(UiEffect.NavigateToOnboarding)
                         }
                     }.onFailure {
                         signInWithFailure()
@@ -70,7 +71,7 @@ class SignInViewModel
 
         private fun signInWithFailure() {
             viewModelScope.launch {
-                _uiEvent.send(UiEffect.ShowToast)
+                _uiEffect.send(UiEffect.ShowToast)
             }
         }
 

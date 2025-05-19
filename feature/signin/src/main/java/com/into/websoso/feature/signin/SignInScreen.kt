@@ -38,11 +38,11 @@ fun SignInScreen(
     signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val latestEvent by rememberUpdatedState(signInViewModel.uiEvent)
+    val latestEffect by rememberUpdatedState(signInViewModel.uiEffect)
     val pagerState = rememberPagerState { Onboarding_Images.size }
 
-    latestEvent.collectAsEventWithLifecycle { event ->
-        when (event) {
+    latestEffect.collectAsEventWithLifecycle { effect ->
+        when (effect) {
             ScrollToPage -> {
                 pagerState.animateScrollToPage(
                     page = (pagerState.currentPage + 1) % pagerState.pageCount,
