@@ -30,7 +30,10 @@ include(
     ":core:datastore",
 )
 
-include(":feature:signin")
+include(
+    ":feature:signin",
+    ":feature:library",
+)
 
 include(
     ":data:account",
