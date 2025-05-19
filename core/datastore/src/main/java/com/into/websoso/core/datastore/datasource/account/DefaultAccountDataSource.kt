@@ -20,31 +20,31 @@ internal class DefaultAccountDataSource
     constructor(
         @AccountDataStore private val accountDataStore: DataStore<Preferences>,
     ) : AccountLocalDataSource {
-        override suspend fun accessToken(): String =
+        override suspend fun selectAccessToken(): String =
             accountDataStore.data
                 .map { preferences ->
                     preferences[ACCESS_TOKEN].orEmpty()
                 }.first()
 
-        override suspend fun refreshToken(): String =
+        override suspend fun selectRefreshToken(): String =
             accountDataStore.data
                 .map { preferences ->
                     preferences[REFRESH_TOKEN].orEmpty()
                 }.first()
 
-        override suspend fun saveAccessToken(accessToken: String) {
+        override suspend fun updateAccessToken(accessToken: String) {
             accountDataStore.edit { preferences ->
                 preferences[ACCESS_TOKEN] = accessToken
             }
         }
 
-        override suspend fun saveRefreshToken(refreshToken: String) {
+        override suspend fun updateRefreshToken(refreshToken: String) {
             accountDataStore.edit { preferences ->
                 preferences[REFRESH_TOKEN] = refreshToken
             }
         }
 
-        override suspend fun clearTokens() {
+        override suspend fun deleteTokens() {
             accountDataStore.edit { preferences ->
                 preferences.remove(ACCESS_TOKEN)
                 preferences.remove(REFRESH_TOKEN)
