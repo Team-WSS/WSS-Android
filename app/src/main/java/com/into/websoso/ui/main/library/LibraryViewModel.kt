@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.library.model.LibraryUiState
 import com.into.websoso.ui.mapper.toUi
@@ -18,6 +19,7 @@ class LibraryViewModel
     @Inject
     constructor(
         private val userRepository: UserRepository,
+        private val libraryRepository: LibraryRepository,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<LibraryUiState> =
             MutableLiveData(LibraryUiState())
@@ -65,31 +67,30 @@ class LibraryViewModel
             _uiState.value = uiState.value?.copy(loading = true)
 
             viewModelScope.launch {
-                runCatching {
-                    userRepository.fetchUserStorage(
+                libraryRepository
+                    .fetchUserStorage(
                         userId = userRepository.fetchUserId(),
                         readStatus = readStatus,
                         lastUserNovelId = uiState.value?.lastUserNovelId ?: 0L,
                         size = STORAGE_NOVEL_SIZE,
                         sortType = sortType.titleEn,
-                    )
-                }.onSuccess { response ->
-                    val isLoadable = response.isLoadable && response.userNovels.isNotEmpty()
+                    ).onSuccess { response ->
+                        val isLoadable = response.isLoadable && response.userNovels.isNotEmpty()
 
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        userNovelCount = response.userNovelCount,
-                        userNovelRating = response.userNovelRating,
-                        storageNovels = response.userNovels.map { it.toUi() },
-                        lastUserNovelId = response.userNovels.lastOrNull()?.userNovelId ?: 0L,
-                        isLoadable = isLoadable,
-                    )
-                }.onFailure {
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        error = true,
-                    )
-                }
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                            userNovelCount = response.userNovelCount,
+                            userNovelRating = response.userNovelRating,
+                            storageNovels = response.userNovels.map { it.toUi() },
+                            lastUserNovelId = response.userNovels.lastOrNull()?.userNovelId ?: 0L,
+                            isLoadable = isLoadable,
+                        )
+                    }.onFailure {
+                        _uiState.value = uiState.value?.copy(
+                            loading = false,
+                            error = true,
+                        )
+                    }
             }
         }
 

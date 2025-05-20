@@ -1,5 +1,6 @@
 package com.into.websoso.ui.mapper
 
+import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.model.NovelDetailEntity
 import com.into.websoso.data.model.NovelInfoEntity
 import com.into.websoso.data.model.UserStorageEntity
@@ -101,6 +102,16 @@ fun UserStorageEntity.toUi(): UserStorageModel =
     )
 
 fun StorageNovelEntity.toUi(): StorageNovelModel =
+    StorageNovelModel(
+        author = author,
+        novelId = novelId,
+        novelImage = novelImage,
+        title = title,
+        userNovelId = userNovelId,
+        novelRating = novelRating,
+    )
+
+fun NovelEntity.toUi(): StorageNovelModel =
     StorageNovelModel(
         author = author,
         novelId = novelId,

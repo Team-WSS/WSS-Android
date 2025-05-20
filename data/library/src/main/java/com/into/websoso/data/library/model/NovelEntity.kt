@@ -8,3 +8,10 @@ data class NovelEntity(
     val novelImage: String,
     val novelRating: Float,
 )
+
+data class UserStorageEntity(
+    val isLoadable: Boolean,
+    val userNovelCount: Long,
+    val userNovelRating: Float,
+    val userNovels: List<NovelEntity>,
+)

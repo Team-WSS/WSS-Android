@@ -8,12 +8,22 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import javax.inject.Singleton
 
 internal interface LibraryApi {
     @GET("users/{userId}/novels")
     suspend fun getUserLibrary(
         @Path("userId") userId: Long,
+    ): UserLibraryResponseDto
+
+    @GET("users/{userId}/novels")
+    suspend fun getUserStorage(
+        @Path("userId") userId: Long,
+        @Query("readStatus") readStatus: String,
+        @Query("lastUserNovelId") lastUserNovelId: Long,
+        @Query("size") size: Int,
+        @Query("sortType") sortType: String,
     ): UserLibraryResponseDto
 }
 

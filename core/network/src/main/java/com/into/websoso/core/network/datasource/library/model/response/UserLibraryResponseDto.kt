@@ -1,5 +1,6 @@
 package com.into.websoso.core.network.datasource.library.model.response
 
+import com.into.websoso.data.library.model.UserStorageEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,4 +14,12 @@ internal data class UserLibraryResponseDto(
     val isLoadable: Boolean,
     @SerialName("userNovels")
     val userNovels: List<NovelResponseDto>,
-)
+) {
+    fun toData(): UserStorageEntity =
+        UserStorageEntity(
+            userNovelCount = userNovelCount,
+            userNovelRating = userNovelRating,
+            isLoadable = isLoadable,
+            userNovels = userNovels.map(NovelResponseDto::toData),
+        )
+}
