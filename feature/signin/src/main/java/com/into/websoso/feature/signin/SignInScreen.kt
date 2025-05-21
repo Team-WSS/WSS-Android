@@ -87,7 +87,8 @@ private fun SignInScreen(
             .padding(
                 bottom = WindowInsets.navigationBars
                     .asPaddingValues()
-                    .calculateBottomPadding()),
+                    .calculateBottomPadding(),
+            ),
     ) {
         Spacer(modifier = Modifier.weight(weight = 1f))
         OnboardingHorizontalPager(pagerState = pagerState)
