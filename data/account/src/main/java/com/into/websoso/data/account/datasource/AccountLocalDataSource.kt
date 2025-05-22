@@ -1,13 +1,13 @@
 package com.into.websoso.data.account.datasource
 
 interface AccountLocalDataSource {
-    suspend fun accessToken(): String
+    suspend fun selectAccessToken(): String
 
-    suspend fun refreshToken(): String
+    suspend fun selectRefreshToken(): String
 
-    suspend fun saveAccessToken(accessToken: String)
+    suspend fun updateAccessToken(accessToken: String)
 
-    suspend fun saveRefreshToken(refreshToken: String)
+    suspend fun updateRefreshToken(refreshToken: String)
 
-    suspend fun clearTokens()
+    suspend fun deleteTokens()
 }

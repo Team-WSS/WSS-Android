@@ -31,6 +31,7 @@ fragment-ktx = "1.6.1"
 lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.1.1"
 security-crypto = "1.1.0-alpha06"
+room = "2.7.1"
 
 # Testing Libraries
 junit = "4.13.2"
@@ -94,6 +95,9 @@ fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragm
 lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle-extensions" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 # Testing Libraries
 junit = { module = "junit:junit", version.ref = "junit" }
