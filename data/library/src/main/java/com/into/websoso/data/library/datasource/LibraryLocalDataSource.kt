@@ -10,7 +10,7 @@ interface LibraryLocalDataSource {
 
     fun selectAllNovels(): Flow<List<NovelEntity>>
 
-    suspend fun selectNovel(novelId: Long): NovelEntity
+    suspend fun selectNovel(novelId: Long): NovelEntity?
 
     suspend fun updateNovels(novels: List<NovelEntity>)
 

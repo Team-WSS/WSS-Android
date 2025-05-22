@@ -9,4 +9,5 @@ android {
 }
 
 dependencies {
+    implementation("androidx.paging:paging-runtime:3.3.2")
 }
