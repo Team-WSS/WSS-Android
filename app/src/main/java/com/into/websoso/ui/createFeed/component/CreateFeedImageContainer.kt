@@ -26,7 +26,7 @@ import com.into.websoso.core.resource.R.drawable.ic_feed_remove_image
 @Composable
 fun CreateFeedImageContainer(
     imageUrls: List<String>,
-    onRemoveClick: (Int) -> Unit,
+    onRemoveClick: (index: Int) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier
