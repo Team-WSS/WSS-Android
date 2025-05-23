@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.into.websoso.core.common.ui.component.AdaptationImage
 import com.into.websoso.core.common.util.clickableWithoutRipple
 import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -57,20 +57,31 @@ private fun CreateFeedImageBox(
             .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp)),
     ) {
-        Image(
-            painter = painterResource(ic_feed_remove_image),
-            contentDescription = null,
-            modifier = Modifier
-                .size(38.dp)
-                .padding(10.dp)
-                .align(Alignment.TopEnd)
-                .clickableWithoutRipple { onRemoveClick() },
-        )
         NetworkImage(
             imageUrl = imageUrl,
             contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
+        ImageRemoveButton(
+            modifier = Modifier.align(Alignment.TopEnd),
+            onRemoveClick = onRemoveClick,
         )
     }
+}
+
+@Composable
+private fun ImageRemoveButton(
+    modifier: Modifier,
+    onRemoveClick: () -> Unit,
+) {
+    Image(
+        painter = painterResource(ic_feed_remove_image),
+        contentDescription = null,
+        modifier = modifier
+            .size(38.dp)
+            .padding(10.dp)
+            .clickableWithoutRipple { onRemoveClick() },
+    )
 }
 
 @Preview
@@ -79,9 +90,9 @@ private fun CreateFeedImageContainerPreview() {
     WebsosoTheme {
         CreateFeedImageContainer(
             imageUrls = listOf(
-                "https://github.com/user-attachments/assets/e89a02bb-549f-414d-809f-0ab1e8f72c5f",
-                "https://github.com/user-attachments/assets/e89a02bb-549f-414d-809f-0ab1e8f72c5f",
-                "https://github.com/user-attachments/assets/e89a02bb-549f-414d-809f-0ab1e8f72c5f",
+                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
+                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
+                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
             ),
             onRemoveClick = {},
         )
