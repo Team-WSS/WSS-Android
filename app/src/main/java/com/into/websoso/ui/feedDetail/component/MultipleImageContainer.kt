@@ -18,7 +18,7 @@ import com.into.websoso.core.common.util.clickableWithoutRipple
 @Composable
 fun MultipleImageContainer(
     imageUrls: List<String>,
-    onImageClick: (Int) -> Unit,
+    onImageClick: (index: Int) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier
@@ -26,16 +26,16 @@ fun MultipleImageContainer(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         contentPadding = PaddingValues(horizontal = 20.dp),
     ) {
-        items(imageUrls.size) { position ->
+        items(imageUrls.size) { index ->
             AdaptationImage(
-                imageUrl = imageUrls[position],
+                imageUrl = imageUrls[index],
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(100.dp)
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(8.dp))
                     .clickableWithoutRipple {
-                        onImageClick(position)
+                        onImageClick(index)
                     },
             )
         }

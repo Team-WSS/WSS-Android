@@ -19,6 +19,6 @@ interface FeedDetailClickListener {
 
     fun onFeedImageClick(
         imageUrls: List<String>,
-        position: Int,
+        index: Int,
     )
 }

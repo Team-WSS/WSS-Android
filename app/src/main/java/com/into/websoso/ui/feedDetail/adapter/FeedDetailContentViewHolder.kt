@@ -27,8 +27,8 @@ class FeedDetailContentViewHolder(
             val imageUrls = List<String>(5) {
                 "https://upload.wikimedia.org/wikipedia/ko/9/9e/%EB%A0%88%EB%94%94_%ED%94%8C%EB%A0%88%EC%9D%B4%EC%96%B4_%EC%9B%90_%EC%98%81%ED%99%94.jpg"
             }
-            AdaptationFeedImageContainer(imageUrls) { position ->
-                feedDetailClickListener.onFeedImageClick(imageUrls, position)
+            AdaptationFeedImageContainer(imageUrls) { index ->
+                feedDetailClickListener.onFeedImageClick(imageUrls, index)
             }
         }
     }

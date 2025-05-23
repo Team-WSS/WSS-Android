@@ -142,9 +142,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
             override fun onFeedImageClick(
                 imageUrls: List<String>,
-                position: Int,
+                index: Int,
             ) {
-                navigateToExpandedImage(imageUrls, position)
+                navigateToExpandedImage(imageUrls, index)
             }
         }
 
@@ -186,7 +186,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun navigateToExpandedImage(
         imageUrls: List<String>,
-        position: Int,
+        index: Int,
     ) {
         // TODO("Not yet implemented")
     }

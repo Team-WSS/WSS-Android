@@ -13,11 +13,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.ui.component.AdaptationImage
 import com.into.websoso.core.common.util.clickableWithoutRipple
+import com.into.websoso.ui.feedDetail.model.ImageContainerType.DOUBLE
 
 @Composable
 fun DoubleImageContainer(
     imageUrls: List<String>,
-    onImageClick: (Int) -> Unit,
+    onImageClick: (index: Int) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -25,7 +26,7 @@ fun DoubleImageContainer(
             .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        imageUrls.take(2).forEach { imageUrl ->
+        imageUrls.take(DOUBLE.size).forEach { imageUrl ->
             AdaptationImage(
                 imageUrl = imageUrl,
                 contentScale = ContentScale.Crop,

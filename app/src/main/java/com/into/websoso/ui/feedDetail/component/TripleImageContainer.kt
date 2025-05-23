@@ -17,7 +17,7 @@ import com.into.websoso.core.common.util.clickableWithoutRipple
 @Composable
 fun TripleImageContainer(
     imageUrls: List<String>,
-    onImageClick: (Int) -> Unit,
+    onImageClick: (index: Int) -> Unit,
 ) {
     Row(
         modifier = Modifier

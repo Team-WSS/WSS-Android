@@ -1,7 +1,7 @@
 package com.into.websoso.ui.feedDetail.model
 
 enum class ImageContainerType(
-    private val size: Int,
+    val size: Int,
 ) {
     SINGLE(1),
     DOUBLE(2),

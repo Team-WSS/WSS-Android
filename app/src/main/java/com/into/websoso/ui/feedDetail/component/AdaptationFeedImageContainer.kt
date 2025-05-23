@@ -10,7 +10,7 @@ import com.into.websoso.ui.feedDetail.model.ImageContainerType.TRIPLE
 @Composable
 fun AdaptationFeedImageContainer(
     imageUrls: List<String>,
-    onImageClick: (Int) -> Unit,
+    onImageClick: (index: Int) -> Unit,
 ) {
     when (ImageContainerType.from(imageUrls.size)) {
         SINGLE -> SingleImageContainer(imageUrls.first()) { onImageClick(0) }
