@@ -13,4 +13,9 @@ interface LibraryRemoteDataSource {
         size: Int,
         sortType: String,
     ): UserStorageEntity
+
+    suspend fun getUserLibrary2(
+        userNovelId: Int,
+        size: Int,
+    ): UserStorageEntity
 }

@@ -1,8 +1,13 @@
 package com.into.websoso.data.library
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
+import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.model.UserStorageEntity
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,6 +18,33 @@ class LibraryRepository
         private val libraryRemoteDataSource: LibraryRemoteDataSource,
         private val libraryLocalDataSource: LibraryLocalDataSource,
     ) {
+//        private val libraryRemoteMediator: LibraryRemoteMediator by lazy {
+//            LibraryRemoteMediator(
+//                libraryRemoteDataSource,
+//                libraryLocalDataSource,
+//            )
+//        }
+
+        fun getUserLibrary(): Flow<PagingData<NovelEntity>> =
+            Pager(
+                config = PagingConfig(
+                    pageSize = NETWORK_PAGE_SIZE,
+                    enablePlaceholders = false,
+                ),
+                pagingSourceFactory = { LibraryPagingSource(libraryRemoteDataSource) },
+            ).flow
+
+//        @OptIn(ExperimentalPagingApi::class)
+//        fun getUserLibrary(): Flow<PagingData<NovelEntity>> =
+//            Pager(
+//                config = PagingConfig(
+//                    pageSize = 10,
+//                    enablePlaceholders = false,
+//                ),
+//                remoteMediator = libraryRemoteMediator,
+//                pagingSourceFactory = libraryLocalDataSource::selectAllNovels,
+//            ).flow
+
         suspend fun getUserLibrary(userId: Long = 184): Result<Unit> =
             runCatching {
                 val userLibrary = libraryRemoteDataSource.getUserLibrary(userId)
@@ -36,4 +68,8 @@ class LibraryRepository
                         sortType = sortType,
                     )
             }
+
+        companion object {
+            private const val NETWORK_PAGE_SIZE = 10
+        }
     }

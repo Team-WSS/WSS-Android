@@ -25,6 +25,15 @@ internal interface LibraryApi {
         @Query("size") size: Int,
         @Query("sortType") sortType: String,
     ): UserLibraryResponseDto
+
+    @GET("users/{userId}/novels")
+    suspend fun getUserStorage2(
+        @Path("userId") userId: Long,
+        @Query("readStatus") readStatus: String,
+        @Query("lastUserNovelId") lastUserNovelId: Long,
+        @Query("size") size: Int,
+        @Query("sortType") sortType: String,
+    ): UserLibraryResponseDto
 }
 
 @Module

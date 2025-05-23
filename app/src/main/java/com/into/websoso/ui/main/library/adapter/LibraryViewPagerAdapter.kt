@@ -1,15 +1,18 @@
 package com.into.websoso.ui.main.library.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
+import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.databinding.ItemStorageBinding
 import com.into.websoso.ui.userStorage.model.StorageTab
-import com.into.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
+import kotlinx.coroutines.flow.Flow
 
 class LibraryViewPagerAdapter(
-    private var novels: List<StorageNovelModel>,
+    private val test: Flow<PagingData<NovelEntity>>,
+    private val scope: LifecycleOwner,
     private val novelClickListener: (novelId: Long) -> Unit,
 ) : RecyclerView.Adapter<LibraryViewPagerViewHolder>() {
     override fun onCreateViewHolder(
@@ -24,14 +27,8 @@ class LibraryViewPagerAdapter(
         holder: LibraryViewPagerViewHolder,
         position: Int,
     ) {
-        holder.bind(novels)
+        holder.bind(test, scope)
     }
 
     override fun getItemCount(): Int = StorageTab.entries.size
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateNovels(newNovels: List<StorageNovelModel>) {
-        this.novels = newNovels
-        notifyDataSetChanged()
-    }
 }

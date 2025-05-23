@@ -34,6 +34,19 @@ internal class DefaultLibraryDataSource
                     size,
                     sortType,
                 ).toData()
+
+        override suspend fun getUserLibrary2(
+            userNovelId: Int,
+            size: Int,
+        ): UserStorageEntity =
+            libraryApi
+                .getUserStorage(
+                    userId = 184,
+                    readStatus = "INTEREST",
+                    lastUserNovelId = userNovelId.toLong(),
+                    size = size,
+                    sortType = "NEWEST",
+                ).toData()
     }
 
 @Module

@@ -12,7 +12,6 @@ import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.databinding.FragmentLibraryBinding
 import com.into.websoso.ui.main.MainActivity
 import com.into.websoso.ui.main.library.adapter.LibraryViewPagerAdapter
-import com.into.websoso.ui.main.library.model.LibraryUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.userStorage.SortMenuHandler
 import com.into.websoso.ui.userStorage.model.StorageTab
@@ -24,11 +23,11 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
 
     private val libraryAdapter: LibraryViewPagerAdapter by lazy {
         LibraryViewPagerAdapter(
-            novels = emptyList(),
+            test = libraryViewModel.pagingDataFlow,
+            scope = viewLifecycleOwner,
             novelClickListener = ::navigateToNovelDetail,
         )
     }
-
     private val novelDetailResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == ResultFrom.NovelDetailBack.RESULT_OK) {
@@ -45,8 +44,8 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupViewPagerAndTabLayout()
-        setupObserver()
-        setupInitialReadStatusTab()
+        // setupObserver()
+        //  setupInitialReadStatusTab()
         onSortTypeButtonClick()
         onExploreButtonClick()
     }
@@ -106,10 +105,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
             when {
                 uiState.loading -> binding.wllLibrary.setWebsosoLoadingVisibility(true)
                 uiState.error -> binding.wllLibrary.setLoadingLayoutVisibility(false)
-                !uiState.loading -> {
-                    binding.wllLibrary.setWebsosoLoadingVisibility(false)
-                    updateStorageNovel(uiState)
-                }
+                !uiState.loading -> binding.wllLibrary.setWebsosoLoadingVisibility(false)
             }
             binding.clLibraryNull.visibility =
                 if (uiState.userNovelCount == EMPTY_NOVEL_COUNT) View.VISIBLE else View.GONE
@@ -128,12 +124,6 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding>(R.layout.fragment_l
                 libraryViewModel.updateReadStatus(currentReadStatus, forceLoad = true)
                 libraryViewModel.updateRatingChanged()
             }
-        }
-    }
-
-    private fun updateStorageNovel(uiState: LibraryUiState) {
-        if (uiState.storageNovels.isNotEmpty()) {
-            libraryAdapter.updateNovels(uiState.storageNovels)
         }
     }
 

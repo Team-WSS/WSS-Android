@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.into.websoso.data.library.LibraryRepository
+import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.library.model.LibraryUiState
 import com.into.websoso.ui.mapper.toUi
 import com.into.websoso.ui.userStorage.model.SortType
 import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +25,9 @@ class LibraryViewModel
         private val userRepository: UserRepository,
         private val libraryRepository: LibraryRepository,
     ) : ViewModel() {
+        val pagingDataFlow: Flow<PagingData<NovelEntity>> =
+            libraryRepository.getUserLibrary().cachedIn(viewModelScope)
+
         private val _uiState: MutableLiveData<LibraryUiState> =
             MutableLiveData(LibraryUiState())
         val uiState: LiveData<LibraryUiState> get() = _uiState
