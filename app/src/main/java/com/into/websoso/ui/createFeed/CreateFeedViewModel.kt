@@ -17,6 +17,8 @@ import com.into.websoso.ui.createFeed.model.SearchNovelUiState
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,8 +37,8 @@ class CreateFeedViewModel
         val categories: List<CreatedFeedCategoryModel> get() = _categories.toList()
         private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
         val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
-        private val _attachedImages = MutableLiveData<List<Uri>>(emptyList())
-        val attachedImages: LiveData<List<Uri>> get() = _attachedImages
+        private val _attachedImages = MutableStateFlow<List<Uri>>(emptyList())
+        val attachedImages: StateFlow<List<Uri>> get() = _attachedImages
         private val _exceedingImageCountEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
         val exceedingImageCountEvent: SingleLiveData<Unit> get() = _exceedingImageCountEvent
         val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
@@ -228,8 +230,8 @@ class CreateFeedViewModel
         }
 
         fun removeImage(index: Int) {
-            val imageToRemove: Uri = attachedImages.value?.getOrNull(index) ?: return
-            _attachedImages.value = attachedImages.value?.filter { eachImage -> eachImage != imageToRemove }
+            val imageToRemove: Uri = attachedImages.value.getOrNull(index) ?: return
+            _attachedImages.value = attachedImages.value.filter { eachImage -> eachImage != imageToRemove }
         }
 
         companion object {

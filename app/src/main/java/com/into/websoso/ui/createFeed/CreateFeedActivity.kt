@@ -64,6 +64,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         onCreateFeedClick()
         bindViewModel()
         setupObservers()
+        setupCreateFeedImageContainer()
         createFeedViewModel.categories.setupCategoryChips()
         tracker.trackEvent("write")
     }
@@ -149,7 +150,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     }
 
     private fun launchImagePicker() {
-        val currentCount = createFeedViewModel.attachedImages.value?.size ?: 0
+        val currentCount = createFeedViewModel.attachedImages.value.size
         if (currentCount < MAX_IMAGE_COUNT) {
             imagePickerLauncher.launch(
                 DynamicLimitPhotoPicker.Input(
@@ -181,15 +182,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
             binding.tvCreateFeedCharactersCount.text =
                 getString(tv_create_feed_characters_count, it.length)
         }
-        createFeedViewModel.attachedImages.observe(this) {
-            binding.cvCreateFeedImage.setContent {
-                CreateFeedImageContainer(it) { index ->
-                    singleEventHandler.throttleFirst {
-                        createFeedViewModel.removeImage(index)
-                    }
-                }
-            }
-        }
         createFeedViewModel.exceedingImageCountEvent.observe(this) {
             showWebsosoSnackBar(binding.root, getString(create_feed_image_limit, MAX_IMAGE_COUNT), ic_blocked_user_snack_bar)
         }
@@ -210,6 +202,16 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     setWebsosoChipRadius(20f.toFloatPxFromDp())
                     setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.enTitle) }
                 }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
+        }
+    }
+
+    private fun setupCreateFeedImageContainer() {
+        binding.cvCreateFeedImage.setContent {
+            CreateFeedImageContainer(createFeedViewModel) { index ->
+                singleEventHandler.throttleFirst {
+                    createFeedViewModel.removeImage(index)
+                }
+            }
         }
     }
 

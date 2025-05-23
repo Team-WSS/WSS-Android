@@ -18,28 +18,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.into.websoso.core.common.util.clickableWithoutRipple
-import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_feed_remove_image
+import com.into.websoso.ui.createFeed.CreateFeedViewModel
 
 @Composable
 fun CreateFeedImageContainer(
-    images: List<Uri>,
+    viewModel: CreateFeedViewModel,
     onRemoveClick: (index: Int) -> Unit,
 ) {
+    val images = viewModel.attachedImages.collectAsStateWithLifecycle()
+
     LazyRow(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(horizontal = 20.dp),
     ) {
-        items(images.size) { index ->
+        items(images.value.size) { index ->
             CreateFeedImageBox(
-                image = images.elementAt(index),
+                image = images.value.elementAt(index),
                 onRemoveClick = {
                     onRemoveClick(index)
                 },
@@ -87,17 +88,15 @@ private fun ImageRemoveButton(
     )
 }
 
+/*
 @Preview
 @Composable
 private fun CreateFeedImageContainerPreview() {
     WebsosoTheme {
         CreateFeedImageContainer(
-            images = listOf(
-                "https://example.com/image1.jpg".toUri(),
-                "https://example.com/image2.jpg".toUri(),
-                "https://example.com/image3.jpg".toUri(),
-            ),
+            viewModel = CreateFeedViewModel(),
             onRemoveClick = {},
         )
     }
 }
+*/
