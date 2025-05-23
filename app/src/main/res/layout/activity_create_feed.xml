@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="비공개 기록"
+                android:text="@string/create_feed_private"
                 android:textAppearance="@style/title3"
                 android:textColor="@color/white" />
 
@@ -85,8 +85,8 @@
                 android:id="@+id/sc_create_feed_lock_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@={!viewModel.isPublic}"
                 android:background="@null"
+                android:checked="@={!viewModel.isPublic}"
                 android:thumb="@drawable/bg_create_feed_toggle_thumb"
                 app:track="@drawable/bg_create_feed_toggle" />
         </LinearLayout>
@@ -218,6 +218,15 @@
                         app:track="@drawable/bg_create_feed_toggle" />
                 </LinearLayout>
 
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/cv_create_feed_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_create_feed_spoiler" />
+
                 <TextView
                     android:id="@+id/tv_create_feed_connect_novel"
                     android:layout_width="wrap_content"
@@ -228,7 +237,7 @@
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ll_create_feed_spoiler" />
+                    app:layout_constraintTop_toBottomOf="@id/cv_create_feed_image" />
 
                 <com.into.websoso.core.common.ui.custom.WebsosoSearchEditText
                     android:id="@+id/wset_create_feed_search_novel"
