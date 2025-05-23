@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.ui.component.AdaptationImage
 import com.into.websoso.core.common.util.clickableWithoutRipple
+import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_feed_remove_image
 
@@ -65,7 +66,7 @@ private fun CreateFeedImageBox(
                 .align(Alignment.TopEnd)
                 .clickableWithoutRipple { onRemoveClick() },
         )
-        AdaptationImage(
+        NetworkImage(
             imageUrl = imageUrl,
             contentScale = ContentScale.Crop,
         )
