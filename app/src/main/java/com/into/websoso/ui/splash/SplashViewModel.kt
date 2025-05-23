@@ -1,13 +1,17 @@
 package com.into.websoso.ui.splash
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.data.repository.VersionRepository
+import com.into.websoso.ui.splash.UiEffect.NavigateToLogin
+import com.into.websoso.ui.splash.UiEffect.NavigateToMain
+import com.into.websoso.ui.splash.UiEffect.ShowDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,60 +19,17 @@ import javax.inject.Inject
 class SplashViewModel
     @Inject
     constructor(
-        private val authRepository: AuthRepository,
         private val versionRepository: VersionRepository,
         private val userRepository: UserRepository,
+        private val accountRepository: AccountRepository,
     ) : ViewModel() {
-        private val _isUpdateRequired: MutableLiveData<Boolean> = MutableLiveData()
-        val isUpdateRequired: LiveData<Boolean> get() = _isUpdateRequired
-
-        private var _isAutoLogin: MutableLiveData<Boolean> = MutableLiveData()
-        val isAutoLogin: LiveData<Boolean> get() = _isAutoLogin
-
-        private var _error: MutableLiveData<Boolean> = MutableLiveData(false)
-        val error: LiveData<Boolean> get() = _error
+        private val _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+        val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
         init {
-            checkAndUpdateVersion()
-        }
-
-        private fun checkAndUpdateVersion() {
             viewModelScope.launch {
-                runCatching {
-                    versionRepository.isUpdateRequired()
-                }.onSuccess { isRequired ->
-                    _isUpdateRequired.value = isRequired
-                }
-            }
-        }
-
-        // 토큰 만료 확인용 - 추후 로직 수정 필요
-        fun updateMyProfile() {
-            viewModelScope.launch {
-                runCatching {
-                    userRepository.fetchMyProfile()
-                }.onSuccess {
-                    autoLogin()
-                }.onFailure {
-                    authRepository.clearTokens()
-                    _error.value = true
-                }
-            }
-        }
-
-        private fun autoLogin() {
-            viewModelScope.launch {
-                if (authRepository.isAutoLogin) {
-                    runCatching {
-                        authRepository.reissueToken()
-                    }.onSuccess {
-                        _isAutoLogin.value = true
-                    }.onFailure {
-                        _isAutoLogin.value = false
-                    }
-                } else {
-                    _isAutoLogin.value = false
-                }
+                val isUpdateRequired = checkMinimumVersion()
+                if (isUpdateRequired.not()) handleAutoLogin()
             }
         }
 
@@ -81,4 +42,40 @@ class SplashViewModel
                 }
             }
         }
+
+        private suspend fun checkMinimumVersion(): Boolean =
+            runCatching {
+                versionRepository.isUpdateRequired()
+            }.getOrElse { false }.also { isRequired ->
+                if (isRequired) _uiEffect.send(ShowDialog)
+            }
+
+        private suspend fun handleAutoLogin() {
+            if (shouldRefresh()) {
+                _uiEffect.send(NavigateToLogin)
+                return
+            }
+
+            accountRepository
+                .renewTokens()
+                .onSuccess {
+                    _uiEffect.send(NavigateToMain)
+                }.onFailure {
+                    _uiEffect.send(NavigateToLogin)
+                }
+        }
+
+        private suspend fun shouldRefresh(): Boolean =
+            accountRepository.accessToken().isBlank() ||
+                accountRepository
+                    .refreshToken()
+                    .isBlank()
     }
+
+sealed interface UiEffect {
+    data object NavigateToLogin : UiEffect
+
+    data object NavigateToMain : UiEffect
+
+    data object ShowDialog : UiEffect
+}

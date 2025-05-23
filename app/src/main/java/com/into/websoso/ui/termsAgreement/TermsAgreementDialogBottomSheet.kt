@@ -16,10 +16,10 @@ import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.resource.R.drawable.ic_terms_agreement_selected
 import com.into.websoso.core.resource.R.drawable.ic_terms_agreement_unselected
+import com.into.websoso.core.resource.R.string.privacy_policy_link
 import com.into.websoso.core.resource.R.string.string_terms_agreement_complete
 import com.into.websoso.core.resource.R.string.string_terms_agreement_next
-import com.into.websoso.core.resource.R.string.terms_agreement_privacy
-import com.into.websoso.core.resource.R.string.terms_agreement_service
+import com.into.websoso.core.resource.R.string.terms_of_use_link
 import com.into.websoso.databinding.DialogTermsAgreementBinding
 import com.into.websoso.ui.termsAgreement.model.AgreementType
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +57,7 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(getString(terms_agreement_service)),
+                    Uri.parse(getString(terms_of_use_link)),
                 ),
             )
         }
@@ -66,7 +66,7 @@ class TermsAgreementDialogBottomSheet : BaseBottomSheetDialog<DialogTermsAgreeme
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(getString(terms_agreement_privacy)),
+                    Uri.parse(getString(privacy_policy_link)),
                 ),
             )
         }

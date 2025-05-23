@@ -1,9 +1,7 @@
 package com.into.websoso.data.di
 
-import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.into.websoso.data.remote.api.AuthApi
 import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.api.NovelApi
 import com.into.websoso.data.remote.api.PushMessageApi
@@ -38,13 +36,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideNovelRepository(novelApi: NovelApi): NovelRepository = NovelRepository(novelApi)
-
-    @Provides
-    @Singleton
-    fun provideAuthRepository(
-        authApi: AuthApi,
-        preferences: SharedPreferences,
-    ): AuthRepository = AuthRepository(authApi, preferences)
 
     @Provides
     @Singleton

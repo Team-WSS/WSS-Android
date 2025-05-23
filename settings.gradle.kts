@@ -22,5 +22,20 @@ include(":app")
 
 include(
     ":core:resource",
+    ":core:common",
     ":core:designsystem",
+    ":core:auth",
+    ":core:auth-kakao",
+    ":core:network",
+    ":core:datastore",
+)
+
+include(
+    ":feature:signin",
+    ":feature:library",
+)
+
+include(
+    ":data:account",
+    ":data:library",
 )
