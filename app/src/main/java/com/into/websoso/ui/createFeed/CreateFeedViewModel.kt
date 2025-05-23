@@ -1,11 +1,14 @@
 package com.into.websoso.ui.createFeed
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.core.common.util.MutableSingleLiveData
+import com.into.websoso.core.common.util.SingleLiveData
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.domain.usecase.GetSearchedNovelsUseCase
 import com.into.websoso.ui.createFeed.model.CreateFeedCategory
@@ -32,6 +35,10 @@ class CreateFeedViewModel
         val categories: List<CreatedFeedCategoryModel> get() = _categories.toList()
         private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
         val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
+        private val _attachedImages = MutableLiveData<List<Uri>>(emptyList())
+        val attachedImages: LiveData<List<Uri>> get() = _attachedImages
+        private val _exceedingImageCountEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val exceedingImageCountEvent: SingleLiveData<Unit> get() = _exceedingImageCountEvent
         val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
         val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
         val isPublic: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -76,6 +83,7 @@ class CreateFeedViewModel
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
                         isPublic = isPublic.value ?: true,
+                        imageUris = attachedImages.value?.map { it.toString() } ?: emptyList(),
                     )
                 }.onSuccess { }.onFailure { }
             }
@@ -93,6 +101,7 @@ class CreateFeedViewModel
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
                         isPublic = isPublic.value ?: true,
+                        imageUris = attachedImages.value?.map { it.toString() } ?: emptyList(),
                     )
                 }.onSuccess { }.onFailure { }
             }
@@ -204,5 +213,26 @@ class CreateFeedViewModel
                 _searchNovelUiState.value = searchNovelUiState.copy(novels = novels)
                 _selectedNovelTitle.value = ""
             }
+        }
+
+        fun addImages(newUris: List<Uri>) {
+            val current = _attachedImages.value.orEmpty().toMutableList()
+            val remaining = MAX_IMAGE_COUNT - current.size
+
+            if (remaining >= newUris.size) {
+                current.addAll(newUris)
+                _attachedImages.value = current
+            } else {
+                _exceedingImageCountEvent.postValue(Unit)
+            }
+        }
+
+        fun removeImage(index: Int) {
+            val imageToRemove: Uri = attachedImages.value?.getOrNull(index) ?: return
+            _attachedImages.value = attachedImages.value?.filter { eachImage -> eachImage != imageToRemove }
+        }
+
+        companion object {
+            const val MAX_IMAGE_COUNT = 5
         }
     }

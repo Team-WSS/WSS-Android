@@ -43,6 +43,7 @@ class FeedRepository
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
+            imageUris: List<String>?,
         ) {
             feedApi.postFeed(
                 FeedRequestDto(
@@ -51,6 +52,7 @@ class FeedRepository
                     novelId = novelId,
                     isSpoiler = isSpoiler,
                     isPublic = isPublic,
+                    images = imageUris,
                 ),
             )
         }
@@ -62,6 +64,7 @@ class FeedRepository
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
+            imageUris: List<String>?,
         ) {
             feedApi.putFeed(
                 feedId,
@@ -71,6 +74,7 @@ class FeedRepository
                     novelId = novelId,
                     isSpoiler = isSpoiler,
                     isPublic = isPublic,
+                    images = imageUris,
                 ),
             )
         }

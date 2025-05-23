@@ -15,4 +15,6 @@ data class FeedRequestDto(
     val isSpoiler: Boolean,
     @SerialName("isPublic")
     val isPublic: Boolean,
+    @SerialName("images")
+    val images: List<String>?,
 )

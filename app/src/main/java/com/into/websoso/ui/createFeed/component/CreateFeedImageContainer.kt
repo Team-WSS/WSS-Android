@@ -1,5 +1,6 @@
 package com.into.websoso.ui.createFeed.component
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,14 +20,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import coil.compose.rememberAsyncImagePainter
 import com.into.websoso.core.common.util.clickableWithoutRipple
-import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_feed_remove_image
 
 @Composable
 fun CreateFeedImageContainer(
-    imageUrls: List<String>,
+    images: List<Uri>,
     onRemoveClick: (index: Int) -> Unit,
 ) {
     LazyRow(
@@ -35,9 +37,9 @@ fun CreateFeedImageContainer(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(horizontal = 20.dp),
     ) {
-        items(imageUrls.size) { index ->
+        items(images.size) { index ->
             CreateFeedImageBox(
-                imageUrl = imageUrls[index],
+                image = images.elementAt(index),
                 onRemoveClick = {
                     onRemoveClick(index)
                 },
@@ -48,7 +50,7 @@ fun CreateFeedImageContainer(
 
 @Composable
 private fun CreateFeedImageBox(
-    imageUrl: String,
+    image: Uri,
     onRemoveClick: () -> Unit,
 ) {
     Box(
@@ -57,8 +59,9 @@ private fun CreateFeedImageBox(
             .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp)),
     ) {
-        NetworkImage(
-            imageUrl = imageUrl,
+        Image(
+            painter = rememberAsyncImagePainter(image),
+            contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
@@ -89,10 +92,10 @@ private fun ImageRemoveButton(
 private fun CreateFeedImageContainerPreview() {
     WebsosoTheme {
         CreateFeedImageContainer(
-            imageUrls = listOf(
-                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
-                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
-                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
+            images = listOf(
+                "https://example.com/image1.jpg".toUri(),
+                "https://example.com/image2.jpg".toUri(),
+                "https://example.com/image3.jpg".toUri(),
             ),
             onRemoveClick = {},
         )
