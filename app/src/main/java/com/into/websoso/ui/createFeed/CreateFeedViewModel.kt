@@ -218,7 +218,7 @@ class CreateFeedViewModel
         }
 
         fun addImages(newImages: List<Uri>) {
-            val current = _attachedImages.value.orEmpty().toMutableList()
+            val current = _attachedImages.value.toMutableList()
             val remaining = MAX_IMAGE_COUNT - current.size
 
             if (remaining >= newImages.size) {
@@ -235,6 +235,6 @@ class CreateFeedViewModel
         }
 
         companion object {
-            const val MAX_IMAGE_COUNT = 5
+            const val MAX_IMAGE_COUNT = 20
         }
     }
