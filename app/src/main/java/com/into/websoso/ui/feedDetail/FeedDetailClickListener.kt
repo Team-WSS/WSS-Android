@@ -16,4 +16,9 @@ interface FeedDetailClickListener {
     )
 
     fun onFeedDetailClick(view: View)
+
+    fun onFeedImageClick(
+        imageUrls: List<String>,
+        index: Int,
+    )
 }
