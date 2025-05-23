@@ -24,7 +24,7 @@ class FeedDetailContentViewHolder(
         binding.clFeedLike.isSelected = feed.isLiked
         binding.cvFeedImage.setContent {
             AdaptationFeedImageContainer(feed.imageUrls) { index ->
-                feedDetailClickListener.onFeedImageClick(feed.imageUrls, index)
+                feedDetailClickListener.onFeedImageClick(index, feed.imageUrls)
             }
         }
     }

@@ -49,6 +49,7 @@ import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
 import com.into.websoso.ui.createFeed.CreateFeedActivity
+import com.into.websoso.ui.expandedFeedImage.ExpandedFeedImageActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
 import com.into.websoso.ui.feedDetail.FeedDetailViewModel.Companion.DEFAULT_NOTIFICATION_ID
@@ -141,10 +142,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             }
 
             override fun onFeedImageClick(
-                imageUrls: List<String>,
                 index: Int,
+                imageUrls: List<String>,
             ) {
-                navigateToExpandedImage(imageUrls, index)
+                navigateToExpandedImage(index, imageUrls)
             }
         }
 
@@ -185,10 +186,11 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun navigateToExpandedImage(
-        imageUrls: List<String>,
         index: Int,
+        imageUrls: List<String>,
     ) {
-        // TODO("Not yet implemented")
+        val intent = ExpandedFeedImageActivity.getIntent(this, index, imageUrls)
+        startActivity(intent)
     }
 
     private fun bindMenuByIsMine(
