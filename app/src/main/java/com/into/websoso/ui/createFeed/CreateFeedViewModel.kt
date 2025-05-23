@@ -83,7 +83,7 @@ class CreateFeedViewModel
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
                         isPublic = isPublic.value ?: true,
-                        imageUris = attachedImages.value?.map { it.toString() } ?: emptyList(),
+                        images = attachedImages.value ?: emptyList(),
                     )
                 }.onSuccess { }.onFailure { }
             }
@@ -101,7 +101,7 @@ class CreateFeedViewModel
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
                         isPublic = isPublic.value ?: true,
-                        imageUris = attachedImages.value?.map { it.toString() } ?: emptyList(),
+                        images = attachedImages.value ?: emptyList(),
                     )
                 }.onSuccess { }.onFailure { }
             }
@@ -215,12 +215,12 @@ class CreateFeedViewModel
             }
         }
 
-        fun addImages(newUris: List<Uri>) {
+        fun addImages(newImages: List<Uri>) {
             val current = _attachedImages.value.orEmpty().toMutableList()
             val remaining = MAX_IMAGE_COUNT - current.size
 
-            if (remaining >= newUris.size) {
-                current.addAll(newUris)
+            if (remaining >= newImages.size) {
+                current.addAll(newImages)
                 _attachedImages.value = current
             } else {
                 _exceedingImageCountEvent.postValue(Unit)

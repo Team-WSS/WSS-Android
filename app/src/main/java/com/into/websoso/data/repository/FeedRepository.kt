@@ -1,5 +1,7 @@
 package com.into.websoso.data.repository
 
+import android.net.Uri
+import com.into.websoso.data.mapper.MultipartMapper
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.CommentsEntity
 import com.into.websoso.data.model.FeedEntity
@@ -15,6 +17,7 @@ class FeedRepository
     @Inject
     constructor(
         private val feedApi: FeedApi,
+        private val multipartMapper: MultipartMapper,
     ) {
         private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
         val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
@@ -43,17 +46,19 @@ class FeedRepository
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
-            imageUris: List<String>?,
+            images: List<Uri>,
         ) {
             feedApi.postFeed(
-                FeedRequestDto(
-                    relevantCategories = relevantCategories,
-                    feedContent = feedContent,
-                    novelId = novelId,
-                    isSpoiler = isSpoiler,
-                    isPublic = isPublic,
-                    images = imageUris,
+                feedRequestDto = multipartMapper.formatToMultipart(
+                    FeedRequestDto(
+                        relevantCategories = relevantCategories,
+                        feedContent = feedContent,
+                        novelId = novelId,
+                        isSpoiler = isSpoiler,
+                        isPublic = isPublic,
+                    ),
                 ),
+                images = images.map { multipartMapper.formatToMultipart(it) },
             )
         }
 
@@ -64,18 +69,20 @@ class FeedRepository
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
-            imageUris: List<String>?,
+            images: List<Uri>,
         ) {
             feedApi.putFeed(
-                feedId,
-                FeedRequestDto(
-                    relevantCategories = relevantCategories,
-                    feedContent = feedContent,
-                    novelId = novelId,
-                    isSpoiler = isSpoiler,
-                    isPublic = isPublic,
-                    images = imageUris,
+                feedId = feedId,
+                feedRequestDto = multipartMapper.formatToMultipart(
+                    FeedRequestDto(
+                        relevantCategories = relevantCategories,
+                        feedContent = feedContent,
+                        novelId = novelId,
+                        isSpoiler = isSpoiler,
+                        isPublic = isPublic,
+                    ),
                 ),
+                images = images.map { multipartMapper.formatToMultipart(it) },
             )
         }
 

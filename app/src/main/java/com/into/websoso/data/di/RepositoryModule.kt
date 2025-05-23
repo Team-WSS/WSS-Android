@@ -2,6 +2,7 @@ package com.into.websoso.data.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.into.websoso.data.mapper.MultipartMapper
 import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.api.NovelApi
 import com.into.websoso.data.remote.api.PushMessageApi
@@ -24,7 +25,10 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideFeedRepository(feedApi: FeedApi): FeedRepository = FeedRepository(feedApi)
+    fun provideFeedRepository(
+        feedApi: FeedApi,
+        multipartMapper: MultipartMapper,
+    ): FeedRepository = FeedRepository(feedApi, multipartMapper)
 
     @Provides
     @Singleton
