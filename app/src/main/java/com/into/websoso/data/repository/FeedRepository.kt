@@ -3,7 +3,7 @@ package com.into.websoso.data.repository
 import android.net.Uri
 import com.into.websoso.core.common.util.ImageCompressor
 import com.into.websoso.core.common.util.ImageDownloader
-import com.into.websoso.core.common.util.MultiPartConvertor
+import com.into.websoso.data.mapper.MultiPartMapper
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.CommentsEntity
 import com.into.websoso.data.model.FeedEntity
@@ -21,7 +21,7 @@ class FeedRepository
     @Inject
     constructor(
         private val feedApi: FeedApi,
-        private val multiPartConvertor: MultiPartConvertor,
+        private val multiPartMapper: MultiPartMapper,
         private val imageDownloader: ImageDownloader,
         private val imageCompressor: ImageCompressor,
     ) {
@@ -55,7 +55,7 @@ class FeedRepository
             images: List<Uri>,
         ) {
             feedApi.postFeed(
-                feedRequestDto = multiPartConvertor.formatToMultipart(
+                feedRequestDto = multiPartMapper.formatToMultipart(
                     FeedRequestDto(
                         relevantCategories = relevantCategories,
                         feedContent = feedContent,
@@ -64,7 +64,7 @@ class FeedRepository
                         isPublic = isPublic,
                     ),
                 ),
-                images = images.map { multiPartConvertor.formatToMultipart(it) },
+                images = images.map { multiPartMapper.formatToMultipart(it) },
             )
         }
 
@@ -79,7 +79,7 @@ class FeedRepository
         ) {
             feedApi.putFeed(
                 feedId = feedId,
-                feedRequestDto = multiPartConvertor.formatToMultipart(
+                feedRequestDto = multiPartMapper.formatToMultipart(
                     FeedRequestDto(
                         relevantCategories = relevantCategories,
                         feedContent = feedContent,
@@ -88,7 +88,7 @@ class FeedRepository
                         isPublic = isPublic,
                     ),
                 ),
-                images = images.map { multiPartConvertor.formatToMultipart(it) },
+                images = images.map { multiPartMapper.formatToMultipart(it) },
             )
         }
 
