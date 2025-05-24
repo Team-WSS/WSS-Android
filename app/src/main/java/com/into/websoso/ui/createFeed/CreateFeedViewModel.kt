@@ -270,8 +270,10 @@ class CreateFeedViewModel
         }
 
         fun removeImage(index: Int) {
-            val imageToRemove: Uri = attachedImages.value.getOrNull(index) ?: return
-            _attachedImages.value = attachedImages.value.filter { eachImage -> eachImage != imageToRemove }
+            val currentImages = attachedImages.value.toMutableList().apply {
+                this.getOrNull(index).let { removeAt(index) }
+            }
+            _attachedImages.value = currentImages
         }
 
         private fun downloadImage(
