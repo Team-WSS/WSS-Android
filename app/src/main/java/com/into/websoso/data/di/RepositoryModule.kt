@@ -2,16 +2,11 @@ package com.into.websoso.data.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.into.websoso.core.common.util.ImageCompressor
-import com.into.websoso.core.common.util.ImageDownloader
-import com.into.websoso.core.common.util.MultiPartConvertor
-import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.api.NovelApi
 import com.into.websoso.data.remote.api.PushMessageApi
 import com.into.websoso.data.remote.api.UserApi
 import com.into.websoso.data.remote.api.VersionApi
 import com.into.websoso.data.repository.AuthRepository
-import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
@@ -25,15 +20,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-    @Provides
-    @Singleton
-    fun provideFeedRepository(
-        feedApi: FeedApi,
-        multiPartConvertor: MultiPartConvertor,
-        imageDownloader: ImageDownloader,
-        imageCompressor: ImageCompressor,
-    ): FeedRepository = FeedRepository(feedApi, multiPartConvertor, imageDownloader, imageCompressor)
-
     @Provides
     @Singleton
     fun provideUserRepository(

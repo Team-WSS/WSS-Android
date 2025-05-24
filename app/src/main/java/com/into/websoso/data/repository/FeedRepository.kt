@@ -14,7 +14,9 @@ import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.request.CommentRequestDto
 import com.into.websoso.data.remote.request.FeedRequestDto
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FeedRepository
     @Inject
     constructor(
