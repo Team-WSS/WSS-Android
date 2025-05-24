@@ -1,4 +1,4 @@
-package com.into.websoso.data.mapper
+package com.into.websoso.core.common.util
 
 import android.content.Context
 import android.net.Uri
@@ -12,7 +12,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
 import javax.inject.Inject
 
-class MultipartMapper
+class MultiPartConvertor
     @Inject
     constructor(
         @ApplicationContext private val context: Context,

@@ -245,6 +245,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                     isPublic = feed.isPublic,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
+                    imageUrls = feed.imageUrls,
                 )
             } ?: throw IllegalArgumentException()
 

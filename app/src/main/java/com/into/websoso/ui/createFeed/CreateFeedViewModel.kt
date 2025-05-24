@@ -64,9 +64,29 @@ class CreateFeedViewModel
                 isSpoiled.value = feed.isSpoiler
                 isPublic.value = feed.isPublic
                 _categories.addAll(createCategories(feed.feedCategory))
+                if (feed.imageUrls.isNotEmpty()) loadFeedImages(feed.feedId)
             } ?: _categories.addAll(createCategories())
 
             isActivated.addSource(content) { updateIsActivated() }
+        }
+
+        private fun loadFeedImages(
+            feedId: Long,
+            retryCount: Int = 0,
+        ) {
+            if (retryCount > 3) return
+
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.fetchFeed(feedId)
+                }.onSuccess { feed ->
+                    feed.images.forEach { image ->
+                        downloadImage(image)
+                    }
+                }.onFailure {
+                    loadFeedImages(feedId, retryCount + 1)
+                }
+            }
         }
 
         private fun updateIsActivated() {
@@ -85,7 +105,7 @@ class CreateFeedViewModel
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
                         isPublic = isPublic.value ?: true,
-                        images = attachedImages.value ?: emptyList(),
+                        images = attachedImages.value,
                     )
                 }.onSuccess { }.onFailure { }
             }
@@ -103,7 +123,7 @@ class CreateFeedViewModel
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
                         isPublic = isPublic.value ?: true,
-                        images = attachedImages.value ?: emptyList(),
+                        images = attachedImages.value,
                     )
                 }.onSuccess { }.onFailure { }
             }
@@ -218,20 +238,57 @@ class CreateFeedViewModel
         }
 
         fun addImages(newImages: List<Uri>) {
-            val current = _attachedImages.value.toMutableList()
+            val current = _attachedImages.value
             val remaining = MAX_IMAGE_COUNT - current.size
 
             if (remaining >= newImages.size) {
-                current.addAll(newImages)
-                _attachedImages.value = current
+                addCompressedImages(newImages)
             } else {
                 _exceedingImageCountEvent.postValue(Unit)
+            }
+        }
+
+        private fun addCompressedImage(newImage: Uri) {
+            addCompressedImages(listOf(newImage))
+        }
+
+        private fun addCompressedImages(
+            newImages: List<Uri>,
+            retryCount: Int = 0,
+        ) {
+            if (retryCount > 3) return
+
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.compressImages(newImages)
+                }.onSuccess { compressedImages ->
+                    _attachedImages.value = attachedImages.value + compressedImages
+                }.onFailure {
+                    addCompressedImages(newImages, retryCount + 1)
+                }
             }
         }
 
         fun removeImage(index: Int) {
             val imageToRemove: Uri = attachedImages.value.getOrNull(index) ?: return
             _attachedImages.value = attachedImages.value.filter { eachImage -> eachImage != imageToRemove }
+        }
+
+        private fun downloadImage(
+            url: String,
+            retryCount: Int = 0,
+        ) {
+            if (retryCount > 3) return
+
+            viewModelScope.launch {
+                runCatching {
+                    feedRepository.downloadImage(url)
+                }.onSuccess { uri ->
+                    uri?.let { addCompressedImage(uri) }
+                }.onFailure {
+                    downloadImage(url, retryCount + 1)
+                }
+            }
         }
 
         companion object {

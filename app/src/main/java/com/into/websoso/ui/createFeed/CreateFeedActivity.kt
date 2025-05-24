@@ -9,7 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_text_selector
@@ -21,7 +20,6 @@ import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.util.DynamicLimitPhotoPicker
-import com.into.websoso.core.common.util.ImageCompressor
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getAdaptedParcelableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
@@ -37,7 +35,6 @@ import com.into.websoso.ui.createFeed.component.CreateFeedImageContainer
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,7 +44,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private val imageCompressor: ImageCompressor by lazy { ImageCompressor() }
     private val imagePickerLauncher: ActivityResultLauncher<DynamicLimitPhotoPicker.Input> = createFeedImagePickerLauncher()
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -218,10 +214,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     private fun createFeedImagePickerLauncher() =
         registerForActivityResult(DynamicLimitPhotoPicker()) { uris ->
             if (uris.isNullOrEmpty()) return@registerForActivityResult
-            lifecycleScope.launch {
-                val compressedUris = imageCompressor.compressUris(this@CreateFeedActivity, uris, contentResolver)
-                createFeedViewModel.addImages(compressedUris)
-            }
+            createFeedViewModel.addImages(uris)
         }
 
     companion object {

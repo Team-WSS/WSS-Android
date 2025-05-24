@@ -2,7 +2,9 @@ package com.into.websoso.data.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.into.websoso.data.mapper.MultipartMapper
+import com.into.websoso.core.common.util.ImageCompressor
+import com.into.websoso.core.common.util.ImageDownloader
+import com.into.websoso.core.common.util.MultiPartConvertor
 import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.api.NovelApi
 import com.into.websoso.data.remote.api.PushMessageApi
@@ -27,8 +29,10 @@ object RepositoryModule {
     @Singleton
     fun provideFeedRepository(
         feedApi: FeedApi,
-        multipartMapper: MultipartMapper,
-    ): FeedRepository = FeedRepository(feedApi, multipartMapper)
+        multiPartConvertor: MultiPartConvertor,
+        imageDownloader: ImageDownloader,
+        imageCompressor: ImageCompressor,
+    ): FeedRepository = FeedRepository(feedApi, multiPartConvertor, imageDownloader, imageCompressor)
 
     @Provides
     @Singleton

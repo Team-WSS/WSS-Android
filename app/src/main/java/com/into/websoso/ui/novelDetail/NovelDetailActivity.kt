@@ -332,6 +332,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                         ?.novel
                         ?.getGenres
                         ?: emptyList(),
+                    imageUrls = emptyList(),
                 )
                 val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)
                 novelDetailResultLauncher.launch(intent)
