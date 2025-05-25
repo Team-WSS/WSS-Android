@@ -117,8 +117,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 }
 
                 tracker.trackEvent("write_feed")
-                setResult(CreateFeed.RESULT_OK)
-                if (!isFinishing) finish()
             }
         }
 
@@ -180,6 +178,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         }
         createFeedViewModel.exceedingImageCountEvent.observe(this) {
             showWebsosoSnackBar(binding.root, getString(create_feed_image_limit, MAX_IMAGE_COUNT), ic_blocked_user_snack_bar)
+        }
+        createFeedViewModel.updateFeedSuccessEvent.observe(this) {
+            setResult(CreateFeed.RESULT_OK)
+            finish()
         }
     }
 

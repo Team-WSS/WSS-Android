@@ -41,6 +41,8 @@ class CreateFeedViewModel
         val attachedImages: StateFlow<List<Uri>> get() = _attachedImages
         private val _exceedingImageCountEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
         val exceedingImageCountEvent: SingleLiveData<Unit> get() = _exceedingImageCountEvent
+        private val _updateFeedSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
+        val updateFeedSuccessEvent: SingleLiveData<Unit> get() = _updateFeedSuccessEvent
         val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
         val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
         val isPublic: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -107,7 +109,9 @@ class CreateFeedViewModel
                         isPublic = isPublic.value ?: true,
                         images = attachedImages.value,
                     )
-                }.onSuccess { }.onFailure { }
+                }.onSuccess {
+                    _updateFeedSuccessEvent.postValue(Unit)
+                }.onFailure { }
             }
         }
 
@@ -125,7 +129,9 @@ class CreateFeedViewModel
                         isPublic = isPublic.value ?: true,
                         images = attachedImages.value,
                     )
-                }.onSuccess { }.onFailure { }
+                }.onSuccess {
+                    _updateFeedSuccessEvent.postValue(Unit)
+                }.onFailure { }
             }
         }
 

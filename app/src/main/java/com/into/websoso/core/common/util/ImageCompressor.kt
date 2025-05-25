@@ -18,17 +18,19 @@ class ImageCompressor
         @ApplicationContext private val context: Context,
     ) {
         /**
-         * 주어진 이미지 URI 리스트를 최대 5MB 이하로 압축하여 임시 파일로 저장하고,
-         * 해당 파일의 URI 리스트를 반환합니다.
+         * 주어진 이미지 URI 리스트를 압축된 리스트로 반환합니다.
          *
          * 이 함수는 JPEG 형식으로 이미지를 반복적으로 압축하면서 품질을 낮추며,
-         * 최종 파일의 크기가 5MB를 넘지 않도록 보장합니다.
-         * 안전한 반환을 위해 실제 반환값은 4.8MB 이하입니다.
+         * 최종 파일의 크기가 전달된 용량을 넘지 않도록 보장합니다.
          *
          * @param uris 압축할 이미지 URI 리스트입니다.
-         * @return 5MB 이하로 압축된 이미지 파일들의 URI 리스트
+         * @param size 압축 후 이미지 파일의 최대 크기 (기본값: 0.25MB, 단위: MB)
+         * @return 압축된 이미지 파일들의 URI 리스트
          */
-        suspend fun compressUris(uris: List<Uri>): List<Uri> =
+        suspend fun compressUris(
+            uris: List<Uri>,
+            size: Double = DEFAULT_MAX_IMAGE_SIZE,
+        ): List<Uri> =
             withContext(Dispatchers.IO) {
                 val compressedUris = mutableListOf<Uri>()
 
@@ -37,12 +39,12 @@ class ImageCompressor
                     val bitmap = BitmapFactory.decodeStream(inputStream)
                     inputStream?.close()
 
-                    var quality = 100
+                    var quality = INITIAL_QUALITY
                     val outputStream = ByteArrayOutputStream()
                     bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
 
-                    while (outputStream.size() > MAX_IMAGE_SIZE && quality > 10) {
-                        quality -= 10
+                    while (outputStream.size() > (size * MB) && quality > QUALITY_DECREMENT_STEP) {
+                        quality -= QUALITY_DECREMENT_STEP
                         outputStream.reset()
                         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
                     }
@@ -58,6 +60,9 @@ class ImageCompressor
             }
 
         companion object {
-            private const val MAX_IMAGE_SIZE = 4_800_000
+            private const val INITIAL_QUALITY: Int = 100
+            private const val QUALITY_DECREMENT_STEP: Int = 5
+            private const val DEFAULT_MAX_IMAGE_SIZE: Double = 0.25
+            private const val MB: Double = (1024 * 1024).toDouble()
         }
     }
