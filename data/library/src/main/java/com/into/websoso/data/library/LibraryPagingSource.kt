@@ -17,7 +17,6 @@ internal class LibraryPagingSource(
             val response = libraryRemoteDataSource.getUserLibrary2(
                 userNovelId = userNovelId,
                 size = params.loadSize,
-                // 처음은 30 이후 10인지 확인할 것
             )
             val nextKey = if (response.isLoadable.not()) {
                 null
