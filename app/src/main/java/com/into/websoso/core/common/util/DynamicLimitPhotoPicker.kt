@@ -33,7 +33,7 @@ import com.into.websoso.core.common.util.DynamicLimitPhotoPicker.Input
  * @return 선택된 이미지들의 [Uri] 목록을 반환합니다.
  * @see Input 선택 가능한 최대 개수를 설정할 수 있는 입력 파라미터입니다.
  */
-class DynamicLimitPhotoPicker : ActivityResultContract<DynamicLimitPhotoPicker.Input, List<Uri>>() {
+class DynamicLimitPhotoPicker : ActivityResultContract<Input, List<Uri>>() {
     data class Input(
         val maxSelectable: Int,
     )
