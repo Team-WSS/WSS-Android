@@ -17,15 +17,17 @@ class ImageDownloader
     constructor(
         @ApplicationContext private val context: Context,
     ) {
-        suspend fun formatImageToUri(url: String): Uri? =
+        suspend fun formatImageToUri(url: String): Result<Uri> =
             withContext(Dispatchers.IO) {
                 runCatching {
                     val connection = URL(url).openConnection()
                     connection.connect()
-                    val inputStream = connection.getInputStream()
-                    val file = File.createTempFile("image_", ".jpg", context.cacheDir)
-                    FileOutputStream(file).use { output -> inputStream.copyTo(output) }
-                    Uri.fromFile(file)
-                }.getOrNull()
+
+                    connection.getInputStream().use { inputStream ->
+                        val file = File.createTempFile("image_", ".jpg", context.cacheDir)
+                        FileOutputStream(file).use { output -> inputStream.copyTo(output) }
+                        Uri.fromFile(file)
+                    }
+                }
             }
     }

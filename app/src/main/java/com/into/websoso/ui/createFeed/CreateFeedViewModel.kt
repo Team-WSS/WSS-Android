@@ -17,7 +17,6 @@ import com.into.websoso.ui.createFeed.model.SearchNovelUiState
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -76,24 +75,33 @@ class CreateFeedViewModel
             isActivated.addSource(content) { updateIsActivated() }
         }
 
-        private fun loadFeedImages(
-            feedId: Long,
-            retryCount: Int = 0,
-        ) {
-            if (retryCount > 3) return
-
+        private fun loadFeedImages(feedId: Long) {
             viewModelScope.launch {
-                runCatching {
-                    feedRepository.fetchFeed(feedId)
-                }.onSuccess { feed ->
-                    feed.images.forEach { image ->
-                        downloadImage(image)
+                val result = loadExistImages(feedId)
+
+                result.onSuccess { uris ->
+                    if (uris.isNotEmpty()) {
+                        addCompressedImages(uris)
                     }
-                }.onFailure {
-                    loadFeedImages(feedId, retryCount + 1)
                 }
             }
         }
+
+        private suspend fun loadExistImages(feedId: Long) =
+            runCatching {
+                val feed = feedRepository.fetchFeed(feedId)
+                val downloadedUris = mutableListOf<Uri>()
+
+                for (url in feed.images) {
+                    runCatching {
+                        feedRepository.downloadImage(url).getOrThrow()
+                    }.getOrNull()?.let { uri ->
+                        downloadedUris.add(uri)
+                    }
+                }
+
+                downloadedUris
+            }
 
         private fun updateIsActivated() {
             isActivated.value = content.value.isNullOrEmpty().not() &&
@@ -278,7 +286,7 @@ class CreateFeedViewModel
         ) {
             if (retryCount > 3) return
 
-            viewModelScope.launch(Dispatchers.Default) {
+            viewModelScope.launch {
                 runCatching {
                     feedRepository.compressImages(newImages)
                 }.onSuccess { compressedImages ->
@@ -302,11 +310,13 @@ class CreateFeedViewModel
         ) {
             if (retryCount > 3) return
 
-            viewModelScope.launch(Dispatchers.Default) {
+            viewModelScope.launch {
                 runCatching {
                     feedRepository.downloadImage(url)
                 }.onSuccess { uri ->
-                    uri?.let { addCompressedImage(uri) }
+                    uri.getOrNull()?.let {
+                        addCompressedImage(it)
+                    }
                 }.onFailure {
                     downloadImage(url, retryCount + 1)
                 }

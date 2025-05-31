@@ -158,7 +158,7 @@ class FeedRepository
             feedApi.postImpertinenceComment(feedId, commentId)
         }
 
-        suspend fun downloadImage(imageUrl: String): Uri? = imageDownloader.formatImageToUri(imageUrl)
+        suspend fun downloadImage(imageUrl: String): Result<Uri?> = imageDownloader.formatImageToUri(imageUrl)
 
         suspend fun compressImages(imageUris: List<Uri>): List<Uri> = imageCompressor.compressUris(imageUris)
     }
