@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.core.common.util.MutableSingleLiveData
-import com.into.websoso.core.common.util.SingleLiveData
+import com.into.websoso.core.common.util.MutableSingleStateFlow
+import com.into.websoso.core.common.util.SingleStateFlow
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.domain.usecase.GetSearchedNovelsUseCase
 import com.into.websoso.ui.createFeed.model.CreateFeedCategory
@@ -17,6 +17,7 @@ import com.into.websoso.ui.createFeed.model.SearchNovelUiState
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -39,10 +40,13 @@ class CreateFeedViewModel
         val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
         private val _attachedImages = MutableStateFlow<List<Uri>>(emptyList())
         val attachedImages: StateFlow<List<Uri>> get() = _attachedImages
-        private val _exceedingImageCountEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-        val exceedingImageCountEvent: SingleLiveData<Unit> get() = _exceedingImageCountEvent
-        private val _updateFeedSuccessEvent: MutableSingleLiveData<Unit> = MutableSingleLiveData()
-        val updateFeedSuccessEvent: SingleLiveData<Unit> get() = _updateFeedSuccessEvent
+        private val _exceedingImageCountEvent: MutableSingleStateFlow<Unit> = MutableSingleStateFlow()
+        val exceedingImageCountEvent: SingleStateFlow<Unit> get() = _exceedingImageCountEvent
+        private val _updateFeedSuccessEvent: MutableSingleStateFlow<Unit> = MutableSingleStateFlow()
+        val updateFeedSuccessEvent: SingleStateFlow<Unit> get() = _updateFeedSuccessEvent
+        private val _isUploading: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isUploading: LiveData<Boolean> get() = _isUploading
+        val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
         val isActivated: MediatorLiveData<Boolean> = MediatorLiveData(false)
         val isSpoiled: MutableLiveData<Boolean> = MutableLiveData(false)
         val isPublic: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -97,8 +101,10 @@ class CreateFeedViewModel
         }
 
         fun createFeed() {
+            if (isUploading.value == true) return
             viewModelScope.launch {
                 runCatching {
+                    _isUploading.value = true
                     feedRepository.saveFeed(
                         relevantCategories = categories
                             .filter { it.isSelected }
@@ -110,14 +116,19 @@ class CreateFeedViewModel
                         images = attachedImages.value,
                     )
                 }.onSuccess {
-                    _updateFeedSuccessEvent.postValue(Unit)
-                }.onFailure { }
+                    _isUploading.value = false
+                    _updateFeedSuccessEvent.emit(Unit)
+                }.onFailure {
+                    _isUploading.value = false
+                }
             }
         }
 
         fun editFeed(feedId: Long) {
+            if (isUploading.value == true) return
             viewModelScope.launch {
                 runCatching {
+                    _isUploading.value = true
                     feedRepository.saveEditedFeed(
                         feedId = feedId,
                         relevantCategories = categories
@@ -130,8 +141,11 @@ class CreateFeedViewModel
                         images = attachedImages.value,
                     )
                 }.onSuccess {
-                    _updateFeedSuccessEvent.postValue(Unit)
-                }.onFailure { }
+                    _isUploading.value = false
+                    _updateFeedSuccessEvent.emit(Unit)
+                }.onFailure {
+                    _isUploading.value = false
+                }
             }
         }
 
@@ -250,7 +264,7 @@ class CreateFeedViewModel
             if (remaining >= newImages.size) {
                 addCompressedImages(newImages)
             } else {
-                _exceedingImageCountEvent.postValue(Unit)
+                _exceedingImageCountEvent.emit(Unit)
             }
         }
 
@@ -264,7 +278,7 @@ class CreateFeedViewModel
         ) {
             if (retryCount > 3) return
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.Default) {
                 runCatching {
                     feedRepository.compressImages(newImages)
                 }.onSuccess { compressedImages ->
@@ -288,7 +302,7 @@ class CreateFeedViewModel
         ) {
             if (retryCount > 3) return
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.Default) {
                 runCatching {
                     feedRepository.downloadImage(url)
                 }.onSuccess { uri ->

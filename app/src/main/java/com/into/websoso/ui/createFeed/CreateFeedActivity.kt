@@ -9,6 +9,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_text_selector
@@ -35,6 +38,7 @@ import com.into.websoso.ui.createFeed.component.CreateFeedImageContainer
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -60,6 +64,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         onCreateFeedClick()
         bindViewModel()
         setupObservers()
+        setupEventCollectors()
         setupCreateFeedImageContainer()
         createFeedViewModel.categories.setupCategoryChips()
         tracker.trackEvent("write")
@@ -176,13 +181,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
             binding.tvCreateFeedCharactersCount.text =
                 getString(tv_create_feed_characters_count, it.length)
         }
-        createFeedViewModel.exceedingImageCountEvent.observe(this) {
-            showWebsosoSnackBar(binding.root, getString(create_feed_image_limit, MAX_IMAGE_COUNT), ic_blocked_user_snack_bar)
-        }
-        createFeedViewModel.updateFeedSuccessEvent.observe(this) {
-            setResult(CreateFeed.RESULT_OK)
-            finish()
-        }
     }
 
     private fun List<CreatedFeedCategoryModel>.setupCategoryChips() {
@@ -200,6 +198,32 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     setWebsosoChipRadius(20f.toFloatPxFromDp())
                     setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.enTitle) }
                 }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
+        }
+    }
+
+    private fun setupEventCollectors() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                createFeedViewModel.exceedingImageCountEvent.collect { event ->
+                    event?.getContentIfNotHandled()?.let {
+                        showWebsosoSnackBar(
+                            binding.root,
+                            getString(create_feed_image_limit, MAX_IMAGE_COUNT),
+                            ic_blocked_user_snack_bar,
+                        )
+                    }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                createFeedViewModel.updateFeedSuccessEvent.collect { event ->
+                    event?.getContentIfNotHandled()?.let {
+                        setResult(CreateFeed.RESULT_OK)
+                        finish()
+                    }
+                }
+            }
         }
     }
 
