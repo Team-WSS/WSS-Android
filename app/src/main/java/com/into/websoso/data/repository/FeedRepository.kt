@@ -2,7 +2,6 @@ package com.into.websoso.data.repository
 
 import android.net.Uri
 import com.into.websoso.core.common.util.ImageCompressor
-import com.into.websoso.core.common.util.ImageDownloader
 import com.into.websoso.data.mapper.MultiPartMapper
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.CommentsEntity
@@ -13,6 +12,7 @@ import com.into.websoso.data.model.UserInterestFeedsEntity
 import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.request.CommentRequestDto
 import com.into.websoso.data.remote.request.FeedRequestDto
+import com.into.websoso.data.util.ImageDownloader
 import javax.inject.Inject
 import javax.inject.Singleton
 

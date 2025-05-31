@@ -1,4 +1,4 @@
-package com.into.websoso.core.common.util
+package com.into.websoso.data.util
 
 import android.content.Context
 import android.net.Uri
@@ -9,7 +9,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ImageDownloader
     @Inject
     constructor(
