@@ -324,6 +324,6 @@ class CreateFeedViewModel
         }
 
         companion object {
-            const val MAX_IMAGE_COUNT = 20
+            const val MAX_IMAGE_COUNT = 5
         }
     }
