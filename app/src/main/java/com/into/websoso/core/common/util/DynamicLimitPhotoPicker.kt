@@ -54,6 +54,8 @@ class DynamicLimitPhotoPicker : ActivityResultContract<DynamicLimitPhotoPicker.I
             intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 type = mimeType
                 addCategory(Intent.CATEGORY_OPENABLE)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
         }
