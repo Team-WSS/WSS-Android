@@ -24,12 +24,14 @@ class MultiPartMapper
         }
 
         fun formatToMultipart(uri: Uri): MultipartBody.Part {
-            val inputStream: InputStream = requireNotNull(context.contentResolver.openInputStream(uri))
+            val inputStream: InputStream = context.contentResolver.openInputStream(uri)
+                ?: throw IllegalArgumentException("유효하지 않은 URI: $uri")
 
-            val bytes = inputStream.readBytes()
-            val fileName = uri.lastPathSegment ?: "image.jpg"
-
-            val requestBody = bytes.toRequestBody("image/*".toMediaType())
-            return MultipartBody.Part.createFormData("images", fileName, requestBody)
+            return inputStream.use { stream ->
+                val bytes = stream.readBytes()
+                val fileName = uri.lastPathSegment ?: "image.jpg"
+                val requestBody = bytes.toRequestBody("image/*".toMediaType())
+                MultipartBody.Part.createFormData("images", fileName, requestBody)
+            }
         }
     }
