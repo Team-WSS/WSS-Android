@@ -284,7 +284,7 @@ class CreateFeedViewModel
             newImages: List<Uri>,
             retryCount: Int = 0,
         ) {
-            if (retryCount > 3) return
+            if (retryCount > MAX_RETRY_COUNT) return
 
             viewModelScope.launch {
                 runCatching {
@@ -304,26 +304,8 @@ class CreateFeedViewModel
             _attachedImages.value = currentImages
         }
 
-        private fun downloadImage(
-            url: String,
-            retryCount: Int = 0,
-        ) {
-            if (retryCount > 3) return
-
-            viewModelScope.launch {
-                runCatching {
-                    feedRepository.downloadImage(url)
-                }.onSuccess { uri ->
-                    uri.getOrNull()?.let {
-                        addCompressedImage(it)
-                    }
-                }.onFailure {
-                    downloadImage(url, retryCount + 1)
-                }
-            }
-        }
-
         companion object {
-            const val MAX_IMAGE_COUNT = 5
+            const val MAX_IMAGE_COUNT: Int = 5
+            private const val MAX_RETRY_COUNT: Int = 3
         }
     }

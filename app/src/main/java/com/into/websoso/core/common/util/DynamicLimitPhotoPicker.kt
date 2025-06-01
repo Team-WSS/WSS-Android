@@ -41,27 +41,21 @@ class DynamicLimitPhotoPicker : ActivityResultContract<Input, List<Uri>>() {
     override fun createIntent(
         context: Context,
         input: Input,
-    ): Intent {
-        val mimeType = "image/*"
-        val intent: Intent
-
+    ): Intent =
         if (Build.VERSION.SDK_INT >= 33) {
-            intent = Intent(MediaStore.ACTION_PICK_IMAGES).apply {
-                type = mimeType
+            Intent(MediaStore.ACTION_PICK_IMAGES).apply {
+                type = MINE_TYPE
                 putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, input.maxSelectable)
             }
         } else {
-            intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                type = mimeType
+            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = MINE_TYPE
                 addCategory(Intent.CATEGORY_OPENABLE)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
                 putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
         }
-
-        return intent
-    }
 
     override fun parseResult(
         resultCode: Int,
@@ -80,5 +74,9 @@ class DynamicLimitPhotoPicker : ActivityResultContract<Input, List<Uri>>() {
         intent.data?.let { uris.add(it) }
 
         return uris
+    }
+
+    companion object {
+        private const val MINE_TYPE: String = "image/*"
     }
 }
