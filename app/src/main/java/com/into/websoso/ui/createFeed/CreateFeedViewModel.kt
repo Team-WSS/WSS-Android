@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,9 +41,9 @@ class CreateFeedViewModel
         private val _attachedImages = MutableStateFlow<List<Uri>>(emptyList())
         val attachedImages: StateFlow<List<Uri>> get() = _attachedImages
         private val _exceedingImageCountEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
-        val exceedingImageCountEvent: SharedFlow<Unit> get() = _exceedingImageCountEvent
+        val exceedingImageCountEvent: SharedFlow<Unit> get() = _exceedingImageCountEvent.asSharedFlow()
         private val _updateFeedSuccessEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
-        val updateFeedSuccessEvent: SharedFlow<Unit> get() = _updateFeedSuccessEvent
+        val updateFeedSuccessEvent: SharedFlow<Unit> get() = _updateFeedSuccessEvent.asSharedFlow()
         private val _isUploading: MutableLiveData<Boolean> = MutableLiveData(false)
         val isUploading: LiveData<Boolean> get() = _isUploading
         val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
