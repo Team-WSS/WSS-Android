@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,15 +20,20 @@ class ImageDownloader
     ) {
         suspend fun formatImageToUri(url: String): Result<Uri> =
             withContext(Dispatchers.IO) {
-                runCatching {
-                    val connection = URL(url).openConnection()
-                    connection.connect()
+                val connection = (URL(url).openConnection() as? HttpURLConnection)
+                    ?: return@withContext Result.failure(IllegalStateException("Invalid HTTP connection"))
 
-                    connection.getInputStream().use { inputStream ->
+                runCatching {
+                    connection.connect()
+                    connection.inputStream.use { inputStream ->
                         val file = File.createTempFile("image_", ".jpg", context.cacheDir)
-                        FileOutputStream(file).use { output -> inputStream.copyTo(output) }
+                        FileOutputStream(file).use { output ->
+                            inputStream.copyTo(output)
+                        }
                         Uri.fromFile(file)
                     }
+                }.also {
+                    connection.disconnect()
                 }
             }
     }
