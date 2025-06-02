@@ -7,8 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.core.common.util.MutableSingleStateFlow
-import com.into.websoso.core.common.util.SingleStateFlow
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.domain.usecase.GetSearchedNovelsUseCase
 import com.into.websoso.ui.createFeed.model.CreateFeedCategory
@@ -17,7 +15,9 @@ import com.into.websoso.ui.createFeed.model.SearchNovelUiState
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,10 +39,10 @@ class CreateFeedViewModel
         val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
         private val _attachedImages = MutableStateFlow<List<Uri>>(emptyList())
         val attachedImages: StateFlow<List<Uri>> get() = _attachedImages
-        private val _exceedingImageCountEvent: MutableSingleStateFlow<Unit> = MutableSingleStateFlow()
-        val exceedingImageCountEvent: SingleStateFlow<Unit> get() = _exceedingImageCountEvent
-        private val _updateFeedSuccessEvent: MutableSingleStateFlow<Unit> = MutableSingleStateFlow()
-        val updateFeedSuccessEvent: SingleStateFlow<Unit> get() = _updateFeedSuccessEvent
+        private val _exceedingImageCountEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
+        val exceedingImageCountEvent: SharedFlow<Unit> get() = _exceedingImageCountEvent
+        private val _updateFeedSuccessEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
+        val updateFeedSuccessEvent: SharedFlow<Unit> get() = _updateFeedSuccessEvent
         private val _isUploading: MutableLiveData<Boolean> = MutableLiveData(false)
         val isUploading: LiveData<Boolean> get() = _isUploading
         val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -272,7 +272,7 @@ class CreateFeedViewModel
             if (remaining >= newImages.size) {
                 addCompressedImages(newImages)
             } else {
-                _exceedingImageCountEvent.emit(Unit)
+                _exceedingImageCountEvent.tryEmit(Unit)
             }
         }
 

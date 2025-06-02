@@ -204,24 +204,20 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     private fun setupEventCollectors() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createFeedViewModel.exceedingImageCountEvent.collect { event ->
-                    event?.getContentIfNotHandled()?.let {
-                        showWebsosoSnackBar(
-                            binding.root,
-                            getString(create_feed_image_limit, MAX_IMAGE_COUNT),
-                            ic_blocked_user_snack_bar,
-                        )
-                    }
+                createFeedViewModel.exceedingImageCountEvent.collect {
+                    showWebsosoSnackBar(
+                        binding.root,
+                        getString(create_feed_image_limit, MAX_IMAGE_COUNT),
+                        ic_blocked_user_snack_bar,
+                    )
                 }
             }
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createFeedViewModel.updateFeedSuccessEvent.collect { event ->
-                    event?.getContentIfNotHandled()?.let {
-                        setResult(CreateFeed.RESULT_OK)
-                        finish()
-                    }
+                createFeedViewModel.updateFeedSuccessEvent.collect {
+                    setResult(CreateFeed.RESULT_OK)
+                    finish()
                 }
             }
         }
