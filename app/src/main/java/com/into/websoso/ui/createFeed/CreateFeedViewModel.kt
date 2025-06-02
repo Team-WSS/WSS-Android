@@ -277,10 +277,6 @@ class CreateFeedViewModel
             }
         }
 
-        private fun addCompressedImage(newImage: Uri) {
-            addCompressedImages(listOf(newImage))
-        }
-
         private fun addCompressedImages(
             newImages: List<Uri>,
             retryCount: Int = 0,
