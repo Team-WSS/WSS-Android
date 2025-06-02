@@ -305,10 +305,10 @@ class CreateFeedViewModel
         }
 
         fun removeImage(index: Int) {
-            val currentImages = attachedImages.value.toMutableList().apply {
-                this.getOrNull(index).let { removeAt(index) }
-            }
-            _attachedImages.value = currentImages
+            attachedImages.value
+                .toMutableList()
+                .also { image -> if (index in image.indices) image.removeAt(index) }
+                .let { _attachedImages.value = it }
         }
 
         companion object {
