@@ -55,14 +55,16 @@ class FeedRepository
             images: List<Uri>,
         ) {
             feedApi.postFeed(
-                feedRequestDto = multiPartMapper.formatToMultipart(
-                    FeedRequestDto(
+                feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
+                    target = FeedRequestDto(
                         relevantCategories = relevantCategories,
                         feedContent = feedContent,
                         novelId = novelId,
                         isSpoiler = isSpoiler,
                         isPublic = isPublic,
                     ),
+                    partName = PART_NAME_FEED,
+                    fileName = "feed.json",
                 ),
                 images = images.map { multiPartMapper.formatToMultipart(it) },
             )
@@ -79,14 +81,16 @@ class FeedRepository
         ) {
             feedApi.putFeed(
                 feedId = feedId,
-                feedRequestDto = multiPartMapper.formatToMultipart(
-                    FeedRequestDto(
+                feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
+                    target = FeedRequestDto(
                         relevantCategories = relevantCategories,
                         feedContent = feedContent,
                         novelId = novelId,
                         isSpoiler = isSpoiler,
                         isPublic = isPublic,
                     ),
+                    partName = "feed",
+                    fileName = "feed.json",
                 ),
                 images = images.map { multiPartMapper.formatToMultipart(it) },
             )
@@ -161,4 +165,9 @@ class FeedRepository
         suspend fun downloadImage(imageUrl: String): Result<Uri?> = imageDownloader.formatImageToUri(imageUrl)
 
         suspend fun compressImages(imageUris: List<Uri>): List<Uri> = imageCompressor.compressUris(imageUris)
+
+        companion object {
+            private const val PART_NAME_FEED: String = "feed"
+            private const val FILE_NAME_FEED: String = "feed.json"
+        }
     }
