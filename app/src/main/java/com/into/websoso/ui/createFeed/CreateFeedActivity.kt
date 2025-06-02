@@ -9,9 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_text_selector
@@ -24,6 +21,7 @@ import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.util.DynamicLimitPhotoPicker
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.getAdaptedParcelableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
@@ -38,7 +36,6 @@ import com.into.websoso.ui.createFeed.component.CreateFeedImageContainer
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -202,24 +199,16 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     }
 
     private fun setupEventCollectors() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createFeedViewModel.exceedingImageCountEvent.collect {
-                    showWebsosoSnackBar(
-                        binding.root,
-                        getString(create_feed_image_limit, MAX_IMAGE_COUNT),
-                        ic_blocked_user_snack_bar,
-                    )
-                }
-            }
+        createFeedViewModel.exceedingImageCountEvent.collectWithLifecycle(this) {
+            showWebsosoSnackBar(
+                binding.root,
+                getString(create_feed_image_limit, MAX_IMAGE_COUNT),
+                ic_blocked_user_snack_bar,
+            )
         }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createFeedViewModel.updateFeedSuccessEvent.collect {
-                    setResult(CreateFeed.RESULT_OK)
-                    finish()
-                }
-            }
+        createFeedViewModel.updateFeedSuccessEvent.collectWithLifecycle(this) {
+            setResult(CreateFeed.RESULT_OK)
+            finish()
         }
     }
 
