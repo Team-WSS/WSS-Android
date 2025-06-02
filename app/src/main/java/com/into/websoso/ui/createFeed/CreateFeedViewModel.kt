@@ -1,6 +1,7 @@
 package com.into.websoso.ui.createFeed
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,9 @@ import com.into.websoso.ui.createFeed.model.SearchNovelUiState
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -88,21 +92,27 @@ class CreateFeedViewModel
             }
         }
 
-        private suspend fun loadExistImages(feedId: Long) =
+        private suspend fun loadExistImages(feedId: Long): Result<List<Uri>> =
             runCatching {
                 val feed = feedRepository.fetchFeed(feedId)
-                val downloadedUris = mutableListOf<Uri>()
-
-                for (url in feed.images) {
-                    runCatching {
-                        feedRepository.downloadImage(url).getOrThrow()
-                    }.getOrNull()?.let { uri ->
-                        downloadedUris.add(uri)
-                    }
-                }
-
-                downloadedUris
+                downloadAllImages(feed.images)
             }
+
+        private suspend fun downloadAllImages(imageUrls: List<String>): List<Uri> =
+            coroutineScope {
+                imageUrls
+                    .map { url ->
+                        async { safeDownloadImage(url) }
+                    }.awaitAll()
+                    .filterNotNull()
+            }
+
+        private suspend fun safeDownloadImage(url: String): Uri? =
+            runCatching {
+                feedRepository.downloadImage(url).getOrThrow()
+            }.onFailure {
+                Log.e("CreateFeedViewModel", it.message.toString())
+            }.getOrNull()
 
         private fun updateIsActivated() {
             isActivated.value = content.value.isNullOrEmpty().not() &&
