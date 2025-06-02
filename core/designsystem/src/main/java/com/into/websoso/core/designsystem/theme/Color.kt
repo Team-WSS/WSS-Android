@@ -24,7 +24,6 @@ val Gray300 = Color(0xFF52515F)
 val GrayToast = Color(0xCC394258)
 val Black = Color(0xFF111118)
 val Black60 = Color(0x99000000)
-val ExpandedFeedImageBackground = Color(0xFF030303)
 
 // ETC
 val Transparent = Color(0x00000000)
@@ -37,3 +36,4 @@ val BgGradientGray = Brush.linearGradient(
     start = Offset(0f, 0f),
     end = Offset(0f, Float.POSITIVE_INFINITY),
 )
+val ExpandedFeedImageBackground = Color(0xFF030303)
