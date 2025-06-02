@@ -23,7 +23,7 @@ class ImageCompressor
             uris: List<Uri>,
             size: Double = DEFAULT_MAX_IMAGE_SIZE,
         ): List<Uri> =
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 uris.mapNotNull { uri ->
                     runCatching {
                         val inputStream = context.contentResolver.openInputStream(uri)
