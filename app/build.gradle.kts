@@ -83,11 +83,11 @@ dependencies {
     implementation(projects.core.datastore)
     implementation(projects.core.database)
 
-    implementation(projects.feature.signin)
-    implementation(projects.feature.library)
-
     implementation(projects.data.account)
     implementation(projects.data.library)
+
+    implementation(projects.feature.signin)
+    implementation(projects.feature.library)
 
     // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)

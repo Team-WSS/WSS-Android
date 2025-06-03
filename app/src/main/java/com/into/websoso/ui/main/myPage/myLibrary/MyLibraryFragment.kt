@@ -26,9 +26,7 @@ import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyLibraryBinding
 import com.into.websoso.ui.main.MainActivity
-import com.into.websoso.ui.main.library.LibraryFragment
 import com.into.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
-import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -198,32 +196,26 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(fragment_my_lib
         }
 
     private fun onStorageButtonClick() {
-        val tabClickMappings = mapOf(
-            binding.clMyLibraryTopBar to StorageTab.INTEREST.readStatus,
-            binding.llMyLibraryStorageInteresting to StorageTab.INTEREST.readStatus,
-            binding.llMyLibraryStorageWatching to StorageTab.WATCHING.readStatus,
-            binding.llMyLibraryStorageWatched to StorageTab.WATCHED.readStatus,
-            binding.llMyLibraryStorageQuit to StorageTab.QUIT.readStatus,
-        )
+        binding.clMyLibraryTopBar.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                navigateToLibraryFragment()
+            }
+        }
 
-        tabClickMappings.forEach { (view, readStatus) ->
-            view.setOnClickListener {
-                singleEventHandler.throttleFirst {
-                    navigateToLibraryFragment(readStatus)
-                }
+        binding.llMyLibraryStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                navigateToLibraryFragment()
             }
         }
     }
 
-    private fun navigateToLibraryFragment(readStatus: String) {
+    private fun navigateToLibraryFragment() {
         startActivity(
             MainActivity
                 .getIntent(
                     context = requireContext(),
                     destination = MainActivity.FragmentType.LIBRARY,
-                ).apply {
-                    putExtra(LibraryFragment.READ_STATUS, readStatus)
-                },
+                ),
         )
     }
 
