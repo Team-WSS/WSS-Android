@@ -11,6 +11,8 @@ interface NavigatorProvider {
     fun navigateToMainActivity(startActivity: (Intent) -> Unit)
 
     fun navigateToOnboardingActivity(startActivity: (Intent) -> Unit)
+
+    fun navigateToUserStorageActivity(startActivity: (Intent) -> Unit)
 }
 
 @EntryPoint

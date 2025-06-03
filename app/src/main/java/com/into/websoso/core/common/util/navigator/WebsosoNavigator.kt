@@ -6,6 +6,7 @@ import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.ui.login.LoginActivity
 import com.into.websoso.ui.main.MainActivity
 import com.into.websoso.ui.onboarding.OnboardingActivity
+import com.into.websoso.ui.userStorage.UserStorageActivity
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -31,6 +32,11 @@ internal class WebsosoNavigator
 
         override fun navigateToOnboardingActivity(startActivity: (Intent) -> Unit) {
             val intent = OnboardingActivity.getIntent(context)
+            startActivity(intent)
+        }
+
+        override fun navigateToUserStorageActivity(startActivity: (Intent) -> Unit) {
+            val intent = UserStorageActivity.getIntent(context)
             startActivity(intent)
         }
     }
