@@ -3,7 +3,7 @@ package com.into.websoso.feature.library
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.into.websoso.data.library.LibraryRepository
+import com.into.websoso.domain.library.GetUserNovelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ import javax.inject.Inject
 class LibraryViewModel
     @Inject
     constructor(
-//        private val libraryRepository: LibraryRepository,
+        getUserNovelUseCase: GetUserNovelUseCase,
     ) : ViewModel() {
-//        val novels = libraryRepository.getUserLibrary().cachedIn(viewModelScope)
+        val novelList = getUserNovelUseCase().cachedIn(viewModelScope)
     }
