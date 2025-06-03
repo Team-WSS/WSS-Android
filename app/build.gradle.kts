@@ -84,6 +84,7 @@ dependencies {
     implementation(projects.core.database)
 
     implementation(projects.feature.signin)
+    implementation(projects.feature.library)
 
     implementation(projects.data.account)
     implementation(projects.data.library)
