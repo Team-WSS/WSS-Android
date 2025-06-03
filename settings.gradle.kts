@@ -32,11 +32,15 @@ include(
 )
 
 include(
-    ":feature:signin",
-    ":feature:library",
+    ":data:account",
+    ":data:library",
 )
 
 include(
-    ":data:account",
-    ":data:library",
+    ":domain:library",
+)
+
+include(
+    ":feature:signin",
+    ":feature:library",
 )
