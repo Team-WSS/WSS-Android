@@ -1,21 +1,17 @@
 package com.into.websoso.data.library.datasource
 
-import com.into.websoso.data.library.model.NovelEntity
-import com.into.websoso.data.library.model.UserStorageEntity
+import com.into.websoso.data.library.model.UserNovelsEntity
 
 interface LibraryRemoteDataSource {
-    suspend fun getUserLibrary(userId: Long): List<NovelEntity>
-
-    suspend fun getUserLibrary(
+    suspend fun getUserNovels(
         userId: Long,
-        readStatus: String,
         lastUserNovelId: Long,
         size: Int,
         sortType: String,
-    ): UserStorageEntity
-
-    suspend fun getUserLibrary2(
-        userNovelId: Int,
-        size: Int,
-    ): UserStorageEntity
+        isInterest: Boolean?,
+        readStatuses: List<String>?,
+        attractivePoints: List<String>?,
+        novelRating: Float?,
+        query: String?,
+    ): UserNovelsEntity
 }

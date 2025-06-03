@@ -9,14 +9,30 @@ private const val STARTING_USER_NOVEL_ID = 0
 
 internal class LibraryPagingSource(
     private val libraryRemoteDataSource: LibraryRemoteDataSource,
+    private val userId: Long,
+    private val lastUserNovelId: Long,
+    private val size: Int,
+    private val sortType: String,
+    private val isInterest: Boolean?,
+    private val readStatuses: List<String>?,
+    private val attractivePoints: List<String>?,
+    private val novelRating: Float?,
+    private val query: String?,
 ) : PagingSource<Int, NovelEntity>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NovelEntity> {
         val userNovelId = params.key ?: STARTING_USER_NOVEL_ID
 
         return try {
-            val response = libraryRemoteDataSource.getUserLibrary2(
-                userNovelId = userNovelId,
-                size = params.loadSize,
+            val response = libraryRemoteDataSource.getUserNovels(
+                userId = userId,
+                lastUserNovelId = lastUserNovelId,
+                size = size,
+                sortType = sortType,
+                isInterest = isInterest,
+                readStatuses = readStatuses,
+                attractivePoints = attractivePoints,
+                novelRating = novelRating,
+                query = query,
             )
             val nextKey = if (response.isLoadable.not()) {
                 null
