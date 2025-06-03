@@ -10,22 +10,43 @@ internal data class NovelResponseDto(
     val userNovelId: Long,
     @SerialName("novelId")
     val novelId: Long,
-    @SerialName("author")
-    val author: String,
-    @SerialName("novelImage")
-    val novelImage: String,
     @SerialName("title")
     val title: String,
+    @SerialName("novelImage")
+    val novelImage: String,
     @SerialName("novelRating")
     val novelRating: Float,
+    @SerialName("readStatus")
+    val readStatus: String,
+    @SerialName("isInterest")
+    val isInterest: Boolean,
+    @SerialName("userNovelRating")
+    val userNovelRating: Float,
+    @SerialName("attractivePoints")
+    val attractivePoints: List<String>,
+    @SerialName("startDate")
+    val startDate: String,
+    @SerialName("endDate")
+    val endDate: String,
+    @SerialName("keywords")
+    val keywords: List<String>,
+    @SerialName("myFeeds")
+    val myFeeds: List<String>,
 ) {
     internal fun toData(): NovelEntity =
         NovelEntity(
             userNovelId = userNovelId,
             novelId = novelId,
-            author = author,
-            novelImage = novelImage,
             title = title,
+            novelImage = novelImage,
             novelRating = novelRating,
+            readStatus = readStatus,
+            isInterest = isInterest,
+            userNovelRating = userNovelRating,
+            attractivePoints = attractivePoints,
+            startDate = startDate,
+            endDate = endDate,
+            keywords = keywords,
+            myFeeds = myFeeds,
         )
 }
