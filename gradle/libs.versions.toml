@@ -31,7 +31,7 @@ fragment-ktx = "1.6.1"
 lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.1.1"
 security-crypto = "1.1.0-alpha06"
-room = "2.7.1"
+room = "2.6.1"
 
 # Testing Libraries
 junit = "4.13.2"

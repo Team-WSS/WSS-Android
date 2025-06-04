@@ -5,9 +5,10 @@ plugins {
 }
 
 android {
-    setNamespace("data.library")
+    setNamespace("domain.library")
 }
 
 dependencies {
+    implementation(projects.data.library)
     implementation("androidx.paging:paging-runtime:3.3.2")
 }
