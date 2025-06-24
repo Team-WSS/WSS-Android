@@ -16,9 +16,6 @@ import com.into.websoso.ui.createFeed.model.SearchNovelUiState
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -81,9 +78,7 @@ class CreateFeedViewModel
         }
 
         private fun loadFeedImages(feedId: Long) {
-            viewModelScope.launch {
-                val result = loadExistImages(feedId)
-
+            loadExistImages(feedId) { result ->
                 result.onSuccess { uris ->
                     if (uris.isNotEmpty()) {
                         addCompressedImages(uris)
@@ -92,20 +87,29 @@ class CreateFeedViewModel
             }
         }
 
-        private suspend fun loadExistImages(feedId: Long): Result<List<Uri>> =
-            runCatching {
-                val feed = feedRepository.fetchFeed(feedId)
-                downloadAllImages(feed.images)
+        private fun loadExistImages(
+            feedId: Long,
+            onComplete: (Result<List<Uri>>) -> Unit,
+        ) {
+            viewModelScope.launch {
+                val result = runCatching {
+                    val feed = feedRepository.fetchFeed(feedId)
+                    downloadAllImages(feed.images)
+                }
+                onComplete(result)
+            }
+        }
+
+        private suspend fun downloadAllImages(imageUrls: List<String>): List<Uri> {
+            val uris = mutableListOf<Uri>()
+
+            imageUrls.forEach { url ->
+                val uri = safeDownloadImage(url)
+                uri?.let { uris.add(it) }
             }
 
-        private suspend fun downloadAllImages(imageUrls: List<String>): List<Uri> =
-            coroutineScope {
-                imageUrls
-                    .map { url ->
-                        async { safeDownloadImage(url) }
-                    }.awaitAll()
-                    .filterNotNull()
-            }
+            return uris
+        }
 
         private suspend fun safeDownloadImage(url: String): Uri? =
             runCatching {
