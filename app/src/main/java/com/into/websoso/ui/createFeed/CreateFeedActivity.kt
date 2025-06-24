@@ -26,6 +26,7 @@ import com.into.websoso.core.common.util.getAdaptedParcelableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.string.create_feed_image_limit
 import com.into.websoso.core.resource.R.string.tv_create_feed_characters_count
@@ -214,9 +215,11 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
     private fun setupCreateFeedImageContainer() {
         binding.cvCreateFeedImage.setContent {
-            CreateFeedImageContainer(createFeedViewModel) { index ->
-                singleEventHandler.throttleFirst {
-                    createFeedViewModel.removeImage(index)
+            WebsosoTheme {
+                CreateFeedImageContainer(createFeedViewModel) { index ->
+                    singleEventHandler.throttleFirst {
+                        createFeedViewModel.removeImage(index)
+                    }
                 }
             }
         }
