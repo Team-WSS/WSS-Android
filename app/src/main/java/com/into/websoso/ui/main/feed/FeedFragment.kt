@@ -52,9 +52,9 @@ import com.into.websoso.databinding.FragmentFeedBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
+import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_DETAIL_LIKE_STATUS
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_ID
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_LIKE_COUNT
-import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_LIKE_STATUS
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.main.feed.adapter.FeedAdapter
 import com.into.websoso.ui.main.feed.adapter.FeedType.Feed
@@ -155,7 +155,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             FeedDetailBack.RESULT_OK -> {
                 val updatedFeedId: Long = result.data?.getLongExtra(FEED_ID, -1) ?: -1
                 val updatedLikeStatus: Boolean =
-                    result.data?.getBooleanExtra(FEED_LIKE_STATUS, false) ?: false
+                    result.data?.getBooleanExtra(FEED_DETAIL_LIKE_STATUS, false) ?: false
                 val updatedLikeCount: Int = result.data?.getIntExtra(FEED_LIKE_COUNT, 0) ?: 0
                 feedViewModel.updatedLike2(
                     selectedFeedId = updatedFeedId,
@@ -193,8 +193,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 singleEventHandler.throttleFirst { showMenu(view, feedId, isMyFeed) }
             }
 
-            override fun onContentClick(feedId: Long) {
-                singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId) }
+            override fun onContentClick(
+                feedId: Long,
+                isLiked: Boolean,
+            ) {
+                singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId, isLiked) }
             }
 
             override fun onNovelInfoClick(novelId: Long) {
@@ -222,7 +225,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     updatedLikeCount.toString()
                 view.isSelected = !view.isSelected
 
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                singleEventHandler.debounce(timeMillis = 100L, coroutineScope = lifecycleScope) {
                     feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
                 }
             }
@@ -367,8 +370,17 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
 
-    private fun navigateToFeedDetail(feedId: Long) {
-        activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
+    private fun navigateToFeedDetail(
+        feedId: Long,
+        isLiked: Boolean,
+    ) {
+        activityResultCallback.launch(
+            FeedDetailActivity.getIntent(
+                context = requireContext(),
+                feedId = feedId,
+                isLiked = isLiked,
+            ),
+        )
     }
 
     private fun navigateToNovelDetail(novelId: Long) {

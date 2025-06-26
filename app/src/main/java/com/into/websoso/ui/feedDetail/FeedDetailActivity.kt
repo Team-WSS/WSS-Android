@@ -81,6 +81,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private enum class MenuType { COMMENT, FEED }
 
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
+    private val isLiked: Boolean by lazy { intent.getBooleanExtra(FEED_LIKE_STATUS, false) }
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedDetailAdapter: FeedDetailAdapter by lazy {
         FeedDetailAdapter(
@@ -119,7 +120,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     updatedLikeCount.toString()
                 view.isSelected = !view.isSelected
 
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                singleEventHandler.debounce(timeMillis = 100L, coroutineScope = lifecycleScope) {
                     tracker.trackEvent("feed_detail_like")
                     feedDetailViewModel.updateLike(view.isSelected, updatedLikeCount)
                 }
@@ -411,7 +412,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             val intent = Intent().apply {
                 putExtra(FEED_ID, feedId)
                 putExtra(
-                    FEED_LIKE_STATUS,
+                    FEED_DETAIL_LIKE_STATUS,
                     feedDetailViewModel.feedDetailUiState.value
                         ?.feedDetail
                         ?.feed
@@ -461,7 +462,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun setupView() {
         setupRefreshView()
-        feedDetailViewModel.updateFeedDetail(feedId, Feed)
+        feedDetailViewModel.updateFeedDetail(feedId, Feed, isLiked)
         binding.rvFeedDetail.apply {
             adapter = feedDetailAdapter
             itemAnimator = null
@@ -568,20 +569,23 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     companion object {
         const val FEED_ID: String = "FEED_ID"
-        const val FEED_LIKE_STATUS: String = "FEED_LIKE_STATUS"
+        const val FEED_DETAIL_LIKE_STATUS: String = "FEED_DETAIL_LIKE_STATUS"
         const val FEED_LIKE_COUNT: String = "FEED_LIKE_COUNT"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val NOTIFICATION_ID: String = "NOTIFICATION_ID"
+        private const val FEED_LIKE_STATUS: String = "FEED_LIKE_STATUS"
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(
             context: Context,
             feedId: Long,
             notificationId: Long? = null,
+            isLiked: Boolean = false,
         ): Intent =
             Intent(context, FeedDetailActivity::class.java).apply {
                 putExtra(FEED_ID, feedId)
                 putExtra(NOTIFICATION_ID, notificationId)
+                putExtra(FEED_LIKE_STATUS, isLiked)
             }
     }
 }
