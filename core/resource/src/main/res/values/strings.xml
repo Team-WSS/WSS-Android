@@ -401,6 +401,7 @@
     <string name="remove_popup_menu_stop_creating">그만하기</string>
     <string name="remove_popup_menu_keep_creating">계속 작성</string>
     <string name="create_feed_private">나만 보는 기록</string>
+    <string name="create_feed_image_limit">%d장까지 업로드 가능해요</string>
 
     <!-- 서재 뷰 -->
     <string name="storage_storage">서재</string>

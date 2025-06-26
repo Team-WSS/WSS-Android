@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
@@ -18,13 +19,21 @@ import com.into.websoso.R.style.body4
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.util.DynamicLimitPhotoPicker
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.getAdaptedParcelableExtra
+import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.string.create_feed_image_limit
 import com.into.websoso.core.resource.R.string.tv_create_feed_characters_count
 import com.into.websoso.core.resource.R.string.wset_create_feed_search_novel
 import com.into.websoso.databinding.ActivityCreateFeedBinding
+import com.into.websoso.ui.createFeed.CreateFeedViewModel.Companion.MAX_IMAGE_COUNT
+import com.into.websoso.ui.createFeed.component.CreateFeedImageContainer
 import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +46,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private val imagePickerLauncher: ActivityResultLauncher<DynamicLimitPhotoPicker.Input> = createFeedImagePickerLauncher()
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val imm: InputMethodManager =
@@ -51,7 +61,9 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         setupView()
         onCreateFeedClick()
         bindViewModel()
-        setupObserver()
+        setupObservers()
+        setupEventCollectors()
+        setupCreateFeedImageContainer()
         createFeedViewModel.categories.setupCategoryChips()
         tracker.trackEvent("write")
     }
@@ -108,8 +120,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 }
 
                 tracker.trackEvent("write_feed")
-                setResult(CreateFeed.RESULT_OK)
-                if (!isFinishing) finish()
             }
         }
 
@@ -128,6 +138,25 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 if (!isFinishing) finish()
             }
         }
+
+        binding.ivCreateFeedImage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                launchImagePicker()
+            }
+        }
+    }
+
+    private fun launchImagePicker() {
+        val currentCount = createFeedViewModel.attachedImages.value.size
+        if (currentCount < MAX_IMAGE_COUNT) {
+            imagePickerLauncher.launch(
+                DynamicLimitPhotoPicker.Input(
+                    maxSelectable = MAX_IMAGE_COUNT - currentCount,
+                ),
+            )
+        } else {
+            showWebsosoSnackBar(binding.root, getString(create_feed_image_limit, MAX_IMAGE_COUNT), ic_blocked_user_snack_bar)
+        }
     }
 
     private fun bindViewModel() {
@@ -135,7 +164,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         binding.viewModel = createFeedViewModel
     }
 
-    private fun setupObserver() {
+    private fun setupObservers() {
         createFeedViewModel.isActivated.observe(this) { isSelected ->
             binding.tvCreateFeedDoneButton.isSelected = isSelected
             binding.tvCreateFeedDoneButton.isEnabled = isSelected
@@ -169,6 +198,38 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
+
+    private fun setupEventCollectors() {
+        createFeedViewModel.exceedingImageCountEvent.collectWithLifecycle(this) {
+            showWebsosoSnackBar(
+                binding.root,
+                getString(create_feed_image_limit, MAX_IMAGE_COUNT),
+                ic_blocked_user_snack_bar,
+            )
+        }
+        createFeedViewModel.updateFeedSuccessEvent.collectWithLifecycle(this) {
+            setResult(CreateFeed.RESULT_OK)
+            finish()
+        }
+    }
+
+    private fun setupCreateFeedImageContainer() {
+        binding.cvCreateFeedImage.setContent {
+            WebsosoTheme {
+                CreateFeedImageContainer(createFeedViewModel) { index ->
+                    singleEventHandler.throttleFirst {
+                        createFeedViewModel.removeImage(index)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createFeedImagePickerLauncher() =
+        registerForActivityResult(DynamicLimitPhotoPicker()) { uris ->
+            if (uris.isNullOrEmpty()) return@registerForActivityResult
+            createFeedViewModel.addImages(uris)
+        }
 
     companion object {
         private const val FEED = "FEED"

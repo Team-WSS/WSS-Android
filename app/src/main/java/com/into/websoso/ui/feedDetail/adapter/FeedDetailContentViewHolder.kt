@@ -23,12 +23,8 @@ class FeedDetailContentViewHolder(
         )
         binding.clFeedLike.isSelected = feed.isLiked
         binding.cvFeedImage.setContent {
-            // TODO: 이미지 존재 여부에 따른 가시성 설정
-            val imageUrls = List<String>(5) {
-                "https://upload.wikimedia.org/wikipedia/ko/9/9e/%EB%A0%88%EB%94%94_%ED%94%8C%EB%A0%88%EC%9D%B4%EC%96%B4_%EC%9B%90_%EC%98%81%ED%99%94.jpg"
-            }
-            AdaptationFeedImageContainer(imageUrls) { index ->
-                feedDetailClickListener.onFeedImageClick(imageUrls, index)
+            AdaptationFeedImageContainer(feed.imageUrls) { index ->
+                feedDetailClickListener.onFeedImageClick(index, feed.imageUrls)
             }
         }
     }

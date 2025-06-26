@@ -36,3 +36,4 @@ val BgGradientGray = Brush.linearGradient(
     start = Offset(0f, 0f),
     end = Offset(0f, Float.POSITIVE_INFINITY),
 )
+val ExpandedFeedImageBackground = Color(0xFF030303)
