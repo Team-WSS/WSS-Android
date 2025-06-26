@@ -200,6 +200,26 @@ class FeedViewModel
             }
         }
 
+        fun updatedLike2(
+            selectedFeedId: Long,
+            isLiked: Boolean,
+            updatedLikeCount: Int,
+        ) {
+            _feedUiState.value = feedUiState.value?.copy(
+                feeds = feedUiState.value?.feeds?.map { feedModel ->
+                    when (feedModel.id == selectedFeedId) {
+                        true -> feedModel.copy(
+                            isLiked = isLiked,
+                            likeCount = updatedLikeCount,
+                        )
+
+                        false -> feedModel
+                    }
+                } ?: emptyList(),
+                isRefreshed = false,
+            )
+        }
+
         fun updateReportedSpoilerFeed(feedId: Long) {
             feedUiState.value?.let { feedUiState ->
                 viewModelScope.launch {

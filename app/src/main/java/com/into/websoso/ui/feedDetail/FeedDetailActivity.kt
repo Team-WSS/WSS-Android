@@ -405,7 +405,24 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         binding.root.setOnClickListener { it.hideKeyboard() }
 
         binding.ivFeedDetailBackButton.setOnClickListener {
-            setResult(FeedDetailBack.RESULT_OK)
+            val intent = Intent().apply {
+                putExtra(FEED_ID, feedId)
+                putExtra(
+                    FEED_LIKE_STATUS,
+                    feedDetailViewModel.feedDetailUiState.value
+                        ?.feedDetail
+                        ?.feed
+                        ?.isLiked,
+                )
+                putExtra(
+                    FEED_LIKE_COUNT,
+                    feedDetailViewModel.feedDetailUiState.value
+                        ?.feedDetail
+                        ?.feed
+                        ?.likeCount,
+                )
+            }
+            setResult(FeedDetailBack.RESULT_OK, intent)
             if (!isFinishing) finish()
         }
 
@@ -548,6 +565,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     companion object {
         const val FEED_ID: String = "FEED_ID"
+        const val FEED_LIKE_STATUS: String = "FEED_LIKE_STATUS"
+        const val FEED_LIKE_COUNT: String = "FEED_LIKE_COUNT"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val NOTIFICATION_ID: String = "NOTIFICATION_ID"
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
