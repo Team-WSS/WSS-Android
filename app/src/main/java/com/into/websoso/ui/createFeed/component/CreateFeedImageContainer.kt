@@ -1,8 +1,10 @@
 package com.into.websoso.ui.createFeed.component
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,36 +13,54 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.rememberAsyncImagePainter
 import com.into.websoso.core.common.util.clickableWithoutRipple
-import com.into.websoso.core.designsystem.component.NetworkImage
+import com.into.websoso.core.designsystem.theme.Gray200
+import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_feed_remove_image
+import com.into.websoso.ui.createFeed.CreateFeedViewModel
+import com.into.websoso.ui.createFeed.CreateFeedViewModel.Companion.MAX_IMAGE_COUNT
 
 @Composable
 fun CreateFeedImageContainer(
-    imageUrls: List<String>,
+    viewModel: CreateFeedViewModel,
     onRemoveClick: (index: Int) -> Unit,
 ) {
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        contentPadding = PaddingValues(horizontal = 20.dp),
-    ) {
-        items(imageUrls.size) { index ->
-            CreateFeedImageBox(
-                imageUrl = imageUrls[index],
-                onRemoveClick = {
-                    onRemoveClick(index)
-                },
+    val images = viewModel.attachedImages.collectAsStateWithLifecycle()
+    Column {
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp),
+        ) {
+            items(images.value.size) { index ->
+                CreateFeedImageBox(
+                    image = images.value.elementAt(index),
+                    onRemoveClick = {
+                        onRemoveClick(index)
+                    },
+                )
+            }
+        }
+        if (images.value.isNotEmpty()) {
+            FeedImageCounter(
+                current = images.value.size,
+                max = MAX_IMAGE_COUNT,
+                modifier = Modifier.padding(top = 12.dp),
             )
         }
     }
@@ -48,7 +68,7 @@ fun CreateFeedImageContainer(
 
 @Composable
 private fun CreateFeedImageBox(
-    imageUrl: String,
+    image: Uri,
     onRemoveClick: () -> Unit,
 ) {
     Box(
@@ -57,8 +77,9 @@ private fun CreateFeedImageBox(
             .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp)),
     ) {
-        NetworkImage(
-            imageUrl = imageUrl,
+        Image(
+            painter = rememberAsyncImagePainter(image),
+            contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
@@ -84,17 +105,35 @@ private fun ImageRemoveButton(
     )
 }
 
+@Composable
+private fun FeedImageCounter(
+    current: Int,
+    max: Int,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        buildAnnotatedString {
+            withStyle(style = SpanStyle(color = Primary100)) {
+                append("$current")
+            }
+            withStyle(style = SpanStyle(color = Gray200)) {
+                append(" / $max")
+            }
+        },
+        style = WebsosoTheme.typography.title2,
+        modifier = modifier.padding(start = 20.dp, top = 8.dp),
+    )
+}
+
+/*
 @Preview
 @Composable
 private fun CreateFeedImageContainerPreview() {
     WebsosoTheme {
         CreateFeedImageContainer(
-            imageUrls = listOf(
-                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
-                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
-                "https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/00fb05f8-cb19-4d21-84b1-5cf6b9988749.jpg",
-            ),
+            viewModel = CreateFeedViewModel(),
             onRemoveClick = {},
         )
     }
 }
+*/

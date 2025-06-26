@@ -26,7 +26,7 @@ import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.drawable.ic_novel_rating_keword_remove
 import com.into.websoso.core.resource.R.string.detail_explore_search_hint
-import com.into.websoso.core.resource.R.string.inquire_link
+import com.into.websoso.core.resource.R.string.kakao_channel_link
 import com.into.websoso.databinding.FragmentDetailExploreKeywordBinding
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel
 import com.into.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
@@ -71,7 +71,7 @@ class DetailExploreKeywordFragment : BaseFragment<FragmentDetailExploreKeywordBi
         object : DetailExploreClickListener {
             override fun onNovelInquireButtonClick() {
                 tracker.trackEvent("contact_keyword")
-                val inquireUrl = getString(inquire_link)
+                val inquireUrl = getString(kakao_channel_link)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
                 startActivity(intent)
             }

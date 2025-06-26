@@ -3,6 +3,7 @@ package com.into.websoso.ui.feedDetail.model
 enum class ImageContainerType(
     val size: Int,
 ) {
+    EMPTY(0),
     SINGLE(1),
     DOUBLE(2),
     TRIPLE(3),

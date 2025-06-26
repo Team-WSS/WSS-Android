@@ -24,6 +24,10 @@ object BindingAdapter {
         isVectorImage: Boolean?,
         isCircularImage: Boolean?,
     ) {
+        if (imageUrl.isNullOrEmpty()) {
+            view.setImageResource(img_loading_thumbnail)
+            return
+        }
         view.load(imageUrl) {
             crossfade(true)
             if (isVectorImage == true) decoderFactory(SvgDecoder.Factory())

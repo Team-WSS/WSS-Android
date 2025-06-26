@@ -14,6 +14,8 @@ data class FeedEntity(
     val isMyFeed: Boolean,
     val isPublic: Boolean,
     val novel: NovelEntity,
+    val images: List<String>,
+    val imageCount: Int,
 ) {
     data class UserEntity(
         val id: Long,

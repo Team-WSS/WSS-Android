@@ -1,17 +1,19 @@
 package com.into.websoso.data.remote.api
 
 import com.into.websoso.data.remote.request.CommentRequestDto
-import com.into.websoso.data.remote.request.FeedRequestDto
 import com.into.websoso.data.remote.response.CommentsResponseDto
 import com.into.websoso.data.remote.response.FeedDetailResponseDto
 import com.into.websoso.data.remote.response.FeedsResponseDto
 import com.into.websoso.data.remote.response.PopularFeedsResponseDto
 import com.into.websoso.data.remote.response.UserInterestFeedsResponseDto
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -23,15 +25,19 @@ interface FeedApi {
         @Query("size") size: Int,
     ): FeedsResponseDto
 
+    @Multipart
     @POST("feeds")
     suspend fun postFeed(
-        @Body feedRequestDto: FeedRequestDto,
+        @Part feedRequestDto: MultipartBody.Part,
+        @Part images: List<MultipartBody.Part>?,
     )
 
+    @Multipart
     @PUT("feeds/{feedId}")
     suspend fun putFeed(
         @Path("feedId") feedId: Long,
-        @Body feedRequestDto: FeedRequestDto,
+        @Part feedRequestDto: MultipartBody.Part,
+        @Part images: List<MultipartBody.Part>?,
     )
 
     @GET("feeds/{feedId}")
