@@ -26,7 +26,7 @@ import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.Keywo
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.core.resource.R.drawable.ic_novel_rating_keword_remove
-import com.into.websoso.core.resource.R.string.kakao_channel_link
+import com.into.websoso.core.resource.R.string.inquire_link
 import com.into.websoso.core.resource.R.string.novel_rating_keyword_exceed
 import com.into.websoso.core.resource.R.string.novel_rating_keyword_search_hint
 import com.into.websoso.databinding.DialogNovelRatingKeywordBinding
@@ -91,7 +91,7 @@ class NovelRatingKeywordBottomSheetDialog : BaseBottomSheetDialog<DialogNovelRat
         }
 
     private fun navigateToReportKeyword() {
-        val inquireUrl = getString(kakao_channel_link)
+        val inquireUrl = getString(inquire_link)
         val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
