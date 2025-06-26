@@ -157,7 +157,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 val updatedLikeStatus: Boolean =
                     result.data?.getBooleanExtra(FEED_DETAIL_LIKE_STATUS, false) ?: false
                 val updatedLikeCount: Int = result.data?.getIntExtra(FEED_LIKE_COUNT, 0) ?: 0
-                feedViewModel.updatedLike2(
+                feedViewModel.updateLikedSync(
                     selectedFeedId = updatedFeedId,
                     isLiked = updatedLikeStatus,
                     updatedLikeCount = updatedLikeCount,

@@ -200,7 +200,7 @@ class FeedViewModel
             }
         }
 
-        fun updatedLike2(
+        fun updateLikedSync(
             selectedFeedId: Long,
             isLiked: Boolean,
             updatedLikeCount: Int,
