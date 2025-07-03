@@ -45,7 +45,7 @@ import com.into.websoso.feature.library.R.string.library_interesting
 import com.into.websoso.feature.library.R.string.library_novel_count
 import com.into.websoso.feature.library.R.string.library_rating
 import com.into.websoso.feature.library.R.string.library_read_status
-import com.into.websoso.feature.library.model.FilterType
+import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryFilterUiState
 import com.into.websoso.feature.library.util.buildFilterLabel
 
@@ -53,7 +53,7 @@ import com.into.websoso.feature.library.util.buildFilterLabel
 fun LibraryFilterTopBar(
     libraryFilterUiState: LibraryFilterUiState,
     totalCount: Int,
-    onFilterClick: (FilterType) -> Unit,
+    onFilterClick: (LibraryFilterType) -> Unit,
     selectedSortType: SortType,
     onSortClick: () -> Unit,
     isGrid: Boolean,
@@ -85,7 +85,7 @@ fun LibraryFilterTopBar(
 @Composable
 fun NovelFilterChipSection(
     libraryFilterUiState: LibraryFilterUiState,
-    onFilterClick: (FilterType) -> Unit,
+    onFilterClick: (LibraryFilterType) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -95,7 +95,7 @@ fun NovelFilterChipSection(
         NovelFilterChip(
             text = stringResource(id = library_interesting),
             isSelected = libraryFilterUiState.isInterested,
-            onClick = { onFilterClick(FilterType.Interest) },
+            onClick = { onFilterClick(LibraryFilterType.Interest) },
             showDropdownIcon = false,
         )
 
@@ -113,13 +113,13 @@ fun NovelFilterChipSection(
                 libraryFilterUiState.readStatusLabel,
             ),
             isSelected = libraryFilterUiState.readStatusSelected,
-            onClick = { onFilterClick(FilterType.ReadStatus) },
+            onClick = { onFilterClick(LibraryFilterType.ReadStatus) },
         )
 
         NovelFilterChip(
             text = stringResource(id = library_rating),
             isSelected = libraryFilterUiState.ratingSelected,
-            onClick = { onFilterClick(FilterType.Rating) },
+            onClick = { onFilterClick(LibraryFilterType.Rating) },
         )
 
         NovelFilterChip(
@@ -128,7 +128,7 @@ fun NovelFilterChipSection(
                 libraryFilterUiState.attractivePointLabel,
             ),
             isSelected = libraryFilterUiState.attractivePointSelected,
-            onClick = { onFilterClick(FilterType.AttractivePoint) },
+            onClick = { onFilterClick(LibraryFilterType.AttractivePoint) },
         )
     }
 }
