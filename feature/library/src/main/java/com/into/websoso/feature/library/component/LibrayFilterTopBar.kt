@@ -83,7 +83,7 @@ fun LibraryFilterTopBar(
 }
 
 @Composable
-fun NovelFilterChipSection(
+private fun NovelFilterChipSection(
     libraryFilterUiState: LibraryFilterUiState,
     onFilterClick: (LibraryFilterType) -> Unit,
 ) {
@@ -134,7 +134,7 @@ fun NovelFilterChipSection(
 }
 
 @Composable
-fun NovelFilterChip(
+private fun NovelFilterChip(
     text: String,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -174,7 +174,7 @@ fun NovelFilterChip(
 }
 
 @Composable
-fun NovelFilterStatusBar(
+private fun NovelFilterStatusBar(
     totalCount: Int,
     selectedSortType: SortType,
     isGrid: Boolean,

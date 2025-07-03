@@ -58,7 +58,7 @@ fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
 }
 
 @Composable
-fun LibraryExploreButton(
+private fun LibraryExploreButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {

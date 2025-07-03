@@ -37,7 +37,6 @@ import com.into.websoso.core.resource.R.drawable.ic_library_interesting
 import com.into.websoso.core.resource.R.drawable.ic_library_null_star
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.feature.library.model.LibraryListItemModel
-import com.into.websoso.feature.library.model.RatingStarType
 import com.into.websoso.feature.library.model.ReadStatus
 import com.into.websoso.feature.library.util.formatDateRange
 
@@ -46,6 +45,12 @@ private val ITEM_SPACING = 6.dp
 private val HORIZONTAL_PADDING = 20.dp
 private const val IMAGE_ASPECT_WIDTH = 102.67f
 private const val IMAGE_ASPECT_HEIGHT = 160f
+
+private enum class RatingStarType {
+    FULL,
+    HALF,
+    EMPTY,
+}
 
 @Composable
 fun NovelGridListItem(
@@ -90,7 +95,7 @@ fun NovelGridListItem(
 }
 
 @Composable
-fun NovelGridThumbnail(
+private fun NovelGridThumbnail(
     item: LibraryListItemModel,
     size: GridItemSize,
 ) {
@@ -129,7 +134,7 @@ fun NovelGridThumbnail(
 }
 
 @Composable
-fun ReadStatusBadge(
+private fun ReadStatusBadge(
     readStatus: ReadStatus,
     modifier: Modifier = Modifier,
 ) {
@@ -146,7 +151,7 @@ fun ReadStatusBadge(
 }
 
 @Composable
-fun rememberGridItemSize(): GridItemSize {
+private fun rememberGridItemSize(): GridItemSize {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     val density = LocalDensity.current
 
@@ -162,7 +167,7 @@ fun rememberGridItemSize(): GridItemSize {
 }
 
 @Composable
-fun NovelRatingStar(
+private fun NovelRatingStar(
     rating: Float,
     modifier: Modifier = Modifier,
 ) {
@@ -200,7 +205,7 @@ private fun calculateRatingStars(rating: Float): List<RatingStarType> {
     }
 }
 
-data class GridItemSize(
+private data class GridItemSize(
     val width: Dp,
     val height: Dp,
 )
