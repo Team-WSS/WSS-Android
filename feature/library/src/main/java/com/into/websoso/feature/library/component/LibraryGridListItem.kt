@@ -1,0 +1,206 @@
+package com.into.websoso.feature.library.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.into.websoso.core.designsystem.theme.Black
+import com.into.websoso.core.designsystem.theme.Gray200
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.core.resource.R.drawable.ic_library_half_star
+import com.into.websoso.core.resource.R.drawable.ic_library_interesting
+import com.into.websoso.core.resource.R.drawable.ic_library_null_star
+import com.into.websoso.core.resource.R.drawable.ic_storage_star
+import com.into.websoso.feature.library.model.LibraryListItemModel
+import com.into.websoso.feature.library.model.RatingStarType
+import com.into.websoso.feature.library.model.ReadStatus
+import com.into.websoso.feature.library.util.formatDateRange
+
+private const val GRID_COLUMN_COUNT = 3
+private val ITEM_SPACING = 6.dp
+private val HORIZONTAL_PADDING = 20.dp
+private const val IMAGE_ASPECT_WIDTH = 102.67f
+private const val IMAGE_ASPECT_HEIGHT = 160f
+
+@Composable
+fun NovelGridListItem(
+    item: LibraryListItemModel,
+    modifier: Modifier = Modifier,
+    onItemClick: () -> Unit = {},
+) {
+    val itemSize = rememberGridItemSize()
+
+    Column(
+        modifier = modifier
+            .width(itemSize.width)
+            .wrapContentHeight()
+            .clickable { onItemClick() },
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        NovelGridThumbnail(
+            item = item,
+            size = itemSize,
+        )
+
+        Text(
+            text = item.title,
+            style = WebsosoTheme.typography.body4,
+            color = Black,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        item.myRating?.let {
+            NovelRatingStar(rating = it)
+        }
+
+        formatDateRange(item.startDate, item.endDate)?.let {
+            Text(
+                text = it,
+                style = WebsosoTheme.typography.label2,
+                color = Gray200,
+            )
+        }
+    }
+}
+
+@Composable
+fun NovelGridThumbnail(
+    item: LibraryListItemModel,
+    size: GridItemSize,
+) {
+    Box(
+        modifier = Modifier
+            .size(width = size.width, height = size.height)
+            .clip(RoundedCornerShape(8.dp)),
+    ) {
+        AsyncImage(
+            model = item.novelImageUrl,
+            contentDescription = item.title,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
+
+        item.readStatus?.let {
+            ReadStatusBadge(
+                readStatus = it,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(6.dp),
+            )
+        }
+
+        if (item.isInterested) {
+            Image(
+                imageVector = ImageVector.vectorResource(id = ic_library_interesting),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(30.dp)
+                    .align(Alignment.BottomEnd)
+                    .padding(6.dp),
+            )
+        }
+    }
+}
+
+@Composable
+fun ReadStatusBadge(
+    readStatus: ReadStatus,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = readStatus.label,
+        color = White,
+        style = WebsosoTheme.typography.label2,
+        modifier = modifier
+            .background(
+                color = readStatus.backgroundColor,
+                shape = RoundedCornerShape(4.dp),
+            ).padding(horizontal = 8.dp, vertical = 4.dp),
+    )
+}
+
+@Composable
+fun rememberGridItemSize(): GridItemSize {
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+    val density = LocalDensity.current
+
+    return remember(screenWidth) {
+        with(density) {
+            val totalSpacingPx = (ITEM_SPACING * (GRID_COLUMN_COUNT - 1) + HORIZONTAL_PADDING * 2).toPx()
+            val itemWidthPx = ((screenWidth.dp.toPx() - totalSpacingPx) / GRID_COLUMN_COUNT)
+            val itemHeightPx = itemWidthPx * (IMAGE_ASPECT_HEIGHT / IMAGE_ASPECT_WIDTH)
+
+            GridItemSize(itemWidthPx.toDp(), itemHeightPx.toDp())
+        }
+    }
+}
+
+@Composable
+fun NovelRatingStar(
+    rating: Float,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        calculateRatingStars(rating).forEach { starType ->
+            Image(
+                imageVector = ratingStarIcon(starType),
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun ratingStarIcon(starType: RatingStarType): ImageVector =
+    when (starType) {
+        RatingStarType.FULL -> ImageVector.vectorResource(id = ic_storage_star)
+        RatingStarType.HALF -> ImageVector.vectorResource(id = ic_library_half_star)
+        RatingStarType.EMPTY -> ImageVector.vectorResource(id = ic_library_null_star)
+    }
+
+private fun calculateRatingStars(rating: Float): List<RatingStarType> {
+    val fullStar = rating.toInt()
+    val halfStar = (rating - fullStar) >= 0.5f
+    val emptyStar = 5 - fullStar - if (halfStar) 1 else 0
+
+    return buildList {
+        repeat(fullStar) { add(RatingStarType.FULL) }
+        if (halfStar) add(RatingStarType.HALF)
+        repeat(emptyStar) { add(RatingStarType.EMPTY) }
+    }
+}
+
+data class GridItemSize(
+    val width: Dp,
+    val height: Dp,
+)
