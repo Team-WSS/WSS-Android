@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.into.websoso.feature.library.model.LibraryListItemModel
 
 @Composable
-fun NovelGridList(
+fun LibraryGridList(
     novels: List<LibraryListItemModel>,
     gridState: LazyGridState,
     modifier: Modifier = Modifier,
