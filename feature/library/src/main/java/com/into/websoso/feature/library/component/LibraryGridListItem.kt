@@ -80,7 +80,7 @@ fun NovelGridListItem(
             overflow = TextOverflow.Ellipsis,
         )
 
-        item.myRating?.let {
+        item.userNovelRating?.let {
             NovelRatingStar(rating = it)
         }
 
@@ -105,7 +105,7 @@ private fun NovelGridThumbnail(
             .clip(RoundedCornerShape(8.dp)),
     ) {
         AsyncImage(
-            model = item.novelImageUrl,
+            model = item.novelImage,
             contentDescription = item.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
@@ -120,7 +120,7 @@ private fun NovelGridThumbnail(
             )
         }
 
-        if (item.isInterested) {
+        if (item.isInterest) {
             Image(
                 imageVector = ImageVector.vectorResource(id = ic_library_interesting),
                 contentDescription = null,
@@ -186,12 +186,14 @@ private fun NovelRatingStar(
 }
 
 @Composable
-private fun ratingStarIcon(starType: RatingStarType): ImageVector =
-    when (starType) {
-        RatingStarType.FULL -> ImageVector.vectorResource(id = ic_storage_star)
-        RatingStarType.HALF -> ImageVector.vectorResource(id = ic_library_half_star)
-        RatingStarType.EMPTY -> ImageVector.vectorResource(id = ic_library_null_star)
+private fun ratingStarIcon(starType: RatingStarType): ImageVector {
+    val resId = when (starType) {
+        RatingStarType.FULL -> ic_storage_star
+        RatingStarType.HALF -> ic_library_half_star
+        RatingStarType.EMPTY -> ic_library_null_star
     }
+    return ImageVector.vectorResource(id = resId)
+}
 
 private fun calculateRatingStars(rating: Float): List<RatingStarType> {
     val fullStar = rating.toInt()
