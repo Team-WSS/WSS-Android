@@ -9,6 +9,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
+import coil.ImageLoader
+import coil.decode.ImageDecoderDecoder
+import coil.load
 import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_text_selector
@@ -28,6 +31,7 @@ import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.drawable.ic_load_load
 import com.into.websoso.core.resource.R.string.create_feed_image_limit
 import com.into.websoso.core.resource.R.string.tv_create_feed_characters_count
 import com.into.websoso.core.resource.R.string.wset_create_feed_search_novel
@@ -64,6 +68,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         setupObservers()
         setupEventCollectors()
         setupCreateFeedImageContainer()
+        setupLoadingAnimation()
         createFeedViewModel.categories.setupCategoryChips()
         tracker.trackEvent("write")
     }
@@ -223,6 +228,15 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 }
             }
         }
+    }
+
+    private fun setupLoadingAnimation() {
+        val gifImageLoader = ImageLoader
+            .Builder(this)
+            .components {
+                add(ImageDecoderDecoder.Factory())
+            }.build()
+        binding.ivCreateFeedLoad.load(ic_load_load, gifImageLoader)
     }
 
     private fun createFeedImagePickerLauncher() =
