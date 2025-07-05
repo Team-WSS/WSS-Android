@@ -144,7 +144,7 @@
                     android:minLines="16"
                     android:paddingHorizontal="16dp"
                     android:paddingTop="24dp"
-                    android:paddingBottom="32dp"
+                    android:paddingBottom="40dp"
                     android:scrollbars="vertical"
                     android:text="@={viewModel.content}"
                     android:textAppearance="@style/body2"
