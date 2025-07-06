@@ -5,29 +5,32 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.into.websoso.feature.library.model.LibraryListItemModel
 
 @Composable
 fun LibraryList(
-    novels: List<LibraryListItemModel>,
+    novels: LazyPagingItems<LibraryListItemModel>,
     listState: LazyListState,
-    modifier: Modifier = Modifier,
     onItemClick: (LibraryListItemModel) -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
+        state = listState,
         contentPadding = PaddingValues(start = 20.dp, bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(28.dp),
     ) {
-        items(novels, key = { it.title }) { novel ->
-            LibraryListItem(
-                item = novel,
-                onClick = { onItemClick(novel) },
-            )
+        items(novels.itemCount) { index ->
+            novels[index]?.let { novel ->
+                LibraryListItem(
+                    item = novel,
+                    onClick = { onItemClick(novel) },
+                )
+            }
         }
     }
 }
