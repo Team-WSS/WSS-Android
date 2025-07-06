@@ -8,6 +8,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -39,7 +40,6 @@ import com.into.websoso.core.resource.R.drawable.ic_library_drop_down_fill
 import com.into.websoso.core.resource.R.drawable.ic_library_grid
 import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
-import com.into.websoso.domain.library.model.SortType
 import com.into.websoso.feature.library.R.string.library_attractive_point
 import com.into.websoso.feature.library.R.string.library_interesting
 import com.into.websoso.feature.library.R.string.library_novel_count
@@ -47,6 +47,7 @@ import com.into.websoso.feature.library.R.string.library_rating
 import com.into.websoso.feature.library.R.string.library_read_status
 import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryFilterUiState
+import com.into.websoso.feature.library.model.SortTypeUiModel
 import com.into.websoso.feature.library.util.buildFilterLabel
 
 @Composable
@@ -54,7 +55,7 @@ fun LibraryFilterTopBar(
     libraryFilterUiState: LibraryFilterUiState,
     totalCount: Int,
     onFilterClick: (LibraryFilterType) -> Unit,
-    selectedSortType: SortType,
+    selectedSortType: SortTypeUiModel,
     onSortClick: () -> Unit,
     isGrid: Boolean,
     onToggleViewType: () -> Unit,
@@ -176,7 +177,7 @@ private fun NovelFilterChip(
 @Composable
 private fun NovelFilterStatusBar(
     totalCount: Int,
-    selectedSortType: SortType,
+    selectedSortType: SortTypeUiModel,
     isGrid: Boolean,
     onSortClick: () -> Unit,
     onToggleViewType: () -> Unit,
@@ -193,29 +194,49 @@ private fun NovelFilterStatusBar(
         )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            TextButton(onClick = onSortClick) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = ic_library_sort),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                )
-
-                Text(
-                    text = selectedSortType.displayName,
-                    style = WebsosoTheme.typography.body5,
-                    color = Gray300,
-                )
-            }
+            SortTypeSelector(
+                selectedSortType = selectedSortType,
+                onClick = { onSortClick() },
+            )
 
             IconButton(onClick = onToggleViewType) {
                 Image(
                     imageVector = ImageVector.vectorResource(
                         id = if (isGrid) ic_library_grid else ic_library_list,
                     ),
-                    contentDescription = "리스트 형태 전환",
+                    contentDescription = null,
                     modifier = Modifier.size(16.dp),
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun SortTypeSelector(
+    selectedSortType: SortTypeUiModel,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TextButton(
+        onClick = onClick,
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                imageVector = ImageVector.vectorResource(id = ic_library_sort),
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            Text(
+                text = selectedSortType.displayName,
+                style = WebsosoTheme.typography.body5,
+                color = Gray300,
+            )
         }
     }
 }
