@@ -37,7 +37,7 @@ import com.into.websoso.core.resource.R.drawable.ic_library_interesting
 import com.into.websoso.core.resource.R.drawable.ic_library_null_star
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.feature.library.model.LibraryListItemModel
-import com.into.websoso.feature.library.model.ReadStatus
+import com.into.websoso.feature.library.model.ReadStatusUiModel
 import com.into.websoso.feature.library.util.formatDateRange
 
 private const val GRID_COLUMN_COUNT = 3
@@ -135,7 +135,7 @@ private fun NovelGridThumbnail(
 
 @Composable
 private fun ReadStatusBadge(
-    readStatus: ReadStatus,
+    readStatus: ReadStatusUiModel,
     modifier: Modifier = Modifier,
 ) {
     Text(
