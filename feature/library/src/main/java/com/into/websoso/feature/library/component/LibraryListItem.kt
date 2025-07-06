@@ -54,13 +54,14 @@ import com.into.websoso.core.resource.R.drawable.ic_library_relationship
 import com.into.websoso.core.resource.R.drawable.ic_library_vibe
 import com.into.websoso.core.resource.R.drawable.ic_library_world_view
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
+import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.feature.library.R.string.library_dot_separator
 import com.into.websoso.feature.library.R.string.library_my_rating
 import com.into.websoso.feature.library.R.string.library_my_rating_score
 import com.into.websoso.feature.library.R.string.library_total_rating
-import com.into.websoso.feature.library.model.AttractivePoint
+import com.into.websoso.feature.library.model.AttractivePointUiModel
 import com.into.websoso.feature.library.model.LibraryListItemModel
-import com.into.websoso.feature.library.model.ReadStatus
+import com.into.websoso.feature.library.model.ReadStatusUiModel
 import com.into.websoso.feature.library.util.formatDateRange
 
 private const val THUMBNAIL_WIDTH_RATIO = 60f / 360f
@@ -120,7 +121,7 @@ fun LibraryListItem(
 @Composable
 private fun NovelThumbnail(
     thumbnailUrl: String,
-    readStatus: ReadStatus?,
+    readStatus: ReadStatusUiModel?,
     isInteresting: Boolean,
 ) {
     val size = calculateThumbnailSize()
@@ -161,7 +162,7 @@ private fun NovelThumbnail(
 
 @Composable
 private fun ReadStatusBadge(
-    readStatus: ReadStatus?,
+    readStatus: ReadStatusUiModel?,
     width: Dp,
 ) {
     if (readStatus != null) {
@@ -199,7 +200,7 @@ private fun NovelInfo(
     title: String,
     myRating: Float?,
     totalRating: Float,
-    attractivePoints: List<AttractivePoint>,
+    attractivePoints: List<AttractivePointUiModel>,
 ) {
     Column {
         Spacer(modifier = Modifier.height(2.dp))
@@ -291,7 +292,7 @@ private fun TotalRatingSection(rating: Float) {
 }
 
 @Composable
-private fun AttractivePointTags(types: List<AttractivePoint>) {
+private fun AttractivePointTags(types: List<AttractivePointUiModel>) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         types.forEachIndexed { index, type ->
             AttractivePointItem(type)
@@ -312,7 +313,7 @@ private fun AttractivePointTags(types: List<AttractivePoint>) {
 }
 
 @Composable
-private fun AttractivePointItem(type: AttractivePoint) {
+private fun AttractivePointItem(type: AttractivePointUiModel) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Image(
             imageVector = attractivePointIcon(type),
@@ -331,13 +332,13 @@ private fun AttractivePointItem(type: AttractivePoint) {
 }
 
 @Composable
-private fun attractivePointIcon(type: AttractivePoint): ImageVector {
-    val resId = when (type) {
-        AttractivePoint.CHARACTER -> ic_library_character
-        AttractivePoint.MATERIAL -> ic_library_material
-        AttractivePoint.WORLDVIEW -> ic_library_world_view
-        AttractivePoint.RELATIONSHIP -> ic_library_relationship
-        AttractivePoint.VIBE -> ic_library_vibe
+private fun attractivePointIcon(points: AttractivePointUiModel): ImageVector {
+    val resId = when (points.type) {
+        AttractivePoints.CHARACTER -> ic_library_character
+        AttractivePoints.MATERIAL -> ic_library_material
+        AttractivePoints.WORLDVIEW -> ic_library_world_view
+        AttractivePoints.RELATIONSHIP -> ic_library_relationship
+        AttractivePoints.VIBE -> ic_library_vibe
     }
     return ImageVector.vectorResource(id = resId)
 }
