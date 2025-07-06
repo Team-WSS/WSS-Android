@@ -12,4 +12,5 @@
     <string name="library_sort">정렬</string>
     <string name="library_empty">보관함이 비어있어요</string>
     <string name="library_go_to_explore">웹소설 찾으러 가기</string>
+    <string name="library_title">서재</string>
 </resources>
