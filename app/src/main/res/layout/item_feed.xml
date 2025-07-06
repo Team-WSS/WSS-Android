@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> onClick.onContentClick(feed.id)}">
+        android:onClick="@{() -> onClick.onContentClick(feed.id, feed.isLiked)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_feed_profile"
@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:onClick="@{() -> onClick.onContentClick(feed.id)}"
+            android:onClick="@{() -> onClick.onContentClick(feed.id, feed.isLiked)}"
             android:text="@string/feed_spoiler_warning"
             android:textAppearance="@style/body2"
             android:textColor="@color/secondary_100_FF675D"
