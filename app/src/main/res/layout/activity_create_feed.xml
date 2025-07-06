@@ -128,7 +128,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_create_feed_category"
                     app:singleSelection="false" />
 
-
                 <EditText
                     android:id="@+id/et_create_feed_content"
                     android:layout_width="0dp"

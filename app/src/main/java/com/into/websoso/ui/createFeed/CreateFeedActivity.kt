@@ -1,8 +1,10 @@
 package com.into.websoso.ui.createFeed
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -63,6 +65,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         super.onCreate(savedInstanceState)
 
         setupView()
+        setupCustomScroll()
         onCreateFeedClick()
         bindViewModel()
         setupObservers()
@@ -89,6 +92,20 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         CreateFeedSearchNovelBottomSheetDialog.apply {
             newInstance().show(supportFragmentManager, CREATE_FEED_SEARCH_NOVEL_TAG)
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupCustomScroll() {
+        binding.etCreateFeedContent.setOnTouchListener { view, event ->
+            if (view.hasFocus()) {
+                view.parent.requestDisallowInterceptTouchEvent(true)
+                if ((event.action and MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
+                    view.parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            false
+        }
+        binding.etCreateFeedContent.movementMethod = ScrollingMovementMethod()
     }
 
     private fun onCreateFeedClick() {
