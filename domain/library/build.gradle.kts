@@ -10,5 +10,5 @@ android {
 
 dependencies {
     implementation(projects.data.library)
-    implementation(libs.compose.paging)
+    implementation(libs.paging.runtime)
 }
