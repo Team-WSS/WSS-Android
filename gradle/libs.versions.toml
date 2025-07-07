@@ -32,7 +32,6 @@ lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.1.1"
 security-crypto = "1.1.0-alpha06"
 room = "2.6.1"
-paging = "3.3.1"
 
 # Testing Libraries
 junit = "4.13.2"
@@ -162,8 +161,8 @@ compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+compose-paging = { group = "androidx.paging", name = "paging-compose-android", version.ref = "pagingComposeAndroid" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
-androidx-paging-compose-android = { group = "androidx.paging", name = "paging-compose-android", version.ref = "pagingComposeAndroid" }
 
 [bundles]
 compose = [
