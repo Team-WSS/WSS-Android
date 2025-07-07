@@ -8,8 +8,15 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +26,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.map
 import com.into.websoso.feature.library.component.LibraryEmptyView
+import com.into.websoso.feature.library.component.LibraryFilterBottomSheet
 import com.into.websoso.feature.library.component.LibraryFilterTopBar
 import com.into.websoso.feature.library.component.LibraryGridList
 import com.into.websoso.feature.library.component.LibraryList
@@ -30,8 +38,17 @@ import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import kotlinx.coroutines.flow.map
 
+// 2. 바텀시트 내부 클릭리스너 정상 작동 확인
+// 3. 뷰모델로 데이터 전달 잘 되는지 확인
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LibraryScreen(libraryViewModel: LibraryViewModel = hiltViewModel()) {
+fun LibraryScreen(
+    navigateToMainActivity: () -> Unit,
+    navigateToNovelDetailActivity: (novelId: Long) -> Unit,
+    libraryViewModel: LibraryViewModel = hiltViewModel(),
+) {
+    val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
 
     val pagingItems = libraryViewModel.novelPagingData
@@ -41,26 +58,39 @@ fun LibraryScreen(libraryViewModel: LibraryViewModel = hiltViewModel()) {
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
 
+    var isShowBottomSheet by remember { mutableStateOf(false) }
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { false },
+    )
+
     LibraryScreen(
         uiState = uiState,
         pagingItems = pagingItems,
         listState = listState,
         gridState = gridState,
-        onFilterClick = { /* TODO */ },
+        sheetState = bottomSheetState,
+        onDismissRequest = { isShowBottomSheet = false },
+        isShowBottomSheet = isShowBottomSheet,
+        onFilterClick = { isShowBottomSheet = true },
         onSortClick = { libraryViewModel.updateSortType(it) },
         onToggleViewType = { libraryViewModel.updateViewType() },
-        onItemClick = { /* TODO */ },
+        onItemClick = { navigateToNovelDetailActivity(it.novelId) },
         onSearchClick = { /* TODO */ },
-        onExploreClick = { /* TODO */ },
+        onExploreClick = navigateToMainActivity,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LibraryScreen(
     uiState: LibraryUiState,
     pagingItems: LazyPagingItems<LibraryListItemModel>,
     listState: LazyListState,
     gridState: LazyGridState,
+    sheetState: SheetState,
+    isShowBottomSheet: Boolean,
+    onDismissRequest: () -> Unit,
     onFilterClick: (LibraryFilterType) -> Unit,
     onSortClick: (SortTypeUiModel) -> Unit,
     onToggleViewType: () -> Unit,
@@ -104,5 +134,12 @@ private fun LibraryScreen(
                 )
             }
         }
+    }
+
+    if (isShowBottomSheet) {
+        LibraryFilterBottomSheet(
+            onDismissRequest = onDismissRequest,
+            sheetState = sheetState,
+        )
     }
 }
