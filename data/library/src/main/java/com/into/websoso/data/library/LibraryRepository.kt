@@ -3,7 +3,6 @@ package com.into.websoso.data.library
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 import com.into.websoso.data.library.model.NovelEntity
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +14,7 @@ class LibraryRepository
     @Inject
     constructor(
         private val libraryRemoteDataSource: LibraryRemoteDataSource,
-        private val libraryLocalDataSource: LibraryLocalDataSource,
+//        private val libraryLocalDataSource: LibraryLocalDataSource,
     ) {
         fun getUserLibrary(
             userId: Long,
