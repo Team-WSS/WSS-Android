@@ -7,11 +7,10 @@ import androidx.paging.cachedIn
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.domain.library.GetUserNovelUseCase
 import com.into.websoso.domain.library.model.SortType
-import com.into.websoso.feature.library.model.LibraryFilterType
-import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,9 +25,9 @@ class LibraryViewModel
     constructor(
         private val getUserNovelUseCase: GetUserNovelUseCase,
     ) : ViewModel() {
-        private val mutableQueryParams = MutableStateFlow(LibraryQueryParams())
-        private val queryParams: StateFlow<LibraryQueryParams> = mutableQueryParams.asStateFlow()
+        private val queryParams = MutableStateFlow(LibraryQueryParams())
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         val novelPagingData: Flow<PagingData<NovelEntity>> =
             queryParams
                 .flatMapLatest { params ->
@@ -54,25 +53,13 @@ class LibraryViewModel
             }
         }
 
-        fun onSortClick(selected: SortTypeUiModel) {
+        fun updateSortType(selected: SortTypeUiModel) {
             val newSortType = when (selected.sortType) {
                 SortType.NEWEST -> SortType.OLDEST
                 SortType.OLDEST -> SortType.NEWEST
             }
-            mutableQueryParams.update { it.copy(sortType = newSortType) }
+            queryParams.update { it.copy(sortType = newSortType) }
             _uiState.update { it.copy(selectedSortType = SortTypeUiModel.from(newSortType)) }
-        }
-
-        fun onFilterClick(type: LibraryFilterType) {
-            // TODO: 바텀시트 연결 예정
-        }
-
-        fun onItemClick(item: LibraryListItemModel) {
-            // TODO: 상세화면 이동
-        }
-
-        fun navigateToExplore() {
-            // TODO: 탐색화면 이동
         }
     }
 
