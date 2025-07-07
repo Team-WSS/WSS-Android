@@ -133,6 +133,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
             fun valueOf(id: Int): FragmentType =
                 entries.find { fragmentType -> fragmentType.resId == id }
                     ?: throw IllegalArgumentException()
+
+            fun valueOf(fragmentName: String): FragmentType =
+                entries.find { fragmentType -> fragmentType.name == fragmentName }
+                    ?: throw IllegalArgumentException()
         }
     }
 
