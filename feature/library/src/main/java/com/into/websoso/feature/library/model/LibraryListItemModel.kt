@@ -1,5 +1,7 @@
 package com.into.websoso.feature.library.model
 
+import com.into.websoso.feature.library.util.formatDateRange
+
 data class LibraryListItemModel(
     val novelId: Long,
     val title: String,
@@ -13,4 +15,5 @@ data class LibraryListItemModel(
     val keywords: List<String>,
     val myFeeds: List<String>,
     val isInterest: Boolean,
+    val formattedDateRange: String? = formatDateRange(startDate, endDate),
 )
