@@ -17,7 +17,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.into.websoso.feature.library.model.LibraryListItemModel
 
 @Composable
-fun LibraryGridList(
+internal fun LibraryGridList(
     novels: LazyPagingItems<LibraryListItemModel>,
     gridState: LazyGridState,
     modifier: Modifier = Modifier,

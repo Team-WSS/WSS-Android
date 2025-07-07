@@ -27,7 +27,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -38,7 +38,6 @@ import com.into.websoso.core.resource.R.drawable.ic_library_null_star
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
-import com.into.websoso.feature.library.util.formatDateRange
 
 private const val GRID_COLUMN_COUNT = 3
 private val ITEM_SPACING = 6.dp
@@ -53,7 +52,7 @@ private enum class RatingStarType {
 }
 
 @Composable
-fun NovelGridListItem(
+internal fun NovelGridListItem(
     item: LibraryListItemModel,
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit = {},
@@ -84,7 +83,7 @@ fun NovelGridListItem(
             NovelRatingStar(rating = it)
         }
 
-        formatDateRange(item.startDate, item.endDate)?.let {
+        item.formattedDateRange?.let {
             Text(
                 text = it,
                 style = WebsosoTheme.typography.label2,
@@ -104,8 +103,8 @@ private fun NovelGridThumbnail(
             .size(width = size.width, height = size.height)
             .clip(RoundedCornerShape(8.dp)),
     ) {
-        AsyncImage(
-            model = item.novelImage,
+        NetworkImage(
+            imageUrl = item.novelImage,
             contentDescription = item.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
@@ -146,7 +145,8 @@ private fun ReadStatusBadge(
             .background(
                 color = readStatus.backgroundColor,
                 shape = RoundedCornerShape(4.dp),
-            ).padding(horizontal = 8.dp, vertical = 4.dp),
+            )
+            .padding(horizontal = 8.dp, vertical = 4.dp),
     )
 }
 
@@ -157,7 +157,8 @@ private fun rememberGridItemSize(): GridItemSize {
 
     return remember(screenWidth) {
         with(density) {
-            val totalSpacingPx = (ITEM_SPACING * (GRID_COLUMN_COUNT - 1) + HORIZONTAL_PADDING * 2).toPx()
+            val totalSpacingPx =
+                (ITEM_SPACING * (GRID_COLUMN_COUNT - 1) + HORIZONTAL_PADDING * 2).toPx()
             val itemWidthPx = ((screenWidth.dp.toPx() - totalSpacingPx) / GRID_COLUMN_COUNT)
             val itemHeightPx = itemWidthPx * (IMAGE_ASPECT_HEIGHT / IMAGE_ASPECT_WIDTH)
 

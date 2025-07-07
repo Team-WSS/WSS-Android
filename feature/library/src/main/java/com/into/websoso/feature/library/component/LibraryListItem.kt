@@ -69,7 +69,7 @@ private const val THUMBNAIL_HEIGHT_RATIO = 80f / 360f
 private const val FEED_CARD_WIDTH_RATIO = 0.8611f
 
 @Composable
-fun LibraryListItem(
+internal fun LibraryListItem(
     item: LibraryListItemModel,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},

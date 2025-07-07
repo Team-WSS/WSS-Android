@@ -30,7 +30,7 @@ import com.into.websoso.feature.library.R.string.library_empty
 import com.into.websoso.feature.library.R.string.library_go_to_explore
 
 @Composable
-fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
+internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxSize()

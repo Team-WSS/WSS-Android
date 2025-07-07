@@ -51,12 +51,12 @@ import com.into.websoso.feature.library.model.SortTypeUiModel
 import com.into.websoso.feature.library.util.buildFilterLabel
 
 @Composable
-fun LibraryFilterTopBar(
+internal fun LibraryFilterTopBar(
     libraryFilterUiState: LibraryFilterUiState,
     totalCount: Int,
     onFilterClick: (LibraryFilterType) -> Unit,
     selectedSortType: SortTypeUiModel,
-    onSortClick: () -> Unit,
+    onSortClick: (SortTypeUiModel) -> Unit,
     isGrid: Boolean,
     onToggleViewType: () -> Unit,
     modifier: Modifier = Modifier,
@@ -179,7 +179,7 @@ private fun NovelFilterStatusBar(
     totalCount: Int,
     selectedSortType: SortTypeUiModel,
     isGrid: Boolean,
-    onSortClick: () -> Unit,
+    onSortClick: (SortTypeUiModel) -> Unit,
     onToggleViewType: () -> Unit,
 ) {
     Row(
@@ -196,7 +196,7 @@ private fun NovelFilterStatusBar(
         Row(verticalAlignment = Alignment.CenterVertically) {
             SortTypeSelector(
                 selectedSortType = selectedSortType,
-                onClick = { onSortClick() },
+                onClick = { onSortClick(SortTypeUiModel.NEWEST) },
             )
 
             IconButton(onClick = onToggleViewType) {
@@ -213,7 +213,7 @@ private fun NovelFilterStatusBar(
 }
 
 @Composable
-fun SortTypeSelector(
+private fun SortTypeSelector(
     selectedSortType: SortTypeUiModel,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

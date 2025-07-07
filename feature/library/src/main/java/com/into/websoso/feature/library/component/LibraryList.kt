@@ -12,7 +12,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.into.websoso.feature.library.model.LibraryListItemModel
 
 @Composable
-fun LibraryList(
+internal fun LibraryList(
     novels: LazyPagingItems<LibraryListItemModel>,
     listState: LazyListState,
     onItemClick: (LibraryListItemModel) -> Unit = {},
