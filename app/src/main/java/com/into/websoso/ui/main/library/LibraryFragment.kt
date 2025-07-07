@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.into.websoso.R
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.feature.library.LibraryRoute
 import com.into.websoso.feature.library.LibraryScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +26,7 @@ class LibraryFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WebsosoTheme {
-                    LibraryScreen()
+                    LibraryRoute()
                 }
             }
         }
