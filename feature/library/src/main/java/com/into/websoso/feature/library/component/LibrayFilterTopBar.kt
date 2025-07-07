@@ -40,15 +40,12 @@ import com.into.websoso.core.resource.R.drawable.ic_library_drop_down_fill
 import com.into.websoso.core.resource.R.drawable.ic_library_grid
 import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
-import com.into.websoso.feature.library.R.string.library_attractive_point
 import com.into.websoso.feature.library.R.string.library_interesting
 import com.into.websoso.feature.library.R.string.library_novel_count
 import com.into.websoso.feature.library.R.string.library_rating
-import com.into.websoso.feature.library.R.string.library_read_status
 import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryFilterUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
-import com.into.websoso.feature.library.util.buildFilterLabel
 
 @Composable
 internal fun LibraryFilterTopBar(
@@ -109,10 +106,7 @@ private fun NovelFilterChipSection(
         )
 
         NovelFilterChip(
-            text = buildFilterLabel(
-                stringResource(id = library_read_status),
-                libraryFilterUiState.readStatusLabel,
-            ),
+            text = libraryFilterUiState.readStatusLabelText,
             isSelected = libraryFilterUiState.readStatusSelected,
             onClick = { onFilterClick(LibraryFilterType.ReadStatus) },
         )
@@ -124,10 +118,7 @@ private fun NovelFilterChipSection(
         )
 
         NovelFilterChip(
-            text = buildFilterLabel(
-                stringResource(id = library_attractive_point),
-                libraryFilterUiState.attractivePointLabel,
-            ),
+            text = libraryFilterUiState.attractivePointLabelText,
             isSelected = libraryFilterUiState.attractivePointSelected,
             onClick = { onFilterClick(LibraryFilterType.AttractivePoint) },
         )

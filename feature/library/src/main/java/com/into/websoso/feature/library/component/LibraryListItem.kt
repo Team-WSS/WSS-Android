@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.into.websoso.core.common.extensions.formatDateRange
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -62,7 +63,6 @@ import com.into.websoso.feature.library.R.string.library_total_rating
 import com.into.websoso.feature.library.model.AttractivePointUiModel
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
-import com.into.websoso.feature.library.util.formatDateRange
 
 private const val THUMBNAIL_WIDTH_RATIO = 60f / 360f
 private const val THUMBNAIL_HEIGHT_RATIO = 80f / 360f

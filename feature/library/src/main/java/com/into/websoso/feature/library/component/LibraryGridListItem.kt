@@ -37,6 +37,7 @@ import com.into.websoso.core.resource.R.drawable.ic_library_interesting
 import com.into.websoso.core.resource.R.drawable.ic_library_null_star
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.feature.library.model.LibraryListItemModel
+import com.into.websoso.feature.library.model.RatingStarType
 import com.into.websoso.feature.library.model.ReadStatusUiModel
 
 private const val GRID_COLUMN_COUNT = 3
@@ -44,12 +45,6 @@ private val ITEM_SPACING = 6.dp
 private val HORIZONTAL_PADDING = 20.dp
 private const val IMAGE_ASPECT_WIDTH = 102.67f
 private const val IMAGE_ASPECT_HEIGHT = 160f
-
-private enum class RatingStarType {
-    FULL,
-    HALF,
-    EMPTY,
-}
 
 @Composable
 internal fun NovelGridListItem(
@@ -79,8 +74,8 @@ internal fun NovelGridListItem(
             overflow = TextOverflow.Ellipsis,
         )
 
-        item.userNovelRating?.let {
-            NovelRatingStar(rating = it)
+        if (item.ratingStars.isNotEmpty()) {
+            NovelRatingStar(stars = item.ratingStars)
         }
 
         item.formattedDateRange?.let {
@@ -145,8 +140,7 @@ private fun ReadStatusBadge(
             .background(
                 color = readStatus.backgroundColor,
                 shape = RoundedCornerShape(4.dp),
-            )
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            ).padding(horizontal = 8.dp, vertical = 4.dp),
     )
 }
 
@@ -168,15 +162,15 @@ private fun rememberGridItemSize(): GridItemSize {
 }
 
 @Composable
-private fun NovelRatingStar(
-    rating: Float,
+fun NovelRatingStar(
+    stars: List<RatingStarType>,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        calculateRatingStars(rating).forEach { starType ->
+        stars.forEach { starType ->
             Image(
                 imageVector = ratingStarIcon(starType),
                 contentDescription = null,
@@ -194,18 +188,6 @@ private fun ratingStarIcon(starType: RatingStarType): ImageVector {
         RatingStarType.EMPTY -> ic_library_null_star
     }
     return ImageVector.vectorResource(id = resId)
-}
-
-private fun calculateRatingStars(rating: Float): List<RatingStarType> {
-    val fullStar = rating.toInt()
-    val halfStar = (rating - fullStar) >= 0.5f
-    val emptyStar = 5 - fullStar - if (halfStar) 1 else 0
-
-    return buildList {
-        repeat(fullStar) { add(RatingStarType.FULL) }
-        if (halfStar) add(RatingStarType.HALF)
-        repeat(emptyStar) { add(RatingStarType.EMPTY) }
-    }
 }
 
 private data class GridItemSize(
