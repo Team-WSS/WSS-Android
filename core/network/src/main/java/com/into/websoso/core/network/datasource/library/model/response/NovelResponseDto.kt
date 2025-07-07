@@ -25,9 +25,9 @@ internal data class NovelResponseDto(
     @SerialName("attractivePoints")
     val attractivePoints: List<String>,
     @SerialName("startDate")
-    val startDate: String,
+    val startDate: String?,
     @SerialName("endDate")
-    val endDate: String,
+    val endDate: String?,
     @SerialName("keywords")
     val keywords: List<String>,
     @SerialName("myFeeds")
@@ -44,8 +44,8 @@ internal data class NovelResponseDto(
             isInterest = isInterest,
             userNovelRating = userNovelRating,
             attractivePoints = attractivePoints,
-            startDate = startDate,
-            endDate = endDate,
+            startDate = startDate.orEmpty(),
+            endDate = endDate.orEmpty(),
             keywords = keywords,
             myFeeds = myFeeds,
         )

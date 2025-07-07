@@ -10,5 +10,5 @@ android {
 
 dependencies {
     implementation(projects.data.library)
-    implementation("androidx.paging:paging-runtime:3.3.2")
+    implementation(libs.paging.runtime)
 }

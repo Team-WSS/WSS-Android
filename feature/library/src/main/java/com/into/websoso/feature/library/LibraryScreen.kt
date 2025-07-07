@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -61,10 +62,10 @@ fun LibraryScreen(libraryViewModel: LibraryViewModel = hiltViewModel()) {
         pagingItems = pagingItems,
         listState = listState,
         gridState = gridState,
-        onFilterClick = { /* TODO */  },
+        onFilterClick = { /* TODO */ },
         onSortClick = { libraryViewModel.updateSortType(it) },
         onToggleViewType = { libraryViewModel.updateViewType() },
-        onItemClick = { /* TODO */  },
+        onItemClick = { /* TODO */ },
         onSearchClick = { /* TODO */ },
         onExploreClick = { /* TODO */ },
     )
@@ -98,6 +99,7 @@ private fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(4.dp))
 
+        Log.d("123123", pagingItems.itemCount.toString())
         when {
             pagingItems.itemCount == 0 && pagingItems.loadState.refresh !is LoadState.Loading -> {
                 LibraryEmptyView(onExploreClick = onExploreClick)

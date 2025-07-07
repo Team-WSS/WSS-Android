@@ -10,12 +10,10 @@ import com.into.websoso.domain.library.model.SortType
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -27,22 +25,8 @@ class LibraryViewModel
     ) : ViewModel() {
         private val queryParams = MutableStateFlow(LibraryQueryParams())
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         val novelPagingData: Flow<PagingData<NovelEntity>> =
-            queryParams
-                .flatMapLatest { params ->
-                    getUserNovelUseCase(
-                        userId = params.userId,
-                        lastUserNovelId = params.lastUserNovelId,
-                        size = params.size,
-                        sortType = params.sortType,
-                        isInterest = params.isInterest,
-                        readStatuses = params.readStatuses,
-                        attractivePoints = params.attractivePoints,
-                        novelRating = params.novelRating,
-                        query = params.query,
-                    )
-                }.cachedIn(viewModelScope)
+            getUserNovelUseCase().cachedIn(viewModelScope)
 
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
@@ -55,8 +39,8 @@ class LibraryViewModel
 
         fun updateSortType(selected: SortTypeUiModel) {
             val newSortType = when (selected.sortType) {
-                SortType.NEWEST -> SortType.OLDEST
-                SortType.OLDEST -> SortType.NEWEST
+                SortType.RECENT -> SortType.OLD
+                SortType.OLD -> SortType.RECENT
             }
             queryParams.update { it.copy(sortType = newSortType) }
             _uiState.update { it.copy(selectedSortType = SortTypeUiModel.from(newSortType)) }
@@ -67,7 +51,7 @@ data class LibraryQueryParams(
     val userId: Long = 184,
     val lastUserNovelId: Long = 0,
     val size: Int = 60,
-    val sortType: SortType = SortType.NEWEST,
+    val sortType: SortType = SortType.RECENT,
     val isInterest: Boolean? = null,
     val readStatuses: List<String>? = null,
     val attractivePoints: List<String>? = null,

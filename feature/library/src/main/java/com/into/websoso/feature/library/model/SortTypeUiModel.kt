@@ -7,8 +7,8 @@ enum class SortTypeUiModel(
     val key: String,
     val displayName: String,
 ) {
-    NEWEST(SortType.NEWEST, "NEWEST", "최신 순"),
-    OLDEST(SortType.OLDEST, "OLDEST", "오래된 순");
+    NEWEST(SortType.RECENT, "NEWEST", "최신 순"),
+    OLDEST(SortType.OLD, "OLDEST", "오래된 순");
 
     companion object {
         fun from(sortType: SortType): SortTypeUiModel {

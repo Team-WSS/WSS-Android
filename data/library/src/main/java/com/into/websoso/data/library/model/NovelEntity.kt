@@ -1,5 +1,7 @@
 package com.into.websoso.data.library.model
 
+import com.into.websoso.core.database.entity.InDatabaseNovelEntity
+
 data class UserNovelsEntity(
     val isLoadable: Boolean,
     val userNovelCount: Long,
@@ -21,3 +23,37 @@ data class NovelEntity(
     val keywords: List<String>,
     val myFeeds: List<String>,
 )
+
+fun InDatabaseNovelEntity.toData(): NovelEntity =
+    NovelEntity(
+        userNovelId = userNovelId,
+        novelId = novelId,
+        title = title,
+        novelImage = novelImage,
+        novelRating = novelRating,
+        readStatus = readStatus,
+        isInterest = isInterest,
+        userNovelRating = userNovelRating,
+        attractivePoints = attractivePoints,
+        startDate = startDate,
+        endDate = endDate,
+        keywords = keywords,
+        myFeeds = myFeeds,
+    )
+
+internal fun NovelEntity.toDatabase(): InDatabaseNovelEntity =
+    InDatabaseNovelEntity(
+        userNovelId = userNovelId,
+        novelId = novelId,
+        title = title,
+        novelImage = novelImage,
+        novelRating = novelRating,
+        readStatus = readStatus,
+        isInterest = isInterest,
+        userNovelRating = userNovelRating,
+        attractivePoints = attractivePoints,
+        startDate = startDate,
+        endDate = endDate,
+        keywords = keywords,
+        myFeeds = myFeeds,
+    )
