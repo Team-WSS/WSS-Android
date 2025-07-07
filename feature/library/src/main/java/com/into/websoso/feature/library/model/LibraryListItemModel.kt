@@ -2,7 +2,7 @@ package com.into.websoso.feature.library.model
 
 import com.into.websoso.core.common.extensions.formatDateRange
 
-internal data class LibraryListItemModel(
+data class LibraryListItemModel(
     val novelId: Long,
     val title: String,
     val startDate: String?,
@@ -34,7 +34,7 @@ internal data class LibraryListItemModel(
     }
 }
 
-internal enum class RatingStarType {
+enum class RatingStarType {
     FULL,
     HALF,
     EMPTY,
