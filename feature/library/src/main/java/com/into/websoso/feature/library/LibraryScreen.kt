@@ -46,7 +46,7 @@ import com.into.websoso.feature.library.model.SortTypeUiModel
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun LibraryRoute(libraryViewModel: LibraryViewModel = hiltViewModel()) {
+fun LibraryScreen(libraryViewModel: LibraryViewModel = hiltViewModel()) {
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
 
     val pagingItems = libraryViewModel.novelPagingData
@@ -71,7 +71,7 @@ fun LibraryRoute(libraryViewModel: LibraryViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun LibraryScreen(
+private fun LibraryScreen(
     uiState: LibraryUiState,
     pagingItems: LazyPagingItems<LibraryListItemModel>,
     listState: LazyListState,
