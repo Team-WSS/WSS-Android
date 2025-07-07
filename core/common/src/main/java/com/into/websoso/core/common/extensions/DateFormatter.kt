@@ -1,4 +1,4 @@
-package com.into.websoso.feature.library.util
+package com.into.websoso.core.common.extensions
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
