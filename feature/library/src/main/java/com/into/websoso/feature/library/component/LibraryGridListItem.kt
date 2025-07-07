@@ -140,7 +140,8 @@ private fun ReadStatusBadge(
             .background(
                 color = readStatus.backgroundColor,
                 shape = RoundedCornerShape(4.dp),
-            ).padding(horizontal = 8.dp, vertical = 4.dp),
+            )
+            .padding(horizontal = 8.dp, vertical = 4.dp),
     )
 }
 
@@ -162,7 +163,7 @@ private fun rememberGridItemSize(): GridItemSize {
 }
 
 @Composable
-fun NovelRatingStar(
+internal fun NovelRatingStar(
     stars: List<RatingStarType>,
     modifier: Modifier = Modifier,
 ) {

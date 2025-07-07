@@ -1,6 +1,6 @@
 package com.into.websoso.feature.library.model
 
-data class LibraryFilterUiState(
+internal data class LibraryFilterUiState(
     val isInterested: Boolean = false,
     val readStatusLabel: List<String> = emptyList(),
     val readStatusSelected: Boolean = false,

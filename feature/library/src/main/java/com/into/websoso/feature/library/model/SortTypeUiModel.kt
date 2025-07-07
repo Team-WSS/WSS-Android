@@ -2,7 +2,7 @@ package com.into.websoso.feature.library.model
 
 import com.into.websoso.domain.library.model.SortType
 
-enum class SortTypeUiModel(
+internal enum class SortTypeUiModel(
     val sortType: SortType,
     val key: String,
     val displayName: String,

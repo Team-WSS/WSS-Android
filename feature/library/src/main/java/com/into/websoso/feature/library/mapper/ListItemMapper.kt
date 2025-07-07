@@ -5,7 +5,7 @@ import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
 
-fun NovelEntity.toUiModel(): LibraryListItemModel =
+internal fun NovelEntity.toUiModel(): LibraryListItemModel =
     LibraryListItemModel(
         novelId = novelId,
         title = title,
