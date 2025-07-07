@@ -21,7 +21,7 @@ import javax.inject.Inject
 class LibraryViewModel
     @Inject
     constructor(
-        private val getUserNovelUseCase: GetUserNovelUseCase,
+        getUserNovelUseCase: GetUserNovelUseCase,
     ) : ViewModel() {
         private val queryParams = MutableStateFlow(LibraryQueryParams())
 

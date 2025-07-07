@@ -1,23 +1,17 @@
 package com.into.websoso.feature.library.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.core.resource.R.drawable.ic_common_search
 import com.into.websoso.feature.library.R.string.library_title
 
 @Composable
@@ -35,12 +29,12 @@ internal fun LibraryTopBar(onSearchClick: () -> Unit = {}) {
             color = Black,
         )
 
-        IconButton(onClick = onSearchClick) {
-            Image(
-                imageVector = ImageVector.vectorResource(id = ic_common_search),
-                contentDescription = "검색",
-                modifier = Modifier.size(24.dp),
-            )
-        }
+//        IconButton(onClick = onSearchClick) {
+//            Image(
+//                imageVector = ImageVector.vectorResource(id = ic_common_search),
+//                contentDescription = "검색",
+//                modifier = Modifier.size(24.dp),
+//            )
+//        }
     }
 }
