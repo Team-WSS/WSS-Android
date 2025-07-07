@@ -17,12 +17,13 @@ internal interface LibraryApi {
         @Path("userId") userId: Long,
         @Query("lastUserNovelId") lastUserNovelId: Long,
         @Query("size") size: Int,
-        @Query("sortType") sortType: String,
+        @Query("sortCriteria") sortCriteria: String,
         @Query("isInterest") isInterest: Boolean?,
         @Query("readStatuses") readStatuses: List<String>?,
         @Query("attractivePoints") attractivePoints: List<String>?,
         @Query("novelRating") novelRating: Float?,
         @Query("query") query: String?,
+        @Query("updatedSince") updatedSince: String?,
     ): UserNovelsResponseDto
 }
 

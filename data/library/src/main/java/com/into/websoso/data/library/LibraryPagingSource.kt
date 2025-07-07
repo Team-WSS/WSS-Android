@@ -12,12 +12,13 @@ internal class LibraryPagingSource(
     private val userId: Long,
     private val lastUserNovelId: Long,
     private val size: Int,
-    private val sortType: String,
+    private val sortCriteria: String,
     private val isInterest: Boolean?,
     private val readStatuses: List<String>?,
     private val attractivePoints: List<String>?,
     private val novelRating: Float?,
     private val query: String?,
+    private val updatedSince: String?,
 ) : PagingSource<Int, NovelEntity>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NovelEntity> {
         val userNovelId = params.key ?: STARTING_USER_NOVEL_ID
@@ -27,12 +28,13 @@ internal class LibraryPagingSource(
                 userId = userId,
                 lastUserNovelId = lastUserNovelId,
                 size = size,
-                sortType = sortType,
+                sortCriteria = sortCriteria,
                 isInterest = isInterest,
                 readStatuses = readStatuses,
                 attractivePoints = attractivePoints,
                 novelRating = novelRating,
                 query = query,
+                updatedSince = updatedSince,
             )
             val nextKey = if (response.isLoadable.not()) {
                 null

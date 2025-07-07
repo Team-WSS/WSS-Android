@@ -7,11 +7,12 @@ interface LibraryRemoteDataSource {
         userId: Long,
         lastUserNovelId: Long,
         size: Int,
-        sortType: String,
+        sortCriteria: String,
         isInterest: Boolean?,
         readStatuses: List<String>?,
         attractivePoints: List<String>?,
         novelRating: Float?,
         query: String?,
+        updatedSince: String?,
     ): UserNovelsEntity
 }

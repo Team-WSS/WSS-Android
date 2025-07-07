@@ -35,7 +35,7 @@ class LibraryViewModel
                         userId = params.userId,
                         lastUserNovelId = params.lastUserNovelId,
                         size = params.size,
-                        sortType = params.sortType,
+                        sortCriteria = params.sortType,
                         isInterest = params.isInterest,
                         readStatuses = params.readStatuses,
                         attractivePoints = params.attractivePoints,
@@ -55,8 +55,8 @@ class LibraryViewModel
 
         fun updateSortType(selected: SortTypeUiModel) {
             val newSortType = when (selected.sortType) {
-                SortType.NEWEST -> SortType.OLDEST
-                SortType.OLDEST -> SortType.NEWEST
+                SortType.RECENT -> SortType.OLD
+                SortType.OLD -> SortType.RECENT
             }
             queryParams.update { it.copy(sortType = newSortType) }
             _uiState.update { it.copy(selectedSortType = SortTypeUiModel.from(newSortType)) }
@@ -67,7 +67,7 @@ data class LibraryQueryParams(
     val userId: Long = 184,
     val lastUserNovelId: Long = 0,
     val size: Int = 60,
-    val sortType: SortType = SortType.NEWEST,
+    val sortType: SortType = SortType.RECENT,
     val isInterest: Boolean? = null,
     val readStatuses: List<String>? = null,
     val attractivePoints: List<String>? = null,

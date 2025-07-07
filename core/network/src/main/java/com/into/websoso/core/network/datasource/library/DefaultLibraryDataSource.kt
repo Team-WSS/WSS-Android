@@ -18,24 +18,26 @@ internal class DefaultLibraryDataSource
             userId: Long,
             lastUserNovelId: Long,
             size: Int,
-            sortType: String,
+            sortCriteria: String,
             isInterest: Boolean?,
             readStatuses: List<String>?,
             attractivePoints: List<String>?,
             novelRating: Float?,
             query: String?,
+            updatedSince: String?,
         ): UserNovelsEntity =
             libraryApi
                 .getUserNovels(
                     userId = userId,
                     lastUserNovelId = lastUserNovelId,
                     size = size,
-                    sortType = sortType,
+                    sortCriteria = sortCriteria,
                     isInterest = isInterest,
                     readStatuses = readStatuses,
                     attractivePoints = attractivePoints,
                     novelRating = novelRating,
                     query = query,
+                    updatedSince = null,
                 ).toData()
     }
 

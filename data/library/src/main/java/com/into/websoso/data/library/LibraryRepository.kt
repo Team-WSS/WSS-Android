@@ -20,7 +20,7 @@ class LibraryRepository
             userId: Long,
             lastUserNovelId: Long,
             size: Int,
-            sortType: String,
+            sortCriteria: String,
             isInterest: Boolean?,
             readStatuses: List<String>?,
             attractivePoints: List<String>?,
@@ -38,12 +38,13 @@ class LibraryRepository
                         userId = userId,
                         lastUserNovelId = lastUserNovelId,
                         size = size,
-                        sortType = sortType,
+                        sortCriteria = sortCriteria,
                         isInterest = isInterest,
                         readStatuses = readStatuses,
                         attractivePoints = attractivePoints,
                         novelRating = novelRating,
                         query = query,
+                        updatedSince = "",
                     )
                 },
             ).flow
