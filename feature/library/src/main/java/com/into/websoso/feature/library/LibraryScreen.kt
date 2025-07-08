@@ -25,6 +25,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.map
+import com.into.websoso.domain.library.model.AttractivePoints
+import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.feature.library.component.LibraryEmptyView
 import com.into.websoso.feature.library.component.LibraryFilterBottomSheet
 import com.into.websoso.feature.library.component.LibraryFilterTopBar
@@ -37,9 +39,7 @@ import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import kotlinx.coroutines.flow.map
-
-// 2. 바텀시트 내부 클릭리스너 정상 작동 확인
-// 3. 뷰모델로 데이터 전달 잘 되는지 확인
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,8 +49,8 @@ fun LibraryScreen(
     libraryViewModel: LibraryViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
+    val filterUiState by libraryViewModel.filterUiState.collectAsStateWithLifecycle()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
-
     val pagingItems = libraryViewModel.novelPagingData
         .map { it.map { novel -> novel.toUiModel() } }
         .collectAsLazyPagingItems()
@@ -70,14 +70,32 @@ fun LibraryScreen(
         listState = listState,
         gridState = gridState,
         sheetState = bottomSheetState,
-        onDismissRequest = { isShowBottomSheet = false },
+        onDismissRequest = {
+            scope.launch {
+                isShowBottomSheet = false
+                bottomSheetState.hide()
+            }
+        },
         isShowBottomSheet = isShowBottomSheet,
-        onFilterClick = { isShowBottomSheet = true },
-        onSortClick = { libraryViewModel.updateSortType(it) },
-        onToggleViewType = { libraryViewModel.updateViewType() },
+        onFilterClick = {
+            scope.launch {
+                isShowBottomSheet = true
+                bottomSheetState.show()
+            }
+        },
+        onSortClick = libraryViewModel::updateSortType,
+        onToggleViewType = libraryViewModel::updateViewType,
         onItemClick = { navigateToNovelDetailActivity(it.novelId) },
         onSearchClick = { /* TODO */ },
         onExploreClick = navigateToMainActivity,
+        onReadStatusClick = libraryViewModel::updateReadStatus,
+        onAttractivePointClick = libraryViewModel::updateAttractivePoints,
+        onRatingClick = libraryViewModel::updateRating,
+        onResetClick = libraryViewModel::resetFilter,
+        onFilterSearchClick = libraryViewModel::searchFilteredNovels,
+        attractivePoints = filterUiState.attractivePoints,
+        readStatues = filterUiState.readStatuses,
+        selectedRating = filterUiState.novelRating,
     )
 }
 
@@ -90,6 +108,12 @@ private fun LibraryScreen(
     gridState: LazyGridState,
     sheetState: SheetState,
     isShowBottomSheet: Boolean,
+    readStatues: Map<ReadStatus, Boolean>,
+    attractivePoints: Map<AttractivePoints, Boolean>,
+    selectedRating: Float,
+    onRatingClick: (rating: Float) -> Unit,
+    onReadStatusClick: (ReadStatus) -> Unit,
+    onAttractivePointClick: (AttractivePoints) -> Unit,
     onDismissRequest: () -> Unit,
     onFilterClick: (LibraryFilterType) -> Unit,
     onSortClick: (SortTypeUiModel) -> Unit,
@@ -97,6 +121,8 @@ private fun LibraryScreen(
     onItemClick: (LibraryListItemModel) -> Unit,
     onSearchClick: () -> Unit,
     onExploreClick: () -> Unit,
+    onResetClick: () -> Unit,
+    onFilterSearchClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         LibraryTopBar(onSearchClick = onSearchClick)
@@ -140,6 +166,14 @@ private fun LibraryScreen(
         LibraryFilterBottomSheet(
             onDismissRequest = onDismissRequest,
             sheetState = sheetState,
+            onReadStatusClick = onReadStatusClick,
+            onAttractivePointClick = onAttractivePointClick,
+            onRatingClick = onRatingClick,
+            attractivePoints = attractivePoints,
+            readStatues = readStatues,
+            selectedRating = selectedRating,
+            onResetClick = onResetClick,
+            onFilterSearchClick = onFilterSearchClick,
         )
     }
 }
