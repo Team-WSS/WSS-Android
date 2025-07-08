@@ -90,8 +90,7 @@ internal fun LibraryListItem(
             )
 
             NovelInfo(
-                startDate = item.startDate,
-                endDate = item.endDate,
+                item = item,
                 title = item.title,
                 myRating = item.userNovelRating,
                 totalRating = item.novelRating,
@@ -172,7 +171,8 @@ private fun ReadStatusBadge(
                 .background(
                     color = readStatus.backgroundColor,
                     shape = RoundedCornerShape(8.dp),
-                ).padding(vertical = 4.dp),
+                )
+                .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -195,8 +195,7 @@ private fun calculateThumbnailSize(): ThumbnailUiSize {
 
 @Composable
 private fun NovelInfo(
-    startDate: String?,
-    endDate: String?,
+    item: LibraryListItemModel,
     title: String,
     myRating: Float?,
     totalRating: Float,
@@ -205,15 +204,17 @@ private fun NovelInfo(
     Column {
         Spacer(modifier = Modifier.height(2.dp))
 
-        formatDateRange(startDate, endDate)?.let {
-            Text(
-                text = it,
-                style = WebsosoTheme.typography.body5,
-                color = Gray300,
-            )
+        Box(modifier = Modifier.height(18.dp)) {
+            item.formattedDateRange?.let {
+                Text(
+                    text = it,
+                    style = WebsosoTheme.typography.body5,
+                    color = Gray300,
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Text(
             text = title,
