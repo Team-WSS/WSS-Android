@@ -37,13 +37,15 @@ class LibraryViewModel
             }
         }
 
-        fun updateSortType(selected: SortTypeUiModel) {
-            val newSortType = when (selected.sortType) {
+        fun updateSortType() {
+            val currentSortType = _uiState.value.selectedSortType.sortType
+            val changedSortType = when (currentSortType) {
                 SortType.RECENT -> SortType.OLD
                 SortType.OLD -> SortType.RECENT
             }
-            queryParams.update { it.copy(sortType = newSortType) }
-            _uiState.update { it.copy(selectedSortType = SortTypeUiModel.from(newSortType)) }
+
+            queryParams.update { it.copy(sortType = changedSortType) }
+            _uiState.update { it.copy(selectedSortType = SortTypeUiModel.from(changedSortType)) }
         }
     }
 
