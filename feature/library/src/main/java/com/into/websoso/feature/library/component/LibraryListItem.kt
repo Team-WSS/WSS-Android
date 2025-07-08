@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.into.websoso.core.common.extensions.formatDateRange
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -171,8 +170,7 @@ private fun ReadStatusBadge(
                 .background(
                     color = readStatus.backgroundColor,
                     shape = RoundedCornerShape(8.dp),
-                )
-                .padding(vertical = 4.dp),
+                ).padding(vertical = 4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
