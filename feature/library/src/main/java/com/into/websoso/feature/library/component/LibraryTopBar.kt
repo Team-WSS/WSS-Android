@@ -28,13 +28,17 @@ internal fun LibraryTopBar(onSearchClick: () -> Unit = {}) {
             style = WebsosoTheme.typography.headline1,
             color = Black,
         )
+        /*
+        TODO: 추후 검색 기능 구현 시 롤백
+                IconButton(onClick = onSearchClick) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = ic_common_search),
+                        contentDescription = "검색",
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+            }
 
-//        IconButton(onClick = onSearchClick) {
-//            Image(
-//                imageVector = ImageVector.vectorResource(id = ic_common_search),
-//                contentDescription = "검색",
-//                modifier = Modifier.size(24.dp),
-//            )
-//        }
+         */
     }
 }
