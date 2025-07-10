@@ -2,6 +2,7 @@ import com.into.websoso.setNamespace
 
 plugins {
     id("websoso.android.library")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -9,9 +10,10 @@ android {
 }
 
 dependencies {
-    // 데이터 레이어 의존성
+    implementation(projects.core.common)
     implementation(projects.data.account)
+    implementation(projects.data.library)
 
-    // Datastore 라이브러리
     implementation(libs.datastore.preferences)
+    implementation(libs.serialization.json)
 }
