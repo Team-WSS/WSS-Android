@@ -11,7 +11,6 @@ import com.into.websoso.R
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.library.LibraryScreen
-import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,8 +31,8 @@ class LibraryFragment : Fragment() {
             setContent {
                 WebsosoTheme {
                     LibraryScreen(
-                        navigateToMainActivity = {
-                            websosoNavigator.navigateToMainActivity(::startActivity, EXPLORE.name)
+                        navigateToNormalExploreActivity = {
+                            websosoNavigator.navigateToNormalExploreActivity(::startActivity)
                         },
                         navigateToNovelDetailActivity = { novelId ->
                             websosoNavigator.navigateToNovelDetailActivity(novelId, ::startActivity)

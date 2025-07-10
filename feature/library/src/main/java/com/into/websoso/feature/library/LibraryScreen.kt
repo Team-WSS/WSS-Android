@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryScreen(
-    navigateToMainActivity: () -> Unit,
+    navigateToNormalExploreActivity: () -> Unit,
     navigateToNovelDetailActivity: (novelId: Long) -> Unit,
     libraryViewModel: LibraryViewModel = hiltViewModel(),
     libraryFilterViewModel: LibraryFilterViewModel = hiltViewModel(),
@@ -87,7 +87,7 @@ fun LibraryScreen(
         onToggleViewType = libraryViewModel::updateViewType,
         onItemClick = { navigateToNovelDetailActivity(it.novelId) },
         onSearchClick = { /* TODO */ },
-        onExploreClick = navigateToMainActivity,
+        onExploreClick = navigateToNormalExploreActivity,
         onReadStatusClick = libraryFilterViewModel::updateReadStatus,
         onAttractivePointClick = libraryFilterViewModel::updateAttractivePoints,
         onRatingClick = libraryFilterViewModel::updateRating,

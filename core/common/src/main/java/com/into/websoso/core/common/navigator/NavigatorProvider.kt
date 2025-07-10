@@ -21,6 +21,8 @@ interface NavigatorProvider {
         novelId: Long,
         startActivity: (Intent) -> Unit,
     )
+
+    fun navigateToNormalExploreActivity(startActivity: (Intent) -> Unit)
 }
 
 @EntryPoint
