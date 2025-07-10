@@ -42,7 +42,6 @@ import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
 import com.into.websoso.feature.library.R.string.library_interesting
 import com.into.websoso.feature.library.R.string.library_novel_count
-import com.into.websoso.feature.library.R.string.library_rating
 import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryFilterUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
@@ -55,7 +54,9 @@ internal fun LibraryFilterTopBar(
     selectedSortType: SortTypeUiModel,
     onSortClick: (SortTypeUiModel) -> Unit,
     isGrid: Boolean,
+    isInterested: Boolean,
     onToggleViewType: () -> Unit,
+    onInterestClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -65,7 +66,9 @@ internal fun LibraryFilterTopBar(
     ) {
         NovelFilterChipSection(
             libraryFilterUiState = libraryFilterUiState,
+            isInterested = isInterested,
             onFilterClick = onFilterClick,
+            onInterestClick = onInterestClick,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -83,6 +86,8 @@ internal fun LibraryFilterTopBar(
 @Composable
 private fun NovelFilterChipSection(
     libraryFilterUiState: LibraryFilterUiState,
+    isInterested: Boolean,
+    onInterestClick: () -> Unit,
     onFilterClick: (LibraryFilterType) -> Unit,
 ) {
     Row(
@@ -92,8 +97,8 @@ private fun NovelFilterChipSection(
     ) {
         NovelFilterChip(
             text = stringResource(id = library_interesting),
-            isSelected = libraryFilterUiState.isInterested,
-            onClick = { onFilterClick(LibraryFilterType.Interest) },
+            isSelected = isInterested,
+            onClick = onInterestClick,
             showDropdownIcon = false,
         )
 
@@ -104,22 +109,21 @@ private fun NovelFilterChipSection(
                 .height(32.dp)
                 .background(color = Gray70),
         )
-
         NovelFilterChip(
             text = libraryFilterUiState.readStatusLabelText,
-            isSelected = libraryFilterUiState.readStatusSelected,
+            isSelected = libraryFilterUiState.readStatuses.any { it.value },
             onClick = { onFilterClick(LibraryFilterType.ReadStatus) },
         )
 
         NovelFilterChip(
-            text = stringResource(id = library_rating),
-            isSelected = libraryFilterUiState.ratingSelected,
+            text = libraryFilterUiState.ratingText,
+            isSelected = libraryFilterUiState.isRatingSelected,
             onClick = { onFilterClick(LibraryFilterType.Rating) },
         )
 
         NovelFilterChip(
             text = libraryFilterUiState.attractivePointLabelText,
-            isSelected = libraryFilterUiState.attractivePointSelected,
+            isSelected = libraryFilterUiState.attractivePoints.any { it.value },
             onClick = { onFilterClick(LibraryFilterType.AttractivePoint) },
         )
     }

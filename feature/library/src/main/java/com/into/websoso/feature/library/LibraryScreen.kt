@@ -47,18 +47,17 @@ fun LibraryScreen(
     navigateToMainActivity: () -> Unit,
     navigateToNovelDetailActivity: (novelId: Long) -> Unit,
     libraryViewModel: LibraryViewModel = hiltViewModel(),
+    libraryFilterViewModel: LibraryFilterViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    val filterUiState by libraryViewModel.filterUiState.collectAsStateWithLifecycle()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
+    val filterUiState by libraryFilterViewModel.libraryFilterUiState.collectAsStateWithLifecycle()
     val pagingItems = libraryViewModel.novelPagingData
         .map { it.map { novel -> novel.toUiModel() } }
         .collectAsLazyPagingItems()
-
+    var isShowBottomSheet by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
-
-    var isShowBottomSheet by remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { false },
@@ -81,6 +80,7 @@ fun LibraryScreen(
             scope.launch {
                 isShowBottomSheet = true
                 bottomSheetState.show()
+                libraryFilterViewModel.updateMyLibraryFilter(uiState.libraryFilterUiState)
             }
         },
         onSortClick = libraryViewModel::updateSortType,
@@ -88,11 +88,18 @@ fun LibraryScreen(
         onItemClick = { navigateToNovelDetailActivity(it.novelId) },
         onSearchClick = { /* TODO */ },
         onExploreClick = navigateToMainActivity,
-        onReadStatusClick = libraryViewModel::updateReadStatus,
-        onAttractivePointClick = libraryViewModel::updateAttractivePoints,
-        onRatingClick = libraryViewModel::updateRating,
-        onResetClick = libraryViewModel::resetFilter,
-        onFilterSearchClick = libraryViewModel::searchFilteredNovels,
+        onReadStatusClick = libraryFilterViewModel::updateReadStatus,
+        onAttractivePointClick = libraryFilterViewModel::updateAttractivePoints,
+        onRatingClick = libraryFilterViewModel::updateRating,
+        onResetClick = libraryFilterViewModel::resetFilter,
+        onInterestClick = libraryViewModel::updateInterestedNovels,
+        onFilterSearchClick = {
+            scope.launch {
+                isShowBottomSheet = false
+                bottomSheetState.hide()
+                libraryFilterViewModel.searchFilteredNovels()
+            }
+        },
         attractivePoints = filterUiState.attractivePoints,
         readStatues = filterUiState.readStatuses,
         selectedRating = filterUiState.novelRating,
@@ -123,18 +130,21 @@ private fun LibraryScreen(
     onExploreClick: () -> Unit,
     onResetClick: () -> Unit,
     onFilterSearchClick: () -> Unit,
+    onInterestClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         LibraryTopBar(onSearchClick = onSearchClick)
 
         LibraryFilterTopBar(
-            libraryFilterUiState = uiState.filterUiState,
+            libraryFilterUiState = uiState.libraryFilterUiState,
             totalCount = pagingItems.itemCount,
             selectedSortType = uiState.selectedSortType,
             isGrid = uiState.isGrid,
+            isInterested = uiState.isInterested,
             onFilterClick = onFilterClick,
             onSortClick = onSortClick,
             onToggleViewType = onToggleViewType,
+            onInterestClick = onInterestClick,
         )
 
         Spacer(modifier = Modifier.height(4.dp))
