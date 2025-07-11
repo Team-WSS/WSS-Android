@@ -1,4 +1,3 @@
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -42,11 +41,9 @@ class NovelRemoteMediator(
             if (loadType == LoadType.REFRESH) {
                 libraryLocalDataSource.deleteAllNovels()
             }
-            Log.d("123123", response.toString())
             libraryLocalDataSource.insertNovels(response.userNovels)
             MediatorResult.Success(endOfPaginationReached = !response.isLoadable)
         } catch (e: Exception) {
-            Log.d("1231234", e.toString())
             MediatorResult.Error(e)
         }
     }
