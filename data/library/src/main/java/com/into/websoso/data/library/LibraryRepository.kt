@@ -10,7 +10,6 @@ import com.into.websoso.core.database.entity.InDatabaseNovelEntity
 import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 import com.into.websoso.data.library.datasource.MyLibraryFilterLocalDataSource
-import com.into.websoso.data.library.model.LibraryFilterParams
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.model.toData
 import kotlinx.coroutines.flow.Flow
@@ -52,24 +51,14 @@ class LibraryRepository
             }.flow.map { it.map(InDatabaseNovelEntity::toData) }
 
         suspend fun updateMyLibraryFilter(
-            userId: Long = 184,
-            lastUserNovelId: Long = 0,
-            size: Int = 60,
-            sortCriteria: String = "",
-            isInterest: Boolean? = null,
-            readStatuses: List<String>,
-            attractivePoints: List<String>,
-            novelRating: Float? = null,
-            query: String? = null,
+            readStatuses: Map<String, Boolean>,
+            attractivePoints: Map<String, Boolean>,
+            novelRating: Float,
         ) {
             myLibraryFilterLocalDataSource.updateMyLibraryFilter(
-                LibraryFilterParams(
-                    sortCriteria = sortCriteria,
-                    isInterest = isInterest,
-                    readStatuses = readStatuses.toList(),
-                    attractivePoints = attractivePoints.toList(),
-                    novelRating = novelRating,
-                ),
+                readStatuses = readStatuses,
+                attractivePoints = attractivePoints,
+                novelRating = novelRating,
             )
         }
 
