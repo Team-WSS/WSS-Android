@@ -9,4 +9,11 @@ enum class AttractivePoints(
     CHARACTER("캐릭터", "character"),
     RELATIONSHIP("관계", "relationship"),
     VIBE("분위기", "vibe"),
+    ;
+
+    companion object {
+        fun valueOf(name: String): AttractivePoints =
+            AttractivePoints.entries.find { attractivePoints -> attractivePoints.name == name }
+                ?: throw IllegalArgumentException()
+    }
 }

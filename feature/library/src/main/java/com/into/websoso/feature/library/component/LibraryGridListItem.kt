@@ -162,7 +162,7 @@ private fun rememberGridItemSize(): GridItemSize {
 }
 
 @Composable
-fun NovelRatingStar(
+internal fun NovelRatingStar(
     stars: List<RatingStarType>,
     modifier: Modifier = Modifier,
 ) {
