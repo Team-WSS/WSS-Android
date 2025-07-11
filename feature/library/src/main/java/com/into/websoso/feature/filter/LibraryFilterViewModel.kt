@@ -1,4 +1,4 @@
-package com.into.websoso.feature.library
+package com.into.websoso.feature.filter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,19 +19,19 @@ class LibraryFilterViewModel
     constructor(
         private val libraryRepository: LibraryRepository,
     ) : ViewModel() {
-        private val _libraryFilterUiState = MutableStateFlow(LibraryFilterUiState())
-        val libraryFilterUiState = _libraryFilterUiState.asStateFlow()
+        private val _uiState = MutableStateFlow(LibraryFilterUiState())
+        val uiState = _uiState.asStateFlow()
 
         fun updateMyLibraryFilter(libraryFilterUiState: LibraryFilterUiState) {
             viewModelScope.launch {
-                _libraryFilterUiState.update {
+                _uiState.update {
                     libraryFilterUiState
                 }
             }
         }
 
         fun updateReadStatus(readStatus: ReadStatus) {
-            _libraryFilterUiState.update {
+            _uiState.update {
                 it.copy(
                     readStatuses = it.readStatuses.mapValues { (key, value) ->
                         if (key == readStatus) !value else value
@@ -41,7 +41,7 @@ class LibraryFilterViewModel
         }
 
         fun updateAttractivePoints(attractivePoint: AttractivePoints) {
-            _libraryFilterUiState.update {
+            _uiState.update {
                 it.copy(
                     attractivePoints = it.attractivePoints.mapValues { (key, value) ->
                         if (key == attractivePoint) !value else value
@@ -51,7 +51,7 @@ class LibraryFilterViewModel
         }
 
         fun updateRating(rating: Float) {
-            _libraryFilterUiState.update {
+            _uiState.update {
                 it.copy(
                     novelRating = if (it.novelRating == rating) 0f else rating,
                 )
@@ -59,7 +59,7 @@ class LibraryFilterViewModel
         }
 
         fun resetFilter() {
-            _libraryFilterUiState.update {
+            _uiState.update {
                 LibraryFilterUiState()
             }
         }
@@ -67,13 +67,9 @@ class LibraryFilterViewModel
         fun searchFilteredNovels() {
             viewModelScope.launch {
                 libraryRepository.updateMyLibraryFilter(
-                    readStatuses = libraryFilterUiState.value.readStatuses
-                        .filterValues { it }
-                        .map { it.key.name },
-                    attractivePoints = libraryFilterUiState.value.attractivePoints
-                        .filterValues { it }
-                        .map { it.key.name },
-                    novelRating = libraryFilterUiState.value.novelRating,
+                    readStatuses = uiState.value.readStatuses.mapKeys { it.key.name },
+                    attractivePoints = uiState.value.attractivePoints.mapKeys { it.key.name },
+                    novelRating = uiState.value.novelRating,
                 )
             }
         }

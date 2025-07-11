@@ -1,4 +1,4 @@
-package com.into.websoso.feature.library.component
+package com.into.websoso.feature.filter.component
 
 import android.annotation.SuppressLint
 import androidx.annotation.IntegerRes
@@ -15,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R
 
 @SuppressLint("ResourceType")
 @Composable
@@ -49,6 +51,21 @@ internal fun LibraryFilterBottomSheetClickableItem(
             text = iconTitle,
             style = WebsosoTheme.typography.body4,
             color = if (isSelected) Primary100 else Gray300,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LibraryFilterBottomSheetClickableItemPreview() {
+    WebsosoTheme {
+        LibraryFilterBottomSheetClickableItem(
+            icon = R.drawable.ic_library_vibe,
+            iconTitle = "분위기",
+            horizontalPadding = 12.dp,
+            iconSize = 36.dp,
+            isSelected = false,
+            onClick = { },
         )
     }
 }
