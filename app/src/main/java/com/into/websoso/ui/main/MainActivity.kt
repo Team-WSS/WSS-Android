@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.annotation.IntegerRes
+import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -120,7 +120,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     }
 
     enum class FragmentType(
-        @IntegerRes private val resId: Int,
+        @DrawableRes private val resId: Int,
     ) {
         LIBRARY(menu_library),
         HOME(menu_home),
