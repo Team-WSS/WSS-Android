@@ -31,13 +31,17 @@ data class LibraryFilterUiState(
 
     val readStatusLabelText: String
         get() = buildLabel(
-            readStatuses.filterValues { it }.keys.map { it.name },
+            readStatuses.filterValues { it }.keys.map { status ->
+                ReadStatusUiModel.valueOf(status.name).label
+            },
             "읽기 상태",
         )
 
     val attractivePointLabelText: String
         get() = buildLabel(
-            attractivePoints.filterValues { it }.keys.map { it.name },
+            attractivePoints.filterValues { it }.keys.map { point ->
+                point.label
+            },
             "매력 포인트",
         )
 
