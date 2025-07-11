@@ -8,11 +8,10 @@ enum class SortTypeUiModel(
     val displayName: String,
 ) {
     NEWEST(SortType.RECENT, "NEWEST", "최신 순"),
-    OLDEST(SortType.OLD, "OLDEST", "오래된 순");
+    OLDEST(SortType.OLD, "OLDEST", "오래된 순"),
+    ;
 
     companion object {
-        fun from(sortType: SortType): SortTypeUiModel {
-            return entries.firstOrNull { it.sortType == sortType } ?: NEWEST
-        }
+        fun from(sortType: SortType): SortTypeUiModel = entries.firstOrNull { it.sortType == sortType } ?: NEWEST
     }
 }

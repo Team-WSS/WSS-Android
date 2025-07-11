@@ -8,11 +8,21 @@ import dagger.hilt.components.SingletonComponent
 interface NavigatorProvider {
     fun navigateToLoginActivity(startActivity: (Intent) -> Unit)
 
-    fun navigateToMainActivity(startActivity: (Intent) -> Unit)
+    fun navigateToMainActivity(
+        startActivity: (Intent) -> Unit,
+        fragmentType: String? = null,
+    )
 
     fun navigateToOnboardingActivity(startActivity: (Intent) -> Unit)
 
     fun navigateToUserStorageActivity(startActivity: (Intent) -> Unit)
+
+    fun navigateToNovelDetailActivity(
+        novelId: Long,
+        startActivity: (Intent) -> Unit,
+    )
+
+    fun navigateToNormalExploreActivity(startActivity: (Intent) -> Unit)
 }
 
 @EntryPoint

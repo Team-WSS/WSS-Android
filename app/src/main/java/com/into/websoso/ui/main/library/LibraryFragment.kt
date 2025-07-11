@@ -8,12 +8,17 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.into.websoso.R
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.library.LibraryScreen
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LibraryFragment : Fragment() {
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,11 +30,17 @@ class LibraryFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WebsosoTheme {
-                    LibraryScreen()
+                    LibraryScreen(
+                        navigateToNormalExploreActivity = {
+                            websosoNavigator.navigateToNormalExploreActivity(::startActivity)
+                        },
+                        navigateToNovelDetailActivity = { novelId ->
+                            websosoNavigator.navigateToNovelDetailActivity(novelId, ::startActivity)
+                        },
+                    )
                 }
             }
         }
         return view
     }
 }
-

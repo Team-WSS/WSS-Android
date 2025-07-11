@@ -5,3 +5,7 @@ import javax.inject.Qualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 internal annotation class AccountDataStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+internal annotation class MyLibraryFilterDataStore
