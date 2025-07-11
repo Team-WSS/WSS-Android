@@ -90,10 +90,6 @@ internal fun LibraryListItem(
 
             NovelInfo(
                 item = item,
-                title = item.title,
-                myRating = item.userNovelRating,
-                totalRating = item.novelRating,
-                attractivePoints = item.attractivePoints,
             )
         }
 
@@ -170,7 +166,8 @@ private fun ReadStatusBadge(
                 .background(
                     color = readStatus.backgroundColor,
                     shape = RoundedCornerShape(8.dp),
-                ).padding(vertical = 4.dp),
+                )
+                .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -192,28 +189,46 @@ private fun calculateThumbnailSize(): ThumbnailUiSize {
 }
 
 @Composable
-private fun NovelInfo(
-    item: LibraryListItemModel,
+private fun NovelInfo(item: LibraryListItemModel) {
+    Column {
+        Spacer(modifier = Modifier.height(2.dp))
+        NovelInfoDate(item = item)
+        Spacer(modifier = Modifier.height(4.dp))
+        NovelInfoContent(
+            title = item.title,
+            myRating = item.userNovelRating,
+            totalRating = item.novelRating,
+            attractivePoints = item.attractivePoints,
+        )
+    }
+}
+
+@Composable
+private fun NovelInfoDate(item: LibraryListItemModel) {
+    Box(modifier = Modifier.height(18.dp)) {
+        item.formattedDateRange?.let {
+            Text(
+                text = it,
+                style = WebsosoTheme.typography.body5,
+                color = Gray300,
+            )
+        }
+    }
+}
+
+@Composable
+private fun NovelInfoContent(
     title: String,
     myRating: Float?,
     totalRating: Float,
     attractivePoints: List<AttractivePointUiModel>,
 ) {
-    Column {
-        Spacer(modifier = Modifier.height(2.dp))
+    val size = calculateThumbnailSize()
 
-        Box(modifier = Modifier.height(18.dp)) {
-            item.formattedDateRange?.let {
-                Text(
-                    text = it,
-                    style = WebsosoTheme.typography.body5,
-                    color = Gray300,
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
+    Column(
+        modifier = Modifier.height(size.height),
+        verticalArrangement = Arrangement.Center,
+    ) {
         Text(
             text = title,
             style = WebsosoTheme.typography.title2,
@@ -229,7 +244,11 @@ private fun NovelInfo(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        AttractivePointTags(types = attractivePoints)
+        if (attractivePoints.isNotEmpty()) {
+            AttractivePointTags(types = attractivePoints)
+        } else {
+            Box(modifier = Modifier.height(18.dp))
+        }
     }
 }
 
