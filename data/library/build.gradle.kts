@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(projects.core.database)
+    implementation(projects.data.account)
     // 페이징3
     val paging_version = "3.3.6"
 

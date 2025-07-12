@@ -6,8 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.model.NovelEntity
-import com.into.websoso.domain.library.GetFilteredNovelUseCase
-import com.into.websoso.domain.library.GetUserNovelUseCase
+import com.into.websoso.domain.library.GetLibraryUseCase
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.domain.library.model.SortType
@@ -26,12 +25,11 @@ import javax.inject.Inject
 class LibraryViewModel
     @Inject
     constructor(
-        getUserNovelUseCase: GetUserNovelUseCase,
-        private val getFilteredNovelUseCase: GetFilteredNovelUseCase,
+        getLibraryUseCase: GetLibraryUseCase,
         private val libraryRepository: LibraryRepository,
     ) : ViewModel() {
         val novelPagingData: Flow<PagingData<NovelEntity>> =
-            getUserNovelUseCase().cachedIn(viewModelScope)
+            getLibraryUseCase().cachedIn(viewModelScope)
 
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
@@ -48,18 +46,12 @@ class LibraryViewModel
                             uiState.copy(
                                 isInterested = myFilter.isInterest ?: false,
                                 libraryFilterUiState = uiState.libraryFilterUiState.copy(
-                                    readStatuses = uiState.libraryFilterUiState.readStatuses +
-                                        (
-                                            myFilter.readStatuses?.map {
-                                                ReadStatus.valueOf(it) to true
-                                            } ?: emptyList()
-                                        ),
-                                    attractivePoints = uiState.libraryFilterUiState.attractivePoints +
-                                        (
-                                            myFilter.attractivePoints?.map {
-                                                AttractivePoints.valueOf(it) to true
-                                            } ?: emptyList()
-                                        ),
+                                    readStatuses = myFilter.readStatuses.mapKeys {
+                                        ReadStatus.valueOf(it.key)
+                                    },
+                                    attractivePoints = myFilter.attractivePoints.mapKeys {
+                                        AttractivePoints.valueOf(it.key)
+                                    },
                                     novelRating = myFilter.novelRating ?: 0f,
                                 ),
                             )
