@@ -6,7 +6,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.model.NovelEntity
-import com.into.websoso.domain.library.GetFilteredNovelUseCase
 import com.into.websoso.domain.library.GetUserNovelUseCase
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
@@ -27,7 +26,7 @@ class LibraryViewModel
     @Inject
     constructor(
         getUserNovelUseCase: GetUserNovelUseCase,
-        private val getFilteredNovelUseCase: GetFilteredNovelUseCase,
+//    private val getFilteredNovelUseCase: GetFilteredNovelUseCase,
         private val libraryRepository: LibraryRepository,
     ) : ViewModel() {
         val novelPagingData: Flow<PagingData<NovelEntity>> =
@@ -76,7 +75,8 @@ class LibraryViewModel
         }
 
         fun updateSortType(selected: SortTypeUiModel) {
-            val newSortType = when (selected.sortType) {
+            val current = _uiState.value.selectedSortType.sortType
+            val newSortType = when (current) {
                 SortType.RECENT -> SortType.OLD
                 SortType.OLD -> SortType.RECENT
             }
