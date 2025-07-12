@@ -37,7 +37,6 @@ import com.into.websoso.feature.library.mapper.toUiModel
 import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.LibraryUiState
-import com.into.websoso.feature.library.model.SortTypeUiModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -106,7 +105,7 @@ private fun LibraryScreen(
     isShowBottomSheet: Boolean,
     onDismissRequest: () -> Unit,
     onFilterClick: (LibraryFilterType) -> Unit,
-    onSortClick: (SortTypeUiModel) -> Unit,
+    onSortClick: () -> Unit,
     onToggleViewType: () -> Unit,
     onItemClick: (LibraryListItemModel) -> Unit,
     onSearchClick: () -> Unit,

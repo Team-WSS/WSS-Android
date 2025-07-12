@@ -78,8 +78,9 @@ class LibraryViewModel
             }
         }
 
-        fun updateSortType(selected: SortTypeUiModel) {
-            val newSortType = when (selected.sortType) {
+        fun updateSortType() {
+            val current = _uiState.value.selectedSortType.sortType
+            val newSortType = when (current) {
                 SortType.RECENT -> SortType.OLD
                 SortType.OLD -> SortType.RECENT
             }

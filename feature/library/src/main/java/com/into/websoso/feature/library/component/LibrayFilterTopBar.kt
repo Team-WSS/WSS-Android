@@ -52,7 +52,7 @@ internal fun LibraryFilterTopBar(
     totalCount: Int,
     onFilterClick: (LibraryFilterType) -> Unit,
     selectedSortType: SortTypeUiModel,
-    onSortClick: (SortTypeUiModel) -> Unit,
+    onSortClick: () -> Unit,
     isGrid: Boolean,
     isInterested: Boolean,
     onToggleViewType: () -> Unit,
@@ -174,7 +174,7 @@ private fun NovelFilterStatusBar(
     totalCount: Int,
     selectedSortType: SortTypeUiModel,
     isGrid: Boolean,
-    onSortClick: (SortTypeUiModel) -> Unit,
+    onSortClick: () -> Unit,
     onToggleViewType: () -> Unit,
 ) {
     Row(
@@ -191,7 +191,7 @@ private fun NovelFilterStatusBar(
         Row(verticalAlignment = Alignment.CenterVertically) {
             SortTypeSelector(
                 selectedSortType = selectedSortType,
-                onClick = { onSortClick(SortTypeUiModel.NEWEST) },
+                onClick = onSortClick,
             )
 
             IconButton(onClick = onToggleViewType) {

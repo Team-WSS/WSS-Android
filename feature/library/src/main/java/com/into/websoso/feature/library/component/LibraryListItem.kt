@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.into.websoso.core.common.extensions.formatDateRange
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -90,12 +89,7 @@ internal fun LibraryListItem(
             )
 
             NovelInfo(
-                startDate = item.startDate,
-                endDate = item.endDate,
-                title = item.title,
-                myRating = item.userNovelRating,
-                totalRating = item.novelRating,
-                attractivePoints = item.attractivePoints,
+                item = item,
             )
         }
 
@@ -172,7 +166,8 @@ private fun ReadStatusBadge(
                 .background(
                     color = readStatus.backgroundColor,
                     shape = RoundedCornerShape(8.dp),
-                ).padding(vertical = 4.dp),
+                )
+                .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -194,27 +189,46 @@ private fun calculateThumbnailSize(): ThumbnailUiSize {
 }
 
 @Composable
-private fun NovelInfo(
-    startDate: String?,
-    endDate: String?,
-    title: String,
-    myRating: Float?,
-    totalRating: Float,
-    attractivePoints: List<AttractivePointUiModel>,
-) {
+private fun NovelInfo(item: LibraryListItemModel) {
     Column {
         Spacer(modifier = Modifier.height(2.dp))
+        NovelInfoDate(item = item)
+        Spacer(modifier = Modifier.height(4.dp))
+        NovelInfoContent(
+            title = item.title,
+            myRating = item.userNovelRating,
+            totalRating = item.novelRating,
+            attractivePoints = item.attractivePoints,
+        )
+    }
+}
 
-        formatDateRange(startDate, endDate)?.let {
+@Composable
+private fun NovelInfoDate(item: LibraryListItemModel) {
+    Box(modifier = Modifier.height(18.dp)) {
+        item.formattedDateRange?.let {
             Text(
                 text = it,
                 style = WebsosoTheme.typography.body5,
                 color = Gray300,
             )
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(12.dp))
+@Composable
+private fun NovelInfoContent(
+    title: String,
+    myRating: Float?,
+    totalRating: Float,
+    attractivePoints: List<AttractivePointUiModel>,
+) {
+    val size = calculateThumbnailSize()
 
+    Column(
+        modifier = Modifier.height(size.height),
+        verticalArrangement = Arrangement.Center,
+    ) {
         Text(
             text = title,
             style = WebsosoTheme.typography.title2,
@@ -230,7 +244,11 @@ private fun NovelInfo(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        AttractivePointTags(types = attractivePoints)
+        if (attractivePoints.isNotEmpty()) {
+            AttractivePointTags(types = attractivePoints)
+        } else {
+            Box(modifier = Modifier.height(18.dp))
+        }
     }
 }
 

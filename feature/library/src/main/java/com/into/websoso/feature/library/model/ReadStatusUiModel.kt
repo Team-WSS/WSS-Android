@@ -10,7 +10,7 @@ enum class ReadStatusUiModel(
     val backgroundColor: Color,
     val key: String,
 ) {
-    WATCHING("보는중", Primary100, "WATCHING"),
+    WATCHING("보는 중", Primary100, "WATCHING"),
     WATCHED("봤어요", Black, "WATCHED"),
     QUIT("하차", Gray200, "QUIT"),
     ;
