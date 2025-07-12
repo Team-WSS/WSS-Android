@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import com.into.websoso.core.database.dao.NovelDao
 import com.into.websoso.core.database.entity.InDatabaseNovelEntity
 import com.into.websoso.data.library.model.NovelEntity
-import com.into.websoso.data.library.model.toDatabase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -26,7 +25,7 @@ internal class DefaultLibraryDataSource
         private val novelDao: NovelDao,
     ) : LibraryLocalDataSource {
         override suspend fun insertNovels(novels: List<NovelEntity>) {
-            novelDao.insertNovels(novels.map(NovelEntity::toDatabase))
+            novelDao.insertNovels(novels.map(NovelEntity::toNovelDatabase))
         }
 
         override fun selectAllNovels(): PagingSource<Int, InDatabaseNovelEntity> = novelDao.selectAllNovels()
