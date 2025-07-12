@@ -1,3 +1,5 @@
+package com.into.websoso.data.library.mediator
+
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -9,7 +11,7 @@ import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 @OptIn(ExperimentalPagingApi::class)
 class NovelRemoteMediator(
     private val userId: Long,
-    private val libraryRemoteDataSourcea: LibraryRemoteDataSource,
+    private val libraryRemoteDataSource: LibraryRemoteDataSource,
     private val libraryLocalDataSource: LibraryLocalDataSource,
 ) : RemoteMediator<Int, InDatabaseNovelEntity>() {
     override suspend fun load(
@@ -25,7 +27,7 @@ class NovelRemoteMediator(
             }
         }
         return try {
-            val response = libraryRemoteDataSourcea.getUserNovels(
+            val response = libraryRemoteDataSource.getUserNovels(
                 userId = userId,
                 lastUserNovelId = lastUserNovelId ?: 0,
                 size = state.config.pageSize,
@@ -37,7 +39,6 @@ class NovelRemoteMediator(
                 query = null,
                 updatedSince = null,
             )
-
             if (loadType == LoadType.REFRESH) {
                 libraryLocalDataSource.deleteAllNovels()
             }

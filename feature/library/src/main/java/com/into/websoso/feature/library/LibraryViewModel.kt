@@ -2,10 +2,8 @@ package com.into.websoso.feature.library
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.into.websoso.data.library.LibraryRepository
-import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.domain.library.GetLibraryUseCase
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
@@ -13,10 +11,13 @@ import com.into.websoso.domain.library.model.SortType
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,11 +29,21 @@ class LibraryViewModel
         getLibraryUseCase: GetLibraryUseCase,
         private val libraryRepository: LibraryRepository,
     ) : ViewModel() {
-        val novelPagingData: Flow<PagingData<NovelEntity>> =
-            getLibraryUseCase().cachedIn(viewModelScope)
-
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
+
+        @OptIn(ExperimentalCoroutinesApi::class)
+        val novelPagingData = uiState
+            .map { it.libraryFilterUiState }
+            .distinctUntilChanged()
+            .flatMapLatest { filter ->
+                getLibraryUseCase(
+                    isInterested = uiState.value.isInterested,
+                    readStatuses = filter.readStatuses,
+                    attractivePoints = filter.attractivePoints,
+                    novelRating = filter.novelRating,
+                )
+            }.cachedIn(viewModelScope)
 
         init {
             updateMyLibraryFilter()

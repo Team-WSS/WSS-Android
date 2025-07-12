@@ -25,6 +25,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.map
+import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.feature.filter.LibraryFilterBottomSheetScreen
 import com.into.websoso.feature.filter.LibraryFilterViewModel
 import com.into.websoso.feature.library.component.LibraryEmptyView
@@ -51,7 +52,7 @@ fun LibraryScreen(
     val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
     val pagingItems = libraryViewModel.novelPagingData
-        .map { it.map { novel -> novel.toUiModel() } }
+        .map { it.map(NovelEntity::toUiModel) }
         .collectAsLazyPagingItems()
     var isShowBottomSheet by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
