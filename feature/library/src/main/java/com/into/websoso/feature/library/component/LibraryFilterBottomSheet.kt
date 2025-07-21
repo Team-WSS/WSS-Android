@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +35,7 @@ import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Gray50
+import com.into.websoso.core.designsystem.theme.Gray70
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -177,6 +179,13 @@ private fun LibraryFilterBottomSheetReadStatus(
             onClick = { onReadStatusClick(WATCHING) },
             isSelected = readStatues[WATCHING] ?: false,
         )
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .width(1.dp)
+                .height(32.dp)
+                .background(color = Gray70),
+        )
         LibraryFilterBottomSheetClickableItem(
             icon = ic_library_finished,
             iconTitle = "봤어요",
@@ -184,6 +193,13 @@ private fun LibraryFilterBottomSheetReadStatus(
             horizontalPadding = 36.dp,
             onClick = { onReadStatusClick(WATCHED) },
             isSelected = readStatues[WATCHED] ?: false,
+        )
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .width(1.dp)
+                .height(32.dp)
+                .background(color = Gray70),
         )
         LibraryFilterBottomSheetClickableItem(
             icon = ic_library_stopped,
@@ -376,7 +392,8 @@ private fun NovelRatingItem(
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(size = 8.dp),
-            ).then(
+            )
+            .then(
                 if (isSelected) {
                     Modifier.border(
                         width = 1.dp,
@@ -386,7 +403,8 @@ private fun NovelRatingItem(
                 } else {
                     Modifier
                 },
-            ).padding(vertical = 14.dp, horizontal = 24.dp),
+            )
+            .padding(vertical = 14.dp, horizontal = 24.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
