@@ -200,7 +200,7 @@ private fun NovelFilterStatusBar(
                         id = if (isGrid) ic_library_grid else ic_library_list,
                     ),
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(12.dp),
                 )
             }
         }
