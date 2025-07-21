@@ -1,5 +1,6 @@
 package com.into.websoso.data.library
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -49,9 +50,9 @@ class LibraryRepository
 
         @OptIn(ExperimentalPagingApi::class)
         fun getFilteredLibrary(
-            isInterested: Boolean,
             readStatuses: List<String>,
             attractivePoints: List<String>,
+            isInterested: Boolean,
             novelRating: Float?,
             sortCriteria: String,
         ): Flow<PagingData<NovelEntity>> =
@@ -76,7 +77,13 @@ class LibraryRepository
             readStatuses: Map<String, Boolean>,
             attractivePoints: Map<String, Boolean>,
             novelRating: Float,
+            isInterested: Boolean = false,
+            sortCriteria: String = "",
         ) {
+            Log.d("123123 readStatuses", readStatuses.toString())
+            Log.d("123123 attractivePoints", attractivePoints.toString())
+            Log.d("123123 novelRating", novelRating.toString())
+
             myLibraryFilterLocalDataSource.updateMyLibraryFilter(
                 readStatuses = readStatuses,
                 attractivePoints = attractivePoints,
