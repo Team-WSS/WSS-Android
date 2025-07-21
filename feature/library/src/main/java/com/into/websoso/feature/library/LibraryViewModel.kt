@@ -100,7 +100,7 @@ class LibraryViewModel
             }
         }
 
-        fun scrollToTop() {
+        fun resetScrollPosition() {
             viewModelScope.launch {
                 if (uiState.value.isGrid) {
                     gridState.scrollToItem(0)
