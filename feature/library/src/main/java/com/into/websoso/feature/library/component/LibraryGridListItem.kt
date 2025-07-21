@@ -132,16 +132,21 @@ private fun ReadStatusBadge(
     readStatus: ReadStatusUiModel,
     modifier: Modifier = Modifier,
 ) {
-    Text(
-        text = readStatus.label,
-        color = White,
-        style = WebsosoTheme.typography.label2,
+    Box(
         modifier = modifier
+            .width(48.dp)
             .background(
                 color = readStatus.backgroundColor,
                 shape = RoundedCornerShape(4.dp),
-            ).padding(horizontal = 8.dp, vertical = 4.dp),
-    )
+            ).padding(vertical = 4.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = readStatus.label,
+            color = White,
+            style = WebsosoTheme.typography.label2,
+        )
+    }
 }
 
 @Composable
