@@ -1,5 +1,10 @@
 package com.into.websoso.feature.library
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -44,6 +49,12 @@ class LibraryViewModel
                     sortCriteria = uiState.value.selectedSortType.name,
                 )
             }.cachedIn(viewModelScope)
+
+        var listState by mutableStateOf(LazyListState())
+            private set
+
+        var gridState by mutableStateOf(LazyGridState())
+            private set
 
         init {
             updateMyLibraryFilter()
@@ -97,6 +108,16 @@ class LibraryViewModel
                         isInterested = !it.libraryFilterUiState.isInterested,
                     ),
                 )
+            }
+        }
+
+        fun resetScrollPosition() {
+            viewModelScope.launch {
+                if (uiState.value.isGrid) {
+                    gridState.scrollToItem(0)
+                } else {
+                    listState.scrollToItem(0)
+                }
             }
         }
     }
