@@ -14,9 +14,10 @@ class GetLibraryUseCase
         private val libraryRepository: LibraryRepository,
     ) {
         operator fun invoke(
-            isInterested: Boolean,
             readStatuses: Map<ReadStatus, Boolean>,
             attractivePoints: Map<AttractivePoints, Boolean>,
+            sortCriteria: String,
+            isInterested: Boolean,
             novelRating: Float,
         ): Flow<PagingData<NovelEntity>> {
             val isEmptyFilter = readStatuses.values.none { it } &&
@@ -27,10 +28,11 @@ class GetLibraryUseCase
                 libraryRepository.getLibrary()
             } else {
                 libraryRepository.getFilteredLibrary(
-                    isInterested = isInterested,
                     readStatuses = readStatuses.toSelectedKeyList { it.name },
                     attractivePoints = attractivePoints.toSelectedKeyList { it.name },
                     novelRating = novelRating,
+                    isInterested = isInterested,
+                    sortCriteria = sortCriteria,
                 )
             }
         }

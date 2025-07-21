@@ -120,7 +120,6 @@ private fun LibraryScreen(
             totalCount = pagingItems.itemCount,
             selectedSortType = uiState.selectedSortType,
             isGrid = uiState.isGrid,
-            isInterested = uiState.isInterested,
             onFilterClick = onFilterClick,
             onSortClick = onSortClick,
             onToggleViewType = onToggleViewType,

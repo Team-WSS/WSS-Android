@@ -53,6 +53,7 @@ class LibraryRepository
             readStatuses: List<String>,
             attractivePoints: List<String>,
             novelRating: Float?,
+            sortCriteria: String,
         ): Flow<PagingData<NovelEntity>> =
             Pager(
                 config = PagingConfig(pageSize = 40),
@@ -64,6 +65,7 @@ class LibraryRepository
                     readStatuses = readStatuses,
                     attractivePoints = attractivePoints,
                     novelRating = novelRating,
+                    sortCriteria = sortCriteria,
                 ),
                 pagingSourceFactory = filteredLibraryLocalDataSource::selectAllNovels,
             ).flow.map { pagingData ->

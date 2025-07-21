@@ -6,11 +6,11 @@ import com.into.websoso.domain.library.model.ReadStatus
 data class LibraryUiState(
     val isGrid: Boolean = true,
     val selectedSortType: SortTypeUiModel = SortTypeUiModel.NEWEST,
-    val isInterested: Boolean = false,
     val libraryFilterUiState: LibraryFilterUiState = LibraryFilterUiState(),
 )
 
 data class LibraryFilterUiState(
+    val isInterested: Boolean = false,
     val readStatuses: Map<ReadStatus, Boolean> = mapOf(
         ReadStatus.WATCHING to false,
         ReadStatus.WATCHED to false,

@@ -38,10 +38,11 @@ class LibraryViewModel
             .distinctUntilChanged()
             .flatMapLatest { filter ->
                 getLibraryUseCase(
-                    isInterested = uiState.value.isInterested,
                     readStatuses = filter.readStatuses,
                     attractivePoints = filter.attractivePoints,
                     novelRating = filter.novelRating,
+                    isInterested = filter.isInterested,
+                    sortCriteria = uiState.value.selectedSortType.sortType.name,
                 )
             }.cachedIn(viewModelScope)
 
@@ -55,8 +56,8 @@ class LibraryViewModel
                     if (myFilter != null) {
                         _uiState.update { uiState ->
                             uiState.copy(
-                                isInterested = myFilter.isInterest ?: false,
                                 libraryFilterUiState = uiState.libraryFilterUiState.copy(
+                                    isInterested = myFilter.isInterest ?: false,
                                     readStatuses = myFilter.readStatuses.mapKeys {
                                         ReadStatus.valueOf(it.key)
                                     },
@@ -89,7 +90,11 @@ class LibraryViewModel
 
         fun updateInterestedNovels() {
             _uiState.update {
-                it.copy(isInterested = !it.isInterested)
+                it.copy(
+                    libraryFilterUiState = uiState.value.libraryFilterUiState.copy(
+                        isInterested = !it.libraryFilterUiState.isInterested,
+                    ),
+                )
             }
         }
     }

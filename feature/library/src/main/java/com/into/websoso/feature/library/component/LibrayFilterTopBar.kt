@@ -54,7 +54,6 @@ internal fun LibraryFilterTopBar(
     selectedSortType: SortTypeUiModel,
     onSortClick: () -> Unit,
     isGrid: Boolean,
-    isInterested: Boolean,
     onToggleViewType: () -> Unit,
     onInterestClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -66,7 +65,6 @@ internal fun LibraryFilterTopBar(
     ) {
         NovelFilterChipSection(
             libraryFilterUiState = libraryFilterUiState,
-            isInterested = isInterested,
             onFilterClick = onFilterClick,
             onInterestClick = onInterestClick,
         )
@@ -86,7 +84,6 @@ internal fun LibraryFilterTopBar(
 @Composable
 private fun NovelFilterChipSection(
     libraryFilterUiState: LibraryFilterUiState,
-    isInterested: Boolean,
     onInterestClick: () -> Unit,
     onFilterClick: (LibraryFilterType) -> Unit,
 ) {
@@ -97,7 +94,7 @@ private fun NovelFilterChipSection(
     ) {
         NovelFilterChip(
             text = stringResource(id = library_interesting),
-            isSelected = isInterested,
+            isSelected = libraryFilterUiState.isInterested,
             onClick = onInterestClick,
             showDropdownIcon = false,
         )
