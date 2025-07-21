@@ -131,7 +131,11 @@ private fun LibraryScreen(
     onInterestClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.height(20.dp))
+
         LibraryTopBar(onSearchClick = onSearchClick)
+
+        Spacer(modifier = Modifier.height(28.dp))
 
         LibraryFilterTopBar(
             libraryFilterUiState = uiState.libraryFilterUiState,
