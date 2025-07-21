@@ -1,5 +1,10 @@
 package com.into.websoso.feature.library
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -34,6 +39,12 @@ class LibraryViewModel
 
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
+
+        var listState by mutableStateOf(LazyListState())
+            private set
+
+        var gridState by mutableStateOf(LazyGridState())
+            private set
 
         init {
             updateMyLibraryFilter()
@@ -86,6 +97,16 @@ class LibraryViewModel
         fun updateInterestedNovels() {
             _uiState.update {
                 it.copy(isInterested = !it.isInterested)
+            }
+        }
+
+        fun scrollToTop() {
+            viewModelScope.launch {
+                if (uiState.value.isGrid) {
+                    gridState.scrollToItem(0)
+                } else {
+                    listState.scrollToItem(0)
+                }
             }
         }
     }
