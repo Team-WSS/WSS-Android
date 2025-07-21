@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.into.websoso.R
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.library.LibraryScreen
+import com.into.websoso.feature.library.LibraryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -42,5 +44,10 @@ class LibraryFragment : Fragment() {
             }
         }
         return view
+    }
+
+    fun resetScrollPosition() {
+        val viewModel: LibraryViewModel by viewModels()
+        viewModel.resetScrollPosition()
     }
 }
