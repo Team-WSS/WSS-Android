@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -56,8 +54,8 @@ fun LibraryScreen(
         .map { it.map { novel -> novel.toUiModel() } }
         .collectAsLazyPagingItems()
     var isShowBottomSheet by remember { mutableStateOf(false) }
-    val listState = rememberLazyListState()
-    val gridState = rememberLazyGridState()
+    val listState = libraryViewModel.listState
+    val gridState = libraryViewModel.gridState
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { false },
