@@ -7,7 +7,6 @@ import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.domain.library.GetLibraryUseCase
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
-import com.into.websoso.domain.library.model.SortType
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +41,7 @@ class LibraryViewModel
                     attractivePoints = filter.attractivePoints,
                     novelRating = filter.novelRating,
                     isInterested = filter.isInterested,
-                    sortCriteria = uiState.value.selectedSortType.sortType.name,
+                    sortCriteria = uiState.value.selectedSortType.name,
                 )
             }.cachedIn(viewModelScope)
 
@@ -56,6 +55,7 @@ class LibraryViewModel
                     if (myFilter != null) {
                         _uiState.update { uiState ->
                             uiState.copy(
+                                selectedSortType = SortTypeUiModel.valueOf(myFilter.sortCriteria),
                                 libraryFilterUiState = uiState.libraryFilterUiState.copy(
                                     isInterested = myFilter.isInterest ?: false,
                                     readStatuses = myFilter.readStatuses.mapKeys {
@@ -80,15 +80,17 @@ class LibraryViewModel
         }
 
         fun updateSortType() {
-            val current = _uiState.value.selectedSortType.sortType
+            val current = uiState.value.selectedSortType
             val newSortType = when (current) {
-                SortType.RECENT -> SortType.OLD
-                SortType.OLD -> SortType.RECENT
+                SortTypeUiModel.NEWEST -> SortTypeUiModel.OLDEST
+                SortTypeUiModel.OLDEST -> SortTypeUiModel.NEWEST
             }
-            _uiState.update { it.copy(selectedSortType = SortTypeUiModel.from(newSortType)) }
+            _uiState.update { it.copy(selectedSortType = newSortType) }
+            // 정렬 레포지토리 업데이트
         }
 
         fun updateInterestedNovels() {
+            // 관심도 로컬ㄹ 쿼리 업데이트
             _uiState.update {
                 it.copy(
                     libraryFilterUiState = uiState.value.libraryFilterUiState.copy(
