@@ -40,7 +40,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     private val mainViewModel: MainViewModel by viewModels()
     private var backPressedTime: Long = 0L
     private var currentFragment: Fragment? = null
-    private var currentSelectedItemId: Int = menu_home
 
     private val fragmentTags = mapOf(
         menu_home to HomeFragment.TAG,
@@ -110,15 +109,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     private fun setupBottomNavListener() {
         binding.bnvMain.setOnItemSelectedListener { item ->
-            if (item.itemId == currentSelectedItemId && item.itemId == menu_library) {
-                val libraryFragment = supportFragmentManager.findFragmentByTag(
-                    LibraryFragment::class.java.name,
-                ) as? LibraryFragment
+            fragmentTags[item.itemId] ?: return@setOnItemSelectedListener true
+            val currentFragment = supportFragmentManager.findFragmentById(fcv_main)
 
-                libraryFragment?.resetScrollPosition()
+            if (item.itemId == menu_library && currentFragment is LibraryFragment) {
+                supportFragmentManager.setFragmentResult("scrollToTop", Bundle.EMPTY)
             } else {
                 replaceCurrentFragment(item.itemId)
-                currentSelectedItemId = item.itemId
             }
 
             true
@@ -126,20 +123,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     }
 
     private fun replaceCurrentFragment(itemId: Int) {
-        val tag = fragmentTags[itemId]!!
-        val targetFragment = findOrCreateFragment(tag)
+        val tag = fragmentTags[itemId] ?: return
+        val isLibrary = itemId == menu_library
+        val existingFragment = supportFragmentManager.findFragmentByTag(tag)
+        val targetFragment = existingFragment ?: findOrCreateFragment(tag)
 
-        val transaction = supportFragmentManager.beginTransaction()
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
 
-        currentFragment?.let { transaction.hide(it) }
+            currentFragment?.let {
+                when {
+                    it is LibraryFragment && !isLibrary -> hide(it)
+                    it != targetFragment -> remove(it)
+                    else -> { /* 아무 것도 하지 않음. 나도 아무 것도 안하고 싶다...격하게 */ }
+                }
+            }
 
-        if (!targetFragment.isAdded) {
-            transaction.add(fcv_main, targetFragment, tag)
-        } else {
-            transaction.show(targetFragment)
+            if (existingFragment == null) {
+                add(fcv_main, targetFragment, tag)
+            } else {
+                show(targetFragment)
+            }
         }
 
-        transaction.commit()
         currentFragment = targetFragment
     }
 
