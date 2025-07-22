@@ -28,6 +28,9 @@ class LibraryFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_library, container, false)
         val composeView = view.findViewById<ComposeView>(R.id.cv_library)
+        parentFragmentManager.setFragmentResultListener("scroll_to_top", viewLifecycleOwner) { _, _ ->
+            resetScrollPosition()
+        }
         composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -49,5 +52,9 @@ class LibraryFragment : Fragment() {
     fun resetScrollPosition() {
         val viewModel: LibraryViewModel by viewModels()
         viewModel.resetScrollPosition()
+    }
+
+    companion object {
+        const val TAG = "LibraryFragment"
     }
 }

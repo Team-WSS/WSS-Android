@@ -42,11 +42,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     private var currentSelectedItemId: Int = menu_home
 
     private val fragmentTags = mapOf(
-        menu_home to HomeFragment::class.java.name,
-        menu_explore to ExploreFragment::class.java.name,
-        menu_feed to FeedFragment::class.java.name,
-        menu_library to LibraryFragment::class.java.name,
-        menu_my_page to MyPageFragment::class.java.name,
+        menu_home to HomeFragment.TAG,
+        menu_explore to ExploreFragment.TAG,
+        menu_feed to FeedFragment.TAG,
+        menu_library to LibraryFragment.TAG,
+        menu_my_page to MyPageFragment.TAG,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,15 +141,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     }
 
     private fun findOrCreateFragment(tag: String): Fragment =
-        supportFragmentManager.findFragmentByTag(tag)
-            ?: when (tag) {
-                HomeFragment::class.java.name -> HomeFragment()
-                ExploreFragment::class.java.name -> ExploreFragment()
-                FeedFragment::class.java.name -> FeedFragment()
-                LibraryFragment::class.java.name -> LibraryFragment()
-                MyPageFragment::class.java.name -> MyPageFragment()
-                else -> throw IllegalArgumentException("Unknown fragment tag: $tag")
-            }
+        supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
+            HomeFragment.TAG -> HomeFragment()
+            ExploreFragment.TAG -> ExploreFragment()
+            FeedFragment.TAG -> FeedFragment()
+            LibraryFragment.TAG -> LibraryFragment()
+            MyPageFragment.TAG -> MyPageFragment()
+            else -> throw IllegalArgumentException("Unknown fragment tag: $tag")
+        }
 
     private fun setupObserver() {
         mainViewModel.isLogin.observe(this) { isLogin ->
