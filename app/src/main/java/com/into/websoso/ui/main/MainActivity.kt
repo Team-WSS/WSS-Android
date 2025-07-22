@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.into.websoso.R.id.fcv_main
 import com.into.websoso.R.id.menu_explore
 import com.into.websoso.R.id.menu_feed
@@ -93,16 +94,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     private fun setupInitialFragment() {
         val initialItemId = menu_home
         val initialTag = fragmentTags[initialItemId]!!
-        val initialFragment = findOrCreateFragment(initialTag)
 
-        if (!initialFragment.isAdded) {
-            supportFragmentManager
-                .beginTransaction()
-                .add(fcv_main, initialFragment, initialTag)
-                .commit()
+        val existingFragment = supportFragmentManager.findFragmentByTag(initialTag)
+        val fragment = existingFragment ?: findOrCreateFragment(initialTag)
+
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            if (existingFragment == null) {
+                add(fcv_main, fragment, initialTag)
+            } else {
+                show(existingFragment)
+            }
         }
-
-        currentFragment = initialFragment
     }
 
     private fun setupBottomNavListener() {
