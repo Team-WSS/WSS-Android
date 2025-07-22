@@ -1,10 +1,5 @@
 package com.into.websoso.feature.library
 
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -19,7 +14,9 @@ import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -40,11 +37,8 @@ class LibraryViewModel
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
 
-        var listState by mutableStateOf(LazyListState())
-            private set
-
-        var gridState by mutableStateOf(LazyGridState())
-            private set
+        private val _scrollToTopEvent = MutableSharedFlow<Unit>()
+        val scrollToTopEvent: SharedFlow<Unit> = _scrollToTopEvent
 
         init {
             updateMyLibraryFilter()
@@ -102,11 +96,7 @@ class LibraryViewModel
 
         fun resetScrollPosition() {
             viewModelScope.launch {
-                if (uiState.value.isGrid) {
-                    gridState.scrollToItem(0)
-                } else {
-                    listState.scrollToItem(0)
-                }
+                _scrollToTopEvent.emit(Unit)
             }
         }
     }
