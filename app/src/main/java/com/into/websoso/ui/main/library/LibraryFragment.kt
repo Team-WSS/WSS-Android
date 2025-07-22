@@ -20,6 +20,7 @@ import javax.inject.Inject
 class LibraryFragment : Fragment() {
     @Inject
     lateinit var websosoNavigator: NavigatorProvider
+    private val libraryViewModel: LibraryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +29,7 @@ class LibraryFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_library, container, false)
         val composeView = view.findViewById<ComposeView>(R.id.cv_library)
-        parentFragmentManager.setFragmentResultListener("scroll_to_top", viewLifecycleOwner) { _, _ ->
+        parentFragmentManager.setFragmentResultListener("scrollToTop", viewLifecycleOwner) { _, _ ->
             resetScrollPosition()
         }
         composeView.apply {
@@ -36,6 +37,7 @@ class LibraryFragment : Fragment() {
             setContent {
                 WebsosoTheme {
                     LibraryScreen(
+                        libraryViewModel = libraryViewModel,
                         navigateToNormalExploreActivity = {
                             websosoNavigator.navigateToNormalExploreActivity(::startActivity)
                         },
@@ -49,9 +51,8 @@ class LibraryFragment : Fragment() {
         return view
     }
 
-    fun resetScrollPosition() {
-        val viewModel: LibraryViewModel by viewModels()
-        viewModel.resetScrollPosition()
+    private fun resetScrollPosition() {
+        libraryViewModel.resetScrollPosition()
     }
 
     companion object {
