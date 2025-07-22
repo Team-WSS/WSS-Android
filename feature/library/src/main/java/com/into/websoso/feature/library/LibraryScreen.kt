@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,12 +59,22 @@ fun LibraryScreen(
         .map { it.map { novel -> novel.toUiModel() } }
         .collectAsLazyPagingItems()
     var isShowBottomSheet by remember { mutableStateOf(false) }
-    val listState = libraryViewModel.listState
-    val gridState = libraryViewModel.gridState
+    val listState = rememberLazyListState()
+    val gridState = rememberLazyGridState()
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { false },
     )
+
+    LaunchedEffect(Unit) {
+        libraryViewModel.scrollToTopEvent.collect {
+            if (uiState.isGrid) {
+                gridState.scrollToItem(0)
+            } else {
+                listState.scrollToItem(0)
+            }
+        }
+    }
 
     LibraryScreen(
         uiState = uiState,
