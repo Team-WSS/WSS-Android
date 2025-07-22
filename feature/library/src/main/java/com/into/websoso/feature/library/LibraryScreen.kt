@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.map
+import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.feature.library.component.LibraryEmptyView
@@ -130,7 +132,11 @@ private fun LibraryScreen(
     onFilterSearchClick: () -> Unit,
     onInterestClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(White),
+    ) {
         LibraryTopBar(onSearchClick = onSearchClick)
 
         LibraryFilterTopBar(
