@@ -13,12 +13,12 @@ import com.into.websoso.domain.library.model.SortType
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,8 +37,8 @@ class LibraryViewModel
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
 
-        private val _scrollToTopEvent = MutableSharedFlow<Unit>()
-        val scrollToTopEvent: SharedFlow<Unit> = _scrollToTopEvent
+        private val _scrollToTopEvent = Channel<Unit>(Channel.BUFFERED)
+        val scrollToTopEvent: Flow<Unit> = _scrollToTopEvent.receiveAsFlow()
 
         init {
             updateMyLibraryFilter()
@@ -96,7 +96,7 @@ class LibraryViewModel
 
         fun resetScrollPosition() {
             viewModelScope.launch {
-                _scrollToTopEvent.emit(Unit)
+                _scrollToTopEvent.send(Unit)
             }
         }
     }
