@@ -22,7 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -43,6 +46,8 @@ import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+
+private const val SCROLL_POSITION_TOP = 0
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,13 +70,16 @@ fun LibraryScreen(
         skipPartiallyExpanded = true,
         confirmValueChange = { false },
     )
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
-        libraryViewModel.scrollToTopEvent.collect {
-            if (uiState.isGrid) {
-                gridState.scrollToItem(0)
-            } else {
-                listState.scrollToItem(0)
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            libraryViewModel.scrollToTopEvent.collect {
+                if (uiState.isGrid) {
+                    gridState.scrollToItem(SCROLL_POSITION_TOP)
+                } else {
+                    listState.scrollToItem(SCROLL_POSITION_TOP)
+                }
             }
         }
     }
