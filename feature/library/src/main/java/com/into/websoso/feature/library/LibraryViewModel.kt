@@ -1,10 +1,5 @@
 package com.into.websoso.feature.library
 
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -16,6 +11,8 @@ import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +21,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,6 +35,9 @@ class LibraryViewModel
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
+
+        private val _scrollToTopEvent = Channel<Unit>(Channel.BUFFERED)
+        val scrollToTopEvent: Flow<Unit> = _scrollToTopEvent.receiveAsFlow()
 
         @OptIn(ExperimentalCoroutinesApi::class)
         val novelPagingData = uiState
@@ -52,12 +53,6 @@ class LibraryViewModel
                     sortCriteria = filter.selectedSortType.name,
                 )
             }.cachedIn(viewModelScope)
-
-        var listState by mutableStateOf(LazyListState())
-            private set
-
-        var gridState by mutableStateOf(LazyGridState())
-            private set
 
         init {
             updateMyLibraryFilter()
@@ -101,6 +96,7 @@ class LibraryViewModel
                 SortTypeUiModel.RECENT -> SortTypeUiModel.OLD
                 SortTypeUiModel.OLD -> SortTypeUiModel.RECENT
             }
+
             viewModelScope.launch {
                 libraryRepository.updateMyLibraryFilter(
                     sortCriteria = newSortType.name,
@@ -136,11 +132,7 @@ class LibraryViewModel
 
         fun resetScrollPosition() {
             viewModelScope.launch {
-                if (uiState.value.isGrid) {
-                    gridState.scrollToItem(0)
-                } else {
-                    listState.scrollToItem(0)
-                }
+                _scrollToTopEvent.send(Unit)
             }
         }
 
