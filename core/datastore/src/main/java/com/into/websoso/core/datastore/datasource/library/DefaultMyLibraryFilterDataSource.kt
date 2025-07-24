@@ -42,13 +42,14 @@ internal class DefaultMyLibraryFilterDataSource
                 }.distinctUntilChanged()
 
         override suspend fun updateMyLibraryFilter(params: LibraryFilterParams) {
+            val encodedJsonString = withContext(dispatcher) {
+                Json.encodeToString(
+                    params.toPreferences(),
+                )
+            }
+
             myLibraryFilterDataStore.edit { prefs ->
-                prefs[LIBRARY_FILTER_PARAMS_KEY] =
-                    withContext(dispatcher) {
-                        Json.encodeToString(
-                            params.toPreferences(),
-                        )
-                    }
+                prefs[LIBRARY_FILTER_PARAMS_KEY] = encodedJsonString
             }
         }
 
