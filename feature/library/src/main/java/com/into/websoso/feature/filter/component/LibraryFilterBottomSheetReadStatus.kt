@@ -21,7 +21,7 @@ import com.into.websoso.domain.library.model.ReadStatus.WATCHING
 @SuppressLint("ResourceType")
 @Composable
 internal fun LibraryFilterBottomSheetReadStatus(
-    readStatues: Map<ReadStatus, Boolean>,
+    readStatuses: Map<ReadStatus, Boolean>,
     onReadStatusClick: (ReadStatus) -> Unit,
 ) {
     Row(
@@ -35,7 +35,7 @@ internal fun LibraryFilterBottomSheetReadStatus(
             iconSize = 24.dp,
             horizontalPadding = 36.dp,
             onClick = { onReadStatusClick(WATCHING) },
-            isSelected = readStatues[WATCHING] ?: false,
+            isSelected = readStatuses[WATCHING] ?: false,
         )
         LibraryFilterBottomSheetClickableItem(
             icon = ic_library_finished,
@@ -43,7 +43,7 @@ internal fun LibraryFilterBottomSheetReadStatus(
             iconSize = 24.dp,
             horizontalPadding = 36.dp,
             onClick = { onReadStatusClick(WATCHED) },
-            isSelected = readStatues[WATCHED] ?: false,
+            isSelected = readStatuses[WATCHED] ?: false,
         )
         LibraryFilterBottomSheetClickableItem(
             icon = ic_library_stopped,
@@ -51,7 +51,7 @@ internal fun LibraryFilterBottomSheetReadStatus(
             iconSize = 24.dp,
             horizontalPadding = 36.dp,
             onClick = { onReadStatusClick(QUIT) },
-            isSelected = readStatues[QUIT] ?: false,
+            isSelected = readStatuses[QUIT] ?: false,
         )
     }
 }
@@ -61,7 +61,7 @@ internal fun LibraryFilterBottomSheetReadStatus(
 private fun LibraryFilterBottomSheetReadStatusPreview() {
     WebsosoTheme {
         LibraryFilterBottomSheetReadStatus(
-            readStatues = mapOf(),
+            readStatuses = mapOf(),
             onReadStatusClick = { },
         )
     }
