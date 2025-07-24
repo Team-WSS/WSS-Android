@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,14 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.map
+import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
@@ -70,19 +67,15 @@ fun LibraryScreen(
         skipPartiallyExpanded = true,
         confirmValueChange = { false },
     )
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    LaunchedEffect(Unit) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            libraryViewModel.scrollToTopEvent.collect {
-                if (uiState.isGrid) {
-                    gridState.scrollToItem(SCROLL_POSITION_TOP)
-                } else {
-                    listState.scrollToItem(SCROLL_POSITION_TOP)
-                }
+    libraryViewModel.scrollToTopEvent.collectAsEventWithLifecycle(
+        onEvent = {
+            if (uiState.isGrid) {
+                gridState.scrollToItem(SCROLL_POSITION_TOP)
+            } else {
+                listState.scrollToItem(SCROLL_POSITION_TOP)
             }
-        }
-    }
+        },
+    )
 
     LibraryScreen(
         uiState = uiState,
