@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.into.websoso.core.common.dispatchers.Dispatcher
 import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
 import com.into.websoso.core.datastore.datasource.library.model.LibraryFilterPreferences
+import com.into.websoso.core.datastore.datasource.library.model.toPreferences
 import com.into.websoso.core.datastore.di.MyLibraryFilterDataStore
 import com.into.websoso.data.library.datasource.MyLibraryFilterLocalDataSource
 import com.into.websoso.data.library.model.LibraryFilterParams
@@ -40,20 +41,12 @@ internal class DefaultMyLibraryFilterDataSource
                     }
                 }.distinctUntilChanged()
 
-        override suspend fun updateMyLibraryFilter(
-            readStatuses: Map<String, Boolean>,
-            attractivePoints: Map<String, Boolean>,
-            novelRating: Float,
-        ) {
+        override suspend fun updateMyLibraryFilter(params: LibraryFilterParams) {
             myLibraryFilterDataStore.edit { prefs ->
                 prefs[LIBRARY_FILTER_PARAMS_KEY] =
                     withContext(dispatcher) {
                         Json.encodeToString(
-                            LibraryFilterPreferences(
-                                readStatuses = readStatuses,
-                                attractivePoints = attractivePoints,
-                                novelRating = novelRating,
-                            ),
+                            params.toPreferences(),
                         )
                     }
             }

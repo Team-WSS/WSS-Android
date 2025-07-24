@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class LibraryFilterPreferences(
-    val sortCriteria: String = "",
-    val isInterest: Boolean = false,
+    val sortCriteria: String,
+    val isInterested: Boolean,
     val readStatuses: Map<String, Boolean>,
     val attractivePoints: Map<String, Boolean>,
     val novelRating: Float,
@@ -14,9 +14,18 @@ internal data class LibraryFilterPreferences(
     internal fun toData(): LibraryFilterParams =
         LibraryFilterParams(
             sortCriteria = sortCriteria,
-            isInterest = isInterest,
+            isInterested = isInterested,
             readStatuses = readStatuses,
             attractivePoints = attractivePoints,
             novelRating = novelRating,
         )
 }
+
+internal fun LibraryFilterParams.toPreferences(): LibraryFilterPreferences =
+    LibraryFilterPreferences(
+        sortCriteria = sortCriteria,
+        isInterested = isInterested,
+        readStatuses = readStatuses,
+        attractivePoints = attractivePoints,
+        novelRating = novelRating,
+    )

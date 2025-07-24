@@ -6,11 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface MyLibraryFilterLocalDataSource {
     val myLibraryFilterFlow: Flow<LibraryFilterParams?>
 
-    suspend fun updateMyLibraryFilter(
-        readStatuses: Map<String, Boolean>,
-        attractivePoints: Map<String, Boolean>,
-        novelRating: Float,
-    )
+    suspend fun updateMyLibraryFilter(params: LibraryFilterParams)
 
     suspend fun deleteMyLibraryFilter()
 }
