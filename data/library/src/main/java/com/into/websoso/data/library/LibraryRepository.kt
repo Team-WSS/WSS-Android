@@ -1,6 +1,5 @@
 package com.into.websoso.data.library
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -15,9 +14,11 @@ import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 import com.into.websoso.data.library.datasource.MyLibraryFilterLocalDataSource
 import com.into.websoso.data.library.mediator.FilteredNovelRemoteMediator
 import com.into.websoso.data.library.mediator.NovelRemoteMediator
+import com.into.websoso.data.library.model.LibraryFilterParams
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.model.toData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,7 +38,7 @@ class LibraryRepository
         @OptIn(ExperimentalPagingApi::class)
         fun getLibrary(): Flow<PagingData<NovelEntity>> =
             Pager(
-                config = PagingConfig(pageSize = 20),
+                config = PagingConfig(pageSize = PAGE_SIZE),
                 remoteMediator = NovelRemoteMediator(
                     userId = accountRepository.userId,
                     libraryLocalDataSource = libraryLocalDataSource,
@@ -57,7 +58,7 @@ class LibraryRepository
             sortCriteria: String,
         ): Flow<PagingData<NovelEntity>> =
             Pager(
-                config = PagingConfig(pageSize = 40),
+                config = PagingConfig(pageSize = PAGE_SIZE),
                 remoteMediator = FilteredNovelRemoteMediator(
                     userId = accountRepository.userId,
                     libraryRemoteDataSource = libraryRemoteDataSource,
@@ -74,20 +75,25 @@ class LibraryRepository
             }
 
         suspend fun updateMyLibraryFilter(
-            readStatuses: Map<String, Boolean>,
-            attractivePoints: Map<String, Boolean>,
-            novelRating: Float,
-            isInterested: Boolean = false,
-            sortCriteria: String = "",
+            readStatuses: Map<String, Boolean>? = null,
+            attractivePoints: Map<String, Boolean>? = null,
+            novelRating: Float? = null,
+            isInterested: Boolean? = null,
+            sortCriteria: String? = null,
         ) {
-            Log.d("123123 readStatuses", readStatuses.toString())
-            Log.d("123123 attractivePoints", attractivePoints.toString())
-            Log.d("123123 novelRating", novelRating.toString())
-
-            myLibraryFilterLocalDataSource.updateMyLibraryFilter(
-                readStatuses = readStatuses,
-                attractivePoints = attractivePoints,
-                novelRating = novelRating,
+            val savedFilter = myLibraryFilter.firstOrNull() ?: LibraryFilterParams()
+            val updatedFilter = savedFilter.copy(
+                sortCriteria = sortCriteria ?: savedFilter.sortCriteria,
+                isInterested = isInterested ?: savedFilter.isInterested,
+                readStatuses = readStatuses ?: savedFilter.readStatuses,
+                attractivePoints = attractivePoints ?: savedFilter.attractivePoints,
+                novelRating = novelRating ?: savedFilter.novelRating,
             )
+
+            myLibraryFilterLocalDataSource.updateMyLibraryFilter(params = updatedFilter)
+        }
+
+        companion object {
+            private const val PAGE_SIZE = 10
         }
     }

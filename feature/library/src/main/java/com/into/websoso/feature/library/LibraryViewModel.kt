@@ -19,7 +19,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -39,6 +41,7 @@ class LibraryViewModel
         @OptIn(ExperimentalCoroutinesApi::class)
         val novelPagingData = uiState
             .map { it.libraryFilterUiState }
+            .drop(INITIAL_STATE)
             .distinctUntilChanged()
             .flatMapLatest { filter ->
                 getLibraryUseCase(
@@ -46,7 +49,7 @@ class LibraryViewModel
                     attractivePoints = filter.attractivePoints,
                     novelRating = filter.novelRating,
                     isInterested = filter.isInterested,
-                    sortCriteria = uiState.value.selectedSortType.name,
+                    sortCriteria = filter.selectedSortType.name,
                 )
             }.cachedIn(viewModelScope)
 
@@ -62,20 +65,22 @@ class LibraryViewModel
 
         private fun updateMyLibraryFilter() {
             viewModelScope.launch {
-                libraryRepository.myLibraryFilter.collect { myFilter ->
+                libraryRepository.myLibraryFilter.collectLatest { myFilter ->
                     if (myFilter != null) {
                         _uiState.update { uiState ->
                             uiState.copy(
-                                selectedSortType = SortTypeUiModel.valueOf(myFilter.sortCriteria),
                                 libraryFilterUiState = uiState.libraryFilterUiState.copy(
-                                    isInterested = myFilter.isInterest ?: false,
-                                    readStatuses = myFilter.readStatuses.mapKeys {
-                                        ReadStatus.valueOf(it.key)
-                                    },
-                                    attractivePoints = myFilter.attractivePoints.mapKeys {
-                                        AttractivePoints.valueOf(it.key)
-                                    },
-                                    novelRating = myFilter.novelRating ?: 0f,
+                                    selectedSortType = SortTypeUiModel.valueOf(myFilter.sortCriteria),
+                                    isInterested = myFilter.isInterested,
+                                    readStatuses = myFilter.readStatuses
+                                        .mapKeys {
+                                            ReadStatus.valueOf(it.key)
+                                        }.ifEmpty { uiState.libraryFilterUiState.readStatuses },
+                                    attractivePoints = myFilter.attractivePoints
+                                        .mapKeys {
+                                            AttractivePoints.valueOf(it.key)
+                                        }.ifEmpty { uiState.libraryFilterUiState.attractivePoints },
+                                    novelRating = myFilter.novelRating,
                                 ),
                             )
                         }
@@ -91,21 +96,39 @@ class LibraryViewModel
         }
 
         fun updateSortType() {
-            val current = uiState.value.selectedSortType
+            val current = uiState.value.libraryFilterUiState.selectedSortType
             val newSortType = when (current) {
-                SortTypeUiModel.NEWEST -> SortTypeUiModel.OLDEST
-                SortTypeUiModel.OLDEST -> SortTypeUiModel.NEWEST
+                SortTypeUiModel.RECENT -> SortTypeUiModel.OLD
+                SortTypeUiModel.OLD -> SortTypeUiModel.RECENT
             }
-            _uiState.update { it.copy(selectedSortType = newSortType) }
-            // 정렬 레포지토리 업데이트
+            viewModelScope.launch {
+                libraryRepository.updateMyLibraryFilter(
+                    sortCriteria = newSortType.name,
+                )
+            }
+
+            _uiState.update { uiState ->
+                uiState.copy(
+                    libraryFilterUiState = uiState.libraryFilterUiState.copy(
+                        selectedSortType = newSortType,
+                    ),
+                )
+            }
         }
 
         fun updateInterestedNovels() {
-            // 관심도 로컬ㄹ 쿼리 업데이트
+            val updatedInterested = !uiState.value.libraryFilterUiState.isInterested
+
+            viewModelScope.launch {
+                libraryRepository.updateMyLibraryFilter(
+                    isInterested = updatedInterested,
+                )
+            }
+
             _uiState.update {
                 it.copy(
                     libraryFilterUiState = uiState.value.libraryFilterUiState.copy(
-                        isInterested = !it.libraryFilterUiState.isInterested,
+                        isInterested = updatedInterested,
                     ),
                 )
             }
@@ -119,5 +142,9 @@ class LibraryViewModel
                     listState.scrollToItem(0)
                 }
             }
+        }
+
+        companion object {
+            private const val INITIAL_STATE = 1
         }
     }

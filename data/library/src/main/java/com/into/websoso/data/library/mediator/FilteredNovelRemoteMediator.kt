@@ -27,15 +27,18 @@ class FilteredNovelRemoteMediator(
             LoadType.REFRESH -> null
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             LoadType.APPEND -> {
-                val lastItem = state.lastItemOrNull()
-                lastItem?.userNovelId ?: return MediatorResult.Success(true)
+                when (sortCriteria) {
+                    "RECENT" -> state.lastItemOrNull()?.userNovelId
+                    "OLD" -> state.firstItemOrNull()?.userNovelId
+                    else -> null
+                } ?: return MediatorResult.Success(true)
             }
-        }
+        } ?: DEFAULT_LAST_USER_NOVEL_ID
 
         return try {
             val response = libraryRemoteDataSource.getUserNovels(
                 userId = userId,
-                lastUserNovelId = lastUserNovelId ?: 0,
+                lastUserNovelId = lastUserNovelId,
                 size = state.config.pageSize,
                 sortCriteria = sortCriteria,
                 isInterest = if (!isInterested) null else true,
@@ -55,5 +58,9 @@ class FilteredNovelRemoteMediator(
         } catch (e: Exception) {
             MediatorResult.Error(e)
         }
+    }
+
+    companion object {
+        private const val DEFAULT_LAST_USER_NOVEL_ID = 0L
     }
 }

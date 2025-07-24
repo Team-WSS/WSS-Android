@@ -22,7 +22,9 @@ class GetLibraryUseCase
         ): Flow<PagingData<NovelEntity>> {
             val isEmptyFilter = readStatuses.values.none { it } &&
                 attractivePoints.values.none { it } &&
-                novelRating == 0f
+                novelRating == 0.0f &&
+                !isInterested &&
+                sortCriteria == "RECENT"
 
             return if (isEmptyFilter) {
                 libraryRepository.getLibrary()

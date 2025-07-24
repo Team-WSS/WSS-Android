@@ -51,7 +51,6 @@ internal fun LibraryFilterTopBar(
     libraryFilterUiState: LibraryFilterUiState,
     totalCount: Int,
     onFilterClick: (LibraryFilterType) -> Unit,
-    selectedSortType: SortTypeUiModel,
     onSortClick: () -> Unit,
     isGrid: Boolean,
     onToggleViewType: () -> Unit,
@@ -73,7 +72,7 @@ internal fun LibraryFilterTopBar(
 
         NovelFilterStatusBar(
             totalCount = totalCount,
-            selectedSortType = selectedSortType,
+            selectedSortType = libraryFilterUiState.selectedSortType,
             isGrid = isGrid,
             onSortClick = onSortClick,
             onToggleViewType = onToggleViewType,
