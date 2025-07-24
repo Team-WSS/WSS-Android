@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.map
+import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
+import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.feature.library.component.LibraryEmptyView
@@ -40,6 +43,8 @@ import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+
+private const val SCROLL_POSITION_TOP = 0
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +66,15 @@ fun LibraryScreen(
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { false },
+    )
+    libraryViewModel.scrollToTopEvent.collectAsEventWithLifecycle(
+        onEvent = {
+            if (uiState.isGrid) {
+                gridState.scrollToItem(SCROLL_POSITION_TOP)
+            } else {
+                listState.scrollToItem(SCROLL_POSITION_TOP)
+            }
+        },
     )
 
     LibraryScreen(
@@ -132,7 +146,11 @@ private fun LibraryScreen(
     onFilterSearchClick: () -> Unit,
     onInterestClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(White),
+    ) {
         LibraryTopBar(onSearchClick = onSearchClick)
 
         LibraryFilterTopBar(
