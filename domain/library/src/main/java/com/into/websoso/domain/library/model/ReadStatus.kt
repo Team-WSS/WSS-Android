@@ -1,9 +1,9 @@
 package com.into.websoso.domain.library.model
 
-enum class ReadStatus {
-    WATCHING,
-    WATCHED,
-    QUIT,
+enum class ReadStatus(val key:String) {
+    WATCHING("WATCHING"),
+    WATCHED("WATCHED"),
+    QUIT("QUIT"),
     ;
 
     companion object {
