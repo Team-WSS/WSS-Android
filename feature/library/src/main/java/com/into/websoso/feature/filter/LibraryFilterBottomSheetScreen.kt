@@ -29,6 +29,7 @@ import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetButtons
 import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetHeader
 import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetNovelRatingGrid
 import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetReadStatus
+import com.into.websoso.feature.library.model.RatingLevelUiModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +64,7 @@ private fun LibraryFilterBottomSheetScreen(
     onAttractivePointClick: (AttractivePoints) -> Unit,
     onReadStatusClick: (ReadStatus) -> Unit,
     selectedRating: Float,
-    onRatingClick: (rating: Float) -> Unit,
+    onRatingClick: (rating: RatingLevelUiModel) -> Unit,
     onResetClick: () -> Unit,
     onFilterSearchClick: () -> Unit,
 ) {
@@ -90,7 +91,7 @@ private fun LibraryFilterBottomSheetScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             LibraryFilterBottomSheetReadStatus(
                 onReadStatusClick = onReadStatusClick,
-                readStatues = readStatues,
+                readStatuses = readStatues,
             )
             Spacer(modifier = Modifier.height(height = 32.dp))
             Text(

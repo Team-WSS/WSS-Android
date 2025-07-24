@@ -21,11 +21,17 @@ import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.feature.library.model.RatingLevelUiModel
+import com.into.websoso.feature.library.model.RatingLevelUiModel.Companion.isCloseTo
+import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR
+import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR_POINT_EIGHT
+import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR_POINT_FIVE
+import com.into.websoso.feature.library.model.RatingLevelUiModel.THREE_POINT_FIVE
 
 @Composable
 internal fun LibraryFilterBottomSheetNovelRatingGrid(
     selectedRating: Float,
-    onRatingClick: (rating: Float) -> Unit,
+    onRatingClick: (rating: RatingLevelUiModel) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -42,18 +48,18 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .clickable {
-                        onRatingClick(3.5f)
+                        onRatingClick(THREE_POINT_FIVE)
                     },
-                isSelected = 3.5f == selectedRating,
+                isSelected = selectedRating.isCloseTo(THREE_POINT_FIVE.value),
             )
             NovelRatingItem(
                 title = "4.0 이상",
                 modifier = Modifier
                     .weight(weight = 1f)
                     .clickable {
-                        onRatingClick(4.0f)
+                        onRatingClick(FOUR)
                     },
-                isSelected = 4.0f == selectedRating,
+                isSelected = selectedRating.isCloseTo(FOUR.value),
             )
         }
         Row(
@@ -66,18 +72,18 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .clickable {
-                        onRatingClick(4.5f)
+                        onRatingClick(FOUR_POINT_FIVE)
                     },
-                isSelected = 4.5f == selectedRating,
+                isSelected = selectedRating.isCloseTo(FOUR_POINT_FIVE.value),
             )
             NovelRatingItem(
                 title = "4.8 이상",
                 modifier = Modifier
                     .weight(weight = 1f)
                     .clickable {
-                        onRatingClick(4.8f)
+                        onRatingClick(FOUR_POINT_EIGHT)
                     },
-                isSelected = 4.8f == selectedRating,
+                isSelected = selectedRating.isCloseTo(FOUR_POINT_EIGHT.value),
             )
         }
     }
