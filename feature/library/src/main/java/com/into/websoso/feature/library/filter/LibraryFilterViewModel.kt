@@ -2,12 +2,12 @@ package com.into.websoso.feature.library.filter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.core.common.extensions.isCloseTo
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.feature.library.model.LibraryFilterUiState
 import com.into.websoso.feature.library.model.RatingLevelUiModel
-import com.into.websoso.feature.library.model.RatingLevelUiModel.Companion.isCloseTo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

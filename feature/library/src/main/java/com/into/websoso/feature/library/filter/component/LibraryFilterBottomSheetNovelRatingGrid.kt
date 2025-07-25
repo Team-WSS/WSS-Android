@@ -16,13 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.isCloseTo
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.library.model.RatingLevelUiModel
-import com.into.websoso.feature.library.model.RatingLevelUiModel.Companion.isCloseTo
 import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR
 import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR_POINT_EIGHT
 import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR_POINT_FIVE
@@ -102,8 +102,7 @@ private fun NovelRatingItem(
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(size = 8.dp),
-            )
-            .then(
+            ).then(
                 if (isSelected) {
                     Modifier.border(
                         width = 1.dp,
@@ -113,8 +112,7 @@ private fun NovelRatingItem(
                 } else {
                     Modifier
                 },
-            )
-            .padding(vertical = 14.dp, horizontal = 24.dp),
+            ).padding(vertical = 14.dp, horizontal = 24.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
