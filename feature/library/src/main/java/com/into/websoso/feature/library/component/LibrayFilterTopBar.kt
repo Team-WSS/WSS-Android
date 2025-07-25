@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Black
@@ -40,8 +39,6 @@ import com.into.websoso.core.resource.R.drawable.ic_library_drop_down_fill
 import com.into.websoso.core.resource.R.drawable.ic_library_grid
 import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
-import com.into.websoso.feature.library.R.string.library_interesting
-import com.into.websoso.feature.library.R.string.library_novel_count
 import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryFilterUiState
 import com.into.websoso.feature.library.model.SortTypeUiModel
@@ -92,7 +89,7 @@ private fun NovelFilterChipSection(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         NovelFilterChip(
-            text = stringResource(id = library_interesting),
+            text = "관심",
             isSelected = libraryFilterUiState.isInterested,
             onClick = onInterestClick,
             showDropdownIcon = false,
@@ -179,7 +176,7 @@ private fun NovelFilterStatusBar(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
-            text = stringResource(library_novel_count, totalCount),
+            text = "${totalCount}개",
             style = WebsosoTheme.typography.body4,
             color = Gray200,
         )

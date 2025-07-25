@@ -28,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,10 +54,6 @@ import com.into.websoso.core.resource.R.drawable.ic_library_vibe
 import com.into.websoso.core.resource.R.drawable.ic_library_world_view
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.domain.library.model.AttractivePoints
-import com.into.websoso.feature.library.R.string.library_dot_separator
-import com.into.websoso.feature.library.R.string.library_my_rating
-import com.into.websoso.feature.library.R.string.library_my_rating_score
-import com.into.websoso.feature.library.R.string.library_total_rating
 import com.into.websoso.feature.library.model.AttractivePointUiModel
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
@@ -166,7 +161,8 @@ private fun ReadStatusBadge(
                 .background(
                     color = readStatus.backgroundColor,
                     shape = RoundedCornerShape(8.dp),
-                ).padding(vertical = 4.dp),
+                )
+                .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -276,7 +272,7 @@ private fun MyRatingSection(rating: Float) {
     Spacer(modifier = Modifier.width(2.dp))
 
     Text(
-        text = stringResource(id = library_my_rating_score, rating),
+        text = "$rating",
         style = WebsosoTheme.typography.body5Secondary,
         color = Secondary100,
     )
@@ -284,7 +280,7 @@ private fun MyRatingSection(rating: Float) {
     Spacer(modifier = Modifier.width(4.dp))
 
     Text(
-        text = stringResource(id = library_my_rating),
+        text = "내 별점",
         style = WebsosoTheme.typography.body5,
         color = Gray300,
     )
@@ -302,7 +298,7 @@ private fun TotalRatingSection(rating: Float) {
     Spacer(modifier = Modifier.width(2.dp))
 
     Text(
-        text = stringResource(id = library_total_rating, rating),
+        text = "$rating 전체 별점",
         style = WebsosoTheme.typography.body5,
         color = Gray200,
     )
@@ -318,7 +314,7 @@ private fun AttractivePointTags(types: List<AttractivePointUiModel>) {
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
-                    text = stringResource(id = library_dot_separator),
+                    text = "•",
                     style = WebsosoTheme.typography.body4,
                     color = Primary100,
                 )

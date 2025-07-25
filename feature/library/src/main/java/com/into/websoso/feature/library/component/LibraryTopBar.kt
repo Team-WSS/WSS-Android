@@ -8,11 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.feature.library.R.string.library_title
 
 @Composable
 internal fun LibraryTopBar(onSearchClick: () -> Unit = {}) {
@@ -24,7 +22,7 @@ internal fun LibraryTopBar(onSearchClick: () -> Unit = {}) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = stringResource(id = library_title),
+            text = "서재",
             style = WebsosoTheme.typography.headline1,
             color = Black,
         )
