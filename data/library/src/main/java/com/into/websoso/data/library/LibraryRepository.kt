@@ -54,7 +54,7 @@ class LibraryRepository
             readStatuses: List<String>,
             attractivePoints: List<String>,
             isInterested: Boolean,
-            novelRating: Float?,
+            novelRating: Float,
             sortCriteria: String,
         ): Flow<PagingData<NovelEntity>> =
             Pager(

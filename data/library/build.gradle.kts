@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
     implementation(projects.core.database)
     implementation(projects.data.account)
     // 페이징3

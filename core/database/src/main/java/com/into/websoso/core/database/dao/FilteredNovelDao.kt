@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @Dao
 interface FilteredNovelDao {
-    @Query("SELECT * FROM filtered_novels ORDER BY userNovelId DESC")
+    @Query("SELECT * FROM filtered_novels ORDER BY sortIndex ASC")
     fun selectAllNovels(): PagingSource<Int, InDatabaseFilteredNovelEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

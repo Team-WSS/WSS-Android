@@ -10,6 +10,7 @@ data class UserNovelsEntity(
 )
 
 data class NovelEntity(
+    val sortIndex: Long? = null,
     val userNovelId: Long,
     val novelId: Long,
     val title: String,
@@ -56,6 +57,7 @@ data class NovelEntity(
             endDate = endDate,
             keywords = keywords,
             myFeeds = myFeeds,
+            sortIndex = sortIndex ?: userNovelId,
         )
 }
 
