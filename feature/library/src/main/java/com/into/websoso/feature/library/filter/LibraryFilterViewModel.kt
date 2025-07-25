@@ -1,4 +1,4 @@
-package com.into.websoso.feature.filter
+package com.into.websoso.feature.library.filter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

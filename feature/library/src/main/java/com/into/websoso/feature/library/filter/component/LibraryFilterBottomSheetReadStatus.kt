@@ -1,4 +1,4 @@
-package com.into.websoso.feature.filter.component
+package com.into.websoso.feature.library.filter.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement

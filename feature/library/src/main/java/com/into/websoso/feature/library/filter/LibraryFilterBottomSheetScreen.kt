@@ -1,4 +1,4 @@
-package com.into.websoso.feature.filter
+package com.into.websoso.feature.library.filter
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,11 +24,11 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
-import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetAttractivePoints
-import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetButtons
-import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetHeader
-import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetNovelRatingGrid
-import com.into.websoso.feature.filter.component.LibraryFilterBottomSheetReadStatus
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetAttractivePoints
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetButtons
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetHeader
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetNovelRatingGrid
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetReadStatus
 import com.into.websoso.feature.library.model.RatingLevelUiModel
 
 @Composable

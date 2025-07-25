@@ -30,8 +30,8 @@ import androidx.paging.map
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.data.library.model.NovelEntity
-import com.into.websoso.feature.filter.LibraryFilterBottomSheetScreen
-import com.into.websoso.feature.filter.LibraryFilterViewModel
+import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
+import com.into.websoso.feature.library.filter.LibraryFilterViewModel
 import com.into.websoso.feature.library.component.LibraryEmptyView
 import com.into.websoso.feature.library.component.LibraryFilterTopBar
 import com.into.websoso.feature.library.component.LibraryGridList
