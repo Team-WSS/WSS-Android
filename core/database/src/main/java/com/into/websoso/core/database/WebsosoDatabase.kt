@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Database(
     entities = [InDatabaseNovelEntity::class, InDatabaseFilteredNovelEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

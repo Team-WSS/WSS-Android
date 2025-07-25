@@ -25,7 +25,11 @@ internal class DefaultFilteredLibraryLocalDataSource
         private val filteredNovelDao: FilteredNovelDao,
     ) : FilteredLibraryLocalDataSource {
         override suspend fun insertNovels(novels: List<NovelEntity>) {
-            filteredNovelDao.insertFilteredNovels(novels.map(NovelEntity::toFilteredNovelDatabase))
+            filteredNovelDao.insertFilteredNovels(
+                novels.mapIndexed { index, novelEntity ->
+                    novelEntity.toFilteredNovelDatabase(index)
+                },
+            )
         }
 
         override fun selectAllNovels(): PagingSource<Int, InDatabaseFilteredNovelEntity> = filteredNovelDao.selectAllNovels()

@@ -8,7 +8,7 @@ data class InDatabaseFilteredNovelEntity(
     @PrimaryKey val userNovelId: Long,
     val novelId: Long,
     val title: String,
-    val sortIndex: Long,
+    val sortIndex: Int,
     val novelImage: String,
     val novelRating: Float,
     val readStatus: String,

@@ -1,7 +1,5 @@
 package com.into.websoso.domain.library.model
 
-import android.util.Log
-
 enum class AttractivePoints(
     val label: String,
     val key: String,
@@ -15,10 +13,7 @@ enum class AttractivePoints(
 
     companion object {
         fun from(key: String): AttractivePoints =
-            AttractivePoints.entries.find { attractivePoints ->
-                Log.d("123123", "$key 비교 ${attractivePoints.key}")
-                attractivePoints.key == key
-            }
+            AttractivePoints.entries.find { attractivePoints -> attractivePoints.key == key }
                 ?: WORLDVIEW
     }
 }
