@@ -69,11 +69,11 @@ class LibraryViewModel
                                     isInterested = myFilter.isInterested,
                                     readStatuses = myFilter.readStatuses
                                         .mapKeys {
-                                            ReadStatus.valueOf(it.key)
+                                            ReadStatus.from(it.key)
                                         }.ifEmpty { uiState.libraryFilterUiState.readStatuses },
                                     attractivePoints = myFilter.attractivePoints
                                         .mapKeys {
-                                            AttractivePoints.valueOf(it.key)
+                                            AttractivePoints.from(it.key)
                                         }.ifEmpty { uiState.libraryFilterUiState.attractivePoints },
                                     novelRating = myFilter.novelRating,
                                 ),
