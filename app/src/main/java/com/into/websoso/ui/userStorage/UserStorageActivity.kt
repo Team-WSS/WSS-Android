@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.into.websoso.R
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.library.LibraryScreen
+import com.into.websoso.feature.library.LibraryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class UserStorageActivity : AppCompatActivity(R.layout.activity_storage) {
     @Inject
     lateinit var websosoNavigator: NavigatorProvider
+    private val libraryViewModel: LibraryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,7 @@ class UserStorageActivity : AppCompatActivity(R.layout.activity_storage) {
         setContent {
             WebsosoTheme {
                 LibraryScreen(
+                    libraryViewModel = libraryViewModel,
                     navigateToNormalExploreActivity = {
                         websosoNavigator.navigateToNormalExploreActivity(::startActivity)
                     },

@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal class KakaoLoginResponseDto(
+internal data class KakaoLoginResponseDto(
     @SerialName("Authorization")
     val authorization: String,
     @SerialName("refreshToken")

@@ -12,8 +12,8 @@ enum class AttractivePoints(
     ;
 
     companion object {
-        fun valueOf(name: String): AttractivePoints =
-            AttractivePoints.entries.find { attractivePoints -> attractivePoints.name == name }
-                ?: throw IllegalArgumentException()
+        fun from(key: String): AttractivePoints =
+            AttractivePoints.entries.find { attractivePoints -> attractivePoints.key == key }
+                ?: WORLDVIEW
     }
 }

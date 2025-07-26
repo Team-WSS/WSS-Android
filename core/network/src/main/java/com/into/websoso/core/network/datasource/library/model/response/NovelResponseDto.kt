@@ -17,7 +17,7 @@ internal data class NovelResponseDto(
     @SerialName("novelRating")
     val novelRating: Float,
     @SerialName("readStatus")
-    val readStatus: String,
+    val readStatus: String?,
     @SerialName("isInterest")
     val isInterest: Boolean,
     @SerialName("userNovelRating")
@@ -40,7 +40,7 @@ internal data class NovelResponseDto(
             title = title,
             novelImage = novelImage,
             novelRating = novelRating,
-            readStatus = readStatus,
+            readStatus = readStatus.orEmpty(),
             isInterest = isInterest,
             userNovelRating = userNovelRating,
             attractivePoints = attractivePoints,

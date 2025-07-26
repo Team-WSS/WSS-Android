@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.model.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ class MainViewModel
     @Inject
     constructor(
         private val userRepository: UserRepository,
+        private val accountRepository: AccountRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private var userId: Long = DEFAULT_USER_ID
@@ -34,6 +36,7 @@ class MainViewModel
                     userRepository.fetchUserInfo()
                 }.onSuccess { userInfo ->
                     userId = userInfo.userId
+                    accountRepository.updateUserId(userId)
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
                         loading = false,

@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray200
@@ -25,8 +24,6 @@ import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_storage_null
-import com.into.websoso.feature.library.R.string.library_empty
-import com.into.websoso.feature.library.R.string.library_go_to_explore
 
 @Composable
 internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
@@ -47,7 +44,7 @@ internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(id = library_empty),
+                text = "서재가 비어있어요",
                 style = WebsosoTheme.typography.body1,
                 color = Gray200,
             )
@@ -78,7 +75,7 @@ private fun LibraryExploreButton(
         elevation = null,
     ) {
         Text(
-            text = stringResource(id = library_go_to_explore),
+            text = "웹소설 찾으러 가기",
             style = WebsosoTheme.typography.title1,
             color = Primary100,
         )

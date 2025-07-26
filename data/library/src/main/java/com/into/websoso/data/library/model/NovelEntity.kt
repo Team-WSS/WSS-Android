@@ -1,5 +1,6 @@
 package com.into.websoso.data.library.model
 
+import com.into.websoso.core.database.entity.InDatabaseFilteredNovelEntity
 import com.into.websoso.core.database.entity.InDatabaseNovelEntity
 
 data class UserNovelsEntity(
@@ -22,7 +23,42 @@ data class NovelEntity(
     val endDate: String,
     val keywords: List<String>,
     val myFeeds: List<String>,
-)
+) {
+    internal fun toNovelDatabase(): InDatabaseNovelEntity =
+        InDatabaseNovelEntity(
+            userNovelId = userNovelId,
+            novelId = novelId,
+            title = title,
+            novelImage = novelImage,
+            novelRating = novelRating,
+            readStatus = readStatus,
+            isInterest = isInterest,
+            userNovelRating = userNovelRating,
+            attractivePoints = attractivePoints,
+            startDate = startDate,
+            endDate = endDate,
+            keywords = keywords,
+            myFeeds = myFeeds,
+        )
+
+    internal fun toFilteredNovelDatabase(index: Int): InDatabaseFilteredNovelEntity =
+        InDatabaseFilteredNovelEntity(
+            userNovelId = userNovelId,
+            novelId = novelId,
+            title = title,
+            novelImage = novelImage,
+            novelRating = novelRating,
+            readStatus = readStatus,
+            isInterest = isInterest,
+            userNovelRating = userNovelRating,
+            attractivePoints = attractivePoints,
+            startDate = startDate,
+            endDate = endDate,
+            keywords = keywords,
+            myFeeds = myFeeds,
+            sortIndex = index,
+        )
+}
 
 fun InDatabaseNovelEntity.toData(): NovelEntity =
     NovelEntity(
@@ -41,8 +77,8 @@ fun InDatabaseNovelEntity.toData(): NovelEntity =
         myFeeds = myFeeds,
     )
 
-internal fun NovelEntity.toDatabase(): InDatabaseNovelEntity =
-    InDatabaseNovelEntity(
+fun InDatabaseFilteredNovelEntity.toData(): NovelEntity =
+    NovelEntity(
         userNovelId = userNovelId,
         novelId = novelId,
         title = title,

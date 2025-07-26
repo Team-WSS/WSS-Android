@@ -33,11 +33,11 @@ internal class DefaultLibraryDataSource
                     size = size,
                     sortCriteria = sortCriteria,
                     isInterest = isInterest,
-                    readStatuses = listOf("WATCHING"),
+                    readStatuses = readStatuses,
                     attractivePoints = attractivePoints,
                     novelRating = novelRating,
                     query = query,
-                    updatedSince = "2025-03-20T09:24:00",
+                    updatedSince = updatedSince,
                 ).toData()
     }
 

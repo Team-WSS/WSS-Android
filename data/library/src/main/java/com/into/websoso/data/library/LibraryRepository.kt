@@ -1,19 +1,24 @@
 package com.into.websoso.data.library
 
-import NovelRemoteMediator
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.into.websoso.core.database.entity.InDatabaseFilteredNovelEntity
 import com.into.websoso.core.database.entity.InDatabaseNovelEntity
+import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.library.datasource.FilteredLibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 import com.into.websoso.data.library.datasource.MyLibraryFilterLocalDataSource
+import com.into.websoso.data.library.mediator.FilteredNovelRemoteMediator
+import com.into.websoso.data.library.mediator.NovelRemoteMediator
 import com.into.websoso.data.library.model.LibraryFilterParams
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.model.toData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,66 +27,73 @@ import javax.inject.Singleton
 class LibraryRepository
     @Inject
     constructor(
+        private val accountRepository: AccountRepository,
         private val libraryRemoteDataSource: LibraryRemoteDataSource,
         private val libraryLocalDataSource: LibraryLocalDataSource,
+        private val filteredLibraryLocalDataSource: FilteredLibraryLocalDataSource,
         private val myLibraryFilterLocalDataSource: MyLibraryFilterLocalDataSource,
     ) {
         val myLibraryFilter = myLibraryFilterLocalDataSource.myLibraryFilterFlow
 
         @OptIn(ExperimentalPagingApi::class)
-        fun getUserLibrary(
-            userId: Long,
-            lastUserNovelId: Long,
-            size: Int,
-            sortCriteria: String,
-            isInterest: Boolean?,
-            readStatuses: List<String>?,
-            attractivePoints: List<String>?,
-            novelRating: Float?,
-            query: String?,
-        ): Flow<PagingData<NovelEntity>> =
+        fun getLibrary(): Flow<PagingData<NovelEntity>> =
             Pager(
-                config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
+                config = PagingConfig(pageSize = PAGE_SIZE),
                 remoteMediator = NovelRemoteMediator(
-                    userId,
-                    libraryRemoteDataSource,
-                    libraryLocalDataSource,
+                    userId = accountRepository.userId,
+                    libraryLocalDataSource = libraryLocalDataSource,
+                    libraryRemoteDataSource = libraryRemoteDataSource,
                 ),
-            ) {
-                libraryLocalDataSource.selectAllNovels()
-            }.flow.map { it.map(InDatabaseNovelEntity::toData) }
+                pagingSourceFactory = libraryLocalDataSource::selectAllNovels,
+            ).flow.map { pagingData ->
+                pagingData.map(InDatabaseNovelEntity::toData)
+            }
 
-        suspend fun updateMyLibraryFilter(
-            userId: Long = 184,
-            lastUserNovelId: Long = 0,
-            size: Int = 60,
-            sortCriteria: String = "",
-            isInterest: Boolean? = null,
+        @OptIn(ExperimentalPagingApi::class)
+        fun getFilteredLibrary(
             readStatuses: List<String>,
             attractivePoints: List<String>,
-            novelRating: Float? = null,
-            query: String? = null,
-        ) {
-            myLibraryFilterLocalDataSource.updateMyLibraryFilter(
-                LibraryFilterParams(
-                    sortCriteria = sortCriteria,
-                    isInterest = isInterest,
-                    readStatuses = readStatuses.toList(),
-                    attractivePoints = attractivePoints.toList(),
+            isInterested: Boolean,
+            novelRating: Float,
+            sortCriteria: String,
+        ): Flow<PagingData<NovelEntity>> =
+            Pager(
+                config = PagingConfig(pageSize = PAGE_SIZE),
+                remoteMediator = FilteredNovelRemoteMediator(
+                    userId = accountRepository.userId,
+                    libraryRemoteDataSource = libraryRemoteDataSource,
+                    filteredLibraryLocalDataSource = filteredLibraryLocalDataSource,
+                    isInterested = isInterested,
+                    readStatuses = readStatuses,
+                    attractivePoints = attractivePoints,
                     novelRating = novelRating,
+                    sortCriteria = sortCriteria,
                 ),
+                pagingSourceFactory = filteredLibraryLocalDataSource::selectAllNovels,
+            ).flow.map { pagingData ->
+                pagingData.map(InDatabaseFilteredNovelEntity::toData)
+            }
+
+        suspend fun updateMyLibraryFilter(
+            readStatuses: Map<String, Boolean>? = null,
+            attractivePoints: Map<String, Boolean>? = null,
+            novelRating: Float? = null,
+            isInterested: Boolean? = null,
+            sortCriteria: String? = null,
+        ) {
+            val savedFilter = myLibraryFilter.firstOrNull() ?: LibraryFilterParams()
+            val updatedFilter = savedFilter.copy(
+                sortCriteria = sortCriteria ?: savedFilter.sortCriteria,
+                isInterested = isInterested ?: savedFilter.isInterested,
+                readStatuses = readStatuses ?: savedFilter.readStatuses,
+                attractivePoints = attractivePoints ?: savedFilter.attractivePoints,
+                novelRating = novelRating ?: savedFilter.novelRating,
             )
+
+            myLibraryFilterLocalDataSource.updateMyLibraryFilter(params = updatedFilter)
         }
 
-        // 1. 클릭 리스너로 뷰모델 상태 업데이트
-        // 2. 확인 누르면 datastore 업데이트
-        // 3. 객체 직렬화 및 저장
-        // 4. datastore를 읽고, 캐싱(가능하면), 널이 아니라면, 해당 쿼리문으로 룸 업데이트
-        // 5. 룸에서 데이터 읽고 UI
-        // 6. 이미지 캐싱
-        // 7. 다른 뷰에서 룸 동기화
-        // 8. 증분 API
         companion object {
-            private const val NETWORK_PAGE_SIZE = 10
+            private const val PAGE_SIZE = 10
         }
     }

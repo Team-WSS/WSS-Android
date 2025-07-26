@@ -18,6 +18,13 @@ class AccountRepository
         var isRegisterUser: Boolean = false
             private set
 
+        var userId: Long = 0L
+            private set
+
+        fun updateUserId(userId: Long) {
+            this.userId = userId
+        }
+
         suspend fun accessToken(): String = accountLocalDataSource.selectAccessToken()
 
         suspend fun refreshToken(): String = accountLocalDataSource.selectRefreshToken()
