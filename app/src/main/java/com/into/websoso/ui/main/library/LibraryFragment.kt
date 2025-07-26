@@ -29,9 +29,7 @@ class LibraryFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_library, container, false)
         val composeView = view.findViewById<ComposeView>(R.id.cv_library)
-        parentFragmentManager.setFragmentResultListener("scrollToTop", viewLifecycleOwner) { _, _ ->
-            resetScrollPosition()
-        }
+
         composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -49,6 +47,17 @@ class LibraryFragment : Fragment() {
             }
         }
         return view
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+
+        parentFragmentManager.setFragmentResultListener("scrollToTop", viewLifecycleOwner) { _, _ ->
+            resetScrollPosition()
+        }
     }
 
     private fun resetScrollPosition() {
