@@ -45,6 +45,12 @@ data class LibraryFilterUiState(
             "매력 포인트",
         )
 
+    val isFilterApplied: Boolean
+        get() = readStatuses.values.any { it } ||
+                attractivePoints.values.any { it } ||
+                isRatingSelected ||
+                isInterested
+
     companion object {
         fun buildLabel(
             values: List<String>,
