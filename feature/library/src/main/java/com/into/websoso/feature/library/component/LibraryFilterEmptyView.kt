@@ -13,14 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R
-import com.into.websoso.feature.library.R.string.library_filter_empty
 
 @Composable
 internal fun LibraryFilterEmptyView() {
@@ -41,7 +39,8 @@ internal fun LibraryFilterEmptyView() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(id = library_filter_empty),
+                text = "해당하는 작품이 없어요\n" +
+                    "다른 검색어를 시도해보세요",
                 style = WebsosoTheme.typography.body1,
                 color = Gray200,
                 textAlign = TextAlign.Center,
