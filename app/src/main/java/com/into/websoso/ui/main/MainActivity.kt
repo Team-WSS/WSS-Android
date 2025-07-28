@@ -105,6 +105,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
                 show(existingFragment)
             }
         }
+
+        currentFragment = fragment
     }
 
     private fun setupBottomNavListener() {
