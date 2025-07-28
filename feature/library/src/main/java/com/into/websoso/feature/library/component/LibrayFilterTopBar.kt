@@ -171,7 +171,9 @@ private fun NovelFilterStatusBar(
     onToggleViewType: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -193,7 +195,8 @@ private fun NovelFilterStatusBar(
                         id = if (isGrid) ic_library_grid else ic_library_list,
                     ),
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(12.dp)
+                        ,
                 )
             }
         }

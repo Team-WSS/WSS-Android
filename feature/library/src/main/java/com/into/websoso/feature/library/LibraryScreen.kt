@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -30,13 +31,14 @@ import androidx.paging.map
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.data.library.model.NovelEntity
-import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
-import com.into.websoso.feature.library.filter.LibraryFilterViewModel
 import com.into.websoso.feature.library.component.LibraryEmptyView
+import com.into.websoso.feature.library.component.LibraryFilterEmptyView
 import com.into.websoso.feature.library.component.LibraryFilterTopBar
 import com.into.websoso.feature.library.component.LibraryGridList
 import com.into.websoso.feature.library.component.LibraryList
 import com.into.websoso.feature.library.component.LibraryTopBar
+import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
+import com.into.websoso.feature.library.filter.LibraryFilterViewModel
 import com.into.websoso.feature.library.mapper.toUiModel
 import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryListItemModel
@@ -130,9 +132,14 @@ private fun LibraryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(White),
+            .background(White)
+            .statusBarsPadding(),
     ) {
+        Spacer(modifier = Modifier.height(20.dp))
+
         LibraryTopBar(onSearchClick = onSearchClick)
+
+        Spacer(modifier = Modifier.height(28.dp))
 
         LibraryFilterTopBar(
             libraryFilterUiState = uiState.libraryFilterUiState,
@@ -147,8 +154,13 @@ private fun LibraryScreen(
         Spacer(modifier = Modifier.height(4.dp))
 
         when {
-            pagingItems.itemCount == 0 && pagingItems.loadState.refresh !is LoadState.Loading -> {
-                LibraryEmptyView(onExploreClick = onExploreClick)
+            pagingItems.itemCount == 0 &&
+                pagingItems.loadState.refresh !is LoadState.Loading -> {
+                if (uiState.libraryFilterUiState.isFilterApplied) {
+                    LibraryFilterEmptyView()
+                } else {
+                    LibraryEmptyView(onExploreClick = onExploreClick)
+                }
             }
 
             uiState.isGrid -> {

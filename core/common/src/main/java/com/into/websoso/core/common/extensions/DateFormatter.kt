@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 private val INPUT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-private val OUTPUT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy.MM.dd")
+private val OUTPUT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yy.MM.dd")
 
 fun formatDateRange(
     startDate: String?,

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -30,11 +29,14 @@ import com.into.websoso.core.resource.R.drawable.ic_storage_null
 internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 80.dp),
-        contentAlignment = Alignment.TopCenter,
+            .fillMaxSize(),
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
             Image(
                 imageVector = ImageVector.vectorResource(id = ic_storage_null),
                 contentDescription = null,
@@ -46,10 +48,9 @@ internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
                 style = WebsosoTheme.typography.body1,
                 color = Gray200,
             )
-            Spacer(modifier = Modifier.height(44.dp))
-            LibraryExploreButton(
-                onClick = onExploreClick,
-            )
+            Spacer(modifier = Modifier.height(48.dp))
+            LibraryExploreButton(onClick = onExploreClick)
+            Spacer(modifier = Modifier.weight(2f))
         }
     }
 }
