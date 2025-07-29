@@ -3,7 +3,7 @@ package com.into.websoso.feature.library.filter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.core.common.extensions.isCloseTo
-import com.into.websoso.data.library.LibraryRepository
+import com.into.websoso.data.filter.FilterRepository
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.feature.library.model.LibraryFilterUiState
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class LibraryFilterViewModel
     @Inject
     constructor(
-        private val libraryRepository: LibraryRepository,
+        private val filterRepository: FilterRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(LibraryFilterUiState())
         val uiState = _uiState.asStateFlow()
@@ -68,7 +68,7 @@ class LibraryFilterViewModel
 
         fun searchFilteredNovels() {
             viewModelScope.launch {
-                libraryRepository.updateMyLibraryFilter(
+                filterRepository.updateFilter(
                     readStatuses = uiState.value.readStatuses.mapKeys { it.key.key },
                     attractivePoints = uiState.value.attractivePoints.mapKeys { it.key.key },
                     novelRating = uiState.value.novelRating,

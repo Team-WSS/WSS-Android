@@ -58,7 +58,7 @@ fun LibraryScreen(
 ) {
     val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
-    val pagingItems = libraryViewModel.novelPagingData
+    val novels = libraryViewModel.novels
         .map { it.map(NovelEntity::toUiModel) }
         .collectAsLazyPagingItems()
     val latestEffect by rememberUpdatedState(libraryViewModel.scrollToTopEvent)
@@ -80,7 +80,7 @@ fun LibraryScreen(
 
     LibraryScreen(
         libraryFilterViewModel = libraryFilterViewModel,
-        pagingItems = pagingItems,
+        novels = novels,
         uiState = uiState,
         listState = listState,
         gridState = gridState,
@@ -114,7 +114,7 @@ fun LibraryScreen(
 @Composable
 private fun LibraryScreen(
     libraryFilterViewModel: LibraryFilterViewModel,
-    pagingItems: LazyPagingItems<LibraryListItemModel>,
+    novels: LazyPagingItems<LibraryListItemModel>,
     uiState: LibraryUiState,
     listState: LazyListState,
     gridState: LazyGridState,
@@ -143,7 +143,7 @@ private fun LibraryScreen(
 
         LibraryFilterTopBar(
             libraryFilterUiState = uiState.libraryFilterUiState,
-            totalCount = pagingItems.itemCount,
+            totalCount = novels.itemCount,
             isGrid = uiState.isGrid,
             onFilterClick = onFilterClick,
             onSortClick = onSortClick,
@@ -154,8 +154,8 @@ private fun LibraryScreen(
         Spacer(modifier = Modifier.height(4.dp))
 
         when {
-            pagingItems.itemCount == 0 &&
-                pagingItems.loadState.refresh !is LoadState.Loading -> {
+            novels.itemCount == 0 &&
+                novels.loadState.refresh !is LoadState.Loading -> {
                 if (uiState.libraryFilterUiState.isFilterApplied) {
                     LibraryFilterEmptyView()
                 } else {
@@ -165,7 +165,7 @@ private fun LibraryScreen(
 
             uiState.isGrid -> {
                 LibraryGridList(
-                    novels = pagingItems,
+                    novels = novels,
                     gridState = gridState,
                     onItemClick = onItemClick,
                 )
@@ -173,7 +173,7 @@ private fun LibraryScreen(
 
             else -> {
                 LibraryList(
-                    novels = pagingItems,
+                    novels = novels,
                     listState = listState,
                     onItemClick = onItemClick,
                 )
