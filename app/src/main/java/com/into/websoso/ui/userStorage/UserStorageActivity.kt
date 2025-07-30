@@ -41,6 +41,13 @@ class UserStorageActivity : AppCompatActivity(R.layout.activity_storage) {
     }
 
     companion object {
-        fun getIntent(context: Context) = Intent(context, UserStorageActivity::class.java)
+        private const val USER_ID = "USER_ID"
+
+        fun getIntent(
+            context: Context,
+            userId: Long,
+        ) = Intent(context, UserStorageActivity::class.java).apply {
+            putExtra(USER_ID, userId)
+        }
     }
 }

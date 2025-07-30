@@ -46,8 +46,11 @@ internal class WebsosoNavigator
             startActivity(intent)
         }
 
-        override fun navigateToUserStorageActivity(startActivity: (Intent) -> Unit) {
-            val intent = UserStorageActivity.getIntent(context)
+        override fun navigateToUserStorageActivity(
+            startActivity: (Intent) -> Unit,
+            userId: Long,
+        ) {
+            val intent = UserStorageActivity.getIntent(context, userId)
             startActivity(intent)
         }
 
