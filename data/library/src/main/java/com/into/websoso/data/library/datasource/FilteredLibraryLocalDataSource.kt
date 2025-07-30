@@ -25,9 +25,10 @@ internal class DefaultFilteredLibraryLocalDataSource
         private val filteredNovelDao: FilteredNovelDao,
     ) : FilteredLibraryLocalDataSource {
         override suspend fun insertNovels(novels: List<NovelEntity>) {
+            val offset = filteredNovelDao.selectNovelsCount()
             filteredNovelDao.insertFilteredNovels(
                 novels.mapIndexed { index, novelEntity ->
-                    novelEntity.toFilteredNovelDatabase(index)
+                    novelEntity.toFilteredNovelDatabase(offset + index)
                 },
             )
         }

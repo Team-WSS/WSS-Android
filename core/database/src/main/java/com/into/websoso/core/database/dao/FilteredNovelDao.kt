@@ -23,6 +23,9 @@ interface FilteredNovelDao {
 
     @Query("DELETE FROM filtered_novels")
     suspend fun clearAll()
+
+    @Query("SELECT COUNT(*) FROM filtered_novels")
+    suspend fun selectNovelsCount(): Int
 }
 
 @Module
