@@ -15,6 +15,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Singleton
 internal class DefaultAccountDataSource
     @Inject
     constructor(
@@ -65,6 +66,5 @@ internal class DefaultAccountDataSource
 @InstallIn(SingletonComponent::class)
 internal interface AccountDataSourceModule {
     @Binds
-    @Singleton
     fun bindAccountRemoteDataSource(defaultAccountDataSource: DefaultAccountDataSource): AccountRemoteDataSource
 }

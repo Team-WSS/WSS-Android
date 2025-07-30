@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Singleton
 internal class DefaultLibraryDataSource
     @Inject
     constructor(
@@ -45,6 +46,5 @@ internal class DefaultLibraryDataSource
 @InstallIn(SingletonComponent::class)
 internal interface LibraryDataSourceModule {
     @Binds
-    @Singleton
     fun bindLibraryRemoteDataSource(defaultLibraryDataSource: DefaultLibraryDataSource): LibraryRemoteDataSource
 }

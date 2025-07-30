@@ -19,6 +19,7 @@ interface LibraryLocalDataSource {
     suspend fun deleteAllNovels()
 }
 
+@Singleton
 internal class DefaultLibraryDataSource
     @Inject
     constructor(
@@ -39,6 +40,5 @@ internal class DefaultLibraryDataSource
 @InstallIn(SingletonComponent::class)
 internal interface LibraryDataSourceModule {
     @Binds
-    @Singleton
     fun bindLibraryLocalDataSource(defaultLibraryDataSource: DefaultLibraryDataSource): LibraryLocalDataSource
 }

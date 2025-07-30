@@ -26,6 +26,7 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Singleton
 internal class DefaultLibraryFilterDataSource
     @Inject
     constructor(
@@ -69,6 +70,5 @@ internal class DefaultLibraryFilterDataSource
 @InstallIn(SingletonComponent::class)
 internal interface LibraryFilterDataSourceModule {
     @Binds
-    @Singleton
     fun bindLibraryFilterLocalDataSource(defaultLibraryFilterDataSource: DefaultLibraryFilterDataSource): LibraryFilterLocalDataSource
 }

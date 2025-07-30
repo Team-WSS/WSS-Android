@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Singleton
 internal class WebsosoAuthSessionManager
     @Inject
     constructor() : AuthSessionManager {
@@ -26,6 +27,5 @@ internal class WebsosoAuthSessionManager
 @InstallIn(SingletonComponent::class)
 internal interface WebsosoAuthSessionManagerModule {
     @Binds
-    @Singleton
     fun bindWebsosoAuthSessionManager(websosoAuthSessionManager: WebsosoAuthSessionManager): AuthSessionManager
 }
