@@ -2,7 +2,6 @@ package com.into.websoso.data.filter.repository
 
 import com.into.websoso.data.filter.FilterRepository
 import com.into.websoso.data.filter.model.LibraryFilter
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,8 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@ViewModelScoped
-class UserLibraryFilterRepository
+internal class UserLibraryFilterRepository
     @Inject
     constructor() : FilterRepository {
         private val _filterFlow = MutableStateFlow(LibraryFilter())

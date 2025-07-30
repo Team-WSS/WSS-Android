@@ -8,17 +8,20 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Provider
 
 @Module
 @InstallIn(ViewModelComponent::class)
-internal object RepositoryModule {
+internal object FilterRepositoryModule {
     @Provides
+    @ViewModelScoped
     fun provideFilterRepository(
         savedStateHandle: SavedStateHandle,
-        myFilterRepository: MyLibraryFilterRepository,
-        userFilterRepository: UserLibraryFilterRepository,
+        myFilterRepository: Provider<MyLibraryFilterRepository>,
+        userFilterRepository: Provider<UserLibraryFilterRepository>,
     ): FilterRepository {
         val userId: Long? = savedStateHandle["USER_ID"]
-        return if (userId == null) myFilterRepository else userFilterRepository
+        return if (userId == null) myFilterRepository.get() else userFilterRepository.get()
     }
 }
