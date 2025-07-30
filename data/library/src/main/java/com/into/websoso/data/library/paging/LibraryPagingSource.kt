@@ -29,16 +29,14 @@ class LibraryPagingSource(
                 updatedSince = null,
             )
 
-            val novels = response.userNovels.map { it }
-
-            val nextKey = if (response.isLoadable && novels.isNotEmpty()) {
-                novels.last().userNovelId
+            val nextKey = if (response.isLoadable && response.userNovels.isNotEmpty()) {
+                response.userNovels.last().userNovelId
             } else {
                 null
             }
 
             LoadResult.Page(
-                data = novels,
+                data = response.userNovels,
                 prevKey = null,
                 nextKey = nextKey,
             )
