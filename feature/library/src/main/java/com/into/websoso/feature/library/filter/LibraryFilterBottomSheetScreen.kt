@@ -13,12 +13,9 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
@@ -29,28 +26,32 @@ import com.into.websoso.feature.library.filter.component.LibraryFilterBottomShee
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetHeader
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetNovelRatingGrid
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetReadStatus
+import com.into.websoso.feature.library.model.LibraryFilterUiState
 import com.into.websoso.feature.library.model.RatingLevelUiModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun LibraryFilterBottomSheetScreen(
+    filterUiState: LibraryFilterUiState,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    viewModel: LibraryFilterViewModel,
+    onAttractivePointClick: (AttractivePoints) -> Unit,
+    onReadStatusClick: (ReadStatus) -> Unit,
+    onRatingClick: (rating: RatingLevelUiModel) -> Unit,
+    onResetClick: () -> Unit,
+    onFilterSearchClick: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     LibraryFilterBottomSheetScreen(
         sheetState = sheetState,
-        readStatues = uiState.readStatuses,
-        attractivePoints = uiState.attractivePoints,
-        selectedRating = uiState.novelRating,
+        readStatues = filterUiState.readStatuses,
+        attractivePoints = filterUiState.attractivePoints,
+        selectedRating = filterUiState.novelRating,
         onDismissRequest = onDismissRequest,
-        onAttractivePointClick = viewModel::updateAttractivePoints,
-        onReadStatusClick = viewModel::updateReadStatus,
-        onRatingClick = viewModel::updateRating,
-        onResetClick = viewModel::resetFilter,
-        onFilterSearchClick = viewModel::searchFilteredNovels,
+        onAttractivePointClick = onAttractivePointClick,
+        onReadStatusClick = onReadStatusClick,
+        onRatingClick = onRatingClick,
+        onResetClick = onResetClick,
+        onFilterSearchClick = onFilterSearchClick,
     )
 }
 
@@ -134,12 +135,17 @@ private fun LibraryFilterBottomSheetScreen(
 private fun LibraryFilterBottomSheetPreview() {
     WebsosoTheme {
         LibraryFilterBottomSheetScreen(
-            viewModel = hiltViewModel(),
             onDismissRequest = {},
             sheetState = rememberStandardBottomSheetState(
                 initialValue = SheetValue.Expanded,
                 skipHiddenState = false,
             ),
+            filterUiState = LibraryFilterUiState(),
+            onAttractivePointClick = { },
+            onReadStatusClick = { },
+            onRatingClick = { },
+            onResetClick = { },
+            onFilterSearchClick = { },
         )
     }
 }
