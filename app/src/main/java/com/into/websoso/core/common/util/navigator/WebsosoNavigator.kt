@@ -17,7 +17,6 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 internal class WebsosoNavigator
     @Inject
     constructor(
@@ -73,5 +72,6 @@ internal class WebsosoNavigator
 @InstallIn(SingletonComponent::class)
 internal interface NavigatorModule {
     @Binds
+    @Singleton
     fun bindWebsosoNavigator(websosoNavigator: WebsosoNavigator): NavigatorProvider
 }
