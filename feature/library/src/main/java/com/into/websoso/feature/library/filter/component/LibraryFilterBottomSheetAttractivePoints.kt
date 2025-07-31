@@ -15,18 +15,19 @@ import com.into.websoso.core.resource.R.drawable.ic_library_material
 import com.into.websoso.core.resource.R.drawable.ic_library_relationship
 import com.into.websoso.core.resource.R.drawable.ic_library_vibe
 import com.into.websoso.core.resource.R.drawable.ic_library_world_view
+import com.into.websoso.domain.library.model.AttractivePoint
+import com.into.websoso.domain.library.model.AttractivePoint.CHARACTER
+import com.into.websoso.domain.library.model.AttractivePoint.MATERIAL
+import com.into.websoso.domain.library.model.AttractivePoint.RELATIONSHIP
+import com.into.websoso.domain.library.model.AttractivePoint.VIBE
+import com.into.websoso.domain.library.model.AttractivePoint.WORLDVIEW
 import com.into.websoso.domain.library.model.AttractivePoints
-import com.into.websoso.domain.library.model.AttractivePoints.CHARACTER
-import com.into.websoso.domain.library.model.AttractivePoints.MATERIAL
-import com.into.websoso.domain.library.model.AttractivePoints.RELATIONSHIP
-import com.into.websoso.domain.library.model.AttractivePoints.VIBE
-import com.into.websoso.domain.library.model.AttractivePoints.WORLDVIEW
 
 @SuppressLint("ResourceType")
 @Composable
 internal fun LibraryFilterBottomSheetAttractivePoints(
-    attractivePoints: Map<AttractivePoints, Boolean>,
-    onAttractivePointClick: (AttractivePoints) -> Unit,
+    attractivePoints: AttractivePoints,
+    onAttractivePointClick: (AttractivePoint) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -38,7 +39,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             iconTitle = "세계관",
             horizontalPadding = 12.dp,
             iconSize = 36.dp,
-            isSelected = attractivePoints[WORLDVIEW] ?: false,
+            isSelected = attractivePoints[WORLDVIEW],
             onClick = { onAttractivePointClick(WORLDVIEW) },
         )
         LibraryFilterBottomSheetClickableItem(
@@ -46,7 +47,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             iconTitle = "소재",
             horizontalPadding = 12.dp,
             iconSize = 36.dp,
-            isSelected = attractivePoints[MATERIAL] ?: false,
+            isSelected = attractivePoints[MATERIAL],
             onClick = { onAttractivePointClick(MATERIAL) },
         )
         LibraryFilterBottomSheetClickableItem(
@@ -54,7 +55,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             iconTitle = "캐릭터",
             horizontalPadding = 12.dp,
             iconSize = 36.dp,
-            isSelected = attractivePoints[CHARACTER] ?: false,
+            isSelected = attractivePoints[CHARACTER],
             onClick = { onAttractivePointClick(CHARACTER) },
         )
         LibraryFilterBottomSheetClickableItem(
@@ -62,7 +63,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             iconTitle = "관계",
             horizontalPadding = 12.dp,
             iconSize = 36.dp,
-            isSelected = attractivePoints[RELATIONSHIP] ?: false,
+            isSelected = attractivePoints[RELATIONSHIP],
             onClick = { onAttractivePointClick(RELATIONSHIP) },
         )
         LibraryFilterBottomSheetClickableItem(
@@ -70,7 +71,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             iconTitle = "분위기",
             horizontalPadding = 12.dp,
             iconSize = 36.dp,
-            isSelected = attractivePoints[VIBE] ?: false,
+            isSelected = attractivePoints[VIBE],
             onClick = { onAttractivePointClick(VIBE) },
         )
     }
@@ -81,7 +82,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
 private fun LibraryFilterBottomSheetAttractivePointsPreview() {
     WebsosoTheme {
         LibraryFilterBottomSheetAttractivePoints(
-            attractivePoints = mapOf(),
+            attractivePoints = AttractivePoints(),
             onAttractivePointClick = { },
         )
     }

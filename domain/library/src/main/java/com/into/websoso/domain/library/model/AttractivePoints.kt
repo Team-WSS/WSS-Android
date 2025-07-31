@@ -1,19 +1,32 @@
 package com.into.websoso.domain.library.model
 
-enum class AttractivePoints(
-    val label: String,
-    val key: String,
+data class AttractivePoints(
+    val value: Map<AttractivePoint, Boolean> = AttractivePoint.entries.associateWith { false },
 ) {
-    WORLDVIEW("세계관", "worldview"),
-    MATERIAL("소재", "material"),
-    CHARACTER("캐릭터", "character"),
-    RELATIONSHIP("관계", "relationship"),
-    VIBE("분위기", "vibe"),
-    ;
+    val isSelected: Boolean
+        get() = value.any { it.value }
+
+    val selectedLabels: List<String>
+        get() = value.filterValues { it }.keys.map { it.label }
+
+    val selectedKeys: List<String>
+        get() = value.filterValues { it }.keys.map { it.key }
+
+    operator fun get(attractivePoint: AttractivePoint): Boolean = value[attractivePoint] ?: false
+
+    fun set(attractivePoint: AttractivePoint): AttractivePoints {
+        if (!value.containsKey(attractivePoint)) return this
+        val updatedAttractivePoint = value.toMutableMap().apply {
+            this[attractivePoint] = !(this[attractivePoint] ?: false)
+        }
+        return this.copy(value = updatedAttractivePoint)
+    }
 
     companion object {
-        fun from(key: String): AttractivePoints =
-            AttractivePoints.entries.find { attractivePoints -> attractivePoints.key == key }
-                ?: WORLDVIEW
+        fun List<String>.toAttractivePoints(): AttractivePoints {
+            val enabledSet = mapNotNull(AttractivePoint::from).toSet()
+            val mapped = AttractivePoint.entries.associateWith { it in enabledSet }
+            return AttractivePoints(mapped)
+        }
     }
 }
