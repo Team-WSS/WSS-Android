@@ -10,21 +10,21 @@ import androidx.paging.RemoteMediator
 import androidx.paging.RemoteMediator.MediatorResult.Error
 import androidx.paging.RemoteMediator.MediatorResult.Success
 import com.into.websoso.core.common.extensions.isCloseTo
-import com.into.websoso.core.database.entity.InDatabaseFilteredNovelEntity
+import com.into.websoso.core.database.entity.InDatabaseNovelEntity
 import com.into.websoso.data.filter.model.LibraryFilter
-import com.into.websoso.data.library.datasource.FilteredLibraryLocalDataSource
+import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 
 @OptIn(ExperimentalPagingApi::class)
 class LibraryRemoteMediator(
     private val userId: Long,
     private val libraryRemoteDataSource: LibraryRemoteDataSource,
-    private val filteredLibraryLocalDataSource: FilteredLibraryLocalDataSource,
+    private val libraryLocalDataSource: LibraryLocalDataSource,
     private val libraryFilter: LibraryFilter,
-) : RemoteMediator<Int, InDatabaseFilteredNovelEntity>() {
+) : RemoteMediator<Int, InDatabaseNovelEntity>() {
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, InDatabaseFilteredNovelEntity>,
+        state: PagingState<Int, InDatabaseNovelEntity>,
     ): MediatorResult {
         val lastUserNovelId = when (loadType) {
             REFRESH -> DEFAULT_LAST_USER_NOVEL_ID
@@ -50,9 +50,9 @@ class LibraryRemoteMediator(
                 updatedSince = null,
             )
 
-            if (loadType == REFRESH) filteredLibraryLocalDataSource.deleteAllNovels()
+            if (loadType == REFRESH) libraryLocalDataSource.deleteAllNovels()
 
-            filteredLibraryLocalDataSource.insertNovels(response.userNovels)
+            libraryLocalDataSource.insertNovels(response.userNovels)
 
             Success(endOfPaginationReached = !response.isLoadable)
         } catch (e: Exception) {

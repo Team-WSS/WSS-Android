@@ -5,12 +5,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.into.websoso.core.database.entity.InDatabaseFilteredNovelEntity
+import com.into.websoso.core.database.entity.InDatabaseNovelEntity
 import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.filter.FilterRepository
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.LibraryRepository.Companion.PAGE_SIZE
-import com.into.websoso.data.library.datasource.FilteredLibraryLocalDataSource
+import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.model.toData
@@ -27,7 +27,7 @@ internal class MyLibraryRepository
         filterRepository: FilterRepository,
         private val accountRepository: AccountRepository,
         private val libraryRemoteDataSource: LibraryRemoteDataSource,
-        private val filteredLibraryLocalDataSource: FilteredLibraryLocalDataSource,
+        private val libraryLocalDataSource: LibraryLocalDataSource,
     ) : LibraryRepository {
         @OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
         override val libraryFlow: Flow<PagingData<NovelEntity>> =
@@ -38,12 +38,12 @@ internal class MyLibraryRepository
                         remoteMediator = LibraryRemoteMediator(
                             userId = accountRepository.userId,
                             libraryRemoteDataSource = libraryRemoteDataSource,
-                            filteredLibraryLocalDataSource = filteredLibraryLocalDataSource,
+                            libraryLocalDataSource = libraryLocalDataSource,
                             libraryFilter = filter,
                         ),
-                        pagingSourceFactory = filteredLibraryLocalDataSource::selectAllNovels,
+                        pagingSourceFactory = libraryLocalDataSource::selectAllNovels,
                     ).flow.map { pagingData ->
-                        pagingData.map(InDatabaseFilteredNovelEntity::toData)
+                        pagingData.map(InDatabaseNovelEntity::toData)
                     }
                 }
     }

@@ -1,6 +1,5 @@
 package com.into.websoso.data.library.model
 
-import com.into.websoso.core.database.entity.InDatabaseFilteredNovelEntity
 import com.into.websoso.core.database.entity.InDatabaseNovelEntity
 
 data class UserNovelsEntity(
@@ -24,25 +23,8 @@ data class NovelEntity(
     val keywords: List<String>,
     val myFeeds: List<String>,
 ) {
-    internal fun toNovelDatabase(): InDatabaseNovelEntity =
+    internal fun toNovelDatabase(index: Int): InDatabaseNovelEntity =
         InDatabaseNovelEntity(
-            userNovelId = userNovelId,
-            novelId = novelId,
-            title = title,
-            novelImage = novelImage,
-            novelRating = novelRating,
-            readStatus = readStatus,
-            isInterest = isInterest,
-            userNovelRating = userNovelRating,
-            attractivePoints = attractivePoints,
-            startDate = startDate,
-            endDate = endDate,
-            keywords = keywords,
-            myFeeds = myFeeds,
-        )
-
-    internal fun toFilteredNovelDatabase(index: Int): InDatabaseFilteredNovelEntity =
-        InDatabaseFilteredNovelEntity(
             userNovelId = userNovelId,
             novelId = novelId,
             title = title,
@@ -61,23 +43,6 @@ data class NovelEntity(
 }
 
 fun InDatabaseNovelEntity.toData(): NovelEntity =
-    NovelEntity(
-        userNovelId = userNovelId,
-        novelId = novelId,
-        title = title,
-        novelImage = novelImage,
-        novelRating = novelRating,
-        readStatus = readStatus,
-        isInterest = isInterest,
-        userNovelRating = userNovelRating,
-        attractivePoints = attractivePoints,
-        startDate = startDate,
-        endDate = endDate,
-        keywords = keywords,
-        myFeeds = myFeeds,
-    )
-
-fun InDatabaseFilteredNovelEntity.toData(): NovelEntity =
     NovelEntity(
         userNovelId = userNovelId,
         novelId = novelId,

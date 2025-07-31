@@ -19,19 +19,24 @@ interface LibraryLocalDataSource {
     suspend fun deleteAllNovels()
 }
 
-internal class DefaultLibraryDataSource
+internal class DefaultLibraryLocalDataSource
     @Inject
     constructor(
         private val novelDao: NovelDao,
     ) : LibraryLocalDataSource {
         override suspend fun insertNovels(novels: List<NovelEntity>) {
-            novelDao.insertNovels(novels.map(NovelEntity::toNovelDatabase))
+            val offset = novelDao.selectNovelsCount()
+            novelDao.insertNovels(
+                novels.mapIndexed { index, novelEntity ->
+                    novelEntity.toNovelDatabase(offset + index)
+                },
+            )
         }
 
         override fun selectAllNovels(): PagingSource<Int, InDatabaseNovelEntity> = novelDao.selectAllNovels()
 
         override suspend fun deleteAllNovels() {
-            novelDao.clearAll()
+            novelDao.deleteAllNovels()
         }
     }
 
@@ -40,5 +45,5 @@ internal class DefaultLibraryDataSource
 internal interface LibraryDataSourceModule {
     @Binds
     @Singleton
-    fun bindLibraryLocalDataSource(defaultLibraryDataSource: DefaultLibraryDataSource): LibraryLocalDataSource
+    fun bindLibraryDataSource(defaultLibraryLocalDataSource: DefaultLibraryLocalDataSource): LibraryLocalDataSource
 }

@@ -15,14 +15,17 @@ import javax.inject.Singleton
 
 @Dao
 interface NovelDao {
-    @Query("SELECT * FROM novels ORDER BY userNovelId DESC")
+    @Query("SELECT * FROM novels ORDER BY sortIndex ASC")
     fun selectAllNovels(): PagingSource<Int, InDatabaseNovelEntity>
+
+    @Query("SELECT COUNT(*) FROM novels")
+    suspend fun selectNovelsCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNovels(novels: List<InDatabaseNovelEntity>)
 
     @Query("DELETE FROM novels")
-    suspend fun clearAll()
+    suspend fun deleteAllNovels()
 }
 
 @Module
