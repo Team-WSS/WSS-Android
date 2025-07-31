@@ -42,8 +42,8 @@ import com.into.websoso.feature.library.component.LibraryTopBar
 import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
 import com.into.websoso.feature.library.mapper.toUiModel
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
-import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.LibraryUiState
+import com.into.websoso.feature.library.model.NovelUiModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -119,7 +119,7 @@ fun LibraryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LibraryScreen(
-    novels: LazyPagingItems<LibraryListItemModel>,
+    novels: LazyPagingItems<NovelUiModel>,
     uiState: LibraryUiState,
     filterUiState: LibraryFilterUiModel,
     listState: LazyListState,
@@ -130,7 +130,7 @@ private fun LibraryScreen(
     onFilterClick: () -> Unit,
     onSortClick: () -> Unit,
     onToggleViewType: () -> Unit,
-    onItemClick: (LibraryListItemModel) -> Unit,
+    onItemClick: (NovelUiModel) -> Unit,
     onSearchClick: () -> Unit,
     onExploreClick: () -> Unit,
     onInterestClick: () -> Unit,

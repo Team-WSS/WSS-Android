@@ -55,7 +55,8 @@ import com.into.websoso.core.resource.R.drawable.ic_library_world_view
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.AttractivePoints
-import com.into.websoso.feature.library.model.LibraryListItemModel
+import com.into.websoso.domain.library.model.NovelRating
+import com.into.websoso.feature.library.model.NovelUiModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
 
 private const val THUMBNAIL_WIDTH_RATIO = 60f / 360f
@@ -64,7 +65,7 @@ private const val FEED_CARD_WIDTH_RATIO = 0.8611f
 
 @Composable
 internal fun LibraryListItem(
-    item: LibraryListItemModel,
+    item: NovelUiModel,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -117,7 +118,7 @@ private fun NovelThumbnail(
 
     Column(modifier = Modifier.width(size.width)) {
         ReadStatusBadge(
-            readStatus = readStatus,
+            readStatusUiModel = readStatus,
             width = size.width,
         )
 
@@ -151,22 +152,22 @@ private fun NovelThumbnail(
 
 @Composable
 private fun ReadStatusBadge(
-    readStatus: ReadStatusUiModel?,
+    readStatusUiModel: ReadStatusUiModel?,
     width: Dp,
 ) {
-    if (readStatus != null) {
+    readStatusUiModel?.let {
         Box(
             modifier = Modifier
                 .width(width)
                 .background(
-                    color = readStatus.backgroundColor,
+                    color = it.backgroundColor,
                     shape = RoundedCornerShape(8.dp),
                 )
                 .padding(vertical = 4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = readStatus.label,
+                text = it.readStatus.label,
                 color = White,
                 style = WebsosoTheme.typography.label2,
             )
@@ -184,7 +185,7 @@ private fun calculateThumbnailSize(): ThumbnailUiSize {
 }
 
 @Composable
-private fun NovelInfo(item: LibraryListItemModel) {
+private fun NovelInfo(item: NovelUiModel) {
     Column {
         Spacer(modifier = Modifier.height(2.dp))
         NovelInfoDate(item = item)
@@ -199,7 +200,7 @@ private fun NovelInfo(item: LibraryListItemModel) {
 }
 
 @Composable
-private fun NovelInfoDate(item: LibraryListItemModel) {
+private fun NovelInfoDate(item: NovelUiModel) {
     Box(modifier = Modifier.height(18.dp)) {
         item.formattedDateRange?.let {
             Text(
@@ -214,8 +215,8 @@ private fun NovelInfoDate(item: LibraryListItemModel) {
 @Composable
 private fun NovelInfoContent(
     title: String,
-    myRating: Float?,
-    totalRating: Float,
+    myRating: NovelRating?,
+    totalRating: NovelRating,
     attractivePoints: AttractivePoints,
 ) {
     val size = calculateThumbnailSize()
@@ -249,15 +250,15 @@ private fun NovelInfoContent(
 
 @Composable
 private fun NovelRatings(
-    myRating: Float?,
-    totalRating: Float,
+    myRating: NovelRating?,
+    totalRating: NovelRating,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         myRating?.let {
-            MyRatingSection(rating = it)
+            MyRatingSection(rating = it.rating.value)
             Spacer(modifier = Modifier.width(10.dp))
         }
-        TotalRatingSection(rating = totalRating)
+        TotalRatingSection(rating = totalRating.rating.value)
     }
 }
 

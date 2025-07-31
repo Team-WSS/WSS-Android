@@ -36,8 +36,8 @@ import com.into.websoso.core.resource.R.drawable.ic_library_half_star
 import com.into.websoso.core.resource.R.drawable.ic_library_interesting
 import com.into.websoso.core.resource.R.drawable.ic_library_null_star
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
-import com.into.websoso.feature.library.model.LibraryListItemModel
-import com.into.websoso.feature.library.model.RatingStarType
+import com.into.websoso.feature.library.model.NovelUiModel
+import com.into.websoso.feature.library.model.RatingStarUiModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
 
 private const val GRID_COLUMN_COUNT = 3
@@ -48,7 +48,7 @@ private const val IMAGE_ASPECT_HEIGHT = 160f
 
 @Composable
 internal fun NovelGridListItem(
-    item: LibraryListItemModel,
+    item: NovelUiModel,
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit = {},
 ) {
@@ -90,7 +90,7 @@ internal fun NovelGridListItem(
 
 @Composable
 private fun NovelGridThumbnail(
-    item: LibraryListItemModel,
+    item: NovelUiModel,
     size: GridItemSize,
 ) {
     Box(
@@ -107,7 +107,7 @@ private fun NovelGridThumbnail(
 
         item.readStatus?.let {
             ReadStatusBadge(
-                readStatus = it,
+                readStatusUiModel = it,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(6.dp),
@@ -129,20 +129,20 @@ private fun NovelGridThumbnail(
 
 @Composable
 private fun ReadStatusBadge(
-    readStatus: ReadStatusUiModel,
+    readStatusUiModel: ReadStatusUiModel,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .width(48.dp)
             .background(
-                color = readStatus.backgroundColor,
+                color = readStatusUiModel.backgroundColor,
                 shape = RoundedCornerShape(4.dp),
             ).padding(vertical = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = readStatus.label,
+            text = readStatusUiModel.readStatus.label,
             color = White,
             style = WebsosoTheme.typography.label2,
         )
@@ -168,7 +168,7 @@ private fun rememberGridItemSize(): GridItemSize {
 
 @Composable
 internal fun NovelRatingStar(
-    stars: List<RatingStarType>,
+    stars: List<RatingStarUiModel>,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -186,11 +186,11 @@ internal fun NovelRatingStar(
 }
 
 @Composable
-private fun ratingStarIcon(starType: RatingStarType): ImageVector {
+private fun ratingStarIcon(starType: RatingStarUiModel): ImageVector {
     val resId = when (starType) {
-        RatingStarType.FULL -> ic_storage_star
-        RatingStarType.HALF -> ic_library_half_star
-        RatingStarType.EMPTY -> ic_library_null_star
+        RatingStarUiModel.FULL -> ic_storage_star
+        RatingStarUiModel.HALF -> ic_library_half_star
+        RatingStarUiModel.EMPTY -> ic_library_null_star
     }
     return ImageVector.vectorResource(id = resId)
 }

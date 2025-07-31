@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.into.websoso.feature.library.model.LibraryListItemModel
+import com.into.websoso.feature.library.model.NovelUiModel
 
 @Composable
 internal fun LibraryGridList(
-    novels: LazyPagingItems<LibraryListItemModel>,
+    novels: LazyPagingItems<NovelUiModel>,
     gridState: LazyGridState,
     modifier: Modifier = Modifier,
-    onItemClick: (LibraryListItemModel) -> Unit = {},
+    onItemClick: (NovelUiModel) -> Unit = {},
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
