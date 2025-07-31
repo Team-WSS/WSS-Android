@@ -8,4 +8,4 @@ internal annotation class AccountDataStore
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-internal annotation class MyLibraryFilterDataStore
+internal annotation class LibraryFilterDataStore

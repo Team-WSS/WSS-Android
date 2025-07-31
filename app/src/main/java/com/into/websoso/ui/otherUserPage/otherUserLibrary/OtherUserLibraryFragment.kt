@@ -40,6 +40,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
         RestGenrePreferenceAdapter()
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private val userId by lazy { arguments?.getLong(USER_ID_KEY) ?: 0L }
 
     override fun onViewCreated(
         view: View,
@@ -63,7 +64,6 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
     }
 
     private fun updateUserId() {
-        val userId = arguments?.getLong(USER_ID_KEY) ?: 0L
         otherUserLibraryViewModel.updateUserId(userId)
     }
 
@@ -222,7 +222,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
     }
 
     private fun navigateToUserStorageActivity() {
-        websosoNavigator.navigateToUserStorageActivity(::startActivity)
+        websosoNavigator.navigateToUserStorageActivity(::startActivity, userId)
     }
 
     override fun onResume() {

@@ -15,7 +15,10 @@ interface NavigatorProvider {
 
     fun navigateToOnboardingActivity(startActivity: (Intent) -> Unit)
 
-    fun navigateToUserStorageActivity(startActivity: (Intent) -> Unit)
+    fun navigateToUserStorageActivity(
+        startActivity: (Intent) -> Unit,
+        userId: Long,
+    )
 
     fun navigateToNovelDetailActivity(
         novelId: Long,

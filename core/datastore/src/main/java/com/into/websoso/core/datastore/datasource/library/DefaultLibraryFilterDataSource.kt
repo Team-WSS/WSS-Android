@@ -6,11 +6,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.into.websoso.core.common.dispatchers.Dispatcher
 import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
+import com.into.websoso.core.datastore.datasource.library.mapper.toData
+import com.into.websoso.core.datastore.datasource.library.mapper.toPreferences
 import com.into.websoso.core.datastore.datasource.library.model.LibraryFilterPreferences
-import com.into.websoso.core.datastore.datasource.library.model.toPreferences
-import com.into.websoso.core.datastore.di.MyLibraryFilterDataStore
-import com.into.websoso.data.library.datasource.MyLibraryFilterLocalDataSource
-import com.into.websoso.data.library.model.LibraryFilterParams
+import com.into.websoso.core.datastore.di.LibraryFilterDataStore
+import com.into.websoso.data.filter.datasource.LibraryFilterLocalDataSource
+import com.into.websoso.data.filter.model.LibraryFilter
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,14 +26,14 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
 
-internal class DefaultMyLibraryFilterDataSource
+internal class DefaultLibraryFilterDataSource
     @Inject
     constructor(
-        @MyLibraryFilterDataStore private val myLibraryFilterDataStore: DataStore<Preferences>,
+        @LibraryFilterDataStore private val libraryFilterDataStore: DataStore<Preferences>,
         @Dispatcher(WebsosoDispatchers.DEFAULT) private val dispatcher: CoroutineDispatcher,
-    ) : MyLibraryFilterLocalDataSource {
-        override val myLibraryFilterFlow: Flow<LibraryFilterParams?>
-            get() = myLibraryFilterDataStore.data
+    ) : LibraryFilterLocalDataSource {
+        override val libraryFilterFlow: Flow<LibraryFilter?>
+            get() = libraryFilterDataStore.data
                 .map { prefs ->
                     prefs[LIBRARY_FILTER_PARAMS_KEY]?.let { jsonString ->
                         withContext(dispatcher) {
@@ -41,20 +42,20 @@ internal class DefaultMyLibraryFilterDataSource
                     }
                 }.distinctUntilChanged()
 
-        override suspend fun updateMyLibraryFilter(params: LibraryFilterParams) {
+        override suspend fun updateLibraryFilter(params: LibraryFilter) {
             val encodedJsonString = withContext(dispatcher) {
                 Json.encodeToString(
                     params.toPreferences(),
                 )
             }
 
-            myLibraryFilterDataStore.edit { prefs ->
+            libraryFilterDataStore.edit { prefs ->
                 prefs[LIBRARY_FILTER_PARAMS_KEY] = encodedJsonString
             }
         }
 
-        override suspend fun deleteMyLibraryFilter() {
-            myLibraryFilterDataStore.edit { prefs ->
+        override suspend fun deleteLibraryFilter() {
+            libraryFilterDataStore.edit { prefs ->
                 prefs.remove(LIBRARY_FILTER_PARAMS_KEY)
             }
         }
@@ -66,10 +67,8 @@ internal class DefaultMyLibraryFilterDataSource
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal interface MyLibraryFilterDataSourceModule {
+internal interface LibraryFilterDataSourceModule {
     @Binds
     @Singleton
-    fun bindMyLibraryFilterLocalDataSource(
-        defaultMyLibraryFilterDataSource: DefaultMyLibraryFilterDataSource,
-    ): MyLibraryFilterLocalDataSource
+    fun bindLibraryFilterLocalDataSource(defaultLibraryFilterDataSource: DefaultLibraryFilterDataSource): LibraryFilterLocalDataSource
 }

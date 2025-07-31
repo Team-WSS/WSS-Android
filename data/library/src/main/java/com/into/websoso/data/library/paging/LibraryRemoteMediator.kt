@@ -1,4 +1,4 @@
-package com.into.websoso.data.library.mediator
+package com.into.websoso.data.library.paging
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -11,19 +11,16 @@ import androidx.paging.RemoteMediator.MediatorResult.Error
 import androidx.paging.RemoteMediator.MediatorResult.Success
 import com.into.websoso.core.common.extensions.isCloseTo
 import com.into.websoso.core.database.entity.InDatabaseFilteredNovelEntity
+import com.into.websoso.data.filter.model.LibraryFilter
 import com.into.websoso.data.library.datasource.FilteredLibraryLocalDataSource
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
 
 @OptIn(ExperimentalPagingApi::class)
-class FilteredNovelRemoteMediator(
+class LibraryRemoteMediator(
     private val userId: Long,
     private val libraryRemoteDataSource: LibraryRemoteDataSource,
     private val filteredLibraryLocalDataSource: FilteredLibraryLocalDataSource,
-    private val isInterested: Boolean,
-    private val sortCriteria: String,
-    private val readStatuses: List<String>,
-    private val attractivePoints: List<String>,
-    private val novelRating: Float,
+    private val libraryFilter: LibraryFilter,
 ) : RemoteMediator<Int, InDatabaseFilteredNovelEntity>() {
     override suspend fun load(
         loadType: LoadType,
@@ -40,11 +37,15 @@ class FilteredNovelRemoteMediator(
                 userId = userId,
                 lastUserNovelId = lastUserNovelId,
                 size = state.config.pageSize,
-                sortCriteria = sortCriteria,
-                isInterest = if (!isInterested) null else true,
-                readStatuses = readStatuses.ifEmpty { null },
-                attractivePoints = attractivePoints.ifEmpty { null },
-                novelRating = if (novelRating.isCloseTo(DEFAULT_NOVEL_RATING)) null else novelRating,
+                sortCriteria = libraryFilter.sortCriteria,
+                isInterest = if (!libraryFilter.isInterested) null else true,
+                readStatuses = libraryFilter.readStatusKeys.ifEmpty { null },
+                attractivePoints = libraryFilter.attractivePointKeys.ifEmpty { null },
+                novelRating = if (libraryFilter.novelRating.isCloseTo(DEFAULT_NOVEL_RATING)) {
+                    null
+                } else {
+                    libraryFilter.novelRating
+                },
                 query = null,
                 updatedSince = null,
             )

@@ -22,7 +22,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -31,6 +30,8 @@ import androidx.paging.map
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.data.library.model.NovelEntity
+import com.into.websoso.domain.library.model.AttractivePoints
+import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.feature.library.component.LibraryEmptyView
 import com.into.websoso.feature.library.component.LibraryFilterEmptyView
 import com.into.websoso.feature.library.component.LibraryFilterTopBar
@@ -38,11 +39,12 @@ import com.into.websoso.feature.library.component.LibraryGridList
 import com.into.websoso.feature.library.component.LibraryList
 import com.into.websoso.feature.library.component.LibraryTopBar
 import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
-import com.into.websoso.feature.library.filter.LibraryFilterViewModel
 import com.into.websoso.feature.library.mapper.toUiModel
 import com.into.websoso.feature.library.model.LibraryFilterType
+import com.into.websoso.feature.library.model.LibraryFilterUiState
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.LibraryUiState
+import com.into.websoso.feature.library.model.RatingLevelUiModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -54,11 +56,11 @@ fun LibraryScreen(
     navigateToNormalExploreActivity: () -> Unit,
     navigateToNovelDetailActivity: (novelId: Long) -> Unit,
     libraryViewModel: LibraryViewModel,
-    libraryFilterViewModel: LibraryFilterViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
-    val pagingItems = libraryViewModel.novelPagingData
+    val filterUiState by libraryViewModel.tempFilterUiState.collectAsStateWithLifecycle()
+    val novels = libraryViewModel.novels
         .map { it.map(NovelEntity::toUiModel) }
         .collectAsLazyPagingItems()
     val latestEffect by rememberUpdatedState(libraryViewModel.scrollToTopEvent)
@@ -79,9 +81,9 @@ fun LibraryScreen(
     }
 
     LibraryScreen(
-        libraryFilterViewModel = libraryFilterViewModel,
-        pagingItems = pagingItems,
+        novels = novels,
         uiState = uiState,
+        filterUiState = filterUiState,
         listState = listState,
         gridState = gridState,
         sheetState = bottomSheetState,
@@ -98,7 +100,7 @@ fun LibraryScreen(
                     isShowBottomSheet = true
                     bottomSheetState.show()
                 }.invokeOnCompletion {
-                    libraryFilterViewModel.updateMyLibraryFilter(uiState.libraryFilterUiState)
+                    libraryViewModel.updateMyLibraryFilter()
                 }
         },
         onSortClick = libraryViewModel::updateSortType,
@@ -107,15 +109,20 @@ fun LibraryScreen(
         onSearchClick = { /* TODO */ },
         onExploreClick = navigateToNormalExploreActivity,
         onInterestClick = libraryViewModel::updateInterestedNovels,
+        onAttractivePointClick = libraryViewModel::updateAttractivePoints,
+        onReadStatusClick = libraryViewModel::updateReadStatus,
+        onRatingClick = libraryViewModel::updateRating,
+        onResetClick = libraryViewModel::resetFilter,
+        onFilterSearchClick = libraryViewModel::searchFilteredNovels,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LibraryScreen(
-    libraryFilterViewModel: LibraryFilterViewModel,
-    pagingItems: LazyPagingItems<LibraryListItemModel>,
+    novels: LazyPagingItems<LibraryListItemModel>,
     uiState: LibraryUiState,
+    filterUiState: LibraryFilterUiState,
     listState: LazyListState,
     gridState: LazyGridState,
     sheetState: SheetState,
@@ -128,6 +135,11 @@ private fun LibraryScreen(
     onSearchClick: () -> Unit,
     onExploreClick: () -> Unit,
     onInterestClick: () -> Unit,
+    onAttractivePointClick: (AttractivePoints) -> Unit,
+    onReadStatusClick: (ReadStatus) -> Unit,
+    onRatingClick: (rating: RatingLevelUiModel) -> Unit,
+    onResetClick: () -> Unit,
+    onFilterSearchClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -143,7 +155,7 @@ private fun LibraryScreen(
 
         LibraryFilterTopBar(
             libraryFilterUiState = uiState.libraryFilterUiState,
-            totalCount = pagingItems.itemCount,
+            totalCount = novels.itemCount,
             isGrid = uiState.isGrid,
             onFilterClick = onFilterClick,
             onSortClick = onSortClick,
@@ -154,8 +166,8 @@ private fun LibraryScreen(
         Spacer(modifier = Modifier.height(4.dp))
 
         when {
-            pagingItems.itemCount == 0 &&
-                pagingItems.loadState.refresh !is LoadState.Loading -> {
+            novels.itemCount == 0 &&
+                novels.loadState.refresh !is LoadState.Loading -> {
                 if (uiState.libraryFilterUiState.isFilterApplied) {
                     LibraryFilterEmptyView()
                 } else {
@@ -165,7 +177,7 @@ private fun LibraryScreen(
 
             uiState.isGrid -> {
                 LibraryGridList(
-                    novels = pagingItems,
+                    novels = novels,
                     gridState = gridState,
                     onItemClick = onItemClick,
                 )
@@ -173,7 +185,7 @@ private fun LibraryScreen(
 
             else -> {
                 LibraryList(
-                    novels = pagingItems,
+                    novels = novels,
                     listState = listState,
                     onItemClick = onItemClick,
                 )
@@ -183,9 +195,14 @@ private fun LibraryScreen(
 
     if (isShowBottomSheet) {
         LibraryFilterBottomSheetScreen(
+            filterUiState = filterUiState,
             sheetState = sheetState,
             onDismissRequest = onDismissRequest,
-            viewModel = libraryFilterViewModel,
+            onAttractivePointClick = onAttractivePointClick,
+            onReadStatusClick = onReadStatusClick,
+            onRatingClick = onRatingClick,
+            onResetClick = onResetClick,
+            onFilterSearchClick = onFilterSearchClick,
         )
     }
 }
