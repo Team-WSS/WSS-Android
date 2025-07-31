@@ -1,4 +1,4 @@
-package com.into.websoso.core.database.dao
+package com.into.websoso.core.database.datasource.library.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.into.websoso.core.database.WebsosoDatabase
-import com.into.websoso.core.database.entity.InDatabaseNovelEntity
+import com.into.websoso.core.database.datasource.library.entity.InDatabaseNovelEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Dao
-interface NovelDao {
+internal interface NovelDao {
     @Query("SELECT * FROM novels ORDER BY sortIndex ASC")
     fun selectAllNovels(): PagingSource<Int, InDatabaseNovelEntity>
 

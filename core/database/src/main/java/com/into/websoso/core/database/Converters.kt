@@ -2,7 +2,7 @@ package com.into.websoso.core.database
 
 import androidx.room.TypeConverter
 
-class Converters {
+internal class Converters {
     @TypeConverter
     fun fromString(value: String): List<String> = if (value.isEmpty()) emptyList() else value.split(",")
 
