@@ -6,11 +6,14 @@ data class AttractivePoints(
     val isSelected: Boolean
         get() = value.any { it.value }
 
+    val selectedAttractivePoints: List<AttractivePoint>
+        get() = value.filterValues { it }.keys.toList()
+
     val selectedLabels: List<String>
-        get() = value.filterValues { it }.keys.map { it.label }
+        get() = selectedAttractivePoints.map { it.label }
 
     val selectedKeys: List<String>
-        get() = value.filterValues { it }.keys.map { it.key }
+        get() = selectedAttractivePoints.map { it.key }
 
     operator fun get(attractivePoint: AttractivePoint): Boolean = value[attractivePoint] ?: false
 

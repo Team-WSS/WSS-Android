@@ -41,7 +41,6 @@ import com.into.websoso.feature.library.component.LibraryList
 import com.into.websoso.feature.library.component.LibraryTopBar
 import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
 import com.into.websoso.feature.library.mapper.toUiModel
-import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.LibraryUiState
@@ -128,7 +127,7 @@ private fun LibraryScreen(
     sheetState: SheetState,
     isShowBottomSheet: Boolean,
     onDismissRequest: () -> Unit,
-    onFilterClick: (LibraryFilterType) -> Unit,
+    onFilterClick: () -> Unit,
     onSortClick: () -> Unit,
     onToggleViewType: () -> Unit,
     onItemClick: (LibraryListItemModel) -> Unit,

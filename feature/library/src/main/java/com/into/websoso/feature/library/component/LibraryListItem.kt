@@ -54,7 +54,7 @@ import com.into.websoso.core.resource.R.drawable.ic_library_vibe
 import com.into.websoso.core.resource.R.drawable.ic_library_world_view
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.domain.library.model.AttractivePoint
-import com.into.websoso.feature.library.model.AttractivePointUiModel
+import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
 
@@ -216,7 +216,7 @@ private fun NovelInfoContent(
     title: String,
     myRating: Float?,
     totalRating: Float,
-    attractivePoints: List<AttractivePointUiModel>,
+    attractivePoints: AttractivePoints,
 ) {
     val size = calculateThumbnailSize()
 
@@ -239,8 +239,8 @@ private fun NovelInfoContent(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        if (attractivePoints.isNotEmpty()) {
-            AttractivePointTags(types = attractivePoints)
+        if (attractivePoints.value.isNotEmpty()) {
+            AttractivePointTags(attractivePoints = attractivePoints)
         } else {
             Box(modifier = Modifier.height(18.dp))
         }
@@ -305,12 +305,12 @@ private fun TotalRatingSection(rating: Float) {
 }
 
 @Composable
-private fun AttractivePointTags(types: List<AttractivePointUiModel>) {
+private fun AttractivePointTags(attractivePoints: AttractivePoints) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        types.forEachIndexed { index, type ->
-            AttractivePointItem(type)
+        attractivePoints.selectedAttractivePoints.forEachIndexed { index, attractivePoint ->
+            AttractivePointItem(attractivePoint)
 
-            if (index < types.lastIndex) {
+            if (index < attractivePoints.selectedAttractivePoints.lastIndex) {
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
@@ -326,18 +326,18 @@ private fun AttractivePointTags(types: List<AttractivePointUiModel>) {
 }
 
 @Composable
-private fun AttractivePointItem(type: AttractivePointUiModel) {
+private fun AttractivePointItem(attractivePoint: AttractivePoint) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Image(
-            imageVector = attractivePointIcon(type),
-            contentDescription = type.label,
+            imageVector = attractivePointIcon(attractivePoint),
+            contentDescription = attractivePoint.label,
             modifier = Modifier.size(16.dp),
         )
 
         Spacer(modifier = Modifier.width(4.dp))
 
         Text(
-            text = type.label,
+            text = attractivePoint.label,
             style = WebsosoTheme.typography.body4,
             color = Gray300,
         )
@@ -345,8 +345,8 @@ private fun AttractivePointItem(type: AttractivePointUiModel) {
 }
 
 @Composable
-private fun attractivePointIcon(points: AttractivePointUiModel): ImageVector {
-    val resId = when (points.type) {
+private fun attractivePointIcon(attractivePoint: AttractivePoint): ImageVector {
+    val resId = when (attractivePoint) {
         AttractivePoint.CHARACTER -> ic_library_character
         AttractivePoint.MATERIAL -> ic_library_material
         AttractivePoint.WORLDVIEW -> ic_library_world_view

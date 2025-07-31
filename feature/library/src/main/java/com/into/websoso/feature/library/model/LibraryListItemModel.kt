@@ -1,6 +1,7 @@
 package com.into.websoso.feature.library.model
 
 import com.into.websoso.core.common.extensions.formatDateRange
+import com.into.websoso.domain.library.model.AttractivePoints
 
 data class LibraryListItemModel(
     val novelId: Long,
@@ -11,7 +12,7 @@ data class LibraryListItemModel(
     val readStatus: ReadStatusUiModel?,
     val userNovelRating: Float?,
     val novelRating: Float,
-    val attractivePoints: List<AttractivePointUiModel>,
+    val attractivePoints: AttractivePoints,
     val keywords: List<String>,
     val myFeeds: List<String>,
     val isInterest: Boolean,
