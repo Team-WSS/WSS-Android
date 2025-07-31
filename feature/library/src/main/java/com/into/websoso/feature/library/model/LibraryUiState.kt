@@ -1,65 +1,47 @@
 package com.into.websoso.feature.library.model
 
 import com.into.websoso.domain.library.model.AttractivePoints
-import com.into.websoso.domain.library.model.ReadStatus
+import com.into.websoso.domain.library.model.NovelRating
+import com.into.websoso.domain.library.model.ReadStatuses
+import com.into.websoso.domain.library.model.SortCriteria
 
 data class LibraryUiState(
     val isGrid: Boolean = true,
-    val libraryFilterUiState: LibraryFilterUiState = LibraryFilterUiState(),
+    val libraryFilterUiModel: LibraryFilterUiModel = LibraryFilterUiModel(),
 )
 
-data class LibraryFilterUiState(
-    val selectedSortType: SortTypeUiModel = SortTypeUiModel.RECENT,
+data class LibraryFilterUiModel(
     val isInterested: Boolean = false,
-    val readStatuses: Map<ReadStatus, Boolean> = mapOf(
-        ReadStatus.WATCHING to false,
-        ReadStatus.WATCHED to false,
-        ReadStatus.QUIT to false,
-    ),
-    val attractivePoints: Map<AttractivePoints, Boolean> = mapOf(
-        AttractivePoints.VIBE to false,
-        AttractivePoints.WORLDVIEW to false,
-        AttractivePoints.CHARACTER to false,
-        AttractivePoints.MATERIAL to false,
-        AttractivePoints.RELATIONSHIP to false,
-    ),
-    val novelRating: Float = 0f,
+    val sortCriteria: SortCriteria = SortCriteria.RECENT,
+    val readStatuses: ReadStatuses = ReadStatuses(),
+    val attractivePoints: AttractivePoints = AttractivePoints(),
+    val novelRating: NovelRating = NovelRating(),
 ) {
-    val isRatingSelected: Boolean = novelRating != 0f
     val ratingText: String
-        get() = if (isRatingSelected) "${novelRating}이상" else "별점"
+        get() = if (novelRating.isSelected) "${novelRating.rating.value}이상" else "별점"
 
     val readStatusLabelText: String
-        get() = buildLabel(
-            readStatuses.filterValues { it }.keys.map { status ->
-                ReadStatusUiModel.valueOf(status.name).label
-            },
-            "읽기 상태",
+        get() = createLabel(
+            values = readStatuses.selectedLabels,
+            labelTitle = "읽기 상태",
         )
 
     val attractivePointLabelText: String
-        get() = buildLabel(
-            attractivePoints.filterValues { it }.keys.map { point ->
-                point.label
-            },
-            "매력 포인트",
+        get() = createLabel(
+            values = attractivePoints.selectedLabels,
+            labelTitle = "매력 포인트",
         )
 
     val isFilterApplied: Boolean
-        get() = readStatuses.values.any { it } ||
-                attractivePoints.values.any { it } ||
-                isRatingSelected ||
-                isInterested
+        get() = readStatuses.isSelected || attractivePoints.isSelected || novelRating.isSelected || isInterested
 
-    companion object {
-        fun buildLabel(
-            values: List<String>,
-            labelTitle: String,
-        ): String =
-            when {
-                values.isEmpty() -> labelTitle
-                values.size == 1 -> values.first()
-                else -> "${values.first()} 외 ${values.size - 1}개"
-            }
-    }
+    private fun createLabel(
+        labelTitle: String,
+        values: List<String>,
+    ): String =
+        when {
+            values.isEmpty() -> labelTitle
+            values.size == 1 -> values.first()
+            else -> "${values.first()} 외 ${values.size - 1}"
+        }
 }

@@ -1,7 +1,7 @@
 package com.into.websoso.feature.library.mapper
 
 import com.into.websoso.data.library.model.NovelEntity
-import com.into.websoso.domain.library.model.AttractivePoints
+import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.feature.library.model.LibraryListItemModel
 import com.into.websoso.feature.library.model.ReadStatusUiModel
 
@@ -16,7 +16,7 @@ internal fun NovelEntity.toUiModel(): LibraryListItemModel =
         userNovelRating = userNovelRating.takeIf { it > 0f },
         novelRating = novelRating,
         attractivePoints = attractivePoints.mapNotNull { key ->
-            AttractivePoints.entries.find { it.key == key }?.toUiModel()
+            AttractivePoint.entries.find { it.key == key }?.toUiModel()
         },
         keywords = keywords,
         myFeeds = myFeeds,

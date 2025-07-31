@@ -19,25 +19,28 @@ import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.AttractivePoints
+import com.into.websoso.domain.library.model.NovelRating
+import com.into.websoso.domain.library.model.Rating
 import com.into.websoso.domain.library.model.ReadStatus
+import com.into.websoso.domain.library.model.ReadStatuses
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetAttractivePoints
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetButtons
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetHeader
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetNovelRatingGrid
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetReadStatus
-import com.into.websoso.feature.library.model.LibraryFilterUiState
-import com.into.websoso.feature.library.model.RatingLevelUiModel
+import com.into.websoso.feature.library.model.LibraryFilterUiModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun LibraryFilterBottomSheetScreen(
-    filterUiState: LibraryFilterUiState,
+    filterUiState: LibraryFilterUiModel,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    onAttractivePointClick: (AttractivePoints) -> Unit,
+    onAttractivePointClick: (AttractivePoint) -> Unit,
     onReadStatusClick: (ReadStatus) -> Unit,
-    onRatingClick: (rating: RatingLevelUiModel) -> Unit,
+    onRatingClick: (rating: Rating) -> Unit,
     onResetClick: () -> Unit,
     onFilterSearchClick: () -> Unit,
 ) {
@@ -60,12 +63,12 @@ internal fun LibraryFilterBottomSheetScreen(
 private fun LibraryFilterBottomSheetScreen(
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    readStatues: Map<ReadStatus, Boolean>,
-    attractivePoints: Map<AttractivePoints, Boolean>,
-    onAttractivePointClick: (AttractivePoints) -> Unit,
+    readStatues: ReadStatuses,
+    attractivePoints: AttractivePoints,
+    onAttractivePointClick: (AttractivePoint) -> Unit,
     onReadStatusClick: (ReadStatus) -> Unit,
-    selectedRating: Float,
-    onRatingClick: (rating: RatingLevelUiModel) -> Unit,
+    selectedRating: NovelRating,
+    onRatingClick: (rating: Rating) -> Unit,
     onResetClick: () -> Unit,
     onFilterSearchClick: () -> Unit,
 ) {
@@ -140,7 +143,7 @@ private fun LibraryFilterBottomSheetPreview() {
                 initialValue = SheetValue.Expanded,
                 skipHiddenState = false,
             ),
-            filterUiState = LibraryFilterUiState(),
+            filterUiState = LibraryFilterUiModel(),
             onAttractivePointClick = { },
             onReadStatusClick = { },
             onRatingClick = { },
