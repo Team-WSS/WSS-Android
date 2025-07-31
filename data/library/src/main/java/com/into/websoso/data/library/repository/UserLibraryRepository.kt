@@ -56,8 +56,8 @@ internal class UserLibraryRepository
                 size = PAGE_SIZE,
                 sortCriteria = libraryFilter.sortCriteria,
                 isInterest = if (!libraryFilter.isInterested) null else true,
-                readStatuses = libraryFilter.readStatusKeys.ifEmpty { null },
-                attractivePoints = libraryFilter.attractivePointKeys.ifEmpty { null },
+                readStatuses = libraryFilter.readStatuses.ifEmpty { null },
+                attractivePoints = libraryFilter.attractivePoints.ifEmpty { null },
                 novelRating = if (libraryFilter.novelRating.isCloseTo(DEFAULT_NOVEL_RATING)) {
                     null
                 } else {
