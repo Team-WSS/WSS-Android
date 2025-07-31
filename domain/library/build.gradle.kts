@@ -9,6 +9,6 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
     implementation(projects.data.library)
-    implementation(libs.paging.runtime)
 }

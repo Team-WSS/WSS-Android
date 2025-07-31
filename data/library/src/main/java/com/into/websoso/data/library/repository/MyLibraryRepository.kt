@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import com.into.websoso.core.common.extensions.isCloseTo
 import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.filter.FilterRepository
+import com.into.websoso.data.filter.model.DEFAULT_NOVEL_RATING
 import com.into.websoso.data.filter.model.LibraryFilter
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.LibraryRepository.Companion.PAGE_SIZE
@@ -62,9 +63,5 @@ internal class MyLibraryRepository
                 query = null,
                 updatedSince = null,
             )
-        }
-
-        companion object {
-            private const val DEFAULT_NOVEL_RATING = 0f
         }
     }
