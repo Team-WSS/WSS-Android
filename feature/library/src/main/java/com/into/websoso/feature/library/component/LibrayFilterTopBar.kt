@@ -40,14 +40,13 @@ import com.into.websoso.core.resource.R.drawable.ic_library_grid
 import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
 import com.into.websoso.domain.library.model.SortCriteria
-import com.into.websoso.feature.library.model.LibraryFilterType
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
 
 @Composable
 internal fun LibraryFilterTopBar(
     libraryFilterUiModel: LibraryFilterUiModel,
     totalCount: Int,
-    onFilterClick: (LibraryFilterType) -> Unit,
+    onFilterClick: () -> Unit,
     onSortClick: () -> Unit,
     isGrid: Boolean,
     onToggleViewType: () -> Unit,
@@ -81,7 +80,7 @@ internal fun LibraryFilterTopBar(
 private fun NovelFilterChipSection(
     libraryFilterUiModel: LibraryFilterUiModel,
     onInterestClick: () -> Unit,
-    onFilterClick: (LibraryFilterType) -> Unit,
+    onFilterClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -105,19 +104,19 @@ private fun NovelFilterChipSection(
         NovelFilterChip(
             text = libraryFilterUiModel.readStatusLabelText,
             isSelected = libraryFilterUiModel.readStatuses.isSelected,
-            onClick = { onFilterClick(LibraryFilterType.ReadStatus) },
+            onClick = onFilterClick,
         )
 
         NovelFilterChip(
             text = libraryFilterUiModel.ratingText,
             isSelected = libraryFilterUiModel.novelRating.isSelected,
-            onClick = { onFilterClick(LibraryFilterType.Rating) },
+            onClick = onFilterClick,
         )
 
         NovelFilterChip(
             text = libraryFilterUiModel.attractivePointLabelText,
             isSelected = libraryFilterUiModel.attractivePoints.isSelected,
-            onClick = { onFilterClick(LibraryFilterType.AttractivePoint) },
+            onClick = onFilterClick,
         )
     }
 }
