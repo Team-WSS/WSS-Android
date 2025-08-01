@@ -14,5 +14,9 @@ interface LibraryLocalDataSource {
 
     suspend fun selectNovelByNovelId(novelId: Long): NovelEntity?
 
+    suspend fun selectAllNovelsCount(): Int
+
     suspend fun deleteAllNovels()
+
+    suspend fun deleteNovel(novelId: Long)
 }

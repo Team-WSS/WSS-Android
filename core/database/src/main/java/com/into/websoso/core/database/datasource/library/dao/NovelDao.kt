@@ -35,6 +35,9 @@ internal interface NovelDao {
 
     @Query("DELETE FROM novels")
     suspend fun deleteAllNovels()
+
+    @Query("DELETE FROM novels WHERE novelId = :novelId")
+    suspend fun deleteNovel(novelId: Long)
 }
 
 @Module

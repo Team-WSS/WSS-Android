@@ -1,6 +1,7 @@
 package com.into.websoso.ui.novelDetail.model
 
 import com.into.websoso.ui.novelRating.model.ReadStatus
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -10,7 +11,7 @@ data class NovelDetailModel(
     val userRating: UserRatingModel = UserRatingModel(),
     val isFirstLaunched: Boolean = false,
     val isLogin: Boolean = false,
-) {
+) : Serializable {
     data class UserNovelModel(
         val userNovelId: Long? = null,
         val readStatus: ReadStatus? = null,
@@ -21,7 +22,7 @@ data class NovelDetailModel(
         val isAlreadyDateRated: Boolean = startDate != null || endDate != null,
         val isAlreadyRated: Boolean = userNovelId != null && isUserNovelInterest,
         val formattedUserNovelDate: String = formattedDateRange(startDate, endDate),
-    )
+    ) : Serializable
 
     data class NovelModel(
         val novelId: Long = 0,
@@ -34,7 +35,7 @@ data class NovelDetailModel(
         val author: String = "",
         val formattedNovelDetailSummary: String = "$novelGenres ・ $isNovelCompletedText ・ $author",
         val isNovelNotBlank: Boolean = novelTitle.isNotBlank() && novelImage.isNotBlank() && author.isNotBlank(),
-    ) {
+    ) : Serializable {
         val getGenres: List<String>
             get() = novelGenres.split("/")
     }
@@ -45,7 +46,7 @@ data class NovelDetailModel(
         val novelRatingCount: Int = 0,
         val formattedNovelRating: String = "$novelRating ($novelRatingCount)",
         val feedCount: Int = 0,
-    )
+    ) : Serializable
 
     companion object {
         fun formattedDateRange(

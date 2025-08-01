@@ -2,6 +2,7 @@ package com.into.websoso.ui.novelRating
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
@@ -9,8 +10,10 @@ import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.Keywo
 import com.into.websoso.data.model.NovelRatingEntity
 import com.into.websoso.data.repository.KeywordRepository
 import com.into.websoso.data.repository.UserNovelRepository
+import com.into.websoso.ui.main.feed.model.FeedModel
 import com.into.websoso.ui.mapper.toData
 import com.into.websoso.ui.mapper.toUi
+import com.into.websoso.ui.novelDetail.model.NovelDetailModel
 import com.into.websoso.ui.novelRating.model.CharmPoint
 import com.into.websoso.ui.novelRating.model.NovelRatingKeywordsModel
 import com.into.websoso.ui.novelRating.model.NovelRatingUiState
@@ -25,21 +28,23 @@ import javax.inject.Inject
 class NovelRatingViewModel
     @Inject
     constructor(
+        savedStateHandle: SavedStateHandle,
         private val userNovelRepository: UserNovelRepository,
         private val keywordRepository: KeywordRepository,
     ) : ViewModel() {
-        private val _uiState = MutableLiveData<NovelRatingUiState>(NovelRatingUiState())
+        private val novel: NovelDetailModel? = savedStateHandle["NOVEL"]
+        private val feeds: List<FeedModel>? = savedStateHandle["FEEDS"]
+        private val readStatus: ReadStatus? = savedStateHandle["READ_STATUS"]
+        private val isInterested: Boolean? = savedStateHandle["IS_INTEREST"]
+        private val _uiState = MutableLiveData(NovelRatingUiState())
         val uiState: LiveData<NovelRatingUiState> get() = _uiState
         private val ratingDateManager = RatingDateManager()
 
-        fun updateNovelRating(
-            novelId: Long,
-            isInterest: Boolean,
-        ) {
+        fun updateNovelRating(isInterest: Boolean) {
             viewModelScope.launch {
                 runCatching {
                     _uiState.value = uiState.value?.copy(loading = true)
-                    userNovelRepository.fetchNovelRating(novelId)
+                    userNovelRepository.fetchNovelRating(novel?.novel?.novelId ?: 0)
                 }.onSuccess { novelRatingEntity ->
                     handleSuccessfulFetchNovelRating(novelRatingEntity, isInterest)
                 }.onFailure {
@@ -163,8 +168,8 @@ class NovelRatingViewModel
             }
         }
 
-        fun updateReadStatus(readStatus: ReadStatus) {
-            if (readStatus == ReadStatus.NONE) return
+        fun updateReadStatus() {
+            if (readStatus == ReadStatus.NONE || readStatus == null) return
             uiState.value?.let { uiState ->
                 val updatedModel =
                     ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
@@ -295,42 +300,39 @@ class NovelRatingViewModel
             }
         }
 
-        fun updateUserNovelRating(
-            novelId: Long,
-            novelRating: Float,
-        ) {
+        fun updateUserNovelRating(novelRating: Float) {
             viewModelScope.launch {
+                val ratingModel = uiState.value?.novelRatingModel
                 runCatching {
                     userNovelRepository.saveNovelRating(
+                        isInterested = isInterested,
                         novelRatingEntity = NovelRatingEntity(
-                            novelId = novelId,
-                            readStatus = uiState.value
-                                ?.novelRatingModel
-                                ?.uiReadStatus
-                                ?.name,
-                            startDate = uiState.value
-                                ?.novelRatingModel
+                            userNovelId = novel?.userNovel?.userNovelId,
+                            novelId = novel?.novel?.novelId ?: 0,
+                            userNovelRating = novel?.userRating?.novelRating ?: 0.0f,
+                            novelRating = novelRating,
+                            novelTitle = novel?.novel?.novelTitle,
+                            novelImage = novel?.novel?.novelImage,
+                            startDate = ratingModel
                                 ?.ratingDateModel
                                 ?.currentStartDate
                                 ?.toFormattedDate(),
-                            endDate = uiState.value
-                                ?.novelRatingModel
+                            endDate = ratingModel
                                 ?.ratingDateModel
                                 ?.currentEndDate
                                 ?.toFormattedDate(),
-                            userNovelRating = novelRating,
-                            charmPoints = uiState.value
-                                ?.novelRatingModel
+                            charmPoints = ratingModel
                                 ?.charmPoints
                                 ?.map { it.value }
                                 ?: emptyList(),
-                            userKeywords = uiState.value
-                                ?.novelRatingModel
+                            userKeywords = ratingModel
                                 ?.userKeywords
                                 ?.map { it.toData() }
                                 ?: emptyList(),
+                            readStatus = ratingModel?.uiReadStatus?.name,
                         ),
                         isAlreadyRated = uiState.value?.isAlreadyRated ?: false,
+                        feeds = feeds?.map { it.content } ?: emptyList(),
                     )
                 }.onSuccess {
                     _uiState.value = uiState.value?.copy(isSaveSuccess = true)

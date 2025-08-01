@@ -50,8 +50,14 @@ internal class DefaultLibraryLocalDataSource
 
         override suspend fun selectNovelByNovelId(novelId: Long): NovelEntity? = novelDao.selectNovelByNovelId(novelId)?.toData()
 
+        override suspend fun selectAllNovelsCount(): Int = novelDao.selectNovelsCount()
+
         override suspend fun deleteAllNovels() {
             novelDao.deleteAllNovels()
+        }
+
+        override suspend fun deleteNovel(novelId: Long) {
+            novelDao.deleteNovel(novelId)
         }
     }
 

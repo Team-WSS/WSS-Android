@@ -20,7 +20,6 @@ import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelRating
-import com.into.websoso.core.common.util.getAdaptedSerializableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.toFloatPxFromDp
@@ -36,8 +35,10 @@ import com.into.websoso.core.resource.R.string.novel_rating_charm_points
 import com.into.websoso.core.resource.R.string.novel_rating_complete
 import com.into.websoso.core.resource.R.string.novel_rating_save_error
 import com.into.websoso.databinding.ActivityNovelRatingBinding
+import com.into.websoso.ui.main.feed.model.FeedModel
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
+import com.into.websoso.ui.novelDetail.model.NovelDetailModel
 import com.into.websoso.ui.novelRating.model.CharmPoint
 import com.into.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.into.websoso.ui.novelRating.model.NovelRatingUiState
@@ -53,7 +54,6 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
-    private val novelId: Long by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +74,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
     private fun setupNovelRating() {
         val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
-        novelRatingViewModel.updateNovelRating(novelId, isInterest)
+        novelRatingViewModel.updateNovelRating(isInterest)
     }
 
     private fun onNovelRatingButtonClick() =
@@ -93,7 +93,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
             override fun onSaveClick() {
                 tracker.trackEvent("rate_novel")
-                novelRatingViewModel.updateUserNovelRating(novelId, binding.rbNovelRating.rating)
+                novelRatingViewModel.updateUserNovelRating(binding.rbNovelRating.rating)
             }
 
             override fun onCancelClick() {}
@@ -172,20 +172,13 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
     private fun initView() {
         binding.wllNovelRating.setWebsosoLoadingVisibility(false)
-        updateInitialReadStatus()
+        novelRatingViewModel.updateReadStatus()
     }
 
     private fun updateView(uiState: NovelRatingUiState) {
         updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
         updateCharmPointChips(uiState.novelRatingModel.charmPoints)
         updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
-    }
-
-    private fun updateInitialReadStatus() {
-        val readStatus = intent.getAdaptedSerializableExtra<ReadStatus>(READ_STATUS)
-        readStatus.let {
-            novelRatingViewModel.updateReadStatus(it ?: return)
-        }
     }
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {
@@ -280,7 +273,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
     private fun setupWebsosoLoadingLayout() {
         binding.wllNovelRating.setReloadButtonClickListener {
             val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
-            novelRatingViewModel.updateNovelRating(novelId, isInterest)
+            novelRatingViewModel.updateNovelRating(isInterest)
         }
     }
 
@@ -296,28 +289,23 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
     }
 
     companion object {
-        private const val NOVEL_ID = "NOVEL_ID"
+        private const val NOVEL = "NOVEL"
+        private const val FEEDS = "FEEDS"
         private const val READ_STATUS = "READ_STATUS"
         private const val IS_INTEREST = "IS_INTEREST"
 
         fun getIntent(
             context: Context,
-            novelId: Long,
-        ): Intent =
-            Intent(context, NovelRatingActivity::class.java).apply {
-                putExtra(NOVEL_ID, novelId)
-            }
-
-        fun getIntent(
-            context: Context,
-            novelId: Long,
+            novel: NovelDetailModel?,
+            feeds: List<FeedModel>?,
             readStatus: ReadStatus,
             isInterest: Boolean,
         ): Intent =
             Intent(context, NovelRatingActivity::class.java).apply {
-                putExtra(NOVEL_ID, novelId)
                 putExtra(READ_STATUS, readStatus)
                 putExtra(IS_INTEREST, isInterest)
+                putExtra(FEEDS, feeds?.toTypedArray() ?: emptyArray<FeedModel>())
+                putExtra(NOVEL, novel)
             }
     }
 }
