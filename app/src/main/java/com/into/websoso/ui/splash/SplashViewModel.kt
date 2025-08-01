@@ -52,22 +52,20 @@ class SplashViewModel
             }
 
         private suspend fun handleAutoLogin() {
-            viewModelScope.launch {
-                delay(1000)
+            delay(1000)
 
-                if (shouldRefresh()) {
-                    _uiEffect.send(NavigateToLogin)
-                    return@launch
-                }
-
-                accountRepository
-                    .createTokens()
-                    .onSuccess {
-                        _uiEffect.send(NavigateToMain)
-                    }.onFailure {
-                        _uiEffect.send(NavigateToLogin)
-                    }
+            if (shouldRefresh()) {
+                _uiEffect.send(NavigateToLogin)
+                return
             }
+
+            accountRepository
+                .createTokens()
+                .onSuccess {
+                    _uiEffect.send(NavigateToMain)
+                }.onFailure {
+                    _uiEffect.send(NavigateToLogin)
+                }
         }
 
         private suspend fun shouldRefresh(): Boolean =
