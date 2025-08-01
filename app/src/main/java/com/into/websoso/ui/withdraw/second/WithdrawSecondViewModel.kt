@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.filter.repository.MyLibraryFilterRepository
+import com.into.websoso.data.library.repository.MyLibraryRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +21,8 @@ class WithdrawSecondViewModel
         private val accountRepository: AccountRepository,
         private val pushMessageRepository: PushMessageRepository,
         private val userRepository: UserRepository,
+        private val libraryRepository: MyLibraryRepository,
+        private val filterRepository: MyLibraryFilterRepository,
     ) : ViewModel() {
         private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
         val withdrawReason: LiveData<String> get() = _withdrawReason
@@ -84,6 +88,8 @@ class WithdrawSecondViewModel
                         _isWithDrawSuccess.value = true
                         userRepository.removeTermsAgreementChecked()
                         pushMessageRepository.clearFCMToken()
+                        libraryRepository.deleteAllNovels()
+                        filterRepository.deleteLibraryFilter()
                     }.onFailure {
                         _isWithDrawSuccess.value = false
                     }

@@ -359,7 +359,10 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         val intent = NovelRatingActivity.getIntent(
             context = this,
             novel = novelDetailViewModel.novelDetailModel.value,
-            feeds = novelFeedViewModel.feedUiState.value?.feeds,
+            feeds = novelFeedViewModel.feedUiState.value
+                ?.feeds
+                ?.filter { it.isMyFeed }
+                ?.map { it.content } ?: emptyList(),
             readStatus = readStatus,
             isInterest = binding.llNovelDetailInterest.isSelected,
         )

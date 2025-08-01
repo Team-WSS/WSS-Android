@@ -10,7 +10,6 @@ import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.Keywo
 import com.into.websoso.data.model.NovelRatingEntity
 import com.into.websoso.data.repository.KeywordRepository
 import com.into.websoso.data.repository.UserNovelRepository
-import com.into.websoso.ui.main.feed.model.FeedModel
 import com.into.websoso.ui.mapper.toData
 import com.into.websoso.ui.mapper.toUi
 import com.into.websoso.ui.novelDetail.model.NovelDetailModel
@@ -33,8 +32,7 @@ class NovelRatingViewModel
         private val keywordRepository: KeywordRepository,
     ) : ViewModel() {
         private val novel: NovelDetailModel? = savedStateHandle["NOVEL"]
-        private val feeds: List<FeedModel>? = savedStateHandle["FEEDS"]
-        private val readStatus: ReadStatus? = savedStateHandle["READ_STATUS"]
+        private val feeds: ArrayList<String>? = savedStateHandle["FEEDS"]
         private val isInterested: Boolean? = savedStateHandle["IS_INTEREST"]
         private val _uiState = MutableLiveData(NovelRatingUiState())
         val uiState: LiveData<NovelRatingUiState> get() = _uiState
@@ -168,8 +166,8 @@ class NovelRatingViewModel
             }
         }
 
-        fun updateReadStatus() {
-            if (readStatus == ReadStatus.NONE || readStatus == null) return
+        fun updateReadStatus(readStatus: ReadStatus) {
+            if (readStatus == ReadStatus.NONE) return
             uiState.value?.let { uiState ->
                 val updatedModel =
                     ratingDateManager.updateReadStatus(uiState.novelRatingModel, readStatus)
@@ -332,7 +330,7 @@ class NovelRatingViewModel
                             readStatus = ratingModel?.uiReadStatus?.name,
                         ),
                         isAlreadyRated = uiState.value?.isAlreadyRated ?: false,
-                        feeds = feeds?.map { it.content } ?: emptyList(),
+                        feeds = feeds?.toList() ?: emptyList(),
                     )
                 }.onSuccess {
                     _uiState.value = uiState.value?.copy(isSaveSuccess = true)

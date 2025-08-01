@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class MyLibraryFilterRepository
+class MyLibraryFilterRepository
     @Inject
     constructor(
         private val myLibraryFilterLocalDataSource: LibraryFilterLocalDataSource,
@@ -18,6 +18,10 @@ internal class MyLibraryFilterRepository
             myLibraryFilterLocalDataSource.libraryFilterFlow
                 .map { it ?: LibraryFilter() }
                 .distinctUntilChanged()
+
+        suspend fun deleteLibraryFilter() {
+            myLibraryFilterLocalDataSource.deleteLibraryFilter()
+        }
 
         override suspend fun updateFilter(
             readStatuses: List<String>?,

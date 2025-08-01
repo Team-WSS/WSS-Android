@@ -20,6 +20,7 @@ import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelRating
+import com.into.websoso.core.common.util.getAdaptedSerializableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.toFloatPxFromDp
@@ -35,7 +36,6 @@ import com.into.websoso.core.resource.R.string.novel_rating_charm_points
 import com.into.websoso.core.resource.R.string.novel_rating_complete
 import com.into.websoso.core.resource.R.string.novel_rating_save_error
 import com.into.websoso.databinding.ActivityNovelRatingBinding
-import com.into.websoso.ui.main.feed.model.FeedModel
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelDetail.model.NovelDetailModel
@@ -172,13 +172,20 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
     private fun initView() {
         binding.wllNovelRating.setWebsosoLoadingVisibility(false)
-        novelRatingViewModel.updateReadStatus()
+        updateInitialReadStatus()
     }
 
     private fun updateView(uiState: NovelRatingUiState) {
         updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
         updateCharmPointChips(uiState.novelRatingModel.charmPoints)
         updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
+    }
+
+    private fun updateInitialReadStatus() {
+        val readStatus = intent.getAdaptedSerializableExtra<ReadStatus>(READ_STATUS)
+        readStatus.let {
+            novelRatingViewModel.updateReadStatus(it ?: return)
+        }
     }
 
     private fun updateSelectedDate(ratingDateModel: RatingDateModel) {
@@ -297,14 +304,14 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
         fun getIntent(
             context: Context,
             novel: NovelDetailModel?,
-            feeds: List<FeedModel>?,
+            feeds: List<String>,
             readStatus: ReadStatus,
             isInterest: Boolean,
         ): Intent =
             Intent(context, NovelRatingActivity::class.java).apply {
                 putExtra(READ_STATUS, readStatus)
                 putExtra(IS_INTEREST, isInterest)
-                putExtra(FEEDS, feeds?.toTypedArray() ?: emptyArray<FeedModel>())
+                putExtra(FEEDS, ArrayList(feeds))
                 putExtra(NOVEL, novel)
             }
     }

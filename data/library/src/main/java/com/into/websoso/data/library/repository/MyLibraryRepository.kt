@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
-internal class MyLibraryRepository
+class MyLibraryRepository
     @Inject
     constructor(
         filterRepository: FilterRepository,
@@ -42,6 +42,10 @@ internal class MyLibraryRepository
                         pagingSourceFactory = libraryLocalDataSource::selectAllNovels,
                     ).flow
                 }
+
+        suspend fun deleteAllNovels() {
+            libraryLocalDataSource.deleteAllNovels()
+        }
 
         private suspend fun getUserNovels(
             lastUserNovelId: Long,
