@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.model)
     implementation(projects.core.common)
     implementation(projects.data.account)
     implementation(libs.paging.runtime)

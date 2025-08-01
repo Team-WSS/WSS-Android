@@ -1,5 +1,7 @@
 package com.into.websoso.data.library.model
 
+import com.into.websoso.core.model.MyFeed
+
 data class UserNovelsEntity(
     val isLoadable: Boolean,
     val userNovelCount: Long,
@@ -20,4 +22,12 @@ data class NovelEntity(
     val endDate: String,
     val keywords: List<String>,
     val myFeeds: List<String>,
+    val feeds: List<MyFeed> = dummy,
+)
+
+private val dummy = listOf(
+    MyFeed(
+        id = 0L,
+        content = "피드입니둥",
+    ),
 )

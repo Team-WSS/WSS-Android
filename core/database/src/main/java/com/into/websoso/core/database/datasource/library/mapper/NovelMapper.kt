@@ -19,6 +19,7 @@ internal fun NovelEntity.toNovelDatabase(index: Int): InDatabaseNovelEntity =
         keywords = keywords,
         myFeeds = myFeeds,
         sortIndex = index,
+        feeds = feeds,
     )
 
 internal fun InDatabaseNovelEntity.toData(): NovelEntity =
@@ -36,4 +37,5 @@ internal fun InDatabaseNovelEntity.toData(): NovelEntity =
         endDate = endDate,
         keywords = keywords,
         myFeeds = myFeeds,
+        feeds = feeds,
     )
