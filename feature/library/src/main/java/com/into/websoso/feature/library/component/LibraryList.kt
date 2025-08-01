@@ -9,13 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.into.websoso.feature.library.model.LibraryListItemModel
+import com.into.websoso.feature.library.model.NovelUiModel
 
 @Composable
 internal fun LibraryList(
-    novels: LazyPagingItems<LibraryListItemModel>,
+    novels: LazyPagingItems<NovelUiModel>,
     listState: LazyListState,
-    onItemClick: (LibraryListItemModel) -> Unit = {},
+    onItemClick: (NovelUiModel) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(

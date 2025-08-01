@@ -1,13 +1,14 @@
-package com.into.websoso.core.database.entity
+package com.into.websoso.core.database.datasource.library.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "novels")
-data class InDatabaseNovelEntity(
+internal data class InDatabaseNovelEntity(
     @PrimaryKey val userNovelId: Long,
     val novelId: Long,
     val title: String,
+    val sortIndex: Int,
     val novelImage: String,
     val novelRating: Float,
     val readStatus: String,
@@ -19,3 +20,4 @@ data class InDatabaseNovelEntity(
     val keywords: List<String>,
     val myFeeds: List<String>,
 )
+

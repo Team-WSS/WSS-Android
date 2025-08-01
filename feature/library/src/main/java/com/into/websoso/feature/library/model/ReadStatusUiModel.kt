@@ -4,18 +4,18 @@ import androidx.compose.ui.graphics.Color
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Primary100
+import com.into.websoso.domain.library.model.ReadStatus
 
-enum class ReadStatusUiModel(
-    val label: String,
+internal enum class ReadStatusUiModel(
+    val readStatus: ReadStatus,
     val backgroundColor: Color,
-    val key: String,
 ) {
-    WATCHING("보는 중", Primary100, "WATCHING"),
-    WATCHED("봤어요", Black, "WATCHED"),
-    QUIT("하차", Gray200, "QUIT"),
+    WATCHING(ReadStatus.WATCHING, Primary100),
+    WATCHED(ReadStatus.WATCHED, Black),
+    QUIT(ReadStatus.QUIT, Gray200),
     ;
 
     companion object {
-        fun from(value: String?): ReadStatusUiModel? = entries.find { it.key == value }
+        fun from(readStatus: ReadStatus?): ReadStatusUiModel? = entries.find { it.readStatus == readStatus }
     }
 }

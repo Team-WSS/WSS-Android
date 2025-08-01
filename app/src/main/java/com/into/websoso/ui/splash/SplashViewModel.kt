@@ -10,6 +10,7 @@ import com.into.websoso.ui.splash.UiEffect.NavigateToMain
 import com.into.websoso.ui.splash.UiEffect.ShowDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -51,6 +52,8 @@ class SplashViewModel
             }
 
         private suspend fun handleAutoLogin() {
+            delay(1000)
+
             if (shouldRefresh()) {
                 _uiEffect.send(NavigateToLogin)
                 return

@@ -32,6 +32,7 @@ lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.1.1"
 security-crypto = "1.1.0-alpha06"
 room = "2.6.1"
+paging = "3.3.6"
 
 # Testing Libraries
 junit = "4.13.2"
@@ -50,9 +51,6 @@ coroutines = "1.6.4"
 # Image Loading Libraries
 coil = "2.7.0"
 coil-transformers = "1.0.6"
-
-# Paging3
-paging = "3.3.6"
 
 # Misc UI Libraries
 dots-indicator = "5.0"
@@ -101,6 +99,9 @@ security-crypto = { module = "androidx.security:security-crypto", version.ref = 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 
 # Testing Libraries
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -150,11 +151,6 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 # Amplitude Libraries
 amplitude = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
-
-# Paging3
-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version = "paging" }
-paging-common = { group = "androidx.paging", name = "paging-common", version = "paging" }
-paging-compose = { group = "androidx.paging", name = "paging-compose", version = "paging" }
 
 # Jetpack Compose Libraries
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }

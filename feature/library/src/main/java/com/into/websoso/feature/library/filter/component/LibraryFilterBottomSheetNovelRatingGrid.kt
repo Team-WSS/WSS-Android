@@ -16,22 +16,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.into.websoso.core.common.extensions.isCloseTo
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
-import com.into.websoso.feature.library.model.RatingLevelUiModel
-import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR
-import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR_POINT_EIGHT
-import com.into.websoso.feature.library.model.RatingLevelUiModel.FOUR_POINT_FIVE
-import com.into.websoso.feature.library.model.RatingLevelUiModel.THREE_POINT_FIVE
+import com.into.websoso.domain.library.model.NovelRating
+import com.into.websoso.domain.library.model.Rating
+import com.into.websoso.domain.library.model.Rating.FOUR
+import com.into.websoso.domain.library.model.Rating.FOUR_POINT_EIGHT
+import com.into.websoso.domain.library.model.Rating.FOUR_POINT_FIVE
+import com.into.websoso.domain.library.model.Rating.THREE_POINT_FIVE
 
 @Composable
 internal fun LibraryFilterBottomSheetNovelRatingGrid(
-    selectedRating: Float,
-    onRatingClick: (rating: RatingLevelUiModel) -> Unit,
+    selectedRating: NovelRating,
+    onRatingClick: (rating: Rating) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,7 +50,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                     .clickable {
                         onRatingClick(THREE_POINT_FIVE)
                     },
-                isSelected = selectedRating.isCloseTo(THREE_POINT_FIVE.value),
+                isSelected = selectedRating.isCloseTo(THREE_POINT_FIVE),
             )
             NovelRatingItem(
                 title = "4.0 이상",
@@ -59,7 +59,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                     .clickable {
                         onRatingClick(FOUR)
                     },
-                isSelected = selectedRating.isCloseTo(FOUR.value),
+                isSelected = selectedRating.isCloseTo(FOUR),
             )
         }
         Row(
@@ -74,7 +74,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                     .clickable {
                         onRatingClick(FOUR_POINT_FIVE)
                     },
-                isSelected = selectedRating.isCloseTo(FOUR_POINT_FIVE.value),
+                isSelected = selectedRating.isCloseTo(FOUR_POINT_FIVE),
             )
             NovelRatingItem(
                 title = "4.8 이상",
@@ -83,7 +83,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                     .clickable {
                         onRatingClick(FOUR_POINT_EIGHT)
                     },
-                isSelected = selectedRating.isCloseTo(FOUR_POINT_EIGHT.value),
+                isSelected = selectedRating.isCloseTo(FOUR_POINT_EIGHT),
             )
         }
     }
@@ -128,7 +128,7 @@ private fun NovelRatingItem(
 private fun LibraryFilterBottomSheetNovelRatingGridPreview() {
     WebsosoTheme {
         LibraryFilterBottomSheetNovelRatingGrid(
-            selectedRating = 0f,
+            selectedRating = NovelRating(),
             onRatingClick = {},
         )
     }

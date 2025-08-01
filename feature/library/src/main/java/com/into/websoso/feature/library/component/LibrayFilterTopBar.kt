@@ -39,15 +39,14 @@ import com.into.websoso.core.resource.R.drawable.ic_library_drop_down_fill
 import com.into.websoso.core.resource.R.drawable.ic_library_grid
 import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
-import com.into.websoso.feature.library.model.LibraryFilterType
-import com.into.websoso.feature.library.model.LibraryFilterUiState
-import com.into.websoso.feature.library.model.SortTypeUiModel
+import com.into.websoso.domain.library.model.SortCriteria
+import com.into.websoso.feature.library.model.LibraryFilterUiModel
 
 @Composable
 internal fun LibraryFilterTopBar(
-    libraryFilterUiState: LibraryFilterUiState,
+    libraryFilterUiModel: LibraryFilterUiModel,
     totalCount: Int,
-    onFilterClick: (LibraryFilterType) -> Unit,
+    onFilterClick: () -> Unit,
     onSortClick: () -> Unit,
     isGrid: Boolean,
     onToggleViewType: () -> Unit,
@@ -60,7 +59,7 @@ internal fun LibraryFilterTopBar(
             .padding(start = 20.dp),
     ) {
         NovelFilterChipSection(
-            libraryFilterUiState = libraryFilterUiState,
+            libraryFilterUiModel = libraryFilterUiModel,
             onFilterClick = onFilterClick,
             onInterestClick = onInterestClick,
         )
@@ -69,7 +68,7 @@ internal fun LibraryFilterTopBar(
 
         NovelFilterStatusBar(
             totalCount = totalCount,
-            selectedSortType = libraryFilterUiState.selectedSortType,
+            sortCriteria = libraryFilterUiModel.sortCriteria,
             isGrid = isGrid,
             onSortClick = onSortClick,
             onToggleViewType = onToggleViewType,
@@ -79,9 +78,9 @@ internal fun LibraryFilterTopBar(
 
 @Composable
 private fun NovelFilterChipSection(
-    libraryFilterUiState: LibraryFilterUiState,
+    libraryFilterUiModel: LibraryFilterUiModel,
     onInterestClick: () -> Unit,
-    onFilterClick: (LibraryFilterType) -> Unit,
+    onFilterClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -90,7 +89,7 @@ private fun NovelFilterChipSection(
     ) {
         NovelFilterChip(
             text = "관심",
-            isSelected = libraryFilterUiState.isInterested,
+            isSelected = libraryFilterUiModel.isInterested,
             onClick = onInterestClick,
             showDropdownIcon = false,
         )
@@ -103,21 +102,21 @@ private fun NovelFilterChipSection(
                 .background(color = Gray70),
         )
         NovelFilterChip(
-            text = libraryFilterUiState.readStatusLabelText,
-            isSelected = libraryFilterUiState.readStatuses.any { it.value },
-            onClick = { onFilterClick(LibraryFilterType.ReadStatus) },
+            text = libraryFilterUiModel.readStatusLabelText,
+            isSelected = libraryFilterUiModel.readStatuses.isSelected,
+            onClick = onFilterClick,
         )
 
         NovelFilterChip(
-            text = libraryFilterUiState.ratingText,
-            isSelected = libraryFilterUiState.isRatingSelected,
-            onClick = { onFilterClick(LibraryFilterType.Rating) },
+            text = libraryFilterUiModel.ratingText,
+            isSelected = libraryFilterUiModel.novelRating.isSelected,
+            onClick = onFilterClick,
         )
 
         NovelFilterChip(
-            text = libraryFilterUiState.attractivePointLabelText,
-            isSelected = libraryFilterUiState.attractivePoints.any { it.value },
-            onClick = { onFilterClick(LibraryFilterType.AttractivePoint) },
+            text = libraryFilterUiModel.attractivePointLabelText,
+            isSelected = libraryFilterUiModel.attractivePoints.isSelected,
+            onClick = onFilterClick,
         )
     }
 }
@@ -165,7 +164,7 @@ private fun NovelFilterChip(
 @Composable
 private fun NovelFilterStatusBar(
     totalCount: Int,
-    selectedSortType: SortTypeUiModel,
+    sortCriteria: SortCriteria,
     isGrid: Boolean,
     onSortClick: () -> Unit,
     onToggleViewType: () -> Unit,
@@ -185,7 +184,7 @@ private fun NovelFilterStatusBar(
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             SortTypeSelector(
-                selectedSortType = selectedSortType,
+                sortCriteria = sortCriteria,
                 onClick = onSortClick,
             )
 
@@ -195,8 +194,7 @@ private fun NovelFilterStatusBar(
                         id = if (isGrid) ic_library_grid else ic_library_list,
                     ),
                     contentDescription = null,
-                    modifier = Modifier.size(12.dp)
-                        ,
+                    modifier = Modifier.size(12.dp),
                 )
             }
         }
@@ -205,7 +203,7 @@ private fun NovelFilterStatusBar(
 
 @Composable
 private fun SortTypeSelector(
-    selectedSortType: SortTypeUiModel,
+    sortCriteria: SortCriteria,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -224,7 +222,7 @@ private fun SortTypeSelector(
             Spacer(modifier = Modifier.width(4.dp))
 
             Text(
-                text = selectedSortType.displayName,
+                text = sortCriteria.label,
                 style = WebsosoTheme.typography.body5,
                 color = Gray300,
             )

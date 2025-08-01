@@ -7,8 +7,8 @@ interface FilterRepository {
     val filterFlow: Flow<LibraryFilter>
 
     suspend fun updateFilter(
-        readStatuses: Map<String, Boolean>? = null,
-        attractivePoints: Map<String, Boolean>? = null,
+        readStatuses: List<String>? = null,
+        attractivePoints: List<String>? = null,
         novelRating: Float? = null,
         isInterested: Boolean? = null,
         sortCriteria: String? = null,

@@ -20,8 +20,8 @@ internal class MyLibraryFilterRepository
                 .distinctUntilChanged()
 
         override suspend fun updateFilter(
-            readStatuses: Map<String, Boolean>?,
-            attractivePoints: Map<String, Boolean>?,
+            readStatuses: List<String>?,
+            attractivePoints: List<String>?,
             novelRating: Float?,
             isInterested: Boolean?,
             sortCriteria: String?,
@@ -35,6 +35,6 @@ internal class MyLibraryFilterRepository
                 novelRating = novelRating ?: savedFilter.novelRating,
             )
 
-            myLibraryFilterLocalDataSource.updateLibraryFilter(params = updatedFilter)
+            myLibraryFilterLocalDataSource.updateLibraryFilter(libraryFilter = updatedFilter)
         }
     }

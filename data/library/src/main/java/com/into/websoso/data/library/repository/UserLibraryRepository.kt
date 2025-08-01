@@ -3,7 +3,10 @@ package com.into.websoso.data.library.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.into.websoso.core.common.extensions.isCloseTo
 import com.into.websoso.data.filter.FilterRepository
+import com.into.websoso.data.filter.model.DEFAULT_NOVEL_RATING
+import com.into.websoso.data.filter.model.LibraryFilter
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.LibraryRepository.Companion.PAGE_SIZE
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
@@ -36,11 +39,33 @@ internal class UserLibraryRepository
                         config = PagingConfig(pageSize = PAGE_SIZE),
                         pagingSourceFactory = {
                             LibraryPagingSource(
-                                userId = userId,
-                                libraryRemoteDataSource = libraryRemoteDataSource,
-                                filterParams = filter,
+                                getNovels = { lastUserNovelId ->
+                                    getUserNovels(lastUserNovelId, filter)
+                                },
                             )
                         },
                     ).flow
                 }
+
+        private suspend fun getUserNovels(
+            lastUserNovelId: Long,
+            libraryFilter: LibraryFilter,
+        ) = runCatching {
+            libraryRemoteDataSource.getUserNovels(
+                userId = userId,
+                lastUserNovelId = lastUserNovelId,
+                size = PAGE_SIZE,
+                sortCriteria = libraryFilter.sortCriteria,
+                isInterest = if (!libraryFilter.isInterested) null else true,
+                readStatuses = libraryFilter.readStatuses.ifEmpty { null },
+                attractivePoints = libraryFilter.attractivePoints.ifEmpty { null },
+                novelRating = if (libraryFilter.novelRating.isCloseTo(DEFAULT_NOVEL_RATING)) {
+                    null
+                } else {
+                    libraryFilter.novelRating
+                },
+                query = null,
+                updatedSince = null,
+            )
+        }
     }

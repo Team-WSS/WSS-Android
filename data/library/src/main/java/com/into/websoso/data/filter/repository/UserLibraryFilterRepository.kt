@@ -16,8 +16,8 @@ internal class UserLibraryFilterRepository
         override val filterFlow: Flow<LibraryFilter> = _filterFlow.asStateFlow()
 
         override suspend fun updateFilter(
-            readStatuses: Map<String, Boolean>?,
-            attractivePoints: Map<String, Boolean>?,
+            readStatuses: List<String>?,
+            attractivePoints: List<String>?,
             novelRating: Float?,
             isInterested: Boolean?,
             sortCriteria: String?,
