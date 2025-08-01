@@ -23,5 +23,6 @@ internal object DatabaseModule {
                 context,
                 WebsosoDatabase::class.java,
                 "websoso.db",
-            ).build()
+            ).fallbackToDestructiveMigration()
+            .build()
 }
