@@ -22,6 +22,7 @@ include(":app")
 
 include(
     ":core:resource",
+    ":core:model",
     ":core:common",
     ":core:designsystem",
     ":core:auth",
