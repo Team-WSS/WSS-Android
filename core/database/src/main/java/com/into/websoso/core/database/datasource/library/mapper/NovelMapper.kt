@@ -5,6 +5,7 @@ import com.into.websoso.data.library.model.NovelEntity
 
 internal fun NovelEntity.toNovelDatabase(index: Int): InDatabaseNovelEntity =
     InDatabaseNovelEntity(
+        sortIndex = index,
         userNovelId = userNovelId,
         novelId = novelId,
         title = title,
@@ -18,8 +19,6 @@ internal fun NovelEntity.toNovelDatabase(index: Int): InDatabaseNovelEntity =
         endDate = endDate,
         keywords = keywords,
         myFeeds = myFeeds,
-        sortIndex = index,
-        feeds = feeds,
     )
 
 internal fun InDatabaseNovelEntity.toData(): NovelEntity =
@@ -37,5 +36,4 @@ internal fun InDatabaseNovelEntity.toData(): NovelEntity =
         endDate = endDate,
         keywords = keywords,
         myFeeds = myFeeds,
-        feeds = feeds,
     )

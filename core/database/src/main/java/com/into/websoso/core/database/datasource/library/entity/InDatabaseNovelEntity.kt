@@ -2,7 +2,6 @@ package com.into.websoso.core.database.datasource.library.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.into.websoso.core.model.MyFeed
 
 @Entity(tableName = "novels")
 internal data class InDatabaseNovelEntity(
@@ -20,5 +19,4 @@ internal data class InDatabaseNovelEntity(
     val endDate: String,
     val keywords: List<String>,
     val myFeeds: List<String>,
-    val feeds: List<MyFeed>,
 )
