@@ -104,7 +104,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     editFeedModel == null -> createFeedViewModel.createFeed()
                     editFeedModel.feedId == DEFAULT_FEED_ID -> createFeedViewModel.createFeed()
                     editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
-                    else -> createFeedViewModel.editFeed(editFeedModel.feedId)
+                    else -> createFeedViewModel.editFeed(
+                        feedId = editFeedModel.feedId,
+                        legacyFeed = editFeedModel.feedContent,
+                    )
                 }
 
                 tracker.trackEvent("write_feed")

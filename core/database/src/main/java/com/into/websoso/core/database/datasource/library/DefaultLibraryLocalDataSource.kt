@@ -1,6 +1,7 @@
 package com.into.websoso.core.database.datasource.library
 
 import androidx.paging.PagingSource
+import androidx.room.Transaction
 import com.into.websoso.core.database.datasource.library.dao.NovelDao
 import com.into.websoso.core.database.datasource.library.entity.InDatabaseNovelEntity
 import com.into.websoso.core.database.datasource.library.mapper.toData
@@ -20,16 +21,34 @@ internal class DefaultLibraryLocalDataSource
     constructor(
         private val novelDao: NovelDao,
     ) : LibraryLocalDataSource {
+        @Transaction
         override suspend fun insertNovels(novels: List<NovelEntity>) {
-            val offset = novelDao.selectNovelsCount()
-            novelDao.insertNovels(
-                novels.mapIndexed { index, novelEntity ->
-                    novelEntity.toNovelDatabase(offset + index)
-                },
-            )
+            novelDao.apply {
+                val offset = selectNovelsCount()
+
+                insertNovels(
+                    novels.mapIndexed { index, novelEntity ->
+                        novelEntity.toNovelDatabase(offset + index)
+                    },
+                )
+            }
+        }
+
+        @Transaction
+        override suspend fun insertNovel(novel: NovelEntity) {
+            novelDao.apply {
+                val novelIndex = selectNovelByUserNovelId(novel.userNovelId)?.sortIndex ?: 0
+
+                insertNovel(novel.toNovelDatabase(novelIndex))
+            }
         }
 
         override fun selectAllNovels(): PagingSource<Int, NovelEntity> = novelDao.selectAllNovels().mapValue(InDatabaseNovelEntity::toData)
+
+        override suspend fun selectNovelByUserNovelId(userNovelId: Long): NovelEntity? =
+            novelDao.selectNovelByUserNovelId(userNovelId)?.toData()
+
+        override suspend fun selectNovelByNovelId(novelId: Long): NovelEntity? = novelDao.selectNovelByNovelId(novelId)?.toData()
 
         override suspend fun deleteAllNovels() {
             novelDao.deleteAllNovels()

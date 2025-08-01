@@ -21,8 +21,17 @@ internal interface NovelDao {
     @Query("SELECT COUNT(*) FROM novels")
     suspend fun selectNovelsCount(): Int
 
+    @Query("SELECT * FROM novels WHERE userNovelId = :userNovelId LIMIT 1")
+    suspend fun selectNovelByUserNovelId(userNovelId: Long): InDatabaseNovelEntity?
+
+    @Query("SELECT * FROM novels WHERE novelId = :novelId LIMIT 1")
+    suspend fun selectNovelByNovelId(novelId: Long): InDatabaseNovelEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNovels(novels: List<InDatabaseNovelEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNovel(novel: InDatabaseNovelEntity)
 
     @Query("DELETE FROM novels")
     suspend fun deleteAllNovels()

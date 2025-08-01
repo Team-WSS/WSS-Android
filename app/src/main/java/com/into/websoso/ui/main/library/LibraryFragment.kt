@@ -56,12 +56,8 @@ class LibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         parentFragmentManager.setFragmentResultListener("scrollToTop", viewLifecycleOwner) { _, _ ->
-            resetScrollPosition()
+            libraryViewModel.resetScrollPosition()
         }
-    }
-
-    private fun resetScrollPosition() {
-        libraryViewModel.resetScrollPosition()
     }
 
     companion object {
