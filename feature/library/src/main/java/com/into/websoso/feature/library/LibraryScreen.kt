@@ -12,8 +12,10 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
+import androidx.paging.LoadState.Loading
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.map
@@ -63,6 +65,7 @@ fun LibraryScreen(
         .map { it.map(NovelEntity::toUiModel) }
         .collectAsLazyPagingItems()
     val latestEffect by rememberUpdatedState(libraryViewModel.scrollToTopEvent)
+    val isNovelsRefreshing by remember { derivedStateOf { novels.loadState.refresh is Loading } }
     var isShowBottomSheet by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
@@ -87,6 +90,7 @@ fun LibraryScreen(
         gridState = gridState,
         sheetState = bottomSheetState,
         isShowBottomSheet = isShowBottomSheet,
+        isNovelsRefreshing = isNovelsRefreshing,
         onDismissRequest = {
             scope.launch {
                 isShowBottomSheet = false
@@ -125,6 +129,7 @@ private fun LibraryScreen(
     listState: LazyListState,
     gridState: LazyGridState,
     sheetState: SheetState,
+    isNovelsRefreshing: Boolean,
     isShowBottomSheet: Boolean,
     onDismissRequest: () -> Unit,
     onFilterClick: () -> Unit,
@@ -164,30 +169,35 @@ private fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        when {
-            novels.itemCount == 0 &&
-                novels.loadState.refresh !is LoadState.Loading -> {
-                if (uiState.libraryFilterUiModel.isFilterApplied) {
-                    LibraryFilterEmptyView()
-                } else {
-                    LibraryEmptyView(onExploreClick = onExploreClick)
+        PullToRefreshBox(
+            isRefreshing = isNovelsRefreshing,
+            onRefresh = novels::refresh,
+        ) {
+            when {
+                novels.itemCount == 0 &&
+                    novels.loadState.refresh !is Loading -> {
+                    if (uiState.libraryFilterUiModel.isFilterApplied) {
+                        LibraryFilterEmptyView()
+                    } else {
+                        LibraryEmptyView(onExploreClick = onExploreClick)
+                    }
                 }
-            }
 
-            uiState.isGrid -> {
-                LibraryGridList(
-                    novels = novels,
-                    gridState = gridState,
-                    onItemClick = onItemClick,
-                )
-            }
+                uiState.isGrid -> {
+                    LibraryGridList(
+                        novels = novels,
+                        gridState = gridState,
+                        onItemClick = onItemClick,
+                    )
+                }
 
-            else -> {
-                LibraryList(
-                    novels = novels,
-                    listState = listState,
-                    onItemClick = onItemClick,
-                )
+                else -> {
+                    LibraryList(
+                        novels = novels,
+                        listState = listState,
+                        onItemClick = onItemClick,
+                    )
+                }
             }
         }
     }
