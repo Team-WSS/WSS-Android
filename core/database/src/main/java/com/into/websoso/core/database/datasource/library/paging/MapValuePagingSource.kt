@@ -26,5 +26,6 @@ internal class MapValuePagingSource<Key : Any, From : Any, To : Any>(
 
     override val jumpingSupported: Boolean get() = targetSource.jumpingSupported
 
-    override fun getRefreshKey(state: PagingState<Key, To>): Key? = null
+    @Suppress("UNCHECKED_CAST")
+    override fun getRefreshKey(state: PagingState<Key, To>): Key? = targetSource.getRefreshKey(state as PagingState<Key, From>)
 }
