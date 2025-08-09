@@ -3,6 +3,8 @@ package com.into.websoso.ui.accountInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.filter.repository.MyLibraryFilterRepository
+import com.into.websoso.data.library.repository.MyLibraryRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.accountInfo.UiEffect.NavigateToLogin
@@ -24,6 +26,8 @@ class AccountInfoViewModel
         private val userRepository: UserRepository,
         private val pushMessageRepository: PushMessageRepository,
         private val accountRepository: AccountRepository,
+        private val libraryRepository: MyLibraryRepository,
+        private val filterRepository: MyLibraryFilterRepository,
     ) : ViewModel() {
         private val _userEmail: MutableStateFlow<String> = MutableStateFlow("")
         val userEmail: StateFlow<String> get() = _userEmail.asStateFlow()
@@ -52,11 +56,21 @@ class AccountInfoViewModel
                 accountRepository
                     .deleteTokens(userDeviceIdentifier)
                     .onSuccess {
+                        userRepository.removeTermsAgreementChecked()
                         pushMessageRepository.clearFCMToken()
+                        libraryRepository.deleteAllNovels()
+                        filterRepository.deleteLibraryFilter()
                         _uiEffect.send(NavigateToLogin)
                     }.onFailure {
                         _uiEffect.send(NavigateToLogin)
                     }
+            }
+        }
+
+        fun clearCache() {
+            viewModelScope.launch {
+                libraryRepository.deleteAllNovels()
+                filterRepository.deleteLibraryFilter()
             }
         }
     }

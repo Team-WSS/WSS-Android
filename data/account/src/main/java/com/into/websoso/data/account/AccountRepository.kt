@@ -18,11 +18,18 @@ class AccountRepository
         var isRegisterUser: Boolean = false
             private set
 
-        suspend fun accessToken(): String = accountLocalDataSource.accessToken()
+        var userId: Long = 0L
+            private set
 
-        suspend fun refreshToken(): String = accountLocalDataSource.refreshToken()
+        fun updateUserId(userId: Long) {
+            this.userId = userId
+        }
 
-        suspend fun saveTokens(
+        suspend fun accessToken(): String = accountLocalDataSource.selectAccessToken()
+
+        suspend fun refreshToken(): String = accountLocalDataSource.selectRefreshToken()
+
+        suspend fun createAccount(
             platform: AuthPlatform,
             authToken: AuthToken,
         ): Result<Unit> =
@@ -32,9 +39,23 @@ class AccountRepository
                     authToken = authToken,
                 )
 
-                accountLocalDataSource.saveAccessToken(account.token.accessToken)
-                accountLocalDataSource.saveRefreshToken(account.token.refreshToken)
+                accountLocalDataSource.updateAccessToken(account.token.accessToken)
+                accountLocalDataSource.updateRefreshToken(account.token.refreshToken)
                 isRegisterUser = account.isRegister
+            }
+
+        suspend fun deleteAccount(reason: String): Result<Unit> =
+            runCatching {
+                accountRemoteDataSource.postWithdraw(reason = reason)
+                accountLocalDataSource.deleteTokens()
+            }
+
+        suspend fun createTokens(): Result<Unit> =
+            runCatching {
+                val tokens = accountRemoteDataSource.postReissue(refreshToken = refreshToken())
+
+                accountLocalDataSource.updateAccessToken(tokens.accessToken)
+                accountLocalDataSource.updateRefreshToken(tokens.refreshToken)
             }
 
         suspend fun deleteTokens(deviceIdentifier: String): Result<Unit> =
@@ -45,20 +66,6 @@ class AccountRepository
                         deviceIdentifier = deviceIdentifier,
                     )
 
-                accountLocalDataSource.clearTokens()
-            }
-
-        suspend fun deleteAccount(reason: String): Result<Unit> =
-            runCatching {
-                accountRemoteDataSource.postWithdraw(reason = reason)
-                accountLocalDataSource.clearTokens()
-            }
-
-        suspend fun renewTokens(): Result<Unit> =
-            runCatching {
-                val tokens = accountRemoteDataSource.postReissue(refreshToken = refreshToken())
-
-                accountLocalDataSource.saveAccessToken(tokens.accessToken)
-                accountLocalDataSource.saveRefreshToken(tokens.refreshToken)
+                accountLocalDataSource.deleteTokens()
             }
     }

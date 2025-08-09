@@ -28,14 +28,19 @@ include(
     ":core:auth-kakao",
     ":core:network",
     ":core:datastore",
-)
-
-include(
-    ":feature:signin",
-    ":feature:library",
+    ":core:database",
 )
 
 include(
     ":data:account",
     ":data:library",
+)
+
+include(
+    ":domain:library",
+)
+
+include(
+    ":feature:signin",
+    ":feature:library",
 )

@@ -68,7 +68,7 @@ internal class AuthorizationAuthenticator
         }
 
         private suspend fun renewToken(): String? =
-            accountRepository.get().renewTokens().fold(
+            accountRepository.get().createTokens().fold(
                 onSuccess = { accountRepository.get().accessToken() },
                 onFailure = {
                     sessionManager.onSessionExpired()

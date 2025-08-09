@@ -16,6 +16,7 @@ import com.into.websoso.R.color.primary_100_6A5DFD
 import com.into.websoso.R.color.primary_50_F1EFFF
 import com.into.websoso.R.layout.fragment_other_user_library
 import com.into.websoso.R.style.body2
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.util.SingleEventHandler
@@ -26,17 +27,20 @@ import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentOtherUserLibraryBinding
 import com.into.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
-import com.into.websoso.ui.userStorage.UserStorageActivity
-import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(fragment_other_user_library) {
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
+
     private val otherUserLibraryViewModel: OtherUserLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private val userId by lazy { arguments?.getLong(USER_ID_KEY) ?: 0L }
 
     override fun onViewCreated(
         view: View,
@@ -60,7 +64,6 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
     }
 
     private fun updateUserId() {
-        val userId = arguments?.getLong(USER_ID_KEY) ?: 0L
         otherUserLibraryViewModel.updateUserId(userId)
     }
 
@@ -205,36 +208,21 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
     }
 
     private fun onStorageButtonClick() {
-        val userId = requireNotNull(otherUserLibraryViewModel.userId.value)
+        binding.clOtherUserLibraryTopBar.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                navigateToUserStorageActivity()
+            }
+        }
 
-        val clickMappings = mapOf(
-            binding.clOtherUserLibraryTopBar to StorageTab.INTEREST.readStatus,
-            binding.llOtherUserLibraryStorageInteresting to StorageTab.INTEREST.readStatus,
-            binding.llOtherUserLibraryStorageWatching to StorageTab.WATCHING.readStatus,
-            binding.llOtherUserLibraryStorageWatched to StorageTab.WATCHED.readStatus,
-            binding.llOtherUserLibraryStorageQuit to StorageTab.QUIT.readStatus,
-        )
-
-        clickMappings.forEach { (view, readStatus) ->
-            view.setOnClickListener {
-                singleEventHandler.throttleFirst {
-                    navigateToUserStorageActivity(userId, readStatus)
-                }
+        binding.llOtherUserLibraryStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                navigateToUserStorageActivity()
             }
         }
     }
 
-    private fun navigateToUserStorageActivity(
-        userId: Long,
-        readStatus: String,
-    ) {
-        startActivity(
-            UserStorageActivity.getIntent(
-                context = requireContext(),
-                userId = userId,
-                readStatus = readStatus,
-            ),
-        )
+    private fun navigateToUserStorageActivity() {
+        websosoNavigator.navigateToUserStorageActivity(::startActivity, userId)
     }
 
     override fun onResume() {

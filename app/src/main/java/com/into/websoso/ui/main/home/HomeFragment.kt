@@ -332,5 +332,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
     companion object {
         private const val TODAY_POPULAR_NOVEL_MARGIN = 15
         private const val USER_INTEREST_MARGIN = 14
+        const val TAG = "HomeFragment"
     }
 }

@@ -147,5 +147,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
 
     companion object {
         private const val TOOLBAR_COLLAPSE_THRESHOLD = 0
+        const val TAG = "MyPageFragment"
     }
 }

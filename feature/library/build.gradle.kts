@@ -9,5 +9,10 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.resource)
+    implementation(projects.core.designsystem)
+    implementation(projects.domain.library)
     implementation(projects.data.library)
+
+    implementation(libs.paging.compose)
 }
