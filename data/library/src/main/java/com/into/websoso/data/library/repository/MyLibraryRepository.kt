@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
-class MyLibraryRepository
+internal class MyLibraryRepository
     @Inject
     constructor(
         filterRepository: FilterRepository,
