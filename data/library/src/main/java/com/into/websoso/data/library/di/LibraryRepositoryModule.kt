@@ -19,9 +19,15 @@ internal object LibraryRepositoryModule {
     fun provideLibraryRepository(
         savedStateHandle: SavedStateHandle,
         myLibraryRepository: Provider<MyLibraryRepository>,
-        userLibraryRepository: Provider<UserLibraryRepository.Factory>
+        userLibraryRepository: Provider<UserLibraryRepository.Factory>,
     ): LibraryRepository {
         val userId: Long? = savedStateHandle["USER_ID"]
-        return if (userId == null) myLibraryRepository.get() else userLibraryRepository.get().create(userId)
+        return if (userId == null) {
+            myLibraryRepository.get()
+        } else {
+            userLibraryRepository
+                .get()
+                .create(userId)
+        }
     }
 }

@@ -162,8 +162,7 @@ private fun ReadStatusBadge(
                 .background(
                     color = it.backgroundColor,
                     shape = RoundedCornerShape(8.dp),
-                )
-                .padding(vertical = 4.dp),
+                ).padding(vertical = 4.dp),
             contentAlignment = Alignment.Center,
         ) {
             Text(
