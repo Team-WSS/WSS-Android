@@ -147,8 +147,10 @@ class CreateFeedViewModel
             }
         }
 
-        fun editFeed(  feedId: Long,
-                       legacyFeed: String,) {
+        fun editFeed(
+            feedId: Long,
+            legacyFeed: String,
+        ) {
             if (isUploading.value == true) return
             viewModelScope.launch {
                 runCatching {
