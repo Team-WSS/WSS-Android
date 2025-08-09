@@ -6,7 +6,7 @@ import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.domain.library.model.ReadStatus
 
-internal enum class ReadStatusUiModel(
+enum class ReadStatusUiModel(
     val readStatus: ReadStatus,
     val backgroundColor: Color,
 ) {

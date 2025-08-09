@@ -81,7 +81,10 @@ class CreateFeedViewModel
             }
         }
 
-        fun editFeed(feedId: Long) {
+        fun editFeed(
+            feedId: Long,
+            legacyFeed: String,
+        ) {
             viewModelScope.launch {
                 runCatching {
                     feedRepository.saveEditedFeed(
@@ -89,7 +92,8 @@ class CreateFeedViewModel
                         relevantCategories = categories
                             .filter { it.isSelected }
                             .map { it.category.enTitle },
-                        feedContent = content.value.orEmpty(),
+                        legacyFeed = legacyFeed,
+                        editedFeed = content.value.orEmpty(),
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
                         isPublic = isPublic.value ?: true,

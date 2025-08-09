@@ -107,12 +107,19 @@ class MyActivityViewModel
         fun updateRemovedFeed(feedId: Long) {
             viewModelScope.launch {
                 _uiState.value = _uiState.value?.copy(isLoading = true)
+                val removedFeed = uiState.value?.activities?.find { it.feedId == feedId }
+
                 runCatching {
-                    feedRepository.saveRemovedFeed(feedId)
+                    feedRepository.saveRemovedFeed(
+                        feedId = feedId,
+                        novelId = removedFeed?.novelId,
+                        content = removedFeed?.feedContent.orEmpty(),
+                    )
                 }.onSuccess {
                     _uiState.value = _uiState.value?.copy(
                         isLoading = false,
-                        activities = _uiState.value?.activities?.filter { it.feedId != feedId } ?: emptyList(),
+                        activities = _uiState.value?.activities?.filter { it.feedId != feedId }
+                            ?: emptyList(),
                     )
                 }.onFailure {
                     _uiState.value = _uiState.value?.copy(

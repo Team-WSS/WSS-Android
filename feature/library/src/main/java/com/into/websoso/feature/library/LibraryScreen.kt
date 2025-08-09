@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,13 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
+import androidx.paging.LoadState.Loading
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.map
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
-import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.Rating
 import com.into.websoso.domain.library.model.ReadStatus
@@ -40,11 +39,9 @@ import com.into.websoso.feature.library.component.LibraryGridList
 import com.into.websoso.feature.library.component.LibraryList
 import com.into.websoso.feature.library.component.LibraryTopBar
 import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
-import com.into.websoso.feature.library.mapper.toUiModel
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.NovelUiModel
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 private const val SCROLL_POSITION_TOP = 0
@@ -59,10 +56,9 @@ fun LibraryScreen(
     val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
     val filterUiState by libraryViewModel.tempFilterUiState.collectAsStateWithLifecycle()
-    val novels = libraryViewModel.novels
-        .map { it.map(NovelEntity::toUiModel) }
-        .collectAsLazyPagingItems()
+    val novels = libraryViewModel.novels.collectAsLazyPagingItems()
     val latestEffect by rememberUpdatedState(libraryViewModel.scrollToTopEvent)
+    val isNovelsRefreshing = novels.loadState.refresh is Loading
     var isShowBottomSheet by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
@@ -87,6 +83,7 @@ fun LibraryScreen(
         gridState = gridState,
         sheetState = bottomSheetState,
         isShowBottomSheet = isShowBottomSheet,
+        isNovelsRefreshing = isNovelsRefreshing,
         onDismissRequest = {
             scope.launch {
                 isShowBottomSheet = false
@@ -125,6 +122,7 @@ private fun LibraryScreen(
     listState: LazyListState,
     gridState: LazyGridState,
     sheetState: SheetState,
+    isNovelsRefreshing: Boolean,
     isShowBottomSheet: Boolean,
     onDismissRequest: () -> Unit,
     onFilterClick: () -> Unit,
@@ -164,30 +162,35 @@ private fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        when {
-            novels.itemCount == 0 &&
-                novels.loadState.refresh !is LoadState.Loading -> {
-                if (uiState.libraryFilterUiModel.isFilterApplied) {
-                    LibraryFilterEmptyView()
-                } else {
-                    LibraryEmptyView(onExploreClick = onExploreClick)
+        PullToRefreshBox(
+            isRefreshing = isNovelsRefreshing,
+            onRefresh = novels::refresh,
+        ) {
+            when {
+                novels.itemCount == 0 &&
+                    novels.loadState.refresh !is Loading -> {
+                    if (uiState.libraryFilterUiModel.isFilterApplied) {
+                        LibraryFilterEmptyView()
+                    } else {
+                        LibraryEmptyView(onExploreClick = onExploreClick)
+                    }
                 }
-            }
 
-            uiState.isGrid -> {
-                LibraryGridList(
-                    novels = novels,
-                    gridState = gridState,
-                    onItemClick = onItemClick,
-                )
-            }
+                uiState.isGrid -> {
+                    LibraryGridList(
+                        novels = novels,
+                        gridState = gridState,
+                        onItemClick = onItemClick,
+                    )
+                }
 
-            else -> {
-                LibraryList(
-                    novels = novels,
-                    listState = listState,
-                    onItemClick = onItemClick,
-                )
+                else -> {
+                    LibraryList(
+                        novels = novels,
+                        listState = listState,
+                        onItemClick = onItemClick,
+                    )
+                }
             }
         }
     }

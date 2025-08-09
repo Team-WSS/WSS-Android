@@ -4,7 +4,7 @@ import com.into.websoso.core.common.extensions.formatDateRange
 import com.into.websoso.domain.library.model.AttractivePoints
 import com.into.websoso.domain.library.model.NovelRating
 
-internal data class NovelUiModel(
+data class NovelUiModel(
     val novelId: Long,
     val title: String,
     val startDate: String?,

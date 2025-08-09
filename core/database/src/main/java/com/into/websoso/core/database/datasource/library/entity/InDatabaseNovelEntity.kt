@@ -20,4 +20,3 @@ internal data class InDatabaseNovelEntity(
     val keywords: List<String>,
     val myFeeds: List<String>,
 )
-

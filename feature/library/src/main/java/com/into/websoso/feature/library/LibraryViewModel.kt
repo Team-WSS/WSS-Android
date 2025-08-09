@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.into.websoso.data.filter.FilterRepository
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.model.NovelEntity
@@ -14,14 +15,17 @@ import com.into.websoso.domain.library.model.Rating
 import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.domain.library.model.ReadStatuses.Companion.toReadStatuses
 import com.into.websoso.domain.library.model.SortCriteria
+import com.into.websoso.feature.library.mapper.toUiModel
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
 import com.into.websoso.feature.library.model.LibraryUiState
+import com.into.websoso.feature.library.model.NovelUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -43,8 +47,10 @@ class LibraryViewModel
         private val _scrollToTopEvent = Channel<Unit>(Channel.BUFFERED)
         val scrollToTopEvent: Flow<Unit> = _scrollToTopEvent.receiveAsFlow()
 
-        val novels: Flow<PagingData<NovelEntity>> =
-            libraryRepository.libraryFlow.cachedIn(viewModelScope)
+        val novels: Flow<PagingData<NovelUiModel>> =
+            libraryRepository.libraryFlow
+                .map { pagingData -> pagingData.map(NovelEntity::toUiModel) }
+                .cachedIn(viewModelScope)
 
         init {
             updateLibraryFilter()

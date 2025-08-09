@@ -1,5 +1,6 @@
 package com.into.websoso.data.repository
 
+import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.CommentsEntity
 import com.into.websoso.data.model.FeedEntity
@@ -15,6 +16,7 @@ class FeedRepository
     @Inject
     constructor(
         private val feedApi: FeedApi,
+        private val libraryLocalDataSource: LibraryLocalDataSource,
     ) {
         private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
         val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
@@ -44,6 +46,15 @@ class FeedRepository
             isSpoiler: Boolean,
             isPublic: Boolean,
         ) {
+            val novel = novelId?.let { id ->
+                libraryLocalDataSource.selectNovelByNovelId(id)
+            }
+
+            if (novel != null) {
+                val updatedNovel = novel.copy(myFeeds = listOf(feedContent) + novel.myFeeds)
+                libraryLocalDataSource.insertNovel(updatedNovel)
+            }
+
             feedApi.postFeed(
                 FeedRequestDto(
                     relevantCategories = relevantCategories,
@@ -58,16 +69,30 @@ class FeedRepository
         suspend fun saveEditedFeed(
             feedId: Long,
             relevantCategories: List<String>,
-            feedContent: String,
+            editedFeed: String,
+            legacyFeed: String,
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
         ) {
+            val novel = novelId?.let { id ->
+                libraryLocalDataSource.selectNovelByNovelId(id)
+            }
+
+            if (novel != null) {
+                val updatedNovel = novel.copy(
+                    myFeeds = novel.myFeeds.map { currentFeed ->
+                        if (currentFeed == legacyFeed) editedFeed else currentFeed
+                    },
+                )
+                libraryLocalDataSource.insertNovel(updatedNovel)
+            }
+
             feedApi.putFeed(
                 feedId,
                 FeedRequestDto(
                     relevantCategories = relevantCategories,
-                    feedContent = feedContent,
+                    feedContent = editedFeed,
                     novelId = novelId,
                     isSpoiler = isSpoiler,
                     isPublic = isPublic,
@@ -81,7 +106,20 @@ class FeedRepository
 
         suspend fun fetchUserInterestFeeds(): UserInterestFeedsEntity = feedApi.getUserInterestFeeds().toData()
 
-        suspend fun saveRemovedFeed(feedId: Long) {
+        suspend fun saveRemovedFeed(
+            feedId: Long,
+            novelId: Long?,
+            content: String,
+        ) {
+            val novel = novelId?.let { id ->
+                libraryLocalDataSource.selectNovelByNovelId(id)
+            }
+
+            if (novel != null) {
+                val updatedNovel = novel.copy(myFeeds = novel.myFeeds.filterNot { it == content })
+                libraryLocalDataSource.insertNovel(updatedNovel)
+            }
+
             feedApi.deleteFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
         }
 

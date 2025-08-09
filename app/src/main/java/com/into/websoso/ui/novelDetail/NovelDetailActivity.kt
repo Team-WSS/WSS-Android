@@ -228,7 +228,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                 override fun onPreDraw(): Boolean {
                     binding.ctlNovelDetail.viewTreeObserver.removeOnPreDrawListener(this)
 
-                    val layoutParams = binding.viewNovelDetailTooltipFrameBottom.layoutParams as LayoutParams
+                    val layoutParams =
+                        binding.viewNovelDetailTooltipFrameBottom.layoutParams as LayoutParams
                     layoutParams.topMargin = binding.ctlNovelDetail.height
                     binding.viewNovelDetailTooltipFrameBottom.layoutParams = layoutParams
 
@@ -354,9 +355,14 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         ) {
             return
         }
+
         val intent = NovelRatingActivity.getIntent(
             context = this,
-            novelId = novelId,
+            novel = novelDetailViewModel.novelDetailModel.value,
+            feeds = novelFeedViewModel.feedUiState.value
+                ?.feeds
+                ?.filter { it.isMyFeed }
+                ?.map { it.content } ?: emptyList(),
             readStatus = readStatus,
             isInterest = binding.llNovelDetailInterest.isSelected,
         )

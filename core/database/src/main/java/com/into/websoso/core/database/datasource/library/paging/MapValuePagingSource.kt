@@ -10,6 +10,10 @@ internal class MapValuePagingSource<Key : Any, From : Any, To : Any>(
     private val targetSource: PagingSource<Key, From>,
     private val mapper: suspend (From) -> To,
 ) : PagingSource<Key, To>() {
+    init {
+        targetSource.registerInvalidatedCallback(::invalidate)
+    }
+
     override suspend fun load(params: LoadParams<Key>): LoadResult<Key, To> =
         when (val result = targetSource.load(params)) {
             is LoadResult.Page -> LoadResult.Page(
@@ -26,5 +30,6 @@ internal class MapValuePagingSource<Key : Any, From : Any, To : Any>(
 
     override val jumpingSupported: Boolean get() = targetSource.jumpingSupported
 
-    override fun getRefreshKey(state: PagingState<Key, To>): Key? = null
+    @Suppress("UNCHECKED_CAST")
+    override fun getRefreshKey(state: PagingState<Key, To>): Key? = targetSource.getRefreshKey(state as PagingState<Key, From>)
 }
