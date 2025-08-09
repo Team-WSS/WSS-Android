@@ -55,7 +55,7 @@ class SignInViewModel
         ) {
             viewModelScope.launch {
                 accountRepository
-                    .saveTokens(
+                    .createAccount(
                         platform = platform,
                         authToken = authToken,
                     ).onSuccess {

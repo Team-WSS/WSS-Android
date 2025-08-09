@@ -81,9 +81,13 @@ dependencies {
     implementation(projects.core.authKakao)
     implementation(projects.core.network)
     implementation(projects.core.datastore)
+    implementation(projects.core.database)
+
+    implementation(projects.data.account)
+    implementation(projects.data.library)
 
     implementation(projects.feature.signin)
-    implementation(projects.data.account)
+    implementation(projects.feature.library)
 
     // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)
@@ -129,4 +133,6 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging)
+
+    implementation("androidx.paging:paging-runtime:3.3.2")
 }

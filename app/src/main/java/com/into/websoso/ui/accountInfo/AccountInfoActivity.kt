@@ -1,10 +1,15 @@
 package com.into.websoso.ui.accountInfo
 
+import android.app.AlertDialog
+import android.app.AlertDialog.BUTTON_NEGATIVE
+import android.app.AlertDialog.BUTTON_POSITIVE
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat.getColor
+import com.into.websoso.R.color.black
 import com.into.websoso.R.layout.activity_account_info
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeUserInfo
@@ -42,6 +47,7 @@ class AccountInfoActivity : BaseActivity<ActivityAccountInfoBinding>(activity_ac
         onWithDrawButtonClick()
         onChangeUserInfoButtonClick()
         onBlockUsersButtonClick()
+        onDeleteCacheButtonClick()
     }
 
     private fun showChangeUserInfoSuccessMessage() {
@@ -91,6 +97,26 @@ class AccountInfoActivity : BaseActivity<ActivityAccountInfoBinding>(activity_ac
         binding.clAccountInfoBlockedUserList.setOnClickListener {
             val intent = BlockedUsersActivity.getIntent(this)
             startActivity(intent)
+        }
+    }
+
+    private fun onDeleteCacheButtonClick() {
+        binding.clAccountInfoDeleteCache.setOnClickListener {
+            AlertDialog
+                .Builder(this)
+                .setTitle("캐시 삭제")
+                .setMessage("정말 캐시를 삭제하시겠습니까?")
+                .setPositiveButton("확인") { _, _ ->
+                    accountInfoViewModel.clearCache()
+                }.setNegativeButton("취소", null)
+                .create()
+                .apply {
+                    show()
+                    getButton(BUTTON_POSITIVE)
+                        .setTextColor(getColor(this@AccountInfoActivity, black))
+                    getButton(BUTTON_NEGATIVE)
+                        .setTextColor(getColor(this@AccountInfoActivity, black))
+                }
         }
     }
 

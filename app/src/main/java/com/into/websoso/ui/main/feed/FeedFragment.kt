@@ -528,4 +528,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         _popupBinding = null
         super.onDestroyView()
     }
+
+    companion object {
+        const val TAG = "FeedFragment"
+    }
 }

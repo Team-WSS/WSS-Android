@@ -5,7 +5,10 @@ import android.content.Intent
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.ui.login.LoginActivity
 import com.into.websoso.ui.main.MainActivity
+import com.into.websoso.ui.normalExplore.NormalExploreActivity
+import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.onboarding.OnboardingActivity
+import com.into.websoso.ui.userStorage.UserStorageActivity
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -24,13 +27,43 @@ internal class WebsosoNavigator
             startActivity(intent)
         }
 
-        override fun navigateToMainActivity(startActivity: (Intent) -> Unit) {
+        override fun navigateToMainActivity(
+            startActivity: (Intent) -> Unit,
+            fragmentType: String?,
+        ) {
+            if (fragmentType != null) {
+                val intent =
+                    MainActivity.getIntent(context, MainActivity.FragmentType.valueOf(fragmentType))
+                startActivity(intent)
+                return
+            }
             val intent = MainActivity.getIntent(context, true)
             startActivity(intent)
         }
 
         override fun navigateToOnboardingActivity(startActivity: (Intent) -> Unit) {
             val intent = OnboardingActivity.getIntent(context)
+            startActivity(intent)
+        }
+
+        override fun navigateToUserStorageActivity(
+            startActivity: (Intent) -> Unit,
+            userId: Long,
+        ) {
+            val intent = UserStorageActivity.getIntent(context, userId)
+            startActivity(intent)
+        }
+
+        override fun navigateToNovelDetailActivity(
+            novelId: Long,
+            startActivity: (Intent) -> Unit,
+        ) {
+            val intent = NovelDetailActivity.getIntent(context, novelId)
+            startActivity(intent)
+        }
+
+        override fun navigateToNormalExploreActivity(startActivity: (Intent) -> Unit) {
+            val intent = NormalExploreActivity.getIntent(context)
             startActivity(intent)
         }
     }

@@ -8,12 +8,14 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 import dagger.multibindings.IntoMap
 
 @Module
 @InstallIn(ActivityComponent::class)
 internal interface KakaoAuthClientModule {
     @Binds
+    @ActivityScoped
     @IntoMap
     @AuthPlatformKey(AuthPlatform.KAKAO)
     fun bindKakaoAuthClient(kakaoAuthClient: KakaoAuthClient): AuthClient

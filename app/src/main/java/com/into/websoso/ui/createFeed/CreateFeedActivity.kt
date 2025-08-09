@@ -52,7 +52,8 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
     private val createFeedViewModel: CreateFeedViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
-    private val imagePickerLauncher: ActivityResultLauncher<DynamicLimitPhotoPicker.Input> = createFeedImagePickerLauncher()
+    private val imagePickerLauncher: ActivityResultLauncher<DynamicLimitPhotoPicker.Input> =
+        createFeedImagePickerLauncher()
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val imm: InputMethodManager =
@@ -138,7 +139,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     editFeedModel == null -> createFeedViewModel.createFeed()
                     editFeedModel.feedId == DEFAULT_FEED_ID -> createFeedViewModel.createFeed()
                     editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
-                    else -> createFeedViewModel.editFeed(editFeedModel.feedId)
+                    else -> createFeedViewModel.editFeed(
+                        feedId = editFeedModel.feedId,
+                        legacyFeed = editFeedModel.feedContent,
+                    )
                 }
 
                 tracker.trackEvent("write_feed")
@@ -177,7 +181,11 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                 ),
             )
         } else {
-            showWebsosoSnackBar(binding.root, getString(create_feed_image_limit, MAX_IMAGE_COUNT), ic_blocked_user_snack_bar)
+            showWebsosoSnackBar(
+                binding.root,
+                getString(create_feed_image_limit, MAX_IMAGE_COUNT),
+                ic_blocked_user_snack_bar,
+            )
         }
     }
 

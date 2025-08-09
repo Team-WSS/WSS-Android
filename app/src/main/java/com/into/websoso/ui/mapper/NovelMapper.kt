@@ -2,8 +2,6 @@ package com.into.websoso.ui.mapper
 
 import com.into.websoso.data.model.NovelDetailEntity
 import com.into.websoso.data.model.NovelInfoEntity
-import com.into.websoso.data.model.UserStorageEntity
-import com.into.websoso.data.model.UserStorageEntity.StorageNovelEntity
 import com.into.websoso.domain.model.ExploreResult
 import com.into.websoso.domain.model.ExploreResult.Novel
 import com.into.websoso.ui.normalExplore.model.NormalExploreModel
@@ -16,8 +14,6 @@ import com.into.websoso.ui.novelInfo.model.ReviewCountModel
 import com.into.websoso.ui.novelInfo.model.UnifiedReviewCountModel
 import com.into.websoso.ui.novelRating.model.NovelRatingModel.Companion.toCharmPoint
 import com.into.websoso.ui.novelRating.model.ReadStatus
-import com.into.websoso.ui.userStorage.model.UserStorageModel
-import com.into.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
 fun NovelDetailEntity.toUi(novelId: Long): NovelDetailModel =
     NovelDetailModel(
@@ -90,22 +86,4 @@ fun Novel.toUi(): NovelModel =
         interestedCount = interestedCount,
         rating = rating,
         ratingCount = ratingCount,
-    )
-
-fun UserStorageEntity.toUi(): UserStorageModel =
-    UserStorageModel(
-        isLoadable = isLoadable,
-        userNovelCount = userNovelCount,
-        userNovelRating = userNovelRating,
-        userNovels = userNovels.map { it.toUi() },
-    )
-
-fun StorageNovelEntity.toUi(): StorageNovelModel =
-    StorageNovelModel(
-        author = author,
-        novelId = novelId,
-        novelImage = novelImage,
-        title = title,
-        userNovelId = userNovelId,
-        novelRating = novelRating,
     )

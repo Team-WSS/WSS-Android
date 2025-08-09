@@ -258,10 +258,15 @@ class FeedViewModel
 
         fun updateRemovedFeed(feedId: Long) {
             feedUiState.value?.let { feedUiState ->
+                val removedFeed = feedUiState.feeds.find { it.id == feedId }
                 viewModelScope.launch {
                     _feedUiState.value = feedUiState.copy(loading = true)
                     runCatching {
-                        feedRepository.saveRemovedFeed(feedId)
+                        feedRepository.saveRemovedFeed(
+                            feedId = feedId,
+                            novelId = removedFeed?.novel?.id,
+                            content = removedFeed?.content.orEmpty(),
+                        )
                     }.onSuccess {
                         _feedUiState.value = feedUiState.copy(
                             loading = false,

@@ -1,16 +1,15 @@
 package com.into.websoso.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import com.into.websoso.R.id.fcv_main
 import com.into.websoso.R.id.menu_explore
 import com.into.websoso.R.id.menu_feed
@@ -40,12 +39,21 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     private val mainViewModel: MainViewModel by viewModels()
     private var backPressedTime: Long = 0L
+    private var currentFragment: Fragment? = null
+
+    private val fragmentTags = mapOf(
+        menu_home to HomeFragment.TAG,
+        menu_explore to ExploreFragment.TAG,
+        menu_feed to FeedFragment.TAG,
+        menu_library to LibraryFragment.TAG,
+        menu_my_page to MyPageFragment.TAG,
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupBackButtonListener()
-        setBottomNavigationView()
+        setupBottomNavigationView()
         setupObserver()
         onViewGuestClick()
         handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
@@ -75,12 +83,83 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         }
     }
 
-    private fun setBottomNavigationView() {
+    @SuppressLint("CommitTransaction")
+    private fun setupBottomNavigationView() {
+        setupInitialFragment()
+        setupBottomNavListener()
         binding.bnvMain.selectedItemId = menu_home
-        replaceFragment<HomeFragment>()
-
-        binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
     }
+
+    private fun setupInitialFragment() {
+        val initialItemId = menu_home
+        val initialTag = fragmentTags[initialItemId]!!
+
+        val existingFragment = supportFragmentManager.findFragmentByTag(initialTag)
+        val fragment = existingFragment ?: findOrCreateFragment(initialTag)
+
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            if (existingFragment == null) {
+                add(fcv_main, fragment, initialTag)
+            } else {
+                show(existingFragment)
+            }
+        }
+
+        currentFragment = fragment
+    }
+
+    private fun setupBottomNavListener() {
+        binding.bnvMain.setOnItemSelectedListener { item ->
+            fragmentTags[item.itemId] ?: return@setOnItemSelectedListener true
+            val currentFragment = supportFragmentManager.findFragmentById(fcv_main)
+
+            if (item.itemId == menu_library && currentFragment is LibraryFragment) {
+                supportFragmentManager.setFragmentResult("scrollToTop", Bundle.EMPTY)
+            } else {
+                replaceCurrentFragment(item.itemId)
+            }
+
+            true
+        }
+    }
+
+    private fun replaceCurrentFragment(itemId: Int) {
+        val tag = fragmentTags[itemId] ?: return
+        val isLibrary = itemId == menu_library
+        val existingFragment = supportFragmentManager.findFragmentByTag(tag)
+        val targetFragment = existingFragment ?: findOrCreateFragment(tag)
+
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+
+            currentFragment?.let {
+                when {
+                    it is LibraryFragment && !isLibrary -> hide(it)
+                    it != targetFragment -> remove(it)
+                    else -> { /* 아무 것도 하지 않음. 나도 아무 것도 안하고 싶다...격하게 */ }
+                }
+            }
+
+            if (existingFragment == null) {
+                add(fcv_main, targetFragment, tag)
+            } else {
+                show(targetFragment)
+            }
+        }
+
+        currentFragment = targetFragment
+    }
+
+    private fun findOrCreateFragment(tag: String): Fragment =
+        supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
+            HomeFragment.TAG -> HomeFragment()
+            ExploreFragment.TAG -> ExploreFragment()
+            FeedFragment.TAG -> FeedFragment()
+            LibraryFragment.TAG -> LibraryFragment()
+            MyPageFragment.TAG -> MyPageFragment()
+            else -> throw IllegalArgumentException("Unknown fragment tag: $tag")
+        }
 
     private fun setupObserver() {
         mainViewModel.isLogin.observe(this) { isLogin ->
@@ -101,83 +180,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         }
     }
 
-    private fun replaceFragment(item: MenuItem): Boolean {
-        when (FragmentType.valueOf(item.itemId)) {
-            HOME -> replaceFragment<HomeFragment>()
-            EXPLORE -> replaceFragment<ExploreFragment>()
-            FEED -> replaceFragment<FeedFragment>()
-            LIBRARY -> replaceFragment<LibraryFragment>()
-            MY_PAGE -> replaceFragment<MyPageFragment>()
-        }
-        return true
-    }
-
-    private inline fun <reified T : Fragment> replaceFragment() {
-        supportFragmentManager.commit {
-            replace<T>(fcv_main)
-            setReorderingAllowed(true)
-        }
-    }
-
-    enum class FragmentType(
-        @IntegerRes private val resId: Int,
-    ) {
-        LIBRARY(menu_library),
-        HOME(menu_home),
-        EXPLORE(menu_explore),
-        FEED(menu_feed),
-        MY_PAGE(menu_my_page),
-        ;
-
-        companion object {
-            fun valueOf(id: Int): FragmentType =
-                entries.find { fragmentType -> fragmentType.resId == id }
-                    ?: throw IllegalArgumentException()
-        }
-    }
-
     private fun showLoginRequestDialog() {
         val dialog = LoginRequestDialogFragment.newInstance()
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
     private fun handleNavigation(destination: FragmentType?) {
-        when (destination) {
-            EXPLORE -> selectFragment(EXPLORE)
-            MY_PAGE -> selectFragment(MY_PAGE)
-            FEED -> selectFragment(FEED)
-            LIBRARY -> selectFragment(LIBRARY)
-            HOME, null -> selectFragment(HOME)
+        val menuId = when (destination) {
+            EXPLORE -> menu_explore
+            MY_PAGE -> menu_my_page
+            FEED -> menu_feed
+            LIBRARY -> menu_library
+            HOME, null -> menu_home
         }
-    }
 
-    private fun selectFragment(fragmentType: FragmentType) {
-        when (fragmentType) {
-            HOME -> {
-                binding.bnvMain.selectedItemId = menu_home
-                replaceFragment<HomeFragment>()
-            }
-
-            EXPLORE -> {
-                binding.bnvMain.selectedItemId = menu_explore
-                replaceFragment<ExploreFragment>()
-            }
-
-            FEED -> {
-                binding.bnvMain.selectedItemId = menu_feed
-                replaceFragment<FeedFragment>()
-            }
-
-            LIBRARY -> {
-                binding.bnvMain.selectedItemId = menu_library
-                replaceFragment<LibraryFragment>()
-            }
-
-            MY_PAGE -> {
-                binding.bnvMain.selectedItemId = menu_my_page
-                replaceFragment<MyPageFragment>()
-            }
-        }
+        binding.bnvMain.selectedItemId = menuId
+        replaceCurrentFragment(menuId)
     }
 
     companion object {
@@ -205,5 +223,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
                 putExtra(IS_LOGIN_KEY, isLogin)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+    }
+
+    enum class FragmentType(
+        @IntegerRes val resId: Int,
+    ) {
+        LIBRARY(menu_library),
+        HOME(menu_home),
+        EXPLORE(menu_explore),
+        FEED(menu_feed),
+        MY_PAGE(menu_my_page),
+        ;
+
+        companion object {
+            fun valueOf(id: Int): FragmentType =
+                entries.find { it.resId == id }
+                    ?: throw IllegalArgumentException()
+
+            fun valueOf(fragmentName: String): FragmentType =
+                entries.find { it.name == fragmentName }
+                    ?: throw IllegalArgumentException()
+        }
     }
 }

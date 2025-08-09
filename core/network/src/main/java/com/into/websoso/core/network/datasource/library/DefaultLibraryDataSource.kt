@@ -1,6 +1,7 @@
 package com.into.websoso.core.network.datasource.library
 
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
+import com.into.websoso.data.library.model.UserNovelsEntity
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,9 +14,31 @@ internal class DefaultLibraryDataSource
     constructor(
         private val libraryApi: LibraryApi,
     ) : LibraryRemoteDataSource {
-        override suspend fun getUserLibrary(userId: Long) {
-            TODO("Not yet implemented")
-        }
+        override suspend fun getUserNovels(
+            userId: Long,
+            lastUserNovelId: Long,
+            size: Int,
+            sortCriteria: String,
+            isInterest: Boolean?,
+            readStatuses: List<String>?,
+            attractivePoints: List<String>?,
+            novelRating: Float?,
+            query: String?,
+            updatedSince: String?,
+        ): UserNovelsEntity =
+            libraryApi
+                .getUserNovels(
+                    userId = userId,
+                    lastUserNovelId = lastUserNovelId,
+                    size = size,
+                    sortCriteria = sortCriteria,
+                    isInterest = isInterest,
+                    readStatuses = readStatuses,
+                    attractivePoints = attractivePoints,
+                    novelRating = novelRating,
+                    query = query,
+                    updatedSince = updatedSince,
+                ).toData()
     }
 
 @Module

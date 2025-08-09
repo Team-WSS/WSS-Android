@@ -14,6 +14,10 @@ internal object DispatchersModule {
     @Provides
     @Dispatcher(WebsosoDispatchers.IO)
     fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @Dispatcher(WebsosoDispatchers.DEFAULT)
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }
 
 @Qualifier
@@ -24,4 +28,5 @@ annotation class Dispatcher(
 
 enum class WebsosoDispatchers {
     IO,
+    DEFAULT,
 }

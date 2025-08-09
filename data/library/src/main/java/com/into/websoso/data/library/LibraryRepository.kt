@@ -1,15 +1,13 @@
 package com.into.websoso.data.library
 
-import com.into.websoso.data.library.datasource.LibraryLocalDataSource
-import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
-import javax.inject.Inject
+import androidx.paging.PagingData
+import com.into.websoso.data.library.model.NovelEntity
+import kotlinx.coroutines.flow.Flow
 
-class LibraryRepository
-    @Inject
-    constructor(
-        private val libraryRemoteDataSource: LibraryRemoteDataSource,
-        private val libraryLocalDataSource: LibraryLocalDataSource,
-    ) {
-        fun fetchLibrary() {
-        }
+interface LibraryRepository {
+    val libraryFlow: Flow<PagingData<NovelEntity>>
+
+    companion object {
+        const val PAGE_SIZE = 20
     }
+}
