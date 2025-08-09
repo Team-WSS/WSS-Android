@@ -1,6 +1,5 @@
 package com.into.websoso.feature.library.filter.component
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +22,6 @@ import com.into.websoso.domain.library.model.AttractivePoint.VIBE
 import com.into.websoso.domain.library.model.AttractivePoint.WORLDVIEW
 import com.into.websoso.domain.library.model.AttractivePoints
 
-@SuppressLint("ResourceType")
 @Composable
 internal fun LibraryFilterBottomSheetAttractivePoints(
     attractivePoints: AttractivePoints,
