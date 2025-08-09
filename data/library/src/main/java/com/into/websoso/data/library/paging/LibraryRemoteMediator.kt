@@ -15,6 +15,7 @@ import com.into.websoso.data.library.model.UserNovelsEntity
 @OptIn(ExperimentalPagingApi::class)
 class LibraryRemoteMediator(
     private val getNovels: suspend (lastUserNovelId: Long) -> Result<UserNovelsEntity>,
+    private val getLastNovel: suspend () -> NovelEntity?,
     private val deleteAllNovels: suspend () -> Unit,
     private val insertNovels: suspend (List<NovelEntity>) -> Unit,
 ) : RemoteMediator<Int, NovelEntity>() {
@@ -23,14 +24,21 @@ class LibraryRemoteMediator(
         state: PagingState<Int, NovelEntity>,
     ): MediatorResult {
         val lastUserNovelId = when (loadType) {
-            REFRESH -> DEFAULT_LAST_USER_NOVEL_ID
-            APPEND -> state.lastItemOrNull()?.userNovelId
+            REFRESH -> {
+                deleteAllNovels()
+                DEFAULT_LAST_USER_NOVEL_ID
+            }
+
+            APPEND -> {
+                val lastNovel = getLastNovel()
+                lastNovel?.userNovelId
+            }
+
             PREPEND -> null
         } ?: return Success(true)
 
         return getNovels(lastUserNovelId).fold(
             onSuccess = { result ->
-                if (loadType == REFRESH) deleteAllNovels()
                 insertNovels(result.userNovels)
                 Success(endOfPaginationReached = !result.isLoadable)
             },

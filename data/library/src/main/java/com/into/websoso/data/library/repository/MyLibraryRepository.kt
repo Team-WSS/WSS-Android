@@ -33,9 +33,15 @@ class MyLibraryRepository
             filterRepository.filterFlow
                 .flatMapLatest { filter ->
                     Pager(
-                        config = PagingConfig(pageSize = PAGE_SIZE),
+                        config = PagingConfig(
+                            pageSize = PAGE_SIZE,
+                            enablePlaceholders = false,
+                        ),
                         remoteMediator = LibraryRemoteMediator(
-                            getNovels = { lastUserNovelId -> getUserNovels(lastUserNovelId, filter) },
+                            getNovels = { lastUserNovelId ->
+                                getUserNovels(lastUserNovelId, filter)
+                            },
+                            getLastNovel = libraryLocalDataSource::selectLastNovel,
                             deleteAllNovels = libraryLocalDataSource::deleteAllNovels,
                             insertNovels = libraryLocalDataSource::insertNovels,
                         ),

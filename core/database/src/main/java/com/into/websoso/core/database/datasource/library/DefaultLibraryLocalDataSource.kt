@@ -25,12 +25,10 @@ internal class DefaultLibraryLocalDataSource
         override suspend fun insertNovels(novels: List<NovelEntity>) {
             novelDao.apply {
                 val offset = selectNovelsCount()
-
-                insertNovels(
-                    novels.mapIndexed { index, novelEntity ->
-                        novelEntity.toNovelDatabase(offset + index)
-                    },
-                )
+                val dbEntities = novels.mapIndexed { index, novelEntity ->
+                    novelEntity.toNovelDatabase(offset + index)
+                }
+                insertNovels(dbEntities)
             }
         }
 
@@ -38,10 +36,11 @@ internal class DefaultLibraryLocalDataSource
         override suspend fun insertNovel(novel: NovelEntity) {
             novelDao.apply {
                 val novelIndex = selectNovelByUserNovelId(novel.userNovelId)?.sortIndex ?: 0
-
                 insertNovel(novel.toNovelDatabase(novelIndex))
             }
         }
+
+        override suspend fun selectLastNovel(): NovelEntity? = novelDao.selectLastNovel()?.toData()
 
         override fun selectAllNovels(): PagingSource<Int, NovelEntity> = novelDao.selectAllNovels().mapValue(InDatabaseNovelEntity::toData)
 

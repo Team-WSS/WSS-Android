@@ -18,6 +18,9 @@ internal interface NovelDao {
     @Query("SELECT * FROM novels ORDER BY sortIndex ASC")
     fun selectAllNovels(): PagingSource<Int, InDatabaseNovelEntity>
 
+    @Query("SELECT * FROM novels ORDER BY sortIndex DESC LIMIT 1")
+    suspend fun selectLastNovel(): InDatabaseNovelEntity?
+
     @Query("SELECT COUNT(*) FROM novels")
     suspend fun selectNovelsCount(): Int
 

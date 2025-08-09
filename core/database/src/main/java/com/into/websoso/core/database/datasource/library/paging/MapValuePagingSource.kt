@@ -11,9 +11,7 @@ internal class MapValuePagingSource<Key : Any, From : Any, To : Any>(
     private val mapper: suspend (From) -> To,
 ) : PagingSource<Key, To>() {
     init {
-        targetSource.registerInvalidatedCallback {
-            this.invalidate()
-        }
+        targetSource.registerInvalidatedCallback(::invalidate)
     }
 
     override suspend fun load(params: LoadParams<Key>): LoadResult<Key, To> =

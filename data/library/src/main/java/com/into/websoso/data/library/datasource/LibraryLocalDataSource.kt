@@ -10,6 +10,8 @@ interface LibraryLocalDataSource {
 
     fun selectAllNovels(): PagingSource<Int, NovelEntity>
 
+    suspend fun selectLastNovel(): NovelEntity?
+
     suspend fun selectNovelByUserNovelId(userNovelId: Long): NovelEntity?
 
     suspend fun selectNovelByNovelId(novelId: Long): NovelEntity?
