@@ -37,13 +37,15 @@ class NovelRepository
             novelId: Long,
             isInterest: Boolean,
         ) {
-            libraryLocalDataSource.selectNovelByNovelId(novelId)?.let { novel ->
-                val updatedNovel = novel.copy(isInterest = isInterest)
-                libraryLocalDataSource.insertNovel(updatedNovel)
-            }
-            when (isInterest) {
-                true -> novelApi.postUserInterest(novelId)
-                false -> novelApi.deleteUserInterest(novelId)
+            runCatching {
+                when (isInterest) {
+                    true -> novelApi.postUserInterest(novelId)
+                    false -> novelApi.deleteUserInterest(novelId)
+                }
+            }.onSuccess {
+                libraryLocalDataSource.selectNovelByNovelId(novelId)?.let { novel ->
+                    libraryLocalDataSource.insertNovel(novel.copy(isInterest = isInterest))
+                }
             }
         }
 

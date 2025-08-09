@@ -56,29 +56,31 @@ class FeedRepository
             isPublic: Boolean,
             images: List<Uri>,
         ) {
-            val novel = novelId?.let { id ->
-                libraryLocalDataSource.selectNovelByNovelId(id)
-            }
-
-            if (novel != null) {
-                val updatedNovel = novel.copy(myFeeds = listOf(feedContent) + novel.myFeeds)
-                libraryLocalDataSource.insertNovel(updatedNovel)
-            }
-
-            feedApi.postFeed(
-                feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
-                    target = FeedRequestDto(
-                        relevantCategories = relevantCategories,
-                        feedContent = feedContent,
-                        novelId = novelId,
-                        isSpoiler = isSpoiler,
-                        isPublic = isPublic,
+            runCatching {
+                feedApi.postFeed(
+                    feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
+                        target = FeedRequestDto(
+                            relevantCategories = relevantCategories,
+                            feedContent = feedContent,
+                            novelId = novelId,
+                            isSpoiler = isSpoiler,
+                            isPublic = isPublic,
+                        ),
+                        partName = PART_NAME_FEED,
+                        fileName = "feed.json",
                     ),
-                    partName = PART_NAME_FEED,
-                    fileName = "feed.json",
-                ),
-                images = images.map { multiPartMapper.formatToMultipart(it) },
-            )
+                    images = images.map { multiPartMapper.formatToMultipart(it) },
+                )
+            }.onSuccess {
+                val novel = novelId?.let { id ->
+                    libraryLocalDataSource.selectNovelByNovelId(id)
+                }
+
+                if (novel != null) {
+                    val updatedNovel = novel.copy(myFeeds = listOf(feedContent) + novel.myFeeds)
+                    libraryLocalDataSource.insertNovel(updatedNovel)
+                }
+            }
         }
 
         suspend fun saveEditedFeed(
@@ -91,34 +93,36 @@ class FeedRepository
             isPublic: Boolean,
             images: List<Uri>,
         ) {
-            val novel = novelId?.let { id ->
-                libraryLocalDataSource.selectNovelByNovelId(id)
-            }
-
-            if (novel != null) {
-                val updatedNovel = novel.copy(
-                    myFeeds = novel.myFeeds.map { currentFeed ->
-                        if (currentFeed == legacyFeed) editedFeed else currentFeed
-                    },
-                )
-                libraryLocalDataSource.insertNovel(updatedNovel)
-            }
-
-            feedApi.putFeed(
-                feedId = feedId,
-                feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
-                    target = FeedRequestDto(
-                        relevantCategories = relevantCategories,
-                        feedContent = editedFeed,
-                        novelId = novelId,
-                        isSpoiler = isSpoiler,
-                        isPublic = isPublic,
+            runCatching {
+                feedApi.putFeed(
+                    feedId = feedId,
+                    feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
+                        target = FeedRequestDto(
+                            relevantCategories = relevantCategories,
+                            feedContent = editedFeed,
+                            novelId = novelId,
+                            isSpoiler = isSpoiler,
+                            isPublic = isPublic,
+                        ),
+                        partName = "feed",
+                        fileName = "feed.json",
                     ),
-                    partName = "feed",
-                    fileName = "feed.json",
-                ),
-                images = images.map { multiPartMapper.formatToMultipart(it) },
-            )
+                    images = images.map { multiPartMapper.formatToMultipart(it) },
+                )
+            }.onSuccess {
+                val novel = novelId?.let { id ->
+                    libraryLocalDataSource.selectNovelByNovelId(id)
+                }
+
+                if (novel != null) {
+                    val updatedNovel = novel.copy(
+                        myFeeds = novel.myFeeds.map { currentFeed ->
+                            if (currentFeed == legacyFeed) editedFeed else currentFeed
+                        },
+                    )
+                    libraryLocalDataSource.insertNovel(updatedNovel)
+                }
+            }
         }
 
         suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
@@ -132,16 +136,20 @@ class FeedRepository
             novelId: Long?,
             content: String,
         ) {
-            val novel = novelId?.let { id ->
-                libraryLocalDataSource.selectNovelByNovelId(id)
-            }
+            runCatching {
+                feedApi.deleteFeed(feedId)
+            }.onSuccess {
+                _cachedFeeds.removeIf { it.id == feedId }
 
-            if (novel != null) {
-                val updatedNovel = novel.copy(myFeeds = novel.myFeeds.filterNot { it == content })
-                libraryLocalDataSource.insertNovel(updatedNovel)
-            }
+                val novel = novelId?.let { id ->
+                    libraryLocalDataSource.selectNovelByNovelId(id)
+                }
 
-            feedApi.deleteFeed(feedId).also { _cachedFeeds.removeIf { it.id == feedId } }
+                if (novel != null) {
+                    val updatedNovel = novel.copy(myFeeds = novel.myFeeds.filterNot { it == content })
+                    libraryLocalDataSource.insertNovel(updatedNovel)
+                }
+            }
         }
 
         suspend fun saveSpoilerFeed(feedId: Long) {

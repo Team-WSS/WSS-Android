@@ -14,8 +14,8 @@ class UserNovelRepository
         private val libraryLocalDataSource: LibraryLocalDataSource,
     ) {
         suspend fun deleteUserNovel(novelId: Long) {
-            libraryLocalDataSource.deleteNovel(novelId)
-            userNovelApi.deleteUserNovel(novelId)
+            runCatching { userNovelApi.deleteUserNovel(novelId) }
+                .onSuccess { libraryLocalDataSource.deleteNovel(novelId) }
         }
 
         suspend fun fetchNovelRating(novelId: Long): NovelRatingEntity = userNovelApi.fetchNovelRating(novelId).toData()
@@ -26,29 +26,31 @@ class UserNovelRepository
             isInterested: Boolean?,
             isAlreadyRated: Boolean,
         ) {
-            val updatedNovel = NovelEntity(
-                userNovelId = novelRatingEntity.userNovelId
-                    ?: libraryLocalDataSource.selectAllNovelsCount().toLong(),
-                novelId = novelRatingEntity.novelId!!,
-                title = novelRatingEntity.novelTitle.orEmpty(),
-                novelImage = novelRatingEntity.novelImage.orEmpty(),
-                novelRating = novelRatingEntity.novelRating,
-                readStatus = novelRatingEntity.readStatus.orEmpty(),
-                isInterest = isInterested ?: false,
-                userNovelRating = novelRatingEntity.userNovelRating,
-                attractivePoints = novelRatingEntity.charmPoints,
-                startDate = novelRatingEntity.startDate.orEmpty(),
-                endDate = novelRatingEntity.endDate.orEmpty(),
-                keywords = novelRatingEntity.userKeywords.map { it.keywordName },
-                myFeeds = feeds,
-            )
+            runCatching {
+                if (isAlreadyRated) {
+                    userNovelApi.putNovelRating(novelRatingEntity.novelId!!, novelRatingEntity.toData())
+                } else {
+                    userNovelApi.postNovelRating(novelRatingEntity.toData())
+                }
+            }.onSuccess {
+                val updatedNovel = NovelEntity(
+                    userNovelId = novelRatingEntity.userNovelId
+                        ?: libraryLocalDataSource.selectAllNovelsCount().toLong(),
+                    novelId = novelRatingEntity.novelId!!,
+                    title = novelRatingEntity.novelTitle.orEmpty(),
+                    novelImage = novelRatingEntity.novelImage.orEmpty(),
+                    novelRating = novelRatingEntity.novelRating,
+                    readStatus = novelRatingEntity.readStatus.orEmpty(),
+                    isInterest = isInterested ?: false,
+                    userNovelRating = novelRatingEntity.userNovelRating,
+                    attractivePoints = novelRatingEntity.charmPoints,
+                    startDate = novelRatingEntity.startDate.orEmpty(),
+                    endDate = novelRatingEntity.endDate.orEmpty(),
+                    keywords = novelRatingEntity.userKeywords.map { it.keywordName },
+                    myFeeds = feeds,
+                )
 
-            libraryLocalDataSource.insertNovel(updatedNovel)
-
-            if (isAlreadyRated) {
-                userNovelApi.putNovelRating(novelRatingEntity.novelId, novelRatingEntity.toData())
-            } else {
-                userNovelApi.postNovelRating(novelRatingEntity.toData())
+                libraryLocalDataSource.insertNovel(updatedNovel)
             }
         }
     }
