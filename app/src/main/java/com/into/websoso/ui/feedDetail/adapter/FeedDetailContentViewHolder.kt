@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.databinding.ItemFeedDetailHeaderBinding
 import com.into.websoso.ui.feedDetail.FeedDetailClickListener
+import com.into.websoso.ui.feedDetail.component.AdaptationFeedImageContainer
 import com.into.websoso.ui.main.feed.model.FeedModel
 
 class FeedDetailContentViewHolder(
-    feedDetailClickListener: FeedDetailClickListener,
+    private val feedDetailClickListener: FeedDetailClickListener,
     private val binding: ItemFeedDetailHeaderBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     init {
@@ -21,6 +22,11 @@ class FeedDetailContentViewHolder(
             user = feed.user.copy(avatarImage = itemView.getS3ImageUrl(feed.user.avatarImage)),
         )
         binding.clFeedLike.isSelected = feed.isLiked
+        binding.cvFeedImage.setContent {
+            AdaptationFeedImageContainer(feed.imageUrls) { index ->
+                feedDetailClickListener.onFeedImageClick(index, feed.imageUrls)
+            }
+        }
     }
 
     companion object {

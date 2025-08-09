@@ -103,6 +103,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/cl_feed_profile"
                 tools:text="최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요 애매한 건 빼고 주로 무협 중에서도 회귀물로 골라봤어요 왜냐면 내가 회귀물을 좋아하기 때문에 최근 잼께 봤던 무협 소설 목록 진짜들만 골라봤어요최근 잼께 봤던 무협 소설 목록 진짜들을 가 회귀물을 좋아하기 때문에 최근 잼께 봤습니다 몇글자 까지 될지 모르겠네요" />
 
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/cv_feed_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:isVisible="@{!feed.imageUrls.empty}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_feed_content" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_feed_novel_info"
                 isVisible="@{!feed.novel.nothing}"
@@ -115,7 +125,7 @@
                 android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_feed_content">
+                app:layout_constraintTop_toBottomOf="@+id/cv_feed_image">
 
                 <ImageView
                     android:id="@+id/iv_feed_link"
@@ -186,9 +196,8 @@
                 android:id="@+id/cl_feed_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="28dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="12dp"
                 android:onClick="@{(cl_feed_like) -> onClick.onLikeButtonClick(cl_feed_like, feed.id)}"
                 app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
                 app:layout_constraintStart_toStartOf="parent"

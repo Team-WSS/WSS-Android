@@ -44,6 +44,7 @@ class FeedDetailViewModel
         fun updateFeedDetail(
             feedId: Long,
             from: ResultFrom,
+            isLiked: Boolean = false,
         ) {
             this.feedId = feedId
             feedDetailUiState.value?.let { feedDetailUiState ->
@@ -64,11 +65,26 @@ class FeedDetailViewModel
                         val feed = (result[1] as FeedEntity)
                         val comments = result[2] as CommentsEntity
 
+                        val uiFeed = feed.toUi()
+                        val updatedFeed = if (feed.isLiked == isLiked) {
+                            uiFeed
+                        } else if (!isLiked && feed.isLiked) {
+                            uiFeed.copy(
+                                isLiked = false,
+                                likeCount = feed.likeCount - 1,
+                            )
+                        } else {
+                            uiFeed.copy(
+                                isLiked = true,
+                                likeCount = feed.likeCount + 1,
+                            )
+                        }
+
                         _feedDetailUiState.value = feedDetailUiState.copy(
                             loading = false,
                             isRefreshed = true,
                             feedDetail = FeedDetailModel(
-                                feed = feed.toUi(),
+                                feed = updatedFeed,
                                 comments = comments.comments.map { it.toUi() },
                                 user = FeedDetailModel.UserModel(
                                     avatarImage = myProfile.avatarImage,

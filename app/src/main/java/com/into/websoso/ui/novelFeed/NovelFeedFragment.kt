@@ -102,8 +102,11 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                 showMenu(view, feedId, isMyFeed)
             }
 
-            override fun onContentClick(feedId: Long) {
-                navigateToFeedDetail(feedId)
+            override fun onContentClick(
+                feedId: Long,
+                isLiked: Boolean,
+            ) {
+                navigateToFeedDetail(feedId, isLiked)
             }
 
             override fun onNovelInfoClick(novelId: Long) {
@@ -245,18 +248,28 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                     isPublic = feed.isPublic,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
+                    imageUrls = feed.imageUrls,
                 )
             } ?: throw IllegalArgumentException()
 
         activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
 
-    private fun navigateToFeedDetail(feedId: Long) {
+    private fun navigateToFeedDetail(
+        feedId: Long,
+        isLiked: Boolean,
+    ) {
         if (novelFeedViewModel.isLogin.value == false) {
             showLoginRequestDialog()
             return
         }
-        startActivity(FeedDetailActivity.getIntent(requireContext(), feedId))
+        startActivity(
+            FeedDetailActivity.getIntent(
+                context = requireContext(),
+                feedId = feedId,
+                isLiked = isLiked,
+            ),
+        )
     }
 
     override fun onViewCreated(

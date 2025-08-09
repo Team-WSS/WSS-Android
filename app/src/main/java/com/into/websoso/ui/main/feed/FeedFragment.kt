@@ -26,6 +26,7 @@ import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
@@ -51,7 +52,9 @@ import com.into.websoso.databinding.FragmentFeedBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
+import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_DETAIL_LIKE_STATUS
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_ID
+import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_LIKE_COUNT
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.main.feed.adapter.FeedAdapter
 import com.into.websoso.ui.main.feed.adapter.FeedType.Feed
@@ -148,6 +151,18 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     icon = ic_blocked_user_snack_bar,
                 )
             }
+
+            FeedDetailBack.RESULT_OK -> {
+                val updatedFeedId: Long = result.data?.getLongExtra(FEED_ID, -1) ?: -1
+                val updatedLikeStatus: Boolean =
+                    result.data?.getBooleanExtra(FEED_DETAIL_LIKE_STATUS, false) ?: false
+                val updatedLikeCount: Int = result.data?.getIntExtra(FEED_LIKE_COUNT, 0) ?: 0
+                feedViewModel.updateLikedSync(
+                    selectedFeedId = updatedFeedId,
+                    isLiked = updatedLikeStatus,
+                    updatedLikeCount = updatedLikeCount,
+                )
+            }
         }
     }
 
@@ -178,8 +193,11 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 singleEventHandler.throttleFirst { showMenu(view, feedId, isMyFeed) }
             }
 
-            override fun onContentClick(feedId: Long) {
-                singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId) }
+            override fun onContentClick(
+                feedId: Long,
+                isLiked: Boolean,
+            ) {
+                singleEventHandler.throttleFirst(300) { navigateToFeedDetail(feedId, isLiked) }
             }
 
             override fun onNovelInfoClick(novelId: Long) {
@@ -192,11 +210,12 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                 id: Long,
             ) {
                 tracker.trackEvent("feed_like")
-                val likeCount: Int = view
-                    .findViewById<TextView>(tv_feed_thumb_up_count)
-                    .text
-                    .toString()
-                    .toInt()
+                val likeCount: Int =
+                    view
+                        .findViewById<TextView>(tv_feed_thumb_up_count)
+                        .text
+                        .toString()
+                        .toInt()
                 val updatedLikeCount: Int = when (view.isSelected) {
                     true -> if (likeCount > 0) likeCount - 1 else 0
                     false -> likeCount + 1
@@ -206,7 +225,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     updatedLikeCount.toString()
                 view.isSelected = !view.isSelected
 
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                singleEventHandler.debounce(timeMillis = 100L, coroutineScope = lifecycleScope) {
                     feedViewModel.updateLike(id, view.isSelected, updatedLikeCount)
                 }
             }
@@ -344,14 +363,24 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     isPublic = feed.isPublic,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
+                    imageUrls = feed.imageUrls,
                 )
             } ?: throw IllegalArgumentException()
 
         activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
 
-    private fun navigateToFeedDetail(feedId: Long) {
-        activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
+    private fun navigateToFeedDetail(
+        feedId: Long,
+        isLiked: Boolean,
+    ) {
+        activityResultCallback.launch(
+            FeedDetailActivity.getIntent(
+                context = requireContext(),
+                feedId = feedId,
+                isLiked = isLiked,
+            ),
+        )
     }
 
     private fun navigateToNovelDetail(novelId: Long) {

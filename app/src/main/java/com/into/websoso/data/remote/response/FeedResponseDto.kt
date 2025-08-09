@@ -41,4 +41,8 @@ data class FeedResponseDto(
     val isMyFeed: Boolean,
     @SerialName("isPublic")
     val isPublic: Boolean,
+    @SerialName("thumbnailUrl")
+    val thumbnailUrl: String?,
+    @SerialName("imageCount")
+    val imageCount: Int,
 )

@@ -13,6 +13,8 @@ data class FeedModel(
     val isLiked: Boolean,
     val isMyFeed: Boolean,
     val isPublic: Boolean,
+    val imageUrls: List<String>,
+    val imageCount: Int,
     val novel: NovelModel,
     val categories: String = relevantCategories.joinToString(prefix = "", postfix = ""),
 ) {

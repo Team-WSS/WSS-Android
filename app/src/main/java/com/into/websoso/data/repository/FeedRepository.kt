@@ -1,6 +1,9 @@
 package com.into.websoso.data.repository
 
+import android.net.Uri
+import com.into.websoso.core.common.util.ImageCompressor
 import com.into.websoso.data.library.datasource.LibraryLocalDataSource
+import com.into.websoso.data.mapper.MultiPartMapper
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.CommentsEntity
 import com.into.websoso.data.model.FeedEntity
@@ -10,12 +13,18 @@ import com.into.websoso.data.model.UserInterestFeedsEntity
 import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.request.CommentRequestDto
 import com.into.websoso.data.remote.request.FeedRequestDto
+import com.into.websoso.data.util.ImageDownloader
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FeedRepository
     @Inject
     constructor(
         private val feedApi: FeedApi,
+        private val multiPartMapper: MultiPartMapper,
+        private val imageDownloader: ImageDownloader,
+        private val imageCompressor: ImageCompressor,
         private val libraryLocalDataSource: LibraryLocalDataSource,
     ) {
         private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
@@ -45,6 +54,7 @@ class FeedRepository
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
+            images: List<Uri>,
         ) {
             val novel = novelId?.let { id ->
                 libraryLocalDataSource.selectNovelByNovelId(id)
@@ -56,13 +66,18 @@ class FeedRepository
             }
 
             feedApi.postFeed(
-                FeedRequestDto(
-                    relevantCategories = relevantCategories,
-                    feedContent = feedContent,
-                    novelId = novelId,
-                    isSpoiler = isSpoiler,
-                    isPublic = isPublic,
+                feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
+                    target = FeedRequestDto(
+                        relevantCategories = relevantCategories,
+                        feedContent = feedContent,
+                        novelId = novelId,
+                        isSpoiler = isSpoiler,
+                        isPublic = isPublic,
+                    ),
+                    partName = PART_NAME_FEED,
+                    fileName = "feed.json",
                 ),
+                images = images.map { multiPartMapper.formatToMultipart(it) },
             )
         }
 
@@ -74,6 +89,7 @@ class FeedRepository
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
+            images: List<Uri>,
         ) {
             val novel = novelId?.let { id ->
                 libraryLocalDataSource.selectNovelByNovelId(id)
@@ -89,14 +105,19 @@ class FeedRepository
             }
 
             feedApi.putFeed(
-                feedId,
-                FeedRequestDto(
-                    relevantCategories = relevantCategories,
-                    feedContent = editedFeed,
-                    novelId = novelId,
-                    isSpoiler = isSpoiler,
-                    isPublic = isPublic,
+                feedId = feedId,
+                feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
+                    target = FeedRequestDto(
+                        relevantCategories = relevantCategories,
+                        feedContent = editedFeed,
+                        novelId = novelId,
+                        isSpoiler = isSpoiler,
+                        isPublic = isPublic,
+                    ),
+                    partName = "feed",
+                    fileName = "feed.json",
                 ),
+                images = images.map { multiPartMapper.formatToMultipart(it) },
             )
         }
 
@@ -177,5 +198,14 @@ class FeedRepository
             commentId: Long,
         ) {
             feedApi.postImpertinenceComment(feedId, commentId)
+        }
+
+        suspend fun downloadImage(imageUrl: String): Result<Uri?> = imageDownloader.formatImageToUri(imageUrl)
+
+        suspend fun compressImages(imageUris: List<Uri>): List<Uri> = imageCompressor.compressUris(imageUris)
+
+        companion object {
+            private const val PART_NAME_FEED: String = "feed"
+            private const val FILE_NAME_FEED: String = "feed.json"
         }
     }

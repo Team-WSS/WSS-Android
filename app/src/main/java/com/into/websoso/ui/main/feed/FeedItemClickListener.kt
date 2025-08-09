@@ -14,7 +14,10 @@ interface FeedItemClickListener {
         isMyFeed: Boolean,
     )
 
-    fun onContentClick(feedId: Long)
+    fun onContentClick(
+        feedId: Long,
+        isLiked: Boolean,
+    )
 
     fun onNovelInfoClick(novelId: Long)
 
