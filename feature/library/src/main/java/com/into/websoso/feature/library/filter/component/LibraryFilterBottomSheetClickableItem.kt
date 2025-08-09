@@ -1,7 +1,6 @@
 package com.into.websoso.feature.library.filter.component
 
-import android.annotation.SuppressLint
-import androidx.annotation.IntegerRes
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,11 +23,10 @@ import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R
 
-@SuppressLint("ResourceType")
 @Composable
 internal fun LibraryFilterBottomSheetClickableItem(
     onClick: () -> Unit,
-    @IntegerRes icon: Int,
+    @DrawableRes icon: Int,
     iconTitle: String,
     iconSize: Dp,
     horizontalPadding: Dp,
