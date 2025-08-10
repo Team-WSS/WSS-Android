@@ -21,12 +21,14 @@ abstract class BaseActivity<B : ViewDataBinding>(
         enableEdgeToEdge()
         _binding = DataBindingUtil.setContentView(this, layoutResId)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val inset = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val bottom = kotlin.math.max(bars.bottom, ime.bottom)
             v.updatePadding(
-                top = inset.top,
-                bottom = inset.bottom,
-                left = inset.left,
-                right = inset.right,
+                top = bars.top,
+                bottom = bottom,
+                left = bars.left,
+                right = bars.right,
             )
             insets
         }
