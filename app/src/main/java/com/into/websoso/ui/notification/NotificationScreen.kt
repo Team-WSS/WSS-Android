@@ -22,7 +22,6 @@ fun NotificationScreen(
     onNotificationDetailClick: (NotificationModel) -> Unit,
     onFeedDetailClick: (NotificationModel) -> Unit,
     onBackButtonClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.notificationUIState.collectAsStateWithLifecycle()
 
