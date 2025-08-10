@@ -8,6 +8,10 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.into.websoso.R.id.fcv_main
@@ -51,6 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setupBackButtonListener()
         setupBottomNavigationView()
@@ -137,7 +142,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
                 when {
                     it is LibraryFragment && !isLibrary -> hide(it)
                     it != targetFragment -> remove(it)
-                    else -> { /* 아무 것도 하지 않음. 나도 아무 것도 안하고 싶다...격하게 */ }
+                    else -> { // 아무 것도 하지 않음. 나도 아무 것도 안하고 싶다...격하게
+                    }
                 }
             }
 
