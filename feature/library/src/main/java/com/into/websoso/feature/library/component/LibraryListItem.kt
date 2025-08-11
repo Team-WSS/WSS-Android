@@ -215,7 +215,7 @@ private fun NovelInfoDate(item: NovelUiModel) {
 private fun NovelInfoContent(
     title: String,
     myRating: NovelRating?,
-    totalRating: NovelRating,
+    totalRating: Float,
     attractivePoints: AttractivePoints,
 ) {
     val size = calculateThumbnailSize()
@@ -250,14 +250,14 @@ private fun NovelInfoContent(
 @Composable
 private fun NovelRatings(
     myRating: NovelRating?,
-    totalRating: NovelRating,
+    totalRating: Float,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         myRating?.let {
             MyRatingSection(rating = it.rating.value)
             Spacer(modifier = Modifier.width(10.dp))
         }
-        TotalRatingSection(rating = totalRating.rating.value)
+        TotalRatingSection(rating = totalRating)
     }
 }
 
