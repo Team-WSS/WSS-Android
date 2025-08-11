@@ -33,10 +33,7 @@ class LibraryPagingSource(
         )
     }
 
-    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? =
-        state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.userNovelId
-        }
+    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? = DEFAULT_LAST_USER_NOVEL_ID
 
     companion object {
         private const val DEFAULT_LAST_USER_NOVEL_ID = 0L
