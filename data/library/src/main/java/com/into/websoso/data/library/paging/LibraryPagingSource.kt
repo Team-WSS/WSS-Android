@@ -33,7 +33,7 @@ class LibraryPagingSource(
         )
     }
 
-    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long = DEFAULT_LAST_USER_NOVEL_ID
+    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? = DEFAULT_LAST_USER_NOVEL_ID
 
     companion object {
         private const val DEFAULT_LAST_USER_NOVEL_ID = 0L
