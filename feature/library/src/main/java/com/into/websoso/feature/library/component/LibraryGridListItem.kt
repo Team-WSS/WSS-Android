@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -134,7 +135,7 @@ private fun ReadStatusBadge(
 ) {
     Box(
         modifier = modifier
-            .width(48.dp)
+            .widthIn(48.dp)
             .background(
                 color = readStatusUiModel.backgroundColor,
                 shape = RoundedCornerShape(4.dp),
@@ -145,6 +146,7 @@ private fun ReadStatusBadge(
             text = readStatusUiModel.readStatus.label,
             color = White,
             style = WebsosoTheme.typography.label2,
+            maxLines = 1,
         )
     }
 }

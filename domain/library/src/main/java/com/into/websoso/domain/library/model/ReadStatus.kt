@@ -6,7 +6,7 @@ enum class ReadStatus(
 ) {
     WATCHING("WATCHING", "보는중"),
     WATCHED("WATCHED", "봤어요"),
-    QUIT("QUIT", "하차함"),
+    QUIT("QUIT", "하차"),
     ;
 
     companion object {

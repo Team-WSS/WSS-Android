@@ -101,6 +101,7 @@ private fun NovelFilterChipSection(
                 .height(32.dp)
                 .background(color = Gray70),
         )
+
         NovelFilterChip(
             text = libraryFilterUiModel.readStatusLabelText,
             isSelected = libraryFilterUiModel.readStatuses.isSelected,
@@ -108,14 +109,14 @@ private fun NovelFilterChipSection(
         )
 
         NovelFilterChip(
-            text = libraryFilterUiModel.ratingText,
-            isSelected = libraryFilterUiModel.novelRating.isSelected,
+            text = libraryFilterUiModel.attractivePointLabelText,
+            isSelected = libraryFilterUiModel.attractivePoints.isSelected,
             onClick = onFilterClick,
         )
 
         NovelFilterChip(
-            text = libraryFilterUiModel.attractivePointLabelText,
-            isSelected = libraryFilterUiModel.attractivePoints.isSelected,
+            text = libraryFilterUiModel.ratingText,
+            isSelected = libraryFilterUiModel.novelRating.isSelected,
             onClick = onFilterClick,
         )
     }

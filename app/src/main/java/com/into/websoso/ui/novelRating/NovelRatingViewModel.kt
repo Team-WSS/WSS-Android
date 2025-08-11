@@ -307,8 +307,8 @@ class NovelRatingViewModel
                         novelRatingEntity = NovelRatingEntity(
                             userNovelId = novel?.userNovel?.userNovelId,
                             novelId = novel?.novel?.novelId ?: 0,
-                            userNovelRating = novel?.userRating?.novelRating ?: 0.0f,
-                            novelRating = novelRating,
+                            userNovelRating = novelRating,
+                            novelRating = novel?.userRating?.novelRating ?: 0.0f,
                             novelTitle = novel?.novel?.novelTitle,
                             novelImage = novel?.novel?.novelImage,
                             startDate = ratingModel
