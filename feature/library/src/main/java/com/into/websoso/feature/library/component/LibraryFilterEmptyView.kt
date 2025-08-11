@@ -40,7 +40,7 @@ internal fun LibraryFilterEmptyView() {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "해당하는 작품이 없어요\n" +
-                    "다른 검색어를 시도해보세요",
+                    "검색의 범위를 더 넓혀보세요",
                 style = WebsosoTheme.typography.body1,
                 color = Gray200,
                 textAlign = TextAlign.Center,
