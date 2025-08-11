@@ -12,7 +12,7 @@ data class NovelUiModel(
     val novelImage: String,
     val readStatus: ReadStatusUiModel?,
     val userNovelRating: NovelRating?,
-    val novelRating: NovelRating,
+    val novelRating: Float,
     val attractivePoints: AttractivePoints,
     val keywords: List<String>,
     val myFeeds: List<String>,

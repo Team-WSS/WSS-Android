@@ -16,6 +16,7 @@ enum class Rating(
     FOUR(4.0f),
     FOUR_POINT_FIVE(4.5f),
     FOUR_POINT_EIGHT(4.8f),
+    FIVE(5.0f),
     ;
 
     companion object {
