@@ -3,10 +3,17 @@ package com.into.websoso.ui.userStorage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import com.into.websoso.R
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -16,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserStorageActivity : AppCompatActivity(R.layout.activity_storage) {
+class UserStorageActivity : ComponentActivity(R.layout.activity_storage) {
     @Inject
     lateinit var websosoNavigator: NavigatorProvider
     private val libraryViewModel: LibraryViewModel by viewModels()
@@ -24,18 +31,28 @@ class UserStorageActivity : AppCompatActivity(R.layout.activity_storage) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
         setContent {
             WebsosoTheme {
-                LibraryScreen(
-                    libraryViewModel = libraryViewModel,
-                    navigateToNormalExploreActivity = {
-                        websosoNavigator.navigateToNormalExploreActivity(::startActivity)
-                    },
-                    navigateToNovelDetailActivity = { novelId ->
-                        websosoNavigator.navigateToNovelDetailActivity(novelId, ::startActivity)
-                    },
-                )
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .windowInsetsPadding(WindowInsets.systemBars),
+                ) { inner ->
+                    Box(modifier = Modifier.padding(inner)) {
+                        LibraryScreen(
+                            libraryViewModel = libraryViewModel,
+                            navigateToNormalExploreActivity = {
+                                websosoNavigator.navigateToNormalExploreActivity(::startActivity)
+                            },
+                            navigateToNovelDetailActivity = { novelId ->
+                                websosoNavigator.navigateToNovelDetailActivity(
+                                    novelId,
+                                    ::startActivity,
+                                )
+                            },
+                        )
+                    }
+                }
             }
         }
     }
