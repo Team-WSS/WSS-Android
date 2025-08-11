@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.into.websoso.R
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.library.LibraryScreen
@@ -23,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserStorageActivity : ComponentActivity(R.layout.activity_storage) {
+class UserStorageActivity : ComponentActivity() {
     @Inject
     lateinit var websosoNavigator: NavigatorProvider
     private val libraryViewModel: LibraryViewModel by viewModels()
