@@ -7,7 +7,7 @@ import com.into.websoso.core.auth.toAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import kotlin.coroutines.resumeWithException
 class KakaoAuthClient
     @Inject
     constructor(
-        @ApplicationContext private val context: Context,
+        @ActivityContext private val context: Context,
     ) : AuthClient {
         private val client: UserApiClient by lazy { UserApiClient.instance }
         private val isKakaoTalkLoginAvailable: Boolean
