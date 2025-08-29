@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# consumer-rules.pro (feature.signin 모듈)
+# consumer-rules.pro
 -keep class com.kakao.sdk.** { *; }
 -keep interface com.kakao.sdk.** { *; }
 -dontwarn com.kakao.sdk.**

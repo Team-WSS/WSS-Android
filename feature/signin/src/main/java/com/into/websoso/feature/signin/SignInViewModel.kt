@@ -10,13 +10,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,7 +33,6 @@ class SignInViewModel
         )
 
         val uiEffect: Flow<UiEffect> = merge(autoScrollEventFlow, _uiEffect.receiveAsFlow())
-        val error = MutableStateFlow("")
 
         fun signIn(
             platform: AuthPlatform,
@@ -45,14 +42,8 @@ class SignInViewModel
                 runCatching {
                     requireNotNull(signInToPlatform).invoke()
                 }.onSuccess { authToken ->
-                    error.update {
-                        authToken.toString()
-                    }
                     signInWithSuccess(platform, authToken)
                 }.onFailure {
-                    error.update {
-                        it.toString()
-                    }
                     signInWithFailure()
                 }
             }
@@ -68,17 +59,11 @@ class SignInViewModel
                         platform = platform,
                         authToken = authToken,
                     ).onSuccess {
-                        error.update {
-                            it.toString()
-                        }
                         when (accountRepository.isRegisterUser) {
                             true -> _uiEffect.send(UiEffect.NavigateToHome)
                             false -> _uiEffect.send(UiEffect.NavigateToOnboarding)
                         }
                     }.onFailure {
-                        error.update {
-                            it.toString()
-                        }
                         signInWithFailure()
                     }
             }
