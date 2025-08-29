@@ -45,9 +45,7 @@ class KakaoAuthClient
                         }
                     }
 
-                    token != null -> {
-                        loginContinuation.resume(token.accessToken.toAuthToken())
-                    }
+                    token != null -> loginContinuation.resume(token.accessToken.toAuthToken())
 
                     else -> loginWithKakaoAccount(loginContinuation)
                 }
@@ -57,13 +55,9 @@ class KakaoAuthClient
         private fun loginWithKakaoAccount(loginContinuation: CancellableContinuation<AuthToken>) {
             client.loginWithKakaoAccount(context) { token, error ->
                 when {
-                    error != null -> {
-                        loginContinuation.resumeWithException(error)
-                    }
+                    error != null -> loginContinuation.resumeWithException(error)
 
-                    token != null -> {
-                        loginContinuation.resume(token.accessToken.toAuthToken())
-                    }
+                    token != null -> loginContinuation.resume(token.accessToken.toAuthToken())
 
                     else -> {
                         loginContinuation.resumeWithException(
