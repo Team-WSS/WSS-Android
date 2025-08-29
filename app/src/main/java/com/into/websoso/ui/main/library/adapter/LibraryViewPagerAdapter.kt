@@ -1,4 +1,4 @@
-package com.into.websoso.ui.userStorage.adapter
+package com.into.websoso.ui.main.library.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,20 +8,20 @@ import com.into.websoso.databinding.ItemStorageBinding
 import com.into.websoso.ui.userStorage.model.StorageTab
 import com.into.websoso.ui.userStorage.model.UserStorageModel.StorageNovelModel
 
-class UserStorageViewPagerAdapter(
+class LibraryViewPagerAdapter(
     private var novels: List<StorageNovelModel>,
     private val novelClickListener: (novelId: Long) -> Unit,
-) : RecyclerView.Adapter<UserStorageViewPagerViewHolder>() {
+) : RecyclerView.Adapter<LibraryViewPagerViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): UserStorageViewPagerViewHolder {
+    ): LibraryViewPagerViewHolder {
         val binding = ItemStorageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return UserStorageViewPagerViewHolder(binding, novelClickListener)
+        return LibraryViewPagerViewHolder(binding, novelClickListener)
     }
 
     override fun onBindViewHolder(
-        holder: UserStorageViewPagerViewHolder,
+        holder: LibraryViewPagerViewHolder,
         position: Int,
     ) {
         holder.bind(novels)

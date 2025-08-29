@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.into.websoso.R
+import com.into.websoso.R.string.novel_inquire_link
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
@@ -29,7 +30,12 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
     @Inject
     lateinit var tracker: Tracker
 
-    private val normalExploreAdapter: NormalExploreAdapter by lazy { NormalExploreAdapter(::navigateToNovelDetail) }
+    private val normalExploreAdapter: NormalExploreAdapter by lazy {
+        NormalExploreAdapter(
+            ::navigateToNovelDetail,
+            ::navigateToInquire,
+        )
+    }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -114,7 +120,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
 
             override fun onNovelInquireButtonClick() {
                 tracker.trackEvent("contact_novel_search")
-                val inquireUrl = getString(R.string.inquire_link)
+                val inquireUrl = getString(novel_inquire_link)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
                 startActivity(intent)
             }
@@ -135,6 +141,12 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
             val intent = NovelDetailActivity.getIntent(this, novelId)
             startActivity(intent)
         }
+    }
+
+    private fun navigateToInquire() {
+        val inquireUrl = getString(novel_inquire_link)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+        startActivity(intent)
     }
 
     private fun setupObserver() {

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="profileDisclosureViewModel"
             type="com.into.websoso.ui.profileDisclosure.ProfileDisclosureViewModel" />
+
+        <variable
+            name="onToggleClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,24 +43,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_profile_disclosure_complete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:enabled="@{profileDisclosureViewModel.isCompleteButtonEnabled}"
-            android:padding="10dp"
-            android:text="@string/profile_disclosure_complete"
-            android:textAppearance="@style/title2"
-            android:textColor="@color/bg_profile_disclosure_text_selector"
-            app:layout_constraintBottom_toBottomOf="@id/tv_profile_disclosure_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_profile_disclosure_title" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_profile_disclosure_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> onToggleClick.invoke()}"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +57,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingVertical="10dp"
                 android:text="@string/profile_disclosure_private"
                 android:textAppearance="@style/body1"
                 android:textColor="@color/black"
@@ -74,25 +65,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_profile_disclosure_status_button"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sc_profile_disclosure_toggle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@drawable/img_account_info_check_unselected"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:checked="@{profileDisclosureViewModel.isProfilePrivate}"
+                android:clickable="false"
+                android:thumb="@drawable/bg_notification_setting_toggle_thumb"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:track="@drawable/bg_notification_setting_toggle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
-            android:id="@+id/wll_profile_disclosure"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
