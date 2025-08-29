@@ -53,9 +53,7 @@ fun SignInScreen(
                 )
             }
 
-            ShowToast -> {
-                // TODO: 실패 시 커스텀 스낵 바 구현
-            }
+            ShowToast -> {}
 
             NavigateToHome -> websosoNavigator.navigateToMainActivity(context::startActivity)
 

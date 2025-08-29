@@ -34,24 +34,36 @@ class KakaoAuthClient
 
         private fun loginWithKakaotalk(loginContinuation: CancellableContinuation<AuthToken>) {
             client.loginWithKakaoTalk(context) { token, error ->
-                if (error != null) {
-                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                        loginContinuation.resumeWithException(error)
+                when {
+                    error != null -> {
+                        when {
+                            error is ClientError && error.reason == ClientErrorCause.Cancelled -> {
+                                loginWithKakaoAccount(loginContinuation)
+                            }
+
+                            else -> loginWithKakaoAccount(loginContinuation)
+                        }
                     }
 
-                    loginWithKakaoAccount(loginContinuation)
-                } else if (token != null) {
-                    loginContinuation.resume(token.accessToken.toAuthToken())
+                    token != null -> loginContinuation.resume(token.accessToken.toAuthToken())
+
+                    else -> loginWithKakaoAccount(loginContinuation)
                 }
             }
         }
 
         private fun loginWithKakaoAccount(loginContinuation: CancellableContinuation<AuthToken>) {
             client.loginWithKakaoAccount(context) { token, error ->
-                if (error != null) {
-                    loginContinuation.resumeWithException(error)
-                } else if (token != null) {
-                    loginContinuation.resume(token.accessToken.toAuthToken())
+                when {
+                    error != null -> loginContinuation.resumeWithException(error)
+
+                    token != null -> loginContinuation.resume(token.accessToken.toAuthToken())
+
+                    else -> {
+                        loginContinuation.resumeWithException(
+                            IllegalStateException("Both token and error are null"),
+                        )
+                    }
                 }
             }
         }

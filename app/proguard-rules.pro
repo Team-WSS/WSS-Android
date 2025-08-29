@@ -20,11 +20,47 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# kakao login
--keep class com.kakao.sdk.**.model.* { <fields>; }
--keep class * extends com.google.gson.TypeAdapter
-
 # https://github.com/square/okhttp/pull/6792
 -dontwarn org.bouncycastle.jsse.**
 -dontwarn org.conscrypt.*
 -dontwarn org.openjsse.**
+
+# 카카오 SDK 관련 난독화 방지
+-keep class com.kakao.** { *; }
+-keep interface com.kakao.** { *; }
+-dontwarn com.kakao.**
+
+# 카카오 로그인 SDK
+-keep class com.kakao.sdk.** { *; }
+-keep interface com.kakao.sdk.** { *; }
+-dontwarn com.kakao.sdk.**
+
+# 카카오 인증 관련
+-keep class com.kakao.sdk.auth.** { *; }
+-keep class com.kakao.sdk.user.** { *; }
+-keep class com.kakao.sdk.common.** { *; }
+
+# 네트워크 통신 관련
+-keepclassmembers class * {
+    @com.kakao.sdk.** *;
+}
+
+# Retrofit/OkHttp
+-keep class retrofit2.** { *; }
+-keep class okhttp3.** { *; }
+-dontwarn retrofit2.**
+-dontwarn okhttp3.**
+
+# JSON 직렬화 관련
+-keep class com.google.gson.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+# Intent 관련 유지
+-keep class * extends android.app.Activity
+-keepclassmembers class * extends android.app.Activity {
+   public void *(android.view.View);
+}
+
+-keep class *.BuildConfig { *; }

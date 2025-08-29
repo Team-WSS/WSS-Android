@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.into.websoso.core.common.util.setupWhiteStatusBar
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -17,6 +18,7 @@ class NotificationDetailActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         this.setupWhiteStatusBar()
 
         handleBackPressed()
