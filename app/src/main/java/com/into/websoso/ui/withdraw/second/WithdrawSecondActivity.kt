@@ -5,17 +5,28 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
-import com.into.websoso.R
+import com.into.websoso.R.layout.activity_withdraw_second
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.resource.R.drawable.img_account_info_check_selected
+import com.into.websoso.core.resource.R.drawable.img_account_info_check_unselected
+import com.into.websoso.core.resource.R.string.withdraw_reason_etc
+import com.into.websoso.core.resource.R.string.withdraw_reason_inconvenient
+import com.into.websoso.core.resource.R.string.withdraw_reason_not_exist_any_wanted_novel
+import com.into.websoso.core.resource.R.string.withdraw_reason_rarely_using
+import com.into.websoso.core.resource.R.string.withdraw_reason_want_to_delete_content
 import com.into.websoso.databinding.ActivityWithdrawSecondBinding
-import com.into.websoso.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.layout.activity_withdraw_second) {
+class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(activity_withdraw_second) {
     private val withdrawSecondViewModel: WithdrawSecondViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,24 +49,32 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
             }
 
             override fun onWithdrawReasonRarelyUsingButtonClick() {
-                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_rarely_using))
+                withdrawSecondViewModel.updateWithdrawReason(getString(withdraw_reason_rarely_using))
             }
 
             override fun onWithdrawReasonInconvenientButtonClick() {
-                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_inconvenient))
+                withdrawSecondViewModel.updateWithdrawReason(getString(withdraw_reason_inconvenient))
             }
 
             override fun onWithdrawReasonWantToDeleteContentButtonClick() {
-                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_want_to_delete_content))
+                withdrawSecondViewModel.updateWithdrawReason(
+                    getString(
+                        withdraw_reason_want_to_delete_content,
+                    ),
+                )
             }
 
             override fun onWithdrawReasonNotExistAnyWantedNovelButtonClick() {
-                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_not_exist_any_wanted_novel))
+                withdrawSecondViewModel.updateWithdrawReason(
+                    getString(
+                        withdraw_reason_not_exist_any_wanted_novel,
+                    ),
+                )
             }
 
             override fun onWithdrawReasonEtcButtonClick() {
                 binding.etWithdrawEtc.requestFocus()
-                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_etc))
+                withdrawSecondViewModel.updateWithdrawReason(getString(withdraw_reason_etc))
             }
 
             override fun onWithdrawCheckAgreeButtonClick() {
@@ -63,16 +82,14 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
             }
 
             override fun onWithdrawButtonClick() {
-                singleEventHandler.throttleFirst {
-                    withdrawSecondViewModel.withdraw()
-                }
+                singleEventHandler.throttleFirst(event = withdrawSecondViewModel::withdraw)
             }
         }
 
     private fun onWithdrawEtcEditTextFocusListener() {
         binding.etWithdrawEtc.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
-                withdrawSecondViewModel.updateWithdrawReason(getString(R.string.withdraw_reason_etc))
+                withdrawSecondViewModel.updateWithdrawReason(getString(withdraw_reason_etc))
             }
         }
     }
@@ -87,7 +104,7 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
         }
 
         withdrawSecondViewModel.isWithDrawSuccess.observe(this) { isWithdrawSuccess ->
-            if (isWithdrawSuccess) startActivity(LoginActivity.getIntent(this))
+            if (isWithdrawSuccess) websosoNavigator.navigateToLoginActivity(::startActivity)
         }
     }
 
@@ -99,25 +116,25 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
         updateCheckImageState(
             binding.ivWithdrawReasonRarelyUsing,
             selectedReason,
-            getString(R.string.withdraw_reason_rarely_using),
+            getString(withdraw_reason_rarely_using),
         )
         updateCheckImageState(
             binding.ivWithdrawReasonInconvenient,
             selectedReason,
-            getString(R.string.withdraw_reason_inconvenient),
+            getString(withdraw_reason_inconvenient),
         )
         updateCheckImageState(
             binding.ivWithdrawReasonWantToDeleteContent,
             selectedReason,
-            getString(R.string.withdraw_reason_want_to_delete_content),
+            getString(withdraw_reason_want_to_delete_content),
         )
         updateCheckImageState(
             binding.ivWithdrawReasonNotExistAnyWantedNovel,
             selectedReason,
-            getString(R.string.withdraw_reason_not_exist_any_wanted_novel),
+            getString(withdraw_reason_not_exist_any_wanted_novel),
         )
 
-        val isEtcSelected: Boolean = selectedReason == getString(R.string.withdraw_reason_etc)
+        val isEtcSelected: Boolean = selectedReason == getString(withdraw_reason_etc)
         updateEtcCheckImageState(
             binding.ivWithdrawReasonEtc,
             isEtcSelected,
@@ -130,8 +147,8 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
         reason: String,
     ) {
         when (selectedReason) {
-            reason -> checkImage.setImageResource(R.drawable.img_account_info_check_selected)
-            else -> checkImage.setImageResource(R.drawable.img_account_info_check_unselected)
+            reason -> checkImage.setImageResource(img_account_info_check_selected)
+            else -> checkImage.setImageResource(img_account_info_check_unselected)
         }
     }
 
@@ -140,9 +157,9 @@ class WithdrawSecondActivity : BaseActivity<ActivityWithdrawSecondBinding>(R.lay
         isEtcSelected: Boolean,
     ) {
         val imageResource = if (isEtcSelected) {
-            R.drawable.img_account_info_check_selected
+            img_account_info_check_selected
         } else {
-            R.drawable.img_account_info_check_unselected
+            img_account_info_check_unselected
         }
         checkImage.setImageResource(imageResource)
     }

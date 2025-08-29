@@ -3,7 +3,10 @@ package com.into.websoso.ui.notification
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -29,7 +32,8 @@ fun NotificationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(White),
+            .background(White)
+            .windowInsetsPadding(WindowInsets.systemBars),
     ) {
         NotificationAppBar(onBackButtonClick)
         NotificationsContainer(

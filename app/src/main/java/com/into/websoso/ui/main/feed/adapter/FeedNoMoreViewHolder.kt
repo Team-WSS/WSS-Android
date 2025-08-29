@@ -8,16 +8,14 @@ import com.into.websoso.databinding.ItemFeedNoMoreBinding
 class FeedNoMoreViewHolder(
     binding: ItemFeedNoMoreBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     companion object {
-
         fun from(parent: ViewGroup): FeedNoMoreViewHolder =
             FeedNoMoreViewHolder(
                 ItemFeedNoMoreBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false,
-                )
+                ),
             )
     }
 }

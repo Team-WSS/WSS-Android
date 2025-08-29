@@ -9,14 +9,11 @@ import com.into.websoso.ui.novelInfo.NovelInfoFragment
 class NovelDetailPagerAdapter(
     fragmentActivity: FragmentActivity,
     novelId: Long,
-) :
-    FragmentStateAdapter(fragmentActivity) {
+) : FragmentStateAdapter(fragmentActivity) {
     private val fragments =
         arrayOf(NovelInfoFragment.newInstance(novelId), NovelFeedFragment.newInstance(novelId))
 
     override fun getItemCount(): Int = fragments.size
 
-    override fun createFragment(position: Int): Fragment {
-        return fragments[position]
-    }
+    override fun createFragment(position: Int): Fragment = fragments[position]
 }

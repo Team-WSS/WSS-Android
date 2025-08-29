@@ -1,17 +1,22 @@
 package com.into.websoso.ui.accountInfo
 
+import android.app.AlertDialog
+import android.app.AlertDialog.BUTTON_NEGATIVE
+import android.app.AlertDialog.BUTTON_POSITIVE
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import com.into.websoso.R
-import com.into.websoso.R.drawable.ic_novel_detail_check
-import com.into.websoso.R.string.change_user_info_message
+import androidx.core.content.ContextCompat.getColor
+import com.into.websoso.R.color.black
+import com.into.websoso.R.layout.activity_account_info
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeUserInfo
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.core.resource.R.string.change_user_info_message
 import com.into.websoso.databinding.ActivityAccountInfoBinding
 import com.into.websoso.ui.blockedUsers.BlockedUsersActivity
 import com.into.websoso.ui.changeUserInfo.ChangeUserInfoActivity
@@ -20,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AccountInfoActivity : BaseActivity<ActivityAccountInfoBinding>(R.layout.activity_account_info) {
+class AccountInfoActivity : BaseActivity<ActivityAccountInfoBinding>(activity_account_info) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -42,6 +47,7 @@ class AccountInfoActivity : BaseActivity<ActivityAccountInfoBinding>(R.layout.ac
         onWithDrawButtonClick()
         onChangeUserInfoButtonClick()
         onBlockUsersButtonClick()
+        onDeleteCacheButtonClick()
     }
 
     private fun showChangeUserInfoSuccessMessage() {
@@ -91,6 +97,26 @@ class AccountInfoActivity : BaseActivity<ActivityAccountInfoBinding>(R.layout.ac
         binding.clAccountInfoBlockedUserList.setOnClickListener {
             val intent = BlockedUsersActivity.getIntent(this)
             startActivity(intent)
+        }
+    }
+
+    private fun onDeleteCacheButtonClick() {
+        binding.clAccountInfoDeleteCache.setOnClickListener {
+            AlertDialog
+                .Builder(this)
+                .setTitle("캐시 삭제")
+                .setMessage("정말 캐시를 삭제하시겠습니까?")
+                .setPositiveButton("확인") { _, _ ->
+                    accountInfoViewModel.clearCache()
+                }.setNegativeButton("취소", null)
+                .create()
+                .apply {
+                    show()
+                    getButton(BUTTON_POSITIVE)
+                        .setTextColor(getColor(this@AccountInfoActivity, black))
+                    getButton(BUTTON_NEGATIVE)
+                        .setTextColor(getColor(this@AccountInfoActivity, black))
+                }
         }
     }
 

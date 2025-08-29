@@ -1,13 +1,21 @@
 package com.into.websoso.ui.accountInfo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.filter.repository.MyLibraryFilterRepository
+import com.into.websoso.data.library.repository.MyLibraryRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
+import com.into.websoso.ui.accountInfo.UiEffect.NavigateToLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,14 +24,16 @@ class AccountInfoViewModel
     @Inject
     constructor(
         private val userRepository: UserRepository,
-        private val authRepository: AuthRepository,
         private val pushMessageRepository: PushMessageRepository,
+        private val accountRepository: AccountRepository,
+        private val libraryRepository: MyLibraryRepository,
+        private val filterRepository: MyLibraryFilterRepository,
     ) : ViewModel() {
-        private val _userEmail: MutableLiveData<String> = MutableLiveData()
-        val userEmail: LiveData<String> get() = _userEmail
+        private val _userEmail: MutableStateFlow<String> = MutableStateFlow("")
+        val userEmail: StateFlow<String> get() = _userEmail.asStateFlow()
 
-        private val _isLogoutSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
-        val isLogoutSuccess: LiveData<Boolean> get() = _isLogoutSuccess
+        private val _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+        val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
         init {
             updateUserEmail()
@@ -34,23 +44,37 @@ class AccountInfoViewModel
                 runCatching {
                     userRepository.fetchUserInfoDetail()
                 }.onSuccess { userInfo ->
-                    _userEmail.value = userInfo.email
+                    _userEmail.update { userInfo.email }
                 }
             }
         }
 
-        fun logout() {
+        fun signOut() {
             viewModelScope.launch {
-                runCatching {
-                    val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
-                    authRepository.logout(userDeviceIdentifier)
-                }.onSuccess {
-                    _isLogoutSuccess.value = true
-                    authRepository.updateIsAutoLogin(false)
-                    pushMessageRepository.clearFCMToken()
-                }.onFailure {
-                    _isLogoutSuccess.value = false
-                }
+                val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
+
+                accountRepository
+                    .deleteTokens(userDeviceIdentifier)
+                    .onSuccess {
+                        userRepository.removeTermsAgreementChecked()
+                        pushMessageRepository.clearFCMToken()
+                        libraryRepository.deleteAllNovels()
+                        filterRepository.deleteLibraryFilter()
+                        _uiEffect.send(NavigateToLogin)
+                    }.onFailure {
+                        _uiEffect.send(NavigateToLogin)
+                    }
+            }
+        }
+
+        fun clearCache() {
+            viewModelScope.launch {
+                libraryRepository.deleteAllNovels()
+                filterRepository.deleteLibraryFilter()
             }
         }
     }
+
+sealed interface UiEffect {
+    data object NavigateToLogin : UiEffect
+}

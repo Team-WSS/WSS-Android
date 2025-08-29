@@ -13,21 +13,25 @@ import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Novels
 class SearchNovelAdapter(
     private val onNovelClick: (novelId: Long) -> (Unit),
 ) : ListAdapter<SearchNovelItemType, RecyclerView.ViewHolder>(diffCallBack) {
-
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
             is Novels -> NOVELS.ordinal
             is Loading -> LOADING.ordinal
         }
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): RecyclerView.ViewHolder =
         when (ItemType.valueOf(viewType)) {
             NOVELS -> SearchedNovelViewHolder.of(parent, onNovelClick)
             LOADING -> SearchNovelLoadingViewHolder.from(parent)
         }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+    ) {
         when (holder) {
             is SearchedNovelViewHolder -> holder.bind((getItem(position) as Novels).novel)
             is SearchNovelLoadingViewHolder -> return
@@ -36,15 +40,14 @@ class SearchNovelAdapter(
 
     companion object {
         private val diffCallBack = object : DiffUtil.ItemCallback<SearchNovelItemType>() {
-
             override fun areItemsTheSame(
                 oldItem: SearchNovelItemType,
                 newItem: SearchNovelItemType,
-            ): Boolean = when {
-                oldItem is Novels && newItem is Novels -> oldItem.novel.id == newItem.novel.id
-                else -> false
-            }
-
+            ): Boolean =
+                when {
+                    oldItem is Novels && newItem is Novels -> oldItem.novel.id == newItem.novel.id
+                    else -> false
+                }
 
             override fun areContentsTheSame(
                 oldItem: SearchNovelItemType,

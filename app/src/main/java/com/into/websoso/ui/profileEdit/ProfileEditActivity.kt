@@ -12,13 +12,32 @@ import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.forEach
 import androidx.core.widget.addTextChangedListener
-import com.into.websoso.R
+import com.into.websoso.R.color.bg_profile_edit_chip_background_selector
+import com.into.websoso.R.color.bg_profile_edit_chip_stroke_selector
+import com.into.websoso.R.color.bg_profile_edit_chip_text_selector
+import com.into.websoso.R.color.gray_200_AEADB3
+import com.into.websoso.R.color.gray_300_52515F
+import com.into.websoso.R.color.primary_100_6A5DFD
+import com.into.websoso.R.drawable.bg_profile_edit_gray_50_radius_12dp
+import com.into.websoso.R.drawable.bg_profile_edit_gray_70_radius_12dp
+import com.into.websoso.R.drawable.bg_profile_edit_primary_50_radius_12dp
+import com.into.websoso.R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp
+import com.into.websoso.R.drawable.bg_profile_edit_white_stroke_primary_100_radius_12dp
+import com.into.websoso.R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp
+import com.into.websoso.R.layout.activity_profile_edit
+import com.into.websoso.R.style.body2
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.toFloatPxFromDp
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
+import com.into.websoso.core.resource.R.string.novel_rating_save_error
+import com.into.websoso.core.resource.R.string.profile_edit_introduction_max_count
+import com.into.websoso.core.resource.R.string.profile_edit_nickname_max_count
+import com.into.websoso.core.resource.R.string.profile_edit_success
 import com.into.websoso.databinding.ActivityProfileEditBinding
 import com.into.websoso.domain.model.NicknameValidationResult.VALID_NICKNAME
 import com.into.websoso.ui.profileEdit.model.Genre
@@ -29,7 +48,7 @@ import com.into.websoso.ui.profileEdit.model.ProfileEditUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.activity_profile_edit) {
+class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(activity_profile_edit) {
     private val profileEditViewModel: ProfileEditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,17 +106,17 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
                 AppCompatResources
                     .getColorStateList(
                         this,
-                        R.color.primary_100_6A5DFD,
+                        primary_100_6A5DFD,
                     ).defaultColor
             } else {
-                AppCompatResources.getColorStateList(this, R.color.gray_200_AEADB3).defaultColor
+                AppCompatResources.getColorStateList(this, gray_200_AEADB3).defaultColor
             },
         )
         binding.tvProfileEditNicknameCheckDuplicate.setBackgroundResource(
             if (isEnable) {
-                R.drawable.bg_profile_edit_primary_50_radius_12dp
+                bg_profile_edit_primary_50_radius_12dp
             } else {
-                R.drawable.bg_profile_edit_gray_70_radius_12dp
+                bg_profile_edit_gray_70_radius_12dp
             },
         )
         binding.tvProfileEditNicknameCheckDuplicate.isEnabled = isEnable
@@ -107,7 +126,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
         with(binding) {
             tvProfileEditNicknameCount.text = getColoredText(
                 getString(
-                    R.string.profile_edit_nickname_max_count,
+                    profile_edit_nickname_max_count,
                     uiState.profile.nicknameModel.nickname.length,
                 ),
                 listOf(
@@ -117,7 +136,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
                 AppCompatResources
                     .getColorStateList(
                         this@ProfileEditActivity,
-                        R.color.gray_300_52515F,
+                        gray_300_52515F,
                     ).defaultColor,
             )
             tvProfileEditNickname.isSelected = uiState.profile.nicknameModel.nickname
@@ -127,17 +146,20 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
             when {
                 uiState.defaultState -> viewProfileEditNickname.setBackgroundResource(
-                    R.drawable.bg_profile_edit_white_stroke_secondary_100_radius_12dp,
+                    bg_profile_edit_white_stroke_secondary_100_radius_12dp,
                 )
+
                 uiState.profile.nicknameModel.hasFocus -> viewProfileEditNickname.setBackgroundResource(
-                    R.drawable.bg_profile_edit_white_stroke_gray_70_radius_12dp,
+                    bg_profile_edit_white_stroke_gray_70_radius_12dp,
                 )
 
                 uiState.nicknameEditResult == VALID_NICKNAME -> viewProfileEditNickname.setBackgroundResource(
-                    R.drawable.bg_profile_edit_white_stroke_primary_100_radius_12dp,
+                    bg_profile_edit_white_stroke_primary_100_radius_12dp,
                 )
 
-                else -> viewProfileEditNickname.setBackgroundResource(R.drawable.bg_profile_edit_gray_50_radius_12dp)
+                else -> viewProfileEditNickname.setBackgroundResource(
+                    bg_profile_edit_gray_50_radius_12dp,
+                )
             }
 
             ivProfileEditNicknameClear.isSelected = uiState.defaultState
@@ -162,12 +184,12 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
 
     private fun updateIntroductionEditTextUi(introduction: String) {
         binding.tvProfileEditIntroductionCount.text = getColoredText(
-            getString(R.string.profile_edit_introduction_max_count, introduction.length),
+            getString(profile_edit_introduction_max_count, introduction.length),
             listOf(introduction.length.toString()),
             AppCompatResources
                 .getColorStateList(
                     this@ProfileEditActivity,
-                    R.color.gray_300_52515F,
+                    gray_300_52515F,
                 ).defaultColor,
         )
     }
@@ -178,8 +200,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
                 setResult(ProfileEditSuccess.RESULT_OK)
                 showWebsosoToast(
                     this,
-                    getString(R.string.profile_edit_success),
-                    R.drawable.ic_novel_detail_check,
+                    getString(profile_edit_success),
+                    ic_novel_detail_check,
                 )
                 finish()
             }
@@ -187,8 +209,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             ProfileEditResult.Error -> {
                 showWebsosoToast(
                     this,
-                    getString(R.string.novel_rating_save_error),
-                    R.drawable.ic_novel_rating_alert,
+                    getString(novel_rating_save_error),
+                    ic_novel_rating_alert,
                 )
             }
 
@@ -208,10 +230,10 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(R.layout.ac
             WebsosoChip(binding.root.context)
                 .apply {
                     setWebsosoChipText(genre.krName)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.bg_profile_edit_chip_text_selector)
-                    setWebsosoChipStrokeColor(R.color.bg_profile_edit_chip_stroke_selector)
-                    setWebsosoChipBackgroundColor(R.color.bg_profile_edit_chip_background_selector)
+                    setWebsosoChipTextAppearance(body2)
+                    setWebsosoChipTextColor(bg_profile_edit_chip_text_selector)
+                    setWebsosoChipStrokeColor(bg_profile_edit_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(bg_profile_edit_chip_background_selector)
                     setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                     setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                     setWebsosoChipRadius(20f.toFloatPxFromDp())

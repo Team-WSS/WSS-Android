@@ -8,7 +8,6 @@ data class BlockedUsersResponseDto(
     @SerialName("blocks")
     val blocks: List<BlockedUserResponseDto>,
 ) {
-
     @Serializable
     data class BlockedUserResponseDto(
         @SerialName("blockId")

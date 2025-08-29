@@ -95,5 +95,6 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
 
     companion object {
         private const val DETAIL_BOTTOM_SHEET_TAG = "DetailExploreDialogBottomSheet"
+        const val TAG = "ExploreFragment"
     }
 }

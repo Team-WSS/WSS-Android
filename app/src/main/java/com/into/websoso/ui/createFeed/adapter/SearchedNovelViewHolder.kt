@@ -10,7 +10,6 @@ class SearchedNovelViewHolder(
     private val binding: ItemSearchNovelBinding,
     onNovelClick: (novelId: Long) -> (Unit),
 ) : RecyclerView.ViewHolder(binding.root) {
-
     init {
         binding.onClick = onNovelClick
     }
@@ -21,12 +20,14 @@ class SearchedNovelViewHolder(
     }
 
     companion object {
-
         fun of(
-            parent: ViewGroup, novelItemClickListener: (novelId: Long) -> Unit,
+            parent: ViewGroup,
+            novelItemClickListener: (novelId: Long) -> Unit,
         ): SearchedNovelViewHolder {
             val binding = ItemSearchNovelBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false,
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
             )
             return SearchedNovelViewHolder(binding, novelItemClickListener)
         }

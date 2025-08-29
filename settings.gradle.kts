@@ -1,4 +1,7 @@
+rootProject.name = "Websoso"
+
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -15,5 +18,29 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Websoso"
 include(":app")
+
+include(
+    ":core:resource",
+    ":core:common",
+    ":core:designsystem",
+    ":core:auth",
+    ":core:auth-kakao",
+    ":core:network",
+    ":core:datastore",
+    ":core:database",
+)
+
+include(
+    ":data:account",
+    ":data:library",
+)
+
+include(
+    ":domain:library",
+)
+
+include(
+    ":feature:signin",
+    ":feature:library",
+)

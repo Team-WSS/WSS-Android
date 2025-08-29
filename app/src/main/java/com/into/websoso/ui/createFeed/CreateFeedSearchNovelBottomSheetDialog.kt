@@ -7,12 +7,12 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.into.websoso.R
 import com.into.websoso.R.layout.dialog_create_feed_search_novel
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.DialogCreateFeedSearchNovelBinding
 import com.into.websoso.ui.createFeed.adapter.SearchNovelAdapter
 import com.into.websoso.ui.createFeed.adapter.SearchNovelItemType.Loading
@@ -130,7 +130,7 @@ class CreateFeedSearchNovelBottomSheetDialog :
 
     private fun setupNavigateToInquireNovel() {
         tracker.trackEvent("contact_novel_connect")
-        val inquireUrl = getString(R.string.inquire_link)
+        val inquireUrl = getString(novel_inquire_link)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
         binding.tvCreateFeedAddNovelInquireButton.setOnClickListener {
             startActivity(intent)

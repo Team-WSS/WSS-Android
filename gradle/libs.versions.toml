@@ -1,7 +1,7 @@
 [versions]
 # App Versioning
-versionCode = "10015"
-versionName = "1.2.0"
+versionCode = "10022"
+versionName = "1.3.1"
 
 # Gradle Plugin & Kotlin
 android-gradle-plugin = "8.1.3"
@@ -10,6 +10,9 @@ serialization = "1.5.1"
 
 # Dependency Injection
 hilt = "2.48"
+hilt-navigation-compose = "1.2.0"
+dagger = "2.56.1"
+javax-inject = "1"
 
 # Firebase
 google-services = "4.4.2"
@@ -28,6 +31,8 @@ fragment-ktx = "1.6.1"
 lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.1.1"
 security-crypto = "1.1.0-alpha06"
+room = "2.6.1"
+paging = "3.3.6"
 
 # Testing Libraries
 junit = "4.13.2"
@@ -60,6 +65,7 @@ ktlint = "12.1.0"
 
 # Jetpack Compose Libraries
 compose-bom = "2024.12.01"
+compose-compiler = "1.5.2"
 compose-ui = "1.7.6"
 
 [plugins]
@@ -72,8 +78,14 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 
 [libraries]
+# gradle-plugin
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+hilt-gradle-Plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
+
 # AndroidX Libraries
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -84,6 +96,12 @@ fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragm
 lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle-extensions" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 
 # Testing Libraries
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -96,7 +114,11 @@ retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-logging-interceptor" }
+
+# Coroutines Libraries
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # Image Loading Libraries
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -117,6 +139,11 @@ kakao = { module = "com.kakao.sdk:v2-user", version.ref = "kakao" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 
+# Dependency Injection Libraries
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
+
 # Firebase Libraries
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -136,6 +163,7 @@ compose-foundation-layout = { module = "androidx.compose.foundation:foundation-l
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 
 [bundles]
@@ -149,6 +177,7 @@ compose = [
     "compose-material3",
     "compose-runtime-livedata",
     "compose-ui-tooling",
+    "compose-hilt-navigation",
     "coil-compose",
     "lifecycle-runtime-compose",
 ]

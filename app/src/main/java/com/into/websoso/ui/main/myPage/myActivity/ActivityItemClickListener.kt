@@ -7,7 +7,13 @@ interface ActivityItemClickListener {
 
     fun onNovelInfoClick(novelId: Long)
 
-    fun onLikeButtonClick(view: View, feedId: Long)
+    fun onLikeButtonClick(
+        view: View,
+        feedId: Long,
+    )
 
-    fun onMoreButtonClick(view: View, feedId: Long)
+    fun onMoreButtonClick(
+        view: View,
+        feedId: Long,
+    )
 }

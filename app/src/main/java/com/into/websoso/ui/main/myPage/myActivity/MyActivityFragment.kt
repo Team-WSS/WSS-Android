@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -13,11 +15,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.into.websoso.R
+import com.into.websoso.R.id.tv_my_activity_thumb_up_count
+import com.into.websoso.R.layout.fragment_my_activity
 import com.into.websoso.core.common.ui.base.BaseFragment
-import com.into.websoso.core.common.ui.model.ResultFrom
+import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
+import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.showWebsosoSnackBar
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.string.feed_removed_feed_snackbar
 import com.into.websoso.databinding.FragmentMyActivityBinding
 import com.into.websoso.databinding.MenuMyActivityPopupBinding
 import com.into.websoso.ui.activityDetail.ActivityDetailActivity
@@ -25,7 +32,7 @@ import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
-import com.into.websoso.ui.main.feed.dialog.RemoveMenuType
+import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 import com.into.websoso.ui.main.myPage.MyPageViewModel
 import com.into.websoso.ui.main.myPage.myActivity.adapter.MyActivityAdapter
 import com.into.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
@@ -36,7 +43,7 @@ import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_activity) {
+class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(fragment_my_activity) {
     private val myActivityViewModel: MyActivityViewModel by viewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -59,16 +66,16 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
         activityResultCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    ResultFrom.FeedDetailBack.RESULT_OK, ResultFrom.CreateFeed.RESULT_OK, Activity.RESULT_OK -> {
+                    FeedDetailBack.RESULT_OK, CreateFeed.RESULT_OK, Activity.RESULT_OK -> {
                         myActivityViewModel.updateRefreshedActivities()
                     }
 
-                    ResultFrom.FeedDetailRemoved.RESULT_OK -> {
+                    FeedDetailRemoved.RESULT_OK -> {
                         myActivityViewModel.updateRefreshedActivities()
                         showWebsosoSnackBar(
                             view = binding.root,
-                            message = getString(R.string.feed_removed_feed_snackbar),
-                            icon = R.drawable.ic_blocked_user_snack_bar,
+                            message = getString(feed_removed_feed_snackbar),
+                            icon = ic_blocked_user_snack_bar,
                         )
                     }
                 }
@@ -123,22 +130,22 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
     private fun setupVisibility(activities: List<ActivityModel>?) {
         when (activities.isNullOrEmpty()) {
             true -> {
-                binding.clMyActivityExistsNull.visibility = View.VISIBLE
-                binding.nsMyActivityExists.visibility = View.GONE
+                binding.clMyActivityExistsNull.visibility = VISIBLE
+                binding.nsMyActivityExists.visibility = GONE
             }
 
             false -> {
-                binding.clMyActivityExistsNull.visibility = View.GONE
-                binding.nsMyActivityExists.visibility = View.VISIBLE
+                binding.clMyActivityExistsNull.visibility = GONE
+                binding.nsMyActivityExists.visibility = VISIBLE
             }
         }
     }
 
     private fun setupActivityMoreButtonVisibility(activityCount: Int) {
         if (activityCount >= 5) {
-            binding.btnMyActivityMore.visibility = View.VISIBLE
+            binding.btnMyActivityMore.visibility = VISIBLE
         } else {
-            binding.btnMyActivityMore.visibility = View.GONE
+            binding.btnMyActivityMore.visibility = GONE
         }
     }
 
@@ -154,7 +161,12 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
     private fun onClickFeedItem() =
         object : ActivityItemClickListener {
             override fun onContentClick(feedId: Long) {
-                activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
+                activityResultCallback.launch(
+                    FeedDetailActivity.getIntent(
+                        requireContext(),
+                        feedId,
+                    ),
+                )
             }
 
             override fun onNovelInfoClick(novelId: Long) {
@@ -165,18 +177,17 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
                 view: View,
                 feedId: Long,
             ) {
-                val likeCount: Int =
-                    view
-                        .findViewById<TextView>(R.id.tv_my_activity_thumb_up_count)
-                        .text
-                        .toString()
-                        .toInt()
+                val likeCount: Int = view
+                    .findViewById<TextView>(tv_my_activity_thumb_up_count)
+                    .text
+                    .toString()
+                    .toInt()
                 val updatedLikeCount: Int = when (view.isSelected) {
                     true -> if (likeCount > 0) likeCount - 1 else 0
                     false -> likeCount + 1
                 }
 
-                view.findViewById<TextView>(R.id.tv_my_activity_thumb_up_count).text =
+                view.findViewById<TextView>(tv_my_activity_thumb_up_count).text =
                     updatedLikeCount.toString()
                 view.isSelected = !view.isSelected
 
@@ -201,12 +212,7 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
         val binding = MenuMyActivityPopupBinding.inflate(inflater)
 
         _popupWindow?.dismiss()
-        _popupWindow = PopupWindow(
-            binding.root,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            true,
-        ).apply {
+        _popupWindow = PopupWindow(binding.root, WRAP_CONTENT, WRAP_CONTENT, true).apply {
             elevation = POPUP_ELEVATION
             showAsDropDown(view)
         }
@@ -233,6 +239,7 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
                 novelId = feed.novelId,
                 novelTitle = feed.title,
                 isSpoiler = feed.isSpoiler,
+                isPublic = feed.isPublic,
                 feedContent = feed.feedContent,
                 feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
@@ -247,7 +254,7 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
 
     private fun showRemovedDialog(feedId: Long) {
         val dialogFragment = FeedRemoveDialogFragment.newInstance(
-            menuType = RemoveMenuType.REMOVE_FEED.name,
+            menuType = REMOVE_FEED.name,
             event = {
                 myActivityViewModel.updateRemovedFeed(feedId)
             },
@@ -257,7 +264,6 @@ class MyActivityFragment : BaseFragment<FragmentMyActivityBinding>(R.layout.frag
 
     override fun onResume() {
         super.onResume()
-
         view?.requestLayout()
     }
 

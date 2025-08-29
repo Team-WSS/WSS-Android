@@ -12,9 +12,11 @@ data class FeedEntity(
     val isModified: Boolean,
     val isSpoiler: Boolean,
     val isMyFeed: Boolean,
+    val isPublic: Boolean,
     val novel: NovelEntity,
+    val images: List<String>,
+    val imageCount: Int,
 ) {
-
     data class UserEntity(
         val id: Long,
         val nickname: String,

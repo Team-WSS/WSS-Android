@@ -12,8 +12,6 @@ import com.into.websoso.data.model.UserFeedsEntity.UserFeedEntity
 import com.into.websoso.data.model.UserInfoDetailEntity
 import com.into.websoso.data.model.UserInfoEntity
 import com.into.websoso.data.model.UserNovelStatsEntity
-import com.into.websoso.data.model.UserStorageEntity
-import com.into.websoso.data.model.UserStorageEntity.StorageNovelEntity
 import com.into.websoso.data.remote.response.BlockedUsersResponseDto
 import com.into.websoso.data.remote.response.GenrePreferenceResponseDto
 import com.into.websoso.data.remote.response.MyProfileResponseDto
@@ -25,8 +23,6 @@ import com.into.websoso.data.remote.response.UserFeedsResponseDto.UserFeedRespon
 import com.into.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.into.websoso.data.remote.response.UserInfoResponseDto
 import com.into.websoso.data.remote.response.UserNovelStatsResponseDto
-import com.into.websoso.data.remote.response.UserStorageResponseDto
-import com.into.websoso.data.remote.response.UserStorageResponseDto.StorageNovelDto
 import com.into.websoso.ui.main.myPage.myActivity.model.Genres
 
 fun UserInfoResponseDto.toData(): UserInfoEntity =
@@ -101,24 +97,6 @@ fun OtherUserProfileResponseDto.toData(): OtherUserProfileEntity =
         genrePreferences = this.genrePreferences,
     )
 
-fun UserStorageResponseDto.toData(): UserStorageEntity =
-    UserStorageEntity(
-        isLoadable = this.isLoadable,
-        userNovelRating = this.userNovelRating,
-        userNovelCount = this.userNovelCount,
-        userNovels = this.userNovels.map { it.toData() },
-    )
-
-fun StorageNovelDto.toData(): StorageNovelEntity =
-    StorageNovelEntity(
-        author = this.author,
-        userNovelId = this.userNovelId,
-        novelId = this.novelId,
-        novelRating = this.novelRating,
-        novelImage = this.novelImage,
-        title = this.title,
-    )
-
 fun UserFeedsResponseDto.toData(): UserFeedsEntity =
     UserFeedsEntity(
         isLoadable = this.isLoadable,
@@ -133,6 +111,7 @@ fun UserFeedResponseDto.toData(): UserFeedEntity =
         createdDate = this.createdDate,
         isModified = this.isModified,
         isLiked = this.isLiked,
+        isPublic = this.isPublic,
         likeCount = this.likeCount,
         commentCount = this.commentCount,
         novelId = this.novelId,

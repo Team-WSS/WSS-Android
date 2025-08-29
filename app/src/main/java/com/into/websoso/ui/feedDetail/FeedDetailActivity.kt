@@ -8,8 +8,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.ViewGroup.LayoutParams
+import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.addCallback
@@ -20,11 +20,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.into.websoso.R
 import com.into.websoso.R.id.tv_feed_thumb_up_count
 import com.into.websoso.R.layout.activity_feed_detail
-import com.into.websoso.R.string.feed_popup_menu_content_isMyFeed
-import com.into.websoso.R.string.feed_popup_menu_content_report_isNotMyFeed
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
@@ -43,11 +40,16 @@ import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.string.feed_popup_menu_content_isMyFeed
+import com.into.websoso.core.resource.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.into.websoso.core.resource.R.string.other_user_page_withdraw_user
 import com.into.websoso.databinding.ActivityFeedDetailBinding
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
 import com.into.websoso.ui.createFeed.CreateFeedActivity
+import com.into.websoso.ui.expandedFeedImage.ExpandedFeedImageActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
 import com.into.websoso.ui.feedDetail.FeedDetailViewModel.Companion.DEFAULT_NOTIFICATION_ID
@@ -79,6 +81,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private enum class MenuType { COMMENT, FEED }
 
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
+    private val isLiked: Boolean by lazy { intent.getBooleanExtra(FEED_LIKE_STATUS, false) }
     private val feedDetailViewModel: FeedDetailViewModel by viewModels()
     private val feedDetailAdapter: FeedDetailAdapter by lazy {
         FeedDetailAdapter(
@@ -92,12 +95,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
     }
     private val popupMenu: PopupWindow by lazy {
-        PopupWindow(
-            popupBinding.root,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            true,
-        ).apply { elevation = 2f }
+        PopupWindow(popupBinding.root, WRAP_CONTENT, WRAP_CONTENT, true).apply { elevation = 2f }
     }
 
     private fun onFeedContentClick(): FeedDetailClickListener =
@@ -122,7 +120,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     updatedLikeCount.toString()
                 view.isSelected = !view.isSelected
 
-                singleEventHandler.debounce(coroutineScope = lifecycleScope) {
+                singleEventHandler.debounce(timeMillis = 100L, coroutineScope = lifecycleScope) {
                     tracker.trackEvent("feed_detail_like")
                     feedDetailViewModel.updateLike(view.isSelected, updatedLikeCount)
                 }
@@ -143,14 +141,18 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             override fun onFeedDetailClick(view: View) {
                 view.hideKeyboard()
             }
+
+            override fun onFeedImageClick(
+                index: Int,
+                imageUrls: List<String>,
+            ) {
+                navigateToExpandedImage(index, imageUrls)
+            }
         }
 
     private fun navigateToNovelDetail(novelId: Long) {
         activityResultCallback.launch(
-            NovelDetailActivity.getIntent(
-                this@FeedDetailActivity,
-                novelId,
-            ),
+            NovelDetailActivity.getIntent(this@FeedDetailActivity, novelId),
         )
     }
 
@@ -180,11 +182,16 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun navigateToProfile(userId: Long) {
         activityResultCallback.launch(
-            OtherUserPageActivity.getIntent(
-                this@FeedDetailActivity,
-                userId,
-            ),
+            OtherUserPageActivity.getIntent(this@FeedDetailActivity, userId),
         )
+    }
+
+    private fun navigateToExpandedImage(
+        index: Int,
+        imageUrls: List<String>,
+    ) {
+        val intent = ExpandedFeedImageActivity.getIntent(this, index, imageUrls)
+        startActivity(intent)
     }
 
     private fun bindMenuByIsMine(
@@ -229,8 +236,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     novelId = feed.novel.id,
                     novelTitle = feed.novel.title,
                     isSpoiler = feed.isSpoiler,
+                    isPublic = feed.isPublic,
                     feedContent = feed.content,
                     feedCategory = feed.relevantCategories,
+                    imageUrls = feed.imageUrls,
                 )
             } ?: throw IllegalArgumentException()
 
@@ -377,8 +386,8 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     WithdrawUser.RESULT_OK -> {
                         showWebsosoSnackBar(
                             view = binding.root,
-                            message = getString(R.string.other_user_page_withdraw_user),
-                            icon = R.drawable.ic_blocked_user_snack_bar,
+                            message = getString(other_user_page_withdraw_user),
+                            icon = ic_blocked_user_snack_bar,
                         )
                     }
                 }
@@ -400,7 +409,24 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         binding.root.setOnClickListener { it.hideKeyboard() }
 
         binding.ivFeedDetailBackButton.setOnClickListener {
-            setResult(FeedDetailBack.RESULT_OK)
+            val intent = Intent().apply {
+                putExtra(FEED_ID, feedId)
+                putExtra(
+                    FEED_DETAIL_LIKE_STATUS,
+                    feedDetailViewModel.feedDetailUiState.value
+                        ?.feedDetail
+                        ?.feed
+                        ?.isLiked,
+                )
+                putExtra(
+                    FEED_LIKE_COUNT,
+                    feedDetailViewModel.feedDetailUiState.value
+                        ?.feedDetail
+                        ?.feed
+                        ?.likeCount,
+                )
+            }
+            setResult(FeedDetailBack.RESULT_OK, intent)
             if (!isFinishing) finish()
         }
 
@@ -436,7 +462,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun setupView() {
         setupRefreshView()
-        feedDetailViewModel.updateFeedDetail(feedId, Feed)
+        feedDetailViewModel.updateFeedDetail(feedId, Feed, isLiked)
         binding.rvFeedDetail.apply {
             adapter = feedDetailAdapter
             itemAnimator = null
@@ -445,7 +471,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun setupRefreshView() {
         binding.sptrFeedRefresh.apply {
-            setRefreshViewParams(ViewGroup.LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
+            setRefreshViewParams(LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
             setLottieAnimation(LOTTIE_IMAGE)
             setOnRefreshListener {
                 feedDetailViewModel.updateFeedDetail(feedId, FeedDetailRefreshed)
@@ -543,18 +569,23 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     companion object {
         const val FEED_ID: String = "FEED_ID"
+        const val FEED_DETAIL_LIKE_STATUS: String = "FEED_DETAIL_LIKE_STATUS"
+        const val FEED_LIKE_COUNT: String = "FEED_LIKE_COUNT"
         private const val DEFAULT_FEED_ID: Long = -1
         private const val NOTIFICATION_ID: String = "NOTIFICATION_ID"
+        private const val FEED_LIKE_STATUS: String = "FEED_LIKE_STATUS"
         private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(
             context: Context,
             feedId: Long,
             notificationId: Long? = null,
+            isLiked: Boolean = false,
         ): Intent =
             Intent(context, FeedDetailActivity::class.java).apply {
                 putExtra(FEED_ID, feedId)
                 putExtra(NOTIFICATION_ID, notificationId)
+                putExtra(FEED_LIKE_STATUS, isLiked)
             }
     }
 }

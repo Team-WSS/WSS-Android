@@ -20,16 +20,17 @@ class WebsosoChipGroup(
     Note: do not invoke this method from draw(Canvas), onDraw(Canvas), dispatchDraw(Canvas) or any related method.
     Params:
     chip – the websosoChip to add
-    */
+     */
     fun addChip(chip: WebsosoChip) {
         addView(chip)
     }
 
     fun updateSelectedChip(view: View) {
         if (previousChip == null) {
-            children.find { selectedChip ->
-                selectedChip.isSelected
-            }?.isSelected = false
+            children
+                .find { selectedChip ->
+                    selectedChip.isSelected
+                }?.isSelected = false
         }
 
         previousChip = view

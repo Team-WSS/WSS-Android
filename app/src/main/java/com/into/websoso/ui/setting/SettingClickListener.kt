@@ -1,7 +1,6 @@
 package com.into.websoso.ui.setting
 
 interface SettingClickListener {
-
     fun onUserAccountInfoButtonClick()
 
     fun onProfileDisclosureButtonClick()

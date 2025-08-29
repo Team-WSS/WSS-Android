@@ -11,31 +11,33 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ExploreViewModel @Inject constructor(
-    private val novelRepository: NovelRepository,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<SosoPickUiState> = MutableLiveData(SosoPickUiState())
-    val uiState: LiveData<SosoPickUiState> get() = _uiState
+class ExploreViewModel
+    @Inject
+    constructor(
+        private val novelRepository: NovelRepository,
+    ) : ViewModel() {
+        private val _uiState: MutableLiveData<SosoPickUiState> = MutableLiveData(SosoPickUiState())
+        val uiState: LiveData<SosoPickUiState> get() = _uiState
 
-    init {
-        updateSosoPicks()
-    }
+        init {
+            updateSosoPicks()
+        }
 
-    fun updateSosoPicks() {
-        viewModelScope.launch {
-            runCatching {
-                novelRepository.fetchSosoPicks()
-            }.onSuccess { sosoPicks ->
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    sosoPicks = sosoPicks.novels
-                )
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
-                )
+        fun updateSosoPicks() {
+            viewModelScope.launch {
+                runCatching {
+                    novelRepository.fetchSosoPicks()
+                }.onSuccess { sosoPicks ->
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        sosoPicks = sosoPicks.novels,
+                    )
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
             }
         }
     }
-}

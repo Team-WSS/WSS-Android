@@ -5,7 +5,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.repository.AuthRepository
+import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.filter.repository.MyLibraryFilterRepository
+import com.into.websoso.data.library.repository.MyLibraryRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,9 +18,11 @@ import javax.inject.Inject
 class WithdrawSecondViewModel
     @Inject
     constructor(
-        private val authRepository: AuthRepository,
+        private val accountRepository: AccountRepository,
         private val pushMessageRepository: PushMessageRepository,
         private val userRepository: UserRepository,
+        private val libraryRepository: MyLibraryRepository,
+        private val filterRepository: MyLibraryFilterRepository,
     ) : ViewModel() {
         private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
         val withdrawReason: LiveData<String> get() = _withdrawReason
@@ -75,20 +79,20 @@ class WithdrawSecondViewModel
 
         fun withdraw() {
             viewModelScope.launch {
-                runCatching {
-                    val withdrawReason = when (withdrawReason.value) {
-                        ETC_INPUT_REASON -> withdrawEtcReason.value
-                        else -> withdrawReason.value
-                    } ?: ""
-                    authRepository.withdraw(withdrawReason)
-                }.onSuccess {
-                    _isWithDrawSuccess.value = true
-                    authRepository.updateIsAutoLogin(false)
-                    userRepository.removeTermsAgreementChecked()
-                    pushMessageRepository.clearFCMToken()
-                }.onFailure {
-                    _isWithDrawSuccess.value = false
-                }
+                val reason =
+                    if (withdrawReason.value == ETC_INPUT_REASON) withdrawEtcReason.value else withdrawReason.value
+
+                accountRepository
+                    .deleteAccount(reason.orEmpty())
+                    .onSuccess {
+                        _isWithDrawSuccess.value = true
+                        userRepository.removeTermsAgreementChecked()
+                        pushMessageRepository.clearFCMToken()
+                        libraryRepository.deleteAllNovels()
+                        filterRepository.deleteLibraryFilter()
+                    }.onFailure {
+                        _isWithDrawSuccess.value = false
+                    }
             }
         }
 

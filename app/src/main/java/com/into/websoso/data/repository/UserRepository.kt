@@ -16,7 +16,6 @@ import com.into.websoso.data.model.UserFeedsEntity
 import com.into.websoso.data.model.UserInfoDetailEntity
 import com.into.websoso.data.model.UserInfoEntity
 import com.into.websoso.data.model.UserNovelStatsEntity
-import com.into.websoso.data.model.UserStorageEntity
 import com.into.websoso.data.remote.api.UserApi
 import com.into.websoso.data.remote.request.TermsAgreementRequestDto
 import com.into.websoso.data.remote.request.UserInfoRequestDto
@@ -128,22 +127,6 @@ class UserRepository
         suspend fun fetchNovelDetailFirstLaunched() = userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
 
         suspend fun fetchNicknameValidity(nickname: String): Boolean = userApi.getNicknameValidity(nickname).isValid
-
-        suspend fun fetchUserStorage(
-            userId: Long,
-            readStatus: String,
-            lastUserNovelId: Long,
-            size: Int,
-            sortType: String,
-        ): UserStorageEntity =
-            userApi
-                .getUserStorage(
-                    userId = userId,
-                    readStatus = readStatus,
-                    lastUserNovelId = lastUserNovelId,
-                    size = size,
-                    sortType = sortType,
-                ).toData()
 
         suspend fun fetchUserFeeds(
             userId: Long,

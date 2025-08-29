@@ -30,16 +30,21 @@ import com.into.websoso.ui.otherUserPage.otherUserActivity.adapter.OtherUserActi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OtherUserActivityFragment :
-    BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
-
+class OtherUserActivityFragment : BaseFragment<FragmentOtherUserActivityBinding>(R.layout.fragment_other_user_activity) {
     private val otherUserActivityViewModel: OtherUserActivityViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by activityViewModels()
-    private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy { OtherUserActivityAdapter(onClickFeedItem()) }
+    private val otherUserActivityAdapter: OtherUserActivityAdapter by lazy {
+        OtherUserActivityAdapter(
+            onClickFeedItem(),
+        )
+    }
     private var _popupWindow: PopupWindow? = null
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupActivityResultCallback()
         setupUserId()
@@ -49,14 +54,16 @@ class OtherUserActivityFragment :
     }
 
     private fun setupActivityResultCallback() {
-        activityResultCallback = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                ResultFrom.FeedDetailBack.RESULT_OK,
-                ResultFrom.CreateFeed.RESULT_OK -> {
-                    otherUserActivityViewModel.updateRefreshedActivities()
+        activityResultCallback =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    ResultFrom.FeedDetailBack.RESULT_OK,
+                    ResultFrom.CreateFeed.RESULT_OK,
+                    -> {
+                        otherUserActivityViewModel.updateRefreshedActivities()
+                    }
                 }
             }
-        }
     }
 
     private fun setupUserId() {
@@ -98,6 +105,7 @@ class OtherUserActivityFragment :
                     binding.clOtherUserActivityExistsNull.visibility = View.VISIBLE
                     binding.nsOtherUserActivityExists.visibility = View.GONE
                 }
+
                 false -> {
                     binding.clOtherUserActivityExistsNull.visibility = View.GONE
                     binding.nsOtherUserActivityExists.visibility = View.VISIBLE
@@ -147,41 +155,51 @@ class OtherUserActivityFragment :
         }
     }
 
-    private fun onClickFeedItem() = object : ActivityItemClickListener {
-        override fun onContentClick(feedId: Long) {
-            activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
-        }
-
-        override fun onNovelInfoClick(novelId: Long) {
-            startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
-        }
-
-        override fun onLikeButtonClick(view: View, feedId: Long) {
-            val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
-            val currentLikeCount = likeCountTextView.text.toString().toInt()
-
-            val updatedLikeCount: Int = if (view.isSelected) {
-                if (currentLikeCount > 0) currentLikeCount - 1 else 0
-            } else {
-                currentLikeCount + 1
+    private fun onClickFeedItem() =
+        object : ActivityItemClickListener {
+            override fun onContentClick(feedId: Long) {
+                activityResultCallback.launch(FeedDetailActivity.getIntent(requireContext(), feedId))
             }
 
-            likeCountTextView.text = updatedLikeCount.toString()
-            view.isSelected = !view.isSelected
+            override fun onNovelInfoClick(novelId: Long) {
+                startActivity(NovelDetailActivity.getIntent(requireContext(), novelId))
+            }
 
-            otherUserActivityViewModel.updateActivityLike(
-                view.isSelected,
-                feedId,
-                updatedLikeCount,
-            )
+            override fun onLikeButtonClick(
+                view: View,
+                feedId: Long,
+            ) {
+                val likeCountTextView: TextView = view.findViewById(R.id.tv_my_activity_thumb_up_count)
+                val currentLikeCount = likeCountTextView.text.toString().toInt()
+
+                val updatedLikeCount: Int = if (view.isSelected) {
+                    if (currentLikeCount > 0) currentLikeCount - 1 else 0
+                } else {
+                    currentLikeCount + 1
+                }
+
+                likeCountTextView.text = updatedLikeCount.toString()
+                view.isSelected = !view.isSelected
+
+                otherUserActivityViewModel.updateActivityLike(
+                    view.isSelected,
+                    feedId,
+                    updatedLikeCount,
+                )
+            }
+
+            override fun onMoreButtonClick(
+                view: View,
+                feedId: Long,
+            ) {
+                showPopupMenu(view, feedId)
+            }
         }
 
-        override fun onMoreButtonClick(view: View, feedId: Long) {
-            showPopupMenu(view, feedId)
-        }
-    }
-
-    private fun showPopupMenu(view: View, feedId: Long) {
+    private fun showPopupMenu(
+        view: View,
+        feedId: Long,
+    ) {
         val inflater = LayoutInflater.from(requireContext())
         val binding = MenuOtherUserActivityPopupBinding.inflate(inflater)
 
@@ -190,7 +208,7 @@ class OtherUserActivityFragment :
             binding.root,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            true
+            true,
         ).apply {
             elevation = POPUP_ELEVATION
             showAsDropDown(view)
@@ -207,7 +225,10 @@ class OtherUserActivityFragment :
         }
     }
 
-    fun showReportDialog(feedId: Long, menuType: String) {
+    fun showReportDialog(
+        feedId: Long,
+        menuType: String,
+    ) {
         _popupWindow?.dismiss()
         _popupWindow = null
 
@@ -226,7 +247,7 @@ class OtherUserActivityFragment :
                 }
 
                 showReportDoneDialog(menuType)
-            }
+            },
         )
         dialogFragment.show(parentFragmentManager, FeedReportDialogFragment.TAG)
     }
@@ -251,10 +272,11 @@ class OtherUserActivityFragment :
         const val USER_ID_KEY = "userId"
         const val POPUP_ELEVATION = 2f
 
-        fun newInstance(userId: Long) = OtherUserActivityFragment().apply {
-            arguments = Bundle().apply {
-                putLong(USER_ID_KEY, userId)
+        fun newInstance(userId: Long) =
+            OtherUserActivityFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(USER_ID_KEY, userId)
+                }
             }
-        }
     }
 }

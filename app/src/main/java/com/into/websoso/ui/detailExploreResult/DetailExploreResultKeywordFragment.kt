@@ -10,6 +10,12 @@ import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R
+import com.into.websoso.R.color.bg_novel_rating_chip_background_selector
+import com.into.websoso.R.color.bg_novel_rating_chip_stroke_selector
+import com.into.websoso.R.color.bg_novel_rating_chip_text_selector
+import com.into.websoso.R.color.primary_100_6A5DFD
+import com.into.websoso.R.color.white
+import com.into.websoso.R.style.body2
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
@@ -18,6 +24,9 @@ import com.into.websoso.core.common.ui.model.CategoriesModel.Companion.findKeywo
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_keword_remove
+import com.into.websoso.core.resource.R.string.detail_explore_search_hint
+import com.into.websoso.core.resource.R.string.inquire_link
 import com.into.websoso.databinding.FragmentDetailExploreResultKeywordBinding
 import com.into.websoso.ui.detailExplore.keyword.DetailExploreClickListener
 import com.into.websoso.ui.detailExplore.keyword.adapter.DetailExploreKeywordAdapter
@@ -61,7 +70,7 @@ class DetailExploreResultKeywordFragment :
     private fun onDetailExploreKeywordButtonClick() =
         object : DetailExploreClickListener {
             override fun onNovelInquireButtonClick() {
-                val inquireUrl = getString(R.string.inquire_link)
+                val inquireUrl = getString(inquire_link)
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
                 startActivity(intent)
             }
@@ -146,10 +155,10 @@ class DetailExploreResultKeywordFragment :
         WebsosoChip(requireContext())
             .apply {
                 setWebsosoChipText(selectedKeyword.keywordName)
-                setWebsosoChipTextAppearance(R.style.body2)
-                setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-                setWebsosoChipBackgroundColor(R.color.white)
+                setWebsosoChipTextAppearance(body2)
+                setWebsosoChipTextColor(primary_100_6A5DFD)
+                setWebsosoChipStrokeColor(primary_100_6A5DFD)
+                setWebsosoChipBackgroundColor(white)
                 setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                 setWebsosoChipPaddingHorizontal(4f.toFloatPxFromDp())
                 setWebsosoChipRadius(20f.toFloatPxFromDp())
@@ -159,10 +168,10 @@ class DetailExploreResultKeywordFragment :
                     )
                 }
                 setWebsosoChipCloseIconVisibility(true)
-                setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                setWebsosoChipCloseIconDrawable(ic_novel_rating_keword_remove)
                 setWebsosoChipCloseIconSize(20f)
                 setWebsosoChipCloseIconEndPadding(18f)
-                setCloseIconTintResource(R.color.primary_100_6A5DFD)
+                setCloseIconTintResource(primary_100_6A5DFD)
             }.also { websosoChip ->
                 binding.wcgDetailExploreKeywordSelectedKeyword.addChip(websosoChip)
             }
@@ -216,10 +225,10 @@ class DetailExploreResultKeywordFragment :
             WebsosoChip(binding.root.context)
                 .apply {
                     setWebsosoChipText(keyword.keywordName)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipTextAppearance(body2)
+                    setWebsosoChipTextColor(bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(bg_novel_rating_chip_background_selector)
                     setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                     setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                     setWebsosoChipRadius(20f.toFloatPxFromDp())
@@ -235,7 +244,7 @@ class DetailExploreResultKeywordFragment :
 
     private fun setupSearchKeyword() {
         binding.wsetDetailExploreKeywordSearch.apply {
-            setWebsosoSearchHint(getString(R.string.detail_explore_search_hint))
+            setWebsosoSearchHint(getString(detail_explore_search_hint))
         }
     }
 

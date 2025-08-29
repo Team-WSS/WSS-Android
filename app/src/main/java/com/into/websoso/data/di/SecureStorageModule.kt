@@ -22,8 +22,10 @@ object SecureStorageModule {
 
     @Provides
     @Singleton
-    fun provideAppPreferences(@ApplicationContext context: Context): SharedPreferences {
-        return if (BuildConfig.DEBUG) {
+    fun provideAppPreferences(
+        @ApplicationContext context: Context,
+    ): SharedPreferences =
+        if (BuildConfig.DEBUG) {
             context.getSharedPreferences(DEBUG_APP_PREFERENCES_NAME, Context.MODE_PRIVATE)
         } else {
             try {
@@ -34,9 +36,11 @@ object SecureStorageModule {
                 createEncryptedSharedPreferences(APP_PREFERENCES_NAME, context)
             }
         }
-    }
 
-    private fun deleteExistingPreferences(fileName: String, context: Context) {
+    private fun deleteExistingPreferences(
+        fileName: String,
+        context: Context,
+    ) {
         context.deleteSharedPreferences(fileName)
     }
 
@@ -51,7 +55,8 @@ object SecureStorageModule {
         fileName: String,
         context: Context,
     ): SharedPreferences {
-        val masterKey = MasterKey.Builder(context, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+        val masterKey = MasterKey
+            .Builder(context, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
 

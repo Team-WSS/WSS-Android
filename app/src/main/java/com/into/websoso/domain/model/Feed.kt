@@ -12,6 +12,9 @@ data class Feed(
     val isModified: Boolean,
     val isSpoiler: Boolean,
     val isMyFeed: Boolean,
+    val isPublic: Boolean,
+    val imageUrls: List<String>,
+    val imageCount: Int,
     val novel: Novel,
 ) {
     data class User(

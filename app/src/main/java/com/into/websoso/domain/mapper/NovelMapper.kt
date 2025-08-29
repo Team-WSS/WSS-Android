@@ -5,16 +5,15 @@ import com.into.websoso.data.model.ExploreResultEntity.NovelEntity
 import com.into.websoso.domain.model.ExploreResult
 import com.into.websoso.domain.model.ExploreResult.Novel
 
-fun ExploreResultEntity.toDomain(): ExploreResult {
-    return ExploreResult(
+fun ExploreResultEntity.toDomain(): ExploreResult =
+    ExploreResult(
         resultCount = resultCount,
         isLoadable = isLoadable,
         novels = novels.map { it.toDomain() },
     )
-}
 
-fun NovelEntity.toDomain(): Novel {
-    return Novel(
+fun NovelEntity.toDomain(): Novel =
+    Novel(
         id = id,
         title = title,
         author = author,
@@ -23,4 +22,3 @@ fun NovelEntity.toDomain(): Novel {
         rating = rating,
         ratingCount = ratingCount,
     )
-}

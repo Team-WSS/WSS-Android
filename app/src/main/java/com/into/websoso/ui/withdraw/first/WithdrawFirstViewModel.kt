@@ -12,35 +12,37 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WithdrawFirstViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<WithdrawFirstUiState> =
-        MutableLiveData(WithdrawFirstUiState())
-    val uiState: LiveData<WithdrawFirstUiState> get() = _uiState
+class WithdrawFirstViewModel
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+    ) : ViewModel() {
+        private val _uiState: MutableLiveData<WithdrawFirstUiState> =
+            MutableLiveData(WithdrawFirstUiState())
+        val uiState: LiveData<WithdrawFirstUiState> get() = _uiState
 
-    init {
-        viewModelScope.launch {
-            val userId: Long = userRepository.fetchUserId()
-            updateNovelStats(userId)
+        init {
+            viewModelScope.launch {
+                val userId: Long = userRepository.fetchUserId()
+                updateNovelStats(userId)
+            }
         }
-    }
 
-    private fun updateNovelStats(userId: Long) {
-        viewModelScope.launch {
-            runCatching {
-                userRepository.fetchUserNovelStats(userId)
-            }.onSuccess { userNovelStatsEntity ->
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    userNovelStats = userNovelStatsEntity.toUi(),
-                )
-            }.onFailure {
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = true,
-                )
+        private fun updateNovelStats(userId: Long) {
+            viewModelScope.launch {
+                runCatching {
+                    userRepository.fetchUserNovelStats(userId)
+                }.onSuccess { userNovelStatsEntity ->
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        userNovelStats = userNovelStatsEntity.toUi(),
+                    )
+                }.onFailure {
+                    _uiState.value = uiState.value?.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
             }
         }
     }
-}

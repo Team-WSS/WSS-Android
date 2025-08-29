@@ -7,7 +7,7 @@ import coil.decode.SvgDecoder
 import coil.load
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
-import com.into.websoso.R
+import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
 import jp.wasabeef.transformers.coil.BlurTransformation
 
 object BindingAdapter {
@@ -24,13 +24,17 @@ object BindingAdapter {
         isVectorImage: Boolean?,
         isCircularImage: Boolean?,
     ) {
+        if (imageUrl.isNullOrEmpty()) {
+            view.setImageResource(img_loading_thumbnail)
+            return
+        }
         view.load(imageUrl) {
             crossfade(true)
             if (isVectorImage == true) decoderFactory(SvgDecoder.Factory())
             if (cornerRadius != null) transformations(RoundedCornersTransformation(cornerRadius.toFloatPxFromDp()))
             if (blurRadius != null) transformations(BlurTransformation(view.context, blurRadius))
             if (isCircularImage == true) transformations(CircleCropTransformation())
-            error(R.drawable.img_loading_thumbnail)
+            error(img_loading_thumbnail)
         }
     }
 

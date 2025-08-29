@@ -8,35 +8,30 @@ import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity.Recommende
 class RecommendedNovelsByUserTasteAdapter(
     private val onRecommendedNovelClick: (novelId: Long) -> (Unit),
 ) : ListAdapter<RecommendedNovelByUserTasteEntity, RecommendedNovelsByUserTasteViewHolder>(diffUtil) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): RecommendedNovelsByUserTasteViewHolder {
-        return RecommendedNovelsByUserTasteViewHolder.of(parent, onRecommendedNovelClick)
-    }
+    ): RecommendedNovelsByUserTasteViewHolder = RecommendedNovelsByUserTasteViewHolder.of(parent, onRecommendedNovelClick)
 
-    override fun onBindViewHolder(holder: RecommendedNovelsByUserTasteViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecommendedNovelsByUserTasteViewHolder,
+        position: Int,
+    ) {
         holder.bind(getItem(position))
     }
 
     companion object {
         val diffUtil =
             object : DiffUtil.ItemCallback<RecommendedNovelByUserTasteEntity>() {
-
                 override fun areItemsTheSame(
                     oldItem: RecommendedNovelByUserTasteEntity,
                     newItem: RecommendedNovelByUserTasteEntity,
-                ): Boolean {
-                    return oldItem.novelId == newItem.novelId
-                }
+                ): Boolean = oldItem.novelId == newItem.novelId
 
                 override fun areContentsTheSame(
                     oldItem: RecommendedNovelByUserTasteEntity,
                     newItem: RecommendedNovelByUserTasteEntity,
-                ): Boolean {
-                    return oldItem == newItem
-                }
+                ): Boolean = oldItem == newItem
             }
     }
 }

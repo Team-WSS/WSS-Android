@@ -8,12 +8,13 @@ data class NovelInfoUiModel(
     val attractivePoints: List<CharmPoint> = emptyList(),
     val unifiedReviewCount: UnifiedReviewCountModel = UnifiedReviewCountModel(),
     val isAttractivePointsExist: Boolean = attractivePoints.isNotEmpty(),
-    val isUserReviewExist: Boolean = (unifiedReviewCount.watchingCount.count + unifiedReviewCount.watchedCount.count + unifiedReviewCount.quitCount.count) > 0,
+    val isUserReviewExist: Boolean = (
+        unifiedReviewCount.watchingCount.count + unifiedReviewCount.watchedCount.count +
+            unifiedReviewCount.quitCount.count
+    ) >
+        0,
 ) {
-
-    fun formatAttractivePoints(): String {
-        return attractivePoints.joinToString(", ") { it.title }
-    }
+    fun formatAttractivePoints(): String = attractivePoints.joinToString(", ") { it.title }
 }
 
 data class PlatformModel(
@@ -44,7 +45,10 @@ data class UnifiedReviewCountModel(
         )
     }
 
-    private fun formattedHeight(viewHeight: Int, count: Int): Int {
+    private fun formattedHeight(
+        viewHeight: Int,
+        count: Int,
+    ): Int {
         val maxCount = maxOf(watchingCount.count, watchedCount.count, quitCount.count)
         if (maxCount == 0) return 0
         return viewHeight * count / maxCount

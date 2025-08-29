@@ -11,6 +11,7 @@ fun UserFeedEntity.toUi(): ActivityModel =
         createdDate = ActivityModel.formatDate(createdDate),
         isModified = isModified,
         isLiked = isLiked,
+        isPublic = isPublic,
         likeCount = likeCount,
         commentCount = commentCount,
         novelId = novelId,
@@ -20,7 +21,4 @@ fun UserFeedEntity.toUi(): ActivityModel =
         relevantCategories = ActivityModel.translateGenres(relevantCategories ?: emptyList()),
     )
 
-fun List<UserFeedEntity>.toUi(): List<ActivityModel> {
-    return map { it.toUi() }
-}
-
+fun List<UserFeedEntity>.toUi(): List<ActivityModel> = map { it.toUi() }

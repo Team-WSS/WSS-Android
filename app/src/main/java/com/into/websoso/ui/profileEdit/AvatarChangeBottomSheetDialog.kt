@@ -14,14 +14,16 @@ import com.into.websoso.ui.profileEdit.model.Avatar.Companion.animation
 import com.into.websoso.ui.profileEdit.model.AvatarChangeUiState
 import com.into.websoso.ui.profileEdit.model.AvatarModel
 
-class AvatarChangeBottomSheetDialog :
-    BaseBottomSheetDialog<DialogAvatarChangeBinding>(R.layout.dialog_avatar_change) {
+class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBinding>(R.layout.dialog_avatar_change) {
     private val profileEditViewModel: ProfileEditViewModel by activityViewModels()
     private val avatarChangeAdapter: AvatarChangeAdapter by lazy {
         AvatarChangeAdapter { avatarModel -> profileEditViewModel.updateSelectedAvatar(avatarModel) }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         bindViewModel()
         setupDialogBehavior()

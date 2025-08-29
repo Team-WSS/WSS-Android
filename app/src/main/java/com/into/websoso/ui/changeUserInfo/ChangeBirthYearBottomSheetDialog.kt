@@ -5,18 +5,20 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.into.websoso.R
+import com.into.websoso.R.layout.dialog_onboarding_birth_year
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.databinding.DialogOnboardingBirthYearBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
 @AndroidEntryPoint
-class ChangeBirthYearBottomSheetDialog :
-    BaseBottomSheetDialog<DialogOnboardingBirthYearBinding>(R.layout.dialog_onboarding_birth_year) {
+class ChangeBirthYearBottomSheetDialog : BaseBottomSheetDialog<DialogOnboardingBirthYearBinding>(dialog_onboarding_birth_year) {
     private val changeUserInfoViewModel: ChangeUserInfoViewModel by activityViewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupDialogBehavior()

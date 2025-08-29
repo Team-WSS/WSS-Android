@@ -8,15 +8,15 @@ import com.into.websoso.ui.profileEdit.model.AvatarModel
 class AvatarChangeAdapter(
     private val onAvatarClick: (avatar: AvatarModel) -> (Unit),
 ) : ListAdapter<AvatarModel, AvatarChangeViewHolder>(diffUtil) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): AvatarChangeViewHolder {
-        return AvatarChangeViewHolder.of(parent, onAvatarClick)
-    }
+    ): AvatarChangeViewHolder = AvatarChangeViewHolder.of(parent, onAvatarClick)
 
-    override fun onBindViewHolder(holder: AvatarChangeViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: AvatarChangeViewHolder,
+        position: Int,
+    ) {
         if (holder.itemView.tag == null) {
             holder.setupItem(getItem(position))
         } else {
@@ -26,20 +26,15 @@ class AvatarChangeAdapter(
 
     companion object {
         private val diffUtil = object : DiffUtil.ItemCallback<AvatarModel>() {
-
             override fun areItemsTheSame(
                 oldItem: AvatarModel,
                 newItem: AvatarModel,
-            ): Boolean {
-                return oldItem.avatarId == newItem.avatarId
-            }
+            ): Boolean = oldItem.avatarId == newItem.avatarId
 
             override fun areContentsTheSame(
                 oldItem: AvatarModel,
                 newItem: AvatarModel,
-            ): Boolean {
-                return oldItem == newItem
-            }
+            ): Boolean = oldItem == newItem
         }
     }
 }

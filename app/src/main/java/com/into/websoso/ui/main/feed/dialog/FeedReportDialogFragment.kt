@@ -2,14 +2,14 @@ package com.into.websoso.ui.main.feed.dialog
 
 import android.os.Bundle
 import android.view.View
-import com.into.websoso.R
-import com.into.websoso.R.string.report_popup_menu_impertinence_comment
-import com.into.websoso.R.string.report_popup_menu_impertinence_feed
-import com.into.websoso.R.string.report_popup_menu_spoiling_comment
-import com.into.websoso.R.string.report_popup_menu_spoiling_feed
+import com.into.websoso.R.layout.dialog_report_popup_menu
 import com.into.websoso.core.common.ui.base.BaseDialogFragment
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.report_popup_menu_impertinence_comment
+import com.into.websoso.core.resource.R.string.report_popup_menu_impertinence_feed
+import com.into.websoso.core.resource.R.string.report_popup_menu_spoiling_comment
+import com.into.websoso.core.resource.R.string.report_popup_menu_spoiling_feed
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.ui.main.feed.FeedFragment.FeedDialogClickListener
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_COMMENT
@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeedReportDialogFragment : BaseDialogFragment<DialogReportPopupMenuBinding>(R.layout.dialog_report_popup_menu) {
+class FeedReportDialogFragment : BaseDialogFragment<DialogReportPopupMenuBinding>(dialog_report_popup_menu) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -60,9 +60,7 @@ class FeedReportDialogFragment : BaseDialogFragment<DialogReportPopupMenuBinding
     }
 
     private fun setupImpertinenceCommentView() {
-        binding.tvReportPopupMenuTitle.text = getString(
-            report_popup_menu_impertinence_comment,
-        )
+        binding.tvReportPopupMenuTitle.text = getString(report_popup_menu_impertinence_comment)
         binding.tvReportPopupMenuReport.setOnClickListener {
             singleEventHandler.throttleFirst {
                 tracker.trackEvent("alert_feed_abuse")

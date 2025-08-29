@@ -3,7 +3,7 @@ package com.into.websoso.ui.otherUserPage.otherUserLibrary
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.Spanned
+import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -11,27 +11,36 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import coil.load
 import com.google.android.material.chip.Chip
-import com.into.websoso.R
+import com.into.websoso.R.color.gray_300_52515F
+import com.into.websoso.R.color.primary_100_6A5DFD
+import com.into.websoso.R.color.primary_50_F1EFFF
+import com.into.websoso.R.layout.fragment_other_user_library
+import com.into.websoso.R.style.body2
+import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
+import com.into.websoso.core.resource.R.string.my_library_attractive_point_fixed_text
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentOtherUserLibraryBinding
 import com.into.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
-import com.into.websoso.ui.userStorage.UserStorageActivity
-import com.into.websoso.ui.userStorage.model.StorageTab
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R.layout.fragment_other_user_library) {
+class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(fragment_other_user_library) {
+    @Inject
+    lateinit var websosoNavigator: NavigatorProvider
+
     private val otherUserLibraryViewModel: OtherUserLibraryViewModel by viewModels()
     private val restGenrePreferenceAdapter: RestGenrePreferenceAdapter by lazy {
         RestGenrePreferenceAdapter()
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+    private val userId by lazy { arguments?.getLong(USER_ID_KEY) ?: 0L }
 
     override fun onViewCreated(
         view: View,
@@ -55,7 +64,6 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
     }
 
     private fun updateUserId() {
-        val userId = arguments?.getLong(USER_ID_KEY) ?: 0L
         otherUserLibraryViewModel.updateUserId(userId)
     }
 
@@ -110,7 +118,9 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
             updateDominantGenres(uiState.topGenres)
 
             applyTextColors(
-                uiState.translatedAttractivePoints.joinToString(", ") + getString(R.string.my_library_attractive_point_fixed_text),
+                uiState.translatedAttractivePoints.joinToString(", ") + getString(
+                    my_library_attractive_point_fixed_text,
+                ),
             )
         }
     }
@@ -123,12 +133,12 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
     }
 
     private fun applyTextColors(combinedText: String) {
-        val primary100 = requireContext().getColor(R.color.primary_100_6A5DFD)
-        val gray300 = requireContext().getColor(R.color.gray_300_52515F)
+        val primary100 = requireContext().getColor(primary_100_6A5DFD)
+        val gray300 = requireContext().getColor(gray_300_52515F)
 
         val spannableStringBuilder = SpannableStringBuilder()
 
-        val fixedText = getString(R.string.my_library_attractive_point_fixed_text)
+        val fixedText = getString(my_library_attractive_point_fixed_text)
 
         val splitText = combinedText.split(fixedText)
 
@@ -139,7 +149,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
                         ForegroundColorSpan(primary100),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                        SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(attractivePoints)
@@ -150,7 +160,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
                         ForegroundColorSpan(gray300),
                         0,
                         length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                        SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                 }
             spannableStringBuilder.append(fixedSpannable)
@@ -160,7 +170,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
                     ForegroundColorSpan(primary100),
                     0,
                     length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
             }
             spannableStringBuilder.append(spannable)
@@ -180,9 +190,9 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
             text = "${data.keywordName} ${data.keywordCount}"
             isChecked = false
 
-            setChipBackgroundColorResource(R.color.primary_50_F1EFFF)
-            setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_100_6A5DFD))
-            setTextAppearance(R.style.body2)
+            setChipBackgroundColorResource(primary_50_F1EFFF)
+            setTextColor(ContextCompat.getColor(requireContext(), primary_100_6A5DFD))
+            setTextAppearance(body2)
         }
 
     private fun updateDominantGenres(topGenres: List<GenrePreferenceEntity>) {
@@ -198,36 +208,21 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(R
     }
 
     private fun onStorageButtonClick() {
-        val userId = requireNotNull(otherUserLibraryViewModel.userId.value)
+        binding.clOtherUserLibraryTopBar.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                navigateToUserStorageActivity()
+            }
+        }
 
-        val clickMappings = mapOf(
-            binding.clOtherUserLibraryTopBar to StorageTab.INTEREST.readStatus,
-            binding.llOtherUserLibraryStorageInteresting to StorageTab.INTEREST.readStatus,
-            binding.llOtherUserLibraryStorageWatching to StorageTab.WATCHING.readStatus,
-            binding.llOtherUserLibraryStorageWatched to StorageTab.WATCHED.readStatus,
-            binding.llOtherUserLibraryStorageQuit to StorageTab.QUIT.readStatus,
-        )
-
-        clickMappings.forEach { (view, readStatus) ->
-            view.setOnClickListener {
-                singleEventHandler.throttleFirst {
-                    navigateToUserStorageActivity(userId, readStatus)
-                }
+        binding.llOtherUserLibraryStorage.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                navigateToUserStorageActivity()
             }
         }
     }
 
-    private fun navigateToUserStorageActivity(
-        userId: Long,
-        readStatus: String,
-    ) {
-        startActivity(
-            UserStorageActivity.getIntent(
-                context = requireContext(),
-                userId = userId,
-                readStatus = readStatus,
-            ),
-        )
+    private fun navigateToUserStorageActivity() {
+        websosoNavigator.navigateToUserStorageActivity(::startActivity, userId)
     }
 
     override fun onResume() {

@@ -6,15 +6,17 @@ import android.widget.NumberPicker
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.into.websoso.R
+import com.into.websoso.R.layout.dialog_novel_rating_date
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
+import com.into.websoso.core.resource.R.string.novel_rating_date_remove_alert_accept
+import com.into.websoso.core.resource.R.string.novel_rating_date_remove_alert_cancel
+import com.into.websoso.core.resource.R.string.novel_rating_date_remove_alert_title
 import com.into.websoso.databinding.DialogNovelRatingDateBinding
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelRating.model.RatingDateModel
 
-class NovelRatingDateBottomSheetDialog :
-    BaseBottomSheetDialog<DialogNovelRatingDateBinding>(R.layout.dialog_novel_rating_date) {
+class NovelRatingDateBottomSheetDialog : BaseBottomSheetDialog<DialogNovelRatingDateBinding>(dialog_novel_rating_date) {
     private val novelRatingViewModel: NovelRatingViewModel by activityViewModels()
 
     override fun onViewCreated(
@@ -43,14 +45,17 @@ class NovelRatingDateBottomSheetDialog :
             )
             initNumberPickerRange(uiState?.maxDayValue ?: MAX_DAY_VALUE)
             binding.npRatingDateYear.value =
-                uiState.novelRatingModel.ratingDateModel.currentStartDate?.first ?: 1
+                uiState.novelRatingModel.ratingDateModel.currentStartDate
+                    ?.first ?: 1
             binding.npRatingDateMonth.value =
-                uiState.novelRatingModel.ratingDateModel.currentStartDate?.second ?: 1
+                uiState.novelRatingModel.ratingDateModel.currentStartDate
+                    ?.second ?: 1
             binding.npRatingDateDay.value =
-                uiState.novelRatingModel.ratingDateModel.currentStartDate?.third ?: 1
+                uiState.novelRatingModel.ratingDateModel.currentStartDate
+                    ?.third ?: 1
             initNumberPickerValue(
                 uiState.novelRatingModel.ratingDateModel,
-                uiState.isEditingStartDate
+                uiState.isEditingStartDate,
             )
         }
     }
@@ -84,16 +89,15 @@ class NovelRatingDateBottomSheetDialog :
 
     private fun showClearDateInfoAlertDialog() {
         val novelAlertModel = NovelAlertModel(
-            title = getString(R.string.novel_rating_date_remove_alert_title),
-            acceptButtonText = getString(R.string.novel_rating_date_remove_alert_accept),
-            cancelButtonText = getString(R.string.novel_rating_date_remove_alert_cancel),
+            title = getString(novel_rating_date_remove_alert_title),
+            acceptButtonText = getString(novel_rating_date_remove_alert_accept),
+            cancelButtonText = getString(novel_rating_date_remove_alert_cancel),
             onAcceptClick = { novelRatingViewModel.clearCurrentDate() },
         )
 
         NovelAlertDialogFragment
             .newInstance(novelAlertModel)
             .show(parentFragmentManager, NovelAlertDialogFragment.TAG)
-
     }
 
     private fun setupDialogBehavior() {

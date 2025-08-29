@@ -14,7 +14,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface NovelApi {
-
     @GET("novels/{novelId}")
     suspend fun getNovelDetail(
         @Path("novelId") novelId: Long,

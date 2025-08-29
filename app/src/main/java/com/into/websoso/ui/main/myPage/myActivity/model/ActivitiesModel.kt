@@ -14,6 +14,7 @@ data class ActivitiesModel(
         val createdDate: String,
         val isModified: Boolean,
         val isLiked: Boolean,
+        val isPublic: Boolean,
         val likeCount: Int,
         val commentCount: Int,
         val novelId: Long?,
@@ -37,11 +38,10 @@ data class ActivitiesModel(
             private const val INPUT_DATE_FORMAT = "yyyy-MM-dd"
             private const val OUTPUT_DATE_FORMAT = "M월 d일"
 
-            fun translateGenres(relevantCategories: List<String>): String {
-                return relevantCategories.joinToString(", ") { category ->
+            fun translateGenres(relevantCategories: List<String>): String =
+                relevantCategories.joinToString(", ") { category ->
                     Genres.from(category)?.korean ?: category
                 }
-            }
 
             fun formatDate(inputDate: String): String {
                 val inputFormat = SimpleDateFormat(INPUT_DATE_FORMAT, Locale.getDefault())

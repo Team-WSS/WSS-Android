@@ -8,7 +8,14 @@ import android.text.style.UnderlineSpan
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.forEach
-import com.into.websoso.R
+import com.into.websoso.R.color.bg_novel_rating_chip_background_selector
+import com.into.websoso.R.color.bg_novel_rating_chip_stroke_selector
+import com.into.websoso.R.color.bg_novel_rating_chip_text_selector
+import com.into.websoso.R.color.primary_100_6A5DFD
+import com.into.websoso.R.color.primary_50_F1EFFF
+import com.into.websoso.R.drawable.bg_novel_detail_primary_100_radius_8dp
+import com.into.websoso.R.layout.activity_novel_rating
+import com.into.websoso.R.style.body2
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
@@ -18,9 +25,20 @@ import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_keword_remove
+import com.into.websoso.core.resource.R.string.novel_rating_cancel_alert_accept
+import com.into.websoso.core.resource.R.string.novel_rating_cancel_alert_cancel
+import com.into.websoso.core.resource.R.string.novel_rating_cancel_alert_title
+import com.into.websoso.core.resource.R.string.novel_rating_charm_point_exceed
+import com.into.websoso.core.resource.R.string.novel_rating_charm_points
+import com.into.websoso.core.resource.R.string.novel_rating_complete
+import com.into.websoso.core.resource.R.string.novel_rating_save_error
 import com.into.websoso.databinding.ActivityNovelRatingBinding
 import com.into.websoso.ui.novelDetail.NovelAlertDialogFragment
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
+import com.into.websoso.ui.novelDetail.model.NovelDetailModel
 import com.into.websoso.ui.novelRating.model.CharmPoint
 import com.into.websoso.ui.novelRating.model.CharmPoint.Companion.toWrappedCharmPoint
 import com.into.websoso.ui.novelRating.model.NovelRatingUiState
@@ -30,13 +48,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.activity_novel_rating) {
+class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_novel_rating) {
     @Inject
     lateinit var tracker: Tracker
 
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
-    private val novelId: Long by lazy { intent.getLongExtra(NOVEL_ID, 0) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +74,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
 
     private fun setupNovelRating() {
         val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
-        novelRatingViewModel.updateNovelRating(novelId, isInterest)
+        novelRatingViewModel.updateNovelRating(isInterest)
     }
 
     private fun onNovelRatingButtonClick() =
@@ -76,7 +93,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
 
             override fun onSaveClick() {
                 tracker.trackEvent("rate_novel")
-                novelRatingViewModel.updateUserNovelRating(novelId, binding.rbNovelRating.rating)
+                novelRatingViewModel.updateUserNovelRating(binding.rbNovelRating.rating)
             }
 
             override fun onCancelClick() {}
@@ -88,10 +105,10 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
 
     private fun showCancelNovelRatingAlertDialog() {
         val novelAlertModel = NovelAlertModel(
-            title = getString(R.string.novel_rating_cancel_alert_title),
-            acceptButtonText = getString(R.string.novel_rating_cancel_alert_cancel),
-            cancelButtonText = getString(R.string.novel_rating_cancel_alert_accept),
-            acceptButtonColor = R.drawable.bg_novel_detail_primary_100_radius_8dp,
+            title = getString(novel_rating_cancel_alert_title),
+            acceptButtonText = getString(novel_rating_cancel_alert_cancel),
+            cancelButtonText = getString(novel_rating_cancel_alert_accept),
+            acceptButtonColor = bg_novel_detail_primary_100_radius_8dp,
             onCancelClick = { finish() },
         )
 
@@ -128,8 +145,8 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
     private fun handleCharmPointError(uiState: NovelRatingUiState) {
         showWebsosoSnackBar(
             view = binding.root,
-            message = getString(R.string.novel_rating_charm_point_exceed),
-            icon = R.drawable.ic_novel_rating_alert,
+            message = getString(novel_rating_charm_point_exceed),
+            icon = ic_novel_rating_alert,
         )
         novelRatingViewModel.updateCharmPoints(uiState.novelRatingModel.charmPoints.last())
     }
@@ -137,8 +154,8 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
     private fun handleRatingSuccess() {
         showWebsosoToast(
             context = this@NovelRatingActivity,
-            message = getString(R.string.novel_rating_complete),
-            icon = R.drawable.ic_novel_detail_check,
+            message = getString(novel_rating_complete),
+            icon = ic_novel_detail_check,
         )
 
         setResult(NovelRating.RESULT_OK)
@@ -148,8 +165,8 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
     private fun handleRatingError() {
         showWebsosoSnackBar(
             view = binding.root,
-            message = getString(R.string.novel_rating_save_error),
-            icon = R.drawable.ic_novel_rating_alert,
+            message = getString(novel_rating_save_error),
+            icon = ic_novel_rating_alert,
         )
     }
 
@@ -197,10 +214,10 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
             WebsosoChip(this@NovelRatingActivity)
                 .apply {
                     setWebsosoChipText(keyword.keywordName)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.primary_100_6A5DFD)
-                    setWebsosoChipStrokeColor(R.color.primary_100_6A5DFD)
-                    setWebsosoChipBackgroundColor(R.color.primary_50_F1EFFF)
+                    setWebsosoChipTextAppearance(body2)
+                    setWebsosoChipTextColor(primary_100_6A5DFD)
+                    setWebsosoChipStrokeColor(primary_100_6A5DFD)
+                    setWebsosoChipBackgroundColor(primary_50_F1EFFF)
                     setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                     setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                     setWebsosoChipRadius(20f.toFloatPxFromDp())
@@ -209,23 +226,23 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
                         novelRatingViewModel.saveSelectedKeywords()
                     }
                     setWebsosoChipCloseIconVisibility(true)
-                    setWebsosoChipCloseIconDrawable(R.drawable.ic_novel_rating_keword_remove)
+                    setWebsosoChipCloseIconDrawable(ic_novel_rating_keword_remove)
                     setWebsosoChipCloseIconSize(10f.toFloatPxFromDp())
                     setWebsosoChipCloseIconEndPadding(12f.toFloatPxFromDp())
-                    setCloseIconTintResource(R.color.primary_100_6A5DFD)
+                    setCloseIconTintResource(primary_100_6A5DFD)
                 }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
         }
     }
 
     private fun setupCharmPointChips() {
-        getString(R.string.novel_rating_charm_points).toWrappedCharmPoint().forEach { charmPoint ->
+        getString(novel_rating_charm_points).toWrappedCharmPoint().forEach { charmPoint ->
             WebsosoChip(this@NovelRatingActivity)
                 .apply {
                     setWebsosoChipText(charmPoint.title)
-                    setWebsosoChipTextAppearance(R.style.body2)
-                    setWebsosoChipTextColor(R.color.bg_novel_rating_chip_text_selector)
-                    setWebsosoChipStrokeColor(R.color.bg_novel_rating_chip_stroke_selector)
-                    setWebsosoChipBackgroundColor(R.color.bg_novel_rating_chip_background_selector)
+                    setWebsosoChipTextAppearance(body2)
+                    setWebsosoChipTextColor(bg_novel_rating_chip_text_selector)
+                    setWebsosoChipStrokeColor(bg_novel_rating_chip_stroke_selector)
+                    setWebsosoChipBackgroundColor(bg_novel_rating_chip_background_selector)
                     setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
                     setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
                     setWebsosoChipRadius(20f.toFloatPxFromDp())
@@ -263,7 +280,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
     private fun setupWebsosoLoadingLayout() {
         binding.wllNovelRating.setReloadButtonClickListener {
             val isInterest = intent.getBooleanExtra(IS_INTEREST, false)
-            novelRatingViewModel.updateNovelRating(novelId, isInterest)
+            novelRatingViewModel.updateNovelRating(isInterest)
         }
     }
 
@@ -279,28 +296,23 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(R.layout.ac
     }
 
     companion object {
-        private const val NOVEL_ID = "NOVEL_ID"
+        private const val NOVEL = "NOVEL"
+        private const val FEEDS = "FEEDS"
         private const val READ_STATUS = "READ_STATUS"
         private const val IS_INTEREST = "IS_INTEREST"
 
         fun getIntent(
             context: Context,
-            novelId: Long,
-        ): Intent =
-            Intent(context, NovelRatingActivity::class.java).apply {
-                putExtra(NOVEL_ID, novelId)
-            }
-
-        fun getIntent(
-            context: Context,
-            novelId: Long,
+            novel: NovelDetailModel?,
+            feeds: List<String>,
             readStatus: ReadStatus,
             isInterest: Boolean,
         ): Intent =
             Intent(context, NovelRatingActivity::class.java).apply {
-                putExtra(NOVEL_ID, novelId)
                 putExtra(READ_STATUS, readStatus)
                 putExtra(IS_INTEREST, isInterest)
+                putExtra(FEEDS, ArrayList(feeds))
+                putExtra(NOVEL, novel)
             }
     }
 }

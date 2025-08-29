@@ -2,19 +2,20 @@ package com.into.websoso.ui.normalExplore
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
-import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
-import com.into.websoso.R
-import com.into.websoso.R.string.novel_inquire_link
+import com.into.websoso.R.layout.activity_normal_explore
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
@@ -26,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layout.activity_normal_explore) {
+class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activity_normal_explore) {
     @Inject
     lateinit var tracker: Tracker
 
@@ -73,7 +74,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
     private fun onSearchTextEditorActionListener() {
         binding.apply {
             etNormalExploreSearchContent.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == IME_ACTION_SEARCH) {
                     normalExploreViewModel?.updateSearchResult(isSearchButtonClick = true)
                         ?: throw IllegalStateException()
                     binding.etNormalExploreSearchContent.clearFocus()
@@ -88,7 +89,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
 
     private fun hideKeyboard() {
         val inputMethodManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
             binding.etNormalExploreSearchContent.windowToken,
             0,
@@ -121,14 +122,14 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
             override fun onNovelInquireButtonClick() {
                 tracker.trackEvent("contact_novel_search")
                 val inquireUrl = getString(novel_inquire_link)
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+                val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
                 startActivity(intent)
             }
         }
 
     private fun showKeyboard() {
         val inputMethodManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         binding.etNormalExploreSearchContent.requestFocus()
         inputMethodManager.showSoftInput(
             binding.etNormalExploreSearchContent,
@@ -145,7 +146,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(R.layou
 
     private fun navigateToInquire() {
         val inquireUrl = getString(novel_inquire_link)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(inquireUrl))
+        val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
         startActivity(intent)
     }
 
