@@ -6,6 +6,14 @@ plugins {
 
 android {
     setNamespace("core.auth_kakao")
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+
+            consumerProguardFiles("consumer-rules.pro")
+        }
+    }
 }
 
 dependencies {

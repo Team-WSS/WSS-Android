@@ -6,6 +6,14 @@ plugins {
 
 android {
     setNamespace("feature.signin")
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+
+            consumerProguardFiles("consumer-rules.pro")
+        }
+    }
 }
 
 dependencies {
