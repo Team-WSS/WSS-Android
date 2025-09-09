@@ -30,7 +30,7 @@ abstract class BaseActivity<B : ViewDataBinding>(
                 left = bars.left,
                 right = bars.right,
             )
-            insets
+            WindowInsetsCompat.CONSUMED
         }
     }
 }

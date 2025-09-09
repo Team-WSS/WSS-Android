@@ -163,10 +163,14 @@ fun <T> Flow<T>.collectWithLifecycle(
     }
 }
 
-fun Activity.setupWhiteStatusBar() {
+fun Activity.setupWhiteSystemBar() {
     this.window.statusBarColor = White.toArgb()
 
     WindowCompat.getInsetsController(this.window, this.window.decorView).apply {
         isAppearanceLightStatusBars = true
+    }
+
+    WindowCompat.getInsetsController(this.window, this.window.decorView).apply {
+        isAppearanceLightNavigationBars = true
     }
 }
