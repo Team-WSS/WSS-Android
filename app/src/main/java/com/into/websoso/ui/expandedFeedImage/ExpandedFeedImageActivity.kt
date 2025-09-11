@@ -5,20 +5,20 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import com.into.websoso.core.common.ui.model.ResultFrom
-import com.into.websoso.core.common.util.setupWhiteStatusBar
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 
 class ExpandedFeedImageActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setupWhiteStatusBar()
-
+        enableEdgeToEdge()
         setContent {
             WebsosoTheme {
                 ExpandedFeedImageScreen(
                     index = intent.getIntExtra(FEED_IMAGE_INDEX, 0),
-                    imageUrls = intent.getStringArrayListExtra(FEED_IMAGE_URLS) ?: return@WebsosoTheme,
+                    imageUrls = intent.getStringArrayListExtra(FEED_IMAGE_URLS)
+                        ?: return@WebsosoTheme,
                     onBackButtonClick = {
                         setResult(ResultFrom.Notification.RESULT_OK)
                         finish()

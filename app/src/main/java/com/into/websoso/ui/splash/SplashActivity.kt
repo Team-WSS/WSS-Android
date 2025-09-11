@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.provider.Settings.Secure.ANDROID_ID
 import android.provider.Settings.Secure.getString
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.into.websoso.R
 import com.into.websoso.core.common.navigator.NavigatorProvider
+import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.databinding.ActivitySplashBinding
 import com.into.websoso.ui.splash.UiEffect.NavigateToLogin
 import com.into.websoso.ui.splash.UiEffect.NavigateToMain
 import com.into.websoso.ui.splash.UiEffect.ShowDialog
@@ -17,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SplashActivity : AppCompatActivity(R.layout.activity_splash) {
+class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {
     @Inject
     lateinit var websosoNavigator: NavigatorProvider
 

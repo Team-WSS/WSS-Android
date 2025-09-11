@@ -3,10 +3,13 @@ package com.into.websoso.ui.expandedFeedImage
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -40,7 +43,8 @@ fun ExpandedFeedImageScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(ExpandedFeedImageBackground),
+            .background(color = ExpandedFeedImageBackground)
+            .windowInsetsPadding(WindowInsets.systemBars),
     ) {
         HorizontalPager(
             state = pagerState,

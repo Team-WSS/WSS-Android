@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.into.websoso.core.common.navigator.NavigatorProvider
+import com.into.websoso.core.common.util.setupSystemBarIconColor
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.library.LibraryScreen
 import com.into.websoso.feature.library.LibraryViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,11 +34,13 @@ class UserStorageActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        setupSystemBarIconColor(true)
         setContent {
             WebsosoTheme {
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(color = White)
                         .windowInsetsPadding(WindowInsets.systemBars),
                 ) { inner ->
                     Box(modifier = Modifier.padding(inner)) {
