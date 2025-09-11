@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.into.websoso.core.common.navigator.NavigatorProvider
-import com.into.websoso.core.common.util.setupWhiteSystemBar
+import com.into.websoso.core.common.util.setupSystemBarIconColor
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.library.LibraryScreen
@@ -34,7 +34,7 @@ class UserStorageActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setupWhiteSystemBar()
+        setupSystemBarIconColor(true)
         setContent {
             WebsosoTheme {
                 Scaffold(

@@ -14,7 +14,7 @@ import com.google.firebase.analytics.analytics
 import com.into.websoso.core.auth.AuthClient
 import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.navigator.NavigatorProvider
-import com.into.websoso.core.common.util.setupWhiteSystemBar
+import com.into.websoso.core.common.util.setupSystemBarIconColor
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.signin.SignInScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +34,7 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setupWhiteSystemBar()
+        setupSystemBarIconColor(true)
         setContent {
             WebsosoTheme {
                 SignInScreen(

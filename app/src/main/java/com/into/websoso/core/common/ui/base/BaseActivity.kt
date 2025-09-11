@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
@@ -31,6 +32,10 @@ abstract class BaseActivity<B : ViewDataBinding>(
                 right = bars.right,
             )
             WindowInsetsCompat.CONSUMED
+        }
+        WindowCompat.getInsetsController(this.window, this.window.decorView).apply {
+            isAppearanceLightStatusBars = true
+            isAppearanceLightNavigationBars = true
         }
     }
 }
