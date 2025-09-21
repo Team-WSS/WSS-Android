@@ -88,7 +88,7 @@
 </br>
 
 ## 👨‍👩‍👧‍👦 Contributers
-|<img src="https://avatars.githubusercontent.com/u/114990782?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/127238018?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/144861180?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/81347125?v=4" width="125" />|
-|:---------:|:---------:|:---------:|:---------:|
-|👑손명지</br>([MoongChi](https://github.com/m6z1))|최준서</br>([GongBaek](https://github.com/junseo511))|이연진</br>([Sally](https://github.com/yeonjeen))|김세훈</br>([さんくん~☆](https://github.com/s9hn))|
+|<img src="https://avatars.githubusercontent.com/u/114990782?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/81347125?v=4" width="125" />|
+|:---------:|:---------:|
+|👑손명지</br>([MoongChi](https://github.com/m6z1))|김세훈</br>([さんくん~☆](https://github.com/s9hn))|
 </br>
