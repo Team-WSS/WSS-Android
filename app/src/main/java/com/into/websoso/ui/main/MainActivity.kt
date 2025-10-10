@@ -137,7 +137,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         val existingFragment = supportFragmentManager.findFragmentByTag(tag)
         val targetFragment = existingFragment ?: findOrCreateFragment(tag)
 
-        Log.d("123123", tag.toString())
         supportFragmentManager.commit {
             setReorderingAllowed(true)
 
