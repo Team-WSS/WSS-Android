@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -57,6 +58,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         setupObserver()
         onViewGuestClick()
         handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
+        supportFragmentManager.setFragmentResultListener(
+            "NAVIGATE_TO_LIBRARY_FRAGMENT",
+            this,
+        ) { _, _ ->
+            handleNavigation(LIBRARY)
+        }
     }
 
     private fun setupBackButtonListener() {
@@ -130,6 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         val existingFragment = supportFragmentManager.findFragmentByTag(tag)
         val targetFragment = existingFragment ?: findOrCreateFragment(tag)
 
+        Log.d("123123", tag.toString())
         supportFragmentManager.commit {
             setReorderingAllowed(true)
 
