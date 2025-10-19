@@ -1,7 +1,6 @@
 package com.into.websoso.feature.library.filter.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -20,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
@@ -44,7 +44,7 @@ internal fun LibraryFilterBottomSheetButtons(
             modifier = Modifier
                 .fillMaxHeight()
                 .background(color = Gray50)
-                .clickable { onResetClick() }
+                .clickableWithoutRipple { onResetClick() }
                 .padding(
                     vertical = 20.dp,
                     horizontal = 34.dp,
@@ -66,7 +66,7 @@ internal fun LibraryFilterBottomSheetButtons(
             modifier = Modifier
                 .fillMaxHeight()
                 .background(color = Primary100)
-                .clickable { onFilterSearchClick() }
+                .clickableWithoutRipple { onFilterSearchClick() }
                 .padding(vertical = 20.dp)
                 .weight(weight = 1f),
         ) {

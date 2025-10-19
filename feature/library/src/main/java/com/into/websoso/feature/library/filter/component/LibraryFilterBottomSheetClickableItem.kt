@@ -1,7 +1,6 @@
 package com.into.websoso.feature.library.filter.component
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -17,6 +16,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Primary100
@@ -35,7 +35,7 @@ internal fun LibraryFilterBottomSheetClickableItem(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .clickable(onClick = onClick)
+            .clickableWithoutRipple(onClick = onClick)
             .padding(horizontal = horizontalPadding),
     ) {
         Icon(

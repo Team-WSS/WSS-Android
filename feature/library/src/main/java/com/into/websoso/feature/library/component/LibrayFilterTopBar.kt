@@ -3,7 +3,6 @@ package com.into.websoso.feature.library.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -137,7 +137,7 @@ private fun NovelFilterChip(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier
             .defaultMinSize(minHeight = 32.dp)
-            .clickable(onClick = onClick),
+            .clickableWithoutRipple(onClick = onClick),
         border = if (!isSelected) BorderStroke(1.dp, Gray70) else null,
     ) {
         Row(

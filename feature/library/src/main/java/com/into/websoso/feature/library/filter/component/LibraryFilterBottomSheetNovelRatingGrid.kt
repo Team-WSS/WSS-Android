@@ -2,7 +2,6 @@ package com.into.websoso.feature.library.filter.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
@@ -47,7 +47,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                 title = "3.5 이상",
                 modifier = Modifier
                     .weight(weight = 1f)
-                    .clickable {
+                    .clickableWithoutRipple {
                         onRatingClick(THREE_POINT_FIVE)
                     },
                 isSelected = selectedRating.isCloseTo(THREE_POINT_FIVE),
@@ -56,7 +56,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                 title = "4.0 이상",
                 modifier = Modifier
                     .weight(weight = 1f)
-                    .clickable {
+                    .clickableWithoutRipple {
                         onRatingClick(FOUR)
                     },
                 isSelected = selectedRating.isCloseTo(FOUR),
@@ -71,7 +71,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                 title = "4.5 이상",
                 modifier = Modifier
                     .weight(weight = 1f)
-                    .clickable {
+                    .clickableWithoutRipple {
                         onRatingClick(FOUR_POINT_FIVE)
                     },
                 isSelected = selectedRating.isCloseTo(FOUR_POINT_FIVE),
@@ -80,7 +80,7 @@ internal fun LibraryFilterBottomSheetNovelRatingGrid(
                 title = "4.8 이상",
                 modifier = Modifier
                     .weight(weight = 1f)
-                    .clickable {
+                    .clickableWithoutRipple {
                         onRatingClick(FOUR_POINT_EIGHT)
                     },
                 isSelected = selectedRating.isCloseTo(FOUR_POINT_EIGHT),
@@ -102,7 +102,8 @@ private fun NovelRatingItem(
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(size = 8.dp),
-            ).then(
+            )
+            .then(
                 if (isSelected) {
                     Modifier.border(
                         width = 1.dp,
@@ -112,7 +113,8 @@ private fun NovelRatingItem(
                 } else {
                     Modifier
                 },
-            ).padding(vertical = 14.dp, horizontal = 24.dp),
+            )
+            .padding(vertical = 14.dp, horizontal = 24.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(

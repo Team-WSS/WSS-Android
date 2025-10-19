@@ -1,6 +1,5 @@
 package com.into.websoso.feature.library.filter.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_cancel_modal
@@ -38,7 +38,7 @@ internal fun LibraryFilterBottomSheetHeader(
         Box(
             modifier = Modifier
                 .padding(vertical = 20.dp)
-                .clickable {
+                .clickableWithoutRipple {
                     onDismissRequest()
                 },
         ) {
