@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface LibraryRepository {
     val libraryFlow: Flow<PagingData<NovelEntity>>
 
+    suspend fun refresh()
+
     companion object {
         const val PAGE_SIZE = 20
     }

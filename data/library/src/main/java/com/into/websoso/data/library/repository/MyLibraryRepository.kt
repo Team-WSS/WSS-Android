@@ -49,6 +49,10 @@ class MyLibraryRepository
                     ).flow
                 }
 
+        override suspend fun refresh() {
+           libraryLocalDataSource.selectAllNovels().invalidate()
+        }
+
         suspend fun deleteAllNovels() {
             libraryLocalDataSource.deleteAllNovels()
         }

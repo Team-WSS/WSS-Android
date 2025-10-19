@@ -36,6 +36,12 @@ internal class DefaultLibraryLocalDataSource
         override suspend fun insertNovel(novel: NovelEntity) {
             novelDao.apply {
                 val novelIndex = selectNovelByUserNovelId(novel.userNovelId)?.sortIndex ?: 0
+
+                if (novel.readStatus.isEmpty() && novel.isInterest.not()) {
+                    deleteNovel(novelId = novel.novelId)
+                    return
+                }
+
                 insertNovel(novel.toNovelDatabase(novelIndex))
             }
         }
@@ -56,7 +62,23 @@ internal class DefaultLibraryLocalDataSource
         }
 
         override suspend fun deleteNovel(novelId: Long) {
-            novelDao.deleteNovel(novelId)
+            val existedNovel = novelDao.selectNovelByNovelId(novelId) ?: return
+
+            novelDao.apply {
+                if (existedNovel.isInterest) {
+                    val updatedNovel = existedNovel.copy(
+                        readStatus = "",
+                        userNovelRating = 0.0f,
+                        attractivePoints = emptyList(),
+                        startDate = "",
+                        endDate = "",
+                        keywords = emptyList(),
+                    )
+                    insertNovel(updatedNovel)
+                } else {
+                    deleteNovel(novelId)
+                }
+            }
         }
     }
 

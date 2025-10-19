@@ -60,6 +60,11 @@ class LibraryFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        libraryViewModel.refreshLibrary()
+    }
+
     companion object {
         const val TAG = "LibraryFragment"
     }

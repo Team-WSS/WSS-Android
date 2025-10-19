@@ -35,7 +35,7 @@ import javax.inject.Inject
 class LibraryViewModel
     @Inject
     constructor(
-        libraryRepository: LibraryRepository,
+        private val libraryRepository: LibraryRepository,
         private val filterRepository: FilterRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(LibraryUiState())
@@ -72,6 +72,10 @@ class LibraryViewModel
                     }
                 }
             }
+        }
+
+        fun refreshLibrary() {
+            viewModelScope.launch { libraryRepository.refresh() }
         }
 
         fun updateViewType() {

@@ -47,6 +47,9 @@ internal class UserLibraryRepository
                     ).flow
                 }
 
+        override suspend fun refresh() {
+        }
+
         private suspend fun getUserNovels(
             lastUserNovelId: Long,
             libraryFilter: LibraryFilter,
