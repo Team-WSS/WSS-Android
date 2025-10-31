@@ -57,6 +57,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         setupObserver()
         onViewGuestClick()
         handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
+        supportFragmentManager.setFragmentResultListener(
+            "NAVIGATE_TO_LIBRARY_FRAGMENT",
+            this,
+        ) { _, _ ->
+            handleNavigation(LIBRARY)
+        }
     }
 
     private fun setupBackButtonListener() {
