@@ -20,6 +20,7 @@ data class FeedModel(
 ) {
     val formattedCreatedDate: String = " · $createdDate"
     val isEmptyOfRelevantCategories: Boolean = relevantCategories.isEmpty()
+    val isVisible: Boolean get() = !isSpoiler && imageUrls.isNotEmpty()
 
     data class UserModel(
         val id: Long,
