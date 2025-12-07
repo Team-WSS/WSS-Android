@@ -44,3 +44,4 @@ include(
     ":feature:signin",
     ":feature:library",
 )
+include(":data:feed")
