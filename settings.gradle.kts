@@ -34,6 +34,7 @@ include(
 include(
     ":data:account",
     ":data:library",
+    ":data:feed",
 )
 
 include(
@@ -44,4 +45,3 @@ include(
     ":feature:signin",
     ":feature:library",
 )
-include(":data:feed")
