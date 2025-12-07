@@ -25,7 +25,6 @@ import com.into.websoso.core.resource.R.string.my_library_attractive_point_fixed
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyLibraryBinding
-import com.into.websoso.ui.main.MainActivity
 import com.into.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -198,25 +197,15 @@ class MyLibraryFragment : BaseFragment<FragmentMyLibraryBinding>(fragment_my_lib
     private fun onStorageButtonClick() {
         binding.clMyLibraryTopBar.setOnClickListener {
             singleEventHandler.throttleFirst {
-                navigateToLibraryFragment()
+                requireActivity().supportFragmentManager.setFragmentResult("NAVIGATE_TO_LIBRARY_FRAGMENT", Bundle.EMPTY)
             }
         }
 
         binding.llMyLibraryStorage.setOnClickListener {
             singleEventHandler.throttleFirst {
-                navigateToLibraryFragment()
+                requireActivity().supportFragmentManager.setFragmentResult("NAVIGATE_TO_LIBRARY_FRAGMENT", Bundle.EMPTY)
             }
         }
-    }
-
-    private fun navigateToLibraryFragment() {
-        startActivity(
-            MainActivity
-                .getIntent(
-                    context = requireContext(),
-                    destination = MainActivity.FragmentType.LIBRARY,
-                ),
-        )
     }
 
     private fun updateDominantGenres(topGenres: List<GenrePreferenceEntity>) {
