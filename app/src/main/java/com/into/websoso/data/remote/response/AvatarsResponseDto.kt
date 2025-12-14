@@ -11,7 +11,7 @@ data class AvatarsResponseDto(
     @Serializable
     data class AvatarResponseDto(
         @SerialName("avatarProfileId")
-        val avatarId: Int,
+        val avatarId: Long,
         @SerialName("avatarProfileName")
         val avatarName: String,
         @SerialName("avatarProfileLine")

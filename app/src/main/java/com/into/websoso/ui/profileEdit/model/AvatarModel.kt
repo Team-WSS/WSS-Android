@@ -1,7 +1,7 @@
 package com.into.websoso.ui.profileEdit.model
 
 data class AvatarModel(
-    val avatarId: Int = 0,
+    val avatarId: Long = 0,
     val avatarName: String = "",
     val avatarLine: String = "",
     val avatarProfile: String = "",

@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class ProfileModel(
     val nicknameModel: NicknameModel = NicknameModel(),
     val introduction: String = "",
-    val avatarId: Int = 0,
+    val avatarId: Long = 0,
     val avatarThumbnail: String = "",
     val genrePreferences: List<Genre> = emptyList(),
 ) : Parcelable
