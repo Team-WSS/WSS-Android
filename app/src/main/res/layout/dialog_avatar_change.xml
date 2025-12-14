@@ -28,72 +28,78 @@
             android:id="@+id/tv_profile_edit_avatar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="11dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
             android:text="@string/profile_edit_avatar_title"
-            android:textAppearance="@style/title1"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/body2"
+            android:textColor="@color/gray_200_AEADB3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lav_profile_edit_avatar"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="56dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_title"
-            app:lottie_autoPlay="true" />
 
         <TextView
             android:id="@+id/tv_profile_edit_avatar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="11dp"
             android:text="@{viewModel.avatarChangeUiState.selectedAvatar.avatarName}"
             android:textAppearance="@style/headline1"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lav_profile_edit_avatar"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_title"
             tools:text="추락한 악역영애" />
+
+        <ImageView
+            android:id="@+id/iv_profile_edit_avatar"
+            app:loads3ImageUrl="@{viewModel.avatarChangeUiState.selectedAvatar.avatarImage}"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:layout_marginHorizontal="70dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_name" />
 
         <TextView
             android:id="@+id/tv_profile_edit_avatar_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:background="@drawable/bg_avatar_line"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
             android:text="@{viewModel.avatarChangeUiState.selectedAvatar.avatarLine}"
             android:textAppearance="@style/title3"
             android:textColor="@color/gray_300_52515F"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_name"
+            app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_avatar"
             tools:text="만나서 반가워요, 밝보" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_profile_edit_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="18dp"
             android:clipToPadding="false"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_line"
-            tools:itemCount="5"
+            app:spanCount="2"
+            tools:itemCount="10"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/item_profile_edit_avatar"
-            tools:spanCount="3" />
+            tools:spanCount="2" />
 
         <TextView
             android:id="@+id/tv_profile_edit_avatar_setting"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="18dp"
             android:background="@drawable/bg_profile_edit_primary_100_radius_14dp"
             android:onClick="@{() -> onSaveClick.invoke()}"
             android:paddingVertical="14dp"

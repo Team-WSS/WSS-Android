@@ -18,7 +18,7 @@ data class AvatarsResponseDto(
         val avatarLine: String,
         @SerialName("avatarProfileImage")
         val avatarProfileImage: String,
-        @SerialName("avatarProfileCharacterImage")
+        @SerialName("avatarCharacterImage")
         val avatarImage: String,
         @SerialName("isRepresentative")
         val isRepresentative: Boolean,
