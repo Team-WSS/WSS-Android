@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageUrl="@{avatar.avatarThumbnail}"
+            app:loadImageUrl="@{avatar.avatarProfile}"
             tools:src="@drawable/bg_onboarding_oval_gray50" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

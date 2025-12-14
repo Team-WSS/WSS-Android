@@ -18,7 +18,7 @@ class AvatarChangeViewHolder(
     fun setupItem(avatar: AvatarModel) {
         binding.root.tag = avatar.avatarId
         binding.avatar = avatar.copy(
-            avatarThumbnail = binding.root.getS3ImageUrl(avatar.avatarThumbnail),
+            avatarProfile = binding.root.getS3ImageUrl(avatar.avatarProfile),
         )
         binding.isSelected = avatar.isRepresentative
     }

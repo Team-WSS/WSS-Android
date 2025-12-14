@@ -8,6 +8,6 @@ fun AvatarEntity.toUi(nickname: String) =
         avatarId = avatarId,
         avatarName = avatarName,
         avatarLine = avatarLine.format(nickname),
-        avatarThumbnail = avatarProfileImage,
+        avatarProfile = avatarProfileImage,
         isRepresentative = isRepresentative,
     )
