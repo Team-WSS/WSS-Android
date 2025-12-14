@@ -4,6 +4,6 @@ import com.into.websoso.data.remote.response.AvatarsResponseDto
 import retrofit2.http.GET
 
 interface AvatarApi {
-    @GET("avatars")
+    @GET("avatar-profiles")
     suspend fun getAvatars(): AvatarsResponseDto
 }
