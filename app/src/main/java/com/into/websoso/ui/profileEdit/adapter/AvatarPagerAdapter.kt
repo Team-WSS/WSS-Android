@@ -20,6 +20,18 @@ class AvatarPagerAdapter(
         holder.bind(getItem(position))
     }
 
+    override fun onBindViewHolder(
+        holder: AvatarSelectPageViewHolder,
+        position: Int,
+        payloads: MutableList<Any>,
+    ) {
+        if (payloads.isNotEmpty()) {
+            holder.bind(getItem(position))
+        } else {
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
     companion object {
         private val diffUtil = object : DiffUtil.ItemCallback<List<AvatarModel>>() {
             override fun areItemsTheSame(
@@ -29,13 +41,23 @@ class AvatarPagerAdapter(
                 if (oldItem.isNotEmpty() && newItem.isNotEmpty()) {
                     oldItem.first().avatarId == newItem.first().avatarId
                 } else {
-                    oldItem == newItem
+                    oldItem === newItem
                 }
 
             override fun areContentsTheSame(
                 oldItem: List<AvatarModel>,
                 newItem: List<AvatarModel>,
-            ): Boolean = oldItem.zip(newItem).all { (old, new) -> old == new }
+            ): Boolean {
+                if (oldItem.size != newItem.size) return false
+                return oldItem.zip(newItem).all { (old, new) ->
+                    old.avatarId == new.avatarId && old.isRepresentative == new.isRepresentative
+                }
+            }
+
+            override fun getChangePayload(
+                oldItem: List<AvatarModel>,
+                newItem: List<AvatarModel>,
+            ): Any = Unit
         }
     }
 }

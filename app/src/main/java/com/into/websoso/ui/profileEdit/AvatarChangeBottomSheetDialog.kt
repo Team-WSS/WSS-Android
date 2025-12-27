@@ -47,14 +47,15 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
     }
 
     private fun handleAvatarChangeUiState(uiState: AvatarChangeUiState) {
-        when {
-            uiState.loading -> Unit
-
-            uiState.error -> Unit
-
-            uiState.avatars.isNotEmpty() -> {
+        if (uiState.avatars.isNotEmpty()) {
+            if (binding.vpProfileEditAvatar.adapter == null) {
                 setupViewPager()
-                avatarPagerAdapter.submitList(uiState.avatars.chunked(10))
+            }
+
+            val currentPage = binding.vpProfileEditAvatar.currentItem
+
+            avatarPagerAdapter.submitList(uiState.avatars.chunked(10)) {
+                binding.vpProfileEditAvatar.setCurrentItem(currentPage, false)
             }
         }
     }

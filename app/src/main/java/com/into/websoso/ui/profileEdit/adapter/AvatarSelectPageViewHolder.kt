@@ -12,13 +12,14 @@ class AvatarSelectPageViewHolder(
     private val onAvatarClick: (selectedAvatar: AvatarModel) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(items: List<AvatarModel>) {
-        val childAdapter =
-            binding.rvAvatarPage.adapter as? AvatarChangeAdapter
-                ?: AvatarChangeAdapter(onAvatarClick).also { binding.rvAvatarPage.adapter = it }
+        val childAdapter = binding.rvAvatarPage.adapter as? AvatarChangeAdapter
+            ?: AvatarChangeAdapter(onAvatarClick).also {
+                binding.rvAvatarPage.adapter = it
+                binding.rvAvatarPage.layoutManager = GridLayoutManager(binding.root.context, 5)
+                binding.rvAvatarPage.itemAnimator = null
+            }
 
-        binding.rvAvatarPage.layoutManager = GridLayoutManager(binding.root.context, 5)
-
-        childAdapter.submitList(items.toList())
+        childAdapter.submitList(items.map { it.copy() })
     }
 
     companion object {
