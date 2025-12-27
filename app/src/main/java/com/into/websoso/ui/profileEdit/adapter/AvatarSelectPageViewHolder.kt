@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.databinding.ItemAvatarPageBinding
+import com.into.websoso.ui.profileEdit.ColumnSpacingItemDecoration
 import com.into.websoso.ui.profileEdit.model.AvatarModel
 
 class AvatarSelectPageViewHolder(
@@ -15,11 +16,25 @@ class AvatarSelectPageViewHolder(
         val childAdapter = binding.rvAvatarPage.adapter as? AvatarChangeAdapter
             ?: AvatarChangeAdapter(onAvatarClick).also {
                 binding.rvAvatarPage.adapter = it
-                binding.rvAvatarPage.layoutManager = GridLayoutManager(binding.root.context, 5)
+                binding.rvAvatarPage.layoutManager = GridLayoutManager(
+                    binding.root.context,
+                    2,
+                    GridLayoutManager.HORIZONTAL,
+                    false,
+                )
                 binding.rvAvatarPage.itemAnimator = null
+
+                if (binding.rvAvatarPage.itemDecorationCount == 0) {
+                    binding.rvAvatarPage.addItemDecoration(
+                        ColumnSpacingItemDecoration(
+                            2,
+                            12,
+                        ),
+                    )
+                }
             }
 
-        childAdapter.submitList(items.map { it.copy() })
+        childAdapter.submitList(items.toList())
     }
 
     companion object {
