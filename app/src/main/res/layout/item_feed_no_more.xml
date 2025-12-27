@@ -24,7 +24,7 @@
         android:layout_marginBottom="42dp"
         android:text="@string/feed_no_more_content"
         android:textAppearance="@style/body3"
-        android:textColor="@color/gray_200_AEADB3"
+        android:textColor="@color/gray_200_949399"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

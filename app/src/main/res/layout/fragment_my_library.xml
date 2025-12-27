@@ -235,7 +235,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/my_library_unknown_preference"
                 android:textAppearance="@style/body2"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_my_library_unknown_preference_logo" />
@@ -308,7 +308,7 @@
                             android:layout_marginTop="2dp"
                             android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.uiState.topGenres[0].genreCount)}'
                             android:textAppearance="@style/body5"
-                            android:textColor="@color/gray_200_AEADB3"
+                            android:textColor="@color/gray_200_949399"
                             tools:text="12편" />
 
                     </LinearLayout>
@@ -344,7 +344,7 @@
                             android:layout_marginTop="2dp"
                             android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.uiState.topGenres[1].genreCount)}'
                             android:textAppearance="@style/body5"
-                            android:textColor="@color/gray_200_AEADB3"
+                            android:textColor="@color/gray_200_949399"
                             tools:text="12편" />
 
                     </LinearLayout>
@@ -380,7 +380,7 @@
                             android:layout_marginTop="2dp"
                             android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.uiState.topGenres[2].genreCount)}'
                             android:textAppearance="@style/body5"
-                            android:textColor="@color/gray_200_AEADB3"
+                            android:textColor="@color/gray_200_949399"
                             tools:text="12편" />
 
                     </LinearLayout>
@@ -501,7 +501,7 @@
                     android:paddingBottom="10dp"
                     android:text="@string/my_library_unknown_preference"
                     android:textAppearance="@style/body2"
-                    android:textColor="@color/gray_200_AEADB3"
+                    android:textColor="@color/gray_200_949399"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_my_library_unknown_novel_preference_logo" />

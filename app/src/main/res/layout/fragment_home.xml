@@ -147,7 +147,7 @@
                         android:layout_marginTop="2dp"
                         android:text="@string/home_user_interest_recent_feed"
                         android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_AEADB3"
+                        android:textColor="@color/gray_200_949399"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -184,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/home_interest_feed_description"
                         android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_AEADB3"
+                        android:textColor="@color/gray_200_949399"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -225,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/home_no_associated_feed"
                         android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_AEADB3"
+                        android:textColor="@color/gray_200_949399"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -258,7 +258,7 @@
                         android:layout_marginTop="2dp"
                         android:text="@string/home_recommend_novel_by_user_taste_description"
                         android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_AEADB3"
+                        android:textColor="@color/gray_200_949399"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -298,7 +298,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/home_recommend_novel_description"
                         android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_AEADB3"
+                        android:textColor="@color/gray_200_949399"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/explore_normal_search_hint"
                     android:textAppearance="@style/label1"
-                    android:textColor="@color/gray_200_AEADB3"
+                    android:textColor="@color/gray_200_949399"
                     app:layout_constraintBottom_toBottomOf="@id/cl_explore_normal_search"
                     app:layout_constraintStart_toStartOf="@id/cl_explore_normal_search"
                     app:layout_constraintTop_toTopOf="@id/cl_explore_normal_search" />
@@ -98,7 +98,7 @@
                     android:layout_marginTop="4dp"
                     android:text="@string/explore_detail_search_description"
                     android:textAppearance="@style/label1"
-                    android:textColor="@color/gray_200_AEADB3"
+                    android:textColor="@color/gray_200_949399"
                     app:layout_constraintStart_toStartOf="@id/tv_explore_detail_search_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_explore_detail_search_title" />
 
@@ -207,7 +207,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/explore_sosopick_description"
                 android:textAppearance="@style/label1"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintStart_toStartOf="@id/tv_explore_soso_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_explore_soso_title" />
 

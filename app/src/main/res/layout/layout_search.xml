@@ -16,7 +16,7 @@
         android:paddingEnd="8dp"
         android:textAppearance="@style/label1"
         android:textColor="@color/black"
-        android:textColorHint="@color/gray_200_AEADB3"
+        android:textColorHint="@color/gray_200_949399"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_common_search_clear"
         app:layout_constraintStart_toStartOf="parent"

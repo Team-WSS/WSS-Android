@@ -170,7 +170,7 @@
             android:text="@string/profile_edit_duplicate"
             android:textAppearance="@style/body2"
             android:textAlignment="center"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/gray_200_949399"
             app:layout_constraintBottom_toBottomOf="@id/view_profile_edit_nickname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/view_profile_edit_nickname"
@@ -246,7 +246,7 @@
                 android:text="@{viewModel.profileEditUiState.profile.introduction}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
-                android:textColorHint="@color/gray_200_AEADB3"
+                android:textColorHint="@color/gray_200_949399"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -292,7 +292,7 @@
             android:layout_marginTop="6dp"
             android:text="@string/profile_edit_prefer_genre_description"
             android:textAppearance="@style/body5"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/gray_200_949399"
             app:layout_constraintStart_toStartOf="@id/tv_profile_edit_prefer_genre"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_prefer_genre" />
 

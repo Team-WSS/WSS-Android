@@ -177,7 +177,7 @@
                 android:gravity="center"
                 android:text="@string/detail_explore_keyword_not_exist_result"
                 android:textAppearance="@style/body1"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintBottom_toTopOf="@id/tv_detail_explore_keyword_inquire_keyword_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

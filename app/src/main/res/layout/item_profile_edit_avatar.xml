@@ -19,8 +19,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:onClick="@{() -> onAvatarClick.invoke(avatar)}">
 
         <View

@@ -33,7 +33,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/onboarding_recommend_general"
             android:textAppearance="@style/body2"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/gray_200_949399"
             app:layout_constraintStart_toStartOf="@id/tv_onboarding_third_select_genre"
             app:layout_constraintTop_toBottomOf="@id/tv_onboarding_third_select_genre" />
 

@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/normal_explore_result_inquire"
                 android:textAppearance="@style/body4"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +62,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/gray_200_AEADB3"
+                android:background="@color/gray_200_949399"
                 app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_inquire_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_normal_explore_inquire_button" />
