@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserProfileEditRequestDto(
     @SerialName("avatarId")
-    val avatarId: Int?,
+    val avatarId: Long?,
     @SerialName("nickname")
     val nickname: String?,
     @SerialName("intro")

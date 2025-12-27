@@ -92,7 +92,7 @@
             android:layout_marginStart="4dp"
             android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/gray_200_949399"
             app:isVisible="@{activity.isModified}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_my_activity_created_date"
             app:layout_constraintStart_toEndOf="@+id/tv_my_activity_created_date"
@@ -252,7 +252,7 @@
                 android:maxLines="1"
                 android:text='@{String.valueOf(activity.likeCount)}'
                 android:textAppearance="@style/body2"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_thumb_up"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_my_activity_thumb_up"
@@ -291,7 +291,7 @@
                 android:maxLines="1"
                 android:text='@{String.valueOf(activity.commentCount)}'
                 android:textAppearance="@style/body2"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_my_activity_comment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_my_activity_comment"
@@ -317,7 +317,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_create_novel_lock"
-                app:tint="@color/gray_200_AEADB3" />
+                app:tint="@color/gray_200_949399" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -325,7 +325,7 @@
                 android:layout_marginStart="6dp"
                 android:text="@string/feed_private_label"
                 android:textAppearance="@style/body4"
-                android:textColor="@color/gray_200_AEADB3" />
+                android:textColor="@color/gray_200_949399" />
         </LinearLayout>
 
         <View

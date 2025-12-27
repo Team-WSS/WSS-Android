@@ -19,13 +19,14 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:onClick="@{() -> onAvatarClick.invoke(avatar)}">
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="@{() -> onAvatarClick.invoke(avatar)}"
+        android:layout_marginBottom="12dp">
 
         <View
-            android:layout_width="62dp"
-            android:layout_height="62dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@drawable/bg_profile_edit_oval_primary_100"
             android:visibility="invisible"
             app:isInvisibleMode="@{true}"
@@ -36,14 +37,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             app:isCircularImage="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageUrl="@{avatar.avatarThumbnail}"
+            app:loadImageUrl="@{avatar.avatarProfile}"
             tools:src="@drawable/bg_onboarding_oval_gray50" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

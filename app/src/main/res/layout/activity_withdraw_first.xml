@@ -50,7 +50,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/withdraw_description"
             android:textAppearance="@style/body2"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/gray_200_949399"
             app:layout_constraintStart_toStartOf="@id/tv_withdraw_first_title"
             app:layout_constraintTop_toBottomOf="@id/tv_withdraw_first_title" />
 

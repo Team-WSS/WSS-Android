@@ -5,18 +5,20 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AvatarsResponseDto(
-    @SerialName("avatars")
+    @SerialName("avatarProfiles")
     val avatars: List<AvatarResponseDto>,
 ) {
     @Serializable
     data class AvatarResponseDto(
-        @SerialName("avatarId")
-        val avatarId: Int,
-        @SerialName("avatarName")
+        @SerialName("avatarProfileId")
+        val avatarId: Long,
+        @SerialName("avatarProfileName")
         val avatarName: String,
-        @SerialName("avatarLine")
+        @SerialName("avatarProfileLine")
         val avatarLine: String,
-        @SerialName("avatarImage")
+        @SerialName("avatarProfileImage")
+        val avatarProfileImage: String,
+        @SerialName("avatarCharacterImage")
         val avatarImage: String,
         @SerialName("isRepresentative")
         val isRepresentative: Boolean,

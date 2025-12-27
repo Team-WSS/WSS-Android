@@ -17,7 +17,7 @@ import coil.load
 import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
 import com.into.websoso.R.color.bg_detail_explore_chip_text_selector
-import com.into.websoso.R.color.gray_200_AEADB3
+import com.into.websoso.R.color.gray_200_949399
 import com.into.websoso.R.layout.activity_create_feed
 import com.into.websoso.R.style.body2
 import com.into.websoso.R.style.body4
@@ -81,7 +81,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         binding.wsetCreateFeedSearchNovel.apply {
             setWebsosoFocusableInTouchMode(false)
             setWebsosoSearchHint(getString(wset_create_feed_search_novel))
-            setWebsosoSearchHintTextColor(gray_200_AEADB3)
+            setWebsosoSearchHintTextColor(gray_200_949399)
             setWebsosoSearchTextAppearance(body4)
             setWebsosoOnClickListener {
                 singleEventHandler.throttleFirst { showSearchNovelDialog() }

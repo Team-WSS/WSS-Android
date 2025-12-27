@@ -237,15 +237,16 @@ class ProfileEditViewModel
                             ?.nicknameModel
                             ?.nickname ?: ""
                     val avatarsModel = avatars.map { it.toUi(previousNickname) }
+                    val representativeAvatar: AvatarModel? = avatarsModel.find { it.isRepresentative }
                     _avatarChangeUiState.value = avatarChangeUiState.value?.copy(
                         avatars = avatarsModel,
                         loading = false,
+                        selectedAvatar = representativeAvatar ?: AvatarModel(),
                     )
-                    val representativeAvatar = avatarsModel.find { it.isRepresentative }
                     updatePreviousProfile(
                         profileEditUiState.value?.profile?.copy(
                             avatarId = representativeAvatar?.avatarId ?: 0,
-                            avatarThumbnail = representativeAvatar?.avatarThumbnail ?: "",
+                            avatarThumbnail = representativeAvatar?.avatarProfile ?: "",
                         ) ?: ProfileModel(),
                     )
                 }.onFailure {
@@ -278,7 +279,7 @@ class ProfileEditViewModel
                 uiState.copy(
                     profile = uiState.profile.copy(
                         avatarId = selectedAvatar.avatarId,
-                        avatarThumbnail = selectedAvatar.avatarThumbnail,
+                        avatarThumbnail = selectedAvatar.avatarProfile,
                     ),
                 )
             }

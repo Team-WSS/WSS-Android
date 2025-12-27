@@ -43,7 +43,7 @@
             android:padding="4dp"
             android:text="@string/login_request_dismiss"
             android:textAppearance="@style/label1"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/gray_200_949399"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

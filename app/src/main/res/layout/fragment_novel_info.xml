@@ -402,7 +402,7 @@
                     android:text="@string/novel_info_review_none"
                     android:textAlignment="center"
                     android:textAppearance="@style/body2"
-                    android:textColor="@color/gray_200_AEADB3"
+                    android:textColor="@color/gray_200_949399"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_novel_info_none" />

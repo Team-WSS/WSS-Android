@@ -102,7 +102,7 @@
                     android:gravity="center"
                     android:onClick="@{() -> onClick.onDateEditClick()}"
                     android:textAppearance="@style/label1"
-                    android:textColor="@color/gray_200_AEADB3"
+                    android:textColor="@color/gray_200_949399"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tg_novel_rating_read_status"
@@ -199,7 +199,7 @@
                     android:onClick="@{() -> onClick.onKeywordEditClick()}"
                     android:text="@string/novel_rating_keyword_button"
                     android:textAppearance="@style/label1"
-                    android:textColor="@color/gray_200_AEADB3"
+                    android:textColor="@color/gray_200_949399"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_keyword_title" />
@@ -262,7 +262,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/gray_200_AEADB3" />
+                    app:tint="@color/gray_200_949399" />
 
                 <TextView
                     android:id="@+id/tv_novel_rating_title"

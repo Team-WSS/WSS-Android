@@ -17,11 +17,7 @@ class AvatarChangeAdapter(
         holder: AvatarChangeViewHolder,
         position: Int,
     ) {
-        if (holder.itemView.tag == null) {
-            holder.setupItem(getItem(position))
-        } else {
-            holder.updateItemSelection(getItem(position).isRepresentative)
-        }
+        holder.setupItem(getItem(position))
     }
 
     companion object {
@@ -34,7 +30,9 @@ class AvatarChangeAdapter(
             override fun areContentsTheSame(
                 oldItem: AvatarModel,
                 newItem: AvatarModel,
-            ): Boolean = oldItem == newItem
+            ): Boolean =
+                oldItem.avatarId == newItem.avatarId &&
+                    oldItem.isRepresentative == newItem.isRepresentative
         }
     }
 }
