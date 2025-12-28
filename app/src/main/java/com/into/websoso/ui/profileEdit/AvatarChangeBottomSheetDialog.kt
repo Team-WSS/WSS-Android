@@ -48,14 +48,25 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
 
     private fun handleAvatarChangeUiState(uiState: AvatarChangeUiState) {
         if (uiState.avatars.isNotEmpty()) {
-            if (binding.vpProfileEditAvatar.adapter == null) {
+            val isInitialLoad = binding.vpProfileEditAvatar.adapter == null
+
+            if (isInitialLoad) {
                 setupViewPager()
-            }
 
-            val currentPage = binding.vpProfileEditAvatar.currentItem
+                val chunkedAvatars = uiState.avatars.chunked(10)
+                val selectedAvatarPage = chunkedAvatars
+                    .indexOfFirst { page ->
+                        page.any { it.avatarId == uiState.selectedAvatar.avatarId }
+                    }.coerceAtLeast(0)
 
-            avatarPagerAdapter.submitList(uiState.avatars.chunked(10)) {
-                binding.vpProfileEditAvatar.setCurrentItem(currentPage, false)
+                avatarPagerAdapter.submitList(chunkedAvatars) {
+                    binding.vpProfileEditAvatar.setCurrentItem(selectedAvatarPage, false)
+                }
+            } else {
+                val currentPage = binding.vpProfileEditAvatar.currentItem
+                avatarPagerAdapter.submitList(uiState.avatars.chunked(10)) {
+                    binding.vpProfileEditAvatar.setCurrentItem(currentPage, false)
+                }
             }
         }
     }
