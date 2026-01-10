@@ -4,6 +4,7 @@ import com.into.websoso.core.network.datasource.user.UserApi
 import com.into.websoso.user.datasource.UserLocalDataSource
 import com.into.websoso.user.mapper.toData
 import com.into.websoso.user.model.UserFeedsEntity
+import com.into.websoso.user.model.UserInfoEntity
 import jakarta.inject.Inject
 
 class UserRepository
@@ -12,6 +13,16 @@ class UserRepository
         private val userApi: UserApi,
         private val userLocalDataSource: UserLocalDataSource,
     ) {
+        suspend fun fetchUserInfo(): UserInfoEntity {
+            val userInfo = userApi.getUserInfo().toData()
+            saveUserInfo(userInfo.userId)
+            return userInfo
+        }
+
+        private suspend fun saveUserInfo(userId: Long) {
+            userLocalDataSource.updateUserId(userId)
+        }
+
         suspend fun fetchMyActivities(
             lastFeedId: Long,
             size: Int,

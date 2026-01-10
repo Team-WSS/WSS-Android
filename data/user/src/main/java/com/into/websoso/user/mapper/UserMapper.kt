@@ -1,7 +1,9 @@
 package com.into.websoso.user.mapper
 
 import com.into.websoso.core.network.datasource.user.model.UserFeedsResponseDto
+import com.into.websoso.core.network.datasource.user.model.UserInfoResponseDto
 import com.into.websoso.user.model.UserFeedsEntity
+import com.into.websoso.user.model.UserInfoEntity
 
 fun UserFeedsResponseDto.toData(): UserFeedsEntity =
     UserFeedsEntity(
@@ -25,4 +27,11 @@ fun UserFeedsResponseDto.UserFeedResponseDto.toData(): UserFeedsEntity.UserFeedE
         novelRatingCount = this.novelRatingCount,
         novelRating = this.novelRating,
         relevantCategories = this.relevantCategories,
+    )
+
+fun UserInfoResponseDto.toData(): UserInfoEntity =
+    UserInfoEntity(
+        userId = this.userId,
+        nickname = this.nickname,
+        gender = this.gender,
     )

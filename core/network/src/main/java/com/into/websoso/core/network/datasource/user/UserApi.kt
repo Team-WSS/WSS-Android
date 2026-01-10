@@ -1,6 +1,7 @@
 package com.into.websoso.core.network.datasource.user
 
 import com.into.websoso.core.network.datasource.user.model.UserFeedsResponseDto
+import com.into.websoso.core.network.datasource.user.model.UserInfoResponseDto
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,9 @@ interface UserApi {
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
     ): UserFeedsResponseDto
+
+    @GET("users/me")
+    suspend fun getUserInfo(): UserInfoResponseDto
 }
 
 @Module
