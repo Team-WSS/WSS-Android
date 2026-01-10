@@ -90,6 +90,7 @@ dependencies {
 
     implementation(projects.feature.signin)
     implementation(projects.feature.library)
+    implementation(projects.feature.feed)
 
     // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)

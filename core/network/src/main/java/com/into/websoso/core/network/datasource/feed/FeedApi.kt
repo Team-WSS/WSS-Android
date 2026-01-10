@@ -6,7 +6,12 @@ import com.into.websoso.core.network.datasource.feed.model.response.FeedDetailRe
 import com.into.websoso.core.network.datasource.feed.model.response.FeedsResponseDto
 import com.into.websoso.core.network.datasource.feed.model.response.PopularFeedsResponseDto
 import com.into.websoso.core.network.datasource.feed.model.response.UserInterestFeedsResponseDto
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.MultipartBody
+import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -16,6 +21,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import javax.inject.Singleton
 
 interface FeedApi {
     @GET("feeds")
@@ -111,4 +117,12 @@ interface FeedApi {
         @Path("feedId") feedId: Long,
         @Path("commentId") commentId: Long,
     )
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal object FeedApiModule {
+    @Provides
+    @Singleton
+    internal fun provideFeedApi(retrofit: Retrofit): FeedApi = retrofit.create(FeedApi::class.java)
 }
