@@ -60,7 +60,7 @@ fun CommentsResponseDto.toData(): CommentsEntity =
 
 fun CommentResponseDto.toData(): CommentEntity =
     CommentEntity(
-        user = UserEntity(
+        user = FeedEntity.UserEntity(
             id = userId,
             nickname = nickname,
             avatarImage = avatarImage,
