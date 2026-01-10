@@ -24,7 +24,6 @@ import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.string.block_user_success_message
 import com.into.websoso.core.resource.R.string.feed_removed_feed_snackbar
-import com.into.websoso.core.resource.R.string.my_activity_detail_title
 import com.into.websoso.core.resource.R.string.other_user_page_activity
 import com.into.websoso.databinding.ActivityActivityDetailBinding
 import com.into.websoso.databinding.MenuMyActivityPopupBinding
@@ -39,12 +38,11 @@ import com.into.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
 import com.into.websoso.ui.main.feed.dialog.RemoveMenuType
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.IMPERTINENCE_FEED
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType.SPOILER_FEED
+import com.into.websoso.ui.main.myPage.ActivityItemClickListener
 import com.into.websoso.ui.main.myPage.MyPageViewModel
-import com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
-import com.into.websoso.ui.main.myPage.myActivity.MyActivityFragment
-import com.into.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
-import com.into.websoso.ui.main.myPage.myActivity.model.UserActivityModel
-import com.into.websoso.ui.main.myPage.myActivity.model.UserProfileModel
+import com.into.websoso.ui.main.myPage.model.ActivitiesModel
+import com.into.websoso.ui.main.myPage.model.UserActivityModel
+import com.into.websoso.ui.main.myPage.model.UserProfileModel
 import com.into.websoso.ui.mapper.toUserProfileModel
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
@@ -61,9 +59,6 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
     }
     private val myPageViewModel: MyPageViewModel by viewModels()
     private val otherUserPageViewModel: OtherUserPageViewModel by viewModels()
-    private val source: String by lazy {
-        intent.getStringExtra(MyActivityFragment.EXTRA_SOURCE) ?: ""
-    }
     private val userId: Long by lazy { intent.getLongExtra(USER_ID_KEY, DEFAULT_USER_ID) }
     private var _popupWindow: PopupWindow? = null
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
@@ -109,22 +104,12 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
     }
 
     private fun setupUserIDAndSource() {
-        activityDetailViewModel.source = source
         activityDetailViewModel.userId = userId
-
-        if (source == SOURCE_OTHER_USER_ACTIVITY) {
-            otherUserPageViewModel.updateUserId(userId)
-        }
-
         activityDetailViewModel.updateUserActivities(userId)
     }
 
     private fun setActivityTitle() {
-        binding.tvActivityDetailTitle.text = when (source) {
-            SOURCE_MY_ACTIVITY -> getString(my_activity_detail_title)
-            SOURCE_OTHER_USER_ACTIVITY -> getString(other_user_page_activity)
-            else -> ""
-        }
+        binding.tvActivityDetailTitle.text = getString(other_user_page_activity)
     }
 
     private fun setupMyActivitiesDetailAdapter() {
@@ -191,7 +176,9 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
                     ?.toUserProfileModel()
             }
 
-            else -> null
+            else -> {
+                null
+            }
         }
 
     private fun onBackButtonClick() {
@@ -249,11 +236,7 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
         feedId: Long,
     ) {
         val inflater = LayoutInflater.from(this)
-        val binding = when (source) {
-            SOURCE_MY_ACTIVITY -> MenuMyActivityPopupBinding.inflate(inflater)
-            SOURCE_OTHER_USER_ACTIVITY -> MenuOtherUserActivityPopupBinding.inflate(inflater)
-            else -> return
-        }
+        val binding = MenuOtherUserActivityPopupBinding.inflate(inflater)
 
         _popupWindow?.dismiss()
         _popupWindow = PopupWindow(binding.root, WRAP_CONTENT, WRAP_CONTENT, true).apply {
@@ -329,11 +312,13 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
             menuType = menuType,
             event = {
                 when (menuType) {
-                    SPOILER_FEED.name ->
+                    SPOILER_FEED.name -> {
                         activityDetailViewModel.updateReportedSpoilerFeed(feedId)
+                    }
 
-                    IMPERTINENCE_FEED.name ->
+                    IMPERTINENCE_FEED.name -> {
                         activityDetailViewModel.updateReportedImpertinenceFeed(feedId)
+                    }
                 }
                 showReportDoneDialog(menuType)
             },

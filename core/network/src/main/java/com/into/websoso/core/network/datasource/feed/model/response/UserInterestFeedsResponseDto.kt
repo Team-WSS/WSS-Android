@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class UserInterestFeedsResponseDto(
+data class UserInterestFeedsResponseDto(
     @SerialName("recommendFeeds")
     val userInterestFeeds: List<UserInterestFeedResponseDto>,
     @SerialName("message")

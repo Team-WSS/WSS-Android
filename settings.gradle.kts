@@ -46,3 +46,4 @@ include(
     ":feature:library",
     ":feature:feed",
 )
+include(":domain:feed")
