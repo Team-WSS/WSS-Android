@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,10 +37,12 @@ import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R
 import com.into.websoso.feature.feed.component.FeedFilterChip
 import com.into.websoso.feature.feed.component.FeedSection
+import com.into.websoso.feature.feed.component.MyFeedFilterModal
 import com.into.websoso.feature.feed.model.FeedOrder
 import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.SosoFeedType
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedScreen(
     uiState: FeedUiState,
@@ -44,7 +50,10 @@ internal fun FeedScreen(
     onSortSelected: (order: FeedOrder) -> Unit,
     onSosoTypeSelected: (feedType: SosoFeedType) -> Unit,
     onWriteClick: () -> Unit,
+    onFilterClick: () -> Unit,
 ) {
+    val sheetState = rememberModalBottomSheetState()
+
     Scaffold(containerColor = White) { padding ->
         Column {
             FeedTabRow(
@@ -68,6 +77,7 @@ internal fun FeedScreen(
                 when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> {
                         FeedFilterChip(
+                            // TODO: 클릭하면 바텀시트가 열리도록
                             label = "${uiState.myFeedData.feeds.size}개의 기록",
                             isSelected = true,
                             rightIcon = {
@@ -77,6 +87,7 @@ internal fun FeedScreen(
                                     tint = Gray80,
                                 )
                             },
+                            modifier = Modifier.clickable { onFilterClick() },
                         )
 
                         Row(
@@ -139,6 +150,17 @@ internal fun FeedScreen(
                     }
                 },
             )
+        }
+
+        if (uiState.isFilterSheetVisible) {
+            ModalBottomSheet(
+                onDismissRequest = { onFilterClick() },
+                sheetState = sheetState,
+                containerColor = White,
+                dragHandle = { BottomSheetDefaults.DragHandle() },
+            ) {
+                MyFeedFilterModal()
+            }
         }
     }
 }
@@ -212,6 +234,7 @@ private fun FeedScreenPreview() {
             onTabSelected = { },
             onSortSelected = { },
             onSosoTypeSelected = { },
+            onFilterClick = {},
         )
     }
 }
