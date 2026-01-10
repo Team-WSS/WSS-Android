@@ -12,15 +12,17 @@ import jp.wasabeef.transformers.coil.BlurTransformation
 
 object BindingAdapter {
     @JvmStatic
-    @BindingAdapter("loads3ImageUrl")
+    @BindingAdapter(value = ["loads3ImageUrl", "cornerRadius"], requireAll = false)
     fun loadS3ImageUrl(
         view: ImageView,
         s3ImageKey: String,
+        cornerRadius: Float?,
     ) {
         val fullUrl: String = view.getS3ImageUrl(s3ImageKey)
 
         view.load(fullUrl) {
             error(img_loading_thumbnail)
+            if (cornerRadius != null) transformations(RoundedCornersTransformation(cornerRadius.toFloatPxFromDp()))
         }
     }
 

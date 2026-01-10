@@ -10,8 +10,8 @@
             type="com.into.websoso.ui.feedDetail.FeedDetailClickListener" />
 
         <variable
-            name="feed"
-            type="com.into.websoso.ui.main.feed.model.FeedModel" />
+            name="feedDetail"
+            type="com.into.websoso.ui.feedDetail.model.FeedDetailModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,14 +32,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
-                android:onClick="@{() -> onClick.onProfileClick(feed.user.id, feed.isMyFeed)}"
+                android:onClick="@{() -> onClick.onProfileClick(feedDetail.feed.user.id, feedDetail.feed.isMyFeed)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/iv_feed_profile"
                     cornerRadius="@{12f}"
-                    loadImageUrl="@{feed.user.avatarImage}"
+                    loads3ImageUrl="@{feedDetail.feed.user.avatarImage}"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:maxLines="1"
-                    android:text="@{feed.user.nickname}"
+                    android:text="@{feedDetail.feed.user.nickname}"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +66,7 @@
                 android:id="@+id/tv_feed_created_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{feed.formattedCreatedDate}"
+                android:text="@{feedDetail.feed.formattedCreatedDate}"
                 android:textAppearance="@style/body5"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/cl_feed_profile"
@@ -75,7 +75,7 @@
 
             <TextView
                 android:id="@+id/tv_feed_is_modified"
-                isVisible="@{feed.modified}"
+                isVisible="@{feedDetail.feed.modified}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -95,7 +95,7 @@
                 android:layout_marginEnd="20dp"
                 android:breakStrategy="simple"
                 android:gravity="top"
-                android:text="@{feed.content}"
+                android:text="@{feedDetail.feed.content}"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -108,88 +108,167 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:isVisible="@{!feed.imageUrls.empty}"
+                app:isVisible="@{!feedDetail.feed.imageUrls.empty}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_feed_content" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_feed_novel_info"
-                isVisible="@{!feed.novel.nothing}"
+                isVisible="@{!feedDetail.feed.novel.nothing}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/btn_feed_novel_info"
-                android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
+                android:clipToOutline="true"
+                android:onClick="@{() -> onClick.onNovelInfoClick(feedDetail.feed.novel.id)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_feed_image">
 
                 <ImageView
-                    android:id="@+id/iv_feed_link"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:src="@drawable/ic_link"
+                    android:id="@+id/iv_feed_novel_thumbnail"
+                    loadImageUrl="@{feedDetail.novel.thumbnail}"
+                    android:layout_width="86dp"
+                    android:layout_height="124dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/img_loading_thumbnail" />
+
+                <ImageView
+                    android:id="@+id/iv_feed_detail_novel_genre"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_feed_novel_thumbnail"
+                    app:layout_constraintEnd_toEndOf="@id/iv_feed_novel_thumbnail"
+                    tools:src="@drawable/ic_bl" />
 
                 <TextView
                     android:id="@+id/tv_feed_novel_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="30dp"
                     android:ellipsize="end"
-                    android:ems="13"
-                    android:maxLines="1"
-                    android:text="@{feed.novel.title}"
+                    android:maxLines="2"
+                    android:text="@{feedDetail.feed.novel.title}"
                     android:textAppearance="@style/title3"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_feed_link"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_feed_star"
-                    app:layout_constraintStart_toEndOf="@+id/iv_feed_link"
-                    app:layout_constraintTop_toTopOf="@+id/iv_feed_link"
-                    tools:text="화산귀한화산귀한화산귀한화산귀한" />
+                    app:layout_constraintBottom_toTopOf="@id/cl_feed_detail_writer_rating"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_feed_novel_thumbnail"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="화산귀환화산귀환화산귀환화산귀환화산귀환화산귀환화산귀환화산귀환화산귀환화산귀환" />
 
-                <ImageView
-                    android:id="@+id/iv_feed_star"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_feed_detail_writer_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_star"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_feed_score"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_feed_score"
-                    app:layout_constraintTop_toTopOf="@+id/tv_feed_score" />
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintBottom_toTopOf="@id/tv_feed_detail_novel_description"
+                    app:layout_constraintStart_toStartOf="@id/tv_feed_novel_name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_feed_novel_name">
+
+                    <TextView
+                        android:id="@+id/tv_feed_detail_writer_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="글쓴이"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/gray_300_52515F"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_feed_detail_writer_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:src="@drawable/ic_feed_detail_writer_star"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_feed_detail_writer_rating"
+                        app:layout_constraintStart_toEndOf="@id/tv_feed_detail_writer_rating"
+                        app:layout_constraintTop_toTopOf="@id/tv_feed_detail_writer_rating" />
+
+                    <TextView
+                        android:id="@+id/tv_feed_detail_writer_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text="@{@string/feed_score_count(feedDetail.novel.feedWriterNovelRating)}"
+                        android:textAppearance="@style/body5_2"
+                        android:textColor="@color/secondary_100_FF675D"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_feed_detail_writer_score"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="4.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_feed_detail_novel_all_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@id/cl_feed_detail_writer_rating"
+                    app:layout_constraintStart_toEndOf="@id/cl_feed_detail_writer_rating"
+                    app:layout_constraintTop_toTopOf="@id/cl_feed_detail_writer_rating">
+
+                    <TextView
+                        android:id="@+id/tv_feed_detail_novel_all_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="전체"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/gray_200_949399"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_feed_detail_all_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:src="@drawable/ic_feed_detail_novel_star"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_feed_detail_novel_all_rating"
+                        app:layout_constraintStart_toEndOf="@id/tv_feed_detail_novel_all_rating"
+                        app:layout_constraintTop_toTopOf="@id/tv_feed_detail_novel_all_rating" />
+
+                    <TextView
+                        android:id="@+id/tv_feed_detail_all_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text="@{@string/feed_score_count(feedDetail.feed.novel.rating, feedDetail.feed.novel.ratingCount)}"
+                        android:textAppearance="@style/body5"
+                        android:textColor="@color/gray_200_949399"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_feed_detail_all_rating"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="4.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/tv_feed_score"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_feed_detail_novel_description"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="@{@string/feed_score_count(feed.novel.rating, feed.novel.ratingCount)}"
-                    android:textAppearance="@style/label1"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_feed_novel_name"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_feed_navigate_right"
-                    app:layout_constraintTop_toTopOf="@+id/tv_feed_novel_name"
-                    tools:text="4.0 (523)" />
-
-                <ImageView
-                    android:id="@+id/iv_feed_navigate_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_navigate_right"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_feed_score"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="30dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@{feedDetail.novel.description}"
+                    android:textAppearance="@style/body5"
+                    android:textColor="@color/gray_300_52515F"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_feed_score" />
+                    app:layout_constraintStart_toStartOf="@id/cl_feed_detail_writer_rating"
+                    app:layout_constraintTop_toBottomOf="@id/cl_feed_detail_writer_rating"
+                    tools:text="소설 줄거리 내용입니다...소설 줄거리 내용입니다...소설 줄거리 내용입니다...소설 줄거리 내용입니다...소설 줄거리 내용입니다...소설 줄거리 내용입니다...소설 줄거리 내용입니다..." />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -198,7 +277,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="12dp"
-                android:onClick="@{(cl_feed_like) -> onClick.onLikeButtonClick(cl_feed_like, feed.id)}"
+                android:onClick="@{(cl_feed_like) -> onClick.onLikeButtonClick(cl_feed_like, feedDetail.feed.id)}"
                 app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_feed_novel_info">
@@ -222,7 +301,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="8dp"
                     android:maxLines="1"
-                    android:text="@{String.valueOf(feed.likeCount)}"
+                    android:text="@{String.valueOf(feedDetail.feed.likeCount)}"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_949399"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_feed_thumb_up"
@@ -260,7 +339,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="8dp"
                     android:maxLines="1"
-                    android:text="@{String.valueOf(feed.commentCount)}"
+                    android:text="@{String.valueOf(feedDetail.feed.commentCount)}"
                     android:textAppearance="@style/body2"
                     android:textColor="@color/gray_200_949399"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_feed_comment"
