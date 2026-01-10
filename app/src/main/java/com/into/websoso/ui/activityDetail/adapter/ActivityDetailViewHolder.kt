@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.databinding.ItemMyActivityBinding
-import com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
-import com.into.websoso.ui.main.myPage.myActivity.model.UserActivityModel
+import com.into.websoso.ui.main.myPage.ActivityItemClickListener
+import com.into.websoso.ui.main.myPage.model.UserActivityModel
 
 class ActivityDetailViewHolder(
     private val binding: ItemMyActivityBinding,

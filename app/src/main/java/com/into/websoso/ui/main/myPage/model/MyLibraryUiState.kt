@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.myPage.myLibrary.model
+package com.into.websoso.ui.main.myPage.model
 
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
@@ -13,4 +13,7 @@ data class MyLibraryUiState(
     val novelPreferences: NovelPreferenceEntity? = null,
     val translatedAttractivePoints: List<String> = emptyList(),
     val isGenreListVisible: Boolean = false,
-)
+) {
+    val totalBadgeCount: Int
+        get() = topGenres.sumOf { it.genreCount } + restGenres.sumOf { it.genreCount }
+}

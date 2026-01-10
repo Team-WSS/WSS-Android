@@ -9,6 +9,10 @@
             name="myPageViewModel"
             type="com.into.websoso.ui.main.myPage.MyPageViewModel" />
 
+        <variable
+            name="myLibraryViewModel"
+            type="com.into.websoso.ui.main.myPage.MyLibraryViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,174 +23,579 @@
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/abl_my_page"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:elevation="0dp">
 
-                <com.google.android.material.appbar.CollapsingToolbarLayout
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/tb_my_page"
                     android:layout_width="match_parent"
-                    android:layout_height="272dp"
-                    android:background="@color/transparent"
-                    app:collapsedTitleGravity="center"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/white"
+                    app:contentInsetStart="0dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_my_page_user_profile"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:background="@color/primary_20_F5F7FF"
-                        android:paddingTop="36dp"
-                        android:paddingBottom="12dp"
-                        app:layout_collapseMode="parallax">
-
-                        <ImageView
-                            android:id="@+id/iv_my_page_user_profile"
-                            android:layout_width="94dp"
-                            android:layout_height="0dp"
-                            android:layout_marginTop="30dp"
-                            app:layout_constraintDimensionRatio="1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@mipmap/ic_wss_logo" />
-
-                        <ImageView
-                            android:id="@+id/iv_my_page_user_profile_edit"
-                            android:layout_width="40dp"
-                            android:layout_height="0dp"
-                            android:layout_marginEnd="-7.5dp"
-                            android:layout_marginBottom="-7.5dp"
-                            android:padding="7.5dp"
-                            android:src="@drawable/ic_my_page_edit_profile"
-                            app:layout_constraintBottom_toBottomOf="@id/iv_my_page_user_profile"
-                            app:layout_constraintDimensionRatio="1"
-                            app:layout_constraintEnd_toEndOf="@id/iv_my_page_user_profile" />
+                        android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/tv_my_page_user_name"
+                            android:id="@+id/tv_my_page_sticky_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:text='@{myPageViewModel.uiState.myProfile.nickname}'
-                            android:textAppearance="@style/headline1"
+                            android:text="@string/my_page_title"
+                            android:textAppearance="@style/title2"
                             android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/iv_my_page_user_profile"
-                            tools:text="연진이" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/tv_my_page_user_description"
-                            android:layout_width="0dp"
+                        <ImageView
+                            android:id="@+id/iv_my_page_sticky_go_to_setting"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="20dp"
-                            android:layout_marginTop="6dp"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:paddingBottom="30dp"
-                            android:text='@{myPageViewModel.uiState.myProfile.intro}'
-                            android:textAppearance="@style/body2"
-                            android:textColor="@color/gray_200_949399"
+                            android:layout_marginEnd="12dp"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_settings"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_name"
-                            tools:text="이연진 아니고 연진이" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/tb_my_page"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:contentInsetStart="0dp"
-                        app:layout_collapseMode="pin">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp">
-
-                            <TextView
-                                android:id="@+id/tv_my_page_sticky_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingVertical="12dp"
-                                android:text="@string/my_page_title"
-                                android:textAppearance="@style/title2"
-                                android:textColor="@color/black"
-                                android:visibility="gone"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <ImageView
-                                android:id="@+id/iv_my_page_sticky_go_to_setting"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="12dp"
-                                android:padding="10dp"
-                                android:src="@drawable/ic_settings"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </androidx.appcompat.widget.Toolbar>
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tl_my_page"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:tabBackground="@drawable/bg_my_page_gray70"
-                    app:tabIndicatorColor="@color/black"
-                    app:tabIndicatorFullWidth="true"
-                    app:tabIndicatorHeight="2dp"
-                    app:tabSelectedTextColor="@color/black"
-                    app:tabTextAppearance="@style/title2"
-                    app:tabTextColor="@color/gray_100_CBCBD1">
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="12dp"
-                        android:text="@string/my_page_library" />
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="12dp"
-                        android:text="@string/my_page_activity" />
-
-                </com.google.android.material.tabs.TabLayout>
-
+                </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipChildren="false"
                 android:fillViewport="true"
                 android:overScrollMode="never"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipChildren="false">
+                    android:layout_height="wrap_content">
 
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/vp_my_page"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_page_user_profile"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:paddingBottom="22dp"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/iv_my_page_user_profile"
+                            android:layout_width="86dp"
+                            android:layout_height="86dp"
+                            android:layout_marginTop="20dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:src="@mipmap/ic_wss_logo" />
+
+                        <ImageView
+                            android:id="@+id/iv_my_page_user_profile_edit"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/ic_my_page_edit_profile"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_my_page_user_profile"
+                            app:layout_constraintEnd_toEndOf="@id/iv_my_page_user_profile" />
+
+                        <TextView
+                            android:id="@+id/tv_my_page_user_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text='@{myPageViewModel.uiState.myProfile.nickname}'
+                            android:textAppearance="@style/headline1"
+                            android:textColor="@color/black"
+                            app:layout_constraintStart_toEndOf="@id/iv_my_page_user_profile"
+                            app:layout_constraintTop_toTopOf="@id/iv_my_page_user_profile"
+                            tools:text="소소냥이이이이이이이ㅣ" />
+
+                        <TextView
+                            android:id="@+id/tv_my_page_user_description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginEnd="4dp"
+                            android:gravity="start"
+                            android:maxLines="2"
+                            android:text='@{myPageViewModel.uiState.myProfile.intro}'
+                            android:textAppearance="@style/body4"
+                            android:textColor="@color/gray_200_949399"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/tv_my_page_user_name"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_name"
+                            tools:text="냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥냥" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_my_library_storage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/bg_my_library_gray50_radius_14dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingVertical="16dp"
+                            app:layout_constraintTop_toBottomOf="@id/iv_my_page_user_profile">
+
+                            <LinearLayout
+                                android:id="@+id/ll_my_library_storage_interesting"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_interesting_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text='@{String.valueOf(myLibraryViewModel.uiState.novelStats.interestNovelCount)}'
+                                    android:textAppearance="@style/title2"
+                                    android:textColor="@color/black"
+                                    tools:text="12" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_interesting_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/my_library_interesting"
+                                    android:textAppearance="@style/body5"
+                                    android:textColor="@color/black" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="38dp"
+                                android:background="@color/gray_70_DFDFE3" />
+
+                            <LinearLayout
+                                android:id="@+id/ll_my_library_storage_watching"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_watching_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text='@{String.valueOf(myLibraryViewModel.uiState.novelStats.watchingNovelCount)}'
+                                    android:textAppearance="@style/title2"
+                                    android:textColor="@color/black"
+                                    tools:text="12" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_watching_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/my_library_watching"
+                                    android:textAppearance="@style/body5"
+                                    android:textColor="@color/black" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_my_library_storage_watched"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_watched_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text='@{String.valueOf(myLibraryViewModel.uiState.novelStats.watchedNovelCount)}'
+                                    android:textAppearance="@style/title2"
+                                    android:textColor="@color/black"
+                                    tools:text="12" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_watched_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/my_library_watched"
+                                    android:textAppearance="@style/body5"
+                                    android:textColor="@color/black" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_my_library_storage_quit"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_quit_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@{String.valueOf(myLibraryViewModel.uiState.novelStats.quitNovelCount)}"
+                                    android:textAppearance="@style/title2"
+                                    android:textColor="@color/black"
+                                    tools:text="12" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_linear_storage_quit_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_weight="1"
+                                    android:text="@string/my_library_quite"
+                                    android:textAppearance="@style/body5"
+                                    android:textColor="@color/black" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="3dp"
+                        android:background="@color/gray_50_F4F5F8"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_my_page_user_profile" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_library_genre_preference"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/cl_my_page_user_profile"
+                        tools:layout_editor_absoluteX="0dp">
+
+                        <TextView
+                            android:id="@+id/tv_my_library_genre_preference_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="20dp"
+                            android:paddingVertical="10dp"
+                            android:textAppearance="@style/title2"
+                            android:textColor="@color/gray_300_52515F"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_my_library_dominant_genre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_library_genre_preference_title">
+
+                            <LinearLayout
+                                android:id="@+id/ll_my_library_dominant_genre_first"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/iv_my_library_dominant_genre_first_logo"
+                                    android:layout_width="30dp"
+                                    android:layout_height="37dp"
+                                    tools:src="@drawable/ic_novel_detail_genre_test" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_library_dominant_genre_first_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:text="@{myLibraryViewModel.uiState.topGenres[0].genreName}"
+                                    android:textAppearance="@style/title3"
+                                    android:textColor="@color/black"
+                                    tools:text="로판" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_library_dominant_genre_first_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.uiState.topGenres[0].genreCount)}'
+                                    android:textAppearance="@style/body5"
+                                    android:textColor="@color/gray_200_949399"
+                                    tools:text="12편" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_my_library_dominant_genre_second"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/iv_my_library_dominant_genre_second_logo"
+                                    android:layout_width="30dp"
+                                    android:layout_height="37dp"
+                                    tools:src="@drawable/ic_novel_detail_genre_test" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_library_dominant_genre_second_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:text="@{myLibraryViewModel.uiState.topGenres[1].genreName}"
+                                    android:textAppearance="@style/title3"
+                                    android:textColor="@color/black"
+                                    tools:text="로판" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_library_dominant_genre_second_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.uiState.topGenres[1].genreCount)}'
+                                    android:textAppearance="@style/body5"
+                                    android:textColor="@color/gray_200_949399"
+                                    tools:text="12편" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_my_library_dominant_genre_third"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/iv_my_library_dominant_genre_third_logo"
+                                    android:layout_width="30dp"
+                                    android:layout_height="37dp"
+                                    tools:src="@drawable/ic_novel_detail_genre_test" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_library_dominant_genre_third_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:text="@{myLibraryViewModel.uiState.topGenres[2].genreName}"
+                                    android:textAppearance="@style/title3"
+                                    android:textColor="@color/black"
+                                    tools:text="로판" />
+
+                                <TextView
+                                    android:id="@+id/tv_my_library_dominant_genre_third_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text='@{String.format(@string/my_library_genre_count, myLibraryViewModel.uiState.topGenres[2].genreCount)}'
+                                    android:textAppearance="@style/body5"
+                                    android:textColor="@color/gray_200_949399"
+                                    tools:text="12편" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <ListView
+                            android:id="@+id/lv_my_library_rest_genre"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginHorizontal="40dp"
+                            android:layout_marginTop="32dp"
+                            android:divider="@null"
+                            app:layout_constraintTop_toBottomOf="@id/ll_my_library_dominant_genre"
+                            tools:layout_editor_absoluteX="40dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_my_library_genre_preference_path"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:onClick="@{() -> myLibraryViewModel.updateToggleGenresVisibility()}"
+                            android:padding="20dp"
+                            android:src="@{myLibraryViewModel.uiState.isGenreListVisible ? @drawable/ic_my_library_upper_path : @drawable/ic_my_library_lower_path}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/lv_my_library_rest_genre" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_library_unknown_preference"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/cl_my_page_user_profile">
+
+                        <TextView
+                            android:id="@+id/tv_my_library_preference_analysis_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="20dp"
+                            android:paddingVertical="10dp"
+                            android:text="@string/my_page_taste_title"
+                            android:textAppearance="@style/title2"
+                            android:textColor="@color/gray_300_52515F"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_my_library_unknown_preference_logo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="36dp"
+                            android:src="@drawable/img_my_library_empty_cat"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_library_preference_analysis_title" />
+
+                        <TextView
+                            android:id="@+id/tv_my_library_unknown_preference_instructions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/my_library_unknown_preference"
+                            android:textAppearance="@style/body2"
+                            android:textColor="@color/gray_200_949399"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/iv_my_library_unknown_preference_logo" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/view_my_page_novel_preference_divider"
+                        android:layout_width="0dp"
+                        android:layout_height="3dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gray_50_F4F5F8"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_my_library_genre_preference" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_library_novel_preference"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:paddingVertical="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/view_my_page_novel_preference_divider">
+
+                        <TextView
+                            android:id="@+id/tv_my_library_novel_preference_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:text="@string/my_page_taste_title"
+                            android:textAppearance="@style/title2"
+                            android:textColor="@color/gray_300_52515F"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_my_library_attractive_points"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/bg_my_library_gray50_radius_12dp"
+                            android:paddingVertical="20dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_library_novel_preference_title">
+
+                            <TextView
+                                android:id="@+id/tv_my_library_attractive_points"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{myLibraryViewModel.attractivePointsText}"
+                                android:textAppearance="@style/title2"
+                                android:textColor="@color/gray_300_52515F"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="현캐릭터,소재가 매력적인 작품" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <com.into.websoso.core.common.ui.custom.WebsosoChipGroup
+                            android:id="@+id/wcg_my_library_attractive_points"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintTop_toBottomOf="@id/cl_my_library_attractive_points" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_my_library_unknown_novel_preference"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/cl_my_library_genre_preference">
+
+                        <TextView
+                            android:id="@+id/tv_my_library_unknown_novel_preference_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="24dp"
+                            android:text="@string/my_page_taste_title"
+                            android:textAppearance="@style/title2"
+                            android:textColor="@color/gray_300_52515F"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_my_library_unknown_novel_preference_logo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="36dp"
+                            android:src="@drawable/img_my_library_empty_cat"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_library_unknown_novel_preference_title" />
+
+                        <TextView
+                            android:id="@+id/tv_my_library_unknown_novel_novel_preference_instructions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:paddingBottom="10dp"
+                            android:text="@string/my_library_unknown_preference"
+                            android:textAppearance="@style/body2"
+                            android:textColor="@color/gray_200_949399"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/iv_my_library_unknown_novel_preference_logo" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -202,5 +611,4 @@
             android:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

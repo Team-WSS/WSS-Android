@@ -1,12 +1,12 @@
-package com.into.websoso.ui.main.myPage.myLibrary
+package com.into.websoso.ui.main.myPage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.repository.UserRepository
-import com.into.websoso.ui.main.myPage.myLibrary.model.AttractivePoints
-import com.into.websoso.ui.main.myPage.myLibrary.model.MyLibraryUiState
+import com.into.websoso.ui.main.myPage.model.AttractivePoints
+import com.into.websoso.ui.main.myPage.model.MyLibraryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -115,7 +115,7 @@ class MyLibraryViewModel
 
         private fun translateAttractivePoints(attractivePoints: List<String>): List<String> =
             attractivePoints.mapNotNull { point ->
-                AttractivePoints.fromString(point)?.korean
+                AttractivePoints.Companion.fromString(point)?.korean
             }
 
         companion object {

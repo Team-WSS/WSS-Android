@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.UserRepository
-import com.into.websoso.ui.main.myPage.myActivity.model.ActivityLikeState
+import com.into.websoso.ui.main.myPage.model.ActivityLikeState
 import com.into.websoso.ui.mapper.toUi
 import com.into.websoso.ui.otherUserPage.otherUserActivity.model.OtherUserActivityUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
