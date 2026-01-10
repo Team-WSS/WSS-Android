@@ -17,9 +17,9 @@ internal fun Feed.toFeedUiModel(): FeedUiModel {
             ratingCount = novel.ratingCount.orDefault(),
             genre = NovelCategory.fromTag(genreName.orEmpty()),
             userNovelRating = userNovelRating.orDefault(),
-            feedWriterNovelRating = feedWriterNovelRating.orDefault(),
+            feedWriterNovelRating = feedWriterNovelRating,
         )
-    } else NovelUiModel()
+    } else null
 
     return FeedUiModel(
         user = UserUiModel(
@@ -58,7 +58,7 @@ data class FeedUiModel(
     val isPublic: Boolean = false,
     val imageUrls: ImmutableList<String> = persistentListOf(),
     val imageCount: Int = 0,
-    val novel: NovelUiModel = NovelUiModel(),
+    val novel: NovelUiModel? = null,
 ) {
     val isVisible: Boolean get() = !isSpoiler && imageUrls.isNotEmpty()
 
@@ -74,7 +74,7 @@ data class FeedUiModel(
         val rating: Float = 0f,
         val ratingCount: Int = 0,
         val userNovelRating: Float = 0f,
-        val feedWriterNovelRating: Float = 0f,
+        val feedWriterNovelRating: Float? = null,
         val genre: NovelCategory = NovelCategory.LIGHT_NOVEL,
     )
 }

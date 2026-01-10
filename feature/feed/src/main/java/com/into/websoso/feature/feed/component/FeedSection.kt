@@ -7,13 +7,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,31 +24,54 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.component.S3Image
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
+import com.into.websoso.core.designsystem.theme.Gray50
+import com.into.websoso.core.designsystem.theme.GrayToast
+import com.into.websoso.core.designsystem.theme.Secondary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.core.resource.R
 import com.into.websoso.core.resource.R.drawable.ic_link
 import com.into.websoso.core.resource.R.drawable.ic_navigate_right
 import com.into.websoso.core.resource.R.drawable.ic_star
+import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.FeedUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-internal fun FeedSection(feeds: ImmutableList<FeedUiModel>) {
+internal fun FeedSection(
+    currentTab: FeedTab,
+    feeds: ImmutableList<FeedUiModel>,
+    onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
+    onMoreClick: (feedId: Long) -> Unit,
+    onNovelClick: (novelId: Long) -> Unit,
+    onLikeClick: (feedId: Long) -> Unit,
+    onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier.padding(horizontal = 20.dp),
     ) {
-        items(items = feeds) { feed ->
+        itemsIndexed(items = feeds) { index, feed ->
             FeedItem(
                 feed = feed,
-                onMoreClick = {},
+                currentTab = currentTab,
+                onMoreClick = onMoreClick,
+                onProfileClick = onProfileClick,
+                onNovelClick = onNovelClick,
+                onLikeClick = onLikeClick,
+                onContentClick = onContentClick,
             )
+
+            if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
         }
     }
 }
@@ -53,7 +79,12 @@ internal fun FeedSection(feeds: ImmutableList<FeedUiModel>) {
 @Composable
 private fun FeedItem(
     feed: FeedUiModel,
+    currentTab: FeedTab,
+    onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
     onMoreClick: (feedId: Long) -> Unit,
+    onNovelClick: (novelId: Long) -> Unit,
+    onLikeClick: (feedId: Long) -> Unit,
+    onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(
@@ -64,7 +95,11 @@ private fun FeedItem(
         Row(
             horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onProfileClick(feed.user.id, currentTab)
+                },
         ) {
             S3Image(
                 imageUrl = feed.user.avatarImage,
@@ -108,7 +143,7 @@ private fun FeedItem(
             }
 
             Icon(
-                imageVector = ImageVector.vectorResource(id = com.into.websoso.core.resource.R.drawable.ic_more),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_more),
                 contentDescription = null,
                 tint = Gray200,
                 modifier = Modifier
@@ -119,29 +154,151 @@ private fun FeedItem(
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
-        Text(
-            text = feed.content,
-            style = WebsosoTheme.typography.body2,
-            color = Black,
-            maxLines = 5,
-            overflow = TextOverflow.Ellipsis,
-        )
+        if (feed.isSpoiler) {
+            Text(
+                text = "스포일러가 포함된 글 보기",
+                style = WebsosoTheme.typography.body2,
+                color = Secondary100,
+                modifier = Modifier.clickable { onContentClick(feed.id, feed.isLiked) },
+            )
+        } else {
+            Text(
+                text = feed.content,
+                style = WebsosoTheme.typography.body2,
+                color = Black,
+                maxLines = 5,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.clickable { onContentClick(feed.id, feed.isLiked) },
+            )
+        }
 
         Spacer(modifier = Modifier.height(height = 20.dp))
 
-        FeedNovelInfo(novel = feed.novel)
+        if (feed.imageUrls.isNotEmpty()) {
+            Box {
+                NetworkImage(
+                    imageUrl = feed.imageUrls.firstOrNull().orEmpty(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(ratio = 334f / 237f)
+                        .clip(RoundedCornerShape(size = 14.dp)),
+                    contentScale = ContentScale.Crop,
+                )
+
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.background(
+                        color = GrayToast,
+                        shape = CircleShape,
+                    ),
+                ) {
+                    Text(
+                        text = feed.imageUrls.size.toString(),
+                        style = WebsosoTheme.typography.body5,
+                        color = White,
+                        modifier = Modifier
+                            .align(alignment = Alignment.BottomEnd)
+                            .padding(end = 12.dp, bottom = 10.dp),
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(height = 10.dp))
+        }
+
+        if (feed.novel != null){
+            FeedNovelInfo(
+                novel = feed.novel,
+                onNovelClick = onNovelClick,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(height = 10.dp))
+
+        when (currentTab) {
+            FeedTab.MY_FEED -> {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_lock),
+                        contentDescription = null,
+                        tint = Gray200,
+                    )
+
+                    Text(
+                        text = "나만 보는 기록이에요.",
+                        style = WebsosoTheme.typography.body4,
+                        color = Gray200,
+                    )
+                }
+            }
+
+            FeedTab.SOSO_FEED -> {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(space = 18.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable { onLikeClick(feed.id) },
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_like),
+                            contentDescription = null,
+                            tint = Gray200,
+                        )
+
+                        Text(
+                            text = feed.likeCount.toString(),
+                            style = WebsosoTheme.typography.title3,
+                            color = Gray200,
+                        )
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_like),
+                            contentDescription = null,
+                            tint = Gray200,
+                        )
+
+                        Text(
+                            text = feed.likeCount.toString(),
+                            style = WebsosoTheme.typography.title3,
+                            color = Gray200,
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
-private fun FeedNovelInfo(novel: FeedUiModel.NovelUiModel) {
+private fun FeedNovelInfo(
+    novel: FeedUiModel.NovelUiModel,
+    onNovelClick: (novelId: Long) -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            ),
+            )
+            .clickable {
+                onNovelClick(novel.id)
+            },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -174,20 +331,22 @@ private fun FeedNovelInfo(novel: FeedUiModel.NovelUiModel) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = ic_star),
-                        contentDescription = null,
-                    )
+                novel.feedWriterNovelRating?.let {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = ic_star),
+                            contentDescription = null,
+                        )
 
-                    Text(
-                        text = novel.rating.toString(),
-                        style = WebsosoTheme.typography.label1,
-                        color = Black,
-                    )
+                        Text(
+                            text = novel.rating.toString(),
+                            style = WebsosoTheme.typography.label1,
+                            color = Black,
+                        )
+                    }
                 }
 
                 Icon(
@@ -203,6 +362,14 @@ private fun FeedNovelInfo(novel: FeedUiModel.NovelUiModel) {
 @Composable
 private fun FeedSectionPreview() {
     WebsosoTheme {
-        FeedSection(feeds = persistentListOf())
+        FeedSection(
+            feeds = persistentListOf(FeedUiModel()),
+            currentTab = FeedTab.SOSO_FEED,
+            onProfileClick = { _, _ -> },
+            onMoreClick = { },
+            onNovelClick = { },
+            onLikeClick = { },
+            onContentClick = { _, _ -> },
+        )
     }
 }

@@ -139,45 +139,51 @@ class FeedViewModel @Inject constructor(
         }
         fetchNextPage()
     }
-//
-//    fun updateLike(
-//        selectedFeedId: Long,
-//        isLiked: Boolean,
-//        updatedLikeCount: Int,
-//    ) {
-//        _uiState.value.let { feedUiState ->
-//            val selectedFeed = feedUiState.feeds.find { feedModel ->
-//                feedModel.id == selectedFeedId
-//            } ?: throw IllegalArgumentException()
-//
-//            if (selectedFeed.isLiked == isLiked) return
-//
-//            viewModelScope.launch {
-//                runCatching {
-//                    feedRepository.saveLike(selectedFeed.isLiked, selectedFeedId)
-//                }.onSuccess {
-//                    _uiState.value = feedUiState.copy(
-//                        feeds = feedUiState.feeds.map { feedModel ->
-//                            when (feedModel.id == selectedFeedId) {
-//                                true -> feedModel.copy(
-//                                    isLiked = isLiked,
-//                                    likeCount = updatedLikeCount,
-//                                )
-//
-//                                false -> feedModel
-//                            }
-//                        },
-//                        isRefreshed = false,
-//                    )
-//                }.onFailure {
-//                    _uiState.value = feedUiState.copy(
-//                        loading = false,
-//                        error = true,
-//                    )
-//                }
-//            }
-//        }
-//    }
+
+    fun updateLike(selectedFeedId: Long) {
+        // 1. 현재 UI 상태에서 해당 피드 찾기
+        val currentState = uiState.value
+        val targetFeed = currentState.currentData.feeds.find { it.id == selectedFeedId } ?: return
+
+        // 2. 반전될 상태 미리 계산
+        val prevIsLiked = targetFeed.isLiked
+        val nextIsLiked = !prevIsLiked // 현재 상태의 반대
+        val nextLikeCount = if (nextIsLiked) targetFeed.likeCount + 1 else targetFeed.likeCount - 1
+
+        viewModelScope.launch {
+            // 서버에 좋아요 상태 저장 요청
+            val result = runCatching {
+                feedRepository.saveLike(selectedFeedId, nextIsLiked)
+            }
+
+            result.onSuccess {
+                _uiState.update { state ->
+                    // 현재 활성화된 소스(myFeedData, sosoAllData 등) 내의 리스트에서 해당 아이템만 교체
+                    val updatedSource = state.currentData.copy(
+                        items = state.currentData.items.map { feed ->
+                            if (feed.id == selectedFeedId) {
+                                feed.copy(isLiked = nextIsLiked, likeCount = nextLikeCount)
+                            } else feed
+                        }.toImmutableList()
+                    )
+
+                    // 현재 어떤 탭/카테고리인지 확인하여 해당 데이터만 업데이트
+                    when (state.selectedTab) {
+                        FeedTab.MY_FEED -> state.copy(myFeedData = updatedSource)
+                        FeedTab.SOSO_FEED -> {
+                            if (state.sosoCategory == SosoCategory.ALL) {
+                                state.copy(sosoAllData = updatedSource)
+                            } else {
+                                state.copy(sosoRecoData = updatedSource)
+                            }
+                        }
+                    }
+                }
+            }.onFailure {
+                _uiState.update { it.copy(error = true) }
+            }
+        }
+    }
 //
 //    fun updateLikedSync(
 //        selectedFeedId: Long,

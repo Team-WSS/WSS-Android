@@ -158,7 +158,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        val view = inflater.inflate(R.layout.fragment_feed, container, false)
+        val view = inflater.inflate(fragment_feed, container, false)
         val composeView = view.findViewById<ComposeView>(R.id.cv_feed)
 
         composeView.apply {
@@ -166,11 +166,30 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             setContent {
                 WebsosoTheme {
                     FeedRoute(
+                        onWriteClick = ::navigateToWriteFeed,
+                        onProfileClick = { userId, isMyFeed ->
+                            onClickFeedItem().onProfileClick(
+                                userId = userId,
+                                isMyFeed = isMyFeed,
+                            )
+                        },
+                        onNovelClick = { novelId -> onClickFeedItem().onNovelInfoClick(novelId) },
+                        onContentClick = { feedId, isLiked ->
+                            onClickFeedItem().onContentClick(
+                                feedId,
+                                isLiked,
+                            )
+                        },
                     )
                 }
             }
         }
+
         return view
+    }
+
+    private fun navigateToWriteFeed() {
+        startActivity(CreateFeedActivity.getIntent(requireContext()))
     }
 
     private fun onClickFeedItem() =

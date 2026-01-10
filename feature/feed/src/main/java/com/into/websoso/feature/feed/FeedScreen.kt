@@ -44,6 +44,11 @@ internal fun FeedScreen(
     onSortSelected: (order: FeedOrder) -> Unit,
     onSosoTypeSelected: (feedType: SosoFeedType) -> Unit,
     onWriteClick: () -> Unit,
+    onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
+    onMoreClick: (feedId: Long) -> Unit,
+    onNovelClick: (novelId: Long) -> Unit,
+    onLikeClick: (feedId: Long) -> Unit,
+    onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
 ) {
     Scaffold(containerColor = White) {
         Column {
@@ -130,6 +135,7 @@ internal fun FeedScreen(
             }
 
             FeedSection(
+                currentTab = uiState.selectedTab,
                 feeds = when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> uiState.myFeedData.feeds
                     FeedTab.SOSO_FEED -> when (uiState.sosoCategory) {
@@ -137,6 +143,11 @@ internal fun FeedScreen(
                         SosoFeedType.RECOMMENDATION -> uiState.sosoRecommendationData.feeds
                     }
                 },
+                onProfileClick = onProfileClick,
+                onMoreClick = onMoreClick,
+                onNovelClick = onNovelClick,
+                onLikeClick = onLikeClick,
+                onContentClick = onContentClick,
             )
         }
     }
@@ -211,6 +222,11 @@ private fun FeedScreenPreview() {
             onTabSelected = { },
             onSortSelected = { },
             onSosoTypeSelected = { },
+            onProfileClick = { _, _ -> },
+            onMoreClick = { },
+            onNovelClick = { },
+            onLikeClick = { },
+            onContentClick = { _, _ -> },
         )
     }
 }
