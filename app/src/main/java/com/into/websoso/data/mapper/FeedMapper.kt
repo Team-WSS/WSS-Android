@@ -99,13 +99,13 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity =
             NovelEntity(
                 id = id,
                 title = title.orEmpty(),
-                rating = novelRating ?: 0.0f,
+                rating = novelRating,
                 ratingCount = novelRatingCount ?: 0,
                 thumbnail = novelThumbnailImage.orEmpty(),
                 genre = novelGenre.orEmpty(),
                 author = novelAuthor.orEmpty(),
                 description = novelDescription.orEmpty(),
-                feedWriterNovelRating = feedWriterNovelRating ?: 0.0f,
+                feedWriterNovelRating = feedWriterNovelRating,
             )
         },
     )

@@ -26,13 +26,15 @@ data class FeedDetailEntity(
     data class NovelEntity(
         val id: Long,
         val title: String,
-        val rating: Float,
+        val rating: Float?,
         val ratingCount: Int,
         val thumbnail: String,
         val genre: String,
         val author: String,
         val description: String,
-        val feedWriterNovelRating: Float,
-    )
+        val feedWriterNovelRating: Float?,
+    ) {
+        val isRatingNoting: Boolean = rating == null
+        val isWriterRatingNoting: Boolean = feedWriterNovelRating == null
+    }
 }
-
