@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.myPage.myActivity.model
+package com.into.websoso.ui.main.myPage.model
 
 import java.text.SimpleDateFormat
 import java.util.Locale

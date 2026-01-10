@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.into.websoso.databinding.ItemMyActivityBinding
-import com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
-import com.into.websoso.ui.main.myPage.myActivity.model.UserActivityModel
+import com.into.websoso.ui.main.myPage.ActivityItemClickListener
+import com.into.websoso.ui.main.myPage.model.UserActivityModel
 
 class OtherUserActivityAdapter(
     private val activityItemClickListener: ActivityItemClickListener,

@@ -11,7 +11,7 @@
 
         <variable
             name="myLibraryViewModel"
-            type="com.into.websoso.ui.main.myPage.myLibrary.MyLibraryViewModel" />
+            type="com.into.websoso.ui.main.myPage.MyLibraryViewModel" />
 
     </data>
 

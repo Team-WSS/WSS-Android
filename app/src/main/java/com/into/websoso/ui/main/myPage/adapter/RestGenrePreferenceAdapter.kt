@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.myPage.myLibrary.adapter
+package com.into.websoso.ui.main.myPage.adapter
 
 import android.view.LayoutInflater
 import android.view.View

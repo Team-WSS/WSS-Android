@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.myPage.myLibrary.model
+package com.into.websoso.ui.main.myPage.model
 
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity

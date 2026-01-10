@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.myPage.myLibrary.model
+package com.into.websoso.ui.main.myPage.model
 
 enum class AttractivePoints(
     val korean: String,

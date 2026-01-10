@@ -20,10 +20,10 @@ import com.into.websoso.ui.activityDetail.ActivityDetailActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.into.websoso.ui.main.feed.dialog.FeedReportDoneDialogFragment
-import com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener
-import com.into.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
-import com.into.websoso.ui.main.myPage.myActivity.model.UserActivityModel
-import com.into.websoso.ui.main.myPage.myActivity.model.UserProfileModel
+import com.into.websoso.ui.main.myPage.ActivityItemClickListener
+import com.into.websoso.ui.main.myPage.model.ActivitiesModel.ActivityModel
+import com.into.websoso.ui.main.myPage.model.UserActivityModel
+import com.into.websoso.ui.main.myPage.model.UserProfileModel
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.otherUserPage.OtherUserPageViewModel
 import com.into.websoso.ui.otherUserPage.otherUserActivity.adapter.OtherUserActivityAdapter

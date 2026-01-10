@@ -34,9 +34,9 @@ import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyPageBinding
 import com.into.websoso.ui.main.MainViewModel
-import com.into.websoso.ui.main.myPage.myLibrary.MyLibraryViewModel
-import com.into.websoso.ui.main.myPage.myLibrary.adapter.RestGenrePreferenceAdapter
-import com.into.websoso.ui.main.myPage.myLibrary.model.MyLibraryUiState
+import com.into.websoso.ui.main.myPage.MyLibraryViewModel
+import com.into.websoso.ui.main.myPage.adapter.RestGenrePreferenceAdapter
+import com.into.websoso.ui.main.myPage.model.MyLibraryUiState
 import com.into.websoso.ui.profileEdit.ProfileEditActivity
 import com.into.websoso.ui.setting.SettingActivity
 import dagger.hilt.android.AndroidEntryPoint

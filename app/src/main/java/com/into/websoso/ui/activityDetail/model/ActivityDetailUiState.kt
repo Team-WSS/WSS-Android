@@ -1,6 +1,6 @@
 package com.into.websoso.ui.activityDetail.model
 
-import com.into.websoso.ui.main.myPage.myActivity.model.ActivitiesModel
+import com.into.websoso.ui.main.myPage.model.ActivitiesModel
 
 data class ActivityDetailUiState(
     val isLoading: Boolean = false,

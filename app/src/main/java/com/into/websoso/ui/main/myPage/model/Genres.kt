@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.myPage.myActivity.model
+package com.into.websoso.ui.main.myPage.model
 
 enum class Genres(
     val korean: String,
@@ -18,7 +18,7 @@ enum class Genres(
 
     companion object {
         fun from(value: String): Genres? =
-            Genres.entries.find {
+            entries.find {
                 it.name.equals(value, ignoreCase = true)
             }
     }
