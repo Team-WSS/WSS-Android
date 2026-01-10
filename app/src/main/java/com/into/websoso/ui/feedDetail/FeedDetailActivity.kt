@@ -337,19 +337,21 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class ->
+            DialogRemovePopupMenuBinding::class -> {
                 FeedRemoveDialogFragment
                     .newInstance(
                         menuType = menuType ?: throw IllegalArgumentException(),
                         event = { event() },
                     ).show(supportFragmentManager, FeedRemoveDialogFragment.TAG)
+            }
 
-            DialogReportPopupMenuBinding::class ->
+            DialogReportPopupMenuBinding::class -> {
                 FeedReportDialogFragment
                     .newInstance(
                         menuType = menuType ?: throw IllegalArgumentException(),
                         event = { event() },
                     ).show(supportFragmentManager, FeedReportDialogFragment.TAG)
+            }
         }
     }
 
@@ -371,7 +373,9 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     NovelDetailBack.RESULT_OK,
                     CreateFeed.RESULT_OK,
                     OtherUserProfileBack.RESULT_OK,
-                    -> feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
+                    -> {
+                        feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
+                    }
 
                     BlockUser.RESULT_OK -> {
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
@@ -482,18 +486,22 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private fun setupObserver() {
         feedDetailViewModel.feedDetailUiState.observe(this) { feedDetailUiState ->
             when {
-                feedDetailUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
+                feedDetailUiState.loading -> {
+                    binding.wllFeed.setWebsosoLoadingVisibility(true)
+                }
+
                 feedDetailUiState.error -> {
                     binding.wllFeed.setLoadingLayoutVisibility(false)
 
                     when (feedDetailUiState.previousStack.from) {
-                        CreateFeed, FeedDetailRefreshed ->
+                        CreateFeed, FeedDetailRefreshed -> {
                             RemovedFeedDialogFragment
                                 .newInstance {
                                     val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
                                     setResult(FeedDetailRefreshed.RESULT_OK, extraIntent)
                                     if (!isFinishing) finish()
                                 }.show(supportFragmentManager, RemovedFeedDialogFragment.TAG)
+                        }
 
                         else -> {
                             val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
@@ -553,7 +561,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             }
         }
 
-        val header = feedDetailUiState.feedDetail.feed?.let { Header(it) }
+        val header = Header(feedDetailUiState.feedDetail)
         val comments = feedDetailUiState.feedDetail.comments.map { Comment(it) }
         val feedDetail = listOf(header) + comments
 

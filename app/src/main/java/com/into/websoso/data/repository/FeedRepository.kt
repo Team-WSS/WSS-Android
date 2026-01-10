@@ -6,6 +6,7 @@ import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.mapper.MultiPartMapper
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.CommentsEntity
+import com.into.websoso.data.model.FeedDetailEntity
 import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.FeedsEntity
 import com.into.websoso.data.model.PopularFeedsEntity
@@ -125,7 +126,7 @@ class FeedRepository
             }
         }
 
-        suspend fun fetchFeed(feedId: Long): FeedEntity = feedApi.getFeed(feedId).toData()
+        suspend fun fetchFeed(feedId: Long): FeedDetailEntity = feedApi.getFeed(feedId).toData()
 
         suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
 

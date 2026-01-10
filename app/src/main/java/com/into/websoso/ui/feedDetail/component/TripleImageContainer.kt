@@ -2,9 +2,9 @@ package com.into.websoso.ui.feedDetail.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,18 +23,17 @@ fun TripleImageContainer(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        imageUrls.take(3).forEach { imageUrl ->
+        imageUrls.take(3).forEachIndexed { index, imageUrl ->
             AdaptationImage(
                 imageUrl = imageUrl,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(1f)
+                    .size(100.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .clickableWithoutRipple {
-                        onImageClick(imageUrls.indexOf(imageUrl))
+                        onImageClick(index)
                     },
             )
         }

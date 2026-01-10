@@ -47,7 +47,7 @@ class FeedDetailAdapter(
     ) {
         when (holder) {
             is FeedDetailCommentViewHolder -> holder.bind((getItem(position) as Comment).comment)
-            is FeedDetailContentViewHolder -> holder.bind((getItem(position) as Header).feed)
+            is FeedDetailContentViewHolder -> holder.bind((getItem(position) as Header).feedDetail)
         }
     }
 
@@ -58,10 +58,13 @@ class FeedDetailAdapter(
                 newItem: FeedDetailType,
             ): Boolean =
                 when {
-                    (oldItem is Comment) and (newItem is Comment) ->
+                    (oldItem is Comment) and (newItem is Comment) -> {
                         (oldItem as Comment).comment.commentId == (newItem as Comment).comment.commentId
+                    }
 
-                    else -> oldItem == newItem
+                    else -> {
+                        oldItem == newItem
+                    }
                 }
 
             override fun areContentsTheSame(

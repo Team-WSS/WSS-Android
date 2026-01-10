@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.data.account)
     implementation(projects.data.library)
+    implementation(projects.data.user)
 
     implementation(libs.datastore.preferences)
     implementation(libs.serialization.json)

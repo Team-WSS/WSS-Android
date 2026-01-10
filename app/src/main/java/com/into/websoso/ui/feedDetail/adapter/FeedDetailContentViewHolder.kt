@@ -7,7 +7,7 @@ import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.databinding.ItemFeedDetailHeaderBinding
 import com.into.websoso.ui.feedDetail.FeedDetailClickListener
 import com.into.websoso.ui.feedDetail.component.AdaptationFeedImageContainer
-import com.into.websoso.ui.main.feed.model.FeedModel
+import com.into.websoso.ui.feedDetail.model.FeedDetailModel
 
 class FeedDetailContentViewHolder(
     private val feedDetailClickListener: FeedDetailClickListener,
@@ -17,16 +17,17 @@ class FeedDetailContentViewHolder(
         binding.onClick = feedDetailClickListener
     }
 
-    fun bind(feed: FeedModel) {
-        binding.feed = feed.copy(
-            user = feed.user.copy(avatarImage = itemView.getS3ImageUrl(feed.user.avatarImage)),
+    fun bind(feedDetail: FeedDetailModel) {
+        binding.feedDetail = feedDetail.copy(
+            user = feedDetail.user?.copy(avatarImage = itemView.getS3ImageUrl(feedDetail.user.avatarImage)),
         )
-        binding.clFeedLike.isSelected = feed.isLiked
+        binding.clFeedLike.isSelected = feedDetail.feed?.isLiked == true
         binding.cvFeedImage.setContent {
-            AdaptationFeedImageContainer(feed.imageUrls) { index ->
-                feedDetailClickListener.onFeedImageClick(index, feed.imageUrls)
+            AdaptationFeedImageContainer(feedDetail.feed?.imageUrls ?: return@setContent) { index ->
+                feedDetailClickListener.onFeedImageClick(index, feedDetail.feed.imageUrls)
             }
         }
+        binding.ivFeedDetailNovelGenre.setImageResource(feedDetail.novelImage)
     }
 
     companion object {

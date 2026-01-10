@@ -47,3 +47,4 @@ include(
     ":feature:feed",
 )
 include(":domain:feed")
+include(":data:user")
