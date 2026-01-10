@@ -10,11 +10,10 @@ import kotlinx.collections.immutable.persistentListOf
 data class FeedUiState(
     val selectedTab: FeedTab = FeedTab.MY_FEED,
     val sosoCategory: SosoFeedType = SosoFeedType.ALL,
-
     val myFeedData: FeedSourceData = FeedSourceData(),
     val sosoAllData: FeedSourceData = FeedSourceData(),
     val sosoRecommendationData: FeedSourceData = FeedSourceData(),
-
+    val isFilterSheetVisible: Boolean = false,
     val loading: Boolean = false,
     val error: Boolean = false,
 ) {

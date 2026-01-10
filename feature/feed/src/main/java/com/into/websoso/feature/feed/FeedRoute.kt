@@ -10,9 +10,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun FeedRoute(
-    viewModel: FeedViewModel = hiltViewModel(),
-) {
+fun FeedRoute(viewModel: FeedViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Box {
@@ -22,6 +20,7 @@ fun FeedRoute(
             onSortSelected = viewModel::updateMyFeedSort,
             onSosoTypeSelected = viewModel::updateSosoCategory,
             onWriteClick = { },
+            onFilterClick = { },
         )
 
         if (uiState.loading) CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

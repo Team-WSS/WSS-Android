@@ -19,7 +19,9 @@ internal fun Feed.toFeedUiModel(): FeedUiModel {
             userNovelRating = userNovelRating.orDefault(),
             feedWriterNovelRating = feedWriterNovelRating.orDefault(),
         )
-    } else NovelUiModel()
+    } else {
+        NovelUiModel()
+    }
 
     return FeedUiModel(
         user = UserUiModel(

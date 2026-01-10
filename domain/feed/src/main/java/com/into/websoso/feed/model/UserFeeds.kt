@@ -1,10 +1,10 @@
-package com.into.websoso.user.model
+package com.into.websoso.feed.model
 
-data class UserFeedsEntity(
+data class UserFeeds(
     val isLoadable: Boolean,
-    val feeds: List<UserFeedEntity>,
+    val feeds: List<UserFeed>,
 ) {
-    data class UserFeedEntity(
+    data class UserFeed(
         val feedId: Long,
         val isSpoiler: Boolean,
         val feedContent: String,
@@ -24,5 +24,11 @@ data class UserFeedsEntity(
         val thumbnailUrl: String?,
         val imageCount: Int,
         val feedWriterNovelRating: Float?,
+    )
+
+    data class User(
+        val id: Long,
+        val nickname: String,
+        val avatarImage: String,
     )
 }
