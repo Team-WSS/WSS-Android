@@ -1,3 +1,4 @@
+import com.into.websoso.buildConfigs
 import com.into.websoso.setNamespace
 
 plugins {
@@ -8,6 +9,23 @@ plugins {
 
 android {
     setNamespace("core.designsystem")
+
+    buildTypes {
+        debug {
+            buildConfigs(rootDir) {
+                string(name = "S3_BASE_URL", key = "s3.url")
+            }
+        }
+
+        release {
+            buildConfigs(rootDir) {
+                string(name = "S3_BASE_URL", key = "s3.url")
+            }
+        }
+    }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

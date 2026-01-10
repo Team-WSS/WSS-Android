@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(projects.core.resource)
     implementation(projects.core.designsystem)
-
+    implementation(projects.data.feed)
+    implementation(projects.domain.feed)
     implementation(libs.paging.compose)
 }

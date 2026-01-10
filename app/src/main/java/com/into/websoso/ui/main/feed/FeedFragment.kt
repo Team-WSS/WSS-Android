@@ -5,25 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.core.view.children
-import androidx.core.view.isVisible
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.chip.Chip
-import com.into.websoso.R.color.bg_feed_chip_background_selector
-import com.into.websoso.R.color.bg_feed_chip_text_selector
+import com.into.websoso.R
 import com.into.websoso.R.id.tv_feed_thumb_up_count
 import com.into.websoso.R.layout.fragment_feed
-import com.into.websoso.R.style.title3
 import com.into.websoso.core.common.ui.base.BaseFragment
-import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
@@ -31,12 +26,10 @@ import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
-import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.showWebsosoSnackBar
-import com.into.websoso.core.common.util.toFloatPxFromDp
-import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
 import com.into.websoso.core.resource.R.string.block_user_success_message
@@ -50,6 +43,7 @@ import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
+import com.into.websoso.feature.feed.FeedRoute
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_DETAIL_LIKE_STATUS
@@ -57,21 +51,14 @@ import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_ID
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.Companion.FEED_LIKE_COUNT
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.main.feed.adapter.FeedAdapter
-import com.into.websoso.ui.main.feed.adapter.FeedType.Feed
-import com.into.websoso.ui.main.feed.adapter.FeedType.Loading
-import com.into.websoso.ui.main.feed.adapter.FeedType.NoMore
 import com.into.websoso.ui.main.feed.dialog.FeedRemoveDialogFragment
 import com.into.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType
-import com.into.websoso.ui.main.feed.model.CategoryModel
-import com.into.websoso.ui.main.feed.model.FeedUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.otherUserPage.BlockUserDialogFragment.Companion.USER_NICKNAME
 import com.into.websoso.ui.otherUserPage.OtherUserPageActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -171,9 +158,19 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _popupBinding = MenuFeedPopupBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_feed, container, false)
+        val composeView = view.findViewById<ComposeView>(R.id.cv_feed)
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+        composeView.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                WebsosoTheme {
+                    FeedRoute(
+                    )
+                }
+            }
+        }
+        return view
     }
 
     private fun onClickFeedItem() =
@@ -393,135 +390,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        initView()
-        setupObserver()
         tracker.trackEvent("feed_all")
         activityResultCallback
-    }
-
-    private fun initView() {
-        binding.onWriteClick = { singleEventHandler.throttleFirst { navigateToFeedWriting() } }
-        setupAdapter()
-        setupRefreshView()
-    }
-
-    private fun navigateToFeedWriting() {
-        tracker.trackEvent("feed_write_floating_btn")
-        activityResultCallback.launch(CreateFeedActivity.getIntent(requireContext()))
-    }
-
-    private fun setupAdapter() {
-        binding.rvFeed.apply {
-            adapter = feedAdapter
-            itemAnimator = null
-            addOnScrollListener(
-                InfiniteScrollListener.of(
-                    singleEventHandler = singleEventHandler,
-                    event = feedViewModel::updateFeeds,
-                ),
-            )
-            setHasFixedSize(true)
-        }
-    }
-
-    private fun setupRefreshView() {
-        binding.sptrFeedRefresh.apply {
-            singleEventHandler.throttleFirst {
-                setRefreshViewParams(
-                    params = LayoutParams(
-                        30.toIntPxFromDp(),
-                        30.toIntPxFromDp(),
-                    ),
-                )
-                setLottieAnimation("lottie_websoso_loading.json")
-                setOnRefreshListener {
-                    feedViewModel.updateRefreshedFeeds(true)
-                }
-            }
-        }
-    }
-
-    private fun setupObserver() {
-        feedViewModel.feedUiState.observe(viewLifecycleOwner) { feedUiState ->
-            when {
-                feedUiState.loading -> binding.wllFeed.setWebsosoLoadingVisibility(true)
-                feedUiState.error -> binding.wllFeed.setLoadingLayoutVisibility(false)
-                !feedUiState.loading -> {
-                    binding.wllFeed.setWebsosoLoadingVisibility(false)
-                    binding.sptrFeedRefresh.setRefreshing(false)
-                    updateFeeds(feedUiState)
-                }
-            }
-        }
-
-        feedViewModel.categories.observe(viewLifecycleOwner) { category ->
-            if (binding.wcgFeed.children
-                    .toList()
-                    .isEmpty()
-            ) {
-                category.setUpChips()
-            }
-
-            val selectedCategory = category.find { it.isSelected } ?: category.first()
-            tracker.trackEvent("feed_${selectedCategory.category.shortCode}")
-
-            binding.wcgFeed.children.forEach {
-                val chip = it as Chip
-                chip.isSelected = chip.text == selectedCategory.category.krTitle
-            }
-            // TODO: 최초로 init할 때 전체상태로 updateFeeds 호출함 -> 리프레시되어야하기 때문에 true 설정
-            // TODO: 뷰모델 init으로 옮기기, isRefreshed 상태 없애기
-            feedViewModel.updateFeeds(true)
-        }
-    }
-
-    private fun List<CategoryModel>.setUpChips() {
-        forEach { categoryUiState ->
-            WebsosoChip(requireContext())
-                .apply {
-                    setWebsosoChipText(categoryUiState.category.krTitle)
-                    setWebsosoChipTextAppearance(title3)
-                    setWebsosoChipTextColor(bg_feed_chip_text_selector)
-                    setWebsosoChipBackgroundColor(bg_feed_chip_background_selector)
-                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                    setWebsosoChipPaddingHorizontal(8f.toFloatPxFromDp())
-                    setWebsosoChipRadius(18f.toFloatPxFromDp())
-                    setWebsosoChipSelected(categoryUiState.isSelected)
-                    setOnWebsosoChipClick { feedViewModel.updateSelectedCategory(categoryUiState.category) }
-                }.also { websosoChip -> binding.wcgFeed.addChip(websosoChip) }
-        }
-    }
-
-    private fun updateFeeds(feedUiState: FeedUiState) {
-        val feeds = feedUiState.feeds.map { Feed(it) }
-
-        when (feedUiState.isLoadable) {
-            true -> {
-                feedAdapter.submitList(feeds + Loading)
-                binding.clFeedNone.isVisible = false
-            }
-
-            false -> {
-                when (feeds.isNotEmpty()) {
-                    true -> {
-                        feedAdapter.submitList(feeds + NoMore)
-                        binding.clFeedNone.isVisible = false
-                    }
-
-                    false -> {
-                        feedAdapter.submitList(emptyList())
-                        binding.clFeedNone.isVisible = true
-                    }
-                }
-            }
-        }
-
-        if (feedUiState.isRefreshed) {
-            lifecycleScope.launch {
-                delay(300)
-                binding.rvFeed.smoothScrollToPosition(0)
-            }
-        }
     }
 
     override fun onDestroyView() {

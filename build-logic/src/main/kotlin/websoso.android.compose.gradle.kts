@@ -14,4 +14,5 @@ websosoDependencies {
     androidTestImplementation(platform("compose.bom"))
 
     implementation("compose")
+    implementation("kotlinx-collections-immutable")
 }

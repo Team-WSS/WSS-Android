@@ -1,120 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
-        <variable
-            name="onWriteClick"
-            type="kotlin.jvm.functions.Function0" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".ui.main.feed.FeedFragment">
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_feed_none"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/cv_feed"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/iv_feed_logo_none"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_novel_info_none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_feed_none"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="@string/feed_none"
-                android:textAppearance="@style/body2"
-                android:textColor="@color/gray_200_949399"
-                app:layout_constraintEnd_toEndOf="@+id/iv_feed_logo_none"
-                app:layout_constraintStart_toStartOf="@+id/iv_feed_logo_none"
-                app:layout_constraintTop_toBottomOf="@+id/iv_feed_logo_none" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tv_feed_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/feed_title"
-            android:textAppearance="@style/headline1"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_novel_feed_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:onClick="@{()->onWriteClick.invoke()}"
-            android:src="@drawable/ic_pencil"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <HorizontalScrollView
-            android:id="@+id/hsv_feed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingHorizontal="20dp"
-            android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_feed_title">
-
-            <com.into.websoso.core.common.ui.custom.WebsosoChipGroup
-                android:id="@+id/wcg_feed"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:chipSpacingHorizontal="6dp"
-                app:singleSelection="true">
-
-            </com.into.websoso.core.common.ui.custom.WebsosoChipGroup>
-        </HorizontalScrollView>
-
-        <com.simform.refresh.SSPullToRefreshLayout
-            android:id="@+id/sptr_feed_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hsv_feed">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_feed"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_feed" />
-        </com.simform.refresh.SSPullToRefreshLayout>
-
-        <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
-            android:id="@+id/wll_feed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="100dp"
-            android:visibility="invisible" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </layout>
