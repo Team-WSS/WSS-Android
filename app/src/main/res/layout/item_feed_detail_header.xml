@@ -105,11 +105,10 @@
 
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/cv_feed_image"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 app:isVisible="@{!feedDetail.feed.imageUrls.empty}"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_feed_content" />
 

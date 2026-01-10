@@ -1,8 +1,8 @@
 package com.into.websoso.ui.feedDetail.component
 
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,16 +17,20 @@ fun SingleImageContainer(
     imageUrl: String,
     onImageClick: () -> Unit,
 ) {
-    AdaptationImage(
-        imageUrl = imageUrl,
-        contentScale = ContentScale.Crop,
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(8.dp))
-            .clickableWithoutRipple {
-                onImageClick()
-            },
-    )
+            .size(100.dp),
+    ) {
+        AdaptationImage(
+            imageUrl = imageUrl,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .matchParentSize()
+                .clip(RoundedCornerShape(8.dp))
+                .clickableWithoutRipple {
+                    onImageClick()
+                },
+        )
+    }
 }
