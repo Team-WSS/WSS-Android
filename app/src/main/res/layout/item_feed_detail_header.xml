@@ -107,7 +107,7 @@
                 android:id="@+id/cv_feed_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 app:isVisible="@{!feedDetail.feed.imageUrls.empty}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -118,10 +118,8 @@
                 isVisible="@{!feedDetail.feed.novel.nothing}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/btn_feed_novel_info"
                 android:clipToOutline="true"
                 android:onClick="@{() -> onClick.onNovelInfoClick(feedDetail.feed.novel.id)}"
@@ -276,12 +274,14 @@
                 android:id="@+id/cl_feed_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
                 android:layout_marginStart="12dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
                 android:onClick="@{(cl_feed_like) -> onClick.onLikeButtonClick(cl_feed_like, feedDetail.feed.id)}"
                 app:layout_constraintBottom_toTopOf="@+id/view_feed_indicator"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_feed_novel_info">
+                app:layout_constraintTop_toBottomOf="@+id/cl_feed_novel_info"
+                app:layout_constraintVertical_bias="0.0">
 
                 <ImageView
                     android:id="@+id/iv_feed_thumb_up"
