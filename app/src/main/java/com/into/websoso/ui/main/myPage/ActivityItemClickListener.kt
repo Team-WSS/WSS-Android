@@ -1,4 +1,4 @@
-package com.into.websoso.ui.main.myPage.myActivity
+package com.into.websoso.ui.main.myPage
 
 import android.view.View
 

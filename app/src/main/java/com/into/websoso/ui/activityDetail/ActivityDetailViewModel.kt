@@ -9,7 +9,7 @@ import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.activityDetail.ActivityDetailActivity.Companion.SOURCE_MY_ACTIVITY
 import com.into.websoso.ui.activityDetail.model.ActivityDetailUiState
-import com.into.websoso.ui.main.myPage.myActivity.model.ActivityLikeState
+import com.into.websoso.ui.main.myPage.model.ActivityLikeState
 import com.into.websoso.ui.mapper.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

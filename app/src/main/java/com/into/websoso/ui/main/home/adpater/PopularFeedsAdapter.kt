@@ -1,5 +1,6 @@
 package com.into.websoso.ui.main.home.adpater
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -33,6 +34,7 @@ class PopularFeedsAdapter(
                 newItem: List<PopularFeedEntity>,
             ): Boolean = oldItem.firstOrNull()?.feedId == newItem.firstOrNull()?.feedId
 
+            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
                 oldItem: List<PopularFeedEntity>,
                 newItem: List<PopularFeedEntity>,

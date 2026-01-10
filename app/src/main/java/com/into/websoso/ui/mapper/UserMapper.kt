@@ -3,7 +3,7 @@ package com.into.websoso.ui.mapper
 import com.into.websoso.data.model.MyProfileEntity
 import com.into.websoso.data.model.OtherUserProfileEntity
 import com.into.websoso.ui.main.myPage.model.MyProfileModel
-import com.into.websoso.ui.main.myPage.myActivity.model.UserProfileModel
+import com.into.websoso.ui.main.myPage.model.UserProfileModel
 import com.into.websoso.ui.profileEdit.model.Genre.Companion.toGenreFromTag
 import com.into.websoso.ui.profileEdit.model.NicknameModel
 import com.into.websoso.ui.profileEdit.model.ProfileModel

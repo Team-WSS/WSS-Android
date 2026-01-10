@@ -215,8 +215,8 @@
 
     <!-- 마이페이지 뷰 -->
     <string name="my_page_title">마이페이지</string>
-    <string name="my_page_library">내 통계</string>
-    <string name="my_page_activity">내 활동</string>
+    <string name="my_page_taste_title">주로 보는 작품은…</string>
+    <string name="my_page_badge">%d개의 장르 뱃지</string>
 
     <!-- 마이페이지 내 서재 뷰 -->
     <string name="my_library_storage">서재</string>
