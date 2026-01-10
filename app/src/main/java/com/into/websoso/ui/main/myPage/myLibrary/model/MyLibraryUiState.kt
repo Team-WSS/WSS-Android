@@ -13,4 +13,7 @@ data class MyLibraryUiState(
     val novelPreferences: NovelPreferenceEntity? = null,
     val translatedAttractivePoints: List<String> = emptyList(),
     val isGenreListVisible: Boolean = false,
-)
+) {
+    val totalBadgeCount: Int
+        get() = topGenres.sumOf { it.genreCount } + restGenres.sumOf { it.genreCount }
+}

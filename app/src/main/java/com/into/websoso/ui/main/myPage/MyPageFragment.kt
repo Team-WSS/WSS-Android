@@ -181,6 +181,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
                 updateRestGenrePreferenceVisibility(uiState.isGenreListVisible)
                 uiState.novelPreferences?.let { updateNovelPreferencesKeywords(it) }
                 updateDominantGenres(uiState.topGenres)
+                updateGenreBadgeTitle(uiState.totalBadgeCount)
 
                 applyTextColors(
                     uiState.translatedAttractivePoints.joinToString(", ") +
@@ -310,6 +311,29 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
                 2 -> binding.ivMyLibraryDominantGenreThirdLogo.load(updatedGenreImageUrl)
             }
         }
+    }
+
+    private fun updateGenreBadgeTitle(count: Int) {
+        val primary100 = ContextCompat.getColor(
+            requireContext(),
+            primary_100_6A5DFD,
+        )
+        val countText = count.toString()
+        val fullText = getString(com.into.websoso.core.resource.R.string.my_page_badge, count)
+
+        val spannable = SpannableStringBuilder(fullText)
+        val start = fullText.indexOf(countText)
+        val end = start + countText.length
+
+        if (start != -1) {
+            spannable.setSpan(
+                ForegroundColorSpan(primary100),
+                start,
+                end,
+                SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+        }
+        binding.tvMyLibraryGenrePreferenceTitle.text = spannable
     }
 
     private fun onProfileEditClick() {

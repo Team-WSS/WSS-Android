@@ -296,7 +296,6 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="20dp"
                             android:paddingVertical="10dp"
-                            android:text="@string/my_page_badge"
                             android:textAppearance="@style/title2"
                             android:textColor="@color/gray_300_52515F"
                             app:layout_constraintStart_toStartOf="parent"
