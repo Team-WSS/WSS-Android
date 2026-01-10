@@ -11,5 +11,7 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.data.account)
+    implementation(projects.core.network)
+    implementation(projects.data.library)
     implementation(libs.paging.runtime)
 }

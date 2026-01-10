@@ -17,7 +17,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-internal interface FeedApi {
+interface FeedApi {
     @GET("feeds")
     suspend fun getFeeds(
         @Query("category") category: String?,
