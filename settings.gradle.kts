@@ -46,3 +46,4 @@ include(
     ":feature:library",
 )
 include(":domain:feed")
+include(":data:user")
