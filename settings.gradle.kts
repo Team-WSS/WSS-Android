@@ -45,3 +45,4 @@ include(
     ":feature:signin",
     ":feature:library",
 )
+include(":domain:feed")

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class FeedResponseDto(
+data class FeedResponseDto(
     @SerialName("feedId")
     val feedId: Long,
     @SerialName("userId")

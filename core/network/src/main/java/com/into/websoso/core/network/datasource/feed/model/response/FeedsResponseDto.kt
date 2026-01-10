@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class FeedsResponseDto(
+data class FeedsResponseDto(
     @SerialName("category")
     val category: String,
     @SerialName("isLoadable")
