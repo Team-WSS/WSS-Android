@@ -1,13 +1,14 @@
+import com.into.websoso.setNamespace
+
 plugins {
-    id("java-library")
-    alias(libs.plugins.kotlin.jvm)
+    id("websoso.android.library")
 }
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+
+android {
+    setNamespace("domain.feed")
 }
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-    }
+
+dependencies {
+    implementation(projects.core.common)
+    implementation(projects.data.feed)
 }
