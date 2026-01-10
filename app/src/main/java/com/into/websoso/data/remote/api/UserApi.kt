@@ -68,7 +68,7 @@ interface UserApi {
         @Query("nickname") nickname: String,
     ): UserNicknameValidityResponseDto
 
-    @PATCH("users/my-profile")
+    @PATCH("users/profile")
     suspend fun patchProfile(
         @Body userProfileEditRequestDto: UserProfileEditRequestDto,
     )

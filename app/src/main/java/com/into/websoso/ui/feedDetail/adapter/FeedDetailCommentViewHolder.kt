@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.into.websoso.R.color.black
-import com.into.websoso.R.color.gray_200_AEADB3
+import com.into.websoso.R.color.gray_200_949399
 import com.into.websoso.R.color.secondary_100_FF675D
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.databinding.ItemFeedDetailCommentBinding
@@ -37,14 +37,14 @@ class FeedDetailCommentViewHolder(
         if (comment.isBlocked) {
             binding.tvFeedUserName.text = "차단한 유저"
             binding.tvFeedDetailCommentContent.text = "차단한 유저의 댓글"
-            binding.tvFeedDetailCommentContent.setTextColor(gray_200_AEADB3.color())
+            binding.tvFeedDetailCommentContent.setTextColor(gray_200_949399.color())
             binding.ivFeedDetailMoreButton.isVisible = false
             return
         }
 
         if (comment.isHidden) {
             binding.tvFeedDetailCommentContent.text = "숨김 처리된 댓글"
-            binding.tvFeedDetailCommentContent.setTextColor(gray_200_AEADB3.color())
+            binding.tvFeedDetailCommentContent.setTextColor(gray_200_949399.color())
             binding.ivFeedDetailMoreButton.isVisible = false
             return
         }

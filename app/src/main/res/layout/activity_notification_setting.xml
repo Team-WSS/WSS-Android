@@ -70,7 +70,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/notification_setting_description"
                 android:textAppearance="@style/body3"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tv_notification_setting_button_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_notification_setting_button_title" />

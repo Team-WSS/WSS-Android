@@ -3,21 +3,19 @@ package com.into.websoso.ui.profileEdit
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.databinding.DialogAvatarChangeBinding
-import com.into.websoso.ui.profileEdit.adapter.AvatarChangeAdapter
-import com.into.websoso.ui.profileEdit.model.Avatar.Companion.animation
+import com.into.websoso.ui.profileEdit.adapter.AvatarPagerAdapter
 import com.into.websoso.ui.profileEdit.model.AvatarChangeUiState
-import com.into.websoso.ui.profileEdit.model.AvatarModel
 
 class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBinding>(R.layout.dialog_avatar_change) {
     private val profileEditViewModel: ProfileEditViewModel by activityViewModels()
-    private val avatarChangeAdapter: AvatarChangeAdapter by lazy {
-        AvatarChangeAdapter { avatarModel -> profileEditViewModel.updateSelectedAvatar(avatarModel) }
+
+    private val avatarPagerAdapter: AvatarPagerAdapter by lazy {
+        AvatarPagerAdapter { avatarModel -> profileEditViewModel.updateSelectedAvatar(avatarModel) }
     }
 
     override fun onViewCreated(
@@ -49,35 +47,37 @@ class AvatarChangeBottomSheetDialog : BaseBottomSheetDialog<DialogAvatarChangeBi
     }
 
     private fun handleAvatarChangeUiState(uiState: AvatarChangeUiState) {
-        when {
-            uiState.loading -> Unit
+        if (uiState.avatars.isNotEmpty()) {
+            val isInitialLoad = binding.vpProfileEditAvatar.adapter == null
 
-            uiState.error -> Unit
+            if (isInitialLoad) {
+                setupViewPager()
 
-            uiState.avatars.isNotEmpty() -> {
-                setupRecyclerView()
-                updateAvatarAnimation(uiState.selectedAvatar)
-                avatarChangeAdapter.submitList(uiState.avatars)
+                val chunkedAvatars = uiState.avatars.chunked(10)
+                val selectedAvatarPage = chunkedAvatars
+                    .indexOfFirst { page ->
+                        page.any { it.avatarId == uiState.selectedAvatar.avatarId }
+                    }.coerceAtLeast(0)
+
+                avatarPagerAdapter.submitList(chunkedAvatars) {
+                    binding.vpProfileEditAvatar.setCurrentItem(selectedAvatarPage, false)
+                }
+            } else {
+                val currentPage = binding.vpProfileEditAvatar.currentItem
+                avatarPagerAdapter.submitList(uiState.avatars.chunked(10)) {
+                    binding.vpProfileEditAvatar.setCurrentItem(currentPage, false)
+                }
             }
         }
     }
 
-    private fun setupRecyclerView() {
-        // TODO: 갯수가 일정 갯수 초과시 그리드 리사이클러뷰 가운데 정렬
-        if (binding.rvProfileEditAvatar.childCount > 0) return
-        binding.rvProfileEditAvatar.apply {
-            adapter = avatarChangeAdapter
-            layoutManager = GridLayoutManager(context, profileEditViewModel.getFormattedSpanCount())
-            itemAnimator = null
+    private fun setupViewPager() {
+        binding.vpProfileEditAvatar.apply {
+            adapter = avatarPagerAdapter
+            offscreenPageLimit = 1
         }
-    }
 
-    private fun updateAvatarAnimation(avatar: AvatarModel) {
-        if (avatar.avatarId == 0) return
-        binding.lavProfileEditAvatar.apply {
-            setAnimation(avatar.animation())
-            playAnimation()
-        }
+        binding.dotsIndicatorProfileEdit.attachTo(binding.vpProfileEditAvatar)
     }
 
     private fun onSaveClick() {

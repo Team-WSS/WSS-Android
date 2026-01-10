@@ -95,7 +95,7 @@ class DetailExploreResultDialogBottomSheet : BaseBottomSheetDialog<DialogDetailE
 
     private fun updateButtonColors(selectedFragmentTitle: SelectedFragmentTitle) {
         val selectedColor = requireContext().getColor(R.color.primary_100_6A5DFD)
-        val defaultColor = requireContext().getColor(R.color.gray_200_AEADB3)
+        val defaultColor = requireContext().getColor(R.color.gray_200_949399)
 
         when (selectedFragmentTitle) {
             INFO -> {

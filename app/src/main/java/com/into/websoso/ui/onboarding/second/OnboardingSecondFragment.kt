@@ -5,7 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.into.websoso.R.color.black
-import com.into.websoso.R.color.gray_200_AEADB3
+import com.into.websoso.R.color.gray_200_949399
 import com.into.websoso.R.layout.fragment_onboarding_second
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.resource.R.string.onboarding_second_input_birth_year
@@ -53,7 +53,7 @@ class OnboardingSecondFragment : BaseFragment<FragmentOnboardingSecondBinding>(f
                 ContextCompat.getColor(
                     context,
                     when (userModelInfo.birthYear) {
-                        0 -> gray_200_AEADB3
+                        0 -> gray_200_949399
                         else -> black
                     },
                 ),

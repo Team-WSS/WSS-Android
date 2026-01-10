@@ -28,7 +28,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/other_user_activity_emtpy"
                 android:textAppearance="@style/body2"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_other_user_activity_empty_cat" />

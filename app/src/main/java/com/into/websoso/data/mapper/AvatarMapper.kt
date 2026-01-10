@@ -8,6 +8,7 @@ fun AvatarResponseDto.toData(): AvatarEntity =
         avatarId = avatarId,
         avatarName = avatarName,
         avatarLine = avatarLine,
+        avatarProfileImage = avatarProfileImage,
         avatarImage = avatarImage,
         isRepresentative = isRepresentative,
     )

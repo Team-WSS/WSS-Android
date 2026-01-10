@@ -15,7 +15,7 @@ import androidx.core.widget.addTextChangedListener
 import com.into.websoso.R.color.bg_profile_edit_chip_background_selector
 import com.into.websoso.R.color.bg_profile_edit_chip_stroke_selector
 import com.into.websoso.R.color.bg_profile_edit_chip_text_selector
-import com.into.websoso.R.color.gray_200_AEADB3
+import com.into.websoso.R.color.gray_200_949399
 import com.into.websoso.R.color.gray_300_52515F
 import com.into.websoso.R.color.primary_100_6A5DFD
 import com.into.websoso.R.drawable.bg_profile_edit_gray_50_radius_12dp
@@ -109,7 +109,7 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(activity_pr
                         primary_100_6A5DFD,
                     ).defaultColor
             } else {
-                AppCompatResources.getColorStateList(this, gray_200_AEADB3).defaultColor
+                AppCompatResources.getColorStateList(this, gray_200_949399).defaultColor
             },
         )
         binding.tvProfileEditNicknameCheckDuplicate.setBackgroundResource(

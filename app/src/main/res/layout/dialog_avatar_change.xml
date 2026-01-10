@@ -28,97 +28,112 @@
             android:id="@+id/tv_profile_edit_avatar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="32dp"
             android:text="@string/profile_edit_avatar_title"
-            android:textAppearance="@style/title1"
+            android:textAppearance="@style/title2"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lav_profile_edit_avatar"
+        <ImageView
+            android:id="@+id/iv_profile_edit_avatar"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="56dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="240dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_title"
-            app:lottie_autoPlay="true" />
+            app:loads3ImageUrl="@{viewModel.avatarChangeUiState.selectedAvatar.avatarImage}" />
 
         <TextView
             android:id="@+id/tv_profile_edit_avatar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="8dp"
             android:text="@{viewModel.avatarChangeUiState.selectedAvatar.avatarName}"
-            android:textAppearance="@style/headline1"
+            android:textAppearance="@style/title1"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lav_profile_edit_avatar"
+            app:layout_constraintTop_toBottomOf="@id/iv_profile_edit_avatar"
             tools:text="추락한 악역영애" />
 
         <TextView
             android:id="@+id/tv_profile_edit_avatar_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:text="@{viewModel.avatarChangeUiState.selectedAvatar.avatarLine}"
             android:textAppearance="@style/title3"
-            android:textColor="@color/gray_300_52515F"
+            android:textColor="@color/gray_200_949399"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_name"
             tools:text="만나서 반가워요, 밝보" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_profile_edit_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:clipToPadding="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_line"
-            tools:itemCount="5"
-            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:listitem="@layout/item_profile_edit_avatar"
-            tools:spanCount="3" />
-
-        <TextView
-            android:id="@+id/tv_profile_edit_avatar_setting"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_profile_edit_avatar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/bg_profile_edit_primary_100_radius_14dp"
-            android:onClick="@{() -> onSaveClick.invoke()}"
-            android:paddingVertical="14dp"
-            android:text="@string/profile_edit_avatar_setting"
-            android:textAlignment="center"
-            android:textAppearance="@style/body1"
-            android:textColor="@color/white"
+            android:layout_marginTop="34dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_profile_edit_avatar" />
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_line" />
+
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            android:id="@+id/dotsIndicator_profile_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:dotsColor="@color/gray_200_949399"
+            app:dotsSize="6dp"
+            app:dotsSpacing="4dp"
+            app:dotsWidthFactor="1.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vp_profile_edit_avatar"
+            app:selectedDotColor="@color/primary_100_6A5DFD" />
 
         <TextView
             android:id="@+id/tv_profile_edit_avatar_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_onboarding_gray70_radius_14dp"
             android:onClick="@{() -> onCancelClick.invoke()}"
             android:paddingVertical="14dp"
             android:text="@string/profile_edit_avatar_cancel"
             android:textAlignment="center"
-            android:textAppearance="@style/body1"
+            android:textAppearance="@style/title2"
             android:textColor="@color/gray_300_52515F"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_profile_edit_avatar_setting"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_profile_edit_avatar_setting" />
+            app:layout_constraintTop_toBottomOf="@id/dotsIndicator_profile_edit" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit_avatar_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_primary_100_radius_12dp"
+            android:onClick="@{() -> onSaveClick.invoke()}"
+            android:paddingVertical="14dp"
+            android:text="@string/profile_edit_avatar_setting"
+            android:textAlignment="center"
+            android:textAppearance="@style/title2"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/tv_profile_edit_avatar_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_profile_edit_avatar_cancel"
+            app:layout_constraintTop_toTopOf="@id/tv_profile_edit_avatar_cancel" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -91,7 +91,7 @@
                             android:paddingBottom="30dp"
                             android:text='@{myPageViewModel.uiState.myProfile.intro}'
                             android:textAppearance="@style/body2"
-                            android:textColor="@color/gray_200_AEADB3"
+                            android:textColor="@color/gray_200_949399"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_name"
