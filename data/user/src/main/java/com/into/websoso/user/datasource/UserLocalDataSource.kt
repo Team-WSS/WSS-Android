@@ -1,7 +1,13 @@
 package com.into.websoso.user.datasource
 
-interface UserLocalDataSource {
-    suspend fun getUserId(): Long
+import com.into.websoso.user.model.UserInfoEntity
 
-    suspend fun updateUserId(userId: Long)
+interface UserLocalDataSource {
+    suspend fun getUserInfo(): UserInfoEntity
+
+    suspend fun updateUserInfo(
+        userId: Long,
+        nickname: String,
+        gender: String,
+    )
 }

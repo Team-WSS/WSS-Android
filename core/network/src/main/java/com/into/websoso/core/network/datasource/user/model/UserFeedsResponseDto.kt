@@ -38,6 +38,16 @@ data class UserFeedsResponseDto(
         val novelRatingCount: Int?,
         @SerialName("relevantCategories")
         val relevantCategories: List<String>,
+        @SerialName("genre")
+        val genre: String?,
+        @SerialName("userNovelRating")
+        val userNovelRating: Float?,
+        @SerialName("thumbnailUrl")
+        val thumbnailUrl: String?,
+        @SerialName("imageCount")
+        val imageCount: Int,
+        @SerialName("feedWriterNovelRating")
+        val feedWriterNovelRating: Float?,
         @SerialName("title")
         val title: String?,
     )

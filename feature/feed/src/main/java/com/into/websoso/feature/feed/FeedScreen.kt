@@ -45,7 +45,7 @@ internal fun FeedScreen(
     onSosoTypeSelected: (feedType: SosoFeedType) -> Unit,
     onWriteClick: () -> Unit,
 ) {
-    Scaffold(containerColor = White) {
+    Scaffold(containerColor = White) { padding ->
         Column {
             FeedTabRow(
                 selectedTab = uiState.selectedTab,
@@ -132,6 +132,7 @@ internal fun FeedScreen(
             FeedSection(
                 feeds = when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> uiState.myFeedData.feeds
+
                     FeedTab.SOSO_FEED -> when (uiState.sosoCategory) {
                         SosoFeedType.ALL -> uiState.sosoAllData.feeds
                         SosoFeedType.RECOMMENDATION -> uiState.sosoRecommendationData.feeds

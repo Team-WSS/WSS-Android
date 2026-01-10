@@ -8,6 +8,7 @@ import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.SosoFeedType
 import com.into.websoso.feature.feed.model.toFeedUiModel
 import com.into.websoso.feed.GetFeedsUseCase
+import com.into.websoso.feed.GetMyFeedsUseCase
 import com.into.websoso.feed.model.Feed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -18,127 +19,135 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedViewModel @Inject constructor(
-    private val getFeedsUseCase: GetFeedsUseCase,
-    private val feedRepository: FeedRepository,
-) : ViewModel() {
+class FeedViewModel
+    @Inject
+    constructor(
+        private val getFeedsUseCase: GetFeedsUseCase,
+        private val getMyFeedsUseCase: GetMyFeedsUseCase,
+        private val feedRepository: FeedRepository,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(FeedUiState())
+        val uiState = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(FeedUiState())
-    val uiState = _uiState.asStateFlow()
-
-    /**
-     * Case: 최초 진입 (MyFeed, 최신순)
-     */
-    init {
-        fetchNextPage()
-    }
-
-    /**
-     * Case: 내 피드 내 정렬 변경 (최신순 <-> 오래된순)
-     */
-    fun updateMyFeedSort(sort: FeedOrder) {
-        if (uiState.value.myFeedData.sort == sort) return
-
-        _uiState.update {
-            it.copy(
-                myFeedData = FeedSourceData(sort = sort),
-            )
-        }
-        fetchNextPage()
-    }
-
-    /**
-     * Case: 소소 피드 탭으로 전환 (전체)
-     */
-    fun updateTab(tab: FeedTab) {
-        _uiState.update { it.copy(selectedTab = tab) }
-
-        if (uiState.value.currentData.feeds.isEmpty()) {
+        /**
+         * Case: 최초 진입 (MyFeed, 최신순)
+         */
+        init {
             fetchNextPage()
         }
-    }
 
-    /**
-     * Case: 소소 피드 내 카테고리 전환 (전체 <-> 추천)
-     */
-    fun updateSosoCategory(category: SosoFeedType) {
-        if (uiState.value.sosoCategory == category) return
+        /**
+         * Case: 내 피드 내 정렬 변경 (최신순 <-> 오래된순)
+         */
+        fun updateMyFeedSort(sort: FeedOrder) {
+            if (uiState.value.myFeedData.sort == sort) return
 
-        _uiState.update { it.copy(sosoCategory = category) }
-
-        if (uiState.value.currentData.feeds.isEmpty()) {
+            _uiState.update {
+                it.copy(
+                    myFeedData = FeedSourceData(sort = sort),
+                )
+            }
             fetchNextPage()
         }
-    }
 
-    /**
-     * 무한 스크롤 및 공통 페이징 처리 함수
-     */
-    fun fetchNextPage() {
-        val state = uiState.value
-        val current = state.currentData
+        /**
+         * Case: 소소 피드 탭으로 전환 (전체)
+         */
+        fun updateTab(tab: FeedTab) {
+            _uiState.update { it.copy(selectedTab = tab) }
 
-        if (state.loading || !current.isLoadable) return
+            if (uiState.value.currentData.feeds
+                    .isEmpty()
+            ) {
+                fetchNextPage()
+            }
+        }
 
-        _uiState.update { it.copy(loading = true) }
+        /**
+         * Case: 소소 피드 내 카테고리 전환 (전체 <-> 추천)
+         */
+        fun updateSosoCategory(category: SosoFeedType) {
+            if (uiState.value.sosoCategory == category) return
 
-        viewModelScope.launch {
-            runCatching {
-                when (state.selectedTab) {
-                    FeedTab.MY_FEED -> getFeedsUseCase()
-                    FeedTab.SOSO_FEED -> getFeedsUseCase(
-                        feedsOption = state.sosoCategory.name.uppercase(),
-                        lastFeedId = current.lastId,
-                    )
-                }
-            }.onSuccess { result ->
-                _uiState.update { state ->
-                    val current = state.currentData
+            _uiState.update { it.copy(sosoCategory = category) }
 
-                    val updatedSource = current.copy(
-                        feeds = (current.feeds + result.feeds.map(Feed::toFeedUiModel)).toImmutableList(),
-                        lastId = result.feeds.last().id,
-                        isLoadable = result.isLoadable,
-                    )
+            if (uiState.value.currentData.feeds
+                    .isEmpty()
+            ) {
+                fetchNextPage()
+            }
+        }
 
+        /**
+         * 무한 스크롤 및 공통 페이징 처리 함수
+         */
+        fun fetchNextPage() {
+            val state = uiState.value
+            val current = state.currentData
+
+            if (state.loading || !current.isLoadable) return
+
+            _uiState.update { it.copy(loading = true) }
+
+            viewModelScope.launch {
+                runCatching {
                     when (state.selectedTab) {
-                        FeedTab.MY_FEED -> state.copy(myFeedData = updatedSource, loading = false)
-                        FeedTab.SOSO_FEED -> when (state.sosoCategory) {
-                            SosoFeedType.ALL -> state.copy(
-                                sosoAllData = updatedSource,
-                                loading = false,
-                            )
+                        FeedTab.MY_FEED -> getMyFeedsUseCase()
 
-                            SosoFeedType.RECOMMENDATION -> state.copy(
-                                sosoRecommendationData = updatedSource,
-                                loading = false,
-                            )
+                        FeedTab.SOSO_FEED -> getFeedsUseCase(
+                            feedsOption = state.sosoCategory.name.uppercase(),
+                            lastFeedId = current.lastId,
+                        )
+                    }
+                }.onSuccess { result ->
+                    _uiState.update { state ->
+                        val current = state.currentData
+
+                        val updatedSource = current.copy(
+                            feeds = (current.feeds + result.feeds.map(Feed::toFeedUiModel)).toImmutableList(),
+                            lastId = result.feeds.last().id,
+                            isLoadable = result.isLoadable,
+                        )
+
+                        when (state.selectedTab) {
+                            FeedTab.MY_FEED -> state.copy(myFeedData = updatedSource, loading = false)
+
+                            FeedTab.SOSO_FEED -> when (state.sosoCategory) {
+                                SosoFeedType.ALL -> state.copy(
+                                    sosoAllData = updatedSource,
+                                    loading = false,
+                                )
+
+                                SosoFeedType.RECOMMENDATION -> state.copy(
+                                    sosoRecommendationData = updatedSource,
+                                    loading = false,
+                                )
+                            }
                         }
                     }
-                }
-
-            }.onFailure {
-                _uiState.update { it.copy(loading = false, error = true) }
-            }
-        }
-    }
-
-    /**
-     * 새로고침 (Pull to Refresh 등)
-     */
-    fun refresh() {
-        _uiState.update {
-            when (it.selectedTab) {
-                FeedTab.MY_FEED -> it.copy(myFeedData = FeedSourceData(sort = it.myFeedData.sort))
-                FeedTab.SOSO_FEED -> if (it.sosoCategory == SosoFeedType.ALL) {
-                    it.copy(sosoAllData = FeedSourceData())
-                } else {
-                    it.copy(sosoRecommendationData = FeedSourceData())
+                }.onFailure {
+                    _uiState.update { it.copy(loading = false, error = true) }
                 }
             }
         }
-        fetchNextPage()
-    }
+
+        /**
+         * 새로고침 (Pull to Refresh 등)
+         */
+        fun refresh() {
+            _uiState.update {
+                when (it.selectedTab) {
+                    FeedTab.MY_FEED -> it.copy(myFeedData = FeedSourceData(sort = it.myFeedData.sort))
+
+                    FeedTab.SOSO_FEED -> if (it.sosoCategory == SosoFeedType.ALL) {
+                        it.copy(sosoAllData = FeedSourceData())
+                    } else {
+                        it.copy(sosoRecommendationData = FeedSourceData())
+                    }
+                }
+            }
+            fetchNextPage()
+        }
 //
 //    fun updateLike(
 //        selectedFeedId: Long,
@@ -185,16 +194,16 @@ class FeedViewModel @Inject constructor(
 //        updatedLikeCount: Int,
 //    ) {
 //        _uiState.value = feedUiState.value.copy(
-////            feeds = feedUiState.value.feeds?.map { feedModel ->
-////                when (feedModel.id == selectedFeedId) {
-////                    true -> feedModel.copy(
-////                        isLiked = isLiked,
-////                        likeCount = updatedLikeCount,
-////                    )
-////
-////                    false -> feedModel
-////                }
-////            } ?: emptyList(),
+// //            feeds = feedUiState.value.feeds?.map { feedModel ->
+// //                when (feedModel.id == selectedFeedId) {
+// //                    true -> feedModel.copy(
+// //                        isLiked = isLiked,
+// //                        likeCount = updatedLikeCount,
+// //                    )
+// //
+// //                    false -> feedModel
+// //                }
+// //            } ?: emptyList(),
 //            isRefreshed = false,
 //        )
 //    }
@@ -260,4 +269,4 @@ class FeedViewModel @Inject constructor(
 //            }
 //        }
 //    }
-}
+    }

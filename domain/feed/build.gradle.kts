@@ -11,4 +11,5 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.data.feed)
+    implementation(projects.data.user)
 }
