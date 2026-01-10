@@ -187,7 +187,7 @@
                             android:id="@+id/tv_feed_detail_writer_rating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="글쓴이"
+                            android:text="@{feedDetail.feed.user.nickname}"
                             android:textAppearance="@style/body5"
                             android:textColor="@color/gray_300_52515F"
                             app:layout_constraintBottom_toBottomOf="parent"
