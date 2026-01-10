@@ -4,6 +4,9 @@ import com.into.websoso.data.feed.model.FeedEntity
 import com.into.websoso.data.feed.model.FeedsEntity
 import com.into.websoso.feed.model.Feed
 import com.into.websoso.feed.model.Feeds
+import com.into.websoso.feed.model.UserFeeds
+import com.into.websoso.user.model.MyProfileEntity
+import com.into.websoso.user.model.UserFeedsEntity
 
 fun FeedsEntity.toDomain(): Feeds =
     Feeds(
@@ -41,4 +44,68 @@ fun FeedEntity.toDomain(): Feed =
         genreName = genreName,
         userNovelRating = userNovelRating,
         feedWriterNovelRating = feedWriterNovelRating,
+    )
+
+fun UserFeedsEntity.toDomain(): UserFeeds =
+    UserFeeds(
+        isLoadable = this.isLoadable,
+        feeds = this.feeds.map { it.toDomain() },
+    )
+
+fun UserFeedsEntity.UserFeedEntity.toDomain(): UserFeeds.UserFeed =
+    UserFeeds.UserFeed(
+        feedId = this.feedId,
+        isSpoiler = this.isSpoiler,
+        feedContent = this.feedContent,
+        createdDate = this.createdDate,
+        isModified = this.isModified,
+        isLiked = this.isLiked,
+        isPublic = this.isPublic,
+        likeCount = this.likeCount,
+        commentCount = this.commentCount,
+        novelId = this.novelId,
+        title = this.title,
+        novelRatingCount = this.novelRatingCount,
+        novelRating = this.novelRating,
+        relevantCategories = this.relevantCategories,
+        genre = this.genre,
+        userNovelRating = this.userNovelRating,
+        thumbnailUrl = this.thumbnailUrl,
+        imageCount = this.imageCount,
+        feedWriterNovelRating = this.feedWriterNovelRating,
+    )
+
+fun UserFeedsEntity.UserFeedEntity.toDomain(
+    id: Long,
+    myProfile: MyProfileEntity,
+    category: String = "",
+): Feed =
+    Feed(
+        user = Feed.User(
+            id = id,
+            nickname = myProfile.nickname,
+            avatarImage = myProfile.avatarImage,
+        ),
+        createdDate = this.createdDate,
+        id = this.feedId,
+        content = this.feedContent,
+        relevantCategories = this.relevantCategories,
+        likeCount = this.likeCount,
+        isLiked = this.isLiked,
+        commentCount = this.commentCount,
+        isModified = this.isModified,
+        isSpoiler = this.isSpoiler,
+        isMyFeed = true,
+        isPublic = this.isPublic,
+        imageUrls = listOfNotNull(this.thumbnailUrl),
+        imageCount = this.imageCount,
+        novel = Feed.Novel(
+            id = this.novelId,
+            title = this.title,
+            rating = this.novelRating,
+            ratingCount = this.novelRatingCount,
+        ),
+        genreName = this.genre,
+        userNovelRating = this.userNovelRating,
+        feedWriterNovelRating = this.feedWriterNovelRating,
     )

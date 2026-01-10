@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
@@ -33,6 +35,7 @@ import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R
 import com.into.websoso.feature.feed.component.FeedFilterChip
 import com.into.websoso.feature.feed.component.FeedSection
+import com.into.websoso.feature.feed.component.MyFeedFilterModal
 import com.into.websoso.feature.feed.model.FeedOrder
 import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.SosoFeedType
@@ -44,6 +47,7 @@ internal fun FeedScreen(
     onSortSelected: (order: FeedOrder) -> Unit,
     onSosoTypeSelected: (feedType: SosoFeedType) -> Unit,
     onWriteClick: () -> Unit,
+    onFilterClick: () -> Unit,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
     onMoreClick: (feedId: Long) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
@@ -82,6 +86,7 @@ internal fun FeedScreen(
                                     tint = Gray80,
                                 )
                             },
+                            modifier = Modifier.clickable { onFilterClick() },
                         )
 
                         Row(
@@ -149,6 +154,17 @@ internal fun FeedScreen(
                 onLikeClick = onLikeClick,
                 onContentClick = onContentClick,
             )
+        }
+
+        if (uiState.isFilterSheetVisible) {
+            ModalBottomSheet(
+                onDismissRequest = { onFilterClick() },
+                sheetState = sheetState,
+                containerColor = White,
+                dragHandle = { BottomSheetDefaults.DragHandle() },
+            ) {
+                MyFeedFilterModal()
+            }
         }
     }
 }
@@ -227,6 +243,7 @@ private fun FeedScreenPreview() {
             onNovelClick = { },
             onLikeClick = { },
             onContentClick = { _, _ -> },
+            onFilterClick = {},
         )
     }
 }

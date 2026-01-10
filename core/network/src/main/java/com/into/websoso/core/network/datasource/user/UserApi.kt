@@ -1,5 +1,6 @@
 package com.into.websoso.core.network.datasource.user
 
+import com.into.websoso.core.network.datasource.user.model.MyProfileResponseDto
 import com.into.websoso.core.network.datasource.user.model.UserFeedsResponseDto
 import com.into.websoso.core.network.datasource.user.model.UserInfoResponseDto
 import dagger.Module
@@ -18,10 +19,17 @@ interface UserApi {
         @Path("userId") userId: Long,
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
+        @Query("genres") genres: Array<String>?,
+        @Query("isVisible") isVisible: Boolean?,
+        @Query("isUnVisible") isUnVisible: Boolean?,
+        @Query("sortCriteria") sortCriteria: String?,
     ): UserFeedsResponseDto
 
     @GET("users/me")
     suspend fun getUserInfo(): UserInfoResponseDto
+
+    @GET("users/my-profile")
+    suspend fun getMyProfile(): MyProfileResponseDto
 }
 
 @Module

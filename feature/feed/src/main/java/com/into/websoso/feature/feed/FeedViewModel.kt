@@ -8,6 +8,7 @@ import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.SosoFeedType
 import com.into.websoso.feature.feed.model.toFeedUiModel
 import com.into.websoso.feed.GetFeedsUseCase
+import com.into.websoso.feed.GetMyFeedsUseCase
 import com.into.websoso.feed.model.Feed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val getFeedsUseCase: GetFeedsUseCase,
+    private val getMyFeedsUseCase: GetMyFeedsUseCase,
     private val feedRepository: FeedRepository,
 ) : ViewModel() {
 
@@ -85,7 +87,10 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 when (state.selectedTab) {
-                    FeedTab.MY_FEED -> getFeedsUseCase()
+                    FeedTab.MY_FEED -> getMyFeedsUseCase(
+                        lastFeedId = current.lastId,
+                    )
+
                     FeedTab.SOSO_FEED -> getFeedsUseCase(
                         feedsOption = state.sosoCategory.name.uppercase(),
                         lastFeedId = current.lastId,

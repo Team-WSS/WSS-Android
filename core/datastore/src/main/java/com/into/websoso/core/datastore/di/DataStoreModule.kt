@@ -22,6 +22,11 @@ internal object DataStoreModule {
         name = LIBRARY_FILTER_DATASTORE,
     )
 
+    private const val USER_DATASTORE = "USER_DATASTORE"
+    private val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = USER_DATASTORE,
+    )
+
     @Provides
     @Singleton
     @AccountDataStore
@@ -35,4 +40,11 @@ internal object DataStoreModule {
     internal fun provideLibraryFilterPreferencesDataStore(
         @ApplicationContext context: Context,
     ): DataStore<Preferences> = context.libraryFilterDataStore
+
+    @Provides
+    @Singleton
+    @UserDataStore
+    fun provideUserDataStore(
+        @ApplicationContext context: Context,
+    ): DataStore<Preferences> = context.userDataStore
 }
