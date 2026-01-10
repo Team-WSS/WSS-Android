@@ -95,7 +95,7 @@
     <string name="novel_feed_none">아직 글이 없어요\n최초로 남겨보세요!</string>
 
     <!-- 피드 뷰 -->
-    <string name="feed_score_count">%.1f (%d)</string>
+    <string name="feed_score_count">%.1f</string>
     <string name="feed_popup_menu_content_report_isNotMyFeed">스포일러 신고, 부적절한 표현 신고</string>
     <string name="feed_popup_menu_content_isMyFeed">수정하기, 삭제하기</string>
     <string name="feed_title">소소피드</string>

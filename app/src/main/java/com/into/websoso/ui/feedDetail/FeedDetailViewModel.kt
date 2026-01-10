@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.core.common.ui.model.ResultFrom
 import com.into.websoso.data.model.CommentsEntity
-import com.into.websoso.data.model.FeedEntity
+import com.into.websoso.data.model.FeedDetailEntity
 import com.into.websoso.data.model.MyProfileEntity
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NotificationRepository
@@ -62,21 +62,21 @@ class FeedDetailViewModel
                         }
                     }.onSuccess { result ->
                         val myProfile = result[0] as MyProfileEntity
-                        val feed = (result[1] as FeedEntity)
+                        val feedDetail = (result[1] as FeedDetailEntity)
                         val comments = result[2] as CommentsEntity
 
-                        val uiFeed = feed.toUi()
-                        val updatedFeed = if (feed.isLiked == isLiked) {
+                        val uiFeed = feedDetail.toUi().feed
+                        val updatedFeed = if (feedDetail.isLiked == isLiked) {
                             uiFeed
-                        } else if (!isLiked && feed.isLiked) {
-                            uiFeed.copy(
+                        } else if (!isLiked && feedDetail.isLiked) {
+                            uiFeed?.copy(
                                 isLiked = false,
-                                likeCount = feed.likeCount - 1,
+                                likeCount = feedDetail.likeCount - 1,
                             )
                         } else {
-                            uiFeed.copy(
+                            uiFeed?.copy(
                                 isLiked = true,
-                                likeCount = feed.likeCount + 1,
+                                likeCount = feedDetail.likeCount + 1,
                             )
                         }
 
@@ -89,6 +89,7 @@ class FeedDetailViewModel
                                 user = FeedDetailModel.UserModel(
                                     avatarImage = myProfile.avatarImage,
                                 ),
+                                novel = feedDetail.novel,
                             ),
                         )
                     }.onFailure {

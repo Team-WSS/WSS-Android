@@ -2,7 +2,6 @@ package com.into.websoso.ui.feedDetail.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -32,7 +31,6 @@ fun MultipleImageContainer(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(100.dp)
-                    .aspectRatio(1f)
                     .clip(RoundedCornerShape(8.dp))
                     .clickableWithoutRipple {
                         onImageClick(index)
