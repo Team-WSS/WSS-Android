@@ -81,7 +81,7 @@
             android:layout_marginStart="6dp"
             android:text="@string/feed_is_modified"
             android:textAppearance="@style/body5"
-            android:textColor="@color/gray_200_AEADB3"
+            android:textColor="@color/gray_200_949399"
             app:layout_constraintBottom_toBottomOf="@+id/tv_feed_user_name"
             app:layout_constraintStart_toEndOf="@+id/tv_feed_detail_created_date"
             app:layout_constraintTop_toTopOf="@+id/tv_feed_user_name" />

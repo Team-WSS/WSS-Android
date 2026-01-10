@@ -92,7 +92,7 @@ class UserRepository
         suspend fun fetchOtherUserProfile(userId: Long): OtherUserProfileEntity = userApi.getOtherUserProfile(userId).toData()
 
         suspend fun saveEditingUserProfile(
-            avatarId: Int?,
+            avatarId: Long?,
             nickname: String?,
             intro: String?,
             genrePreferences: List<String>,

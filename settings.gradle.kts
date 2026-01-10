@@ -34,6 +34,7 @@ include(
 include(
     ":data:account",
     ":data:library",
+    ":data:feed",
 )
 
 include(

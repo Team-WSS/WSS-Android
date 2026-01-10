@@ -81,7 +81,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/blocked_users_empty"
                 android:textAppearance="@style/body2"
-                android:textColor="@color/gray_200_AEADB3"
+                android:textColor="@color/gray_200_949399"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

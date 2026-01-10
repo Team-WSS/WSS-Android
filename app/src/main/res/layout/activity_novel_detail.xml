@@ -302,7 +302,7 @@
                                         android:layout_marginStart="10dp"
                                         android:layout_marginEnd="12dp"
                                         android:src="@drawable/ic_novel_detail_navigate_next"
-                                        app:tint="@color/gray_200_AEADB3" />
+                                        app:tint="@color/gray_200_949399" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -580,7 +580,7 @@
                     app:tabIndicatorHeight="2dp"
                     app:tabSelectedTextColor="@color/black"
                     app:tabTextAppearance="@style/title2"
-                    app:tabTextColor="@color/gray_200_AEADB3">
+                    app:tabTextColor="@color/gray_200_949399">
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/ti_novel_detail_info"

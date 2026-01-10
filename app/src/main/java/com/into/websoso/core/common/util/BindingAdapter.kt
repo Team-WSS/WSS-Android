@@ -12,6 +12,19 @@ import jp.wasabeef.transformers.coil.BlurTransformation
 
 object BindingAdapter {
     @JvmStatic
+    @BindingAdapter("loads3ImageUrl")
+    fun loadS3ImageUrl(
+        view: ImageView,
+        s3ImageKey: String,
+    ) {
+        val fullUrl: String = view.getS3ImageUrl(s3ImageKey)
+
+        view.load(fullUrl) {
+            error(img_loading_thumbnail)
+        }
+    }
+
+    @JvmStatic
     @BindingAdapter(
         value = ["loadImageUrl", "cornerRadius", "blurRadius", "isVectorImage", "isCircularImage"],
         requireAll = false,
