@@ -16,6 +16,9 @@ data class FeedEntity(
     val novel: NovelEntity,
     val images: List<String>,
     val imageCount: Int,
+    val genreName: String?,
+    val userNovelRating: Float?,
+    val feedWriterNovelRating: Float?,
 ) {
     data class UserEntity(
         val id: Long,

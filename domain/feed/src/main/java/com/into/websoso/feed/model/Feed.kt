@@ -16,6 +16,9 @@ data class Feed(
     val imageUrls: List<String>,
     val imageCount: Int,
     val novel: Novel,
+    val genreName: String?,
+    val userNovelRating: Float?,
+    val feedWriterNovelRating: Float?,
 ) {
     data class User(
         val id: Long,

@@ -67,6 +67,9 @@ ktlint = "14.0.1"
 compose-bom = "2025.12.01"
 compose-ui = "1.10.0"
 
+# Kotlinx-collection
+kotlinx-collections-immutable = "0.3.8"
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -152,6 +155,9 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 # Amplitude Libraries
 amplitude = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
+
+# kotlinx-collections
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 
 # Jetpack Compose Libraries
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }

@@ -27,9 +27,7 @@ import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.ui.model.ResultFrom.Feed
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
-import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailError
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
-import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRemoved
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
@@ -41,8 +39,12 @@ import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
+import com.into.websoso.core.resource.R.string.block_user_success_message
 import com.into.websoso.core.resource.R.string.feed_popup_menu_content_isMyFeed
 import com.into.websoso.core.resource.R.string.feed_popup_menu_content_report_isNotMyFeed
+import com.into.websoso.core.resource.R.string.feed_removed_feed_snackbar
+import com.into.websoso.core.resource.R.string.feed_server_error
 import com.into.websoso.core.resource.R.string.other_user_page_withdraw_user
 import com.into.websoso.databinding.ActivityFeedDetailBinding
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
@@ -373,17 +375,17 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     NovelDetailBack.RESULT_OK,
                     CreateFeed.RESULT_OK,
                     OtherUserProfileBack.RESULT_OK,
-                    -> {
+                        -> {
                         feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
                     }
 
                     BlockUser.RESULT_OK -> {
                         val nickname = result.data?.getStringExtra(USER_NICKNAME).orEmpty()
-                        val intent = Intent().apply {
-                            putExtra(USER_NICKNAME, nickname)
-                            putExtra(FEED_ID, feedId)
-                        }
-                        setResult(BlockUser.RESULT_OK, intent)
+                        showWebsosoSnackBar(
+                            view = binding.root,
+                            message = getString(block_user_success_message, nickname),
+                            icon = ic_novel_detail_check,
+                        )
                         if (!isFinishing) finish()
                     }
 
@@ -504,16 +506,22 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                         }
 
                         else -> {
-                            val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
-                            setResult(FeedDetailRemoved.RESULT_OK, extraIntent)
+                            showWebsosoSnackBar(
+                                view = binding.root,
+                                message = getString(feed_removed_feed_snackbar),
+                                icon = ic_blocked_user_snack_bar,
+                            )
                             if (!isFinishing) finish()
                         }
                     }
                 }
 
                 feedDetailUiState.isServerError -> {
-                    val extraIntent = Intent().apply { putExtra(FEED_ID, feedId) }
-                    setResult(FeedDetailError.RESULT_OK, extraIntent)
+                    showWebsosoSnackBar(
+                        view = binding.root,
+                        message = getString(feed_server_error),
+                        icon = ic_blocked_user_snack_bar,
+                    )
                     if (!isFinishing) finish()
                 }
 

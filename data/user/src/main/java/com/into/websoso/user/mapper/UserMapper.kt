@@ -1,7 +1,9 @@
 package com.into.websoso.user.mapper
 
+import com.into.websoso.core.network.datasource.user.model.MyProfileResponseDto
 import com.into.websoso.core.network.datasource.user.model.UserFeedsResponseDto
 import com.into.websoso.core.network.datasource.user.model.UserInfoResponseDto
+import com.into.websoso.user.model.MyProfileEntity
 import com.into.websoso.user.model.UserFeedsEntity
 import com.into.websoso.user.model.UserInfoEntity
 
@@ -27,6 +29,11 @@ fun UserFeedsResponseDto.UserFeedResponseDto.toData(): UserFeedsEntity.UserFeedE
         novelRatingCount = this.novelRatingCount,
         novelRating = this.novelRating,
         relevantCategories = this.relevantCategories,
+        genre = this.genre,
+        userNovelRating = this.userNovelRating,
+        thumbnailUrl = this.thumbnailUrl,
+        imageCount = this.imageCount,
+        feedWriterNovelRating = this.feedWriterNovelRating,
     )
 
 fun UserInfoResponseDto.toData(): UserInfoEntity =
@@ -34,4 +41,12 @@ fun UserInfoResponseDto.toData(): UserInfoEntity =
         userId = this.userId,
         nickname = this.nickname,
         gender = this.gender,
+    )
+
+fun MyProfileResponseDto.toData(): MyProfileEntity =
+    MyProfileEntity(
+        nickname = this.nickname,
+        intro = this.intro,
+        avatarImage = this.avatarImage,
+        genrePreferences = this.genrePreferences,
     )

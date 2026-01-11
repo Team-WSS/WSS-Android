@@ -18,15 +18,17 @@ import com.into.websoso.R.color.white
 import com.into.websoso.R.layout.activity_other_user_page
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
-import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
 import com.into.websoso.core.resource.R.string.other_user_page_activity
 import com.into.websoso.core.resource.R.string.other_user_page_library
+import com.into.websoso.core.resource.R.string.other_user_page_withdraw_user
 import com.into.websoso.databinding.ActivityOtherUserPageBinding
 import com.into.websoso.databinding.MenuOtherUserPagePopupBinding
 import com.into.websoso.ui.otherUserPage.adapter.OtherUserPageViewPagerAdapter
@@ -109,7 +111,11 @@ class OtherUserPageActivity : BaseActivity<ActivityOtherUserPageBinding>(activit
 
         otherUserPageViewModel.isWithdrawUser.observe(this) { isWithdrawUser ->
             if (isWithdrawUser) {
-                setResult(WithdrawUser.RESULT_OK, intent)
+                showWebsosoSnackBar(
+                    view = binding.root,
+                    message = getString(other_user_page_withdraw_user),
+                    icon = ic_blocked_user_snack_bar,
+                )
                 finish()
             }
         }

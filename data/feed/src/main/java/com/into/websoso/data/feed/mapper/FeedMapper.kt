@@ -47,6 +47,9 @@ fun FeedResponseDto.toData(): FeedEntity =
             rating = novelRating,
             ratingCount = novelRatingCount,
         ),
+        genreName = genreName,
+        userNovelRating = userNovelRating,
+        feedWriterNovelRating = feedWriterNovelRating,
     )
 
 fun CommentsResponseDto.toData(): CommentsEntity =
@@ -98,6 +101,9 @@ fun FeedDetailResponseDto.toData(): FeedEntity =
             rating = novelRating,
             ratingCount = novelRatingCount,
         ),
+        genreName = genreName,
+        userNovelRating = userNovelRating,
+        feedWriterNovelRating = feedWriterNovelRating,
     )
 
 fun PopularFeedsResponseDto.toData(): PopularFeedsEntity =

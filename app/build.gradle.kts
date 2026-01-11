@@ -87,9 +87,13 @@ dependencies {
 
     implementation(projects.data.account)
     implementation(projects.data.library)
+    implementation(projects.data.feed)
+
+    implementation(projects.domain.feed)
 
     implementation(projects.feature.signin)
     implementation(projects.feature.library)
+    implementation(projects.feature.feed)
 
     // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)
