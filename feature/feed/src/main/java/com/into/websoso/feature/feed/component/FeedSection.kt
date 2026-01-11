@@ -1,7 +1,6 @@
 package com.into.websoso.feature.feed.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -98,7 +97,7 @@ private fun FeedItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
+                .debouncedClickable {
                     onProfileClick(feed.user.id, currentTab)
                 },
         ) {
@@ -149,7 +148,7 @@ private fun FeedItem(
                 tint = Gray200,
                 modifier = Modifier
                     .size(size = 14.dp)
-                    .clickable { onMoreClick(feed.id) },
+                    .debouncedClickable { onMoreClick(feed.id) },
             )
         }
 
@@ -160,7 +159,7 @@ private fun FeedItem(
                 text = "스포일러가 포함된 글 보기",
                 style = WebsosoTheme.typography.body2,
                 color = Secondary100,
-                modifier = Modifier.clickable { onContentClick(feed.id, feed.isLiked) },
+                modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
             )
         } else {
             Text(
@@ -169,7 +168,7 @@ private fun FeedItem(
                 color = Black,
                 maxLines = 5,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.clickable { onContentClick(feed.id, feed.isLiked) },
+                modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
             )
         }
 
@@ -299,7 +298,7 @@ private fun FeedNovelInfo(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
             )
-            .clickable {
+            .debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {

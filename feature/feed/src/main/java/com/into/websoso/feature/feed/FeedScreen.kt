@@ -1,7 +1,6 @@
 package com.into.websoso.feature.feed
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -94,7 +94,7 @@ internal fun FeedScreen(
                                     tint = Gray80,
                                 )
                             },
-                            modifier = Modifier.clickable { onFilterClick() },
+                            modifier = Modifier.debouncedClickable { onFilterClick() },
                         )
 
                         Row(
@@ -111,7 +111,7 @@ internal fun FeedScreen(
                                 text = uiState.myFeedData.sort.title,
                                 style = WebsosoTheme.typography.body3,
                                 color = Gray300,
-                                modifier = Modifier.clickable {
+                                modifier = Modifier.debouncedClickable {
                                     onSortSelected(
                                         when (uiState.myFeedData.sort) {
                                             FeedOrder.NEWEST -> FeedOrder.OLDEST
@@ -128,7 +128,11 @@ internal fun FeedScreen(
                             FeedFilterChip(
                                 isSelected = uiState.sosoCategory == SosoFeedType.ALL,
                                 label = SosoFeedType.ALL.title,
-                                modifier = Modifier.clickable { onSosoTypeSelected(SosoFeedType.ALL) },
+                                modifier = Modifier.debouncedClickable {
+                                    onSosoTypeSelected(
+                                        SosoFeedType.ALL,
+                                    )
+                                },
                             )
 
                             FeedFilterChip(
@@ -140,7 +144,11 @@ internal fun FeedScreen(
                                         contentDescription = null,
                                     )
                                 },
-                                modifier = Modifier.clickable { onSosoTypeSelected(SosoFeedType.RECOMMENDATION) },
+                                modifier = Modifier.debouncedClickable {
+                                    onSosoTypeSelected(
+                                        SosoFeedType.RECOMMENDATION,
+                                    )
+                                },
                             )
                         }
                     }
@@ -227,7 +235,7 @@ private fun FeedTabRow(
 
         Box(
             modifier = Modifier
-                .clickable { onWriteClick() }
+                .debouncedClickable { onWriteClick() }
                 .padding(vertical = 20.dp),
         ) {
             Icon(
