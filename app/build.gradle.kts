@@ -87,6 +87,9 @@ dependencies {
 
     implementation(projects.data.account)
     implementation(projects.data.library)
+    implementation(projects.data.feed)
+
+    implementation(projects.domain.feed)
 
     implementation(projects.feature.signin)
     implementation(projects.feature.library)

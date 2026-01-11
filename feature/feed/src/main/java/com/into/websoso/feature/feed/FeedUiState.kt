@@ -16,6 +16,7 @@ data class FeedUiState(
     val sosoAllData: FeedSourceData = FeedSourceData(),
     val sosoRecommendationData: FeedSourceData = FeedSourceData(),
     val loading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val error: Boolean = false,
 ) {
     val currentData: FeedSourceData
@@ -23,6 +24,16 @@ data class FeedUiState(
             FeedTab.MY_FEED -> myFeedData
             FeedTab.SOSO_FEED -> if (sosoCategory == SosoFeedType.ALL) sosoAllData else sosoRecommendationData
         }
+
+    fun updateCurrentSource(updatedData: FeedSourceData): FeedUiState {
+        return when (selectedTab) {
+            FeedTab.MY_FEED -> copy(myFeedData = updatedData)
+            FeedTab.SOSO_FEED -> {
+                if (sosoCategory == SosoFeedType.ALL) copy(sosoAllData = updatedData)
+                else copy(sosoRecommendationData = updatedData)
+            }
+        }
+    }
 }
 
 data class FeedSourceData(

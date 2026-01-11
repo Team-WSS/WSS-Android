@@ -3,6 +3,7 @@ package com.into.websoso.feature.feed
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,12 +25,17 @@ fun FeedRoute(
     onProfileClick: (userId: Long, isMyFeed: Boolean) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
+    onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
+        confirmValueChange = { newValue ->
+            newValue != SheetValue.Hidden
+        },
     )
     var isFilterSheetVisible by remember { mutableStateOf(false) }
 
@@ -66,6 +72,9 @@ fun FeedRoute(
                 scope.launch { bottomSheetState.hide() }
                     .invokeOnCompletion { isFilterSheetVisible = false }
             },
+            onFirstItemClick = onFirstItemClick,
+            onSecondItemClick = onSecondItemClick,
+            onRefreshPull = viewModel::refresh,
         )
 
         if (uiState.loading) CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

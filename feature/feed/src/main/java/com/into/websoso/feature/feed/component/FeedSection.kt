@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,13 +19,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,22 +63,36 @@ internal fun FeedSection(
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
+    onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onRefreshPull: () -> Unit,
+    isRefreshing: Boolean,
 ) {
-    LazyColumn(
-        modifier = Modifier.padding(horizontal = 20.dp),
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefreshPull,
+        modifier = Modifier.fillMaxSize(),
     ) {
-        itemsIndexed(items = feeds) { index, feed ->
-            FeedItem(
-                feed = feed,
-                currentTab = currentTab,
-                onMoreClick = onMoreClick,
-                onProfileClick = onProfileClick,
-                onNovelClick = onNovelClick,
-                onLikeClick = onLikeClick,
-                onContentClick = onContentClick,
-            )
+        if (feeds.isEmpty()) {
+            FeedEmptyCase()
+        } else {
+            LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
+                itemsIndexed(items = feeds) { index, feed ->
+                    FeedItem(
+                        feed = feed,
+                        currentTab = currentTab,
+                        onMoreClick = onMoreClick,
+                        onProfileClick = onProfileClick,
+                        onNovelClick = onNovelClick,
+                        onLikeClick = onLikeClick,
+                        onContentClick = onContentClick,
+                        onFirstItemClick = onFirstItemClick,
+                        onSecondItemClick = onSecondItemClick,
+                    )
 
-            if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+                    if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+                }
+            }
         }
     }
 }
@@ -85,7 +106,11 @@ private fun FeedItem(
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
+    onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
 ) {
+    var isMenuExpanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier.padding(
             top = 20.dp,
@@ -141,15 +166,32 @@ private fun FeedItem(
                     )
                 }
             }
+            Box {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_more),
+                    contentDescription = null,
+                    tint = Gray200,
+                    modifier = Modifier
+                        .size(size = 14.dp)
+                        .debouncedClickable {
+                            isMenuExpanded = true
+                            onMoreClick(feed.id)
+                        },
+                )
 
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_more),
-                contentDescription = null,
-                tint = Gray200,
-                modifier = Modifier
-                    .size(size = 14.dp)
-                    .debouncedClickable { onMoreClick(feed.id) },
-            )
+                if (isMenuExpanded) {
+                    FeedMoreMenu(
+                        isMyFeed = feed.isMyFeed,
+                        onDismissRequest = { isMenuExpanded = false },
+                        onFirstItemClick = {
+                            onFirstItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                        },
+                        onSecondItemClick = {
+                            onSecondItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                        },
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(height = 10.dp))
@@ -187,18 +229,20 @@ private fun FeedItem(
 
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier.background(
-                        color = GrayToast,
-                        shape = CircleShape,
-                    ),
+                    modifier = Modifier
+                        .align(alignment = Alignment.BottomEnd)
+                        .padding(end = 12.dp, bottom = 10.dp)
+                        .size(size = 20.dp)
+                        .background(
+                            color = GrayToast,
+                            shape = CircleShape,
+                        ),
                 ) {
                     Text(
                         text = feed.imageUrls.size.toString(),
                         style = WebsosoTheme.typography.body5,
                         color = White,
-                        modifier = Modifier
-                            .align(alignment = Alignment.BottomEnd)
-                            .padding(end = 12.dp, bottom = 10.dp),
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -372,6 +416,10 @@ private fun FeedSectionPreview() {
             onNovelClick = { },
             onLikeClick = { },
             onContentClick = { _, _ -> },
+            onFirstItemClick = { _, _ -> },
+            onSecondItemClick = { _, _ -> },
+            onRefreshPull = { },
+            isRefreshing = false,
         )
     }
 }

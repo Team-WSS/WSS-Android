@@ -1,14 +1,17 @@
 package com.into.websoso.feature.feed
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -61,9 +64,12 @@ internal fun FeedScreen(
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
     onApplyFilterClick: (filter: MyFeedFilter) -> Unit,
     onFilterCloseClick: () -> Unit,
+    onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onRefreshPull: () -> Unit,
 ) {
     Scaffold(containerColor = White) {
-        Column {
+        Column(modifier = Modifier.statusBarsPadding()) {
             FeedTabRow(
                 selectedTab = uiState.selectedTab,
                 onTabClick = onTabSelected,
@@ -129,15 +135,13 @@ internal fun FeedScreen(
                                 isSelected = uiState.sosoCategory == SosoFeedType.ALL,
                                 label = SosoFeedType.ALL.title,
                                 modifier = Modifier.debouncedClickable {
-                                    onSosoTypeSelected(
-                                        SosoFeedType.ALL,
-                                    )
+                                    onSosoTypeSelected(SosoFeedType.ALL)
                                 },
                             )
 
                             FeedFilterChip(
-                                isSelected = uiState.sosoCategory == SosoFeedType.RECOMMENDATION,
-                                label = SosoFeedType.RECOMMENDATION.title,
+                                isSelected = uiState.sosoCategory == SosoFeedType.RECOMMENDED,
+                                label = SosoFeedType.RECOMMENDED.title,
                                 leftIcon = {
                                     Image(
                                         painter = painterResource(id = R.drawable.ic_hot),
@@ -145,9 +149,7 @@ internal fun FeedScreen(
                                     )
                                 },
                                 modifier = Modifier.debouncedClickable {
-                                    onSosoTypeSelected(
-                                        SosoFeedType.RECOMMENDATION,
-                                    )
+                                    onSosoTypeSelected(SosoFeedType.RECOMMENDED)
                                 },
                             )
                         }
@@ -161,7 +163,7 @@ internal fun FeedScreen(
                     FeedTab.MY_FEED -> uiState.myFeedData.feeds
                     FeedTab.SOSO_FEED -> when (uiState.sosoCategory) {
                         SosoFeedType.ALL -> uiState.sosoAllData.feeds
-                        SosoFeedType.RECOMMENDATION -> uiState.sosoRecommendationData.feeds
+                        SosoFeedType.RECOMMENDED -> uiState.sosoRecommendationData.feeds
                     }
                 },
                 onProfileClick = onProfileClick,
@@ -169,17 +171,23 @@ internal fun FeedScreen(
                 onNovelClick = onNovelClick,
                 onLikeClick = onLikeClick,
                 onContentClick = onContentClick,
+                onFirstItemClick = onFirstItemClick,
+                onSecondItemClick = onSecondItemClick,
+                onRefreshPull = onRefreshPull,
+                isRefreshing = uiState.isRefreshing,
             )
         }
 
         if (isFilterSheetVisible) {
             ModalBottomSheet(
+                dragHandle = null,
                 onDismissRequest = {},
                 sheetState = bottomSheetState,
                 containerColor = White,
+                contentWindowInsets = { WindowInsets(0) },
             ) {
                 MyFeedFilterModal(
-                    initialFilter = uiState.currentFilter, // 현재 적용된 필터를 초기값으로!
+                    initialFilter = uiState.currentFilter,
                     onApplyFilterClick = onApplyFilterClick,
                     onFilterCloseClick = onFilterCloseClick,
                 )
@@ -220,7 +228,10 @@ private fun FeedTabRow(
             FeedTab.entries.forEach { tab ->
                 Tab(
                     selected = selectedTab == tab,
-                    onClick = { onTabClick(tab) },
+                    onClick = {
+                        Log.d("123123", tab.toString())
+                        onTabClick(tab)
+                    },
                     text = {
                         Text(
                             text = tab.title,
@@ -268,6 +279,9 @@ private fun FeedScreenPreview() {
             onFilterClick = {},
             onApplyFilterClick = {},
             onFilterCloseClick = {},
+            onFirstItemClick = { _, _ -> },
+            onSecondItemClick = { _, _ -> },
+            onRefreshPull = {},
         )
     }
 }

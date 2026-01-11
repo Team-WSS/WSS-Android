@@ -8,7 +8,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
-internal fun Feed.toFeedUiModel(): FeedUiModel {
+fun Feed.toFeedUiModel(): FeedUiModel {
     val novel = if (novel.id != null) {
         NovelUiModel(
             id = novel.id.orDefault(),

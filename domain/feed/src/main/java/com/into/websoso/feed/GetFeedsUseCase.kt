@@ -16,6 +16,7 @@ class GetFeedsUseCase @Inject constructor(
 
         return feedRepository
             .fetchFeeds(
+                feedsOption = feedsOption,
                 lastFeedId = lastFeedId,
                 size = if (isFeedRefreshed) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
             ).toDomain()
