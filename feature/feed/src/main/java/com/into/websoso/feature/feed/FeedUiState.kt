@@ -3,17 +3,18 @@ package com.into.websoso.feature.feed
 import com.into.websoso.feature.feed.model.FeedOrder
 import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.FeedUiModel
+import com.into.websoso.feature.feed.model.MyFeedFilter
 import com.into.websoso.feature.feed.model.SosoFeedType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class FeedUiState(
+    val currentFilter: MyFeedFilter = MyFeedFilter(),
     val selectedTab: FeedTab = FeedTab.MY_FEED,
     val sosoCategory: SosoFeedType = SosoFeedType.ALL,
     val myFeedData: FeedSourceData = FeedSourceData(),
     val sosoAllData: FeedSourceData = FeedSourceData(),
     val sosoRecommendationData: FeedSourceData = FeedSourceData(),
-    val isFilterSheetVisible: Boolean = false,
     val loading: Boolean = false,
     val error: Boolean = false,
 ) {

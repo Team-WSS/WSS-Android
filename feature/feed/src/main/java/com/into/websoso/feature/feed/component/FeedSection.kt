@@ -29,6 +29,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.component.S3Image
 import com.into.websoso.core.designsystem.theme.Black
@@ -206,7 +207,7 @@ private fun FeedItem(
             Spacer(modifier = Modifier.height(height = 10.dp))
         }
 
-        if (feed.novel != null){
+        if (feed.novel != null) {
             FeedNovelInfo(
                 novel = feed.novel,
                 onNovelClick = onNovelClick,
@@ -239,6 +240,7 @@ private fun FeedItem(
 
             FeedTab.SOSO_FEED -> {
                 Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(space = 18.dp),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -247,18 +249,19 @@ private fun FeedItem(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { onLikeClick(feed.id) },
+                        modifier = Modifier.debouncedClickable { onLikeClick(feed.id) },
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_like),
+                            imageVector = ImageVector.vectorResource(
+                                id = if (feed.isLiked) R.drawable.ic_thumb_up_on else R.drawable.ic_thumb_up,
+                            ),
                             contentDescription = null,
-                            tint = Gray200,
                         )
 
                         Text(
                             text = feed.likeCount.toString(),
                             style = WebsosoTheme.typography.title3,
-                            color = Gray200,
+                            color = if (feed.isLiked) Black else Gray200,
                         )
                     }
 
@@ -267,13 +270,13 @@ private fun FeedItem(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_like),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_comment),
                             contentDescription = null,
                             tint = Gray200,
                         )
 
                         Text(
-                            text = feed.likeCount.toString(),
+                            text = feed.commentCount.toString(),
                             style = WebsosoTheme.typography.title3,
                             color = Gray200,
                         )

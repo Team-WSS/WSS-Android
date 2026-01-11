@@ -10,14 +10,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryScrollableTabRow
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,11 +40,15 @@ import com.into.websoso.feature.feed.component.FeedSection
 import com.into.websoso.feature.feed.component.MyFeedFilterModal
 import com.into.websoso.feature.feed.model.FeedOrder
 import com.into.websoso.feature.feed.model.FeedTab
+import com.into.websoso.feature.feed.model.MyFeedFilter
 import com.into.websoso.feature.feed.model.SosoFeedType
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedScreen(
     uiState: FeedUiState,
+    bottomSheetState: SheetState,
+    isFilterSheetVisible: Boolean,
     onTabSelected: (tab: FeedTab) -> Unit,
     onSortSelected: (order: FeedOrder) -> Unit,
     onSosoTypeSelected: (feedType: SosoFeedType) -> Unit,
@@ -53,6 +59,8 @@ internal fun FeedScreen(
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
+    onApplyFilterClick: (filter: MyFeedFilter) -> Unit,
+    onFilterCloseClick: () -> Unit,
 ) {
     Scaffold(containerColor = White) {
         Column {
@@ -156,14 +164,17 @@ internal fun FeedScreen(
             )
         }
 
-        if (uiState.isFilterSheetVisible) {
+        if (isFilterSheetVisible) {
             ModalBottomSheet(
-                onDismissRequest = { onFilterClick() },
-                sheetState = sheetState,
+                onDismissRequest = {},
+                sheetState = bottomSheetState,
                 containerColor = White,
-                dragHandle = { BottomSheetDefaults.DragHandle() },
             ) {
-                MyFeedFilterModal()
+                MyFeedFilterModal(
+                    initialFilter = uiState.currentFilter, // 현재 적용된 필터를 초기값으로!
+                    onApplyFilterClick = onApplyFilterClick,
+                    onFilterCloseClick = onFilterCloseClick,
+                )
             }
         }
     }
@@ -228,12 +239,15 @@ private fun FeedTabRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun FeedScreenPreview() {
     WebsosoTheme {
         FeedScreen(
             uiState = FeedUiState(),
+            bottomSheetState = rememberModalBottomSheetState(),
+            isFilterSheetVisible = false,
             onWriteClick = { },
             onTabSelected = { },
             onSortSelected = { },
@@ -244,6 +258,8 @@ private fun FeedScreenPreview() {
             onLikeClick = { },
             onContentClick = { _, _ -> },
             onFilterClick = {},
+            onApplyFilterClick = {},
+            onFilterCloseClick = {},
         )
     }
 }

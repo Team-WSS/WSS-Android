@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.feed.repository.FeedRepository
 import com.into.websoso.feature.feed.model.FeedOrder
 import com.into.websoso.feature.feed.model.FeedTab
+import com.into.websoso.feature.feed.model.MyFeedFilter
 import com.into.websoso.feature.feed.model.SosoFeedType
 import com.into.websoso.feature.feed.model.toFeedUiModel
 import com.into.websoso.feed.GetFeedsUseCase
@@ -102,7 +103,7 @@ class FeedViewModel @Inject constructor(
 
                     val updatedSource = current.copy(
                         feeds = (current.feeds + result.feeds.map(Feed::toFeedUiModel)).toImmutableList(),
-                        lastId = result.feeds.last().id,
+                        lastId = result.feeds.lastOrNull()?.id ?: 0,
                         isLoadable = result.isLoadable,
                     )
 
@@ -145,51 +146,71 @@ class FeedViewModel @Inject constructor(
         fetchNextPage()
     }
 
+    /**
+     * 내 피드 필터 적용
+     */
+    fun applyMyFilter(filter: MyFeedFilter) {
+        _uiState.update { it.copy(currentFilter = filter, myFeedData = FeedSourceData()) }
+        fetchNextPage()
+    }
+
     fun updateLike(selectedFeedId: Long) {
-        // 1. 현재 UI 상태에서 해당 피드 찾기
-        val currentState = uiState.value
+        val currentState = _uiState.value
         val targetFeed = currentState.currentData.feeds.find { it.id == selectedFeedId } ?: return
+        val currentIsLiked = targetFeed.isLiked
 
-        // 2. 반전될 상태 미리 계산
-        val prevIsLiked = targetFeed.isLiked
-        val nextIsLiked = !prevIsLiked // 현재 상태의 반대
-        val nextLikeCount = if (nextIsLiked) targetFeed.likeCount + 1 else targetFeed.likeCount - 1
-
+        _uiState.update { it.copy(loading = true) }
         viewModelScope.launch {
-            // 서버에 좋아요 상태 저장 요청
-            val result = runCatching {
-                feedRepository.saveLike(selectedFeedId, nextIsLiked)
-            }
+            runCatching {
+                feedRepository.saveLike(
+                    isLikedOfLikedFeed = currentIsLiked,
+                    selectedFeedId = selectedFeedId,
+                )
+            }.onSuccess {
+                val nextIsLiked = !currentIsLiked
+                val nextLikeCount =
+                    if (nextIsLiked) targetFeed.likeCount + 1 else targetFeed.likeCount - 1
 
-            result.onSuccess {
                 _uiState.update { state ->
-                    // 현재 활성화된 소스(myFeedData, sosoAllData 등) 내의 리스트에서 해당 아이템만 교체
-                    val updatedSource = state.currentData.copy(
-                        items = state.currentData.items.map { feed ->
-                            if (feed.id == selectedFeedId) {
-                                feed.copy(isLiked = nextIsLiked, likeCount = nextLikeCount)
-                            } else feed
-                        }.toImmutableList()
-                    )
+                    val updatedItems = state.currentData.feeds.map { feed ->
+                        if (feed.id == selectedFeedId) {
+                            feed.copy(isLiked = nextIsLiked, likeCount = nextLikeCount)
+                        } else feed
+                    }.toImmutableList()
 
-                    // 현재 어떤 탭/카테고리인지 확인하여 해당 데이터만 업데이트
+                    val updatedData = state.currentData.copy(feeds = updatedItems)
+
                     when (state.selectedTab) {
-                        FeedTab.MY_FEED -> state.copy(myFeedData = updatedSource)
+                        FeedTab.MY_FEED -> state.copy(
+                            loading = false,
+                            myFeedData = updatedData,
+                        )
+
                         FeedTab.SOSO_FEED -> {
-                            if (state.sosoCategory == SosoCategory.ALL) {
-                                state.copy(sosoAllData = updatedSource)
+                            if (state.sosoCategory == SosoFeedType.ALL) {
+                                state.copy(
+                                    loading = false,
+                                    sosoAllData = updatedData,
+                                )
                             } else {
-                                state.copy(sosoRecoData = updatedSource)
+                                state.copy(
+                                    loading = false,
+                                    sosoRecommendationData = updatedData,
+                                )
                             }
                         }
                     }
                 }
             }.onFailure {
-                _uiState.update { it.copy(error = true) }
+                _uiState.update {
+                    it.copy(
+                        loading = false,
+                        error = true,
+                    )
+                }
             }
         }
     }
-//
 //    fun updateLikedSync(
 //        selectedFeedId: Long,
 //        isLiked: Boolean,

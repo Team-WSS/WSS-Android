@@ -1,6 +1,8 @@
 package com.into.websoso.feature.feed.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,25 +13,27 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -39,76 +43,193 @@ import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R
+import com.into.websoso.feature.feed.model.MyFeedFilter
+import com.into.websoso.feature.feed.model.NovelCategory
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MyFeedFilterModal() {
+internal fun MyFeedFilterModal(
+    initialFilter: MyFeedFilter,
+    onApplyFilterClick: (filter: MyFeedFilter) -> Unit,
+    onFilterCloseClick: () -> Unit,
+) {
+    var tempGenres by remember { mutableStateOf(initialFilter.selectedGenres) }
+    var tempIsPublic by remember { mutableStateOf(initialFilter.isPublic) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(White, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+            .background(
+                color = White,
+                shape = RoundedCornerShape(
+                    topStart = 16.dp,
+                    topEnd = 16.dp,
+                ),
+            )
+            .navigationBarsPadding(),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp),
         ) {
-            Text(text = "글 찾기 필터", style = WebsosoTheme.typography.body2, color = Gray200)
-            Icon(
-                modifier = Modifier,
-                imageVector = ImageVector.vectorResource(R.drawable.ic_expanded_feed_image_close),
-                contentDescription = "Close",
-                tint = Gray300,
+            Text(
+                text = "글 찾기 필터",
+                style = WebsosoTheme.typography.body2,
+                color = Gray200,
             )
-        }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Text(text = "장르", color = Black, style = WebsosoTheme.typography.title2)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            val genres = listOf("로맨스", "로판", "판타지", "현판", "무협", "미스테리", "드라마", "라노벨", "BL")
-            genres.forEach { genre ->
-                GenreChip(text = genre, isSelected = (genre == "로맨스" || genre == "드라마"))
+            Box(
+                modifier = Modifier
+                    .debouncedClickable(onClick = onFilterCloseClick)
+                    .padding(all = 20.dp),
+            ) {
+                Icon(
+                    modifier = Modifier.size(size = 25.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_cancel_modal),
+                    contentDescription = null,
+                    tint = Gray300,
+                )
             }
         }
 
-        Spacer(modifier = Modifier.height(42.dp))
+        Row(modifier = Modifier.padding(horizontal = 20.dp)) {
+            Text(
+                text = "장르",
+                color = Black,
+                style = WebsosoTheme.typography.title2,
+                modifier = Modifier.padding(vertical = 10.dp),
+            )
+        }
 
-        Text(text = "공개여부", color = Black, style = WebsosoTheme.typography.title2)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        VisibilityItem(
-            title = "공개글",
-            icon = ImageVector.vectorResource(id = R.drawable.ic_visible),
-            isSelected = true,
+        GenreChipGroup(
+            selectedCategories = tempGenres,
+            onCategoriesSelected = { tempGenres = it },
+            modifier = Modifier.padding(horizontal = 20.dp),
         )
-        Divider(color = Gray50, thickness = 1.dp)
-        VisibilityItem(
-            title = "비공개글",
-            icon = ImageVector.vectorResource(id = R.drawable.ic_unvisible),
-            isSelected = false,
-        )
-        Divider(color = Gray50, thickness = 1.dp)
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(height = 32.dp))
 
-        Button(
-            onClick = { /* 필터 적용 */ },
+        Row(modifier = Modifier.padding(horizontal = 20.dp)) {
+            Text(
+                text = "공개여부",
+                color = Black,
+                style = WebsosoTheme.typography.title2,
+                modifier = Modifier.padding(vertical = 10.dp),
+            )
+        }
+
+        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+            VisibilityRow(
+                text = "공개글",
+                iconRes = R.drawable.ic_visible,
+                isSelected = tempIsPublic == true,
+                onClick = { tempIsPublic = if (tempIsPublic == true) null else true },
+            )
+
+            HorizontalDivider(color = Gray50)
+
+            VisibilityRow(
+                text = "비공개글",
+                iconRes = R.drawable.ic_unvisible,
+                isSelected = tempIsPublic == false,
+                onClick = { tempIsPublic = if (tempIsPublic == false) null else false },
+            )
+
+            HorizontalDivider(color = Gray50)
+        }
+
+        Spacer(modifier = Modifier.height(height = 30.dp))
+
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(54.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Primary100),
+                .padding(vertical = 20.dp, horizontal = 12.dp)
+                .background(
+                    color = Primary100,
+                    shape = RoundedCornerShape(size = 14.dp),
+                )
+                .debouncedClickable {
+                    onApplyFilterClick(MyFeedFilter(tempGenres, tempIsPublic))
+                },
         ) {
             Text(
                 text = "해당하는 글 보기",
                 style = WebsosoTheme.typography.title2,
                 color = White,
+                modifier = Modifier.padding(vertical = 18.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun VisibilityRow(
+    text: String,
+    @DrawableRes iconRes: Int,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .debouncedClickable(onClick = onClick)
+            .padding(vertical = 18.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(size = 18.dp),
+                tint = if (isSelected) Black else Gray200,
+            )
+            Text(
+                text = text,
+                color = if (isSelected) Black else Gray200,
+                style = WebsosoTheme.typography.body2,
+            )
+        }
+
+        Image(
+            painter = painterResource(
+                id = if (isSelected) R.drawable.ic_novel_detail_check else R.drawable.ic_novel_unselected,
+            ),
+            contentDescription = null,
+            modifier = Modifier.size(size = 24.dp),
+        )
+    }
+}
+
+@Composable
+private fun GenreChipGroup(
+    selectedCategories: Set<NovelCategory>,
+    onCategoriesSelected: (Set<NovelCategory>) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FlowRow(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 10.dp),
+    ) {
+        NovelCategory.entries.forEach { category ->
+            val isSelected = selectedCategories.contains(category)
+
+            GenreChip(
+                text = category.koreanName,
+                isSelected = isSelected,
+                onChipClick = {
+                    val next = if (isSelected) selectedCategories - category
+                    else selectedCategories + category
+                    onCategoriesSelected(next)
+                },
             )
         }
     }
@@ -118,11 +239,13 @@ fun MyFeedFilterModal() {
 private fun GenreChip(
     text: String,
     isSelected: Boolean,
+    onChipClick: () -> Unit,
 ) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(1.dp, if (isSelected) Primary100 else Gray50),
+        shape = RoundedCornerShape(size = 20.dp),
+        border = BorderStroke(width = 1.dp, color = if (isSelected) Primary100 else Gray50),
         color = if (isSelected) Primary50 else Gray50,
+        onClick = onChipClick,
     ) {
         Text(
             text = text,
@@ -133,57 +256,14 @@ private fun GenreChip(
     }
 }
 
-@Composable
-private fun VisibilityItem(
-    title: String,
-    icon: ImageVector,
-    isSelected: Boolean,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = Gray200,
-            modifier = Modifier.size(18.dp),
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            text = title,
-            style = WebsosoTheme.typography.body2,
-            color = Gray200,
-            modifier = Modifier.weight(1f),
-        )
-
-        Box(
-            modifier = Modifier
-                .size(24.dp)
-                .background(
-                    if (isSelected) Color(0xFF6559FF) else Color(0xFFE0E0E0),
-                    CircleShape,
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(
-                    if (isSelected) R.drawable.ic_novel_detail_check else R.drawable.ic_novel_unselected,
-                ),
-                contentDescription = null,
-                tint = Color.Transparent,
-                modifier = Modifier.size(16.dp),
-            )
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun MyFeedFilterModalPreview() {
     WebsosoTheme {
-        MyFeedFilterModal()
+        MyFeedFilterModal(
+            initialFilter = MyFeedFilter(),
+            onApplyFilterClick = {},
+            onFilterCloseClick = { },
+        )
     }
 }

@@ -1,6 +1,5 @@
 package com.into.websoso.feature.feed.model
 
-import androidx.annotation.ColorRes
 import androidx.compose.ui.graphics.Color
 import com.into.websoso.core.designsystem.theme.Blue
 import com.into.websoso.core.designsystem.theme.Gray
@@ -22,25 +21,25 @@ import com.into.websoso.core.designsystem.theme.Red
 import com.into.websoso.core.designsystem.theme.Violet
 
 enum class NovelCategory(
-    @ColorRes val boxColor: Color,
-    @ColorRes val iconColor: Color,
+    val boxColor: Color,
+    val iconColor: Color,
     val tag: String,
+    val koreanName: String,
 ) {
-    LIGHT_NOVEL(LightGreen, Green, "lightNovel"),
-    WUXIA(LightOrange, Orange, "wuxia"),
-    FANTASY(LightPurple, Purple, "fantasy"),
-    ROMANCE(LightPink, Pink, "romance"),
-    BOYS_LOVE(LightMint, Mint, "BL"),
-    ROMANCE_FANTASY(LightRed, Red, "romanceFantasy"),
-    MODERN_FANTASY(LightBlue, Blue, "modernFantasy"),
-    DRAMA(LightGray, Gray, "drama"),
-    MYSTERY(LightViolet, Violet, "mystery"),
+    ROMANCE(LightPink, Pink, "romance", "로맨스"),
+    ROMANCE_FANTASY(LightRed, Red, "romanceFantasy", "로판"),
+    FANTASY(LightPurple, Purple, "fantasy", "판타지"),
+    MODERN_FANTASY(LightBlue, Blue, "modernFantasy", "현판"),
+    WUXIA(LightOrange, Orange, "wuxia", "무협"),
+    MYSTERY(LightViolet, Violet, "mystery", "미스테리"),
+    DRAMA(LightGray, Gray, "drama", "드라마"),
+    LIGHT_NOVEL(LightGreen, Green, "lightNovel", "라노벨"),
+    BOYS_LOVE(LightMint, Mint, "BL", "BL"),
     ;
 
     companion object {
         fun fromTag(tag: String): NovelCategory {
-            return entries.find { it.tag == tag }
-                ?: LIGHT_NOVEL
+            return entries.find { it.tag == tag } ?: LIGHT_NOVEL
         }
     }
 }
