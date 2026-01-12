@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.model.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,7 @@ class MainViewModel
     constructor(
         private val userRepository: UserRepository,
         private val accountRepository: AccountRepository,
+        private val pushMessageRepository: PushMessageRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private var userId: Long = DEFAULT_USER_ID
@@ -46,6 +48,14 @@ class MainViewModel
                         error = true,
                         loading = false,
                     )
+                }
+            }
+        }
+
+        fun updateFcmToken(token: String) {
+            viewModelScope.launch {
+                runCatching {
+                    pushMessageRepository.updateUserFCMToken(token)
                 }
             }
         }

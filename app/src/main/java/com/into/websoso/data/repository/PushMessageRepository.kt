@@ -19,11 +19,6 @@ class PushMessageRepository
         private val pushMessageApi: PushMessageApi,
     ) {
         suspend fun updateUserFCMToken(fcmToken: String) {
-            val storedToken = fetchUserFCMToken()
-            if (fcmToken == storedToken) {
-                return
-            }
-
             saveUserFCMToken(fcmToken)
         }
 
