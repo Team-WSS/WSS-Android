@@ -1,5 +1,6 @@
 package com.into.websoso.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -56,6 +57,10 @@ class MainViewModel
             viewModelScope.launch {
                 runCatching {
                     pushMessageRepository.updateUserFCMToken(token)
+                }.onSuccess {
+                    Log.d("Fcm-token", "successful updated! token: $token")
+                }.onFailure {
+                    Log.e("Fcm-token", "failed updated! cause: ${it.cause}")
                 }
             }
         }
