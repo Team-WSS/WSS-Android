@@ -49,7 +49,7 @@ Library:
 <table align="center">
   <tr>
     <td width="70%">
-      <img src="https://github.com/user-attachments/assets/a16ca52d-3846-42c6-acef-b195c947fb34" width="100%" />
+      <img src="https://github.com/user-attachments/assets/88358876-5984-4377-b241-c777a383758d" width="100%" />
     </td>
     <td width="30%">
       <img src="https://github.com/user-attachments/assets/a8517309-6c22-4032-8adb-e7742c50cc08" width="100%" />
