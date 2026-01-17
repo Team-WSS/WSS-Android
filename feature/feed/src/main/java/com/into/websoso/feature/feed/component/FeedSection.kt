@@ -262,6 +262,7 @@ private fun FeedItem(
         when (currentTab) {
             FeedTab.MY_FEED -> {
                 Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
                     modifier = Modifier
                         .fillMaxWidth()

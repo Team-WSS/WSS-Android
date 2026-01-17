@@ -1,6 +1,5 @@
 package com.into.websoso.feature.feed
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -228,10 +227,7 @@ private fun FeedTabRow(
             FeedTab.entries.forEach { tab ->
                 Tab(
                     selected = selectedTab == tab,
-                    onClick = {
-                        Log.d("123123", tab.toString())
-                        onTabClick(tab)
-                    },
+                    onClick = { onTabClick(tab) },
                     text = {
                         Text(
                             text = tab.title,
