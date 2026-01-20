@@ -65,6 +65,18 @@ class MainViewModel
             }
         }
 
+        fun updatePushEnable(enable: Boolean) {
+            viewModelScope.launch {
+                runCatching {
+                    pushMessageRepository.saveUserPushEnabled(enable)
+                }.onSuccess {
+                    Log.d("Push-Enabled", "updatePushEnable: success")
+                }.onFailure {
+                    Log.d("Push-Enabled", "updatePushEnable: failed ${it.cause} ")
+                }
+            }
+        }
+
         companion object {
             const val DEFAULT_USER_ID = -1L
         }
