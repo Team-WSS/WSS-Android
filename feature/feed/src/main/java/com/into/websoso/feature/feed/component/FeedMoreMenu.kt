@@ -26,6 +26,7 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import kotlinx.collections.immutable.persistentListOf
 
+
 @Composable
 internal fun FeedMoreMenu(
     isMyFeed: Boolean,
@@ -44,7 +45,7 @@ internal fun FeedMoreMenu(
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
+            modifier = modifier
                 .border(
                     width = 1.dp,
                     color = Gray50,
@@ -63,7 +64,7 @@ internal fun FeedMoreMenu(
                     style = WebsosoTheme.typography.body2,
                     color = if (isMyFeed) Black else Secondary100,
                     modifier = Modifier
-                        .width(width = 192.dp)
+                        .padding(horizontal = 32.dp)
                         .debouncedClickable {
                             if (index == 0) onFirstItemClick() else onSecondItemClick()
                             onDismissRequest()
