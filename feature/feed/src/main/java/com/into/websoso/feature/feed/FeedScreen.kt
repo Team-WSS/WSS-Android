@@ -1,6 +1,6 @@
 package com.into.websoso.feature.feed
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,6 +46,7 @@ import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.MyFeedFilter
 import com.into.websoso.feature.feed.model.SosoFeedType
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FeedScreen(
@@ -229,7 +230,6 @@ private fun FeedTabRow(
                 Tab(
                     selected = selectedTab == tab,
                     onClick = {
-                        Log.d("123123", tab.toString())
                         onTabClick(tab)
                     },
                     text = {
