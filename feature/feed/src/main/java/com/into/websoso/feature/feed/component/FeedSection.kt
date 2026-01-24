@@ -112,10 +112,12 @@ private fun FeedItem(
     var isMenuExpanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.padding(
-            top = 20.dp,
-            bottom = 10.dp,
-        ),
+        modifier = Modifier
+            .debouncedClickable { onContentClick(feed.id, feed.isLiked) }
+            .padding(
+                top = 20.dp,
+                bottom = 10.dp,
+            ),
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
