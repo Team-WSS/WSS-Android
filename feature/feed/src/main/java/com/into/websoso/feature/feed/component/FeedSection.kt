@@ -239,7 +239,7 @@ private fun FeedItem(
                         ),
                 ) {
                     Text(
-                        text = feed.imageUrls.size.toString(),
+                        text = feed.imageCount.toString(),
                         style = WebsosoTheme.typography.body5,
                         color = White,
                         textAlign = TextAlign.Center,
@@ -341,8 +341,7 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            )
-            .debouncedClickable {
+            ).debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
