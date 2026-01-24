@@ -275,6 +275,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
+                        android:id="@+id/view_my_page_profile_divider"
                         android:layout_width="0dp"
                         android:layout_height="3dp"
                         android:background="@color/gray_50_F4F5F8"
@@ -286,7 +287,7 @@
                         android:id="@+id/cl_my_library_genre_preference"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/cl_my_page_user_profile"
+                        app:layout_constraintTop_toBottomOf="@id/view_my_page_profile_divider"
                         tools:layout_editor_absoluteX="0dp">
 
                         <TextView
@@ -450,15 +451,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/cl_my_page_user_profile">
+                        app:layout_constraintTop_toBottomOf="@id/view_my_page_profile_divider">
 
                         <TextView
                             android:id="@+id/tv_my_library_preference_analysis_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
-                            android:paddingVertical="10dp"
+                            android:layout_marginTop="30dp"
+                            android:paddingVertical="0dp"
+                            android:includeFontPadding="false"
                             android:text="@string/my_page_taste_title"
                             android:textAppearance="@style/title2"
                             android:textColor="@color/gray_300_52515F"
@@ -558,14 +560,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/cl_my_library_genre_preference">
+                        app:layout_constraintTop_toBottomOf="@id/view_my_page_novel_preference_divider">
 
                         <TextView
                             android:id="@+id/tv_my_library_unknown_novel_preference_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="24dp"
+                            android:layout_marginTop="30dp"
+                            android:paddingVertical="0dp"
+                            android:includeFontPadding="false"
                             android:text="@string/my_page_taste_title"
                             android:textAppearance="@style/title2"
                             android:textColor="@color/gray_300_52515F"
