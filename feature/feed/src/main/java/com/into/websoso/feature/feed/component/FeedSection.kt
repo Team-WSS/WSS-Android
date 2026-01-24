@@ -343,7 +343,8 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            ).debouncedClickable {
+            )
+            .debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
@@ -389,7 +390,7 @@ private fun FeedNovelInfo(
                         )
 
                         Text(
-                            text = novel.rating.toString(),
+                            text = novel.feedWriterNovelRating.toString(),
                             style = WebsosoTheme.typography.label1,
                             color = Black,
                         )
