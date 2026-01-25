@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -63,12 +64,21 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     private fun showNotificationSettingDialog() {
-        val dialog = NotificationPermissionDialog.newInstance()
-        dialog.isCancelable = false
-        dialog.show(
-            supportFragmentManager,
-            NotificationPermissionDialog.NOTIFICATION_PERMISSION_DIALOG_TAG,
-        )
+        NotificationPermissionDialog
+            .newInstance()
+            .apply {
+                isCancelable = false
+                setOnSetUpClickListener {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        }
+                    startActivity(intent)
+                }
+            }.show(
+                supportFragmentManager,
+                NotificationPermissionDialog.NOTIFICATION_PERMISSION_DIALOG_TAG,
+            )
     }
 
     private fun navigateToNotificationDetail(notification: NotificationModel) {
