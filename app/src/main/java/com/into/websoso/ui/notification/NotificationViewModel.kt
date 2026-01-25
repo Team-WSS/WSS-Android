@@ -2,6 +2,7 @@ package com.into.websoso.ui.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.domain.model.NotificationInfo
 import com.into.websoso.domain.usecase.GetNotificationListUseCase
 import com.into.websoso.ui.mapper.toUi
@@ -18,6 +19,7 @@ class NotificationViewModel
     @Inject
     constructor(
         private val getNotificationListUseCase: GetNotificationListUseCase,
+        private val pushMessageRepository: PushMessageRepository,
     ) : ViewModel() {
         private val _notificationUIState: MutableStateFlow<NotificationUIState> =
             MutableStateFlow(NotificationUIState())
@@ -73,5 +75,13 @@ class NotificationViewModel
                     if (it.id == notificationId) it.copy(isRead = true) else it
                 },
             )
+        }
+
+        fun updatePushMessageEnabled() {
+            viewModelScope.launch {
+                runCatching {
+                    pushMessageRepository.saveUserPushEnabled(true)
+                }
+            }
         }
     }
