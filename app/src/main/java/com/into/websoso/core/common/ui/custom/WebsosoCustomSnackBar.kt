@@ -1,12 +1,14 @@
 package com.into.websoso.core.common.ui.custom
 
 import android.R.color.transparent
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.into.websoso.databinding.CustomSnackBarBinding
 
+@SuppressLint("RestrictedApi")
 class WebsosoCustomSnackBar(
     view: View,
 ) {
