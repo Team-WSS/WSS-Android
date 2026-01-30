@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.google.firebase.messaging.FirebaseMessaging
 import com.into.websoso.R.id.fcv_main
 import com.into.websoso.R.id.menu_explore
 import com.into.websoso.R.id.menu_feed
@@ -57,6 +58,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         setupObserver()
         onViewGuestClick()
         handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
+        updateFcmToken()
         supportFragmentManager.setFragmentResultListener(
             "NAVIGATE_TO_LIBRARY_FRAGMENT",
             this,
@@ -141,8 +143,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
             currentFragment?.let {
                 when {
-                    it is LibraryFragment && !isLibrary -> hide(it)
-                    it != targetFragment -> remove(it)
+                    it is LibraryFragment && !isLibrary -> {
+                        hide(it)
+                    }
+
+                    it != targetFragment -> {
+                        remove(it)
+                    }
+
                     else -> {}
                 }
             }
@@ -175,7 +183,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
                     mainViewModel.updateUserInfo()
                 }
 
-                false -> binding.viewMainGuest.visibility = View.VISIBLE
+                false -> {
+                    binding.viewMainGuest.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -202,6 +212,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
         binding.bnvMain.selectedItemId = menuId
         replaceCurrentFragment(menuId)
+    }
+
+    private fun updateFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+
+            val token = task.result
+            mainViewModel.updateFcmToken(token)
+        }
     }
 
     companion object {
