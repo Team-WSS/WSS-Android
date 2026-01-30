@@ -1,11 +1,12 @@
 package com.into.websoso.domain.library.model
 
 import com.into.websoso.domain.library.model.AttractivePoints.Companion.toAttractivePoints
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AttractivePointsTest {
-
     @Test
     fun `기본 상태에서는 아무 항목도 선택되지 않는다`() {
         val points = AttractivePoints()

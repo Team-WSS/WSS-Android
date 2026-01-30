@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SortCriteriaTest {
-
     @Test
     fun `정렬 키가 일치하면 해당 정렬 기준을 반환한다`() {
         assertEquals(SortCriteria.RECENT, SortCriteria.from("RECENT"))

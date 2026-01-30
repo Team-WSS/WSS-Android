@@ -6,7 +6,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class NovelRatingTest {
-
     @Test
     fun `기본 평점은 선택되지 않은 상태이다`() {
         val rating = NovelRating()
@@ -25,7 +24,8 @@ class NovelRatingTest {
 
     @Test
     fun `같은 평점을 다시 설정하면 기본 상태로 돌아간다`() {
-        val rating = NovelRating.from(3.0f)
+        val rating = NovelRating
+            .from(3.0f)
             .set(Rating.THREE)
 
         assertEquals(Rating.DEFAULT, rating.rating)

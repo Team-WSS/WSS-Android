@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class RatingTest {
-
     @Test
     fun `정확한 값은 대응되는 평점으로 변환된다`() {
         assertEquals(Rating.DEFAULT, Rating.from(0.0f))
