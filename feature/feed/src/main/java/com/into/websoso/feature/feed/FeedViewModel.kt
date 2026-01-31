@@ -93,7 +93,8 @@ class FeedViewModel
                             lastFeedId = lastFeedId,
                             genres = state.currentFilter.selectedGenres.map { it.tag },
                             isVisible = state.currentFilter.isVisible,
-                            sortCriteria = state.myFeedData.sort.name.uppercase(),
+                            sortCriteria = state.myFeedData.sort.name
+                                .uppercase(),
                             isUnVisible = state.currentFilter.isUnVisible,
                         )
 

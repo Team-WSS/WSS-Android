@@ -136,7 +136,7 @@ internal fun MyFeedFilterModal(
                 text = "비공개글",
                 iconRes = R.drawable.ic_unvisible,
                 isSelected = tempIsUnVisible == true,
-                onClick = { tempIsUnVisible = if (tempIsUnVisible == false) null else false },
+                onClick = { tempIsUnVisible = if (tempIsUnVisible == true) null else true },
             )
 
             HorizontalDivider(color = Gray50)
