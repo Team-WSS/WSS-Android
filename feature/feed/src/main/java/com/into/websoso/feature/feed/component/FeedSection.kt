@@ -185,11 +185,13 @@ private fun FeedItem(
                     FeedMoreMenu(
                         isMyFeed = feed.isMyFeed,
                         onDismissRequest = { isMenuExpanded = false },
+                        // TODO: 위 아래 itemClick 모두 로직을 feed.isMyFeed 를 사용하도록 수정 읽고 나면 제거
                         onFirstItemClick = {
-                            onFirstItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                            onFirstItemClick(feed.id, feed.isMyFeed)
                         },
+                        // TODO: 여기 소소 피드에서 내 피드 클릭하면 부적절한 표현이 사용되었나요 라고 떠서 수정함 읽고 나면 제거
                         onSecondItemClick = {
-                            onSecondItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                            onSecondItemClick(feed.id, feed.isMyFeed)
                         },
                     )
                 }
@@ -343,8 +345,7 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            )
-            .debouncedClickable {
+            ).debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
