@@ -36,9 +36,5 @@ enum class Category(
             entries.find { category ->
                 title == category.titleEn || title == category.titleKr
             } ?: throw IllegalArgumentException("존재하지 않는 장르입니다: $title")
-
-        fun iconColor(title: String): Int = from(title).iconColor
-
-        fun backgroundColor(title: String): Int = from(title).backgroundColor
     }
 }
