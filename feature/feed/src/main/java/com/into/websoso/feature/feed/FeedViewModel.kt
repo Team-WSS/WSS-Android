@@ -65,7 +65,6 @@ class FeedViewModel
         fun updateSosoCategory(category: SosoFeedType) {
             if (uiState.value.sosoCategory == category) return
 
-            Log.d("123123 카테고리", category.toString())
             _uiState.update { it.copy(sosoCategory = category) }
             if (uiState.value.currentData.feeds
                     .isEmpty()
