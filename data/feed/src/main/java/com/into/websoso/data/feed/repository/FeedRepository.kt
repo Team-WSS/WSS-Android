@@ -19,8 +19,8 @@ class FeedRepository
         private val libraryLocalDataSource: LibraryLocalDataSource,
     ) {
         // 내부 상태 캡슐화 (외부에서 직접 수정 불가)
-        private val _cachedFeeds = mutableListOf<FeedEntity>()
-        private val _cachedRecommendedFeeds = mutableListOf<FeedEntity>()
+        private val cachedFeeds = mutableListOf<FeedEntity>()
+        private val cachedRecommendedFeeds = mutableListOf<FeedEntity>()
 
         /**
          * 커서 기반 피드 조회
@@ -44,7 +44,7 @@ class FeedRepository
 
             // 2. 타겟 캐시 결정
             val isRecommended = feedsOption == "RECOMMENDED"
-            val targetCache = if (isRecommended) _cachedRecommendedFeeds else _cachedFeeds
+            val targetCache = if (isRecommended) cachedRecommendedFeeds else cachedFeeds
 
             // 3. 커서(lastFeedId) 값에 따른 전략 수행
             // lastFeedId가 0이면 사용자가 새로고침을 했거나 처음 진입한 상황임
@@ -74,8 +74,8 @@ class FeedRepository
                 feedApi.deleteFeed(feedId)
             }.onSuccess {
                 // 모든 캐시에서 해당 피드 제거 (안전하게 두 곳 모두 확인 가능)
-                _cachedFeeds.removeIf { it.id == feedId }
-                _cachedRecommendedFeeds.removeIf { it.id == feedId }
+                cachedFeeds.removeIf { it.id == feedId }
+                cachedRecommendedFeeds.removeIf { it.id == feedId }
 
                 // 로컬 DB(Library) 동기화 로직
                 val novel: NovelEntity? =
