@@ -120,8 +120,8 @@ internal fun FeedScreen(
                                 modifier = Modifier.debouncedClickable {
                                     onSortSelected(
                                         when (uiState.myFeedData.sort) {
-                                            FeedOrder.NEWEST -> FeedOrder.OLDEST
-                                            FeedOrder.OLDEST -> FeedOrder.NEWEST
+                                            FeedOrder.RECENT -> FeedOrder.OLD
+                                            FeedOrder.OLD -> FeedOrder.RECENT
                                         },
                                     )
                                 },

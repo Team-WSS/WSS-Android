@@ -54,7 +54,8 @@ internal fun MyFeedFilterModal(
     onFilterCloseClick: () -> Unit,
 ) {
     var tempGenres by remember { mutableStateOf(initialFilter.selectedGenres) }
-    var tempIsPublic by remember { mutableStateOf(initialFilter.isPublic) }
+    var tempIsVisible by remember { mutableStateOf(initialFilter.isVisible) }
+    var tempIsUnVisible by remember { mutableStateOf(initialFilter.isUnVisible) }
 
     Column(
         modifier = Modifier
@@ -125,8 +126,8 @@ internal fun MyFeedFilterModal(
             VisibilityRow(
                 text = "공개글",
                 iconRes = R.drawable.ic_visible,
-                isSelected = tempIsPublic == true,
-                onClick = { tempIsPublic = if (tempIsPublic == true) null else true },
+                isSelected = tempIsVisible == true,
+                onClick = { tempIsVisible = if (tempIsVisible == true) null else true },
             )
 
             HorizontalDivider(color = Gray50)
@@ -134,8 +135,8 @@ internal fun MyFeedFilterModal(
             VisibilityRow(
                 text = "비공개글",
                 iconRes = R.drawable.ic_unvisible,
-                isSelected = tempIsPublic == false,
-                onClick = { tempIsPublic = if (tempIsPublic == false) null else false },
+                isSelected = tempIsUnVisible == true,
+                onClick = { tempIsUnVisible = if (tempIsUnVisible == false) null else false },
             )
 
             HorizontalDivider(color = Gray50)
@@ -153,7 +154,7 @@ internal fun MyFeedFilterModal(
                     shape = RoundedCornerShape(size = 14.dp),
                 )
                 .debouncedClickable {
-                    onApplyFilterClick(MyFeedFilter(tempGenres, tempIsPublic))
+                    onApplyFilterClick(MyFeedFilter(tempGenres, tempIsVisible))
                 },
         ) {
             Text(
@@ -226,8 +227,11 @@ private fun GenreChipGroup(
                 text = category.koreanName,
                 isSelected = isSelected,
                 onChipClick = {
-                    val next = if (isSelected) selectedCategories - category
-                    else selectedCategories + category
+                    val next = if (isSelected) {
+                        selectedCategories - category
+                    } else {
+                        selectedCategories + category
+                    }
                     onCategoriesSelected(next)
                 },
             )
