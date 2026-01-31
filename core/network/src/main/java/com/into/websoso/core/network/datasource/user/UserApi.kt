@@ -19,7 +19,7 @@ interface UserApi {
         @Path("userId") userId: Long,
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
-        @Query("genres") genres: Array<String>?,
+        @Query("genreNames") genres: Array<String>?,
         @Query("isVisible") isVisible: Boolean?,
         @Query("isUnVisible") isUnVisible: Boolean?,
         @Query("sortCriteria") sortCriteria: String?,
