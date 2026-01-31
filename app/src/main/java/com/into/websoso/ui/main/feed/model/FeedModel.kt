@@ -1,5 +1,7 @@
 package com.into.websoso.ui.main.feed.model
 
+import androidx.annotation.ColorRes
+
 data class FeedModel(
     val user: UserModel,
     val createdDate: String,
@@ -33,6 +35,8 @@ data class FeedModel(
         val title: String?,
         val rating: Float?,
         val ratingCount: Int?,
+        @ColorRes val backgroundColor: Int? = null,
+        @ColorRes val iconColor: Int? = null,
     ) {
         val isNothing: Boolean = id == null
     }
