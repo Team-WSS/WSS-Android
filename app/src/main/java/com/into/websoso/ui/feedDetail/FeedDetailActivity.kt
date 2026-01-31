@@ -576,7 +576,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         private const val DEFAULT_FEED_ID: Long = -1
         private const val NOTIFICATION_ID: String = "NOTIFICATION_ID"
         private const val FEED_LIKE_STATUS: String = "FEED_LIKE_STATUS"
-        private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(
             context: Context,

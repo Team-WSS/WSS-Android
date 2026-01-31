@@ -19,7 +19,9 @@ fun Feed.toFeedUiModel(): FeedUiModel {
             userNovelRating = userNovelRating.orDefault(),
             feedWriterNovelRating = feedWriterNovelRating,
         )
-    } else null
+    } else {
+        null
+    }
 
     return FeedUiModel(
         user = UserUiModel(
@@ -40,6 +42,7 @@ fun Feed.toFeedUiModel(): FeedUiModel {
         imageUrls = imageUrls.toImmutableList(),
         imageCount = imageCount,
         novel = novel,
+        relevantCategories = relevantCategories.toImmutableList(),
     )
 }
 
@@ -61,6 +64,8 @@ data class FeedUiModel(
     val novel: NovelUiModel? = null,
 ) {
     val isVisible: Boolean get() = !isSpoiler && imageUrls.isNotEmpty()
+    val relevantCategoriesByKr: ImmutableList<String>
+        get() = relevantCategories.map { NovelCategory.fromTagToKorean(it) }.toImmutableList()
 
     data class UserUiModel(
         val id: Long = 0L,
