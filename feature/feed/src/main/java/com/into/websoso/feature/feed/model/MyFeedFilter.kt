@@ -1,7 +1,7 @@
 package com.into.websoso.feature.feed.model
 
 data class MyFeedFilter(
-    val selectedGenres: Set<NovelCategory> = emptySet(),
-    val isVisible: Boolean? = null,
-    val isUnVisible: Boolean? = null,
+    val selectedGenres: Set<NovelCategory> = NovelCategory.entries.toSet(),
+    val isVisible: Boolean? = true,
+    val isUnVisible: Boolean? = true,
 )
