@@ -35,6 +35,7 @@ data class FeedModel(
         val title: String?,
         val rating: Float?,
         val ratingCount: Int?,
+        val genre: String = "",
         @ColorRes val backgroundColor: Int? = null,
         @ColorRes val iconColor: Int? = null,
     ) {

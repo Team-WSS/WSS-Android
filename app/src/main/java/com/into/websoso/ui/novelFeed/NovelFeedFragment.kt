@@ -391,9 +391,12 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         }
 
         novelDetailViewModel.novelDetailModel.observe(viewLifecycleOwner) { novelDetail ->
-            val genre = novelDetail.novel?.getGenres?.firstOrNull() ?: return@observe
+            val genre = novelDetail.novel?.getGenres?.firstOrNull() ?: "기타"
             val category = Category.from(genre)
-            feedAdapter.setNovelColors(category.backgroundColor, category.iconColor)
+            feedAdapter.setNovelColors(
+                backgroundColor = category.backgroundColor,
+                iconColor = category.iconColor,
+            )
         }
     }
 
