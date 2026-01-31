@@ -1,11 +1,13 @@
 package com.into.websoso.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.model.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +20,7 @@ class MainViewModel
     constructor(
         private val userRepository: UserRepository,
         private val accountRepository: AccountRepository,
+        private val pushMessageRepository: PushMessageRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private var userId: Long = DEFAULT_USER_ID
@@ -46,6 +49,30 @@ class MainViewModel
                         error = true,
                         loading = false,
                     )
+                }
+            }
+        }
+
+        fun updateFcmToken(token: String) {
+            viewModelScope.launch {
+                runCatching {
+                    pushMessageRepository.updateUserFCMToken(token)
+                }.onSuccess {
+                    Log.d("Fcm-token", "successful updated! token: $token")
+                }.onFailure {
+                    Log.e("Fcm-token", "failed updated! cause: ${it.cause}")
+                }
+            }
+        }
+
+        fun updatePushEnable(enable: Boolean) {
+            viewModelScope.launch {
+                runCatching {
+                    pushMessageRepository.saveUserPushEnabled(enable)
+                }.onSuccess {
+                    Log.d("Push-Enabled", "updatePushEnable: success")
+                }.onFailure {
+                    Log.d("Push-Enabled", "updatePushEnable: failed ${it.cause} ")
                 }
             }
         }

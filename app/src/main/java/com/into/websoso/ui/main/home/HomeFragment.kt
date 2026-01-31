@@ -91,6 +91,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
             updateFCMToken(
                 isFirstLaunch = true,
             )
+            mainViewModel.updatePushEnable(true)
         }
 
     override fun onViewCreated(

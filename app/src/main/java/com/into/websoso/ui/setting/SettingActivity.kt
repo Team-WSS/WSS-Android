@@ -7,8 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.into.websoso.R.layout.activity_setting
 import com.into.websoso.core.common.ui.base.BaseActivity
@@ -31,6 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingActivity : BaseActivity<ActivitySettingBinding>(activity_setting) {
+    private val settingViewModel: SettingViewModel by viewModels()
     private val startActivityLauncher = registerForActivityResult(
         StartActivityForResult(),
     ) { result ->
@@ -38,6 +41,27 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(activity_setting) {
             ChangeProfileDisclosure.RESULT_OK -> showEditProfileDisclosureSuccessMessage(result)
         }
     }
+
+    private val notificationSettingLauncher = registerForActivityResult(
+        StartActivityForResult(),
+    ) {
+        if (isNotificationGranted()) {
+            settingViewModel.updatePushMessageEnabled()
+            navigateToNotificationSetting()
+        }
+    }
+
+    private fun isNotificationGranted(): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.POST_NOTIFICATIONS,
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.areNotificationsEnabled()
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,12 +159,21 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(activity_setting) {
     }
 
     private fun showNotificationSettingDialog() {
-        val dialog = NotificationPermissionDialog.newInstance()
-        dialog.isCancelable = false
-        dialog.show(
-            supportFragmentManager,
-            NotificationPermissionDialog.NOTIFICATION_PERMISSION_DIALOG_TAG,
-        )
+        NotificationPermissionDialog
+            .newInstance()
+            .apply {
+                isCancelable = false
+                setOnSetUpClickListener {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        }
+                    notificationSettingLauncher.launch(intent)
+                }
+            }.show(
+                supportFragmentManager,
+                NotificationPermissionDialog.NOTIFICATION_PERMISSION_DIALOG_TAG,
+            )
     }
 
     private fun navigateToNotificationSetting() {
