@@ -6,22 +6,37 @@ import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import com.into.websoso.R
 
-@BindingAdapter("app:imageTint")
+@BindingAdapter("imageTint")
 fun ImageView.setImageTint(
     @ColorRes colorRes: Int?,
 ) {
-    if (colorRes == null) return
-    setColorFilter(ContextCompat.getColor(context, colorRes))
+    if (colorRes == null) {
+        clearColorFilter()
+    } else {
+        setColorFilter(ContextCompat.getColor(context, colorRes))
+    }
 }
 
-@BindingAdapter("app:backgroundTint")
-fun View.setBackgroundTint(
+@BindingAdapter(value = ["dynamicBackgroundColor", "genreName"], requireAll = false)
+fun View.setGenreBackground(
     @ColorRes colorRes: Int?,
+    genreName: String?,
 ) {
-    if (colorRes == null) return
-    val background = this.background
-    if (background is GradientDrawable) {
-        background.setColor(ContextCompat.getColor(context, colorRes))
+    val drawable = background?.mutate() as? GradientDrawable ?: return
+
+    if (colorRes != null) {
+        drawable.setColor(ContextCompat.getColor(context, colorRes))
+    }
+
+    if (genreName == null) return
+
+    if (genreName != "기타") {
+        drawable.setStroke(0, 0)
+    } else {
+        val strokeWidth = (1 * context.resources.displayMetrics.density).toInt()
+        val strokeColor = ContextCompat.getColor(context, R.color.gray_70_DFDFE3)
+        drawable.setStroke(strokeWidth, strokeColor)
     }
 }
