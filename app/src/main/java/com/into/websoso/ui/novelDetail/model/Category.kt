@@ -1,7 +1,7 @@
 package com.into.websoso.ui.novelDetail.model
 
 import androidx.annotation.ColorRes
-import com.into.websoso.core.resource.R
+import com.into.websoso.R
 
 enum class Category(
     val titleKr: String,
