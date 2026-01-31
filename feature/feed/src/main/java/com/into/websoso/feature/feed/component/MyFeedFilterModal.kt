@@ -154,7 +154,7 @@ internal fun MyFeedFilterModal(
                     shape = RoundedCornerShape(size = 14.dp),
                 )
                 .debouncedClickable {
-                    onApplyFilterClick(MyFeedFilter(tempGenres, tempIsVisible))
+                    onApplyFilterClick(MyFeedFilter(tempGenres, tempIsVisible, tempIsUnVisible))
                 },
         ) {
             Text(
