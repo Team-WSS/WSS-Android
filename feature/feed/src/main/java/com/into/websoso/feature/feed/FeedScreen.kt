@@ -1,6 +1,5 @@
 package com.into.websoso.feature.feed
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -120,8 +119,8 @@ internal fun FeedScreen(
                                 modifier = Modifier.debouncedClickable {
                                     onSortSelected(
                                         when (uiState.myFeedData.sort) {
-                                            FeedOrder.NEWEST -> FeedOrder.OLDEST
-                                            FeedOrder.OLDEST -> FeedOrder.NEWEST
+                                            FeedOrder.RECENT -> FeedOrder.OLD
+                                            FeedOrder.OLD -> FeedOrder.RECENT
                                         },
                                     )
                                 },
@@ -161,6 +160,7 @@ internal fun FeedScreen(
                 currentTab = uiState.selectedTab,
                 feeds = when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> uiState.myFeedData.feeds
+
                     FeedTab.SOSO_FEED -> when (uiState.sosoCategory) {
                         SosoFeedType.ALL -> uiState.sosoAllData.feeds
                         SosoFeedType.RECOMMENDED -> uiState.sosoRecommendationData.feeds
@@ -229,7 +229,6 @@ private fun FeedTabRow(
                 Tab(
                     selected = selectedTab == tab,
                     onClick = {
-                        Log.d("123123", tab.toString())
                         onTabClick(tab)
                     },
                     text = {

@@ -25,20 +25,25 @@ data class FeedUiState(
             FeedTab.SOSO_FEED -> if (sosoCategory == SosoFeedType.ALL) sosoAllData else sosoRecommendationData
         }
 
-    fun updateCurrentSource(updatedData: FeedSourceData): FeedUiState {
-        return when (selectedTab) {
-            FeedTab.MY_FEED -> copy(myFeedData = updatedData)
+    fun updateCurrentSource(updatedData: FeedSourceData): FeedUiState =
+        when (selectedTab) {
+            FeedTab.MY_FEED -> {
+                copy(myFeedData = updatedData)
+            }
+
             FeedTab.SOSO_FEED -> {
-                if (sosoCategory == SosoFeedType.ALL) copy(sosoAllData = updatedData)
-                else copy(sosoRecommendationData = updatedData)
+                if (sosoCategory == SosoFeedType.ALL) {
+                    copy(sosoAllData = updatedData)
+                } else {
+                    copy(sosoRecommendationData = updatedData)
+                }
             }
         }
-    }
 }
 
 data class FeedSourceData(
     val feeds: ImmutableList<FeedUiModel> = persistentListOf(),
     val lastId: Long = 0,
     val isLoadable: Boolean = true,
-    internal val sort: FeedOrder = FeedOrder.NEWEST,
+    internal val sort: FeedOrder = FeedOrder.RECENT,
 )

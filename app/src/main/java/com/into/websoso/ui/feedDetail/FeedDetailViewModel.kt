@@ -196,7 +196,6 @@ class FeedDetailViewModel
         fun dispatchComment(comment: String) {
             feedDetailUiState.value?.let { feedDetailUiState ->
                 viewModelScope.launch {
-                    _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
                     runCatching {
                         feedRepository.saveComment(feedId, comment)
                     }.onSuccess {
@@ -214,7 +213,6 @@ class FeedDetailViewModel
         fun modifyComment(comment: String) {
             feedDetailUiState.value?.let { feedDetailUiState ->
                 viewModelScope.launch {
-                    _feedDetailUiState.value = feedDetailUiState.copy(loading = true)
                     runCatching {
                         feedRepository.saveModifiedComment(feedId, commentId, comment)
                     }.onSuccess {

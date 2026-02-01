@@ -63,7 +63,7 @@ fun LibraryScreen(
     val gridState = rememberLazyGridState()
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
-        confirmValueChange = { false },
+        confirmValueChange = { true },
     )
 
     latestEffect.collectAsEventWithLifecycle {
