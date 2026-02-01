@@ -112,10 +112,12 @@ private fun FeedItem(
     var isMenuExpanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.padding(
-            top = 20.dp,
-            bottom = 10.dp,
-        ),
+        modifier = Modifier
+            .debouncedClickable { onContentClick(feed.id, feed.isLiked) }
+            .padding(
+                top = 20.dp,
+                bottom = 10.dp,
+            ),
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
@@ -151,9 +153,8 @@ private fun FeedItem(
                     color = Gray200,
                     modifier = Modifier.padding(all = 3.dp),
                 )
-
                 Text(
-                    text = feed.createdDate,
+                    text = feed.formattedCreatedDate,
                     style = WebsosoTheme.typography.body5,
                     color = Gray200,
                 )
@@ -183,11 +184,13 @@ private fun FeedItem(
                     FeedMoreMenu(
                         isMyFeed = feed.isMyFeed,
                         onDismissRequest = { isMenuExpanded = false },
+                        // TODO: 위 아래 itemClick 모두 로직을 feed.isMyFeed 를 사용하도록 수정 읽고 나면 제거
                         onFirstItemClick = {
-                            onFirstItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                            onFirstItemClick(feed.id, feed.isMyFeed)
                         },
+                        // TODO: 여기 소소 피드에서 내 피드 클릭하면 부적절한 표현이 사용되었나요 라고 떠서 수정함 읽고 나면 제거
                         onSecondItemClick = {
-                            onSecondItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                            onSecondItemClick(feed.id, feed.isMyFeed)
                         },
                     )
                 }
@@ -239,7 +242,7 @@ private fun FeedItem(
                         ),
                 ) {
                     Text(
-                        text = feed.imageUrls.size.toString(),
+                        text = feed.imageCount.toString(),
                         style = WebsosoTheme.typography.body5,
                         color = White,
                         textAlign = TextAlign.Center,
@@ -389,7 +392,7 @@ private fun FeedNovelInfo(
                         )
 
                         Text(
-                            text = novel.rating.toString(),
+                            text = novel.feedWriterNovelRating.toString(),
                             style = WebsosoTheme.typography.label1,
                             color = Black,
                         )

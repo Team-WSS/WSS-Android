@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -36,7 +35,6 @@ import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.hideKeyboard
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
-import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
@@ -375,7 +373,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     NovelDetailBack.RESULT_OK,
                     CreateFeed.RESULT_OK,
                     OtherUserProfileBack.RESULT_OK,
-                        -> {
+                    -> {
                         feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
                     }
 
@@ -467,21 +465,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun setupView() {
-        setupRefreshView()
         feedDetailViewModel.updateFeedDetail(feedId, Feed, isLiked)
         binding.rvFeedDetail.apply {
             adapter = feedDetailAdapter
             itemAnimator = null
-        }
-    }
-
-    private fun setupRefreshView() {
-        binding.sptrFeedRefresh.apply {
-            setRefreshViewParams(LayoutParams(30.toIntPxFromDp(), 30.toIntPxFromDp()))
-            setLottieAnimation(LOTTIE_IMAGE)
-            setOnRefreshListener {
-                feedDetailViewModel.updateFeedDetail(feedId, FeedDetailRefreshed)
-            }
         }
     }
 
@@ -527,7 +514,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
                 !feedDetailUiState.loading -> {
                     binding.wllFeed.setWebsosoLoadingVisibility(false)
-                    binding.sptrFeedRefresh.setRefreshing(false)
                     updateView(feedDetailUiState)
                 }
             }
@@ -590,7 +576,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         private const val DEFAULT_FEED_ID: Long = -1
         private const val NOTIFICATION_ID: String = "NOTIFICATION_ID"
         private const val FEED_LIKE_STATUS: String = "FEED_LIKE_STATUS"
-        private const val LOTTIE_IMAGE = "lottie_websoso_loading.json"
 
         fun getIntent(
             context: Context,
