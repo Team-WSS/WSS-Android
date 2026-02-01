@@ -23,6 +23,10 @@ class NovelDetailViewModel
     ) : ViewModel() {
         private val _novelDetailModel = MutableLiveData<NovelDetailModel>(NovelDetailModel())
         val novelDetailModel: LiveData<NovelDetailModel> get() = _novelDetailModel
+
+        private val _primaryGenre = MutableLiveData(ETC)
+        val primaryGenre: LiveData<String> get() = _primaryGenre
+
         private val _loading = MutableLiveData<Boolean>(false)
         val loading: LiveData<Boolean> get() = _loading
         private val _error = MutableLiveData<Boolean>(false)
@@ -35,7 +39,10 @@ class NovelDetailViewModel
                     _loading.value = true
                     novelRepository.getNovelDetail(novelId)
                 }.onSuccess { novelDetail ->
-                    _novelDetailModel.value = novelDetail.toUi(novelId)
+                    val uiModel = novelDetail.toUi(novelId)
+                    _novelDetailModel.value = uiModel
+
+                    _primaryGenre.value = uiModel.novel?.getGenres?.firstOrNull() ?: "기타"
                     _loading.value = false
                     if (novelDetailModel.value?.isLogin == false) updateLoginStatus()
                     checkIsFirstLaunched()
@@ -136,5 +143,9 @@ class NovelDetailViewModel
                     novelGenreImage = genreImage,
                 ) ?: return,
             )
+        }
+
+        companion object {
+            private const val ETC = "기타"
         }
     }

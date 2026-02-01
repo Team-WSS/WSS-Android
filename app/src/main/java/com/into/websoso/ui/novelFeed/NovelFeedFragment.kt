@@ -319,6 +319,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         initView()
         novelFeedViewModel.updateFeeds(novelId)
         novelFeedViewModel.updateLoginStatus()
+        novelDetailViewModel.updateNovelDetail(novelId)
         setupObserver()
     }
 
@@ -387,6 +388,10 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                 novelFeedViewModel.updateIsRefreshed(false)
                 binding.rvNovelFeed.scrollToPosition(0)
             }
+        }
+
+        novelDetailViewModel.primaryGenre.observe(viewLifecycleOwner) { genre ->
+            novelFeedViewModel.updateGenre(genre)
         }
     }
 
