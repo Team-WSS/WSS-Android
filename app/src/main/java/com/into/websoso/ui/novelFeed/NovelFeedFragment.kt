@@ -49,7 +49,6 @@ import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.novelDetail.NovelDetailViewModel
-import com.into.websoso.ui.novelDetail.model.Category
 import com.into.websoso.ui.novelFeed.model.NovelFeedUiState
 import com.into.websoso.ui.otherUserPage.BlockUserDialogFragment
 import com.into.websoso.ui.otherUserPage.OtherUserPageActivity
@@ -388,15 +387,6 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                 novelFeedViewModel.updateIsRefreshed(false)
                 binding.rvNovelFeed.scrollToPosition(0)
             }
-        }
-
-        novelDetailViewModel.novelDetailModel.observe(viewLifecycleOwner) { novelDetail ->
-            val genre = novelDetail.novel?.getGenres?.firstOrNull() ?: "기타"
-            val category = Category.from(genre)
-            feedAdapter.setNovelColors(
-                backgroundColor = category.backgroundColor,
-                iconColor = category.iconColor,
-            )
         }
     }
 

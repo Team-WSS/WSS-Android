@@ -1,7 +1,6 @@
 package com.into.websoso.ui.main.feed.adapter
 
 import android.view.ViewGroup
-import androidx.annotation.ColorRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,23 +16,8 @@ import com.into.websoso.ui.main.feed.adapter.FeedType.NoMore
 class FeedAdapter(
     private val feedItemClickListener: FeedItemClickListener,
 ) : ListAdapter<FeedType, RecyclerView.ViewHolder>(diffCallBack) {
-    @ColorRes
-    private var novelBackgroundColor: Int? = null
-
-    @ColorRes
-    private var novelIconColor: Int? = null
-
     init {
         setHasStableIds(true)
-    }
-
-    fun setNovelColors(
-        @ColorRes backgroundColor: Int,
-        @ColorRes iconColor: Int,
-    ) {
-        this.novelBackgroundColor = backgroundColor
-        this.novelIconColor = iconColor
-        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int =
@@ -64,22 +48,8 @@ class FeedAdapter(
         position: Int,
     ) {
         when (holder) {
-            is FeedViewHolder -> {
-                val originalFeed = (getItem(position) as Feed).feed
-
-                val updatedFeed = originalFeed.copy(
-                    novel = originalFeed.novel.copy(
-                        backgroundColor = novelBackgroundColor,
-                        iconColor = novelIconColor,
-                    ),
-                )
-
-                holder.bind(updatedFeed)
-            }
-
-            else -> {
-                return
-            }
+            is FeedViewHolder -> holder.bind((getItem(position) as Feed).feed)
+            else -> return
         }
     }
 
