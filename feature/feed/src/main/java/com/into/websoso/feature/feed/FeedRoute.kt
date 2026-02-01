@@ -48,7 +48,6 @@ fun FeedRoute(
                 feedTab == FeedTab.MY_FEED,
             )
         },
-        onMoreClick = { },
         onNovelClick = onNovelClick,
         onLikeClick = viewModel::updateLike,
         onContentClick = onContentClick,

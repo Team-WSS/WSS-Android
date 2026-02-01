@@ -58,7 +58,6 @@ internal fun FeedScreen(
     onWriteClick: () -> Unit,
     onFilterClick: () -> Unit,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
-    onMoreClick: (feedId: Long) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
@@ -167,7 +166,6 @@ internal fun FeedScreen(
                     }
                 },
                 onProfileClick = onProfileClick,
-                onMoreClick = onMoreClick,
                 onNovelClick = onNovelClick,
                 onLikeClick = onLikeClick,
                 onContentClick = onContentClick,
@@ -276,7 +274,6 @@ private fun FeedScreenPreview() {
             onSortSelected = { },
             onSosoTypeSelected = { },
             onProfileClick = { _, _ -> },
-            onMoreClick = { },
             onNovelClick = { },
             onLikeClick = { },
             onContentClick = { _, _ -> },
