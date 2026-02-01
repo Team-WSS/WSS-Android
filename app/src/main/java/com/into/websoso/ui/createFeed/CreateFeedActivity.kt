@@ -142,7 +142,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
                     else -> createFeedViewModel.editFeed(
                         feedId = editFeedModel.feedId,
-                        legacyFeed = editFeedModel.feedContent,
                     )
                 }
 

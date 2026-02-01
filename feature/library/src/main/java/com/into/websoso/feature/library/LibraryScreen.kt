@@ -150,7 +150,7 @@ private fun LibraryScreen(
 
         LibraryFilterTopBar(
             libraryFilterUiModel = uiState.libraryFilterUiModel,
-            totalCount = novels.itemCount,
+            totalCount = uiState.novelTotalCount,
             isGrid = uiState.isGrid,
             onFilterClick = onFilterClick,
             onSortClick = onSortClick,

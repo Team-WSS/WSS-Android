@@ -45,7 +45,7 @@ import com.into.websoso.feature.library.model.LibraryFilterUiModel
 @Composable
 internal fun LibraryFilterTopBar(
     libraryFilterUiModel: LibraryFilterUiModel,
-    totalCount: Int,
+    totalCount: Long,
     onFilterClick: () -> Unit,
     onSortClick: () -> Unit,
     isGrid: Boolean,
@@ -164,7 +164,7 @@ private fun NovelFilterChip(
 
 @Composable
 private fun NovelFilterStatusBar(
-    totalCount: Int,
+    totalCount: Long,
     sortCriteria: SortCriteria,
     isGrid: Boolean,
     onSortClick: () -> Unit,
