@@ -73,7 +73,7 @@ internal fun FeedSection(
         onRefresh = onRefreshPull,
         modifier = Modifier.fillMaxSize(),
     ) {
-        if (feeds.isEmpty()) {
+        if (feeds.isEmpty() && !isRefreshing) {
             FeedEmptyCase()
         } else {
             LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
@@ -262,8 +262,8 @@ private fun FeedItem(
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
-        when (currentTab) {
-            FeedTab.MY_FEED -> {
+        when (feed.isPublic) {
+            false -> {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
                     modifier = Modifier
@@ -284,7 +284,7 @@ private fun FeedItem(
                 }
             }
 
-            FeedTab.SOSO_FEED -> {
+            true -> {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(space = 18.dp),
