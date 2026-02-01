@@ -168,7 +168,7 @@ private fun FeedItem(
             }
             Box {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_more),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_three_dots),
                     contentDescription = null,
                     tint = Gray200,
                     modifier = Modifier
@@ -298,6 +298,7 @@ private fun FeedItem(
                             imageVector = ImageVector.vectorResource(
                                 id = if (feed.isLiked) R.drawable.ic_thumb_up_on else R.drawable.ic_thumb_up,
                             ),
+                            tint = if (feed.isLiked) Black else Gray200,
                             contentDescription = null,
                         )
 
@@ -408,18 +409,24 @@ private fun FeedNovelInfo(
 @Composable
 private fun FeedSectionPreview() {
     WebsosoTheme {
-        FeedSection(
-            feeds = persistentListOf(FeedUiModel()),
-            currentTab = FeedTab.SOSO_FEED,
-            onProfileClick = { _, _ -> },
-            onMoreClick = { },
-            onNovelClick = { },
-            onLikeClick = { },
-            onContentClick = { _, _ -> },
-            onFirstItemClick = { _, _ -> },
-            onSecondItemClick = { _, _ -> },
-            onRefreshPull = { },
-            isRefreshing = false,
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = White),
+        ) {
+            FeedSection(
+                feeds = persistentListOf(FeedUiModel()),
+                currentTab = FeedTab.SOSO_FEED,
+                onProfileClick = { _, _ -> },
+                onMoreClick = { },
+                onNovelClick = { },
+                onLikeClick = { },
+                onContentClick = { _, _ -> },
+                onFirstItemClick = { _, _ -> },
+                onSecondItemClick = { _, _ -> },
+                onRefreshPull = { },
+                isRefreshing = false,
+            )
+        }
     }
 }
