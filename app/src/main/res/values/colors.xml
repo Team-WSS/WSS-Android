@@ -26,4 +26,29 @@
     <drawable name="selected_bg">@drawable/bg_selected_gradient</drawable>
 
     <color name="transparent">#00000000</color>
+
+    <!-- Genre Icon Colors -->
+    <color name="romance_FF3378">#FF3378</color>
+    <color name="romance_fantasy_873EFF">#873EFF</color>
+    <color name="bl_02A8A4">#02A8A4</color>
+    <color name="fantasy_4D63FF">#4D63FF</color>
+    <color name="modern_fantasy_525CDE">#525CDE</color>
+    <color name="wuxia_E05727">#E05727</color>
+    <color name="drama_02A8A4">#02A8A4</color>
+    <color name="mystery_AD55EC">#AD55EC</color>
+    <color name="light_novel_34C2EB">#34C2EB</color>
+
+    <!-- Genre Background Colors -->
+    <color name="romance_FFE5ED">#FFE5ED</color>
+    <color name="romance_fantasy_F1E8FF">#F1E8FF</color>
+    <color name="bl_E0F6F5">#E0F6F5</color>
+    <color name="fantasy_E9ECFF">#E9ECFF</color>
+    <color name="modern_fantasy_EAEBFF">#EAEBFF</color>
+    <color name="wuxia_FFF1EB">#FFF1EB</color>
+    <color name="drama_E0F6F5">#E0F6F5</color>
+    <color name="mystery_F6EEFC">#F6EEFC</color>
+    <color name="light_novel_E6F8FD">#E6F8FD</color>
+
+    <color name="etc_6457FC">#6457FC</color>
+    <color name="etc_FFFFFF">#FFFFFF</color>
 </resources>
