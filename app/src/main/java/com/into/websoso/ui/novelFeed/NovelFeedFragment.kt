@@ -405,7 +405,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                 ?.firstOrNull()
                 ?.trim()
                 .orEmpty()
-                .ifEmpty { "기타" }
+                .ifEmpty { ETC }
 
         val feeds = novelFeedUiState.feeds.map { feed ->
             Feed(
@@ -440,6 +440,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
 
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
+        private const val ETC = "기타"
 
         fun newInstance(novelId: Long): NovelFeedFragment =
             NovelFeedFragment().also {
