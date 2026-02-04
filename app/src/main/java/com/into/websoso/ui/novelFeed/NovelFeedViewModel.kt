@@ -1,6 +1,5 @@
 package com.into.websoso.ui.novelFeed
 
-import androidx.annotation.ColorRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +8,7 @@ import com.into.websoso.data.model.NovelFeedsEntity
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.UserRepository
-import com.into.websoso.ui.main.feed.model.FeedModel
 import com.into.websoso.ui.mapper.toUi
-import com.into.websoso.ui.novelDetail.model.Category
 import com.into.websoso.ui.novelFeed.model.NovelFeedUiState
 import com.into.websoso.ui.novelInfo.NovelInfoViewModel.Companion.UPDATE_TASK_DELAY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,44 +34,6 @@ class NovelFeedViewModel
         val isRefreshed: LiveData<Boolean> get() = _isRefreshed
         private val _isLogin: MutableLiveData<Boolean> = MutableLiveData(false)
         val isLogin: LiveData<Boolean> get() = _isLogin
-
-        private var novelGenreName: String = ETC
-
-        @ColorRes
-        private var novelBackgroundColor: Int? = null
-
-        @ColorRes
-        private var novelIconColor: Int? = null
-
-        fun updateGenre(genre: String) {
-            val normalizedGenreName = genre.trim().ifEmpty { ETC }
-            novelGenreName = normalizedGenreName
-
-            val category = Category.from(normalizedGenreName)
-            novelBackgroundColor = category.backgroundColor
-            novelIconColor = category.iconColor
-
-            val state = _feedUiState.value ?: return
-            _feedUiState.value = state.copy(
-                feeds = applyNovelGenre(state.feeds),
-            )
-        }
-
-        private fun applyNovelGenre(feeds: List<FeedModel>): List<FeedModel> {
-            val genre = novelGenreName
-            val backgroundColor = novelBackgroundColor
-            val iconColor = novelIconColor
-
-            return feeds.map { feed ->
-                feed.copy(
-                    novel = feed.novel.copy(
-                        genre = genre,
-                        backgroundColor = backgroundColor,
-                        iconColor = iconColor,
-                    ),
-                )
-            }
-        }
 
         fun updateFeeds(
             novelId: Long,
@@ -102,10 +61,8 @@ class NovelFeedViewModel
                         val feeds = responses[0] as NovelFeedsEntity
                         userId = responses[1] as Long
 
-                        val merged = feedUiState.feeds + feeds.feeds.map { it.toUi() }
-
                         _feedUiState.value = feedUiState.copy(
-                            feeds = applyNovelGenre(merged),
+                            feeds = feedUiState.feeds + feeds.feeds.map { it.toUi() },
                             error = false,
                             loading = false,
                             isLoadable = feeds.isLoadable,
@@ -147,12 +104,10 @@ class NovelFeedViewModel
                             size = 20,
                         )
                     }.onSuccess { feeds ->
-                        val refreshed = feeds.feeds.map { it.toUi() }
-
                         _feedUiState.value = feedUiState.copy(
                             loading = false,
                             isLoadable = feeds.isLoadable,
-                            feeds = applyNovelGenre(refreshed),
+                            feeds = feeds.feeds.map { it.toUi() },
                         )
                     }.onFailure {
                         _feedUiState.value = feedUiState.copy(
@@ -282,9 +237,5 @@ class NovelFeedViewModel
                     throw it
                 }
             }
-        }
-
-        companion object {
-            private const val ETC = "기타"
         }
     }
