@@ -61,7 +61,6 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
     private val novelFeedViewModel: NovelFeedViewModel by activityViewModels()
-
     private val novelDetailViewModel: NovelDetailViewModel by activityViewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
@@ -319,7 +318,6 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         initView()
         novelFeedViewModel.updateFeeds(novelId)
         novelFeedViewModel.updateLoginStatus()
-        novelDetailViewModel.updateNovelDetail(novelId)
         setupObserver()
     }
 
@@ -390,14 +388,34 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
             }
         }
 
-        novelDetailViewModel.primaryGenre.observe(viewLifecycleOwner) { genre ->
-            novelFeedViewModel.updateGenre(genre)
+        novelDetailViewModel.novelDetailModel.observe(viewLifecycleOwner) {
+            val currentFeedState = novelFeedViewModel.feedUiState.value ?: return@observe
+            if (currentFeedState.feeds.isEmpty()) return@observe
+            updateFeeds(currentFeedState)
         }
     }
 
     private fun updateFeeds(novelFeedUiState: NovelFeedUiState) {
         binding.clNovelFeedNone.isVisible = novelFeedUiState.feeds.isEmpty()
-        val feeds = novelFeedUiState.feeds.map { Feed(it) }
+
+        val genre: String =
+            novelDetailViewModel.novelDetailModel.value
+                ?.novel
+                ?.getGenres
+                ?.firstOrNull()
+                ?.trim()
+                .orEmpty()
+                .ifEmpty { "기타" }
+
+        val feeds = novelFeedUiState.feeds.map { feed ->
+            Feed(
+                feed.copy(
+                    novel = feed.novel.copy(
+                        genre = genre,
+                    ),
+                ),
+            )
+        }
         when (novelFeedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
