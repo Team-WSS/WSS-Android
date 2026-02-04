@@ -68,6 +68,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         onFirstItemClick = { feedId, isMyFeed ->
                             when (isMyFeed) {
                                 true -> navigateToFeedEdit(feedId)
+
                                 false -> showDialog<DialogReportPopupMenuBinding>(
                                     menuType = ReportMenuType.SPOILER_FEED.name,
                                     event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
@@ -123,19 +124,21 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class ->
+            DialogRemovePopupMenuBinding::class -> {
                 FeedRemoveDialogFragment
                     .newInstance(
                         menuType = menuType,
                         event = { event() },
                     ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+            }
 
-            DialogReportPopupMenuBinding::class ->
+            DialogReportPopupMenuBinding::class -> {
                 FeedReportDialogFragment
                     .newInstance(
                         menuType = menuType,
                         event = { event() },
                     ).show(childFragmentManager, FeedReportDialogFragment.TAG)
+            }
         }
     }
 
@@ -153,7 +156,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                     isSpoiler = feed.isSpoiler,
                     isPublic = feed.isPublic,
                     feedContent = feed.content,
-                    feedCategory = feed.relevantCategories,
+                    feedCategory = feed.relevantCategoriesByKr,
                     imageUrls = feed.imageUrls,
                 )
             } ?: throw IllegalArgumentException()

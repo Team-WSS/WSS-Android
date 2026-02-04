@@ -154,7 +154,7 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:text="@{feedDetail.feed.novel.title}"
-                    android:textAppearance="@style/title3"
+                    android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@id/ll_feed_detail_ratings"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -38,8 +38,8 @@ enum class NovelCategory(
     ;
 
     companion object {
-        fun fromTag(tag: String): NovelCategory {
-            return entries.find { it.tag == tag } ?: LIGHT_NOVEL
-        }
+        fun fromTag(tag: String): NovelCategory = entries.find { it.tag == tag } ?: LIGHT_NOVEL
+
+        fun fromTagToKorean(tag: String): String = entries.find { it.tag == tag }?.koreanName ?: LIGHT_NOVEL.koreanName
     }
 }
