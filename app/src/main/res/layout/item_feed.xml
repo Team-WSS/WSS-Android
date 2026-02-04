@@ -165,7 +165,7 @@
             android:layout_marginEnd="20dp"
             android:background="@drawable/btn_feed_novel_info"
             android:onClick="@{() -> onClick.onNovelInfoClick(feed.novel.id)}"
-            app:dynamicBackgroundColor="@{feed.novel.backgroundColor}"
+            app:dynamicBackgroundColor="@{feed.novel.novelBackgroundColor}"
             app:genreName="@{feed.novel.genre}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -179,7 +179,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:src="@drawable/ic_link"
-                app:imageTint="@{feed.novel.iconColor}"
+                app:imageTint="@{feed.novel.novelIconColor}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

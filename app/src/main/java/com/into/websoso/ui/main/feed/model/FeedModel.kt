@@ -1,6 +1,6 @@
 package com.into.websoso.ui.main.feed.model
 
-import androidx.annotation.ColorRes
+import com.into.websoso.ui.novelDetail.model.Category
 
 data class FeedModel(
     val user: UserModel,
@@ -36,9 +36,26 @@ data class FeedModel(
         val rating: Float?,
         val ratingCount: Int?,
         val genre: String = "",
-        @ColorRes val backgroundColor: Int? = null,
-        @ColorRes val iconColor: Int? = null,
     ) {
         val isNothing: Boolean = id == null
+
+        private val normalizedGenreName: String
+            get() = genre.trim().ifEmpty { ETC }
+
+        private val category: Category
+            get() = Category.from(normalizedGenreName)
+
+        val novelBackgroundColor: Int
+            get() = category.backgroundColor
+
+        val novelIconColor: Int
+            get() = category.iconColor
+
+        val isEtcGenre: Boolean
+            get() = normalizedGenreName == ETC
+
+        companion object {
+            private const val ETC = "기타"
+        }
     }
 }
