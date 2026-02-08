@@ -66,7 +66,80 @@ fun FeedEntity.toUi(): FeedModel =
         ),
     )
 
+fun com.into.websoso.data.feed.model.FeedEntity.toFeedModel(): FeedModel =
+    FeedModel(
+        user = UserModel(
+            id = user.id,
+            nickname = user.nickname,
+            avatarImage = user.avatarImage,
+        ),
+        createdDate = createdDate,
+        id = id,
+        content = content,
+        relevantCategories = relevantCategories,
+        likeCount = likeCount,
+        commentCount = commentCount,
+        isModified = isModified,
+        isSpoiler = isSpoiler,
+        isLiked = isLiked,
+        isMyFeed = isMyFeed,
+        isPublic = isPublic,
+        imageUrls = images,
+        imageCount = imageCount,
+        novel = NovelModel(
+            id = novel.id,
+            title = novel.title,
+            rating = novel.rating,
+            ratingCount = novel.ratingCount,
+        ),
+    )
+
+fun com.into.websoso.data.feed.model.FeedDetailEntity.toFeedDetailModel(): FeedModel =
+    FeedModel(
+        user = UserModel(
+            id = user.id,
+            nickname = user.nickname,
+            avatarImage = user.avatarImage,
+        ),
+        createdDate = createdDate,
+        id = id,
+        content = content,
+        relevantCategories = relevantCategories,
+        likeCount = likeCount,
+        commentCount = commentCount,
+        isModified = isModified,
+        isSpoiler = isSpoiler,
+        isLiked = isLiked,
+        isMyFeed = isMyFeed,
+        isPublic = isPublic,
+        imageUrls = images,
+        imageCount = imageCount,
+        novel = NovelModel(
+            id = novel?.id,
+            title = novel?.title,
+            rating = novel?.rating,
+            ratingCount = novel?.ratingCount,
+        ),
+    )
+
 fun CommentEntity.toUi(): CommentModel =
+    CommentModel(
+        user = UserModel(
+            id = user.id,
+            nickname = user.nickname,
+            avatarImage = user.avatarImage,
+        ),
+        commentContent = commentContent,
+        commentId = commentId,
+        createdDate = createdDate,
+        isModified = isModified,
+        isMyComment = isMyComment,
+        isHidden = isHidden,
+        isSpoiler = isSpoiler,
+        isBlocked = isBlocked,
+    )
+
+fun com.into.websoso.data.feed.model.CommentEntity.toCommentModel(): CommentModel =
     CommentModel(
         user = UserModel(
             id = user.id,

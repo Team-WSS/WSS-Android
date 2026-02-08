@@ -14,17 +14,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.feature.feed.model.FeedTab
 import kotlinx.coroutines.launch
 
-@Deprecated("피드 QA 완료 후 제거 예정")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeedRoute(
+fun UpdateFeedRoute(
     onWriteClick: () -> Unit,
     onProfileClick: (userId: Long, isMyFeed: Boolean) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
-    viewModel: FeedViewModel = hiltViewModel(),
+    viewModel: UpdatedFeedViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -62,6 +61,7 @@ fun FeedRoute(
                 bottomSheetState.hide()
             }.invokeOnCompletion { isFilterSheetVisible = false }
         },
+
         isFilterSheetVisible = isFilterSheetVisible,
         onFilterCloseClick = {
             scope.launch { bottomSheetState.hide() }

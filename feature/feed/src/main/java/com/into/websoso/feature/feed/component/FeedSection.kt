@@ -59,7 +59,6 @@ internal fun FeedSection(
     currentTab: FeedTab,
     feeds: ImmutableList<FeedUiModel>,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
-    onMoreClick: (feedId: Long) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
@@ -73,7 +72,7 @@ internal fun FeedSection(
         onRefresh = onRefreshPull,
         modifier = Modifier.fillMaxSize(),
     ) {
-        if (feeds.isEmpty()) {
+        if (feeds.isEmpty() && !isRefreshing) {
             FeedEmptyCase()
         } else {
             LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
@@ -81,7 +80,6 @@ internal fun FeedSection(
                     FeedItem(
                         feed = feed,
                         currentTab = currentTab,
-                        onMoreClick = onMoreClick,
                         onProfileClick = onProfileClick,
                         onNovelClick = onNovelClick,
                         onLikeClick = onLikeClick,
@@ -102,7 +100,6 @@ private fun FeedItem(
     feed: FeedUiModel,
     currentTab: FeedTab,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
-    onMoreClick: (feedId: Long) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
@@ -167,28 +164,24 @@ private fun FeedItem(
                     )
                 }
             }
+
             Box {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_more),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_three_dots),
                     contentDescription = null,
                     tint = Gray200,
                     modifier = Modifier
                         .size(size = 14.dp)
-                        .debouncedClickable {
-                            isMenuExpanded = true
-                            onMoreClick(feed.id)
-                        },
+                        .debouncedClickable { isMenuExpanded = true },
                 )
 
                 if (isMenuExpanded) {
                     FeedMoreMenu(
                         isMyFeed = feed.isMyFeed,
                         onDismissRequest = { isMenuExpanded = false },
-                        // TODO: 위 아래 itemClick 모두 로직을 feed.isMyFeed 를 사용하도록 수정 읽고 나면 제거
                         onFirstItemClick = {
                             onFirstItemClick(feed.id, feed.isMyFeed)
                         },
-                        // TODO: 여기 소소 피드에서 내 피드 클릭하면 부적절한 표현이 사용되었나요 라고 떠서 수정함 읽고 나면 제거
                         onSecondItemClick = {
                             onSecondItemClick(feed.id, feed.isMyFeed)
                         },
@@ -262,8 +255,8 @@ private fun FeedItem(
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
-        when (currentTab) {
-            FeedTab.MY_FEED -> {
+        when (feed.isPublic) {
+            false -> {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
                     modifier = Modifier
@@ -284,7 +277,7 @@ private fun FeedItem(
                 }
             }
 
-            FeedTab.SOSO_FEED -> {
+            true -> {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(space = 18.dp),
@@ -301,6 +294,7 @@ private fun FeedItem(
                             imageVector = ImageVector.vectorResource(
                                 id = if (feed.isLiked) R.drawable.ic_thumb_up_on else R.drawable.ic_thumb_up,
                             ),
+                            tint = if (feed.isLiked) Black else Gray200,
                             contentDescription = null,
                         )
 
@@ -411,18 +405,23 @@ private fun FeedNovelInfo(
 @Composable
 private fun FeedSectionPreview() {
     WebsosoTheme {
-        FeedSection(
-            feeds = persistentListOf(FeedUiModel()),
-            currentTab = FeedTab.SOSO_FEED,
-            onProfileClick = { _, _ -> },
-            onMoreClick = { },
-            onNovelClick = { },
-            onLikeClick = { },
-            onContentClick = { _, _ -> },
-            onFirstItemClick = { _, _ -> },
-            onSecondItemClick = { _, _ -> },
-            onRefreshPull = { },
-            isRefreshing = false,
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = White),
+        ) {
+            FeedSection(
+                feeds = persistentListOf(FeedUiModel()),
+                currentTab = FeedTab.SOSO_FEED,
+                onProfileClick = { _, _ -> },
+                onNovelClick = { },
+                onLikeClick = { },
+                onContentClick = { _, _ -> },
+                onFirstItemClick = { _, _ -> },
+                onSecondItemClick = { _, _ -> },
+                onRefreshPull = { },
+                isRefreshing = false,
+            )
+        }
     }
 }

@@ -16,8 +16,9 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
-import com.into.websoso.feature.feed.FeedRoute
 import com.into.websoso.feature.feed.FeedViewModel
+import com.into.websoso.feature.feed.UpdateFeedRoute
+import com.into.websoso.feature.feed.UpdatedFeedViewModel
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
@@ -36,6 +37,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     @Inject
     lateinit var tracker: Tracker
     private val feedViewModel: FeedViewModel by viewModels()
+    private val updatedFeedViewModel: UpdatedFeedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,8 +51,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WebsosoTheme {
-                    FeedRoute(
-                        viewModel = feedViewModel,
+                    UpdateFeedRoute(
+                        viewModel = updatedFeedViewModel,
                         onWriteClick = ::navigateToWriteFeed,
                         onProfileClick = { userId, isMyFeed ->
                             navigateToProfile(
@@ -94,11 +96,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         }
 
         return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        feedViewModel.resetFeedsToInitial()
     }
 
     private fun navigateToWriteFeed() {

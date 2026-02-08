@@ -28,7 +28,6 @@ include(
     ":core:auth-kakao",
     ":core:network",
     ":core:datastore",
-    ":core:database",
 )
 
 include(

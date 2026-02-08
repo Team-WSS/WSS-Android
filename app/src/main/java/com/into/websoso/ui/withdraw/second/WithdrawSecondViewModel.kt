@@ -16,87 +16,86 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WithdrawSecondViewModel
-    @Inject
-    constructor(
-        private val accountRepository: AccountRepository,
-        private val pushMessageRepository: PushMessageRepository,
-        private val userRepository: UserRepository,
-        private val libraryRepository: MyLibraryRepository,
-        private val filterRepository: MyLibraryFilterRepository,
-    ) : ViewModel() {
-        private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
-        val withdrawReason: LiveData<String> get() = _withdrawReason
+@Inject
+constructor(
+    private val accountRepository: AccountRepository,
+    private val pushMessageRepository: PushMessageRepository,
+    private val userRepository: UserRepository,
+    private val libraryRepository: MyLibraryRepository,
+    private val filterRepository: MyLibraryFilterRepository,
+) : ViewModel() {
+    private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
+    val withdrawReason: LiveData<String> get() = _withdrawReason
 
-        private val _isWithdrawAgreementChecked: MutableLiveData<Boolean> = MutableLiveData(false)
-        val isWithdrawAgreementChecked: LiveData<Boolean> get() = _isWithdrawAgreementChecked
+    private val _isWithdrawAgreementChecked: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithdrawAgreementChecked: LiveData<Boolean> get() = _isWithdrawAgreementChecked
 
-        private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
-        val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
+    private val _isWithdrawButtonEnabled: MediatorLiveData<Boolean> = MediatorLiveData(false)
+    val isWithdrawButtonEnabled: LiveData<Boolean> get() = _isWithdrawButtonEnabled
 
-        private val _isWithDrawSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
-        val isWithDrawSuccess: LiveData<Boolean> get() = _isWithDrawSuccess
+    private val _isWithDrawSuccess: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isWithDrawSuccess: LiveData<Boolean> get() = _isWithDrawSuccess
 
-        val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
+    val withdrawEtcReason: MutableLiveData<String> = MutableLiveData()
 
-        val withdrawEtcReasonCount: MediatorLiveData<Int> = MediatorLiveData()
+    val withdrawEtcReasonCount: MediatorLiveData<Int> = MediatorLiveData()
 
-        init {
-            withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
-                withdrawEtcReasonCount.value = reason.length
-            }
-
-            _isWithdrawButtonEnabled.addSource(withdrawReason) {
-                _isWithdrawButtonEnabled.value = isEnabled()
-            }
-            _isWithdrawButtonEnabled.addSource(isWithdrawAgreementChecked) {
-                _isWithdrawButtonEnabled.value = isEnabled()
-            }
-            _isWithdrawButtonEnabled.addSource(withdrawEtcReason) {
-                _isWithdrawButtonEnabled.value = isEnabled()
-            }
+    init {
+        withdrawEtcReasonCount.addSource(withdrawEtcReason) { reason ->
+            withdrawEtcReasonCount.value = reason.length
         }
 
-        private fun isEnabled(): Boolean {
-            val isReasonNotBlank: Boolean = _withdrawReason.value?.isNotBlank() == true
-            val isWithdrawAgreement: Boolean = _isWithdrawAgreementChecked.value == true
-            val isEtcReasonValid =
-                _withdrawReason.value == ETC_INPUT_REASON && withdrawEtcReason.value?.isNotBlank() == true
-
-            return when {
-                _withdrawReason.value == ETC_INPUT_REASON -> isEtcReasonValid && isWithdrawAgreement
-                isReasonNotBlank && isWithdrawAgreement -> true
-                else -> false
-            }
+        _isWithdrawButtonEnabled.addSource(withdrawReason) {
+            _isWithdrawButtonEnabled.value = isEnabled()
         }
-
-        fun updateWithdrawReason(reason: String) {
-            _withdrawReason.value = reason
+        _isWithdrawButtonEnabled.addSource(isWithdrawAgreementChecked) {
+            _isWithdrawButtonEnabled.value = isEnabled()
         }
-
-        fun updateIsWithdrawAgreementChecked() {
-            _isWithdrawAgreementChecked.value = isWithdrawAgreementChecked.value?.not()
-        }
-
-        fun withdraw() {
-            viewModelScope.launch {
-                val reason =
-                    if (withdrawReason.value == ETC_INPUT_REASON) withdrawEtcReason.value else withdrawReason.value
-
-                accountRepository
-                    .deleteAccount(reason.orEmpty())
-                    .onSuccess {
-                        _isWithDrawSuccess.value = true
-                        userRepository.removeTermsAgreementChecked()
-                        pushMessageRepository.clearFCMToken()
-                        libraryRepository.deleteAllNovels()
-                        filterRepository.deleteLibraryFilter()
-                    }.onFailure {
-                        _isWithDrawSuccess.value = false
-                    }
-            }
-        }
-
-        companion object {
-            private const val ETC_INPUT_REASON = "직접입력"
+        _isWithdrawButtonEnabled.addSource(withdrawEtcReason) {
+            _isWithdrawButtonEnabled.value = isEnabled()
         }
     }
+
+    private fun isEnabled(): Boolean {
+        val isReasonNotBlank: Boolean = _withdrawReason.value?.isNotBlank() == true
+        val isWithdrawAgreement: Boolean = _isWithdrawAgreementChecked.value == true
+        val isEtcReasonValid =
+            _withdrawReason.value == ETC_INPUT_REASON && withdrawEtcReason.value?.isNotBlank() == true
+
+        return when {
+            _withdrawReason.value == ETC_INPUT_REASON -> isEtcReasonValid && isWithdrawAgreement
+            isReasonNotBlank && isWithdrawAgreement -> true
+            else -> false
+        }
+    }
+
+    fun updateWithdrawReason(reason: String) {
+        _withdrawReason.value = reason
+    }
+
+    fun updateIsWithdrawAgreementChecked() {
+        _isWithdrawAgreementChecked.value = isWithdrawAgreementChecked.value?.not()
+    }
+
+    fun withdraw() {
+        viewModelScope.launch {
+            val reason =
+                if (withdrawReason.value == ETC_INPUT_REASON) withdrawEtcReason.value else withdrawReason.value
+
+            accountRepository
+                .deleteAccount(reason.orEmpty())
+                .onSuccess {
+                    _isWithDrawSuccess.value = true
+                    userRepository.removeTermsAgreementChecked()
+                    pushMessageRepository.clearFCMToken()
+                    filterRepository.deleteLibraryFilter()
+                }.onFailure {
+                    _isWithDrawSuccess.value = false
+                }
+        }
+    }
+
+    companion object {
+        private const val ETC_INPUT_REASON = "직접입력"
+    }
+}

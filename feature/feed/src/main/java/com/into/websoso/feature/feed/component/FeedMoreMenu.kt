@@ -37,7 +37,7 @@ internal fun FeedMoreMenu(
         onDismissRequest = onDismissRequest,
         alignment = Alignment.TopEnd,
         properties = PopupProperties(focusable = true),
-        offset = IntOffset(x = 0, y = 50),
+        offset = IntOffset(x = 0, y = 140),
     ) {
         val contents = if (isMyFeed) persistentListOf("수정하기", "삭제하기")
         else persistentListOf("스포일러 신고", "부적절한 표현 신고")
@@ -54,7 +54,7 @@ internal fun FeedMoreMenu(
                     color = White,
                     shape = RoundedCornerShape(size = 12.dp),
                 )
-                .width(IntrinsicSize.Max),
+                .width(width = 180.dp),
         ) {
             contents.forEachIndexed { index, label ->
                 Text(

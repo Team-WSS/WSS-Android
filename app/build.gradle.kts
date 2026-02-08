@@ -74,6 +74,9 @@ android {
     }
 }
 
+// 룸 디비 제거
+// 좋아요 기능 좀더 생각해보기
+
 dependencies {
     // 프로젝트 의존성
     implementation(projects.core.resource)
@@ -83,7 +86,6 @@ dependencies {
     implementation(projects.core.authKakao)
     implementation(projects.core.network)
     implementation(projects.core.datastore)
-    implementation(projects.core.database)
 
     implementation(projects.data.account)
     implementation(projects.data.library)
