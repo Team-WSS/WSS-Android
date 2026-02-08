@@ -52,7 +52,7 @@ import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.expandedFeedImage.ExpandedFeedImageActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.FEED
-import com.into.websoso.ui.feedDetail.FeedDetailViewModel.Companion.DEFAULT_NOTIFICATION_ID
+import com.into.websoso.ui.feedDetail.UpdatedFeedDetailViewModel.Companion.DEFAULT_NOTIFICATION_ID
 import com.into.websoso.ui.feedDetail.adapter.FeedDetailAdapter
 import com.into.websoso.ui.feedDetail.adapter.FeedDetailType.Comment
 import com.into.websoso.ui.feedDetail.adapter.FeedDetailType.Header
@@ -81,8 +81,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     private enum class MenuType { COMMENT, FEED }
 
     private val feedId: Long by lazy { intent.getLongExtra(FEED_ID, DEFAULT_FEED_ID) }
-    private val isLiked: Boolean by lazy { intent.getBooleanExtra(FEED_LIKE_STATUS, false) }
-    private val feedDetailViewModel: FeedDetailViewModel by viewModels()
+    private val feedDetailViewModel: UpdatedFeedDetailViewModel by viewModels()
     private val feedDetailAdapter: FeedDetailAdapter by lazy {
         FeedDetailAdapter(
             onFeedContentClick(),
@@ -122,7 +121,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
                 singleEventHandler.debounce(timeMillis = 100L, coroutineScope = lifecycleScope) {
                     tracker.trackEvent("feed_detail_like")
-                    feedDetailViewModel.updateLike(view.isSelected, updatedLikeCount)
+                    feedDetailViewModel.updateLike()
                 }
             }
 
@@ -373,7 +372,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     NovelDetailBack.RESULT_OK,
                     CreateFeed.RESULT_OK,
                     OtherUserProfileBack.RESULT_OK,
-                    -> {
+                        -> {
                         feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
                     }
 
@@ -465,7 +464,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
     }
 
     private fun setupView() {
-        feedDetailViewModel.updateFeedDetail(feedId, Feed, isLiked)
+        feedDetailViewModel.updateFeedDetail(feedId, Feed)
         binding.rvFeedDetail.apply {
             adapter = feedDetailAdapter
             itemAnimator = null

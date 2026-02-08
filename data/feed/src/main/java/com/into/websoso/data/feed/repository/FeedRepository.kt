@@ -8,7 +8,7 @@ import com.into.websoso.data.feed.model.FeedsEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// TODO: 이 부분 확인 후 수정 후 주석 모두 제거
+@Deprecated("피드 QA 완료 후 제거 예정")
 @Singleton
 class FeedRepository
 @Inject

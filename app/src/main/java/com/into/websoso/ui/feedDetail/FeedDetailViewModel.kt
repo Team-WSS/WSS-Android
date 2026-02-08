@@ -22,6 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Deprecated("피드 QA 완료 후 제거 예정")
 @HiltViewModel
 class FeedDetailViewModel
 @Inject
