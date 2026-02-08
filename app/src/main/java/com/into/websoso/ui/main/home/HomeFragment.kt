@@ -108,7 +108,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         onPostInterestNovelClick()
         onSettingPreferenceGenreClick()
         onNotificationButtonClick()
+        onNormalSearchButtonClick()
         tracker.trackEvent("home")
+    }
+
+    private fun onNormalSearchButtonClick() {
+        binding.clHomeNormalSearch.setOnClickListener {
+            tracker.trackEvent("general_search")
+            val intent = NormalExploreActivity.getIntent(requireContext())
+            startActivity(intent)
+        }
     }
 
     private fun bindViewModel() {
