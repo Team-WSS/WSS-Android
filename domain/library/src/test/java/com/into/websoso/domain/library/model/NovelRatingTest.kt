@@ -8,34 +8,49 @@ import org.junit.Test
 class NovelRatingTest {
     @Test
     fun `기본 평점은 선택되지 않은 상태이다`() {
+        // given
         val rating = NovelRating()
 
+        // then
         assertEquals(Rating.DEFAULT, rating.rating)
         assertFalse(rating.isSelected)
     }
 
     @Test
     fun `평점을 설정하면 선택 상태가 된다`() {
-        val rating = NovelRating.from(4.0f)
+        // given
+        val input = 4.0f
 
+        // when
+        val rating = NovelRating.from(input)
+
+        // then
         assertTrue(rating.isSelected)
         assertEquals(Rating.FOUR, rating.rating)
     }
 
     @Test
     fun `같은 평점을 다시 설정하면 기본 상태로 돌아간다`() {
-        val rating = NovelRating
-            .from(3.0f)
-            .set(Rating.THREE)
+        // given
+        val rating = NovelRating.from(3.0f)
 
-        assertEquals(Rating.DEFAULT, rating.rating)
-        assertFalse(rating.isSelected)
+        // when
+        val toggled = rating.set(Rating.THREE)
+
+        // then
+        assertEquals(Rating.DEFAULT, toggled.rating)
+        assertFalse(toggled.isSelected)
     }
 
     @Test
     fun `평점은 근사값 비교로 판단된다`() {
+        // given
         val rating = NovelRating.from(4.0f)
 
-        assertTrue(rating.isCloseTo(Rating.from(4.00001f)))
+        // when
+        val result = rating.isCloseTo(Rating.from(4.00001f))
+
+        // then
+        assertTrue(result)
     }
 }

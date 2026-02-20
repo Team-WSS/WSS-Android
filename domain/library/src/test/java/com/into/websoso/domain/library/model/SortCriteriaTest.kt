@@ -6,14 +6,25 @@ import org.junit.Test
 class SortCriteriaTest {
     @Test
     fun `정렬 키가 일치하면 해당 정렬 기준을 반환한다`() {
-        assertEquals(SortCriteria.RECENT, SortCriteria.from("RECENT"))
-        assertEquals(SortCriteria.OLD, SortCriteria.from("OLD"))
+        // when
+        val recent = SortCriteria.from("RECENT")
+        val old = SortCriteria.from("OLD")
+
+        // then
+        assertEquals(SortCriteria.RECENT, recent)
+        assertEquals(SortCriteria.OLD, old)
     }
 
     @Test
     fun `정렬 키가 일치하지 않으면 최신순으로 처리된다`() {
-        assertEquals(SortCriteria.RECENT, SortCriteria.from("UNKNOWN"))
-        assertEquals(SortCriteria.RECENT, SortCriteria.from(""))
-        assertEquals(SortCriteria.RECENT, SortCriteria.from("recent"))
+        // when
+        val unknown = SortCriteria.from("UNKNOWN")
+        val empty = SortCriteria.from("")
+        val lowerCase = SortCriteria.from("recent")
+
+        // then
+        assertEquals(SortCriteria.RECENT, unknown)
+        assertEquals(SortCriteria.RECENT, empty)
+        assertEquals(SortCriteria.RECENT, lowerCase)
     }
 }
