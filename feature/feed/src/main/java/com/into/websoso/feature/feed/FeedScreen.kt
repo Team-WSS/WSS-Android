@@ -66,6 +66,7 @@ internal fun FeedScreen(
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onRefreshPull: () -> Unit,
+    onWriteFeedClick: () -> Unit,
 ) {
     Scaffold(containerColor = White) { _ ->
         Column(modifier = Modifier.statusBarsPadding()) {
@@ -172,7 +173,9 @@ internal fun FeedScreen(
                 onFirstItemClick = onFirstItemClick,
                 onSecondItemClick = onSecondItemClick,
                 onRefreshPull = onRefreshPull,
+                onWriteFeedClick = onWriteFeedClick,
                 isRefreshing = uiState.isRefreshing,
+                isLoading = uiState.loading,
             )
         }
 
@@ -283,6 +286,7 @@ private fun FeedScreenPreview() {
             onFirstItemClick = { _, _ -> },
             onSecondItemClick = { _, _ -> },
             onRefreshPull = {},
+            onWriteFeedClick = {},
         )
     }
 }

@@ -70,5 +70,6 @@ fun FeedRoute(
         onFirstItemClick = onFirstItemClick,
         onSecondItemClick = onSecondItemClick,
         onRefreshPull = viewModel::refresh,
+        onWriteFeedClick = { },
     )
 }

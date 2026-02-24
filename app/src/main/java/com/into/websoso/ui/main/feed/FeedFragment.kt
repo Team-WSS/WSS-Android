@@ -90,6 +90,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                                 )
                             }
                         },
+                        onWriteFeedClick = ::navigateToWriteFeed,
                     )
                 }
             }
