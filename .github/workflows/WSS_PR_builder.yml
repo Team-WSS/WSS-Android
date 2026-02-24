@@ -11,6 +11,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
     steps:
       - uses: actions/checkout@v4
 
@@ -65,7 +70,8 @@ jobs:
         run: ./gradlew build
 
       - name: Run Unit Tests
-        run: ./gradlew test
+        id: test
+        run: ./gradlew testDebugUnitTest --stacktrace
         
       - name: Upload test reports
         if: always()
@@ -75,3 +81,16 @@ jobs:
           path: |
             **/build/reports/tests/**
             **/build/test-results/**
+
+      - name: Publish Unit Test Report (PR comment + Checks)
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Results
+          reporter: java-junit
+          path: |
+            **/build/test-results/testDebugUnitTest/TEST-*.xml
+            **/build/test-results/test/TEST-*.xml
+          fail-on-error: false
+          comment: true
+          only-summary: true
