@@ -78,8 +78,7 @@ class UpdatedFeedDetailViewModel @Inject constructor(
                 sosoAllFeeds.find { it.id == targetFeedId }
                     ?: sosoRecommendedFeeds.find { it.id == targetFeedId }
                     ?: myFeeds.find { it.id == targetFeedId }
-            }
-                .distinctUntilChanged()
+            }.distinctUntilChanged()
                 .collect { feedEntity ->
                     if (feedEntity != null) {
                         val currentUiState = _feedDetailUiState.value ?: FeedDetailUiState()

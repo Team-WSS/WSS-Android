@@ -42,7 +42,6 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity {
             nickname = nickname,
             avatarImage = avatarImage,
         ),
-
         novel = novelId?.let { id ->
             FeedDetailEntity.NovelEntity(
                 id = id,
@@ -51,7 +50,7 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity {
                 ratingCount = novelRatingCount ?: 0,
                 genre = novelGenre.orEmpty(),
                 feedWriterNovelRating = feedWriterNovelRating,
-                thumbnail = this.images.firstOrNull().orEmpty(),
+                thumbnail = novelThumbnailImage.orEmpty(),
                 author = novelAuthor.orEmpty(),
                 description = novelDescription.orEmpty(),
             )
