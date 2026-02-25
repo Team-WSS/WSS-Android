@@ -29,8 +29,17 @@ class UpdatedFeedViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
+        collectFeedRefreshEvent()
         collectFeedFlows()
         fetchNextPage()
+    }
+
+    private fun collectFeedRefreshEvent() {
+        viewModelScope.launch {
+            feedRepository.feedRefreshEvent.collect {
+                refresh()
+            }
+        }
     }
 
     private fun collectFeedFlows() {

@@ -16,7 +16,6 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
-import com.into.websoso.feature.feed.FeedViewModel
 import com.into.websoso.feature.feed.UpdateFeedRoute
 import com.into.websoso.feature.feed.UpdatedFeedViewModel
 import com.into.websoso.ui.createFeed.CreateFeedActivity
@@ -36,7 +35,6 @@ import javax.inject.Inject
 class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     @Inject
     lateinit var tracker: Tracker
-    private val feedViewModel: FeedViewModel by viewModels()
     private val updatedFeedViewModel: UpdatedFeedViewModel by viewModels()
 
     override fun onCreateView(
@@ -73,7 +71,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
                                 false -> showDialog<DialogReportPopupMenuBinding>(
                                     menuType = ReportMenuType.SPOILER_FEED.name,
-                                    event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
+                                    event = { updatedFeedViewModel.updateReportedSpoilerFeed(feedId) },
                                 )
                             }
                         },
@@ -81,12 +79,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                             when (isMyFeed) {
                                 true -> showDialog<DialogRemovePopupMenuBinding>(
                                     menuType = REMOVE_FEED.name,
-                                    event = { feedViewModel.updateRemovedFeed(feedId) },
+                                    event = { updatedFeedViewModel.updateRemovedFeed(feedId) },
                                 )
 
                                 false -> showDialog<DialogReportPopupMenuBinding>(
                                     menuType = ReportMenuType.IMPERTINENCE_FEED.name,
-                                    event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
+                                    event = {
+                                        updatedFeedViewModel.updateReportedImpertinenceFeed(
+                                            feedId,
+                                        )
+                                    },
                                 )
                             }
                         },
@@ -146,18 +148,19 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun navigateToFeedEdit(feedId: Long) {
         val feedContent =
-            feedViewModel.uiState.value.myFeedData.feeds.find { it.id == feedId }?.let { feed ->
-                EditFeedModel(
-                    feedId = feed.id,
-                    novelId = feed.novel?.id,
-                    novelTitle = feed.novel?.title,
-                    isSpoiler = feed.isSpoiler,
-                    isPublic = feed.isPublic,
-                    feedContent = feed.content,
-                    feedCategory = feed.relevantCategoriesByKr,
-                    imageUrls = feed.imageUrls,
-                )
-            } ?: throw IllegalArgumentException()
+            updatedFeedViewModel.uiState.value.myFeedData.feeds.find { it.id == feedId }
+                ?.let { feed ->
+                    EditFeedModel(
+                        feedId = feed.id,
+                        novelId = feed.novel?.id,
+                        novelTitle = feed.novel?.title,
+                        isSpoiler = feed.isSpoiler,
+                        isPublic = feed.isPublic,
+                        feedContent = feed.content,
+                        feedCategory = feed.relevantCategoriesByKr,
+                        imageUrls = feed.imageUrls,
+                    )
+                } ?: throw IllegalArgumentException()
 
         startActivity(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }
