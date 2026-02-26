@@ -28,26 +28,26 @@
     <color name="transparent">#00000000</color>
 
     <!-- Genre Icon Colors -->
-    <color name="romance_FF3378">#FF3378</color>
-    <color name="romance_fantasy_873EFF">#873EFF</color>
-    <color name="bl_02A8A4">#02A8A4</color>
-    <color name="fantasy_4D63FF">#4D63FF</color>
-    <color name="modern_fantasy_525CDE">#525CDE</color>
-    <color name="wuxia_E05727">#E05727</color>
-    <color name="drama_02A8A4">#02A8A4</color>
-    <color name="mystery_AD55EC">#AD55EC</color>
-    <color name="light_novel_34C2EB">#34C2EB</color>
+    <color name="romance_E586CA">#E586CA</color>
+    <color name="romance_fantasy_B72F58">#B72F58</color>
+    <color name="bl_021A6FF">#21A6FF</color>
+    <color name="fantasy_6457FC">#6457FC</color>
+    <color name="modern_fantasy_4767F7">#4767F7</color>
+    <color name="wuxia_B8896E">#B8896E</color>
+    <color name="drama_5D78A0">#5D78A0</color>
+    <color name="mystery_9560BF">#9560BF</color>
+    <color name="light_novel_AEC23B">#AEC23B</color>
 
     <!-- Genre Background Colors -->
-    <color name="romance_FFE5ED">#FFE5ED</color>
-    <color name="romance_fantasy_F1E8FF">#F1E8FF</color>
-    <color name="bl_E0F6F5">#E0F6F5</color>
-    <color name="fantasy_E9ECFF">#E9ECFF</color>
-    <color name="modern_fantasy_EAEBFF">#EAEBFF</color>
-    <color name="wuxia_FFF1EB">#FFF1EB</color>
-    <color name="drama_E0F6F5">#E0F6F5</color>
-    <color name="mystery_F6EEFC">#F6EEFC</color>
-    <color name="light_novel_E6F8FD">#E6F8FD</color>
+    <color name="romance_FFF5FC">#FFF5FC</color>
+    <color name="romance_fantasy_F9EBE9">#F9EBE9</color>
+    <color name="bl_F0FAFD">#F0FAFD</color>
+    <color name="fantasy_F0F1FF">#F0F1FF</color>
+    <color name="modern_fantasy_E9F2FF">#E9F2FF</color>
+    <color name="wuxia_FDF2E3">#FDF2E3</color>
+    <color name="drama_EEF0F7">#EEF0F7</color>
+    <color name="mystery_F2E6F2">#F2E6F2</color>
+    <color name="light_novel_EFF3D6">#EFF3D6</color>
 
     <color name="etc_6457FC">#6457FC</color>
     <color name="etc_FFFFFF">#FFFFFF</color>
