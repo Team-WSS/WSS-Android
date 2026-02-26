@@ -36,7 +36,11 @@ data class FeedModel(
         val rating: Float?,
         val ratingCount: Int?,
         val genre: String = "",
+        val feedWriterNovelRating: Float?,
     ) {
+        val isWriterRatingNoting: Boolean =
+            feedWriterNovelRating == null || feedWriterNovelRating == 0f
+
         val isNothing: Boolean = id == null
 
         private val normalizedGenreName: String

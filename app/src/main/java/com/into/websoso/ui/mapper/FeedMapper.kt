@@ -35,6 +35,7 @@ fun Feed.toUi(): FeedModel =
             title = novel.title,
             rating = novel.rating,
             ratingCount = novel.ratingCount,
+            feedWriterNovelRating = novel.feedWriterNovelRating,
         ),
     )
 
@@ -63,6 +64,7 @@ fun FeedEntity.toUi(): FeedModel =
             title = novel.title,
             rating = novel.rating,
             ratingCount = novel.ratingCount,
+            feedWriterNovelRating = novel.feedWriterNovelRating,
         ),
     )
 
@@ -91,6 +93,7 @@ fun com.into.websoso.data.feed.model.FeedEntity.toFeedModel(): FeedModel =
             title = novel.title,
             rating = novel.rating,
             ratingCount = novel.ratingCount,
+            feedWriterNovelRating = feedWriterNovelRating,
         ),
     )
 
@@ -119,6 +122,7 @@ fun com.into.websoso.data.feed.model.FeedDetailEntity.toFeedDetailModel(): FeedM
             title = novel?.title,
             rating = novel?.rating,
             ratingCount = novel?.ratingCount,
+            feedWriterNovelRating = novel?.feedWriterNovelRating,
         ),
     )
 
@@ -182,6 +186,7 @@ fun FeedDetailEntity.toUi(): FeedDetailModel =
                 title = novel?.title,
                 rating = novel?.rating,
                 ratingCount = novel?.ratingCount,
+                feedWriterNovelRating = novel?.feedWriterNovelRating,
             ),
         ),
         comments = emptyList(),

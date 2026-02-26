@@ -34,7 +34,8 @@ data class FeedDetailEntity(
         val description: String,
         val feedWriterNovelRating: Float?,
     ) {
-        val isRatingNoting: Boolean = rating == null
-        val isWriterRatingNoting: Boolean = feedWriterNovelRating == null
+        val isRatingNoting: Boolean = rating == null || rating == 0f
+        val isWriterRatingNoting: Boolean =
+            feedWriterNovelRating == null || feedWriterNovelRating == 0f
     }
 }

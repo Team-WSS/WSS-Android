@@ -390,7 +390,7 @@ private fun FeedNovelInfo(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
             ) {
-                novel.feedWriterNovelRating?.let {
+                if (!novel.isWriterRatingNoting) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(space = 4.dp),

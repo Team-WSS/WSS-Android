@@ -28,5 +28,6 @@ data class Feed(
         val title: String?,
         val rating: Float?,
         val ratingCount: Int?,
+        val feedWriterNovelRating: Float?,
     )
 }
