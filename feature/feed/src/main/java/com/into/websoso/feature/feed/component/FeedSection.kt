@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -65,6 +66,8 @@ internal fun FeedSection(
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onRefreshPull: () -> Unit,
+    onWriteFeedClick: () -> Unit,
+    isLoading: Boolean,
     isRefreshing: Boolean,
 ) {
     PullToRefreshBox(
@@ -72,23 +75,36 @@ internal fun FeedSection(
         onRefresh = onRefreshPull,
         modifier = Modifier.fillMaxSize(),
     ) {
-        if (feeds.isEmpty() && !isRefreshing) {
-            FeedEmptyCase()
-        } else {
-            LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
-                itemsIndexed(items = feeds) { index, feed ->
-                    FeedItem(
-                        feed = feed,
-                        currentTab = currentTab,
-                        onProfileClick = onProfileClick,
-                        onNovelClick = onNovelClick,
-                        onLikeClick = onLikeClick,
-                        onContentClick = onContentClick,
-                        onFirstItemClick = onFirstItemClick,
-                        onSecondItemClick = onSecondItemClick,
-                    )
+        when {
+            isLoading && feeds.isEmpty() -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
 
-                    if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+            feeds.isEmpty() && !isRefreshing -> {
+                FeedEmptyCase(onWriteFeedClick = onWriteFeedClick)
+            }
+
+            else -> {
+                LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
+                    itemsIndexed(items = feeds) { index, feed ->
+                        FeedItem(
+                            feed = feed,
+                            currentTab = currentTab,
+                            onProfileClick = onProfileClick,
+                            onNovelClick = onNovelClick,
+                            onLikeClick = onLikeClick,
+                            onContentClick = onContentClick,
+                            onFirstItemClick = onFirstItemClick,
+                            onSecondItemClick = onSecondItemClick,
+                        )
+
+                        if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+                    }
                 }
             }
         }
@@ -374,7 +390,7 @@ private fun FeedNovelInfo(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
             ) {
-                novel.feedWriterNovelRating?.let {
+                if (!novel.isWriterRatingNoting) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
@@ -420,7 +436,9 @@ private fun FeedSectionPreview() {
                 onFirstItemClick = { _, _ -> },
                 onSecondItemClick = { _, _ -> },
                 onRefreshPull = { },
+                onWriteFeedClick = {},
                 isRefreshing = false,
+                isLoading = false,
             )
         }
     }

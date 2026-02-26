@@ -23,6 +23,7 @@ fun UpdateFeedRoute(
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onWriteFeedClick: () -> Unit,
     viewModel: UpdatedFeedViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -70,5 +71,6 @@ fun UpdateFeedRoute(
         onFirstItemClick = onFirstItemClick,
         onSecondItemClick = onSecondItemClick,
         onRefreshPull = viewModel::refresh,
+        onWriteFeedClick = onWriteFeedClick,
     )
 }

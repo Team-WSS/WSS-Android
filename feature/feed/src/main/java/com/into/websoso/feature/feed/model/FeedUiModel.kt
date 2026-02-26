@@ -96,5 +96,8 @@ data class FeedUiModel(
         val userNovelRating: Float = 0f,
         val feedWriterNovelRating: Float? = null,
         val genre: NovelCategory = NovelCategory.LIGHT_NOVEL,
-    )
+    ) {
+        val isWriterRatingNoting: Boolean =
+            feedWriterNovelRating == null || feedWriterNovelRating == 0f
+    }
 }
