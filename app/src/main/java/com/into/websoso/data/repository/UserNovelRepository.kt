@@ -6,25 +6,24 @@ import com.into.websoso.data.remote.api.UserNovelApi
 import javax.inject.Inject
 
 class UserNovelRepository
-@Inject
-constructor(
-    private val userNovelApi: UserNovelApi,
-) {
-    suspend fun deleteUserNovel(novelId: Long) {
-        userNovelApi.deleteUserNovel(novelId)
-    }
-
-    suspend fun fetchNovelRating(novelId: Long): NovelRatingEntity =
-        userNovelApi.fetchNovelRating(novelId).toData()
-
-    suspend fun saveNovelRating(
-        novelRatingEntity: NovelRatingEntity,
-        isAlreadyRated: Boolean,
+    @Inject
+    constructor(
+        private val userNovelApi: UserNovelApi,
     ) {
-        if (isAlreadyRated) {
-            userNovelApi.putNovelRating(novelRatingEntity.novelId!!, novelRatingEntity.toData())
-        } else {
-            userNovelApi.postNovelRating(novelRatingEntity.toData())
+        suspend fun deleteUserNovel(novelId: Long) {
+            userNovelApi.deleteUserNovel(novelId)
+        }
+
+        suspend fun fetchNovelRating(novelId: Long): NovelRatingEntity = userNovelApi.fetchNovelRating(novelId).toData()
+
+        suspend fun saveNovelRating(
+            novelRatingEntity: NovelRatingEntity,
+            isAlreadyRated: Boolean,
+        ) {
+            if (isAlreadyRated) {
+                userNovelApi.putNovelRating(novelRatingEntity.novelId!!, novelRatingEntity.toData())
+            } else {
+                userNovelApi.postNovelRating(novelRatingEntity.toData())
+            }
         }
     }
-}

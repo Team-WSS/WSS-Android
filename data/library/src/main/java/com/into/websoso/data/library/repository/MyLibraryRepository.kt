@@ -22,61 +22,60 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class MyLibraryRepository
-@Inject
-constructor(
-    private val filterRepository: FilterRepository,
-    private val accountRepository: AccountRepository,
-    private val libraryRemoteDataSource: LibraryRemoteDataSource,
-) : LibraryRepository {
-    private var _novelTotalCount: MutableStateFlow<Long> = MutableStateFlow(0)
-    override val novelTotalCount: Flow<Long> = _novelTotalCount.asStateFlow()
+    @Inject
+    constructor(
+        private val filterRepository: FilterRepository,
+        private val accountRepository: AccountRepository,
+        private val libraryRemoteDataSource: LibraryRemoteDataSource,
+    ) : LibraryRepository {
+        private var _novelTotalCount: MutableStateFlow<Long> = MutableStateFlow(0)
+        override val novelTotalCount: Flow<Long> = _novelTotalCount.asStateFlow()
 
-    /**
-     * Room 캐싱 없이 서버와 직접 통신하며, 필터 변경 시 스트림을 재생성합니다.
-     */
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getLibraryFlow(): Flow<PagingData<NovelEntity>> =
-        filterRepository.filterFlow
-            .flatMapLatest { currentFilter ->
-                Pager(
-                    config = PagingConfig(
-                        pageSize = PAGE_SIZE,
-                        enablePlaceholders = false,
-                    ),
-                    pagingSourceFactory = {
-                        LibraryPagingSource(
-                            getNovels = { lastUserNovelId ->
-                                getUserNovels(lastUserNovelId, currentFilter).also { result ->
-                                    _novelTotalCount.update {
-                                        result.getOrNull()?.userNovelCount ?: 0
+        /**
+         * Room 캐싱 없이 서버와 직접 통신하며, 필터 변경 시 스트림을 재생성합니다.
+         */
+        @OptIn(ExperimentalCoroutinesApi::class)
+        override fun getLibraryFlow(): Flow<PagingData<NovelEntity>> =
+            filterRepository.filterFlow
+                .flatMapLatest { currentFilter ->
+                    Pager(
+                        config = PagingConfig(
+                            pageSize = PAGE_SIZE,
+                            enablePlaceholders = false,
+                        ),
+                        pagingSourceFactory = {
+                            LibraryPagingSource(
+                                getNovels = { lastUserNovelId ->
+                                    getUserNovels(lastUserNovelId, currentFilter).also { result ->
+                                        _novelTotalCount.update {
+                                            result.getOrNull()?.userNovelCount ?: 0
+                                        }
                                     }
-                                }
-                            },
-                        )
-                    },
-                ).flow
-            }
+                                },
+                            )
+                        },
+                    ).flow
+                }
 
-
-    private suspend fun getUserNovels(
-        lastUserNovelId: Long,
-        libraryFilter: LibraryFilter,
-    ) = runCatching {
-        libraryRemoteDataSource.getUserNovels(
-            userId = accountRepository.userId,
-            lastUserNovelId = lastUserNovelId,
-            size = PAGE_SIZE,
-            sortCriteria = libraryFilter.sortCriteria,
-            isInterest = if (!libraryFilter.isInterested) null else true,
-            readStatuses = libraryFilter.readStatuses.ifEmpty { null },
-            attractivePoints = libraryFilter.attractivePoints.ifEmpty { null },
-            novelRating = if (libraryFilter.novelRating.isCloseTo(DEFAULT_NOVEL_RATING)) {
-                null
-            } else {
-                libraryFilter.novelRating
-            },
-            query = null,
-            updatedSince = null,
-        )
+        private suspend fun getUserNovels(
+            lastUserNovelId: Long,
+            libraryFilter: LibraryFilter,
+        ) = runCatching {
+            libraryRemoteDataSource.getUserNovels(
+                userId = accountRepository.userId,
+                lastUserNovelId = lastUserNovelId,
+                size = PAGE_SIZE,
+                sortCriteria = libraryFilter.sortCriteria,
+                isInterest = if (!libraryFilter.isInterested) null else true,
+                readStatuses = libraryFilter.readStatuses.ifEmpty { null },
+                attractivePoints = libraryFilter.attractivePoints.ifEmpty { null },
+                novelRating = if (libraryFilter.novelRating.isCloseTo(DEFAULT_NOVEL_RATING)) {
+                    null
+                } else {
+                    libraryFilter.novelRating
+                },
+                query = null,
+                updatedSince = null,
+            )
+        }
     }
-}

@@ -53,19 +53,21 @@ fun UpdateFeedRoute(
         onLikeClick = viewModel::updateLike,
         onContentClick = onContentClick,
         onFilterClick = {
-            scope.launch { bottomSheetState.show() }
+            scope
+                .launch { bottomSheetState.show() }
                 .invokeOnCompletion { isFilterSheetVisible = true }
         },
         onApplyFilterClick = {
-            scope.launch {
-                viewModel.applyMyFilter(filter = it)
-                bottomSheetState.hide()
-            }.invokeOnCompletion { isFilterSheetVisible = false }
+            scope
+                .launch {
+                    viewModel.applyMyFilter(filter = it)
+                    bottomSheetState.hide()
+                }.invokeOnCompletion { isFilterSheetVisible = false }
         },
-
         isFilterSheetVisible = isFilterSheetVisible,
         onFilterCloseClick = {
-            scope.launch { bottomSheetState.hide() }
+            scope
+                .launch { bottomSheetState.hide() }
                 .invokeOnCompletion { isFilterSheetVisible = false }
         },
         onFirstItemClick = onFirstItemClick,

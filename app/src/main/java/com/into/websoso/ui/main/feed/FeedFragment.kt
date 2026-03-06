@@ -148,7 +148,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun navigateToFeedEdit(feedId: Long) {
         val feedContent =
-            updatedFeedViewModel.uiState.value.myFeedData.feeds.find { it.id == feedId }
+            updatedFeedViewModel.uiState.value.myFeedData.feeds
+                .find { it.id == feedId }
                 ?.let { feed ->
                     EditFeedModel(
                         feedId = feed.id,

@@ -102,8 +102,7 @@ private fun NovelRatingItem(
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(size = 8.dp),
-            )
-            .then(
+            ).then(
                 if (isSelected) {
                     Modifier.border(
                         width = 1.dp,
@@ -113,8 +112,7 @@ private fun NovelRatingItem(
                 } else {
                     Modifier
                 },
-            )
-            .padding(vertical = 14.dp, horizontal = 24.dp),
+            ).padding(vertical = 14.dp, horizontal = 24.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(

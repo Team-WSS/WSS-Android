@@ -19,162 +19,63 @@ import javax.inject.Singleton
 
 @Singleton
 class FeedRepository
-@Inject
-constructor(
-    private val feedApi: FeedApi,
-    private val multiPartMapper: MultiPartMapper,
-    private val imageDownloader: ImageDownloader,
-    private val imageCompressor: ImageCompressor,
-) {
-    private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
-    val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
-
-    fun clearCachedFeeds() {
-        if (cachedFeeds.isNotEmpty()) _cachedFeeds.clear()
-    }
-
-    suspend fun fetchFeeds(
-        category: String,
-        lastFeedId: Long,
-        size: Int,
-    ): FeedsEntity =
-        feedApi
-            .getFeeds(
-                category = if (category == "all") null else category,
-                lastFeedId = lastFeedId,
-                size = size,
-            ).toData()
-            .also { _cachedFeeds.addAll(it.feeds) }
-            .copy(feeds = cachedFeeds)
-
-    suspend fun saveFeed(
-        relevantCategories: List<String>,
-        feedContent: String,
-        novelId: Long?,
-        isSpoiler: Boolean,
-        isPublic: Boolean,
-        images: List<Uri>,
+    @Inject
+    constructor(
+        private val feedApi: FeedApi,
+        private val multiPartMapper: MultiPartMapper,
     ) {
-        feedApi.postFeed(
-            feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
-                target = FeedRequestDto(
-                    relevantCategories = relevantCategories,
-                    feedContent = feedContent,
-                    novelId = novelId,
-                    isSpoiler = isSpoiler,
-                    isPublic = isPublic,
-                ),
-                partName = PART_NAME_FEED,
-                fileName = "feed.json",
-            ),
-            images = images.map { multiPartMapper.formatToMultipart(it) },
-        )
-    }
+        private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
+        val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
 
-    suspend fun saveEditedFeed(
-        feedId: Long,
-        relevantCategories: List<String>,
-        editedFeed: String,
-        novelId: Long?,
-        isSpoiler: Boolean,
-        isPublic: Boolean,
-        images: List<Uri>,
-    ) {
-        feedApi.putFeed(
-            feedId = feedId,
-            feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
-                target = FeedRequestDto(
-                    relevantCategories = relevantCategories,
-                    feedContent = editedFeed,
-                    novelId = novelId,
-                    isSpoiler = isSpoiler,
-                    isPublic = isPublic,
-                ),
-                partName = "feed",
-                fileName = "feed.json",
-            ),
-            images = images.map { multiPartMapper.formatToMultipart(it) },
-        )
-    }
+        fun clearCachedFeeds() {
+            if (cachedFeeds.isNotEmpty()) _cachedFeeds.clear()
+        }
 
-    suspend fun fetchFeed(feedId: Long): FeedDetailEntity = feedApi.getFeed(feedId).toData()
+        suspend fun fetchFeeds(
+            category: String,
+            lastFeedId: Long,
+            size: Int,
+        ): FeedsEntity =
+            feedApi
+                .getFeeds(
+                    category = if (category == "all") null else category,
+                    lastFeedId = lastFeedId,
+                    size = size,
+                ).toData()
+                .also { _cachedFeeds.addAll(it.feeds) }
+                .copy(feeds = cachedFeeds)
 
-    suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
+        suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
 
-    suspend fun fetchUserInterestFeeds(): UserInterestFeedsEntity =
-        feedApi.getUserInterestFeeds().toData()
+        suspend fun fetchUserInterestFeeds(): UserInterestFeedsEntity = feedApi.getUserInterestFeeds().toData()
 
-    suspend fun saveRemovedFeed(feedId: Long) {
-        runCatching {
-            feedApi.deleteFeed(feedId)
-        }.onSuccess {
-            _cachedFeeds.removeIf { it.id == feedId }
+        suspend fun saveRemovedFeed(feedId: Long) {
+            runCatching {
+                feedApi.deleteFeed(feedId)
+            }.onSuccess {
+                _cachedFeeds.removeIf { it.id == feedId }
+            }
+        }
+
+        suspend fun saveSpoilerFeed(feedId: Long) {
+            feedApi.postSpoilerFeed(feedId)
+        }
+
+        suspend fun saveImpertinenceFeed(feedId: Long) {
+            feedApi.postImpertinenceFeed(feedId)
+        }
+
+        suspend fun saveLike(
+            isLikedOfLikedFeed: Boolean,
+            selectedFeedId: Long,
+        ) {
+            when (isLikedOfLikedFeed) {
+                true -> feedApi.deleteLikes(selectedFeedId)
+                false -> feedApi.postLikes(selectedFeedId)
+            }
+        }
+
+        companion object {
+            private const val PART_NAME_FEED: String = "feed"
         }
     }
-
-    suspend fun saveSpoilerFeed(feedId: Long) {
-        feedApi.postSpoilerFeed(feedId)
-    }
-
-    suspend fun saveImpertinenceFeed(feedId: Long) {
-        feedApi.postImpertinenceFeed(feedId)
-    }
-
-    suspend fun saveLike(
-        isLikedOfLikedFeed: Boolean,
-        selectedFeedId: Long,
-    ) {
-        when (isLikedOfLikedFeed) {
-            true -> feedApi.deleteLikes(selectedFeedId)
-            false -> feedApi.postLikes(selectedFeedId)
-        }
-    }
-
-    suspend fun fetchComments(feedId: Long): CommentsEntity = feedApi.getComments(feedId).toData()
-
-    suspend fun saveComment(
-        feedId: Long,
-        comment: String,
-    ) {
-        feedApi.postComment(feedId, CommentRequestDto(comment))
-    }
-
-    suspend fun saveModifiedComment(
-        feedId: Long,
-        commentId: Long,
-        comment: String,
-    ) {
-        feedApi.putComment(feedId, commentId, CommentRequestDto(comment))
-    }
-
-    suspend fun deleteComment(
-        feedId: Long,
-        commentId: Long,
-    ) {
-        feedApi.deleteComment(feedId, commentId)
-    }
-
-    suspend fun saveSpoilerComment(
-        feedId: Long,
-        commentId: Long,
-    ) {
-        feedApi.postSpoilerComment(feedId, commentId)
-    }
-
-    suspend fun saveImpertinenceComment(
-        feedId: Long,
-        commentId: Long,
-    ) {
-        feedApi.postImpertinenceComment(feedId, commentId)
-    }
-
-    suspend fun downloadImage(imageUrl: String): Result<Uri?> =
-        imageDownloader.formatImageToUri(imageUrl)
-
-    suspend fun compressImages(imageUris: List<Uri>): List<Uri> =
-        imageCompressor.compressUris(imageUris)
-
-    companion object {
-        private const val PART_NAME_FEED: String = "feed"
-    }
-}

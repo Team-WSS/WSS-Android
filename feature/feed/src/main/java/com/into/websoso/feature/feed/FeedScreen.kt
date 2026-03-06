@@ -161,6 +161,7 @@ internal fun FeedScreen(
                 currentTab = uiState.selectedTab,
                 feeds = when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> uiState.myFeedData.feeds
+
                     FeedTab.SOSO_FEED -> when (uiState.sosoCategory) {
                         SosoFeedType.ALL -> uiState.sosoAllData.feeds
                         SosoFeedType.RECOMMENDED -> uiState.sosoRecommendationData.feeds
@@ -221,8 +222,7 @@ private fun FeedTabRow(
                         .tabIndicatorOffset(
                             selectedTabIndex = selectedTab.ordinal,
                             matchContentSize = false,
-                        )
-                        .padding(horizontal = 8.dp),
+                        ).padding(horizontal = 8.dp),
                     height = 2.dp,
                     color = Black,
                 )
