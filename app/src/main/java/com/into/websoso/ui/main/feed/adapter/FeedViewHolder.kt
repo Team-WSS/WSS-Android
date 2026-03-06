@@ -20,7 +20,6 @@ class FeedViewHolder(
         binding.feed = feed.copy(
             user = feed.user.copy(avatarImage = itemView.getS3ImageUrl(feed.user.avatarImage)),
         )
-
         binding.clFeedLike.isSelected = feed.isLiked
     }
 

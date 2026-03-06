@@ -1,8 +1,6 @@
 package com.into.websoso.data.library.paging
 
 import androidx.paging.PagingSource
-import androidx.paging.PagingSource.LoadResult.Error
-import androidx.paging.PagingSource.LoadResult.Page
 import androidx.paging.PagingState
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.model.UserNovelsEntity
@@ -11,29 +9,31 @@ class LibraryPagingSource(
     private val getNovels: suspend (lastUserNovelId: Long) -> Result<UserNovelsEntity>,
 ) : PagingSource<Long, NovelEntity>() {
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, NovelEntity> {
-        val lastUserNovelId = params.key ?: DEFAULT_LAST_USER_NOVEL_ID
+        val currentKey = params.key ?: DEFAULT_LAST_USER_NOVEL_ID
 
-        return getNovels(lastUserNovelId).fold(
+        return getNovels(currentKey).fold(
             onSuccess = { result ->
-                val nextKey = if (result.isLoadable && result.userNovels.isNotEmpty()) {
-                    result.userNovels.last().userNovelId
+                val novels = result.userNovels
+
+                val nextKey = if (result.isLoadable && novels.isNotEmpty()) {
+                    novels.last().userNovelId
                 } else {
                     null
                 }
 
-                Page(
-                    data = result.userNovels,
+                LoadResult.Page(
+                    data = novels,
                     prevKey = null,
                     nextKey = nextKey,
                 )
             },
             onFailure = { throwable ->
-                Error(throwable)
+                LoadResult.Error(throwable)
             },
         )
     }
 
-    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? = DEFAULT_LAST_USER_NOVEL_ID
+    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? = null
 
     companion object {
         private const val DEFAULT_LAST_USER_NOVEL_ID = 0L

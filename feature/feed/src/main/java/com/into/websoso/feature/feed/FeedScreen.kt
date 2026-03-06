@@ -1,6 +1,6 @@
 package com.into.websoso.feature.feed
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +18,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -47,6 +46,7 @@ import com.into.websoso.feature.feed.model.MyFeedFilter
 import com.into.websoso.feature.feed.model.SosoFeedType
 
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 internal fun FeedScreen(
     uiState: FeedUiState,
@@ -58,7 +58,6 @@ internal fun FeedScreen(
     onWriteClick: () -> Unit,
     onFilterClick: () -> Unit,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
-    onMoreClick: (feedId: Long) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
@@ -67,8 +66,9 @@ internal fun FeedScreen(
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onRefreshPull: () -> Unit,
+    onWriteFeedClick: () -> Unit,
 ) {
-    Scaffold(containerColor = White) {
+    Scaffold(containerColor = White) { _ ->
         Column(modifier = Modifier.statusBarsPadding()) {
             FeedTabRow(
                 selectedTab = uiState.selectedTab,
@@ -120,8 +120,8 @@ internal fun FeedScreen(
                                 modifier = Modifier.debouncedClickable {
                                     onSortSelected(
                                         when (uiState.myFeedData.sort) {
-                                            FeedOrder.NEWEST -> FeedOrder.OLDEST
-                                            FeedOrder.OLDEST -> FeedOrder.NEWEST
+                                            FeedOrder.RECENT -> FeedOrder.OLD
+                                            FeedOrder.OLD -> FeedOrder.RECENT
                                         },
                                     )
                                 },
@@ -161,20 +161,22 @@ internal fun FeedScreen(
                 currentTab = uiState.selectedTab,
                 feeds = when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> uiState.myFeedData.feeds
+
                     FeedTab.SOSO_FEED -> when (uiState.sosoCategory) {
                         SosoFeedType.ALL -> uiState.sosoAllData.feeds
                         SosoFeedType.RECOMMENDED -> uiState.sosoRecommendationData.feeds
                     }
                 },
                 onProfileClick = onProfileClick,
-                onMoreClick = onMoreClick,
                 onNovelClick = onNovelClick,
                 onLikeClick = onLikeClick,
                 onContentClick = onContentClick,
                 onFirstItemClick = onFirstItemClick,
                 onSecondItemClick = onSecondItemClick,
                 onRefreshPull = onRefreshPull,
+                onWriteFeedClick = onWriteFeedClick,
                 isRefreshing = uiState.isRefreshing,
+                isLoading = uiState.loading,
             )
         }
 
@@ -212,35 +214,38 @@ private fun FeedTabRow(
             selectedTabIndex = selectedTab.ordinal,
             containerColor = White,
             edgePadding = 0.dp,
+            minTabWidth = 0.dp,
             divider = {},
             indicator = {
                 TabRowDefaults.SecondaryIndicator(
-                    modifier = Modifier.tabIndicatorOffset(
-                        selectedTabIndex = selectedTab.ordinal,
-                        matchContentSize = true,
-                    ),
+                    modifier = Modifier
+                        .tabIndicatorOffset(
+                            selectedTabIndex = selectedTab.ordinal,
+                            matchContentSize = false,
+                        ).padding(horizontal = 8.dp),
                     height = 2.dp,
                     color = Black,
                 )
             },
-            modifier = Modifier.weight(weight = 1f),
+            modifier = Modifier
+                .weight(weight = 1f)
+                .padding(horizontal = 12.dp),
         ) {
             FeedTab.entries.forEach { tab ->
-                Tab(
-                    selected = selectedTab == tab,
-                    onClick = {
-                        Log.d("123123", tab.toString())
-                        onTabClick(tab)
-                    },
-                    text = {
-                        Text(
-                            text = tab.title,
-                            style = WebsosoTheme.typography.headline1,
-                        )
-                    },
-                    selectedContentColor = Black,
-                    unselectedContentColor = Gray100,
-                )
+                val selected = selectedTab == tab
+                Box(
+                    modifier = Modifier
+                        .debouncedClickable { onTabClick(tab) }
+                        .padding(horizontal = 8.dp)
+                        .padding(vertical = 10.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = tab.title,
+                        style = WebsosoTheme.typography.headline1,
+                        color = if (selected) Black else Gray100,
+                    )
+                }
             }
         }
 
@@ -272,7 +277,6 @@ private fun FeedScreenPreview() {
             onSortSelected = { },
             onSosoTypeSelected = { },
             onProfileClick = { _, _ -> },
-            onMoreClick = { },
             onNovelClick = { },
             onLikeClick = { },
             onContentClick = { _, _ -> },
@@ -282,6 +286,7 @@ private fun FeedScreenPreview() {
             onFirstItemClick = { _, _ -> },
             onSecondItemClick = { _, _ -> },
             onRefreshPull = {},
+            onWriteFeedClick = {},
         )
     }
 }

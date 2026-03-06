@@ -49,6 +49,7 @@ fun FeedResponseDto.toData(): FeedEntity =
             title = title,
             rating = novelRating,
             ratingCount = novelRatingCount,
+            feedWriterNovelRating = feedWriterNovelRating,
         ),
     )
 

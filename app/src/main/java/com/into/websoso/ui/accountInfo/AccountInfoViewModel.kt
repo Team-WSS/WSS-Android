@@ -58,7 +58,6 @@ class AccountInfoViewModel
                     .onSuccess {
                         userRepository.removeTermsAgreementChecked()
                         pushMessageRepository.clearFCMToken()
-                        libraryRepository.deleteAllNovels()
                         filterRepository.deleteLibraryFilter()
                         _uiEffect.send(NavigateToLogin)
                     }.onFailure {
@@ -69,7 +68,6 @@ class AccountInfoViewModel
 
         fun clearCache() {
             viewModelScope.launch {
-                libraryRepository.deleteAllNovels()
                 filterRepository.deleteLibraryFilter()
             }
         }

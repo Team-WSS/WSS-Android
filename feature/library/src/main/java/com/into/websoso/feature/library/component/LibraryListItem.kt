@@ -2,7 +2,6 @@ package com.into.websoso.feature.library.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -72,7 +72,7 @@ internal fun LibraryListItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .debouncedClickable { onClick() },
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Row(

@@ -1,6 +1,5 @@
 package com.into.websoso.data.repository
 
-import com.into.websoso.data.library.datasource.LibraryLocalDataSource
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.ExploreResultEntity
 import com.into.websoso.data.model.ExploreResultEntity.NovelEntity
@@ -17,7 +16,6 @@ class NovelRepository
     @Inject
     constructor(
         private val novelApi: NovelApi,
-        private val libraryLocalDataSource: LibraryLocalDataSource,
     ) {
         var cachedNormalExploreIsLoadable: Boolean = true
             private set
@@ -37,15 +35,9 @@ class NovelRepository
             novelId: Long,
             isInterest: Boolean,
         ) {
-            runCatching {
-                when (isInterest) {
-                    true -> novelApi.postUserInterest(novelId)
-                    false -> novelApi.deleteUserInterest(novelId)
-                }
-            }.onSuccess {
-                libraryLocalDataSource.selectNovelByNovelId(novelId)?.let { novel ->
-                    libraryLocalDataSource.insertNovel(novel.copy(isInterest = isInterest))
-                }
+            when (isInterest) {
+                true -> novelApi.postUserInterest(novelId)
+                false -> novelApi.deleteUserInterest(novelId)
             }
         }
 

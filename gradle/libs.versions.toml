@@ -1,7 +1,7 @@
 [versions]
 # App Versioning
-versionCode = "10043"
-versionName = "1.5.0"
+versionCode = "10045"
+versionName = "1.6.0"
 
 # Gradle Plugin & Kotlin
 android-gradle-plugin = "8.13.2"
@@ -31,7 +31,6 @@ fragment-ktx = "1.8.5"
 lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.2.0"
 security-crypto = "1.1.0"
-room = "2.8.4"
 paging = "3.3.6"
 
 # Testing Libraries
@@ -100,10 +99,6 @@ fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragm
 lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle-extensions" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 

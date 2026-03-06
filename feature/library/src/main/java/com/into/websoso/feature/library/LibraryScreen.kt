@@ -63,7 +63,7 @@ fun LibraryScreen(
     val gridState = rememberLazyGridState()
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
-        confirmValueChange = { false },
+        confirmValueChange = { true },
     )
 
     latestEffect.collectAsEventWithLifecycle {
@@ -150,7 +150,7 @@ private fun LibraryScreen(
 
         LibraryFilterTopBar(
             libraryFilterUiModel = uiState.libraryFilterUiModel,
-            totalCount = novels.itemCount,
+            totalCount = uiState.novelTotalCount,
             isGrid = uiState.isGrid,
             onFilterClick = onFilterClick,
             onSortClick = onSortClick,

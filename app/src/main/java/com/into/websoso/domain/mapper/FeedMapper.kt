@@ -37,5 +37,6 @@ fun FeedEntity.toDomain(): Feed =
             title = novel.title,
             rating = novel.rating,
             ratingCount = novel.ratingCount,
+            feedWriterNovelRating = novel.feedWriterNovelRating,
         ),
     )

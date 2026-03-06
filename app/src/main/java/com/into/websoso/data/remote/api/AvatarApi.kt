@@ -7,3 +7,4 @@ interface AvatarApi {
     @GET("avatar-profiles")
     suspend fun getAvatars(): AvatarsResponseDto
 }
+

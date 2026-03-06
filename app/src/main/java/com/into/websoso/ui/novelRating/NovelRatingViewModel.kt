@@ -32,8 +32,6 @@ class NovelRatingViewModel
         private val keywordRepository: KeywordRepository,
     ) : ViewModel() {
         private val novel: NovelDetailModel? = savedStateHandle["NOVEL"]
-        private val feeds: ArrayList<String>? = savedStateHandle["FEEDS"]
-        private val isInterested: Boolean? = savedStateHandle["IS_INTEREST"]
         private val _uiState = MutableLiveData(NovelRatingUiState())
         val uiState: LiveData<NovelRatingUiState> get() = _uiState
         private val ratingDateManager = RatingDateManager()
@@ -119,7 +117,6 @@ class NovelRatingViewModel
             }
             when (keyword == null) {
                 true -> updateDefaultKeywords(updatedCategories, selectedKeywords)
-
                 false -> updateSearchResultKeywords(updatedCategories)
             }
         }
@@ -303,7 +300,6 @@ class NovelRatingViewModel
                 val ratingModel = uiState.value?.novelRatingModel
                 runCatching {
                     userNovelRepository.saveNovelRating(
-                        isInterested = isInterested,
                         novelRatingEntity = NovelRatingEntity(
                             userNovelId = novel?.userNovel?.userNovelId,
                             novelId = novel?.novel?.novelId ?: 0,
@@ -330,7 +326,6 @@ class NovelRatingViewModel
                             readStatus = ratingModel?.uiReadStatus?.name,
                         ),
                         isAlreadyRated = uiState.value?.isAlreadyRated ?: false,
-                        feeds = feeds?.toList() ?: emptyList(),
                     )
                 }.onSuccess {
                     _uiState.value = uiState.value?.copy(isSaveSuccess = true)

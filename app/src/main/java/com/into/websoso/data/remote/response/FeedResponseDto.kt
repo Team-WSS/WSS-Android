@@ -45,4 +45,6 @@ data class FeedResponseDto(
     val thumbnailUrl: String?,
     @SerialName("imageCount")
     val imageCount: Int,
+    @SerialName("feedWriterNovelRating")
+    val feedWriterNovelRating: Float?,
 )

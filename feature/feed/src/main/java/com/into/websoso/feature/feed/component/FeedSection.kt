@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -59,13 +60,14 @@ internal fun FeedSection(
     currentTab: FeedTab,
     feeds: ImmutableList<FeedUiModel>,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
-    onMoreClick: (feedId: Long) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onRefreshPull: () -> Unit,
+    onWriteFeedClick: () -> Unit,
+    isLoading: Boolean,
     isRefreshing: Boolean,
 ) {
     PullToRefreshBox(
@@ -73,24 +75,36 @@ internal fun FeedSection(
         onRefresh = onRefreshPull,
         modifier = Modifier.fillMaxSize(),
     ) {
-        if (feeds.isEmpty()) {
-            FeedEmptyCase()
-        } else {
-            LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
-                itemsIndexed(items = feeds) { index, feed ->
-                    FeedItem(
-                        feed = feed,
-                        currentTab = currentTab,
-                        onMoreClick = onMoreClick,
-                        onProfileClick = onProfileClick,
-                        onNovelClick = onNovelClick,
-                        onLikeClick = onLikeClick,
-                        onContentClick = onContentClick,
-                        onFirstItemClick = onFirstItemClick,
-                        onSecondItemClick = onSecondItemClick,
-                    )
+        when {
+            isLoading && feeds.isEmpty() -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
 
-                    if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+            feeds.isEmpty() && !isRefreshing -> {
+                FeedEmptyCase(onWriteFeedClick = onWriteFeedClick)
+            }
+
+            else -> {
+                LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
+                    itemsIndexed(items = feeds) { index, feed ->
+                        FeedItem(
+                            feed = feed,
+                            currentTab = currentTab,
+                            onProfileClick = onProfileClick,
+                            onNovelClick = onNovelClick,
+                            onLikeClick = onLikeClick,
+                            onContentClick = onContentClick,
+                            onFirstItemClick = onFirstItemClick,
+                            onSecondItemClick = onSecondItemClick,
+                        )
+
+                        if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+                    }
                 }
             }
         }
@@ -102,7 +116,6 @@ private fun FeedItem(
     feed: FeedUiModel,
     currentTab: FeedTab,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
-    onMoreClick: (feedId: Long) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
     onLikeClick: (feedId: Long) -> Unit,
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
@@ -112,10 +125,12 @@ private fun FeedItem(
     var isMenuExpanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.padding(
-            top = 20.dp,
-            bottom = 10.dp,
-        ),
+        modifier = Modifier
+            .debouncedClickable { onContentClick(feed.id, feed.isLiked) }
+            .padding(
+                top = 20.dp,
+                bottom = 10.dp,
+            ),
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
@@ -151,9 +166,8 @@ private fun FeedItem(
                     color = Gray200,
                     modifier = Modifier.padding(all = 3.dp),
                 )
-
                 Text(
-                    text = feed.createdDate,
+                    text = feed.formattedCreatedDate,
                     style = WebsosoTheme.typography.body5,
                     color = Gray200,
                 )
@@ -166,17 +180,15 @@ private fun FeedItem(
                     )
                 }
             }
+
             Box {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_more),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_three_dots),
                     contentDescription = null,
                     tint = Gray200,
                     modifier = Modifier
                         .size(size = 14.dp)
-                        .debouncedClickable {
-                            isMenuExpanded = true
-                            onMoreClick(feed.id)
-                        },
+                        .debouncedClickable { isMenuExpanded = true },
                 )
 
                 if (isMenuExpanded) {
@@ -184,10 +196,10 @@ private fun FeedItem(
                         isMyFeed = feed.isMyFeed,
                         onDismissRequest = { isMenuExpanded = false },
                         onFirstItemClick = {
-                            onFirstItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                            onFirstItemClick(feed.id, feed.isMyFeed)
                         },
                         onSecondItemClick = {
-                            onSecondItemClick(feed.id, currentTab == FeedTab.MY_FEED)
+                            onSecondItemClick(feed.id, feed.isMyFeed)
                         },
                     )
                 }
@@ -239,7 +251,7 @@ private fun FeedItem(
                         ),
                 ) {
                     Text(
-                        text = feed.imageUrls.size.toString(),
+                        text = feed.imageCount.toString(),
                         style = WebsosoTheme.typography.body5,
                         color = White,
                         textAlign = TextAlign.Center,
@@ -259,8 +271,8 @@ private fun FeedItem(
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
-        when (currentTab) {
-            FeedTab.MY_FEED -> {
+        when (feed.isPublic) {
+            false -> {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
                     modifier = Modifier
@@ -281,7 +293,7 @@ private fun FeedItem(
                 }
             }
 
-            FeedTab.SOSO_FEED -> {
+            true -> {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(space = 18.dp),
@@ -298,6 +310,7 @@ private fun FeedItem(
                             imageVector = ImageVector.vectorResource(
                                 id = if (feed.isLiked) R.drawable.ic_thumb_up_on else R.drawable.ic_thumb_up,
                             ),
+                            tint = if (feed.isLiked) Black else Gray200,
                             contentDescription = null,
                         )
 
@@ -377,7 +390,7 @@ private fun FeedNovelInfo(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
             ) {
-                novel.feedWriterNovelRating?.let {
+                if (!novel.isWriterRatingNoting) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
@@ -388,7 +401,7 @@ private fun FeedNovelInfo(
                         )
 
                         Text(
-                            text = novel.rating.toString(),
+                            text = novel.feedWriterNovelRating.toString(),
                             style = WebsosoTheme.typography.label1,
                             color = Black,
                         )
@@ -408,18 +421,25 @@ private fun FeedNovelInfo(
 @Composable
 private fun FeedSectionPreview() {
     WebsosoTheme {
-        FeedSection(
-            feeds = persistentListOf(FeedUiModel()),
-            currentTab = FeedTab.SOSO_FEED,
-            onProfileClick = { _, _ -> },
-            onMoreClick = { },
-            onNovelClick = { },
-            onLikeClick = { },
-            onContentClick = { _, _ -> },
-            onFirstItemClick = { _, _ -> },
-            onSecondItemClick = { _, _ -> },
-            onRefreshPull = { },
-            isRefreshing = false,
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = White),
+        ) {
+            FeedSection(
+                feeds = persistentListOf(FeedUiModel()),
+                currentTab = FeedTab.SOSO_FEED,
+                onProfileClick = { _, _ -> },
+                onNovelClick = { },
+                onLikeClick = { },
+                onContentClick = { _, _ -> },
+                onFirstItemClick = { _, _ -> },
+                onSecondItemClick = { _, _ -> },
+                onRefreshPull = { },
+                onWriteFeedClick = {},
+                isRefreshing = false,
+                isLoading = false,
+            )
+        }
     }
 }

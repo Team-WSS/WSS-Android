@@ -37,10 +37,13 @@ internal fun FeedMoreMenu(
         onDismissRequest = onDismissRequest,
         alignment = Alignment.TopEnd,
         properties = PopupProperties(focusable = true),
-        offset = IntOffset(x = 0, y = 50),
+        offset = IntOffset(x = 0, y = 140),
     ) {
-        val contents = if (isMyFeed) persistentListOf("수정하기", "삭제하기")
-        else persistentListOf("스포일러 신고", "부적절한 표현 신고")
+        val contents = if (isMyFeed) {
+            persistentListOf("수정하기", "삭제하기")
+        } else {
+            persistentListOf("스포일러 신고", "부적절한 표현 신고")
+        }
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -49,12 +52,10 @@ internal fun FeedMoreMenu(
                     width = 1.dp,
                     color = Gray50,
                     shape = RoundedCornerShape(size = 12.dp),
-                )
-                .background(
+                ).background(
                     color = White,
                     shape = RoundedCornerShape(size = 12.dp),
-                )
-                .width(IntrinsicSize.Max),
+                ).width(width = 180.dp),
         ) {
             contents.forEachIndexed { index, label ->
                 Text(
@@ -67,8 +68,7 @@ internal fun FeedMoreMenu(
                         .debouncedClickable {
                             if (index == 0) onFirstItemClick() else onSecondItemClick()
                             onDismissRequest()
-                        }
-                        .padding(vertical = 14.dp),
+                        }.padding(vertical = 14.dp),
                 )
 
                 if (index < contents.lastIndex) HorizontalDivider(color = Gray50)

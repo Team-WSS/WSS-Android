@@ -43,10 +43,14 @@ data class FeedDetailResponseDto(
     val isPublic: Boolean,
     @SerialName("images")
     val images: List<String>,
-    @SerialName("genreName")
-    val genreName: String?,
-    @SerialName("userNovelRating")
-    val userNovelRating: Float?,
+    @SerialName("novelThumbnailImage")
+    val novelThumbnailImage: String?,
+    @SerialName("novelGenre")
+    val novelGenre: String?,
+    @SerialName("novelAuthor")
+    val novelAuthor: String?,
     @SerialName("feedWriterNovelRating")
     val feedWriterNovelRating: Float?,
+    @SerialName("novelDescription")
+    val novelDescription: String?,
 )

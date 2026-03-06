@@ -20,6 +20,7 @@ import com.into.websoso.feature.library.model.LibraryFilterUiModel
 import com.into.websoso.feature.library.model.LibraryUiState
 import com.into.websoso.feature.library.model.NovelUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,9 +36,11 @@ import javax.inject.Inject
 class LibraryViewModel
     @Inject
     constructor(
-        libraryRepository: LibraryRepository,
+        private val libraryRepository: LibraryRepository,
         private val filterRepository: FilterRepository,
     ) : ViewModel() {
+        private var pagingJob: Job? = null
+
         private val _uiState = MutableStateFlow(LibraryUiState())
         val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
 
@@ -47,13 +50,38 @@ class LibraryViewModel
         private val _scrollToTopEvent = Channel<Unit>(Channel.BUFFERED)
         val scrollToTopEvent: Flow<Unit> = _scrollToTopEvent.receiveAsFlow()
 
-        val novels: Flow<PagingData<NovelUiModel>> =
-            libraryRepository.libraryFlow
-                .map { pagingData -> pagingData.map(NovelEntity::toUiModel) }
-                .cachedIn(viewModelScope)
+        val novels: MutableStateFlow<PagingData<NovelUiModel>> = MutableStateFlow(PagingData.empty())
 
         init {
+            loadLibrary()
+            loadNovelsCount()
             updateLibraryFilter()
+        }
+
+        private fun loadNovelsCount() {
+            viewModelScope.launch {
+                libraryRepository.novelTotalCount.collect { result ->
+                    _uiState.update { it.copy(novelTotalCount = result) }
+                }
+            }
+        }
+
+        private fun loadLibrary() {
+            pagingJob?.cancel()
+
+            pagingJob = viewModelScope.launch {
+                libraryRepository
+                    .getLibraryFlow()
+                    .map { pagingData -> pagingData.map(NovelEntity::toUiModel) }
+                    .cachedIn(viewModelScope)
+                    .collect { result ->
+                        novels.update { result }
+                    }
+            }
+        }
+
+        fun refresh() {
+            loadLibrary()
         }
 
         private fun updateLibraryFilter() {

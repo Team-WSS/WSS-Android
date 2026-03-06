@@ -1,4 +1,4 @@
-package com.into.websoso.data.model
+package com.into.websoso.data.feed.model
 
 data class FeedDetailEntity(
     val user: UserEntity,
@@ -33,9 +33,5 @@ data class FeedDetailEntity(
         val author: String,
         val description: String,
         val feedWriterNovelRating: Float?,
-    ) {
-        val isRatingNoting: Boolean = rating == null || rating == 0f
-        val isWriterRatingNoting: Boolean =
-            feedWriterNovelRating == null || feedWriterNovelRating == 0f
-    }
+    )
 }

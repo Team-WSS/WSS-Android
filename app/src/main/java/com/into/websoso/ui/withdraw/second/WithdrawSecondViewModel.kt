@@ -88,7 +88,6 @@ class WithdrawSecondViewModel
                         _isWithDrawSuccess.value = true
                         userRepository.removeTermsAgreementChecked()
                         pushMessageRepository.clearFCMToken()
-                        libraryRepository.deleteAllNovels()
                         filterRepository.deleteLibraryFilter()
                     }.onFailure {
                         _isWithDrawSuccess.value = false

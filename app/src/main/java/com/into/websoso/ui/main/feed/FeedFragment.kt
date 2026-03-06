@@ -16,8 +16,8 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
-import com.into.websoso.feature.feed.FeedRoute
-import com.into.websoso.feature.feed.FeedViewModel
+import com.into.websoso.feature.feed.UpdateFeedRoute
+import com.into.websoso.feature.feed.UpdatedFeedViewModel
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
@@ -35,7 +35,7 @@ import javax.inject.Inject
 class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     @Inject
     lateinit var tracker: Tracker
-    private val feedViewModel: FeedViewModel by viewModels()
+    private val updatedFeedViewModel: UpdatedFeedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,8 +49,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WebsosoTheme {
-                    FeedRoute(
-                        viewModel = feedViewModel,
+                    UpdateFeedRoute(
+                        viewModel = updatedFeedViewModel,
                         onWriteClick = ::navigateToWriteFeed,
                         onProfileClick = { userId, isMyFeed ->
                             navigateToProfile(
@@ -68,9 +68,10 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         onFirstItemClick = { feedId, isMyFeed ->
                             when (isMyFeed) {
                                 true -> navigateToFeedEdit(feedId)
+
                                 false -> showDialog<DialogReportPopupMenuBinding>(
                                     menuType = ReportMenuType.SPOILER_FEED.name,
-                                    event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
+                                    event = { updatedFeedViewModel.updateReportedSpoilerFeed(feedId) },
                                 )
                             }
                         },
@@ -78,26 +79,26 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                             when (isMyFeed) {
                                 true -> showDialog<DialogRemovePopupMenuBinding>(
                                     menuType = REMOVE_FEED.name,
-                                    event = { feedViewModel.updateRemovedFeed(feedId) },
+                                    event = { updatedFeedViewModel.updateRemovedFeed(feedId) },
                                 )
 
                                 false -> showDialog<DialogReportPopupMenuBinding>(
                                     menuType = ReportMenuType.IMPERTINENCE_FEED.name,
-                                    event = { feedViewModel.updateReportedImpertinenceFeed(feedId) },
+                                    event = {
+                                        updatedFeedViewModel.updateReportedImpertinenceFeed(
+                                            feedId,
+                                        )
+                                    },
                                 )
                             }
                         },
+                        onWriteFeedClick = ::navigateToWriteFeed,
                     )
                 }
             }
         }
 
         return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        feedViewModel.resetFeedsToInitial()
     }
 
     private fun navigateToWriteFeed() {
@@ -123,19 +124,21 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class ->
+            DialogRemovePopupMenuBinding::class -> {
                 FeedRemoveDialogFragment
                     .newInstance(
                         menuType = menuType,
                         event = { event() },
                     ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+            }
 
-            DialogReportPopupMenuBinding::class ->
+            DialogReportPopupMenuBinding::class -> {
                 FeedReportDialogFragment
                     .newInstance(
                         menuType = menuType,
                         event = { event() },
                     ).show(childFragmentManager, FeedReportDialogFragment.TAG)
+            }
         }
     }
 
@@ -145,18 +148,20 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun navigateToFeedEdit(feedId: Long) {
         val feedContent =
-            feedViewModel.uiState.value.myFeedData.feeds.find { it.id == feedId }?.let { feed ->
-                EditFeedModel(
-                    feedId = feed.id,
-                    novelId = feed.novel?.id,
-                    novelTitle = feed.novel?.title,
-                    isSpoiler = feed.isSpoiler,
-                    isPublic = feed.isPublic,
-                    feedContent = feed.content,
-                    feedCategory = feed.relevantCategories,
-                    imageUrls = feed.imageUrls,
-                )
-            } ?: throw IllegalArgumentException()
+            updatedFeedViewModel.uiState.value.myFeedData.feeds
+                .find { it.id == feedId }
+                ?.let { feed ->
+                    EditFeedModel(
+                        feedId = feed.id,
+                        novelId = feed.novel?.id,
+                        novelTitle = feed.novel?.title,
+                        isSpoiler = feed.isSpoiler,
+                        isPublic = feed.isPublic,
+                        feedContent = feed.content,
+                        feedCategory = feed.relevantCategoriesByKr,
+                        imageUrls = feed.imageUrls,
+                    )
+                } ?: throw IllegalArgumentException()
 
         startActivity(CreateFeedActivity.getIntent(requireContext(), feedContent))
     }

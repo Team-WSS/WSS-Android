@@ -1,5 +1,7 @@
 package com.into.websoso.ui.main.feed.model
 
+import com.into.websoso.ui.novelDetail.model.Category
+
 data class FeedModel(
     val user: UserModel,
     val createdDate: String,
@@ -33,7 +35,31 @@ data class FeedModel(
         val title: String?,
         val rating: Float?,
         val ratingCount: Int?,
+        val genre: String = "",
+        val feedWriterNovelRating: Float?,
     ) {
+        val isWriterRatingNoting: Boolean =
+            feedWriterNovelRating == null || feedWriterNovelRating == 0f
+
         val isNothing: Boolean = id == null
+
+        private val normalizedGenreName: String
+            get() = genre.trim().ifEmpty { ETC }
+
+        private val category: Category
+            get() = Category.from(normalizedGenreName)
+
+        val novelBackgroundColor: Int
+            get() = category.backgroundColor
+
+        val novelIconColor: Int
+            get() = category.iconColor
+
+        val isEtcGenre: Boolean
+            get() = normalizedGenreName == ETC
+
+        companion object {
+            private const val ETC = "기타"
+        }
     }
 }
