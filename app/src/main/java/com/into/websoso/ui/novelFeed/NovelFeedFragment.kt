@@ -48,6 +48,7 @@ import com.into.websoso.ui.main.feed.dialog.FeedReportDialogFragment
 import com.into.websoso.ui.main.feed.dialog.RemoveMenuType.REMOVE_FEED
 import com.into.websoso.ui.main.feed.dialog.ReportMenuType
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
+import com.into.websoso.ui.novelDetail.NovelDetailViewModel
 import com.into.websoso.ui.novelFeed.model.NovelFeedUiState
 import com.into.websoso.ui.otherUserPage.BlockUserDialogFragment
 import com.into.websoso.ui.otherUserPage.OtherUserPageActivity
@@ -60,6 +61,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     private val popupBinding: MenuFeedPopupBinding
         get() = _popupBinding ?: error("error: binding is null")
     private val novelFeedViewModel: NovelFeedViewModel by activityViewModels()
+    private val novelDetailViewModel: NovelDetailViewModel by activityViewModels()
     private val feedAdapter: FeedAdapter by lazy { FeedAdapter(onClickFeedItem()) }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
@@ -70,7 +72,6 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         savedInstanceState: Bundle?,
     ): View {
         _popupBinding = MenuFeedPopupBinding.inflate(inflater, container, false)
-
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -221,19 +222,21 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         noinline event: () -> Unit,
     ) {
         when (Dialog::class) {
-            DialogRemovePopupMenuBinding::class ->
+            DialogRemovePopupMenuBinding::class -> {
                 FeedRemoveDialogFragment
                     .newInstance(
                         menuType = menuType,
                         event = { event() },
                     ).show(childFragmentManager, FeedRemoveDialogFragment.TAG)
+            }
 
-            DialogReportPopupMenuBinding::class ->
+            DialogReportPopupMenuBinding::class -> {
                 FeedReportDialogFragment
                     .newInstance(
                         menuType = menuType,
                         event = { event() },
                     ).show(childFragmentManager, FeedReportDialogFragment.TAG)
+            }
         }
     }
 
@@ -281,9 +284,11 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
         activityResultCallback =
             registerForActivityResult(StartActivityForResult()) { result ->
                 when (result.resultCode) {
-                    OtherUserProfileBack.RESULT_OK -> novelFeedViewModel.updateRefreshedFeeds(
-                        novelId,
-                    )
+                    OtherUserProfileBack.RESULT_OK -> {
+                        novelFeedViewModel.updateRefreshedFeeds(
+                            novelId,
+                        )
+                    }
 
                     BlockUser.RESULT_OK -> {
                         val nickname =
@@ -361,8 +366,14 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     private fun setupObserver() {
         novelFeedViewModel.feedUiState.observe(viewLifecycleOwner) { novelFeedUiState ->
             when {
-                novelFeedUiState.loading -> binding.wllNovelFeed.setWebsosoLoadingVisibility(true)
-                novelFeedUiState.error -> binding.wllNovelFeed.setLoadingLayoutVisibility(false)
+                novelFeedUiState.loading -> {
+                    binding.wllNovelFeed.setWebsosoLoadingVisibility(true)
+                }
+
+                novelFeedUiState.error -> {
+                    binding.wllNovelFeed.setLoadingLayoutVisibility(false)
+                }
+
                 !novelFeedUiState.loading -> {
                     binding.wllNovelFeed.setWebsosoLoadingVisibility(false)
                     binding.sptrNovelFeedRefresh.setRefreshing(false)
@@ -376,11 +387,35 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
                 binding.rvNovelFeed.scrollToPosition(0)
             }
         }
+
+        novelDetailViewModel.novelDetailModel.observe(viewLifecycleOwner) {
+            val currentFeedState = novelFeedViewModel.feedUiState.value ?: return@observe
+            if (currentFeedState.feeds.isEmpty()) return@observe
+            updateFeeds(currentFeedState)
+        }
     }
 
     private fun updateFeeds(novelFeedUiState: NovelFeedUiState) {
         binding.clNovelFeedNone.isVisible = novelFeedUiState.feeds.isEmpty()
-        val feeds = novelFeedUiState.feeds.map { Feed(it) }
+
+        val genre: String =
+            novelDetailViewModel.novelDetailModel.value
+                ?.novel
+                ?.getGenres
+                ?.firstOrNull()
+                ?.trim()
+                .orEmpty()
+                .ifEmpty { ETC }
+
+        val feeds = novelFeedUiState.feeds.map { feed ->
+            Feed(
+                feed.copy(
+                    novel = feed.novel.copy(
+                        genre = genre,
+                    ),
+                ),
+            )
+        }
         when (novelFeedUiState.isLoadable) {
             true -> feedAdapter.submitList(feeds + Loading)
             false -> feedAdapter.submitList(feeds)
@@ -405,6 +440,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
 
     companion object {
         private const val NOVEL_ID = "NOVEL_ID"
+        private const val ETC = "기타"
 
         fun newInstance(novelId: Long): NovelFeedFragment =
             NovelFeedFragment().also {

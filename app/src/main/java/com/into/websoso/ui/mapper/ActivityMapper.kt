@@ -1,7 +1,7 @@
 package com.into.websoso.ui.mapper
 
 import com.into.websoso.data.model.UserFeedsEntity.UserFeedEntity
-import com.into.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel
+import com.into.websoso.ui.main.myPage.model.ActivitiesModel.ActivityModel
 
 fun UserFeedEntity.toUi(): ActivityModel =
     ActivityModel(

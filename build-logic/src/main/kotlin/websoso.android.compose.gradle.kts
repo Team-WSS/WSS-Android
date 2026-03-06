@@ -1,9 +1,12 @@
 import com.into.websoso.androidExtension
 import com.into.websoso.websosoDependencies
 
+plugins {
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+
 androidExtension.apply {
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.2"
 }
 
 websosoDependencies {
@@ -11,4 +14,5 @@ websosoDependencies {
     androidTestImplementation(platform("compose.bom"))
 
     implementation("compose")
+    implementation("kotlinx-collections-immutable")
 }

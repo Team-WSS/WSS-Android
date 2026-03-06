@@ -5,7 +5,8 @@ import com.into.websoso.data.library.model.NovelEntity
 import kotlinx.coroutines.flow.Flow
 
 interface LibraryRepository {
-    val libraryFlow: Flow<PagingData<NovelEntity>>
+    val novelTotalCount: Flow<Long>
+    fun getLibraryFlow(): Flow<PagingData<NovelEntity>>
 
     companion object {
         const val PAGE_SIZE = 20

@@ -28,7 +28,6 @@ include(
     ":core:auth-kakao",
     ":core:network",
     ":core:datastore",
-    ":core:database",
 )
 
 include(
@@ -44,4 +43,7 @@ include(
 include(
     ":feature:signin",
     ":feature:library",
+    ":feature:feed",
 )
+include(":domain:feed")
+include(":data:user")

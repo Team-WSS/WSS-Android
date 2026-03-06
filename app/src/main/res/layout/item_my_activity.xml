@@ -9,15 +9,15 @@
 
         <variable
             name="activity"
-            type="com.into.websoso.ui.main.myPage.myActivity.model.ActivitiesModel.ActivityModel" />
+            type="com.into.websoso.ui.main.myPage.model.ActivitiesModel.ActivityModel" />
 
         <variable
             name="userProfile"
-            type="com.into.websoso.ui.main.myPage.myActivity.model.UserProfileModel" />
+            type="com.into.websoso.ui.main.myPage.model.UserProfileModel" />
 
         <variable
             name="onClick"
-            type="com.into.websoso.ui.main.myPage.myActivity.ActivityItemClickListener" />
+            type="com.into.websoso.ui.main.myPage.ActivityItemClickListener" />
 
     </data>
 

@@ -9,3 +9,7 @@ internal annotation class AccountDataStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 internal annotation class LibraryFilterDataStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+internal annotation class UserDataStore

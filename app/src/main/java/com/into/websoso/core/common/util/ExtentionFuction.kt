@@ -69,6 +69,18 @@ fun View.getS3ImageUrl(imageName: String): String {
     return "$baseUrl$imageName@${scale}x.png"
 }
 
+fun Context.getS3ImageUrl(imageName: String): String {
+    val baseUrl = BuildConfig.S3_BASE_URL
+    val scale = when {
+        resources.displayMetrics.density >= 4.0 -> 4
+        resources.displayMetrics.density >= 3.0 -> 3
+        resources.displayMetrics.density >= 2.0 -> 2
+        else -> 1
+    }
+
+    return "$baseUrl$imageName@${scale}x.png"
+}
+
 fun View.hideKeyboard() {
     val inputMethodManager: InputMethodManager =
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

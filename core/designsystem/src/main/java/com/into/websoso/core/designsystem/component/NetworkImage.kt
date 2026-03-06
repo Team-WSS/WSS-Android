@@ -15,12 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.into.websoso.core.designsystem.BuildConfig
 import com.into.websoso.core.resource.R.drawable.img_my_library_empty_cat
 
 @Composable
@@ -57,6 +59,59 @@ fun NetworkImage(
             modifier = Modifier.matchParentSize(),
         )
     }
+}
+
+@Composable
+fun S3Image(
+    contentDescription: String? = null,
+    imageUrl: String,
+    contentScale: ContentScale = Fit,
+    alignment: Alignment = Center,
+    placeholder: Painter = painterResource(id = img_my_library_empty_cat),
+    modifier: Modifier = Modifier,
+) {
+    val isPreview = LocalInspectionMode.current
+    var isLoading by remember { mutableStateOf(true) }
+    var isError by remember { mutableStateOf(false) }
+    val painter = rememberAsyncImagePainter(
+        model = rememberS3Url(imageUrl),
+        onState = { state ->
+            isLoading = state is AsyncImagePainter.State.Loading
+            isError = state is AsyncImagePainter.State.Error
+        },
+    )
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Center,
+    ) {
+        if (isLoading && !isPreview) CircularProgressIndicator(modifier = Modifier.size(size = 48.dp))
+
+        Image(
+            painter = if (!isError && !isPreview) painter else placeholder,
+            contentDescription = contentDescription,
+            contentScale = contentScale,
+            alignment = alignment,
+            modifier = Modifier.matchParentSize(),
+        )
+    }
+}
+
+@Composable
+fun rememberS3Url(imageName: String?): String {
+    if (imageName.isNullOrBlank()) return ""
+
+    val density = LocalDensity.current.density
+    val baseUrl = BuildConfig.S3_BASE_URL
+
+    val scale = when {
+        density >= 4.0f -> 4
+        density >= 3.0f -> 3
+        density >= 2.0f -> 2
+        else -> 1
+    }
+
+    return "$baseUrl$imageName@${scale}x.png"
 }
 
 @Preview

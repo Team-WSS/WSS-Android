@@ -4,15 +4,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class FeedResponseDto(
-    @SerialName("feedId")
-    val feedId: Long,
+data class FeedResponseDto(
     @SerialName("userId")
     val userId: Long,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("avatarImage")
     val avatarImage: String,
+    @SerialName("feedId")
+    val feedId: Long,
     @SerialName("createdDate")
     val createdDate: String,
     @SerialName("feedContent")
@@ -45,4 +45,10 @@ internal data class FeedResponseDto(
     val thumbnailUrl: String?,
     @SerialName("imageCount")
     val imageCount: Int,
+    @SerialName("genreName")
+    val genreName: String?,
+    @SerialName("userNovelRating")
+    val userNovelRating: Float?,
+    @SerialName("feedWriterNovelRating")
+    val feedWriterNovelRating: Float?,
 )

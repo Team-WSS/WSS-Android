@@ -2,9 +2,10 @@ package com.into.websoso.data.mapper
 
 import com.into.websoso.data.model.CommentEntity
 import com.into.websoso.data.model.CommentsEntity
+import com.into.websoso.data.model.FeedDetailEntity
+import com.into.websoso.data.model.FeedDetailEntity.NovelEntity
+import com.into.websoso.data.model.FeedDetailEntity.UserEntity
 import com.into.websoso.data.model.FeedEntity
-import com.into.websoso.data.model.FeedEntity.NovelEntity
-import com.into.websoso.data.model.FeedEntity.UserEntity
 import com.into.websoso.data.model.FeedsEntity
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.UserInterestFeedsEntity
@@ -25,7 +26,7 @@ fun FeedsResponseDto.toData(): FeedsEntity =
 
 fun FeedResponseDto.toData(): FeedEntity =
     FeedEntity(
-        user = UserEntity(
+        user = FeedEntity.UserEntity(
             id = userId,
             nickname = nickname,
             avatarImage = avatarImage,
@@ -43,11 +44,12 @@ fun FeedResponseDto.toData(): FeedEntity =
         isPublic = isPublic,
         images = thumbnailUrl?.let { listOf(it) } ?: emptyList(),
         imageCount = imageCount,
-        novel = NovelEntity(
+        novel = FeedEntity.NovelEntity(
             id = novelId,
             title = title,
             rating = novelRating,
             ratingCount = novelRatingCount,
+            feedWriterNovelRating = feedWriterNovelRating,
         ),
     )
 
@@ -59,7 +61,7 @@ fun CommentsResponseDto.toData(): CommentsEntity =
 
 fun CommentResponseDto.toData(): CommentEntity =
     CommentEntity(
-        user = UserEntity(
+        user = FeedEntity.UserEntity(
             id = userId,
             nickname = nickname,
             avatarImage = avatarImage,
@@ -74,8 +76,8 @@ fun CommentResponseDto.toData(): CommentEntity =
         isSpoiler = isSpoiler,
     )
 
-fun FeedDetailResponseDto.toData(): FeedEntity =
-    FeedEntity(
+fun FeedDetailResponseDto.toData(): FeedDetailEntity =
+    FeedDetailEntity(
         user = UserEntity(
             id = userId,
             nickname = nickname,
@@ -94,12 +96,19 @@ fun FeedDetailResponseDto.toData(): FeedEntity =
         isPublic = isPublic,
         images = images,
         imageCount = images.size,
-        novel = NovelEntity(
-            id = novelId,
-            title = title,
-            rating = novelRating,
-            ratingCount = novelRatingCount,
-        ),
+        novel = novelId?.let { id ->
+            NovelEntity(
+                id = id,
+                title = title.orEmpty(),
+                rating = novelRating,
+                ratingCount = novelRatingCount ?: 0,
+                thumbnail = novelThumbnailImage.orEmpty(),
+                genre = novelGenre.orEmpty(),
+                author = novelAuthor.orEmpty(),
+                description = novelDescription.orEmpty(),
+                feedWriterNovelRating = feedWriterNovelRating,
+            )
+        },
     )
 
 fun PopularFeedsResponseDto.toData(): PopularFeedsEntity =

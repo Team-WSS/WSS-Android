@@ -16,6 +16,7 @@ enum class ReadStatusUiModel(
     ;
 
     companion object {
-        fun from(readStatus: ReadStatus?): ReadStatusUiModel? = entries.find { it.readStatus == readStatus }
+        fun from(readStatus: ReadStatus?): ReadStatusUiModel? =
+            entries.find { it.readStatus == readStatus }
     }
 }

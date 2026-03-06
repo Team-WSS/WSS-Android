@@ -4,9 +4,12 @@ import com.into.websoso.core.network.datasource.feed.model.request.CommentReques
 import com.into.websoso.core.network.datasource.feed.model.response.CommentsResponseDto
 import com.into.websoso.core.network.datasource.feed.model.response.FeedDetailResponseDto
 import com.into.websoso.core.network.datasource.feed.model.response.FeedsResponseDto
-import com.into.websoso.core.network.datasource.feed.model.response.PopularFeedsResponseDto
-import com.into.websoso.core.network.datasource.feed.model.response.UserInterestFeedsResponseDto
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.MultipartBody
+import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -16,14 +19,21 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import javax.inject.Singleton
 
-internal interface FeedApi {
+interface FeedApi {
     @GET("feeds")
     suspend fun getFeeds(
         @Query("category") category: String?,
+        @Query("feedsOption") feedsOption: String, // [New] 옵션 추가됨
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
     ): FeedsResponseDto
+
+    @GET("feeds/{feedId}")
+    suspend fun getFeed(
+        @Path("feedId") feedId: Long,
+    ): FeedDetailResponseDto
 
     @Multipart
     @POST("feeds")
@@ -40,29 +50,8 @@ internal interface FeedApi {
         @Part images: List<MultipartBody.Part>?,
     )
 
-    @GET("feeds/{feedId}")
-    suspend fun getFeed(
-        @Path("feedId") feedId: Long,
-    ): FeedDetailResponseDto
-
-    @GET("feeds/popular")
-    suspend fun getPopularFeeds(): PopularFeedsResponseDto
-
-    @GET("feeds/interest")
-    suspend fun getUserInterestFeeds(): UserInterestFeedsResponseDto
-
     @DELETE("feeds/{feedId}")
     suspend fun deleteFeed(
-        @Path("feedId") feedId: Long,
-    )
-
-    @POST("feeds/{feedId}/spoiler")
-    suspend fun postSpoilerFeed(
-        @Path("feedId") feedId: Long,
-    )
-
-    @POST("feeds/{feedId}/impertinence")
-    suspend fun postImpertinenceFeed(
         @Path("feedId") feedId: Long,
     )
 
@@ -73,6 +62,16 @@ internal interface FeedApi {
 
     @DELETE("feeds/{feedId}/likes")
     suspend fun deleteLikes(
+        @Path("feedId") feedId: Long,
+    )
+
+    @POST("feeds/{feedId}/spoiler")
+    suspend fun postSpoilerFeed(
+        @Path("feedId") feedId: Long,
+    )
+
+    @POST("feeds/{feedId}/impertinence")
+    suspend fun postImpertinenceFeed(
         @Path("feedId") feedId: Long,
     )
 
@@ -111,4 +110,12 @@ internal interface FeedApi {
         @Path("feedId") feedId: Long,
         @Path("commentId") commentId: Long,
     )
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal object FeedApiModule {
+    @Provides
+    @Singleton
+    internal fun provideFeedApi(retrofit: Retrofit): FeedApi = retrofit.create(FeedApi::class.java)
 }

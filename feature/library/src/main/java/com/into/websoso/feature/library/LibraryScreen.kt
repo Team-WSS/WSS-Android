@@ -63,7 +63,7 @@ fun LibraryScreen(
     val gridState = rememberLazyGridState()
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
-        confirmValueChange = { false },
+        confirmValueChange = { true },
     )
 
     latestEffect.collectAsEventWithLifecycle {
@@ -150,7 +150,7 @@ private fun LibraryScreen(
 
         LibraryFilterTopBar(
             libraryFilterUiModel = uiState.libraryFilterUiModel,
-            totalCount = novels.itemCount,
+            totalCount = uiState.novelTotalCount,
             isGrid = uiState.isGrid,
             onFilterClick = onFilterClick,
             onSortClick = onSortClick,
@@ -166,7 +166,7 @@ private fun LibraryScreen(
         ) {
             when {
                 novels.itemCount == 0 &&
-                    novels.loadState.refresh !is Loading -> {
+                        novels.loadState.refresh !is Loading -> {
                     if (uiState.libraryFilterUiModel.isFilterApplied) {
                         LibraryFilterEmptyView()
                     } else {

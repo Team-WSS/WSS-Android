@@ -23,7 +23,7 @@ import com.into.websoso.data.remote.response.UserFeedsResponseDto.UserFeedRespon
 import com.into.websoso.data.remote.response.UserInfoDetailResponseDto
 import com.into.websoso.data.remote.response.UserInfoResponseDto
 import com.into.websoso.data.remote.response.UserNovelStatsResponseDto
-import com.into.websoso.ui.main.myPage.myActivity.model.Genres
+import com.into.websoso.ui.main.myPage.model.Genres
 
 fun UserInfoResponseDto.toData(): UserInfoEntity =
     UserInfoEntity(

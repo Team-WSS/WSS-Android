@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.repository.UserRepository
-import com.into.websoso.ui.main.myPage.myLibrary.model.AttractivePoints
+import com.into.websoso.ui.main.myPage.model.AttractivePoints
 import com.into.websoso.ui.otherUserPage.otherUserLibrary.model.OtherUserLibraryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async

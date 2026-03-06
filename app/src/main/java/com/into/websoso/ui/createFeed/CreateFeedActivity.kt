@@ -23,7 +23,6 @@ import com.into.websoso.R.style.body2
 import com.into.websoso.R.style.body4
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.custom.WebsosoChip
-import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.util.DynamicLimitPhotoPicker
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
@@ -34,7 +33,9 @@ import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.drawable.ic_load_load
+import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
 import com.into.websoso.core.resource.R.string.create_feed_image_limit
+import com.into.websoso.core.resource.R.string.feed_create_done
 import com.into.websoso.core.resource.R.string.tv_create_feed_characters_count
 import com.into.websoso.core.resource.R.string.wset_create_feed_search_novel
 import com.into.websoso.databinding.ActivityCreateFeedBinding
@@ -141,7 +142,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
                     else -> createFeedViewModel.editFeed(
                         feedId = editFeedModel.feedId,
-                        legacyFeed = editFeedModel.feedContent,
                     )
                 }
 
@@ -238,7 +238,11 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
             )
         }
         createFeedViewModel.updateFeedSuccessEvent.collectWithLifecycle(this) {
-            setResult(CreateFeed.RESULT_OK)
+            showWebsosoSnackBar(
+                view = binding.root,
+                message = getString(feed_create_done),
+                icon = ic_novel_detail_check,
+            )
             finish()
         }
     }

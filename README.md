@@ -1,93 +1,64 @@
-# 📗 WSS-Android
-<img src="https://github.com/Team-WSS/WSS-Android/assets/127238018/4d76ae12-f626-4f80-91c7-cefa4ef0378c" width="500">
+<div align="center">
 
-> The Genius Developer of the Academy Reincarnated as a Giraffe
+
+<h1>WSS-Android</h1> 
+<p align="center">
+  <strong>웹소설에 푹 빠지는 곳, 웹소소</strong>
+</p>
+
+<p align="center">
+  <img src="https://github.com/Team-WSS/WSS-Android/assets/127238018/4d76ae12-f626-4f80-91c7-cefa4ef0378c" width="500"/>
+</p>
+
+</div>
 </br>
+  
+<h2>📌 Download</h2>
 
-## 💻 IDE
-<div><img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white"><img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white"><img src="https://img.shields.io/badge/Android%20Studio-3E81F2.svg?style=for-the-badge&logo=android-studio&logoColor=white"></div>
-</br>
+<a href="https://play.google.com/store/apps/details?id=com.into.websoso">
+  <img
+    alt="다운로드하기 Google Play"
+    src="https://play.google.com/intl/ko/badges/static/images/badges/ko_badge_web_generic.png"
+    width="20%"
+  />
+</a>
 
-## 📁 Overview
-> Not sure what web novel to read? Websoso.</br>
-> This is the Android official repository for Websoso, a dedicated web novel tracking & community app.</br>
-```
-📦com.teamwss.websoso
-├─📂data
-│  ├─📂di
-│  ├─📂mapper
-│  ├─📂remote
-│  └─📂repository
-├─📂domain
-│  ├─📂mapper
-│  ├─📂model
-│  ├─📂usecase
-├─📂ui
-│  ├─📂common
-│  ├─📂feed
-│  ├─📂feedDetail
-│  ├─📂login
-│  ├─📂main
-│  ├─📂mapper
-│  ├─📂myPage
-│  ├─📂normalExplore
-│  ├─📂novelDetail
-│  ├─📂novelRating
-│  ├─📂onboarding
-│  └─📂splash
-└─📂util
-```
-</br>
+## 🛠 Tech Stack & Libraries  
+- [Kotlin](https://kotlinlang.org/)  
+- [Modularization](https://developer.android.com/topic/modularization?hl=ko)   
+- [Google App Architecture](https://developer.android.com/topic/architecture?hl=ko)   
+- [Gradle Version Catalog](https://docs.gradle.org/current/userguide/version_catalogs.html) + Precompiled Script Plugin   
+- [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlinlang.org/docs/flow.html)   
+- [Dagger-Hilt](https://dagger.dev/hilt/)
+  
+Jetpack:     
+- [Compose](https://developer.android.com/compose)   
+- [Hilt Navigation Compose](https://developer.android.com/develop/ui/compose/libraries?hl=ko#hilt)
+- [Paging3](https://developer.android.com/jetpack/androidx/releases/paging?hl=ko)
+- [Room](https://developer.android.com/jetpack/androidx/releases/room?hl=ko)
+- [DataStore](https://developer.android.com/jetpack/androidx/releases/datastore?hl=ko)   
+   
+Library:   
+- [Retrofit2 & OkHttp3](https://github.com/square/retrofit)   
+- [Coil](https://coil-kt.github.io/coil/getting_started/)   
 
-## 🏭 Libraries
-- Material Design
-- Retrofit2
-- Serialization
-- Okhttp3
-- ViewPager2
-- Coroutine
-- AndroidX
-- ViewModel
-- Coil
-- Dots Indicator
-- Hilt
 
-</br>
+## 🏛️ Architecture(Modularization) Overview   
+<p align="start"><strong>We follow the Google App Architecture Guidelines.</strong></p>
 
-## 🥕 Extensions
-- BindingActivity
-- BindingBottomSheetDialog
-- BindingFragment
-- BindingAdapter
-- WebsosoChip
-- WebsosoChipGroup
-
-</br>
-
-## 🏭 Tech Stacks
-- Google Recommended Architecture
-- MVVM pattern
-- Static Factory Method pattern
-- Hilt
-
-</br>
+<table align="center">
+  <tr>
+    <td width="70%">
+      <img src="https://github.com/user-attachments/assets/88358876-5984-4377-b241-c777a383758d" width="100%" />
+    </td>
+    <td width="30%">
+      <img src="https://github.com/user-attachments/assets/a8517309-6c22-4032-8adb-e7742c50cc08" width="100%" />
+    </td>
+  </tr>
+</table>
 
 ## 🏷️ Convention
 - Adheres to the [WSS-Android-Convention](https://github.com/Team-WSS/WSS-Android-Convention).
 
-</br>
-
 ## ⭐️ Did you find this repository helpful?
-- Don't forget give a star.
-
-</br>
-
-## 🍴 Didn't you?
-- Then fork this repo, make it better and don't forget give a STAR.
-
-</br>
-
-## 👨‍👩‍👧‍👦 Contributers
-|<img src="https://avatars.githubusercontent.com/u/114990782?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/127238018?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/144861180?v=4" width="125" />|<img src="https://avatars.githubusercontent.com/u/81347125?v=4" width="125" />|
-|:---------:|:---------:|:---------:|:---------:|
-|👑손명지</br>([MoongChi](https://github.com/m6z1))|최준서</br>([GongBaek](https://github.com/junseo511))|이연진</br>([Sally](https://github.com/yeonjeen))|김세훈</br>([さんくん~☆](https://github.com/s9hn))|
+- We truly appreciate your support with a star (⭐️)!

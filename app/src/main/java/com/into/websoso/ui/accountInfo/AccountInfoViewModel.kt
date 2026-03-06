@@ -21,59 +21,57 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountInfoViewModel
-    @Inject
-    constructor(
-        private val userRepository: UserRepository,
-        private val pushMessageRepository: PushMessageRepository,
-        private val accountRepository: AccountRepository,
-        private val libraryRepository: MyLibraryRepository,
-        private val filterRepository: MyLibraryFilterRepository,
-    ) : ViewModel() {
-        private val _userEmail: MutableStateFlow<String> = MutableStateFlow("")
-        val userEmail: StateFlow<String> get() = _userEmail.asStateFlow()
+@Inject
+constructor(
+    private val userRepository: UserRepository,
+    private val pushMessageRepository: PushMessageRepository,
+    private val accountRepository: AccountRepository,
+    private val libraryRepository: MyLibraryRepository,
+    private val filterRepository: MyLibraryFilterRepository,
+) : ViewModel() {
+    private val _userEmail: MutableStateFlow<String> = MutableStateFlow("")
+    val userEmail: StateFlow<String> get() = _userEmail.asStateFlow()
 
-        private val _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
-        val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
+    private val _uiEffect = Channel<UiEffect>(Channel.BUFFERED)
+    val uiEffect: Flow<UiEffect> get() = _uiEffect.receiveAsFlow()
 
-        init {
-            updateUserEmail()
-        }
+    init {
+        updateUserEmail()
+    }
 
-        private fun updateUserEmail() {
-            viewModelScope.launch {
-                runCatching {
-                    userRepository.fetchUserInfoDetail()
-                }.onSuccess { userInfo ->
-                    _userEmail.update { userInfo.email }
-                }
-            }
-        }
-
-        fun signOut() {
-            viewModelScope.launch {
-                val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
-
-                accountRepository
-                    .deleteTokens(userDeviceIdentifier)
-                    .onSuccess {
-                        userRepository.removeTermsAgreementChecked()
-                        pushMessageRepository.clearFCMToken()
-                        libraryRepository.deleteAllNovels()
-                        filterRepository.deleteLibraryFilter()
-                        _uiEffect.send(NavigateToLogin)
-                    }.onFailure {
-                        _uiEffect.send(NavigateToLogin)
-                    }
-            }
-        }
-
-        fun clearCache() {
-            viewModelScope.launch {
-                libraryRepository.deleteAllNovels()
-                filterRepository.deleteLibraryFilter()
+    private fun updateUserEmail() {
+        viewModelScope.launch {
+            runCatching {
+                userRepository.fetchUserInfoDetail()
+            }.onSuccess { userInfo ->
+                _userEmail.update { userInfo.email }
             }
         }
     }
+
+    fun signOut() {
+        viewModelScope.launch {
+            val userDeviceIdentifier = userRepository.fetchUserDeviceIdentifier()
+
+            accountRepository
+                .deleteTokens(userDeviceIdentifier)
+                .onSuccess {
+                    userRepository.removeTermsAgreementChecked()
+                    pushMessageRepository.clearFCMToken()
+                    filterRepository.deleteLibraryFilter()
+                    _uiEffect.send(NavigateToLogin)
+                }.onFailure {
+                    _uiEffect.send(NavigateToLogin)
+                }
+        }
+    }
+
+    fun clearCache() {
+        viewModelScope.launch {
+            filterRepository.deleteLibraryFilter()
+        }
+    }
+}
 
 sealed interface UiEffect {
     data object NavigateToLogin : UiEffect
