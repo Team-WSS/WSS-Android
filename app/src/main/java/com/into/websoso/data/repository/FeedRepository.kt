@@ -1,19 +1,12 @@
 package com.into.websoso.data.repository
 
-import android.net.Uri
-import com.into.websoso.core.common.util.ImageCompressor
 import com.into.websoso.data.mapper.MultiPartMapper
 import com.into.websoso.data.mapper.toData
-import com.into.websoso.data.model.CommentsEntity
-import com.into.websoso.data.model.FeedDetailEntity
 import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.FeedsEntity
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.UserInterestFeedsEntity
 import com.into.websoso.data.remote.api.FeedApi
-import com.into.websoso.data.remote.request.CommentRequestDto
-import com.into.websoso.data.remote.request.FeedRequestDto
-import com.into.websoso.data.util.ImageDownloader
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,7 +15,6 @@ class FeedRepository
     @Inject
     constructor(
         private val feedApi: FeedApi,
-        private val multiPartMapper: MultiPartMapper,
     ) {
         private val _cachedFeeds: MutableList<FeedEntity> = mutableListOf()
         val cachedFeeds: List<FeedEntity> get() = _cachedFeeds.toList()
@@ -73,9 +65,5 @@ class FeedRepository
                 true -> feedApi.deleteLikes(selectedFeedId)
                 false -> feedApi.postLikes(selectedFeedId)
             }
-        }
-
-        companion object {
-            private const val PART_NAME_FEED: String = "feed"
         }
     }
