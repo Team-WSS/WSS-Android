@@ -2,6 +2,7 @@ package com.into.websoso.ui.novelDetail
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
@@ -102,6 +103,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
 
         binding.onClick = onNovelDetailButtonClick()
         bindViewModel()
+        setupAuthorUnderline()
         setupPopupBinding()
         setupObserver()
         setupWebsosoLoadingLayout()
@@ -114,6 +116,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun bindViewModel() {
         binding.novelDetailViewModel = novelDetailViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun setupAuthorUnderline() {
+        binding.tvNovelDetailAuthor.paintFlags =
+            binding.tvNovelDetailAuthor.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun setupPopupBinding() {
@@ -204,7 +211,9 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                     updateGenreImage(novelDetail.novel.novelGenreImage)
                 }
 
-                false -> binding.wllNovelDetail.setWebsosoLoadingVisibility(true)
+                false -> {
+                    binding.wllNovelDetail.setWebsosoLoadingVisibility(true)
+                }
             }
         }
         novelDetailViewModel.loading.observe(this) { isLoading ->
@@ -346,6 +355,10 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                 }
                 tracker.trackEvent("rate_love")
                 novelDetailViewModel.updateUserInterest(novelId)
+            }
+
+            override fun onAuthorClick(author: String) {
+                TODO("Not yet implemented")
             }
         }
 
