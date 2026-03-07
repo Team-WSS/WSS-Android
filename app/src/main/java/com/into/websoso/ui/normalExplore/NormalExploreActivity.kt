@@ -47,6 +47,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         setupUI()
         onSearchTextEditorActionListener()
         setupObserver()
+        setupInitialSearchAuthor()
         handleBackPressed()
     }
 
@@ -69,6 +70,14 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             }
             onClick = onNormalExploreButtonClick()
         }
+    }
+
+    private fun setupInitialSearchAuthor() {
+        val searchAuthor = intent.getStringExtra(SEARCH_AUTHOR).orEmpty()
+        if (searchAuthor.isBlank()) return
+
+        normalExploreViewModel.searchWord.value = searchAuthor
+        normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
     }
 
     private fun onSearchTextEditorActionListener() {
@@ -196,6 +205,14 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
+        private const val SEARCH_AUTHOR = "SEARCH_AUTHOR"
+
+        fun getIntent(
+            context: Context,
+            searchAuthor: String = "",
+        ): Intent =
+            Intent(context, NormalExploreActivity::class.java).apply {
+                putExtra(SEARCH_AUTHOR, searchAuthor)
+            }
     }
 }

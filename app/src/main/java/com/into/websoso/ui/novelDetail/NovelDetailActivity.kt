@@ -11,7 +11,6 @@ import android.view.View.GONE
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.View.VISIBLE
 import android.view.ViewTreeObserver.OnPreDrawListener
-import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import androidx.activity.addCallback
@@ -47,6 +46,7 @@ import com.into.websoso.databinding.MenuNovelDetailPopupBinding
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
+import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelFeed.NovelFeedViewModel
@@ -289,8 +289,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun showPopupWindow() {
         menuPopupWindow = PopupWindow(
             novelDetailMenuPopupBinding.root,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WRAP_CONTENT,
+            WRAP_CONTENT,
             true,
         ).apply {
             this.elevation = 14f.toFloatPxFromDp()
@@ -358,7 +358,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
             }
 
             override fun onAuthorClick(author: String) {
-                TODO("Not yet implemented")
+                val intent = NormalExploreActivity.getIntent(
+                    context = this@NovelDetailActivity,
+                    searchAuthor = author,
+                )
+                startActivity(intent)
             }
         }
 
