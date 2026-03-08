@@ -16,4 +16,8 @@
         <item name="android:textColor">@color/bg_detail_explore_chip_text_selector</item>
         <item name="chipCornerRadius">8dp</item>
     </style>
+
+    <style name="Theme.Websoso.EditText" parent="">
+        <item name="colorControlActivated">@color/primary_100_6A5DFD</item>
+    </style>
 </resources>

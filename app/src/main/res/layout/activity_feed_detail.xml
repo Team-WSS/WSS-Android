@@ -108,6 +108,8 @@
                 android:textAppearance="@style/body3"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_200_949399"
+                android:textColorHighlight="@color/primary_50_F1EFFF"
+                android:theme="@style/Theme.Websoso.EditText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_feed_detail_comment_register"
                 app:layout_constraintStart_toEndOf="@id/iv_feed_detail_my_profile_image"
