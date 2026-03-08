@@ -48,7 +48,7 @@ class NormalExploreViewModel
         }
 
         fun updateSearchResult(isSearchButtonClick: Boolean) {
-            if (_uiState.value?.isLoadable == false && !isSearchButtonClick) {
+            if ((_searchWord.value.isNullOrBlank() || _uiState.value?.isLoadable == false) && !isSearchButtonClick) {
                 return
             }
             viewModelScope.launch {
