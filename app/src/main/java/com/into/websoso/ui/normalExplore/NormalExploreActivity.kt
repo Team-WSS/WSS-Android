@@ -75,8 +75,12 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         binding.apply {
             etNormalExploreSearchContent.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == IME_ACTION_SEARCH) {
+                    normalExploreViewModel?.updateSearchWord(
+                        binding.etNormalExploreSearchContent.text
+                            ?.toString()
+                            .orEmpty(),
+                    )
                     normalExploreViewModel?.updateSearchResult(isSearchButtonClick = true)
-                        ?: throw IllegalStateException()
                     binding.etNormalExploreSearchContent.clearFocus()
                     hideKeyboard()
                     true
@@ -106,6 +110,11 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             override fun onSearchButtonClick() {
                 singleEventHandler.throttleFirst {
                     tracker.trackEvent("click_search_result")
+                    normalExploreViewModel.updateSearchWord(
+                        binding.etNormalExploreSearchContent.text
+                            ?.toString()
+                            .orEmpty(),
+                    )
                     normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
                     binding.etNormalExploreSearchContent.clearFocus()
                     hideKeyboard()
@@ -196,6 +205,14 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, NormalExploreActivity::class.java)
+        const val SEARCH_AUTHOR = "SEARCH_AUTHOR"
+
+        fun getIntent(
+            context: Context,
+            searchAuthor: String = "",
+        ): Intent =
+            Intent(context, NormalExploreActivity::class.java).apply {
+                putExtra(SEARCH_AUTHOR, searchAuthor)
+            }
     }
 }

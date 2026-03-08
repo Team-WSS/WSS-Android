@@ -14,4 +14,6 @@ interface NovelDetailClickListener {
     fun onNovelFeedWriteClick()
 
     fun onNovelInterestClick()
+
+    fun onAuthorClick(author: String)
 }

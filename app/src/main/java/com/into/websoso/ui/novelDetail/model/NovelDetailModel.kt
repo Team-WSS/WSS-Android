@@ -33,7 +33,7 @@ data class NovelDetailModel(
         val isNovelCompleted: Boolean = false,
         val isNovelCompletedText: String = if (isNovelCompleted) "완결작" else "연재중",
         val author: String = "",
-        val formattedNovelDetailSummary: String = "$novelGenres ・ $isNovelCompletedText ・ $author",
+        val formattedNovelDetailSummary: String = "$novelGenres ・ $isNovelCompletedText ・ ",
         val isNovelNotBlank: Boolean = novelTitle.isNotBlank() && novelImage.isNotBlank() && author.isNotBlank(),
     ) : Serializable {
         val getGenres: List<String>
@@ -66,7 +66,9 @@ data class NovelDetailModel(
                 }"
 
                 start != null -> outputFormat.format(start)
+
                 end != null -> outputFormat.format(end)
+
                 else -> ""
             }
         }

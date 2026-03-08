@@ -136,17 +136,35 @@
                             app:layout_constraintTop_toBottomOf="@id/cv_novel_detail_cover"
                             tools:text="철혈검가 사냥개의 회귀" />
 
-                        <TextView
-                            android:id="@+id/tv_novel_detail_character_info"
+                        <LinearLayout
+                            android:id="@+id/ll_novel_detail_character_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@{novelDetailViewModel.novelDetailModel.novel.formattedNovelDetailSummary}"
-                            android:textAppearance="@style/body2"
+                            android:orientation="horizontal"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_novel_detail_title"
-                            tools:text="로판/로맨스 ・ 완결작 ・ 이보라" />
+                            app:layout_constraintTop_toBottomOf="@id/tv_novel_detail_title">
+
+                            <TextView
+                                android:id="@+id/tv_novel_detail_summary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{novelDetailViewModel.novelDetailModel.novel.formattedNovelDetailSummary}"
+                                android:textAppearance="@style/body2"
+                                android:textColor="@color/gray_200_949399"
+                                tools:text="로판/로맨스 ・ 완결작" />
+
+                            <TextView
+                                android:id="@+id/tv_novel_detail_author"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:onClick="@{() -> onClick.onAuthorClick(novelDetailViewModel.novelDetailModel.novel.author)}"
+                                android:text='@{novelDetailViewModel.novelDetailModel.novel.author}'
+                                android:textAppearance="@style/body2"
+                                android:textColor="@color/gray_200_949399"
+                                tools:text=" ・ 이보라" />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/ll_novel_detail_numeric_info"
@@ -156,7 +174,7 @@
                             android:gravity="center_vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_novel_detail_character_info">
+                            app:layout_constraintTop_toBottomOf="@id/ll_novel_detail_character_info">
 
                             <ImageView
                                 android:layout_width="12dp"
