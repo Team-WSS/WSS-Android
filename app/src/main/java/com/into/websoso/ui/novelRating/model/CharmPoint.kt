@@ -9,6 +9,7 @@ enum class CharmPoint(
     MATERIAL("material", "소재"),
     CHARACTER("character", "캐릭터"),
     RELATIONSHIP("relationship", "관계"),
+    WRITINGSKILL("writingskill", "필력"),
     ;
 
     companion object {
