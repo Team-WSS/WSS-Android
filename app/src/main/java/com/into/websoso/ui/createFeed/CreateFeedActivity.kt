@@ -3,8 +3,8 @@ package com.into.websoso.ui.createFeed
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -57,9 +57,22 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         createFeedImagePickerLauncher()
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        val imm: InputMethodManager =
-            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        if (ev.action == MotionEvent.ACTION_DOWN) {
+            val focusView = currentFocus
+            if (focusView is android.widget.EditText) {
+                val outRect = Rect()
+                focusView.getGlobalVisibleRect(outRect)
+
+                // 터치한 좌표가 EditText 영역 밖일 경우에만 키보드 숨김 및 포커스 해제
+                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    focusView.clearFocus()
+                    val imm: InputMethodManager =
+                        getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                }
+            }
+        }
+
         return super.dispatchTouchEvent(ev)
     }
 
@@ -99,15 +112,19 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     @SuppressLint("ClickableViewAccessibility")
     private fun setupCustomScroll() {
         binding.etCreateFeedContent.setOnTouchListener { view, event ->
-            if (view.hasFocus()) {
-                view.parent.requestDisallowInterceptTouchEvent(true)
-                if ((event.action and MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_DOWN -> {
+                    // 터치 시작 시 부모 개입 차단
+                    view.parent.requestDisallowInterceptTouchEvent(true)
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     view.parent.requestDisallowInterceptTouchEvent(false)
                 }
             }
+
             false
         }
-        binding.etCreateFeedContent.movementMethod = ScrollingMovementMethod()
     }
 
     private fun onCreateFeedClick() {
@@ -138,8 +155,11 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
                 when {
                     editFeedModel == null -> createFeedViewModel.createFeed()
+
                     editFeedModel.feedId == DEFAULT_FEED_ID -> createFeedViewModel.createFeed()
+
                     editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
+
                     else -> createFeedViewModel.editFeed(
                         feedId = editFeedModel.feedId,
                     )
