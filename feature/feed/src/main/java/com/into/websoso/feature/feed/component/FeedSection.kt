@@ -215,6 +215,17 @@ private fun FeedItem(
                 color = Secondary100,
                 modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
             )
+        } else {
+            Text(
+                text = feed.content,
+                style = WebsosoTheme.typography.body2,
+                color = Black,
+                maxLines = 5,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
+            )
+
+            Spacer(modifier = Modifier.height(height = 10.dp))
             if (feed.imageUrls.isNotEmpty()) {
                 Box {
                     NetworkImage(
@@ -245,18 +256,7 @@ private fun FeedItem(
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.height(height = 10.dp))
             }
-        } else {
-            Text(
-                text = feed.content,
-                style = WebsosoTheme.typography.body2,
-                color = Black,
-                maxLines = 5,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
-            )
         }
 
         Spacer(modifier = Modifier.height(height = 20.dp))
