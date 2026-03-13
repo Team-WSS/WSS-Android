@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeedRoute(
+fun UpdateFeedRoute(
     onWriteClick: () -> Unit,
     onProfileClick: (userId: Long, isMyFeed: Boolean) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
@@ -24,7 +24,7 @@ fun FeedRoute(
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onWriteFeedClick: () -> Unit,
-    viewModel: FeedViewModel = hiltViewModel(),
+    viewModel: UpdatedFeedViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

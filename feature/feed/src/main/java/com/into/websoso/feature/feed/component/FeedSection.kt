@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,10 +23,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,6 +57,8 @@ import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.FeedUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 
 @Composable
 internal fun FeedSection(
@@ -67,6 +72,7 @@ internal fun FeedSection(
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onRefreshPull: () -> Unit,
     onWriteFeedClick: () -> Unit,
+    onLoadMore: () -> Unit,
     isLoading: Boolean,
     isRefreshing: Boolean,
 ) {
@@ -90,7 +96,25 @@ internal fun FeedSection(
             }
 
             else -> {
-                LazyColumn(modifier = Modifier.padding(horizontal = 20.dp)) {
+                val listState = rememberLazyListState()
+
+                LaunchedEffect(listState) {
+                    snapshotFlow {
+                        val lastVisible =
+                            listState.layoutInfo.visibleItemsInfo
+                                .lastOrNull()
+                                ?.index ?: 0
+                        val total = listState.layoutInfo.totalItemsCount
+                        lastVisible >= total - 3
+                    }.distinctUntilChanged()
+                        .filter { it }
+                        .collect { onLoadMore() }
+                }
+
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                ) {
                     itemsIndexed(items = feeds) { index, feed ->
                         FeedItem(
                             feed = feed,
@@ -104,6 +128,19 @@ internal fun FeedSection(
                         )
 
                         if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+                    }
+
+                    if (isLoading) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
                     }
                 }
             }
@@ -353,8 +390,7 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            )
-            .debouncedClickable {
+            ).debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
@@ -436,6 +472,7 @@ private fun FeedSectionPreview() {
                 onSecondItemClick = { _, _ -> },
                 onRefreshPull = { },
                 onWriteFeedClick = {},
+                onLoadMore = {},
                 isRefreshing = false,
                 isLoading = false,
             )
