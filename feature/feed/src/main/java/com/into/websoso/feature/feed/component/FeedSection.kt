@@ -215,6 +215,39 @@ private fun FeedItem(
                 color = Secondary100,
                 modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
             )
+            if (feed.imageUrls.isNotEmpty()) {
+                Box {
+                    NetworkImage(
+                        imageUrl = feed.imageUrls.firstOrNull().orEmpty(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(ratio = 334f / 237f)
+                            .clip(RoundedCornerShape(size = 14.dp)),
+                        contentScale = ContentScale.Crop,
+                    )
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .align(alignment = Alignment.BottomEnd)
+                            .padding(end = 12.dp, bottom = 10.dp)
+                            .size(size = 20.dp)
+                            .background(
+                                color = GrayToast,
+                                shape = CircleShape,
+                            ),
+                    ) {
+                        Text(
+                            text = feed.imageCount.toString(),
+                            style = WebsosoTheme.typography.body5,
+                            color = White,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(height = 10.dp))
+            }
         } else {
             Text(
                 text = feed.content,
@@ -227,40 +260,6 @@ private fun FeedItem(
         }
 
         Spacer(modifier = Modifier.height(height = 20.dp))
-
-        if (feed.imageUrls.isNotEmpty()) {
-            Box {
-                NetworkImage(
-                    imageUrl = feed.imageUrls.firstOrNull().orEmpty(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(ratio = 334f / 237f)
-                        .clip(RoundedCornerShape(size = 14.dp)),
-                    contentScale = ContentScale.Crop,
-                )
-
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .align(alignment = Alignment.BottomEnd)
-                        .padding(end = 12.dp, bottom = 10.dp)
-                        .size(size = 20.dp)
-                        .background(
-                            color = GrayToast,
-                            shape = CircleShape,
-                        ),
-                ) {
-                    Text(
-                        text = feed.imageCount.toString(),
-                        style = WebsosoTheme.typography.body5,
-                        color = White,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(height = 10.dp))
-        }
 
         if (feed.novel != null) {
             FeedNovelInfo(
@@ -354,8 +353,7 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            )
-            .debouncedClickable {
+            ).debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
