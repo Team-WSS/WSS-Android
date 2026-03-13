@@ -224,42 +224,41 @@ private fun FeedItem(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
             )
-        }
 
-        Spacer(modifier = Modifier.height(height = 20.dp))
-
-        if (feed.imageUrls.isNotEmpty()) {
-            Box {
-                NetworkImage(
-                    imageUrl = feed.imageUrls.firstOrNull().orEmpty(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(ratio = 334f / 237f)
-                        .clip(RoundedCornerShape(size = 14.dp)),
-                    contentScale = ContentScale.Crop,
-                )
-
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .align(alignment = Alignment.BottomEnd)
-                        .padding(end = 12.dp, bottom = 10.dp)
-                        .size(size = 20.dp)
-                        .background(
-                            color = GrayToast,
-                            shape = CircleShape,
-                        ),
-                ) {
-                    Text(
-                        text = feed.imageCount.toString(),
-                        style = WebsosoTheme.typography.body5,
-                        color = White,
-                        textAlign = TextAlign.Center,
+            Spacer(modifier = Modifier.height(height = 20.dp))
+            if (feed.imageUrls.isNotEmpty()) {
+                Box {
+                    NetworkImage(
+                        imageUrl = feed.imageUrls.firstOrNull().orEmpty(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(ratio = 334f / 237f)
+                            .clip(RoundedCornerShape(size = 14.dp)),
+                        contentScale = ContentScale.Crop,
                     )
-                }
-            }
 
-            Spacer(modifier = Modifier.height(height = 10.dp))
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .align(alignment = Alignment.BottomEnd)
+                            .padding(end = 12.dp, bottom = 10.dp)
+                            .size(size = 20.dp)
+                            .background(
+                                color = GrayToast,
+                                shape = CircleShape,
+                            ),
+                    ) {
+                        Text(
+                            text = feed.imageCount.toString(),
+                            style = WebsosoTheme.typography.body5,
+                            color = White,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(height = 10.dp))
+            }
         }
 
         if (feed.novel != null) {
