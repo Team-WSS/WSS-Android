@@ -2,6 +2,7 @@ package com.into.websoso.user.model
 
 data class UserFeedsEntity(
     val isLoadable: Boolean,
+    val feedsCount: Int,
     val feeds: List<UserFeedEntity>,
 ) {
     data class UserFeedEntity(

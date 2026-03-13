@@ -16,8 +16,8 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
-import com.into.websoso.feature.feed.UpdateFeedRoute
-import com.into.websoso.feature.feed.UpdatedFeedViewModel
+import com.into.websoso.feature.feed.FeedRoute
+import com.into.websoso.feature.feed.FeedViewModel
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
@@ -35,7 +35,7 @@ import javax.inject.Inject
 class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
     @Inject
     lateinit var tracker: Tracker
-    private val updatedFeedViewModel: UpdatedFeedViewModel by viewModels()
+    private val feedViewModel: FeedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,8 +49,8 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WebsosoTheme {
-                    UpdateFeedRoute(
-                        viewModel = updatedFeedViewModel,
+                    FeedRoute(
+                        viewModel = feedViewModel,
                         onWriteClick = ::navigateToWriteFeed,
                         onProfileClick = { userId, isMyFeed ->
                             navigateToProfile(
@@ -71,7 +71,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
                                 false -> showDialog<DialogReportPopupMenuBinding>(
                                     menuType = ReportMenuType.SPOILER_FEED.name,
-                                    event = { updatedFeedViewModel.updateReportedSpoilerFeed(feedId) },
+                                    event = { feedViewModel.updateReportedSpoilerFeed(feedId) },
                                 )
                             }
                         },
@@ -79,13 +79,13 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                             when (isMyFeed) {
                                 true -> showDialog<DialogRemovePopupMenuBinding>(
                                     menuType = REMOVE_FEED.name,
-                                    event = { updatedFeedViewModel.updateRemovedFeed(feedId) },
+                                    event = { feedViewModel.updateRemovedFeed(feedId) },
                                 )
 
                                 false -> showDialog<DialogReportPopupMenuBinding>(
                                     menuType = ReportMenuType.IMPERTINENCE_FEED.name,
                                     event = {
-                                        updatedFeedViewModel.updateReportedImpertinenceFeed(
+                                        feedViewModel.updateReportedImpertinenceFeed(
                                             feedId,
                                         )
                                     },
@@ -148,7 +148,7 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
 
     private fun navigateToFeedEdit(feedId: Long) {
         val feedContent =
-            updatedFeedViewModel.uiState.value.myFeedData.feeds
+            feedViewModel.uiState.value.myFeedData.feeds
                 .find { it.id == feedId }
                 ?.let { feed ->
                     EditFeedModel(

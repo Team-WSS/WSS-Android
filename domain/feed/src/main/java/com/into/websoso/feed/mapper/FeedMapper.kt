@@ -109,3 +109,37 @@ fun UserFeedsEntity.UserFeedEntity.toDomain(
         userNovelRating = this.userNovelRating,
         feedWriterNovelRating = this.feedWriterNovelRating,
     )
+
+fun UserFeedsEntity.UserFeedEntity.toFeedEntity(
+    userProfile: MyProfileEntity,
+    userId: Long,
+): FeedEntity =
+    FeedEntity(
+        id = this.feedId,
+        content = this.feedContent,
+        createdDate = this.createdDate,
+        isModified = this.isModified,
+        isSpoiler = this.isSpoiler,
+        isPublic = this.isPublic,
+        isLiked = this.isLiked,
+        likeCount = this.likeCount,
+        commentCount = this.commentCount,
+        isMyFeed = true,
+        user = FeedEntity.UserEntity(
+            id = userId,
+            nickname = userProfile.nickname,
+            avatarImage = userProfile.avatarImage,
+        ),
+        novel = FeedEntity.NovelEntity(
+            id = this.novelId,
+            title = this.title,
+            rating = this.novelRating,
+            ratingCount = this.novelRatingCount,
+        ),
+        images = if (this.thumbnailUrl != null) listOf(this.thumbnailUrl.orEmpty()) else emptyList(),
+        imageCount = this.imageCount,
+        relevantCategories = this.relevantCategories,
+        genreName = this.genre,
+        userNovelRating = this.userNovelRating,
+        feedWriterNovelRating = this.feedWriterNovelRating,
+    )

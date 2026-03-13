@@ -7,9 +7,10 @@ import com.into.websoso.user.model.MyProfileEntity
 import com.into.websoso.user.model.UserFeedsEntity
 import com.into.websoso.user.model.UserInfoEntity
 
-fun UserFeedsResponseDto.toData(): UserFeedsEntity =
+fun UserFeedsResponseDto.toData(isDefaultFilter: Boolean): UserFeedsEntity =
     UserFeedsEntity(
         isLoadable = this.isLoadable,
+        feedsCount = if (isDefaultFilter) feedsCount else this.feeds.size,
         feeds = this.feeds.map { it.toData() },
     )
 
