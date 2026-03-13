@@ -119,15 +119,45 @@ class UpdatedFeedViewModel
                     }
                 }.onSuccess { result ->
                     _uiState.update { currentState ->
-                        val updatedSource = currentState.currentData.copy(
-                            lastId = result.isLoadable.let {
-                                if (it) result.feeds.lastOrNull()?.id ?: 0 else 0
-                            },
-                            isLoadable = result.isLoadable,
-                        )
-                        currentState
-                            .updateCurrentSource(updatedSource)
-                            .copy(loading = false, isRefreshing = false)
+                        val newLastId = if (result.isLoadable) {
+                            result.feeds.lastOrNull()?.id ?: 0L
+                        } else {
+                            currentState.currentData.lastId
+                        }
+
+                        val tab = currentState.selectedTab
+                        val category = currentState.sosoCategory
+
+                        when (tab) {
+                            FeedTab.MY_FEED -> currentState.copy(
+                                myFeedData = currentState.myFeedData.copy(
+                                    lastId = newLastId,
+                                    isLoadable = result.isLoadable,
+                                ),
+                                loading = false,
+                                isRefreshing = false,
+                            )
+
+                            FeedTab.SOSO_FEED -> if (category == SosoFeedType.ALL) {
+                                currentState.copy(
+                                    sosoAllData = currentState.sosoAllData.copy(
+                                        lastId = newLastId,
+                                        isLoadable = result.isLoadable,
+                                    ),
+                                    loading = false,
+                                    isRefreshing = false,
+                                )
+                            } else {
+                                currentState.copy(
+                                    sosoRecommendationData = currentState.sosoRecommendationData.copy(
+                                        lastId = newLastId,
+                                        isLoadable = result.isLoadable,
+                                    ),
+                                    loading = false,
+                                    isRefreshing = false,
+                                )
+                            }
+                        }
                     }
                 }.onFailure {
                     _uiState.update { it.copy(loading = false, isRefreshing = false, error = true) }

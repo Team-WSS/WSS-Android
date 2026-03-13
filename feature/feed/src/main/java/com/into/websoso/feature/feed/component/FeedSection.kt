@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,6 +68,7 @@ internal fun FeedSection(
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onRefreshPull: () -> Unit,
     onWriteFeedClick: () -> Unit,
+    onLoadMore: () -> Unit,
     isLoading: Boolean,
     isRefreshing: Boolean,
 ) {
@@ -104,6 +106,22 @@ internal fun FeedSection(
                         )
 
                         if (index < feeds.lastIndex) HorizontalDivider(color = Gray50)
+                    }
+                    item {
+                        LaunchedEffect(feeds.size) {
+                            onLoadMore()
+                        }
+
+                        if (isLoading) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
                     }
                 }
             }
@@ -437,6 +455,7 @@ private fun FeedSectionPreview() {
                 onSecondItemClick = { _, _ -> },
                 onRefreshPull = { },
                 onWriteFeedClick = {},
+                onLoadMore = {},
                 isRefreshing = false,
                 isLoading = false,
             )
