@@ -74,5 +74,6 @@ fun UpdateFeedRoute(
         onSecondItemClick = onSecondItemClick,
         onRefreshPull = viewModel::refresh,
         onWriteFeedClick = onWriteFeedClick,
+        onLoadMore = viewModel::fetchNextPage,
     )
 }

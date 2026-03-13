@@ -92,13 +92,16 @@ class UpdatedFeedViewModel
             val current = state.currentData
             val lastFeedId = feedId ?: current.lastId
 
+            val tab = state.selectedTab
+            val category = state.sosoCategory
+
             if (state.loading || (!current.isLoadable && lastFeedId != 0L)) return
 
             _uiState.update { it.copy(loading = true) }
 
             viewModelScope.launch {
                 runCatching {
-                    when (state.selectedTab) {
+                    when (tab) {
                         FeedTab.MY_FEED -> {
                             getMyFeedsUseCase(
                                 lastFeedId = lastFeedId,
@@ -112,22 +115,56 @@ class UpdatedFeedViewModel
 
                         FeedTab.SOSO_FEED -> {
                             getFeedsUseCase(
-                                feedsOption = state.sosoCategory.name.uppercase(),
+                                feedsOption = category.name.uppercase(),
                                 lastFeedId = lastFeedId,
                             )
                         }
                     }
                 }.onSuccess { result ->
                     _uiState.update { currentState ->
-                        val updatedSource = currentState.currentData.copy(
-                            lastId = result.isLoadable.let {
-                                if (it) result.feeds.lastOrNull()?.id ?: 0 else 0
-                            },
-                            isLoadable = result.isLoadable,
-                        )
-                        currentState
-                            .updateCurrentSource(updatedSource)
-                            .copy(loading = false, isRefreshing = false)
+                        val newLastId = if (result.isLoadable) {
+                            result.feeds.lastOrNull()?.id ?: 0L
+                        } else {
+                            currentState.currentData.lastId
+                        }
+
+                        when (tab) {
+                            FeedTab.MY_FEED -> currentState.copy(
+                                myFeedData = currentState.myFeedData.copy(
+                                    lastId = if (result.isLoadable) {
+                                        currentState.myFeedData.feeds
+                                            .lastOrNull()
+                                            ?.id
+                                            ?: 0L
+                                    } else {
+                                        currentState.myFeedData.lastId
+                                    },
+                                    isLoadable = result.isLoadable,
+                                ),
+                                loading = false,
+                                isRefreshing = false,
+                            )
+
+                            FeedTab.SOSO_FEED -> if (category == SosoFeedType.ALL) {
+                                currentState.copy(
+                                    sosoAllData = currentState.sosoAllData.copy(
+                                        lastId = newLastId,
+                                        isLoadable = result.isLoadable,
+                                    ),
+                                    loading = false,
+                                    isRefreshing = false,
+                                )
+                            } else {
+                                currentState.copy(
+                                    sosoRecommendationData = currentState.sosoRecommendationData.copy(
+                                        lastId = newLastId,
+                                        isLoadable = result.isLoadable,
+                                    ),
+                                    loading = false,
+                                    isRefreshing = false,
+                                )
+                            }
+                        }
                     }
                 }.onFailure {
                     _uiState.update { it.copy(loading = false, isRefreshing = false, error = true) }
