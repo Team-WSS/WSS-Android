@@ -131,7 +131,14 @@ class UpdatedFeedViewModel
                         when (tab) {
                             FeedTab.MY_FEED -> currentState.copy(
                                 myFeedData = currentState.myFeedData.copy(
-                                    lastId = newLastId,
+                                    lastId = if (result.isLoadable) {
+                                        currentState.myFeedData.feeds
+                                            .lastOrNull()
+                                            ?.id
+                                            ?: 0L
+                                    } else {
+                                        currentState.myFeedData.lastId
+                                    },
                                     isLoadable = result.isLoadable,
                                 ),
                                 loading = false,
