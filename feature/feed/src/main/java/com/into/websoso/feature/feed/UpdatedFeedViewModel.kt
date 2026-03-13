@@ -92,13 +92,16 @@ class UpdatedFeedViewModel
             val current = state.currentData
             val lastFeedId = feedId ?: current.lastId
 
+            val tab = state.selectedTab
+            val category = state.sosoCategory
+
             if (state.loading || (!current.isLoadable && lastFeedId != 0L)) return
 
             _uiState.update { it.copy(loading = true) }
 
             viewModelScope.launch {
                 runCatching {
-                    when (state.selectedTab) {
+                    when (tab) {
                         FeedTab.MY_FEED -> {
                             getMyFeedsUseCase(
                                 lastFeedId = lastFeedId,
@@ -112,7 +115,7 @@ class UpdatedFeedViewModel
 
                         FeedTab.SOSO_FEED -> {
                             getFeedsUseCase(
-                                feedsOption = state.sosoCategory.name.uppercase(),
+                                feedsOption = category.name.uppercase(),
                                 lastFeedId = lastFeedId,
                             )
                         }
@@ -124,9 +127,6 @@ class UpdatedFeedViewModel
                         } else {
                             currentState.currentData.lastId
                         }
-
-                        val tab = currentState.selectedTab
-                        val category = currentState.sosoCategory
 
                         when (tab) {
                             FeedTab.MY_FEED -> currentState.copy(
