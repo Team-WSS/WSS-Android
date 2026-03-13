@@ -82,6 +82,8 @@
                             android:text="@={normalExploreViewModel.searchWord}"
                             android:textAppearance="@style/label1"
                             android:textColor="@color/black"
+                            android:textColorHighlight="@color/primary_50_F1EFFF"
+                            android:theme="@style/Theme.Websoso.EditText"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/iv_normal_explore_cancel_button"
                             app:layout_constraintStart_toStartOf="parent"

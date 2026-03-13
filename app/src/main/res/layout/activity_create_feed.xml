@@ -149,6 +149,8 @@
                     android:textAppearance="@style/body2"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_200_949399"
+                    android:textColorHighlight="@color/primary_50_F1EFFF"
+                    android:theme="@style/Theme.Websoso.EditText"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/wcg_detail_explore_info_genre" />
