@@ -224,8 +224,7 @@ private fun FeedTabRow(
                         .tabIndicatorOffset(
                             selectedTabIndex = selectedTab.ordinal,
                             matchContentSize = false,
-                        )
-                        .padding(horizontal = 8.dp),
+                        ).padding(horizontal = 8.dp),
                     height = 2.dp,
                     color = Black,
                 )
