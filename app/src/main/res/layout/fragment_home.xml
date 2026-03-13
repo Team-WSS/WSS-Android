@@ -40,7 +40,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,15 +50,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_normal_search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/btn_explore_gray50_radius_14dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_home_normal_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/explore_normal_search_hint"
+                        android:textAppearance="@style/label1"
+                        android:textColor="@color/gray_200_949399"
+                        app:layout_constraintBottom_toBottomOf="@id/cl_home_normal_search"
+                        app:layout_constraintStart_toStartOf="@id/cl_home_normal_search"
+                        app:layout_constraintTop_toTopOf="@id/cl_home_normal_search" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_normal_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_explore_search"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
                     android:id="@+id/tv_home_today_popular_novel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
                     android:text="@string/home_today_popular"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/cl_home_normal_search" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_home_today_popular_novel"
@@ -78,7 +116,7 @@
                     android:layout_width="28dp"
                     android:layout_height="16dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="62dp"
+                    android:layout_marginTop="32dp"
                     android:src="@drawable/ic_home_hot"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rv_home_today_popular_novel" />
@@ -124,7 +162,7 @@
                     android:id="@+id/tv_home_interest_feed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="76dp"
+                    android:layout_marginTop="40dp"
                     android:paddingVertical="2dp"
                     android:text="@string/home_interest_feed"
                     android:textAppearance="@style/headline1"
@@ -235,7 +273,7 @@
                     android:id="@+id/tv_home_recommend_novel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="56dp"
+                    android:layout_marginTop="40dp"
                     android:paddingVertical="2dp"
                     android:text="@string/home_recommend_novel"
                     android:textAppearance="@style/headline1"
