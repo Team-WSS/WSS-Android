@@ -225,7 +225,7 @@ private fun FeedItem(
                 modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
             )
 
-            Spacer(modifier = Modifier.height(height = 10.dp))
+            Spacer(modifier = Modifier.height(height = 20.dp))
             if (feed.imageUrls.isNotEmpty()) {
                 Box {
                     NetworkImage(
@@ -256,10 +256,10 @@ private fun FeedItem(
                         )
                     }
                 }
+
+                Spacer(modifier = Modifier.height(height = 10.dp))
             }
         }
-
-        Spacer(modifier = Modifier.height(height = 20.dp))
 
         if (feed.novel != null) {
             FeedNovelInfo(
@@ -353,7 +353,8 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            ).debouncedClickable {
+            )
+            .debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
