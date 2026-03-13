@@ -15,4 +15,5 @@ dependencies {
     implementation(projects.data.feed)
     implementation(projects.domain.feed)
     implementation(libs.paging.compose)
+    implementation(libs.androidx.foundation)
 }
