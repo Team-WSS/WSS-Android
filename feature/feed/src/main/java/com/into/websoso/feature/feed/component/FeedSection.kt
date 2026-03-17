@@ -299,6 +299,8 @@ private fun FeedItem(
         }
 
         if (feed.novel != null) {
+            Spacer(modifier = Modifier.height(height = 10.dp))
+
             FeedNovelInfo(
                 novel = feed.novel,
                 onNovelClick = onNovelClick,
