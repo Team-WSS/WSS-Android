@@ -22,8 +22,8 @@ fun FeedsResponseDto.toData(): FeedsEntity =
         feeds = feeds.map { it.toData() },
     )
 
-fun FeedDetailResponseDto.toData(): FeedDetailEntity {
-    return FeedDetailEntity(
+fun FeedDetailResponseDto.toData(): FeedDetailEntity =
+    FeedDetailEntity(
         id = feedId,
         content = feedContent,
         createdDate = createdDate,
@@ -56,7 +56,6 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity {
             )
         },
     )
-}
 
 fun FeedResponseDto.toData(): FeedEntity =
     FeedEntity(

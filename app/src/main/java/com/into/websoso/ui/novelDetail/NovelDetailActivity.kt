@@ -2,6 +2,7 @@ package com.into.websoso.ui.novelDetail
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
@@ -10,7 +11,6 @@ import android.view.View.GONE
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.View.VISIBLE
 import android.view.ViewTreeObserver.OnPreDrawListener
-import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import androidx.activity.addCallback
@@ -46,6 +46,7 @@ import com.into.websoso.databinding.MenuNovelDetailPopupBinding
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
+import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelFeed.NovelFeedViewModel
@@ -102,6 +103,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
 
         binding.onClick = onNovelDetailButtonClick()
         bindViewModel()
+        setupAuthorUnderline()
         setupPopupBinding()
         setupObserver()
         setupWebsosoLoadingLayout()
@@ -114,6 +116,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun bindViewModel() {
         binding.novelDetailViewModel = novelDetailViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun setupAuthorUnderline() {
+        binding.tvNovelDetailAuthor.paintFlags =
+            binding.tvNovelDetailAuthor.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun setupPopupBinding() {
@@ -204,7 +211,9 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                     updateGenreImage(novelDetail.novel.novelGenreImage)
                 }
 
-                false -> binding.wllNovelDetail.setWebsosoLoadingVisibility(true)
+                false -> {
+                    binding.wllNovelDetail.setWebsosoLoadingVisibility(true)
+                }
             }
         }
         novelDetailViewModel.loading.observe(this) { isLoading ->
@@ -280,8 +289,8 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun showPopupWindow() {
         menuPopupWindow = PopupWindow(
             novelDetailMenuPopupBinding.root,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WRAP_CONTENT,
+            WRAP_CONTENT,
             true,
         ).apply {
             this.elevation = 14f.toFloatPxFromDp()
@@ -346,6 +355,14 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                 }
                 tracker.trackEvent("rate_love")
                 novelDetailViewModel.updateUserInterest(novelId)
+            }
+
+            override fun onAuthorClick(author: String) {
+                val intent = NormalExploreActivity.getIntent(
+                    context = this@NovelDetailActivity,
+                    searchAuthor = author,
+                )
+                startActivity(intent)
             }
         }
 

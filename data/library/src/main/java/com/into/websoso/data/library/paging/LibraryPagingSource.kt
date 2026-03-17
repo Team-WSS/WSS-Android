@@ -8,7 +8,6 @@ import com.into.websoso.data.library.model.UserNovelsEntity
 class LibraryPagingSource(
     private val getNovels: suspend (lastUserNovelId: Long) -> Result<UserNovelsEntity>,
 ) : PagingSource<Long, NovelEntity>() {
-
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, NovelEntity> {
         val currentKey = params.key ?: DEFAULT_LAST_USER_NOVEL_ID
 
@@ -34,9 +33,7 @@ class LibraryPagingSource(
         )
     }
 
-    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? {
-        return null
-    }
+    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? = null
 
     companion object {
         private const val DEFAULT_LAST_USER_NOVEL_ID = 0L
