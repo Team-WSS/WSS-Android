@@ -252,6 +252,8 @@ private fun FeedItem(
                 color = Secondary100,
                 modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
             )
+
+            Spacer(modifier = Modifier.height(height = 20.dp))
         } else {
             Text(
                 text = feed.content,
@@ -299,8 +301,6 @@ private fun FeedItem(
         }
 
         if (feed.novel != null) {
-            Spacer(modifier = Modifier.height(height = 10.dp))
-
             FeedNovelInfo(
                 novel = feed.novel,
                 onNovelClick = onNovelClick,
