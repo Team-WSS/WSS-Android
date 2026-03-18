@@ -67,6 +67,7 @@ internal fun FeedScreen(
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onRefreshPull: () -> Unit,
     onWriteFeedClick: () -> Unit,
+    onLoadMore: () -> Unit,
 ) {
     Scaffold(containerColor = White) { _ ->
         Column(modifier = Modifier.statusBarsPadding()) {
@@ -91,7 +92,7 @@ internal fun FeedScreen(
                 when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> {
                         FeedFilterChip(
-                            label = "${uiState.myFeedData.feeds.size}개의 기록",
+                            label = "${uiState.myFeedData.totalCount}개의 기록",
                             isSelected = true,
                             rightIcon = {
                                 Icon(
@@ -177,6 +178,7 @@ internal fun FeedScreen(
                 onWriteFeedClick = onWriteFeedClick,
                 isRefreshing = uiState.isRefreshing,
                 isLoading = uiState.loading,
+                onLoadMore = onLoadMore,
             )
         }
 
@@ -287,6 +289,7 @@ private fun FeedScreenPreview() {
             onSecondItemClick = { _, _ -> },
             onRefreshPull = {},
             onWriteFeedClick = {},
+            onLoadMore = {},
         )
     }
 }

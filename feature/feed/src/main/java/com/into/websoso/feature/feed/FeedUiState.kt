@@ -43,6 +43,7 @@ data class FeedUiState(
 
 data class FeedSourceData(
     val feeds: ImmutableList<FeedUiModel> = persistentListOf(),
+    val totalCount: Int = 0,
     val lastId: Long = 0,
     val isLoadable: Boolean = true,
     internal val sort: FeedOrder = FeedOrder.RECENT,
