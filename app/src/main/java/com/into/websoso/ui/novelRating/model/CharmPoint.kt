@@ -13,11 +13,12 @@ enum class CharmPoint(
     ;
 
     companion object {
-        fun String.toWrappedCharmPoint(): List<CharmPoint> {
-            return split(",").map {
-                entries.find { charmPoint -> charmPoint.title == it } ?: return emptyList()
+        fun String.toWrappedCharmPoint(): List<CharmPoint> =
+            split(",").map { rawTitle ->
+                val trimmedTitle = rawTitle.trim()
+                entries.find { charmPoint -> charmPoint.title == trimmedTitle }
+                    ?: throw IllegalArgumentException("존재하지 않는 매력포인트입니다: $rawTitle")
             }
-        }
 
         fun String.toFormattedCharmPoint(): String {
             entries.forEach { charmPoint ->
