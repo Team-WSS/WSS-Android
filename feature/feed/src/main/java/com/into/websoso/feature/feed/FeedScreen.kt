@@ -92,7 +92,7 @@ internal fun FeedScreen(
                 when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> {
                         FeedFilterChip(
-                            label = "${uiState.myFeedData.feeds.size}개의 기록",
+                            label = "${uiState.myFeedData.totalCount}개의 기록",
                             isSelected = true,
                             rightIcon = {
                                 Icon(

@@ -14,7 +14,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.feature.feed.model.FeedTab
 import kotlinx.coroutines.launch
 
-@Deprecated("피드 QA 완료 후 제거 예정")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedRoute(
@@ -24,6 +23,7 @@ fun FeedRoute(
     onContentClick: (feedId: Long, isLiked: Boolean) -> Unit,
     onFirstItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
     onSecondItemClick: (feedId: Long, isMyFeed: Boolean) -> Unit,
+    onWriteFeedClick: () -> Unit,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -73,7 +73,7 @@ fun FeedRoute(
         onFirstItemClick = onFirstItemClick,
         onSecondItemClick = onSecondItemClick,
         onRefreshPull = viewModel::refresh,
-        onWriteFeedClick = { },
+        onWriteFeedClick = onWriteFeedClick,
         onLoadMore = viewModel::fetchNextPage,
     )
 }
