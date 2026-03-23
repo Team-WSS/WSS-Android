@@ -59,6 +59,7 @@ jobs:
           echo amplitude.key=\"$AMPLITUDE_KEY\" >> ./local.properties
 
       - name: Run Ktlint
+        if: github.event_name == 'pull_request'
         uses: ScaCap/action-ktlint@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -66,12 +67,17 @@ jobs:
           fail_on_error: true
           reporter: github-pr-review
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      # 2. PR용: 모든 모듈의 로직을 검증하되, 빌드(컴파일)는 앱 중심으로 효율화
+      - name: Test & Assemble (PR)
+        if: github.event_name == 'pull_request'
+        # 1. 모든 모듈의 유닛 테스트 실행 (로직 검증)
+        # 2. 앱 모듈 디버그 빌드 실행 (의존성 모듈 자동 포함 빌드)
+        run: ./gradlew testDebugUnitTest :app:assembleDebug --scan
 
-      - name: Run Unit Tests
-        id: test
-        run: ./gradlew test
+      # 3. Merge(Push)용: 전체 검증 (안전장치)
+      - name: Full Build (Push)
+        if: github.event_name == 'push'
+        run: ./gradlew build --scan
         
       - name: Upload test reports
         if: always()
