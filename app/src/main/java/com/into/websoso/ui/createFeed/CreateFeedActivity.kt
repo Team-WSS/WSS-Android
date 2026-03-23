@@ -68,7 +68,7 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
                     focusView.clearFocus()
                     val imm: InputMethodManager =
                         getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                    imm.hideSoftInputFromWindow(focusView.windowToken, 0)
                 }
             }
         }

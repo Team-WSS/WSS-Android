@@ -73,7 +73,6 @@ data class FeedUiModel(
             if (createdDate.contains("월") && createdDate.contains("일")) {
                 return createdDate
             }
-
             return try {
                 val date = LocalDate.parse(createdDate)
                 "${date.monthValue}월 ${date.dayOfMonth}일"
