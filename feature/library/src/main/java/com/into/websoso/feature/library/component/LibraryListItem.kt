@@ -52,6 +52,7 @@ import com.into.websoso.core.resource.R.drawable.ic_library_quote_started
 import com.into.websoso.core.resource.R.drawable.ic_library_relationship
 import com.into.websoso.core.resource.R.drawable.ic_library_vibe
 import com.into.websoso.core.resource.R.drawable.ic_library_world_view
+import com.into.websoso.core.resource.R.drawable.ic_library_writingskill
 import com.into.websoso.core.resource.R.drawable.ic_storage_star
 import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.AttractivePoints
@@ -352,6 +353,7 @@ private fun attractivePointIcon(attractivePoint: AttractivePoint): ImageVector {
         AttractivePoint.WORLDVIEW -> ic_library_world_view
         AttractivePoint.RELATIONSHIP -> ic_library_relationship
         AttractivePoint.VIBE -> ic_library_vibe
+        AttractivePoint.WRITINGSKILL -> ic_library_writingskill
     }
     return ImageVector.vectorResource(id = resId)
 }
