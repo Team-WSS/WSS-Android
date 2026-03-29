@@ -232,7 +232,18 @@ class FeedViewModel
         }
 
         fun applyMyFilter(filter: MyFeedFilter) {
-            _uiState.update { it.copy(currentFilter = filter, myFeedData = FeedSourceData()) }
+            _uiState.update { state ->
+                val resetMyData = state.myFeedData.copy(
+                    lastId = 0L,
+                    isLoadable = true,
+                )
+                state.copy(
+                    currentFilter = filter,
+                    myFeedData = resetMyData,
+                    isRefreshing = true,
+                    error = false,
+                )
+            }
             fetchNextPage(feedId = 0L)
         }
     }
