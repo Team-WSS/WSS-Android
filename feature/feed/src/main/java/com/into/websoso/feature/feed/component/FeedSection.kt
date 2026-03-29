@@ -204,7 +204,7 @@ private fun FeedItem(
                     modifier = Modifier.padding(all = 3.dp),
                 )
                 Text(
-                    text = feed.formattedCreatedDate,
+                    text = feed.createdDate,
                     style = WebsosoTheme.typography.body5,
                     color = Gray200,
                 )
@@ -392,7 +392,8 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            ).debouncedClickable {
+            )
+            .debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
