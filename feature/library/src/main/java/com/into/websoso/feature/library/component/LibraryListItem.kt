@@ -169,6 +169,9 @@ private fun ReadStatusBadge(
                 text = it.readStatus.label,
                 color = White,
                 style = WebsosoTheme.typography.label2,
+                softWrap = false,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
