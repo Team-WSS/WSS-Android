@@ -392,8 +392,7 @@ private fun FeedNovelInfo(
             .background(
                 color = novel.genre.boxColor,
                 shape = RoundedCornerShape(size = 16.dp),
-            )
-            .debouncedClickable {
+            ).debouncedClickable {
                 onNovelClick(novel.id)
             },
     ) {
