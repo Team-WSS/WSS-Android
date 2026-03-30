@@ -204,7 +204,7 @@ private fun FeedItem(
                     modifier = Modifier.padding(all = 3.dp),
                 )
                 Text(
-                    text = feed.formattedCreatedDate,
+                    text = feed.createdDate,
                     style = WebsosoTheme.typography.body5,
                     color = Gray200,
                 )
