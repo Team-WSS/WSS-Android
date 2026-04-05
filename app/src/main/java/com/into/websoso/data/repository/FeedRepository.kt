@@ -24,13 +24,11 @@ class FeedRepository
         }
 
         suspend fun fetchFeeds(
-            category: String,
             lastFeedId: Long,
             size: Int,
         ): FeedsEntity =
             feedApi
                 .getFeeds(
-                    category = if (category == "all") null else category,
                     lastFeedId = lastFeedId,
                     size = size,
                 ).toData()

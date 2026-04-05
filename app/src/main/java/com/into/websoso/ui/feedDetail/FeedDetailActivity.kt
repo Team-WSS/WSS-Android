@@ -237,7 +237,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     isSpoiler = feed.isSpoiler,
                     isPublic = feed.isPublic,
                     feedContent = feed.content,
-                    feedCategory = feed.relevantCategories,
                     imageUrls = feed.imageUrls,
                 )
             } ?: throw IllegalArgumentException()

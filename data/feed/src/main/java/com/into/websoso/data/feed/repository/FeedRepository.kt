@@ -34,7 +34,6 @@ class FeedRepository
             val result = feedApi
                 .getFeeds(
                     feedsOption = feedsOption,
-                    category = null,
                     lastFeedId = lastFeedId,
                     size = size,
                 ).toData()

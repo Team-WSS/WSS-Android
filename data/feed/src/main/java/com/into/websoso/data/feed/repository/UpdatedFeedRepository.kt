@@ -64,7 +64,6 @@ class UpdatedFeedRepository
          * 완료 후 전체 리스트를 새로고침하도록 이벤트를 발생시킵니다.
          */
         suspend fun saveFeed(
-            relevantCategories: List<String>,
             feedContent: String,
             novelId: Long?,
             isSpoiler: Boolean,
@@ -74,7 +73,6 @@ class UpdatedFeedRepository
             feedApi.postFeed(
                 feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
                     target = FeedRequestDto(
-                        relevantCategories = relevantCategories,
                         feedContent = feedContent,
                         novelId = novelId,
                         isSpoiler = isSpoiler,
@@ -95,14 +93,13 @@ class UpdatedFeedRepository
          */
         fun saveEditedFeed(
             feedId: Long,
-            relevantCategories: List<String>,
             editedFeed: String,
             novelId: Long?,
             isSpoiler: Boolean,
             isPublic: Boolean,
             images: List<Uri>,
         ) {
-            updateFeedInLocalCache(feedId, editedFeed, relevantCategories, isSpoiler, isPublic)
+            updateFeedInLocalCache(feedId, editedFeed, isSpoiler, isPublic)
 
             scope.launch {
                 runCatching {
@@ -110,7 +107,6 @@ class UpdatedFeedRepository
                         feedId = feedId,
                         feedRequestDto = multiPartMapper.formatToMultipart<FeedRequestDto>(
                             target = FeedRequestDto(
-                                relevantCategories = relevantCategories,
                                 feedContent = editedFeed,
                                 novelId = novelId,
                                 isSpoiler = isSpoiler,
@@ -133,7 +129,6 @@ class UpdatedFeedRepository
         private fun updateFeedInLocalCache(
             feedId: Long,
             editedFeed: String,
-            relevantCategories: List<String>,
             isSpoiler: Boolean,
             isPublic: Boolean,
         ) {
@@ -142,7 +137,6 @@ class UpdatedFeedRepository
                     if (feed.id == feedId) {
                         feed.copy(
                             content = editedFeed,
-                            relevantCategories = relevantCategories,
                             isSpoiler = isSpoiler,
                             isPublic = isPublic,
                         )
@@ -182,7 +176,6 @@ class UpdatedFeedRepository
             val result = feedApi
                 .getFeeds(
                     feedsOption = feedsOption,
-                    category = null,
                     lastFeedId = lastFeedId,
                     size = size,
                 ).toData()

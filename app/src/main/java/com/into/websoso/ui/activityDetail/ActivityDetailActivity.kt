@@ -288,7 +288,6 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
                 isSpoiler = feed.isSpoiler,
                 isPublic = feed.isPublic,
                 feedContent = feed.feedContent,
-                feedCategory = feed.relevantCategories?.split(", ") ?: emptyList(),
             )
             activityResultCallback.launch(CreateFeedActivity.getIntent(this, editFeedModel))
         } ?: throw IllegalArgumentException("Feed not found")

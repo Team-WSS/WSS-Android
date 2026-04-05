@@ -7,7 +7,6 @@ import com.into.websoso.domain.model.Feeds
 
 fun FeedsEntity.toDomain(): Feeds =
     Feeds(
-        category = category,
         isLoadable = isLoadable,
         feeds = feeds.map { it.toDomain() },
     )
@@ -22,7 +21,6 @@ fun FeedEntity.toDomain(): Feed =
         createdDate = createdDate,
         id = id,
         content = content,
-        relevantCategories = relevantCategories,
         likeCount = likeCount,
         isLiked = isLiked,
         commentCount = commentCount,

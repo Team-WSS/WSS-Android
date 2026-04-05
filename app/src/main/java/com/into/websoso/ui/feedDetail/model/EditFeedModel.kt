@@ -11,6 +11,5 @@ data class EditFeedModel(
     val feedContent: String = "",
     val isSpoiler: Boolean = false,
     val isPublic: Boolean = true,
-    val feedCategory: List<String> = emptyList(),
     val imageUrls: List<String> = emptyList(),
 ) : Parcelable

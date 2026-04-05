@@ -338,10 +338,6 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                 val editFeedModel = EditFeedModel(
                     novelId = novelId,
                     novelTitle = binding.tvNovelDetailTitle.text.toString(),
-                    feedCategory = novelDetailViewModel.novelDetailModel.value
-                        ?.novel
-                        ?.getGenres
-                        ?: emptyList(),
                     imageUrls = emptyList(),
                 )
                 val intent = CreateFeedActivity.getIntent(this@NovelDetailActivity, editFeedModel)

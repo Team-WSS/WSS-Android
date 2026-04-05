@@ -36,8 +36,6 @@ data class UserFeedsResponseDto(
         val novelRating: Float?,
         @SerialName("novelRatingCount")
         val novelRatingCount: Int?,
-        @SerialName("relevantCategories")
-        val relevantCategories: List<String>,
         @SerialName("title")
         val title: String?,
     )

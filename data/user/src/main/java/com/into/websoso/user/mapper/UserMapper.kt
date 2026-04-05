@@ -29,7 +29,6 @@ fun UserFeedsResponseDto.UserFeedResponseDto.toData(): UserFeedsEntity.UserFeedE
         title = this.title,
         novelRatingCount = this.novelRatingCount,
         novelRating = this.novelRating,
-        relevantCategories = this.relevantCategories,
         genre = this.genre,
         userNovelRating = this.userNovelRating,
         thumbnailUrl = this.thumbnailUrl,

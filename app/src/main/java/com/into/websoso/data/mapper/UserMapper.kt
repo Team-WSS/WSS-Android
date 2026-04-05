@@ -118,7 +118,6 @@ fun UserFeedResponseDto.toData(): UserFeedEntity =
         title = this.title,
         novelRatingCount = this.novelRatingCount,
         novelRating = this.novelRating,
-        relevantCategories = this.relevantCategories,
     )
 
 fun TermsAgreementResponseDto.toData(): TermsAgreementEntity =

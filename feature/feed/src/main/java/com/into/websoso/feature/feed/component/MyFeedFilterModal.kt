@@ -98,7 +98,7 @@ internal fun MyFeedFilterModal(
 
         Row(modifier = Modifier.padding(horizontal = 20.dp)) {
             Text(
-                text = "장르",
+                text = "카테고리",
                 color = Black,
                 style = WebsosoTheme.typography.title2,
                 modifier = Modifier.padding(vertical = 10.dp),

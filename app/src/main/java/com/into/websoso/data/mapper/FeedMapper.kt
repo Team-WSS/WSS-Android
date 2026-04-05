@@ -19,7 +19,6 @@ import com.into.websoso.data.remote.response.UserInterestFeedsResponseDto
 
 fun FeedsResponseDto.toData(): FeedsEntity =
     FeedsEntity(
-        category = category,
         isLoadable = isLoadable,
         feeds = feeds.map { it.toData() },
     )
@@ -34,7 +33,6 @@ fun FeedResponseDto.toData(): FeedEntity =
         createdDate = createdDate,
         id = feedId,
         content = feedContent,
-        relevantCategories = relevantCategories,
         likeCount = likeCount,
         isLiked = isLiked,
         commentCount = commentCount,
@@ -86,7 +84,6 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity =
         createdDate = createdDate,
         id = feedId,
         content = feedContent,
-        relevantCategories = relevantCategories,
         likeCount = likeCount,
         isLiked = isLiked,
         commentCount = commentCount,
