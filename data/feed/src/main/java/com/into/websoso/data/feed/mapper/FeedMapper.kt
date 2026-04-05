@@ -19,6 +19,7 @@ fun FeedsResponseDto.toData(): FeedsEntity =
     FeedsEntity(
         isLoadable = isLoadable,
         feeds = feeds.map { it.toData() },
+        feedsCount = feedsCount,
     )
 
 fun FeedDetailResponseDto.toData(): FeedDetailEntity =
