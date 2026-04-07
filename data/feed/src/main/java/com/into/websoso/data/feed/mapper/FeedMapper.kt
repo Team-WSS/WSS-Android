@@ -19,7 +19,8 @@ fun FeedsResponseDto.toData(): FeedsEntity =
     FeedsEntity(
         isLoadable = isLoadable,
         feeds = feeds.map { it.toData() },
-        feedsCount = feedsCount,
+        // TODO: FeedsCount 수집해야함. 어느 API에서 오는지..?
+        feedsCount = 0,
     )
 
 fun FeedDetailResponseDto.toData(): FeedDetailEntity =

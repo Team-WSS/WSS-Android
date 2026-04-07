@@ -95,7 +95,7 @@ class FeedViewModel
             val tab = state.selectedTab
             val category = state.sosoCategory
 
-            if (state.loading || (!current.isLoadable && lastFeedId != 0L)) return
+            if ((state.loading && feedId == null) || (!current.isLoadable && lastFeedId != 0L)) return
 
             _uiState.update { it.copy(loading = true) }
 

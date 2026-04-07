@@ -9,6 +9,4 @@ data class FeedsResponseDto(
     val isLoadable: Boolean,
     @SerialName("feeds")
     val feeds: List<FeedResponseDto>,
-    @SerialName("feedsCount")
-    val feedsCount: Int,
 )
