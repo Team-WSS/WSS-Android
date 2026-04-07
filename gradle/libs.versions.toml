@@ -57,7 +57,7 @@ lottie = "6.7.1"
 pull-to-refresh = "1.5.2"
 
 # Social Login Libraries
-kakao = "2.23.1"
+kakao = "2.23.2"
 
 # Ktlint
 ktlint = "14.0.1"

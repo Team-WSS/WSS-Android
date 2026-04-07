@@ -74,6 +74,12 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("pl.droidsonroids.gif:android-gif-drawable:1.2.29")
+    }
+}
+
 // 룸 디비 제거
 // 좋아요 기능 좀더 생각해보기
 
