@@ -217,8 +217,8 @@ private fun GenreChipGroup(
 ) {
     FlowRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(space = 10.dp),
+        horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 14.dp),
     ) {
         NovelCategory.entries.forEach { category ->
             val isSelected = selectedCategories.contains(category)
@@ -253,7 +253,7 @@ private fun GenreChip(
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
             color = if (isSelected) Primary100 else Gray300,
             style = WebsosoTheme.typography.body2,
         )
