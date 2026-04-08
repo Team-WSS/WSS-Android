@@ -42,7 +42,6 @@ fun Feed.toFeedUiModel(): FeedUiModel {
         imageUrls = imageUrls.toImmutableList(),
         imageCount = imageCount,
         novel = novel,
-        relevantCategories = relevantCategories.toImmutableList(),
     )
 }
 
@@ -51,7 +50,6 @@ data class FeedUiModel(
     val createdDate: String = "",
     val id: Long = 0L,
     val content: String = "",
-    val relevantCategories: ImmutableList<String> = persistentListOf(),
     val likeCount: Int = 0,
     val commentCount: Int = 0,
     val isModified: Boolean = false,
@@ -64,8 +62,6 @@ data class FeedUiModel(
     val novel: NovelUiModel? = null,
 ) {
     val isVisible: Boolean get() = !isSpoiler && imageUrls.isNotEmpty()
-    val relevantCategoriesByKr: ImmutableList<String>
-        get() = relevantCategories.map { NovelCategory.fromTagToKorean(it) }.toImmutableList()
 
     data class UserUiModel(
         val id: Long = 0L,

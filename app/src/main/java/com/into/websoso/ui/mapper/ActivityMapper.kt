@@ -8,7 +8,7 @@ fun UserFeedEntity.toUi(): ActivityModel =
         feedId = feedId,
         isSpoiler = isSpoiler,
         feedContent = feedContent,
-        createdDate = ActivityModel.formatDate(createdDate),
+        createdDate = createdDate,
         isModified = isModified,
         isLiked = isLiked,
         isPublic = isPublic,
@@ -18,7 +18,6 @@ fun UserFeedEntity.toUi(): ActivityModel =
         title = title,
         novelRatingCount = novelRatingCount,
         novelRating = novelRating,
-        relevantCategories = ActivityModel.translateGenres(relevantCategories ?: emptyList()),
     )
 
 fun List<UserFeedEntity>.toUi(): List<ActivityModel> = map { it.toUi() }

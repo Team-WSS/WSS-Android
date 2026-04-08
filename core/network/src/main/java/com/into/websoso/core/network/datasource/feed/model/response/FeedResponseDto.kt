@@ -31,8 +31,6 @@ data class FeedResponseDto(
     val novelRating: Float?,
     @SerialName("novelRatingCount")
     val novelRatingCount: Int?,
-    @SerialName("relevantCategories")
-    val relevantCategories: List<String>,
     @SerialName("isSpoiler")
     val isSpoiler: Boolean,
     @SerialName("isModified")

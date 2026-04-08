@@ -18,6 +18,7 @@ import com.into.websoso.core.designsystem.theme.Orange
 import com.into.websoso.core.designsystem.theme.Pink
 import com.into.websoso.core.designsystem.theme.Purple
 import com.into.websoso.core.designsystem.theme.Red
+import com.into.websoso.core.designsystem.theme.Transparent
 import com.into.websoso.core.designsystem.theme.Violet
 
 enum class NovelCategory(
@@ -35,11 +36,10 @@ enum class NovelCategory(
     DRAMA(LightGray, Gray, "drama", "드라마"),
     LIGHT_NOVEL(LightGreen, Green, "lightNovel", "라노벨"),
     BOYS_LOVE(LightMint, Mint, "BL", "BL"),
+    ETC(Transparent, Transparent, "etc", "그 외"),
     ;
 
     companion object {
-        fun fromTag(tag: String): NovelCategory = entries.find { it.tag == tag } ?: LIGHT_NOVEL
-
-        fun fromTagToKorean(tag: String): String = entries.find { it.tag == tag }?.koreanName ?: LIGHT_NOVEL.koreanName
+        fun fromTag(tag: String): NovelCategory = entries.find { it.tag == tag } ?: ETC
     }
 }

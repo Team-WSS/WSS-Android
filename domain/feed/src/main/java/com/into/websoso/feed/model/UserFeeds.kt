@@ -18,7 +18,6 @@ data class UserFeeds(
         val title: String?,
         val novelRatingCount: Int?,
         val novelRating: Float?,
-        val relevantCategories: List<String>,
         val genre: String?,
         val userNovelRating: Float?,
         val thumbnailUrl: String?,

@@ -55,7 +55,6 @@ class GetMyFeedsUseCase
             )
 
             return Feeds(
-                category = "내 활동",
                 isLoadable = myFeedsEntity.isLoadable,
                 totalCount = myFeedsEntity.feedsCount,
                 feeds = emptyList(),
