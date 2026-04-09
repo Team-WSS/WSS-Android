@@ -27,10 +27,10 @@ enum class NovelCategory(
     val tag: String,
     val koreanName: String,
 ) {
-    ROMANCE(LightPink, Pink, "romance", "로맨스"),
-    ROMANCE_FANTASY(LightRed, Red, "romanceFantasy", "로판"),
     FANTASY(LightPurple, Purple, "fantasy", "판타지"),
     MODERN_FANTASY(LightBlue, Blue, "modernFantasy", "현판"),
+    ROMANCE(LightPink, Pink, "romance", "로맨스"),
+    ROMANCE_FANTASY(LightRed, Red, "romanceFantasy", "로판"),
     WUXIA(LightOrange, Orange, "wuxia", "무협"),
     MYSTERY(LightViolet, Violet, "mystery", "미스테리"),
     DRAMA(LightGray, Gray, "drama", "드라마"),
