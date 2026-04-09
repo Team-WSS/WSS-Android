@@ -32,7 +32,7 @@ enum class NovelCategory(
     FANTASY(LightPurple, Purple, "fantasy", "판타지"),
     MODERN_FANTASY(LightBlue, Blue, "modernFantasy", "현판"),
     WUXIA(LightOrange, Orange, "wuxia", "무협"),
-    MYSTERY(LightViolet, Violet, "mystery", "미스테리"),
+    MYSTERY(LightViolet, Violet, "mystery", "미스터리"),
     DRAMA(LightGray, Gray, "drama", "드라마"),
     LIGHT_NOVEL(LightGreen, Green, "lightNovel", "라노벨"),
     BOYS_LOVE(LightMint, Mint, "BL", "BL"),
