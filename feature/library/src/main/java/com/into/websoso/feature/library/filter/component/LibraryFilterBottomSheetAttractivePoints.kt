@@ -78,7 +78,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_vibe,
             iconTitle = "분위기",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[VIBE],
             onClick = { onAttractivePointClick(VIBE) },
         )
