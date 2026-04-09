@@ -76,12 +76,11 @@ android {
 
 configurations.all {
     resolutionStrategy {
+        // SSPullToRefresh가 android-gif-drawable 1.2.28을 끌고 옴
+        // 1.2.28은 16KB 페이지 미지원, 1.2.29에서 지원 추가됨
         force("pl.droidsonroids.gif:android-gif-drawable:1.2.29")
     }
 }
-
-// 룸 디비 제거
-// 좋아요 기능 좀더 생각해보기
 
 dependencies {
     // 프로젝트 의존성
