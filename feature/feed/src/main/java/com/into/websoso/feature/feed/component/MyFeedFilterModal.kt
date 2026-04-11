@@ -190,11 +190,11 @@ private fun VisibilityRow(
                 imageVector = ImageVector.vectorResource(id = iconRes),
                 contentDescription = null,
                 modifier = Modifier.size(size = 18.dp),
-                tint = if (isSelected) Black else Gray200,
+                tint = Gray200,
             )
             Text(
                 text = text,
-                color = if (isSelected) Black else Gray200,
+                color = Gray200,
                 style = WebsosoTheme.typography.body2,
             )
         }
