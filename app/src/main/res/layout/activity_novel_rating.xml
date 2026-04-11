@@ -284,18 +284,22 @@
 
                 <TextView
                     android:id="@+id/tv_novel_rating_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="@{viewModel.uiState.novelRatingModel.novelTitle}"
+                    android:textAlignment="center"
                     android:textAppearance="@style/title2"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tv_novel_rating_complete"
+                    app:layout_constraintStart_toEndOf="@id/iv_novel_rating_navigate_back"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="당신의 이해를 돕기 위하여" />
+                    tools:text="당신의 이해를 돕기 위하여234234234234234234234243" />
 
                 <TextView
+                    android:id="@+id/tv_novel_rating_complete"
                     android:layout_width="48dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
