@@ -79,7 +79,7 @@
     <string name="novel_info_view_more">…더보기</string>
     <string name="novel_info_view_less">접기</string>
     <string name="novel_info_title">작품 소개</string>
-    <string name="novel_info_rating_title">독자들의 평가</string>
+    <string name="novel_info_rating_title">독자들의 감상평</string>
     <string name="novel_info_keyword_chip_text">%s %d</string>
     <string name="novel_info_review_none">아직 평가가 없어요\n최초로 남겨보세요!</string>
     <string name="novel_info_read_status_watching">보는 중</string>
