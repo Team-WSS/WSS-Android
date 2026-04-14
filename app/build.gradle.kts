@@ -74,14 +74,6 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        // SSPullToRefresh가 android-gif-drawable 1.2.28을 끌고 옴
-        // 1.2.28은 16KB 페이지 미지원, 1.2.29에서 지원 추가됨
-        force("pl.droidsonroids.gif:android-gif-drawable:1.2.29")
-    }
-}
-
 dependencies {
     // 프로젝트 의존성
     implementation(projects.core.resource)
@@ -136,7 +128,7 @@ dependencies {
     // UI 관련 유틸 라이브러리
     implementation(libs.dots.indicator) // ViewPager2 indicator
     implementation(libs.lottie) // Lottie 애니메이션
-    implementation(libs.pull.to.refresh) // Pull 새로고침
+    implementation(libs.swipe.refresh.layout) // Pull 새로고침
 
     // Third-party SDK
     implementation(libs.kakao) // 카카오 로그인 API

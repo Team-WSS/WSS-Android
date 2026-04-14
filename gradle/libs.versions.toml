@@ -54,7 +54,7 @@ coil-transformers = "1.0.6"
 # Misc UI Libraries
 dots-indicator = "5.1.0"
 lottie = "6.7.1"
-pull-to-refresh = "1.5.2"
+swipe-refresh-layout = "1.2.0"
 
 # Social Login Libraries
 kakao = "2.23.1"
@@ -130,7 +130,7 @@ coil-transformers = { module = "jp.wasabeef.transformers:coil", version.ref = "c
 # Misc UI Libraries
 dots-indicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dots-indicator" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
-pull-to-refresh = { module = "com.github.SimformSolutionsPvtLtd:SSPullToRefresh", version.ref = "pull-to-refresh" }
+swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 
 # Social Login Libraries
 kakao = { module = "com.kakao.sdk:v2-user", version.ref = "kakao" }
