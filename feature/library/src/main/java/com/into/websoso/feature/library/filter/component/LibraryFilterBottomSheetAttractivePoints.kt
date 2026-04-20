@@ -38,7 +38,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_world_view,
             iconTitle = "세계관",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[WORLDVIEW],
             onClick = { onAttractivePointClick(WORLDVIEW) },
         )
@@ -46,7 +46,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_material,
             iconTitle = "소재",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[MATERIAL],
             onClick = { onAttractivePointClick(MATERIAL) },
         )
@@ -54,7 +54,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_writingskill,
             iconTitle = "필력",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[WRITINGSKILL],
             onClick = { onAttractivePointClick(WRITINGSKILL) },
         )
@@ -62,7 +62,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_character,
             iconTitle = "캐릭터",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[CHARACTER],
             onClick = { onAttractivePointClick(CHARACTER) },
         )
@@ -70,7 +70,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_relationship,
             iconTitle = "관계",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[RELATIONSHIP],
             onClick = { onAttractivePointClick(RELATIONSHIP) },
         )
@@ -78,7 +78,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_vibe,
             iconTitle = "분위기",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[VIBE],
             onClick = { onAttractivePointClick(VIBE) },
         )
