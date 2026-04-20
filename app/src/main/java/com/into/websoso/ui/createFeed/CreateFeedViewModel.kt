@@ -10,8 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.feed.repository.UpdatedFeedRepository
 import com.into.websoso.domain.usecase.GetSearchedNovelsUseCase
-import com.into.websoso.ui.createFeed.model.CreateFeedCategory
-import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.createFeed.model.SearchNovelUiState
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.mapper.toUi
@@ -35,9 +33,6 @@ class CreateFeedViewModel
         private val _searchNovelUiState: MutableLiveData<SearchNovelUiState> =
             MutableLiveData(SearchNovelUiState())
         val searchNovelUiState: LiveData<SearchNovelUiState> get() = _searchNovelUiState
-
-        private val _categories: MutableList<CreatedFeedCategoryModel> = mutableListOf()
-        val categories: List<CreatedFeedCategoryModel> get() = _categories.toList()
 
         private val _selectedNovelTitle: MutableLiveData<String> = MutableLiveData()
         val selectedNovelTitle: LiveData<String> get() = _selectedNovelTitle
@@ -64,23 +59,14 @@ class CreateFeedViewModel
         private var searchedText = ""
 
         init {
-            fun createCategories(feedCategory: List<String>? = null): List<CreatedFeedCategoryModel> =
-                CreateFeedCategory.entries.map { category ->
-                    CreatedFeedCategoryModel(
-                        category = category,
-                        isSelected = feedCategory?.contains(category.krTitle) == true,
-                    )
-                }
-
             savedStateHandle.get<EditFeedModel>("FEED")?.let { feed ->
                 novelId = feed.novelId
                 _selectedNovelTitle.value = feed.novelTitle.orEmpty()
                 content.value = feed.feedContent
                 isSpoiled.value = feed.isSpoiler
                 isPublic.value = feed.isPublic
-                _categories.addAll(createCategories(feed.feedCategory))
                 if (feed.imageUrls.isNotEmpty()) loadFeedImages(feed.feedId)
-            } ?: _categories.addAll(createCategories())
+            }
 
             isActivated.addSource(content) { updateIsActivated() }
         }
@@ -142,8 +128,7 @@ class CreateFeedViewModel
          * 내용 및 카테고리 선택 여부를 확인하여 작성 완료 버튼의 활성화 상태를 갱신합니다.
          */
         private fun updateIsActivated() {
-            isActivated.value = content.value.isNullOrEmpty().not() &&
-                categories.any { it.isSelected }
+            isActivated.value = content.value.isNullOrEmpty().not()
         }
 
         /**
@@ -155,9 +140,6 @@ class CreateFeedViewModel
                 runCatching {
                     _isUploading.value = true
                     feedRepository.saveFeed(
-                        relevantCategories = categories
-                            .filter { it.isSelected }
-                            .map { it.category.enTitle },
                         feedContent = content.value.orEmpty(),
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
@@ -183,9 +165,6 @@ class CreateFeedViewModel
                     _isUploading.value = true
                     feedRepository.saveEditedFeed(
                         feedId = feedId,
-                        relevantCategories = categories
-                            .filter { it.isSelected }
-                            .map { it.category.enTitle },
                         editedFeed = content.value.orEmpty(),
                         novelId = novelId,
                         isSpoiler = isSpoiled.value ?: false,
@@ -199,19 +178,6 @@ class CreateFeedViewModel
                     _isUploading.value = false
                 }
             }
-        }
-
-        /**
-         * 선택한 카테고리의 활성화 상태를 토글합니다.
-         */
-        fun updateSelectedCategory(category: String) {
-            categories.forEachIndexed { index, categoryModel ->
-                _categories[index] = when (categoryModel.category.enTitle == category) {
-                    true -> categoryModel.copy(isSelected = !categoryModel.isSelected)
-                    false -> return@forEachIndexed
-                }
-            }
-            updateIsActivated()
         }
 
         /**

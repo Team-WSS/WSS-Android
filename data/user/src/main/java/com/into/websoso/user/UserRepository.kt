@@ -56,11 +56,8 @@ class UserRepository
             isVisible: Boolean? = null,
             isUnVisible: Boolean? = null,
             sortCriteria: String? = null,
-        ): UserFeedsEntity {
-            val isDefaultFilter =
-                genres == null && isVisible == null && isUnVisible == null && sortCriteria == null
-
-            return userApi
+        ): UserFeedsEntity =
+            userApi
                 .getUserFeeds(
                     userId,
                     lastFeedId,
@@ -69,8 +66,7 @@ class UserRepository
                     isVisible,
                     isUnVisible,
                     sortCriteria,
-                ).toData(isDefaultFilter = isDefaultFilter)
-        }
+                ).toData()
 
         suspend fun fetchMyProfile(): MyProfileEntity = userApi.getMyProfile().toData()
     }

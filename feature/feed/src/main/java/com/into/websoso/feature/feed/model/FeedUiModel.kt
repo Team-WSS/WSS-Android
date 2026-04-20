@@ -7,8 +7,6 @@ import com.into.websoso.feed.model.Feed
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import java.time.LocalDate
-import java.time.format.DateTimeParseException
 
 fun Feed.toFeedUiModel(): FeedUiModel {
     val novel = if (novel.id != null) {
@@ -44,7 +42,6 @@ fun Feed.toFeedUiModel(): FeedUiModel {
         imageUrls = imageUrls.toImmutableList(),
         imageCount = imageCount,
         novel = novel,
-        relevantCategories = relevantCategories.toImmutableList(),
     )
 }
 
@@ -53,7 +50,6 @@ data class FeedUiModel(
     val createdDate: String = "",
     val id: Long = 0L,
     val content: String = "",
-    val relevantCategories: ImmutableList<String> = persistentListOf(),
     val likeCount: Int = 0,
     val commentCount: Int = 0,
     val isModified: Boolean = false,
@@ -66,20 +62,6 @@ data class FeedUiModel(
     val novel: NovelUiModel? = null,
 ) {
     val isVisible: Boolean get() = !isSpoiler && imageUrls.isNotEmpty()
-    val relevantCategoriesByKr: ImmutableList<String>
-        get() = relevantCategories.map { NovelCategory.fromTagToKorean(it) }.toImmutableList()
-    val formattedCreatedDate: String
-        get() {
-            if (createdDate.contains("월") && createdDate.contains("일")) {
-                return createdDate
-            }
-            return try {
-                val date = LocalDate.parse(createdDate)
-                "${date.monthValue}월 ${date.dayOfMonth}일"
-            } catch (e: DateTimeParseException) {
-                createdDate
-            }
-        }
 
     data class UserUiModel(
         val id: Long = 0L,

@@ -7,10 +7,10 @@ import com.into.websoso.user.model.MyProfileEntity
 import com.into.websoso.user.model.UserFeedsEntity
 import com.into.websoso.user.model.UserInfoEntity
 
-fun UserFeedsResponseDto.toData(isDefaultFilter: Boolean): UserFeedsEntity =
+fun UserFeedsResponseDto.toData(): UserFeedsEntity =
     UserFeedsEntity(
         isLoadable = this.isLoadable,
-        feedsCount = if (isDefaultFilter) feedsCount else this.feeds.size,
+        feedsCount = this.feedsCount,
         feeds = this.feeds.map { it.toData() },
     )
 
@@ -29,7 +29,6 @@ fun UserFeedsResponseDto.UserFeedResponseDto.toData(): UserFeedsEntity.UserFeedE
         title = this.title,
         novelRatingCount = this.novelRatingCount,
         novelRating = this.novelRating,
-        relevantCategories = this.relevantCategories,
         genre = this.genre,
         userNovelRating = this.userNovelRating,
         thumbnailUrl = this.thumbnailUrl,

@@ -20,7 +20,6 @@ import retrofit2.http.Query
 interface FeedApi {
     @GET("feeds")
     suspend fun getFeeds(
-        @Query("category") category: String?,
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
     ): FeedsResponseDto

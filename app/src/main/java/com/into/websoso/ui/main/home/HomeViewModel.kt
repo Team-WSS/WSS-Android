@@ -72,7 +72,7 @@ class HomeViewModel
             }
         }
 
-        private suspend fun fetchUserHomeData() {
+        private fun fetchUserHomeData() {
             viewModelScope.launch {
                 runCatching {
                     val results = listOf(

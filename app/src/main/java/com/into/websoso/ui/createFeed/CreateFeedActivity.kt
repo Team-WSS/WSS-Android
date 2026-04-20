@@ -14,21 +14,15 @@ import androidx.activity.viewModels
 import coil.ImageLoader
 import coil.decode.ImageDecoderDecoder
 import coil.load
-import com.into.websoso.R.color.bg_detail_explore_chip_background_selector
-import com.into.websoso.R.color.bg_detail_explore_chip_stroke_selector
-import com.into.websoso.R.color.bg_detail_explore_chip_text_selector
 import com.into.websoso.R.color.gray_200_949399
 import com.into.websoso.R.layout.activity_create_feed
-import com.into.websoso.R.style.body2
 import com.into.websoso.R.style.body4
 import com.into.websoso.core.common.ui.base.BaseActivity
-import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.util.DynamicLimitPhotoPicker
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.getAdaptedParcelableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
-import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
@@ -41,7 +35,6 @@ import com.into.websoso.core.resource.R.string.wset_create_feed_search_novel
 import com.into.websoso.databinding.ActivityCreateFeedBinding
 import com.into.websoso.ui.createFeed.CreateFeedViewModel.Companion.MAX_IMAGE_COUNT
 import com.into.websoso.ui.createFeed.component.CreateFeedImageContainer
-import com.into.websoso.ui.createFeed.model.CreatedFeedCategoryModel
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -87,7 +80,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         setupEventCollectors()
         setupCreateFeedImageContainer()
         setupLoadingAnimation()
-        createFeedViewModel.categories.setupCategoryChips()
         tracker.trackEvent("write")
     }
 
@@ -130,11 +122,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
     private fun onCreateFeedClick() {
         onBackPressedDispatcher.addCallback(this) {
             singleEventHandler.throttleFirst {
-                val isEmptyCategory = createFeedViewModel.categories.any { it.isSelected }
                 val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
                 val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
-                if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
+                if (!isBlankContent || !isSelectedNovel) {
                     CreatingFeedDialogFragment
                         .newInstance(event = ::finish)
                         .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
@@ -158,8 +149,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
                     editFeedModel.feedId == DEFAULT_FEED_ID -> createFeedViewModel.createFeed()
 
-                    editFeedModel.feedCategory.isEmpty() -> createFeedViewModel.createFeed()
-
                     else -> createFeedViewModel.editFeed(
                         feedId = editFeedModel.feedId,
                     )
@@ -171,11 +160,10 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
 
         binding.ivCreateFeedBackButton.setOnClickListener {
             singleEventHandler.throttleFirst {
-                val isEmptyCategory = createFeedViewModel.categories.any { it.isSelected }
                 val isBlankContent = createFeedViewModel.content.value.isNullOrBlank()
                 val isSelectedNovel = createFeedViewModel.selectedNovelTitle.value.isNullOrBlank()
 
-                if (isEmptyCategory || !isBlankContent || !isSelectedNovel) {
+                if (!isBlankContent || !isSelectedNovel) {
                     CreatingFeedDialogFragment
                         .newInstance(event = ::finish)
                         .show(supportFragmentManager, CreatingFeedDialogFragment.TAG)
@@ -228,24 +216,6 @@ class CreateFeedActivity : BaseActivity<ActivityCreateFeedBinding>(activity_crea
         createFeedViewModel.content.observe(this) {
             binding.tvCreateFeedCharactersCount.text =
                 getString(tv_create_feed_characters_count, it.length)
-        }
-    }
-
-    private fun List<CreatedFeedCategoryModel>.setupCategoryChips() {
-        forEach { category ->
-            WebsosoChip(this@CreateFeedActivity)
-                .apply {
-                    setWebsosoChipText(category.category.krTitle)
-                    setWebsosoChipTextAppearance(body2)
-                    setWebsosoChipTextColor(bg_detail_explore_chip_text_selector)
-                    setWebsosoChipStrokeColor(bg_detail_explore_chip_stroke_selector)
-                    setWebsosoChipBackgroundColor(bg_detail_explore_chip_background_selector)
-                    setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-                    setWebsosoChipPaddingHorizontal(6.7f.toFloatPxFromDp())
-                    setWebsosoChipSelected(category.isSelected)
-                    setWebsosoChipRadius(20f.toFloatPxFromDp())
-                    setOnWebsosoChipClick { createFeedViewModel.updateSelectedCategory(category.category.enTitle) }
-                }.also { websosoChip -> binding.wcgDetailExploreInfoGenre.addChip(websosoChip) }
         }
     }
 

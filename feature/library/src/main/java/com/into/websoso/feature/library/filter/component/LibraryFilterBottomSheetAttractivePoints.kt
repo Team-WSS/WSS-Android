@@ -14,12 +14,14 @@ import com.into.websoso.core.resource.R.drawable.ic_library_material
 import com.into.websoso.core.resource.R.drawable.ic_library_relationship
 import com.into.websoso.core.resource.R.drawable.ic_library_vibe
 import com.into.websoso.core.resource.R.drawable.ic_library_world_view
+import com.into.websoso.core.resource.R.drawable.ic_library_writingskill
 import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.AttractivePoint.CHARACTER
 import com.into.websoso.domain.library.model.AttractivePoint.MATERIAL
 import com.into.websoso.domain.library.model.AttractivePoint.RELATIONSHIP
 import com.into.websoso.domain.library.model.AttractivePoint.VIBE
 import com.into.websoso.domain.library.model.AttractivePoint.WORLDVIEW
+import com.into.websoso.domain.library.model.AttractivePoint.WRITINGSKILL
 import com.into.websoso.domain.library.model.AttractivePoints
 
 @Composable
@@ -36,7 +38,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_world_view,
             iconTitle = "세계관",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[WORLDVIEW],
             onClick = { onAttractivePointClick(WORLDVIEW) },
         )
@@ -44,15 +46,23 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_material,
             iconTitle = "소재",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[MATERIAL],
             onClick = { onAttractivePointClick(MATERIAL) },
+        )
+        LibraryFilterBottomSheetClickableItem(
+            icon = ic_library_writingskill,
+            iconTitle = "필력",
+            horizontalPadding = 12.dp,
+            iconSize = 32.dp,
+            isSelected = attractivePoints[WRITINGSKILL],
+            onClick = { onAttractivePointClick(WRITINGSKILL) },
         )
         LibraryFilterBottomSheetClickableItem(
             icon = ic_library_character,
             iconTitle = "캐릭터",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[CHARACTER],
             onClick = { onAttractivePointClick(CHARACTER) },
         )
@@ -60,7 +70,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_relationship,
             iconTitle = "관계",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[RELATIONSHIP],
             onClick = { onAttractivePointClick(RELATIONSHIP) },
         )
@@ -68,7 +78,7 @@ internal fun LibraryFilterBottomSheetAttractivePoints(
             icon = ic_library_vibe,
             iconTitle = "분위기",
             horizontalPadding = 12.dp,
-            iconSize = 36.dp,
+            iconSize = 32.dp,
             isSelected = attractivePoints[VIBE],
             onClick = { onAttractivePointClick(VIBE) },
         )

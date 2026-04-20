@@ -10,7 +10,6 @@ import com.into.websoso.user.model.UserFeedsEntity
 
 fun FeedsEntity.toDomain(): Feeds =
     Feeds(
-        category = category,
         isLoadable = isLoadable,
         feeds = feeds.map { it.toDomain() },
     )
@@ -25,7 +24,6 @@ fun FeedEntity.toDomain(): Feed =
         createdDate = createdDate,
         id = id,
         content = content,
-        relevantCategories = relevantCategories,
         likeCount = likeCount,
         isLiked = isLiked,
         commentCount = commentCount,
@@ -67,7 +65,6 @@ fun UserFeedsEntity.UserFeedEntity.toDomain(): UserFeeds.UserFeed =
         title = this.title,
         novelRatingCount = this.novelRatingCount,
         novelRating = this.novelRating,
-        relevantCategories = this.relevantCategories,
         genre = this.genre,
         userNovelRating = this.userNovelRating,
         thumbnailUrl = this.thumbnailUrl,
@@ -78,7 +75,6 @@ fun UserFeedsEntity.UserFeedEntity.toDomain(): UserFeeds.UserFeed =
 fun UserFeedsEntity.UserFeedEntity.toDomain(
     id: Long,
     myProfile: MyProfileEntity,
-    category: String = "",
 ): Feed =
     Feed(
         user = Feed.User(
@@ -89,7 +85,6 @@ fun UserFeedsEntity.UserFeedEntity.toDomain(
         createdDate = this.createdDate,
         id = this.feedId,
         content = this.feedContent,
-        relevantCategories = this.relevantCategories,
         likeCount = this.likeCount,
         isLiked = this.isLiked,
         commentCount = this.commentCount,
@@ -138,7 +133,6 @@ fun UserFeedsEntity.UserFeedEntity.toFeedEntity(
         ),
         images = if (this.thumbnailUrl != null) listOf(this.thumbnailUrl.orEmpty()) else emptyList(),
         imageCount = this.imageCount,
-        relevantCategories = this.relevantCategories,
         genreName = this.genre,
         userNovelRating = this.userNovelRating,
         feedWriterNovelRating = this.feedWriterNovelRating,

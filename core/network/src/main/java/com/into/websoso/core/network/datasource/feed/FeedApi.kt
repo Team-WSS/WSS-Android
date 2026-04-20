@@ -24,8 +24,7 @@ import javax.inject.Singleton
 interface FeedApi {
     @GET("feeds")
     suspend fun getFeeds(
-        @Query("category") category: String?,
-        @Query("feedsOption") feedsOption: String, // [New] 옵션 추가됨
+        @Query("feedsOption") feedsOption: String,
         @Query("lastFeedId") lastFeedId: Long,
         @Query("size") size: Int,
     ): FeedsResponseDto

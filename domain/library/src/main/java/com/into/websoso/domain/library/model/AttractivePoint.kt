@@ -9,6 +9,7 @@ enum class AttractivePoint(
     CHARACTER("캐릭터", "character"),
     RELATIONSHIP("관계", "relationship"),
     VIBE("분위기", "vibe"),
+    WRITINGSKILL("필력", "writingskill"),
     ;
 
     companion object {

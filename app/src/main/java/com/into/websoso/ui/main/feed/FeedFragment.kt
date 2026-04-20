@@ -158,7 +158,6 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
                         isSpoiler = feed.isSpoiler,
                         isPublic = feed.isPublic,
                         feedContent = feed.content,
-                        feedCategory = feed.relevantCategoriesByKr,
                         imageUrls = feed.imageUrls,
                     )
                 } ?: throw IllegalArgumentException()

@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FeedRequestDto(
-    @SerialName("relevantCategories")
-    val relevantCategories: List<String>,
     @SerialName("feedContent")
     val feedContent: String,
     @SerialName("novelId")

@@ -17,9 +17,10 @@ import com.into.websoso.data.feed.model.UserInterestFeedsEntity
 
 fun FeedsResponseDto.toData(): FeedsEntity =
     FeedsEntity(
-        category = category,
         isLoadable = isLoadable,
         feeds = feeds.map { it.toData() },
+        // TODO: FeedsCount 수집해야함. 어느 API에서 오는지..?
+        feedsCount = 0,
     )
 
 fun FeedDetailResponseDto.toData(): FeedDetailEntity =
@@ -34,7 +35,6 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity =
         likeCount = likeCount,
         commentCount = commentCount,
         isMyFeed = isMyFeed,
-        relevantCategories = relevantCategories,
         images = images,
         imageCount = images.size,
         user = FeedDetailEntity.UserEntity(
@@ -67,7 +67,6 @@ fun FeedResponseDto.toData(): FeedEntity =
         createdDate = createdDate,
         id = feedId,
         content = feedContent,
-        relevantCategories = relevantCategories,
         likeCount = likeCount,
         isLiked = isLiked,
         commentCount = commentCount,

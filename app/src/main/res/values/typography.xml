@@ -5,76 +5,86 @@
         <item name="fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">20dp</item>
         <item name="lineHeight">28dp</item>
+        <item name="android:letterSpacing">-0.06</item>
     </style>
 
     <style name="title1">
         <item name="fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">18dp</item>
         <item name="lineHeight">25dp</item>
+        <item name="android:letterSpacing">-0.033</item>
     </style>
 
     <style name="title2">
         <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">16dp</item>
         <item name="lineHeight">22dp</item>
+        <item name="android:letterSpacing">-0.038</item>
     </style>
 
     <style name="title3">
         <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">14dp</item>
-        <item name="lineHeight">21dp</item>
+        <item name="lineHeight">14dp</item>
+        <item name="android:letterSpacing">-0.043</item>
     </style>
 
     <style name="body1">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">17dp</item>
         <item name="lineHeight">24dp</item>
+        <item name="android:letterSpacing">-0.035</item>
     </style>
 
     <style name="body2">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">15dp</item>
         <item name="lineHeight">22.5dp</item>
+        <item name="android:letterSpacing">-0.04</item>
     </style>
 
     <style name="body3">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">14dp</item>
         <item name="lineHeight">21dp</item>
+        <item name="android:letterSpacing">-0.029</item>
     </style>
 
     <style name="body4">
         <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">13dp</item>
         <item name="lineHeight">19dp</item>
+        <item name="android:letterSpacing">-0.031</item>
     </style>
 
     <style name="body4_2">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">13dp</item>
         <item name="lineHeight">19dp</item>
+        <item name="android:letterSpacing">-0.031</item>
     </style>
 
     <style name="body5">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">12dp</item>
-        <item name="lineHeight">17dp</item>
+        <item name="lineHeight">17.4dp</item>
     </style>
 
     <style name="body5_2">
         <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">12dp</item>
-        <item name="lineHeight">17dp</item>
+        <item name="lineHeight">17.4dp</item>
     </style>
 
     <style name="label1">
         <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">13dp</item>
         <item name="lineHeight">19dp</item>
+        <item name="android:letterSpacing">-0.031</item>
     </style>
 
     <style name="label2">
-        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">10dp</item>
         <item name="lineHeight">10dp</item>
     </style>

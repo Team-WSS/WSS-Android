@@ -1,9 +1,10 @@
 package com.into.websoso.feature.feed.component
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,9 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.extensions.debouncedClickable
@@ -66,8 +68,7 @@ internal fun MyFeedFilterModal(
                     topStart = 16.dp,
                     topEnd = 16.dp,
                 ),
-            )
-            .navigationBarsPadding(),
+            ).navigationBarsPadding(),
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -98,7 +99,7 @@ internal fun MyFeedFilterModal(
 
         Row(modifier = Modifier.padding(horizontal = 20.dp)) {
             Text(
-                text = "장르",
+                text = "카테고리",
                 color = Black,
                 style = WebsosoTheme.typography.title2,
                 modifier = Modifier.padding(vertical = 10.dp),
@@ -152,8 +153,7 @@ internal fun MyFeedFilterModal(
                 .background(
                     color = Primary100,
                     shape = RoundedCornerShape(size = 14.dp),
-                )
-                .debouncedClickable {
+                ).debouncedClickable {
                     onApplyFilterClick(MyFeedFilter(tempGenres, tempIsVisible, tempIsUnVisible))
                 },
         ) {
@@ -190,11 +190,11 @@ private fun VisibilityRow(
                 imageVector = ImageVector.vectorResource(id = iconRes),
                 contentDescription = null,
                 modifier = Modifier.size(size = 18.dp),
-                tint = if (isSelected) Black else Gray200,
+                tint = Gray200,
             )
             Text(
                 text = text,
-                color = if (isSelected) Black else Gray200,
+                color = Gray200,
                 style = WebsosoTheme.typography.body2,
             )
         }
@@ -217,8 +217,8 @@ private fun GenreChipGroup(
 ) {
     FlowRow(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(space = 10.dp),
+        horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 8.dp),
     ) {
         NovelCategory.entries.forEach { category ->
             val isSelected = selectedCategories.contains(category)
@@ -244,16 +244,23 @@ private fun GenreChip(
     text: String,
     isSelected: Boolean,
     onChipClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Surface(
-        shape = RoundedCornerShape(size = 20.dp),
-        border = BorderStroke(width = 1.dp, color = if (isSelected) Primary100 else Gray50),
-        color = if (isSelected) Primary50 else Gray50,
-        onClick = onChipClick,
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(size = 20.dp))
+            .border(
+                width = 1.dp,
+                color = if (isSelected) Primary100 else Gray50,
+                shape = RoundedCornerShape(size = 20.dp),
+            ).background(color = if (isSelected) Primary50 else Gray50)
+            .clickable(onClick = onChipClick),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            textAlign = TextAlign.Center,
             color = if (isSelected) Primary100 else Gray300,
             style = WebsosoTheme.typography.body2,
         )

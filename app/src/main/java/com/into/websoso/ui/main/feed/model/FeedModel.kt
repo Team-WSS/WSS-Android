@@ -7,7 +7,6 @@ data class FeedModel(
     val createdDate: String,
     val id: Long,
     val content: String,
-    val relevantCategories: List<String>,
     val likeCount: Int,
     val commentCount: Int,
     val isModified: Boolean,
@@ -18,10 +17,8 @@ data class FeedModel(
     val imageUrls: List<String>,
     val imageCount: Int,
     val novel: NovelModel,
-    val categories: String = relevantCategories.joinToString(prefix = "", postfix = ""),
 ) {
     val formattedCreatedDate: String = " · $createdDate"
-    val isEmptyOfRelevantCategories: Boolean = relevantCategories.isEmpty()
     val isVisible: Boolean get() = !isSpoiler && imageUrls.isNotEmpty()
 
     data class UserModel(

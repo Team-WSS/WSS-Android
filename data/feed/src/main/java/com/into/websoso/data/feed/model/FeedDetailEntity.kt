@@ -5,7 +5,6 @@ data class FeedDetailEntity(
     val createdDate: String,
     val id: Long,
     val content: String,
-    val relevantCategories: List<String>,
     val likeCount: Int,
     val isLiked: Boolean,
     val commentCount: Int,
