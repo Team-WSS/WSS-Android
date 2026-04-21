@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -341,17 +340,8 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
     }
 
     private fun setupRefreshView() {
-        binding.sptrNovelFeedRefresh.apply {
-            setRefreshViewParams(
-                params = LayoutParams(
-                    30.toIntPxFromDp(),
-                    30.toIntPxFromDp(),
-                ),
-            )
-            setLottieAnimation("lottie_websoso_loading.json")
-            setOnRefreshListener {
-                novelFeedViewModel.updateRefreshedFeeds(novelId)
-            }
+        binding.sptrNovelFeedRefresh.setOnRefreshListener {
+            novelFeedViewModel.updateRefreshedFeeds(novelId)
         }
     }
 
@@ -375,7 +365,7 @@ class NovelFeedFragment : BaseFragment<FragmentNovelFeedBinding>(R.layout.fragme
 
                 !novelFeedUiState.loading -> {
                     binding.wllNovelFeed.setWebsosoLoadingVisibility(false)
-                    binding.sptrNovelFeedRefresh.setRefreshing(false)
+                    binding.sptrNovelFeedRefresh.isRefreshing = false
                     updateFeeds(novelFeedUiState)
                 }
             }
