@@ -75,6 +75,7 @@
                             android:autofillHints="@null"
                             android:background="@null"
                             android:cursorVisible="true"
+                            android:hint="@string/explore_normal_search_hint"
                             android:imeOptions="actionSearch"
                             android:inputType="text"
                             android:maxLines="1"
@@ -83,6 +84,7 @@
                             android:textAppearance="@style/label1"
                             android:textColor="@color/black"
                             android:textColorHighlight="@color/primary_50_F1EFFF"
+                            android:textColorHint="@color/gray_200_949399"
                             android:theme="@style/Theme.Websoso.EditText"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/iv_normal_explore_cancel_button"
@@ -123,6 +125,69 @@
             </com.google.android.material.appbar.AppBarLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_normal_explore_soso_pick_section"
+            isVisible="@{normalExploreViewModel.isSosoPickVisible}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore">
+
+            <TextView
+                android:id="@+id/tv_normal_explore_soso_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/explore_soso"
+                android:textAppearance="@style/title1"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_explore_soso_pick"
+                app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_soso_title"
+                app:layout_constraintStart_toEndOf="@id/tv_normal_explore_soso_title"
+                app:layout_constraintTop_toTopOf="@id/tv_normal_explore_soso_title" />
+
+            <TextView
+                android:id="@+id/tv_normal_explore_soso_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/explore_sosopick_description"
+                android:textAppearance="@style/label1"
+                android:textColor="@color/gray_200_949399"
+                app:layout_constraintStart_toStartOf="@id/tv_normal_explore_soso_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_soso_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_normal_explore_soso_pick"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingStart="20dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="24dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_soso_description"
+                tools:listitem="@layout/item_soso_pick" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_normal_explore_result"
             isVisible="@{!normalExploreViewModel.isNovelResultEmptyBoxVisibility}"
@@ -136,7 +201,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore"
+            app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_soso_pick_section"
             tools:listitem="@layout/item_normal_explore" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
