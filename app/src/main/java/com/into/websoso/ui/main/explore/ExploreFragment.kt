@@ -7,7 +7,7 @@ import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.databinding.FragmentExploreBinding
-import com.into.websoso.ui.detailExplore.DetailExploreDialogBottomSheet
+import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,18 +41,12 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(R.layout.fragment_e
     private fun onDetailExploreButtonClick() {
         binding.clExploreDetailSearch.setOnClickListener {
             singleEventHandler.throttleFirst {
-                showDetailExploreDialog()
+                startActivity(DetailExploreActivity.getIntent(requireContext()))
             }
         }
     }
 
-    private fun showDetailExploreDialog() {
-        val detailExploreBottomSheet = DetailExploreDialogBottomSheet.newInstance()
-        detailExploreBottomSheet.show(childFragmentManager, DETAIL_BOTTOM_SHEET_TAG)
-    }
-
     companion object {
-        private const val DETAIL_BOTTOM_SHEET_TAG = "DetailExploreDialogBottomSheet"
         const val TAG = "ExploreFragment"
     }
 }

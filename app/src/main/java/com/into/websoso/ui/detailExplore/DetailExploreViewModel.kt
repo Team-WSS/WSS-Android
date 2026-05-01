@@ -29,10 +29,15 @@ class DetailExploreViewModel
         private val _selectedStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
         val selectedStatus: LiveData<SeriesStatus?> get() = _selectedStatus
 
-        private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
-        val selectedRating: LiveData<Float?> get() = _selectedRating
+        private val _selectedRatingMin: MutableLiveData<Float> = MutableLiveData(RATING_MIN)
+        val selectedRatingMin: LiveData<Float> get() = _selectedRatingMin
 
-        val ratings: List<Float> = listOf(3.5f, 4.0f, 4.5f, 4.8f)
+        private val _selectedRatingMax: MutableLiveData<Float> = MutableLiveData(RATING_MAX)
+        val selectedRatingMax: LiveData<Float> get() = _selectedRatingMax
+
+        val selectedRating: LiveData<Float?> = _selectedRatingMin.map { min ->
+            if (min > RATING_MIN) min else null
+        }
 
         private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
         val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
@@ -51,7 +56,10 @@ class DetailExploreViewModel
             _isInfoChipSelected.addSource(_selectedStatus) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
-            _isInfoChipSelected.addSource(_selectedRating) {
+            _isInfoChipSelected.addSource(_selectedRatingMin) {
+                _isInfoChipSelected.value = isInfoChipSelectedEnabled()
+            }
+            _isInfoChipSelected.addSource(_selectedRatingMax) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
 
@@ -61,15 +69,18 @@ class DetailExploreViewModel
         private fun isInfoChipSelectedEnabled(): Boolean {
             val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
             val isStatusChipSelected: Boolean = _selectedStatus.value != null
-            val isRatingChipSelected: Boolean = _selectedRating.value != null
+            val isRatingRangeNarrowed: Boolean =
+                (_selectedRatingMin.value ?: RATING_MIN) > RATING_MIN ||
+                    (_selectedRatingMax.value ?: RATING_MAX) < RATING_MAX
 
-            return isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
+            return isGenreChipSelected || isStatusChipSelected || isRatingRangeNarrowed
         }
 
         fun updateSelectedInfoValueClear() {
             _selectedGenres.value = mutableListOf()
             _selectedStatus.value = null
-            _selectedRating.value = null
+            _selectedRatingMin.value = RATING_MIN
+            _selectedRatingMax.value = RATING_MAX
         }
 
         fun updateSelectedGenres(genre: Genre) {
@@ -92,8 +103,9 @@ class DetailExploreViewModel
             _selectedStatus.value = status
         }
 
-        fun updateSelectedRating(rating: Float?) {
-            _selectedRating.value = rating
+        fun updateSelectedRatingRange(min: Float, max: Float) {
+            _selectedRatingMin.value = min
+            _selectedRatingMax.value = max
         }
 
         fun updateKeyword(searchWord: String?) {
@@ -187,5 +199,11 @@ class DetailExploreViewModel
                     isSearchResultKeywordsEmpty = false,
                 )
             }
+        }
+
+        companion object {
+            const val RATING_MIN = 0.0f
+            const val RATING_MAX = 5.0f
+            const val RATING_STEP = 0.5f
         }
     }

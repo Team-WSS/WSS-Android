@@ -19,10 +19,12 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.ui.model.ResultFrom.Notification
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.home_nickname_interest_feed
 import com.into.websoso.databinding.FragmentHomeBinding
+import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
@@ -44,6 +46,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
     private val homeResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(StartActivityForResult()) { result ->
@@ -109,6 +113,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         onSettingPreferenceGenreClick()
         onNotificationButtonClick()
         onNormalSearchButtonClick()
+        onDetailSearchButtonClick()
         tracker.trackEvent("home")
     }
 
@@ -117,6 +122,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
             tracker.trackEvent("general_search")
             val intent = NormalExploreActivity.getIntent(requireContext())
             startActivity(intent)
+        }
+    }
+
+    private fun onDetailSearchButtonClick() {
+        binding.clHomeDetailSearch.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                startActivity(DetailExploreActivity.getIntent(requireContext()))
+            }
         }
     }
 

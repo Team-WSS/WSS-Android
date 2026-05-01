@@ -46,6 +46,8 @@
     <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
     <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
     <string name="detail_explore_info_rating_highest">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_range">%1$.1f ~ %2$.1f</string>
+    <string name="detail_explore_info_rating_value">%1$.1f</string>
 
     <!-- 상세 탐색 뷰(키워드) -->
     <string name="detail_explore_search_hint">키워드를 검색하세요</string>
