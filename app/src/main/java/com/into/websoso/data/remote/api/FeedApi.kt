@@ -5,7 +5,6 @@ import com.into.websoso.data.remote.response.CommentsResponseDto
 import com.into.websoso.data.remote.response.FeedDetailResponseDto
 import com.into.websoso.data.remote.response.FeedsResponseDto
 import com.into.websoso.data.remote.response.PopularFeedsResponseDto
-import com.into.websoso.data.remote.response.UserInterestFeedsResponseDto
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -46,9 +45,6 @@ interface FeedApi {
 
     @GET("feeds/popular")
     suspend fun getPopularFeeds(): PopularFeedsResponseDto
-
-    @GET("feeds/interest")
-    suspend fun getUserInterestFeeds(): UserInterestFeedsResponseDto
 
     @DELETE("feeds/{feedId}")
     suspend fun deleteFeed(

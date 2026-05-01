@@ -19,16 +19,16 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.ui.model.ResultFrom.Notification
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
+import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
-import com.into.websoso.core.resource.R.string.home_nickname_interest_feed
 import com.into.websoso.databinding.FragmentHomeBinding
+import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.into.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.into.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
-import com.into.websoso.ui.main.home.adpater.UserInterestFeedAdapter
 import com.into.websoso.ui.main.home.dialog.TermsAgreementDialogFragment
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.notification.NotificationActivity
@@ -45,6 +45,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
+    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
+
     private val homeResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(StartActivityForResult()) { result ->
             when (result.resultCode) {
@@ -60,10 +62,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private val popularFeedsAdapter: PopularFeedsAdapter by lazy {
         PopularFeedsAdapter(::onPopularFeedClick)
-    }
-
-    private val userInterestFeedAdapter: UserInterestFeedAdapter by lazy {
-        UserInterestFeedAdapter(::onUserInterestNovelFeedClick)
     }
 
     private val recommendedNovelsByUserTasteAdapter: RecommendedNovelsByUserTasteAdapter by lazy {
@@ -105,10 +103,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         setupItemDecoration()
         setupObserver()
         setupDotsIndicator()
-        onPostInterestNovelClick()
         onSettingPreferenceGenreClick()
         onNotificationButtonClick()
         onNormalSearchButtonClick()
+        onDetailSearchButtonClick()
         tracker.trackEvent("home")
     }
 
@@ -117,6 +115,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
             tracker.trackEvent("general_search")
             val intent = NormalExploreActivity.getIntent(requireContext())
             startActivity(intent)
+        }
+    }
+
+    private fun onDetailSearchButtonClick() {
+        binding.clHomeDetailSearch.setOnClickListener {
+            singleEventHandler.throttleFirst {
+                startActivity(DetailExploreActivity.getIntent(requireContext()))
+            }
         }
     }
 
@@ -129,28 +135,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         with(binding) {
             rvHomeTodayPopularNovel.adapter = popularNovelsAdapter
             vpHomePopularFeed.adapter = popularFeedsAdapter
-            rvUserInterestFeed.adapter = userInterestFeedAdapter
             rvRecommendNovelByUserTaste.adapter = recommendedNovelsByUserTasteAdapter
         }
     }
 
     private fun setupItemDecoration() {
-        with(binding) {
-            rvHomeTodayPopularNovel.addItemDecoration(
-                HomeCustomItemDecoration(
-                    TODAY_POPULAR_NOVEL_MARGIN,
-                ),
-            )
-            rvUserInterestFeed.addItemDecoration(HomeCustomItemDecoration(USER_INTEREST_MARGIN))
-        }
+        binding.rvHomeTodayPopularNovel.addItemDecoration(
+            HomeCustomItemDecoration(TODAY_POPULAR_NOVEL_MARGIN),
+        )
     }
 
     private fun setupObserver() {
-        mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
-            binding.tvHomeInterestFeed.text =
-                getString(home_nickname_interest_feed, uiState.nickname)
-        }
-
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.error -> {
@@ -162,9 +157,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
                     binding.wllHome.setWebsosoLoadingVisibility(false)
                     popularNovelsAdapter.submitList(uiState.popularNovels)
                     popularFeedsAdapter.submitList(uiState.popularFeeds)
-                    updateUserInterestFeedsVisibility(uiState.userInterestFeeds.isEmpty())
                     updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
-                    userInterestFeedAdapter.submitList(uiState.userInterestFeeds)
                     recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
                     updateHasNotificationUnread(uiState.isNotificationUnread)
                 }
@@ -190,32 +183,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
             if (existingDialog != null || existingBottomSheet != null) return@collectWithLifecycle
 
             showTermsAgreementDialog()
-        }
-    }
-
-    private fun updateUserInterestFeedsVisibility(isUserInterestEmpty: Boolean) {
-        with(binding) {
-            if (isUserInterestEmpty) {
-                when (homeViewModel.uiState.value?.isInterestNovel) {
-                    true -> {
-                        clHomeUserInterestFeed.visibility = View.GONE
-                        clHomeInterestFeed.visibility = View.GONE
-                        clHomeNoAssociatedFeed.visibility = View.VISIBLE
-                    }
-
-                    false -> {
-                        clHomeUserInterestFeed.visibility = View.GONE
-                        clHomeInterestFeed.visibility = View.VISIBLE
-                        clHomeNoAssociatedFeed.visibility = View.GONE
-                    }
-
-                    else -> Unit
-                }
-            } else {
-                clHomeUserInterestFeed.visibility = View.VISIBLE
-                clHomeInterestFeed.visibility = View.GONE
-                clHomeNoAssociatedFeed.visibility = View.GONE
-            }
         }
     }
 
@@ -268,11 +235,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         navigateToNovelDetail(novelId)
     }
 
-    private fun onUserInterestNovelFeedClick(novelId: Long) {
-        tracker.trackEvent("home_love_feedlist")
-        navigateToNovelDetail(novelId)
-    }
-
     private fun onRecommendedNovelClick(novelId: Long) {
         tracker.trackEvent("home_prefer_novellist")
         navigateToNovelDetail(novelId)
@@ -299,17 +261,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
                 feedId,
             ),
         )
-    }
-
-    private fun onPostInterestNovelClick() {
-        binding.clHomeInterestFeed.setOnClickListener {
-            tracker.trackEvent("home_to_love_btn")
-            startActivityLauncher.launch(
-                NormalExploreActivity.getIntent(
-                    requireContext(),
-                ),
-            )
-        }
     }
 
     private fun onSettingPreferenceGenreClick() {
@@ -341,7 +292,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     companion object {
         private const val TODAY_POPULAR_NOVEL_MARGIN = 15
-        private const val USER_INTEREST_MARGIN = 14
         const val TAG = "HomeFragment"
     }
 }

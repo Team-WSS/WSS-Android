@@ -7,7 +7,6 @@
 
     <!-- 메인 뷰 -->
     <string name="main_ic_home">홈</string>
-    <string name="main_ic_explore">탐색</string>
     <string name="main_ic_library">서재</string>
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">My</string>
@@ -21,11 +20,9 @@
     <string name="normal_explore_result_inquire">찾는 작품이 없다면?</string>
 
     <!-- 탐색 뷰 -->
-    <string name="explore_title">탐색하기</string>
     <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
     <string name="explore_detail_search_title">뭐 읽을지 고민될 땐?</string>
     <string name="explore_detail_search_description">장르, 연재상태, 별점, 키워드로 작품 찾기</string>
-    <string name="explore_detail_search_button">내 취향에 맞는 웹소설 찾기</string>
     <string name="explore_soso">소소</string>
     <string name="explore_sosopick_description">다른 독자들이 최근에 찾아본 웹소설이에요</string>
 
@@ -46,6 +43,8 @@
     <string name="detail_explore_info_rating_lower">%1$.1f이상</string>
     <string name="detail_explore_info_rating_higher">%1$.1f이상</string>
     <string name="detail_explore_info_rating_highest">%1$.1f이상</string>
+    <string name="detail_explore_info_rating_range">%1$.1f ~ %2$.1f</string>
+    <string name="detail_explore_info_rating_value">%1$.1f</string>
 
     <!-- 상세 탐색 뷰(키워드) -->
     <string name="detail_explore_search_hint">키워드를 검색하세요</string>
@@ -234,10 +233,6 @@
     <!-- 홈 뷰 -->
     <string name="home_today_popular">+ 오늘의 발견 +</string>
     <string name="home_rising_feed">지금 뜨는 글</string>
-    <string name="home_interest_feed">관심글</string>
-    <string name="home_user_interest_recent_feed">관심 등록한 작품의 최신 글이에요</string>
-    <string name="home_interest_feed_description">관심작품의 최신 소식을 모아서 볼 수 있어요.\n좋아하는 웹소설을 관심 등록 해볼까요?</string>
-    <string name="home_post_interest_novel">관심작품 등록하기</string>
     <string name="home_user_recommend_novel_description">관심 등록한 작품의 최신 글이에요</string>
     <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해드려요!</string>
     <string name="home_recommend_novel_by_user_taste_description">선호장르를 기반으로 추천해드려요</string>
@@ -246,12 +241,7 @@
     <string name="home_popular_novel_nickname">%s님의 한마디</string>
     <string name="home_popular_novel_feed_title_null">작품 소개</string>
     <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
-    <string name="home_user_interest_feed_nickname_format">%1$s님의 한마디</string>
-    <string name="home_user_interest_novel_rating_format">%1$.1f (%2$d)</string>
-    <string name="home_nickname_interest_feed">･ :*%1$s님의 관심글*: ･</string>
     <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
-    <string name="home_no_associated_feed">관심 등록한 작품과 관련된 글이 없어요</string>
-    <string name="home_interest_feed_text">관심글</string>
 
     <!-- 환경설정 뷰-->
     <string name="setting_title">설정</string>

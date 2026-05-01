@@ -87,6 +87,65 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_detail_search"
+                    android:layout_width="0dp"
+                    android:layout_height="104dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_explore_primary20_radius_14dp"
+                    android:clipChildren="true"
+                    android:clipToOutline="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_home_normal_search">
+
+                    <ImageView
+                        android:layout_width="82dp"
+                        android:layout_height="82dp"
+                        android:layout_marginTop="14dp"
+                        android:alpha="0.08"
+                        android:contentDescription="@null"
+                        android:rotation="12"
+                        android:src="@drawable/ic_explore_genre_first"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.59"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="132dp"
+                        android:layout_height="88dp"
+                        android:layout_marginTop="8dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/img_home_detail_search"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_home_detail_search_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/explore_detail_search_title"
+                        android:textAppearance="@style/title1"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/explore_detail_search_description"
+                        android:textAppearance="@style/label1"
+                        android:textColor="@color/gray_200_949399"
+                        app:layout_constraintStart_toStartOf="@id/tv_home_detail_search_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_home_detail_search_title" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
                     android:id="@+id/tv_home_today_popular_novel"
                     android:layout_width="wrap_content"
@@ -96,7 +155,7 @@
                     android:text="@string/home_today_popular"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cl_home_normal_search" />
+                    app:layout_constraintTop_toBottomOf="@+id/cl_home_detail_search" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_home_today_popular_novel"
@@ -159,117 +218,6 @@
                     app:selectedDotColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/tv_home_interest_feed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:paddingVertical="2dp"
-                    android:text="@string/home_interest_feed"
-                    android:textAppearance="@style/headline1"
-                    app:layout_constraintStart_toStartOf="@id/vp_home_popular_feed"
-                    app:layout_constraintTop_toBottomOf="@id/dotsIndicator_home" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_user_interest_feed"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_interest_feed">
-
-                    <TextView
-                        android:id="@+id/tv_home_user_interest_feed_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/home_user_interest_recent_feed"
-                        android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_949399"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_user_interest_feed"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_home_user_interest_feed_description"
-                        tools:listitem="@layout/item_user_interest_feed" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_interest_feed"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_home_white_stroke_gray_70_radius_14dp"
-                    android:paddingHorizontal="24dp"
-                    android:paddingVertical="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cl_home_user_interest_feed">
-
-                    <TextView
-                        android:id="@+id/tv_home_interest_feed_description"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/home_interest_feed_description"
-                        android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_949399"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_home_post_interest_novel"
-                        android:layout_width="0dp"
-                        android:layout_height="34dp"
-                        android:layout_marginTop="14dp"
-                        android:background="@drawable/bg_home_secondary100_radius_8dp"
-                        android:gravity="center"
-                        android:paddingHorizontal="20dp"
-                        android:text="@string/home_post_interest_novel"
-                        android:textAppearance="@style/title3"
-                        android:textColor="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_home_interest_feed_description" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_no_associated_feed"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_home_white_stroke_gray_70_radius_14dp"
-                    android:paddingHorizontal="24dp"
-                    android:paddingVertical="20dp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cl_home_interest_feed">
-
-                    <TextView
-                        android:id="@+id/tv_home_no_associated_feed"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/home_no_associated_feed"
-                        android:textAppearance="@style/body2"
-                        android:textColor="@color/gray_200_949399"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
                     android:id="@+id/tv_home_recommend_novel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -278,7 +226,7 @@
                     android:text="@string/home_recommend_novel"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="@id/vp_home_popular_feed"
-                    app:layout_constraintTop_toBottomOf="@id/cl_home_no_associated_feed" />
+                    app:layout_constraintTop_toBottomOf="@id/dotsIndicator_home" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_user_recommend_novel"
