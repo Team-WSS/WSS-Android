@@ -84,9 +84,14 @@ fun RatingRangeSlider(
                 detectDragGestures(
                     onDragStart = { offset ->
                         val touchX = offset.x
-                        activeThumb = if ((touchX - latestStartCenter).absoluteValue <=
-                            (touchX - latestEndCenter).absoluteValue
-                        ) 1 else 2
+                        activeThumb =
+                            if ((touchX - latestStartCenter).absoluteValue <=
+                                (touchX - latestEndCenter).absoluteValue
+                            ) {
+                                1
+                            } else {
+                                2
+                            }
                         val newValue = valueAtX(touchX)
                         if (activeThumb == 1) {
                             onValueChange(newValue.coerceAtMost(latestMax), latestMax)

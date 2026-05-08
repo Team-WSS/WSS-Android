@@ -103,7 +103,10 @@ class DetailExploreViewModel
             _selectedStatus.value = status
         }
 
-        fun updateSelectedRatingRange(min: Float, max: Float) {
+        fun updateSelectedRatingRange(
+            min: Float,
+            max: Float,
+        ) {
             _selectedRatingMin.value = min
             _selectedRatingMax.value = max
         }

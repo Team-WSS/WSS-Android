@@ -24,10 +24,10 @@ class DetailExploreResultViewModel
             MutableLiveData(DetailExploreResultUiState())
         val uiState: LiveData<DetailExploreResultUiState> get() = _uiState
 
-        private val _selectedGenres: MutableLiveData<List<Genre>?> = MutableLiveData(emptyList())
-        private val _isNovelCompleted: MutableLiveData<Boolean?> = MutableLiveData()
-        private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
-        private val _selectedKeywordIds: MutableLiveData<List<Int>?> = MutableLiveData(emptyList())
+        private val filterGenres: MutableLiveData<List<Genre>?> = MutableLiveData(emptyList())
+        private val filterIsNovelCompleted: MutableLiveData<Boolean?> = MutableLiveData()
+        private val filterRating: MutableLiveData<Float?> = MutableLiveData()
+        private val filterKeywordIds: MutableLiveData<List<Int>?> = MutableLiveData(emptyList())
 
         private val _appliedFiltersMessage: MediatorLiveData<String?> = MediatorLiveData()
         val appliedFiltersMessage: LiveData<String?> get() = _appliedFiltersMessage
@@ -37,29 +37,29 @@ class DetailExploreResultViewModel
 
         init {
             _appliedFiltersMessage.apply {
-                addSource(_selectedGenres) { updateMessage() }
-                addSource(_isNovelCompleted) { updateMessage() }
-                addSource(_selectedRating) { updateMessage() }
-                addSource(_selectedKeywordIds) { updateMessage() }
+                addSource(filterGenres) { updateMessage() }
+                addSource(filterIsNovelCompleted) { updateMessage() }
+                addSource(filterRating) { updateMessage() }
+                addSource(filterKeywordIds) { updateMessage() }
             }
         }
 
         private fun updateMessage() {
             val appliedFilters = mutableListOf<String>()
 
-            if (_selectedGenres.value?.isNotEmpty() == true) appliedFilters.add(GENRES_LABEL)
-            if (_isNovelCompleted.value != null) appliedFilters.add(NOVEL_COMPLETED_LABEL)
-            if (_selectedRating.value != null) appliedFilters.add(RATING_LABEL)
-            if (_selectedKeywordIds.value?.isNotEmpty() == true) appliedFilters.add(KEYWORDS_LABEL)
+            if (filterGenres.value?.isNotEmpty() == true) appliedFilters.add(GENRES_LABEL)
+            if (filterIsNovelCompleted.value != null) appliedFilters.add(NOVEL_COMPLETED_LABEL)
+            if (filterRating.value != null) appliedFilters.add(RATING_LABEL)
+            if (filterKeywordIds.value?.isNotEmpty() == true) appliedFilters.add(KEYWORDS_LABEL)
 
             _appliedFiltersMessage.value = appliedFilters.joinToString(FILTER_SEPARATOR)
         }
 
         fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
-            _selectedGenres.value = detailExploreFilteredModel.genres
-            _isNovelCompleted.value = detailExploreFilteredModel.isCompleted
-            _selectedRating.value = detailExploreFilteredModel.novelRating
-            _selectedKeywordIds.value = detailExploreFilteredModel.keywordIds
+            filterGenres.value = detailExploreFilteredModel.genres
+            filterIsNovelCompleted.value = detailExploreFilteredModel.isCompleted
+            filterRating.value = detailExploreFilteredModel.novelRating
+            filterKeywordIds.value = detailExploreFilteredModel.keywordIds
 
             updateSearchResult(true)
         }
@@ -70,10 +70,10 @@ class DetailExploreResultViewModel
             viewModelScope.launch {
                 runCatching {
                     getDetailExploreResultUseCase(
-                        genres = _selectedGenres.value?.map { it.titleEn },
-                        isCompleted = _isNovelCompleted.value,
-                        novelRating = _selectedRating.value,
-                        keywordIds = _selectedKeywordIds.value,
+                        genres = filterGenres.value?.map { it.titleEn },
+                        isCompleted = filterIsNovelCompleted.value,
+                        novelRating = filterRating.value,
+                        keywordIds = filterKeywordIds.value,
                         isSearchButtonClick = isSearchButtonClick,
                     )
                 }.onSuccess { results ->

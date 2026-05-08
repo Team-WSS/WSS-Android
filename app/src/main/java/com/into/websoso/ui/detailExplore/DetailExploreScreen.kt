@@ -63,6 +63,7 @@ fun DetailExploreScreen(
             Box(modifier = Modifier.weight(1f)) {
                 when (selectedTab) {
                     INFO -> DetailExploreInfoTab(viewModel = viewModel)
+
                     KEYWORD -> DetailExploreKeywordTab(
                         viewModel = viewModel,
                         onKeywordInquireClick = onKeywordInquireClick,

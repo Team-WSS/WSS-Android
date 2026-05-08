@@ -66,7 +66,6 @@ fun DetailExploreInfoTab(
             onGenreClick = viewModel::updateSelectedGenres,
         )
         StatusSection(
-
             selectedStatus = selectedStatus,
             onStatusClick = { status ->
                 viewModel.updateSelectedSeriesStatus(
