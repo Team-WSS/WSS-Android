@@ -6,11 +6,6 @@
         android:title="@string/main_ic_home" />
 
     <item
-        android:id="@+id/menu_explore"
-        android:icon="@drawable/ic_main_explore"
-        android:title="@string/main_ic_explore" />
-
-    <item
         android:id="@+id/menu_feed"
         android:icon="@drawable/ic_main_feed"
         android:title="@string/main_ic_feed" />

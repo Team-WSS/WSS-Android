@@ -13,18 +13,20 @@ class GetDetailExploreResultUseCase
     ) {
         private var previousGenres: List<String>? = null
         private var previousIsCompleted: Boolean? = null
-        private var previousNovelRating: Float? = null
+        private var previousNovelRatingStart: Float = RATING_MIN_DEFAULT
+        private var previousNovelRatingEnd: Float = RATING_MAX_DEFAULT
         private var previousKeywordIds: List<Int>? = null
         private var previousPage: Int = INITIAL_PAGE
 
         suspend operator fun invoke(
             genres: List<String>?,
             isCompleted: Boolean?,
-            novelRating: Float?,
+            novelRatingStart: Float,
+            novelRatingEnd: Float,
             keywordIds: List<Int>?,
             isSearchButtonClick: Boolean,
         ): ExploreResult {
-            if (isSearchButtonClick && isCacheValid(genres, isCompleted, novelRating, keywordIds)) {
+            if (isSearchButtonClick && isCacheValid(genres, isCompleted, novelRatingStart, novelRatingEnd, keywordIds)) {
                 return ExploreResultEntity(
                     resultCount = novelRepository.cachedNormalExploreResult.size.toLong(),
                     isLoadable = novelRepository.cachedDetailExploreIsLoadable,
@@ -45,7 +47,8 @@ class GetDetailExploreResultUseCase
                 .fetchFilteredNovelResult(
                     genres = genres,
                     isCompleted = isCompleted,
-                    novelRating = novelRating,
+                    novelRatingStart = novelRatingStart,
+                    novelRatingEnd = novelRatingEnd,
                     keywordIds = keywordIds,
                     page = previousPage,
                     size = REQUEST_SIZE,
@@ -53,7 +56,8 @@ class GetDetailExploreResultUseCase
                 .also {
                     previousGenres = genres
                     previousIsCompleted = isCompleted
-                    previousNovelRating = novelRating
+                    previousNovelRatingStart = novelRatingStart
+                    previousNovelRatingEnd = novelRatingEnd
                     previousKeywordIds = keywordIds
                 }
         }
@@ -61,17 +65,21 @@ class GetDetailExploreResultUseCase
         private fun isCacheValid(
             genres: List<String>?,
             isCompleted: Boolean?,
-            novelRating: Float?,
+            novelRatingStart: Float,
+            novelRatingEnd: Float,
             keywordIds: List<Int>?,
         ): Boolean =
             genres?.equals(previousGenres) == true &&
                 isCompleted == previousIsCompleted &&
-                novelRating == previousNovelRating &&
+                novelRatingStart == previousNovelRatingStart &&
+                novelRatingEnd == previousNovelRatingEnd &&
                 keywordIds?.equals(previousKeywordIds) == true
 
         companion object {
             private const val INITIAL_PAGE = 0
             private const val ADDITIONAL_PAGE_SIZE = 1
             private const val REQUEST_SIZE = 30
+            private const val RATING_MIN_DEFAULT = 0.0f
+            private const val RATING_MAX_DEFAULT = 5.0f
         }
     }

@@ -97,6 +97,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.detailExplore.DetailExploreActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.detailExploreResult.DetailExploreResultActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

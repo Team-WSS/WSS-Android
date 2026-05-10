@@ -9,9 +9,6 @@ import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.TermsAgreementEntity
-import com.into.websoso.data.model.UserInterestFeedMessage
-import com.into.websoso.data.model.UserInterestFeedMessage.NO_INTEREST_NOVELS
-import com.into.websoso.data.model.UserInterestFeedsEntity
 import com.into.websoso.data.repository.FeedRepository
 import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.data.repository.NovelRepository
@@ -78,11 +75,9 @@ class HomeViewModel
                     val results = listOf(
                         async { runCatching { novelRepository.fetchPopularNovels() } },
                         async { runCatching { feedRepository.fetchPopularFeeds() } },
-                        async { runCatching { feedRepository.fetchUserInterestFeeds() } },
                         async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } },
                     ).awaitAll()
 
-                    // 실패가 하나라도 있다면 상위 onFailure로 예외 전파
                     val failures = results.filter { it.isFailure }
                     if (failures.isNotEmpty()) {
                         throw failures.first().exceptionOrNull()
@@ -93,10 +88,8 @@ class HomeViewModel
                         ?: PopularNovelsEntity(emptyList())
                     val popularFeeds = results[1].getOrNull() as? PopularFeedsEntity
                         ?: PopularFeedsEntity(emptyList())
-                    val userInterestFeeds = results[2].getOrNull() as? UserInterestFeedsEntity
-                        ?: UserInterestFeedsEntity(emptyList(), "")
                     val recommendedNovels =
-                        results[3].getOrNull() as? RecommendedNovelsByUserTasteEntity
+                        results[2].getOrNull() as? RecommendedNovelsByUserTasteEntity
                             ?: RecommendedNovelsByUserTasteEntity(emptyList())
 
                     _uiState.value = uiState.value?.copy(
@@ -104,8 +97,6 @@ class HomeViewModel
                         error = false,
                         popularNovels = popularNovels.popularNovels,
                         popularFeeds = popularFeeds.popularFeeds.chunked(3),
-                        isInterestNovel = isUserInterestedInNovels(userInterestFeeds.message),
-                        userInterestFeeds = userInterestFeeds.userInterestFeeds,
                         recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                     )
                 }.onFailure {
@@ -165,23 +156,13 @@ class HomeViewModel
         fun updateFeed() {
             viewModelScope.launch {
                 runCatching {
-                    listOf(
-                        async { feedRepository.fetchPopularFeeds() },
-                        async { feedRepository.fetchUserInterestFeeds() },
-                    ).awaitAll()
-                }.onSuccess { responses ->
-                    val popularFeeds = responses[0] as PopularFeedsEntity
-                    val userInterestFeeds = responses[1] as UserInterestFeedsEntity
-
+                    feedRepository.fetchPopularFeeds()
+                }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
                         popularFeeds = popularFeeds.popularFeeds.chunked(3),
-                        isInterestNovel = isUserInterestedInNovels(userInterestFeeds.message),
-                        userInterestFeeds = userInterestFeeds.userInterestFeeds,
                     )
                 }.onFailure {
-                    _uiState.value = uiState.value?.copy(
-                        error = true,
-                    )
+                    _uiState.value = uiState.value?.copy(error = true)
                 }
             }
         }
@@ -224,12 +205,6 @@ class HomeViewModel
                 }
             }
         }
-
-        private fun isUserInterestedInNovels(userInterestFeedMessage: String): Boolean =
-            when (UserInterestFeedMessage.fromMessage(userInterestFeedMessage)) {
-                NO_INTEREST_NOVELS -> false
-                else -> true
-            }
 
         fun saveFCMToken(token: String) {
             viewModelScope.launch {

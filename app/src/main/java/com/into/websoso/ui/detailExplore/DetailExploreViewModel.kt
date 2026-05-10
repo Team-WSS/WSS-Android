@@ -29,10 +29,10 @@ class DetailExploreViewModel
         private val _selectedStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
         val selectedStatus: LiveData<SeriesStatus?> get() = _selectedStatus
 
-        private val _selectedRating: MutableLiveData<Float?> = MutableLiveData()
-        val selectedRating: LiveData<Float?> get() = _selectedRating
-
-        val ratings: List<Float> = listOf(3.5f, 4.0f, 4.5f, 4.8f)
+        private val selectedRatingRange: MutableLiveData<RatingRange> =
+            MutableLiveData(RatingRange(RATING_MIN, RATING_MAX))
+        val selectedRatingMin: LiveData<Float> = selectedRatingRange.map { it.min }
+        val selectedRatingMax: LiveData<Float> = selectedRatingRange.map { it.max }
 
         private val _isInfoChipSelected: MediatorLiveData<Boolean> = MediatorLiveData(false)
         val isInfoChipSelected: LiveData<Boolean> get() = _isInfoChipSelected
@@ -51,7 +51,7 @@ class DetailExploreViewModel
             _isInfoChipSelected.addSource(_selectedStatus) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
-            _isInfoChipSelected.addSource(_selectedRating) {
+            _isInfoChipSelected.addSource(selectedRatingRange) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
 
@@ -61,15 +61,16 @@ class DetailExploreViewModel
         private fun isInfoChipSelectedEnabled(): Boolean {
             val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
             val isStatusChipSelected: Boolean = _selectedStatus.value != null
-            val isRatingChipSelected: Boolean = _selectedRating.value != null
+            val range = selectedRatingRange.value ?: RatingRange(RATING_MIN, RATING_MAX)
+            val isRatingRangeNarrowed: Boolean = range.min > RATING_MIN || range.max < RATING_MAX
 
-            return isGenreChipSelected || isStatusChipSelected || isRatingChipSelected
+            return isGenreChipSelected || isStatusChipSelected || isRatingRangeNarrowed
         }
 
         fun updateSelectedInfoValueClear() {
             _selectedGenres.value = mutableListOf()
             _selectedStatus.value = null
-            _selectedRating.value = null
+            selectedRatingRange.value = RatingRange(RATING_MIN, RATING_MAX)
         }
 
         fun updateSelectedGenres(genre: Genre) {
@@ -92,8 +93,11 @@ class DetailExploreViewModel
             _selectedStatus.value = status
         }
 
-        fun updateSelectedRating(rating: Float?) {
-            _selectedRating.value = rating
+        fun updateSelectedRatingRange(
+            min: Float,
+            max: Float,
+        ) {
+            selectedRatingRange.value = RatingRange(min, max)
         }
 
         fun updateKeyword(searchWord: String?) {
@@ -187,5 +191,16 @@ class DetailExploreViewModel
                     isSearchResultKeywordsEmpty = false,
                 )
             }
+        }
+
+        private data class RatingRange(
+            val min: Float,
+            val max: Float,
+        )
+
+        companion object {
+            const val RATING_MIN = 0.0f
+            const val RATING_MAX = 5.0f
+            const val RATING_STEP = 0.5f
         }
     }

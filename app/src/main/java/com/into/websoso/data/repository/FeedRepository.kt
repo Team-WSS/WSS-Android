@@ -1,11 +1,9 @@
 package com.into.websoso.data.repository
 
-import com.into.websoso.data.mapper.MultiPartMapper
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.FeedsEntity
 import com.into.websoso.data.model.PopularFeedsEntity
-import com.into.websoso.data.model.UserInterestFeedsEntity
 import com.into.websoso.data.remote.api.FeedApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,8 +34,6 @@ class FeedRepository
                 .copy(feeds = cachedFeeds)
 
         suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
-
-        suspend fun fetchUserInterestFeeds(): UserInterestFeedsEntity = feedApi.getUserInterestFeeds().toData()
 
         suspend fun saveRemovedFeed(feedId: Long) {
             runCatching {
