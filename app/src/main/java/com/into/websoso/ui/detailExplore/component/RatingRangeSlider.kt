@@ -1,11 +1,11 @@
 package com.into.websoso.ui.detailExplore.component
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
@@ -63,6 +64,10 @@ fun RatingRangeSlider(
     val latestMax by rememberUpdatedState(max)
     val latestStartCenter by rememberUpdatedState(startCenterPx)
     val latestEndCenter by rememberUpdatedState(endCenterPx)
+
+    val view = LocalView.current
+    var lastMinSnapped by remember { mutableFloatStateOf(min) }
+    var lastMaxSnapped by remember { mutableFloatStateOf(max) }
 
     fun snap(rawValue: Float): Float {
         val stepped = round(rawValue / stepSize) * stepSize
@@ -103,8 +108,18 @@ fun RatingRangeSlider(
                         change.consume()
                         val newValue = valueAtX(change.position.x)
                         if (activeThumb == 1) {
+                            val snapped = newValue.coerceAtMost(latestMax)
+                            if (snapped != lastMinSnapped) {
+                                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                                lastMinSnapped = snapped
+                            }
                             onValueChange(newValue.coerceAtMost(latestMax), latestMax)
                         } else {
+                            val snapped = newValue.coerceAtLeast(latestMin)
+                            if (snapped != lastMaxSnapped) {
+                                view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                                lastMaxSnapped = snapped
+                            }
                             onValueChange(latestMin, newValue.coerceAtLeast(latestMin))
                         }
                     },
