@@ -99,9 +99,13 @@ fun RatingRangeSlider(
                             }
                         val newValue = valueAtX(touchX)
                         if (activeThumb == 1) {
-                            onValueChange(newValue.coerceAtMost(latestMax), latestMax)
+                            val snapped = newValue.coerceAtMost(latestMax)
+                            lastMinSnapped = snapped
+                            onValueChange(snapped, latestMax)
                         } else {
-                            onValueChange(latestMin, newValue.coerceAtLeast(latestMin))
+                            val snapped = newValue.coerceAtLeast(latestMin)
+                            lastMaxSnapped = snapped
+                            onValueChange(lastMinSnapped, snapped)
                         }
                     },
                     onDrag = { change, _ ->
