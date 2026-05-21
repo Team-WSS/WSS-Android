@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.model.SosoPickEntity
+import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.domain.usecase.GetNormalExploreResultUseCase
 import com.into.websoso.ui.mapper.toUi
 import com.into.websoso.ui.normalExplore.NormalExploreActivity.Companion.SEARCH_AUTHOR
@@ -18,6 +20,7 @@ class NormalExploreViewModel
     @Inject
     constructor(
         private val getNormalExploreResultUseCase: GetNormalExploreResultUseCase,
+        private val novelRepository: NovelRepository,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<NormalExploreUiState> =
@@ -36,9 +39,26 @@ class NormalExploreViewModel
         private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
         val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
+        private val _sosoPicks: MutableLiveData<List<SosoPickEntity.NovelEntity>> = MutableLiveData(emptyList())
+        val sosoPicks: LiveData<List<SosoPickEntity.NovelEntity>> get() = _sosoPicks
+
+        private val _isSosoPickVisible: MutableLiveData<Boolean> = MutableLiveData(initialSearchWord.isBlank())
+        val isSosoPickVisible: LiveData<Boolean> get() = _isSosoPickVisible
+
         init {
+            fetchSosoPicks()
             if (initialSearchWord.isNotBlank()) {
                 updateSearchResult(isSearchButtonClick = true)
+            }
+        }
+
+        private fun fetchSosoPicks() {
+            viewModelScope.launch {
+                runCatching {
+                    novelRepository.fetchSosoPicks()
+                }.onSuccess { result ->
+                    _sosoPicks.value = result.novels
+                }
             }
         }
 
@@ -50,6 +70,9 @@ class NormalExploreViewModel
         fun updateSearchResult(isSearchButtonClick: Boolean) {
             if ((_searchWord.value.isNullOrBlank() || _uiState.value?.isLoadable == false) && !isSearchButtonClick) {
                 return
+            }
+            if (isSearchButtonClick) {
+                _isSosoPickVisible.value = false
             }
             viewModelScope.launch {
                 _uiState.value = _uiState.value?.copy(loading = isSearchButtonClick)
@@ -90,5 +113,6 @@ class NormalExploreViewModel
         fun updateSearchWordEmpty() {
             _searchWord.value = ""
             savedStateHandle[SEARCH_AUTHOR] = ""
+            _isSosoPickVisible.value = true
         }
     }

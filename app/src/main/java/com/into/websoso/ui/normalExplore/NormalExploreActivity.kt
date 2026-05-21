@@ -17,6 +17,7 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
+import com.into.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
@@ -37,6 +38,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             ::navigateToInquire,
         )
     }
+    private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetailFromSosoPick) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -67,6 +69,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                     ),
                 )
             }
+            rvNormalExploreSosoPick.adapter = sosoPickAdapter
             onClick = onNormalExploreButtonClick()
         }
     }
@@ -153,6 +156,14 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         }
     }
 
+    private fun navigateToNovelDetailFromSosoPick(novelId: Long) {
+        singleEventHandler.throttleFirst {
+            tracker.trackEvent("soso_pick", mapOf("novelId" to novelId))
+            val intent = NovelDetailActivity.getIntent(this, novelId)
+            startActivity(intent)
+        }
+    }
+
     private fun navigateToInquire() {
         val inquireUrl = getString(novel_inquire_link)
         val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
@@ -182,6 +193,10 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
 
         normalExploreViewModel.searchWord.observe(this) {
             normalExploreViewModel.validateSearchWordClearButton()
+        }
+
+        normalExploreViewModel.sosoPicks.observe(this) { sosoPicks ->
+            sosoPickAdapter.submitList(sosoPicks)
         }
     }
 

@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.firebase.messaging.FirebaseMessaging
 import com.into.websoso.R.id.fcv_main
-import com.into.websoso.R.id.menu_explore
 import com.into.websoso.R.id.menu_feed
 import com.into.websoso.R.id.menu_home
 import com.into.websoso.R.id.menu_library
@@ -24,12 +23,10 @@ import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.string.main_back_press
 import com.into.websoso.databinding.ActivityMainBinding
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
-import com.into.websoso.ui.main.MainActivity.FragmentType.EXPLORE
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.into.websoso.ui.main.MainActivity.FragmentType.HOME
 import com.into.websoso.ui.main.MainActivity.FragmentType.LIBRARY
 import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
-import com.into.websoso.ui.main.explore.ExploreFragment
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
 import com.into.websoso.ui.main.library.LibraryFragment
@@ -44,7 +41,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     private val fragmentTags = mapOf(
         menu_home to HomeFragment.TAG,
-        menu_explore to ExploreFragment.TAG,
         menu_feed to FeedFragment.TAG,
         menu_library to LibraryFragment.TAG,
         menu_my_page to MyPageFragment.TAG,
@@ -168,7 +164,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     private fun findOrCreateFragment(tag: String): Fragment =
         supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
             HomeFragment.TAG -> HomeFragment()
-            ExploreFragment.TAG -> ExploreFragment()
             FeedFragment.TAG -> FeedFragment()
             LibraryFragment.TAG -> LibraryFragment()
             MyPageFragment.TAG -> MyPageFragment()
@@ -203,7 +198,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     private fun handleNavigation(destination: FragmentType?) {
         val menuId = when (destination) {
-            EXPLORE -> menu_explore
             MY_PAGE -> menu_my_page
             FEED -> menu_feed
             LIBRARY -> menu_library
@@ -257,7 +251,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     ) {
         LIBRARY(menu_library),
         HOME(menu_home),
-        EXPLORE(menu_explore),
         FEED(menu_feed),
         MY_PAGE(menu_my_page),
         ;

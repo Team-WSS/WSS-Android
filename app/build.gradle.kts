@@ -74,9 +74,6 @@ android {
     }
 }
 
-// 룸 디비 제거
-// 좋아요 기능 좀더 생각해보기
-
 dependencies {
     // 프로젝트 의존성
     implementation(projects.core.resource)
@@ -131,7 +128,7 @@ dependencies {
     // UI 관련 유틸 라이브러리
     implementation(libs.dots.indicator) // ViewPager2 indicator
     implementation(libs.lottie) // Lottie 애니메이션
-    implementation(libs.pull.to.refresh) // Pull 새로고침
+    implementation(libs.swipe.refresh.layout) // Pull 새로고침
 
     // Third-party SDK
     implementation(libs.kakao) // 카카오 로그인 API

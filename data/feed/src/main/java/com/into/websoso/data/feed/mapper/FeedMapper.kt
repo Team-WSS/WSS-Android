@@ -6,14 +6,12 @@ import com.into.websoso.core.network.datasource.feed.model.response.FeedDetailRe
 import com.into.websoso.core.network.datasource.feed.model.response.FeedResponseDto
 import com.into.websoso.core.network.datasource.feed.model.response.FeedsResponseDto
 import com.into.websoso.core.network.datasource.feed.model.response.PopularFeedsResponseDto
-import com.into.websoso.core.network.datasource.feed.model.response.UserInterestFeedsResponseDto
 import com.into.websoso.data.feed.model.CommentEntity
 import com.into.websoso.data.feed.model.CommentsEntity
 import com.into.websoso.data.feed.model.FeedDetailEntity
 import com.into.websoso.data.feed.model.FeedEntity
 import com.into.websoso.data.feed.model.FeedsEntity
 import com.into.websoso.data.feed.model.PopularFeedsEntity
-import com.into.websoso.data.feed.model.UserInterestFeedsEntity
 
 fun FeedsResponseDto.toData(): FeedsEntity =
     FeedsEntity(
@@ -121,21 +119,4 @@ fun PopularFeedsResponseDto.toData(): PopularFeedsEntity =
                 isSpoiler = feed.isSpoiler,
             )
         },
-    )
-
-fun UserInterestFeedsResponseDto.toData(): UserInterestFeedsEntity =
-    UserInterestFeedsEntity(
-        userInterestFeeds = userInterestFeeds.map { feed ->
-            UserInterestFeedsEntity.UserInterestFeedEntity(
-                avatarImage = feed.avatarImage,
-                feedContent = feed.feedContent,
-                nickname = feed.nickname,
-                novelId = feed.novelId,
-                novelImage = feed.novelImage,
-                novelRating = feed.novelRating,
-                novelRatingCount = feed.novelRatingCount,
-                novelTitle = feed.novelTitle,
-            )
-        },
-        message = message,
     )

@@ -145,16 +145,7 @@ class DetailExploreResultActivity : BaseActivity<ActivityDetailExploreResultBind
 
     private fun onEditFilterItemButtonClick() {
         binding.clDetailExploreResultFilterButton.setOnClickListener {
-            singleEventHandler.throttleFirst {
-                val detailExploreResultDialogBottomSheet =
-                    DetailExploreResultDialogBottomSheet.newInstance()
-                detailExploreResultDialogBottomSheet.show(
-                    supportFragmentManager,
-                    DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG,
-                )
-
-                detailExploreResultViewModel.updateIsBottomSheetOpen(true)
-            }
+            singleEventHandler.throttleFirst { finish() }
         }
     }
 
@@ -172,8 +163,6 @@ class DetailExploreResultActivity : BaseActivity<ActivityDetailExploreResultBind
     companion object {
         private const val FULL_SPAN = 2
         private const val HALF_SPAN = 1
-        const val DETAIL_EXPLORE_RESULT_BOTTOM_SHEET_TAG =
-            "DetailExploreResultDialogBottomSheet"
         private const val DETAIL_EXPLORE_FILTERED_INFO = "DetailExploreFilteredInfo"
 
         fun getIntent(

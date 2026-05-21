@@ -101,7 +101,7 @@ fun LibraryScreen(
         onSortClick = libraryViewModel::updateSortType,
         onToggleViewType = libraryViewModel::updateViewType,
         onItemClick = { navigateToNovelDetailActivity(it.novelId) },
-        onSearchClick = { /* TODO */ },
+        onSearchClick = navigateToNormalExploreActivity,
         onExploreClick = navigateToNormalExploreActivity,
         onInterestClick = libraryViewModel::updateInterestedNovels,
         onAttractivePointClick = libraryViewModel::updateAttractivePoints,
