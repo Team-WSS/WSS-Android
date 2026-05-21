@@ -26,7 +26,8 @@ class DetailExploreResultViewModel
 
         private val filterGenres: MutableLiveData<List<Genre>?> = MutableLiveData(emptyList())
         private val filterIsNovelCompleted: MutableLiveData<Boolean?> = MutableLiveData()
-        private val filterRating: MutableLiveData<Float?> = MutableLiveData()
+        private val filterRatingStart: MutableLiveData<Float> = MutableLiveData(DetailExploreFilteredModel.RATING_MIN_DEFAULT)
+        private val filterRatingEnd: MutableLiveData<Float> = MutableLiveData(DetailExploreFilteredModel.RATING_MAX_DEFAULT)
         private val filterKeywordIds: MutableLiveData<List<Int>?> = MutableLiveData(emptyList())
 
         private val _appliedFiltersMessage: MediatorLiveData<String?> = MediatorLiveData()
@@ -39,7 +40,8 @@ class DetailExploreResultViewModel
             _appliedFiltersMessage.apply {
                 addSource(filterGenres) { updateMessage() }
                 addSource(filterIsNovelCompleted) { updateMessage() }
-                addSource(filterRating) { updateMessage() }
+                addSource(filterRatingStart) { updateMessage() }
+                addSource(filterRatingEnd) { updateMessage() }
                 addSource(filterKeywordIds) { updateMessage() }
             }
         }
@@ -49,7 +51,7 @@ class DetailExploreResultViewModel
 
             if (filterGenres.value?.isNotEmpty() == true) appliedFilters.add(GENRES_LABEL)
             if (filterIsNovelCompleted.value != null) appliedFilters.add(NOVEL_COMPLETED_LABEL)
-            if (filterRating.value != null) appliedFilters.add(RATING_LABEL)
+            appliedFilters.add(RATING_LABEL)
             if (filterKeywordIds.value?.isNotEmpty() == true) appliedFilters.add(KEYWORDS_LABEL)
 
             _appliedFiltersMessage.value = appliedFilters.joinToString(FILTER_SEPARATOR)
@@ -58,7 +60,8 @@ class DetailExploreResultViewModel
         fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
             filterGenres.value = detailExploreFilteredModel.genres
             filterIsNovelCompleted.value = detailExploreFilteredModel.isCompleted
-            filterRating.value = detailExploreFilteredModel.novelRating
+            filterRatingStart.value = detailExploreFilteredModel.novelRatingStart
+            filterRatingEnd.value = detailExploreFilteredModel.novelRatingEnd
             filterKeywordIds.value = detailExploreFilteredModel.keywordIds
 
             updateSearchResult(true)
@@ -72,7 +75,8 @@ class DetailExploreResultViewModel
                     getDetailExploreResultUseCase(
                         genres = filterGenres.value?.map { it.titleEn },
                         isCompleted = filterIsNovelCompleted.value,
-                        novelRating = filterRating.value,
+                        novelRatingStart = filterRatingStart.value ?: DetailExploreFilteredModel.RATING_MIN_DEFAULT,
+                        novelRatingEnd = filterRatingEnd.value ?: DetailExploreFilteredModel.RATING_MAX_DEFAULT,
                         keywordIds = filterKeywordIds.value,
                         isSearchButtonClick = isSearchButtonClick,
                     )

@@ -39,7 +39,10 @@ class DetailExploreActivity : AppCompatActivity() {
     private fun navigateToSearchResult() {
         val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
         val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
-        val novelRating = detailExploreViewModel.selectedRating.value
+        val novelRatingStart = detailExploreViewModel.selectedRatingMin.value
+            ?: DetailExploreViewModel.RATING_MIN
+        val novelRatingEnd = detailExploreViewModel.selectedRatingMax.value
+            ?: DetailExploreViewModel.RATING_MAX
 
         val keywordIds = detailExploreViewModel.uiState.value
             ?.categories
@@ -54,7 +57,8 @@ class DetailExploreActivity : AppCompatActivity() {
                 detailExploreFilteredModel = DetailExploreFilteredModel(
                     genres = selectedGenres,
                     isCompleted = isCompleted,
-                    novelRating = novelRating,
+                    novelRatingStart = novelRatingStart,
+                    novelRatingEnd = novelRatingEnd,
                     keywordIds = keywordIds,
                 ),
             ),

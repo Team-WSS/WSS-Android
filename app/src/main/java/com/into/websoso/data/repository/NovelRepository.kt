@@ -77,7 +77,8 @@ class NovelRepository
         suspend fun fetchFilteredNovelResult(
             genres: List<String>?,
             isCompleted: Boolean?,
-            novelRating: Float?,
+            novelRatingStart: Float,
+            novelRatingEnd: Float,
             keywordIds: List<Int>?,
             page: Int,
             size: Int,
@@ -85,7 +86,8 @@ class NovelRepository
             val result = novelApi.getFilteredNovelResult(
                 genres = genres,
                 isCompleted = isCompleted,
-                novelRating = novelRating,
+                novelRatingStart = novelRatingStart,
+                novelRatingEnd = novelRatingEnd,
                 keywordIds = keywordIds,
                 page = page,
                 size = size,

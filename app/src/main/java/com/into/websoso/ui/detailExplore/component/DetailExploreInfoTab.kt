@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -78,7 +78,6 @@ fun DetailExploreInfoTab(
             max = ratingMax,
             onRangeChange = viewModel::updateSelectedRatingRange,
         )
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -117,6 +116,10 @@ private fun GenreSection(
                     label = genre.titleKr,
                     isSelected = selectedGenres.contains(genre),
                     onClick = { onGenreClick(genre) },
+                    modifier = Modifier.size(
+                        width = genre.figmaWidthDp.dp,
+                        height = 37.dp,
+                    ),
                 )
             }
         }
@@ -166,9 +169,11 @@ private fun StatusChipCell(
         label = label,
         isSelected = selectedStatus == status,
         onClick = { onClick(status) },
-        modifier = modifier.wrapContentHeight(),
+        modifier = modifier.aspectRatio(STATUS_CHIP_ASPECT_RATIO),
     )
 }
+
+private const val STATUS_CHIP_ASPECT_RATIO = 155f / 43f
 
 @Composable
 private fun RatingSection(
@@ -176,7 +181,7 @@ private fun RatingSection(
     max: Float,
     onRangeChange: (Float, Float) -> Unit,
 ) {
-    Column {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -196,7 +201,6 @@ private fun RatingSection(
                 color = Primary100,
             )
         }
-        Spacer(modifier = Modifier.height(6.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
