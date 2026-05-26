@@ -115,6 +115,10 @@ fun PopularFeedsResponseDto.toData(): PopularFeedsEntity =
                 likeCount = feed.likeCount,
                 commentCount = feed.commentCount,
                 isSpoiler = feed.isSpoiler,
+                isPublic = feed.isPublic ?: true,
+                novelTitle = feed.novelTitle ?: feed.title.orEmpty(),
+                novelImage = feed.novelImage ?: feed.novelThumbnailImage.orEmpty(),
+                novelGenreImage = feed.novelGenreImage.orEmpty(),
             )
         },
     )

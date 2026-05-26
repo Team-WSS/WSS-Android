@@ -20,5 +20,17 @@ data class PopularFeedsResponseDto(
         val commentCount: Int,
         @SerialName("isSpoiler")
         val isSpoiler: Boolean,
+        @SerialName("isPublic")
+        val isPublic: Boolean? = null,
+        @SerialName("title")
+        val title: String? = null,
+        @SerialName("novelTitle")
+        val novelTitle: String? = null,
+        @SerialName("novelImage")
+        val novelImage: String? = null,
+        @SerialName("novelThumbnailImage")
+        val novelThumbnailImage: String? = null,
+        @SerialName("novelGenreImage")
+        val novelGenreImage: String? = null,
     )
 }
