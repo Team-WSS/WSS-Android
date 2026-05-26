@@ -18,6 +18,7 @@ import com.into.websoso.ui.main.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -96,7 +97,7 @@ class HomeViewModel
                         loading = false,
                         error = false,
                         popularNovels = popularNovels.popularNovels,
-                        popularFeeds = popularFeeds.popularFeeds.chunked(3),
+                        popularFeeds = popularFeeds.toHomePopularFeeds(),
                         recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                     )
                 }.onFailure {
@@ -142,7 +143,7 @@ class HomeViewModel
                     _uiState.value = uiState.value?.copy(
                         loading = false,
                         popularNovels = popularNovels.popularNovels,
-                        popularFeeds = popularFeeds.popularFeeds.chunked(3),
+                        popularFeeds = popularFeeds.toHomePopularFeeds(),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(
@@ -159,7 +160,7 @@ class HomeViewModel
                     feedRepository.fetchPopularFeeds()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
-                        popularFeeds = popularFeeds.popularFeeds.chunked(3),
+                        popularFeeds = popularFeeds.toHomePopularFeeds(),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
@@ -250,5 +251,36 @@ class HomeViewModel
                     pushMessageRepository.updateUserFCMToken(token)
                 }
             }
+        }
+
+        private suspend fun PopularFeedsEntity.toHomePopularFeeds(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
+            coroutineScope {
+                popularFeeds
+                    .map { feed ->
+                        async {
+                            runCatching {
+                                val feedDetail = feedRepository.fetchFeed(feed.feedId)
+                                val novel = feedDetail.novel ?: return@runCatching null
+
+                                feed.copy(
+                                    feesContent = feedDetail.content,
+                                    isSpoiler = feedDetail.isSpoiler,
+                                    isPublic = feedDetail.isPublic,
+                                    novelTitle = novel.title,
+                                    novelImage = feed.novelImage.ifBlank { novel.thumbnail },
+                                )
+                            }.getOrNull()
+                        }
+                    }.awaitAll()
+                    .filterNotNull()
+                    .filter { feed ->
+                        feed.isPublic &&
+                            feed.novelTitle.isNotBlank() &&
+                            feed.novelImage.isNotBlank()
+                    }.chunked(POPULAR_FEED_PAGE_SIZE)
+            }
+
+        companion object {
+            private const val POPULAR_FEED_PAGE_SIZE = 2
         }
     }
