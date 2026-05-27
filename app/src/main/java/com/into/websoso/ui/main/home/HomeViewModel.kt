@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.TermsAgreementEntity
@@ -70,42 +69,38 @@ class HomeViewModel
             }
         }
 
-        private fun fetchUserHomeData() {
-            viewModelScope.launch {
-                runCatching {
-                    val results = listOf(
-                        async { runCatching { novelRepository.fetchPopularNovels() } },
-                        async { runCatching { feedRepository.fetchPopularFeeds() } },
-                        async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } },
-                    ).awaitAll()
+        private suspend fun fetchUserHomeData() {
+            coroutineScope {
+                val popularNovelsDeferred =
+                    async { runCatching { novelRepository.fetchPopularNovels() } }
+                val popularFeedsDeferred =
+                    async { runCatching { feedRepository.fetchHomePopularFeeds() } }
+                val recommendedNovelsDeferred =
+                    async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
 
-                    val failures = results.filter { it.isFailure }
-                    if (failures.isNotEmpty()) {
-                        throw failures.first().exceptionOrNull()
-                            ?: IllegalStateException("Unknown error")
-                    }
+                val popularNovelsResult = popularNovelsDeferred.await()
+                val popularFeedsResult = popularFeedsDeferred.await()
+                val recommendedNovelsResult = recommendedNovelsDeferred.await()
 
-                    val popularNovels = results[0].getOrNull() as? PopularNovelsEntity
-                        ?: PopularNovelsEntity(emptyList())
-                    val popularFeeds = results[1].getOrNull() as? PopularFeedsEntity
-                        ?: PopularFeedsEntity(emptyList())
-                    val recommendedNovels =
-                        results[2].getOrNull() as? RecommendedNovelsByUserTasteEntity
-                            ?: RecommendedNovelsByUserTasteEntity(emptyList())
-
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        error = false,
-                        popularNovels = popularNovels.popularNovels,
-                        popularFeeds = popularFeeds.toHomePopularFeeds(),
-                        recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
-                    )
-                }.onFailure {
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        error = true,
-                    )
+                val failure = popularNovelsResult.exceptionOrNull()
+                    ?: popularFeedsResult.exceptionOrNull()
+                    ?: recommendedNovelsResult.exceptionOrNull()
+                if (failure != null) {
+                    handleFailureState()
+                    return@coroutineScope
                 }
+
+                val popularNovels = popularNovelsResult.getOrThrow()
+                val popularFeeds = popularFeedsResult.getOrThrow()
+                val recommendedNovels = recommendedNovelsResult.getOrThrow()
+
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = false,
+                    popularNovels = popularNovels.popularNovels,
+                    popularFeeds = popularFeeds,
+                    recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
+                )
             }
         }
 
@@ -130,37 +125,47 @@ class HomeViewModel
         }
 
         private suspend fun fetchGuestData() {
-            viewModelScope.launch {
-                runCatching {
-                    listOf(
-                        async { novelRepository.fetchPopularNovels() },
-                        async { feedRepository.fetchPopularFeeds() },
-                    ).awaitAll()
-                }.onSuccess { responses ->
-                    val popularNovels = responses[0] as PopularNovelsEntity
-                    val popularFeeds = responses[1] as PopularFeedsEntity
+            coroutineScope {
+                val popularNovelsDeferred =
+                    async { runCatching { novelRepository.fetchPopularNovels() } }
+                val popularFeedsDeferred =
+                    async { runCatching { feedRepository.fetchHomePopularFeeds() } }
 
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        popularNovels = popularNovels.popularNovels,
-                        popularFeeds = popularFeeds.toHomePopularFeeds(),
-                    )
-                }.onFailure {
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        error = true,
-                    )
+                val popularNovelsResult = popularNovelsDeferred.await()
+                val popularFeedsResult = popularFeedsDeferred.await()
+
+                val failure = popularNovelsResult.exceptionOrNull()
+                    ?: popularFeedsResult.exceptionOrNull()
+                if (failure != null) {
+                    handleFailureState()
+                    return@coroutineScope
                 }
+
+                val popularNovels = popularNovelsResult.getOrThrow()
+                val popularFeeds = popularFeedsResult.getOrThrow()
+
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    popularNovels = popularNovels.popularNovels,
+                    popularFeeds = popularFeeds,
+                )
             }
+        }
+
+        private fun handleFailureState() {
+            _uiState.value = uiState.value?.copy(
+                loading = false,
+                error = true,
+            )
         }
 
         fun updateFeed() {
             viewModelScope.launch {
                 runCatching {
-                    feedRepository.fetchPopularFeeds()
+                    feedRepository.fetchHomePopularFeeds()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
-                        popularFeeds = popularFeeds.toHomePopularFeeds(),
+                        popularFeeds = popularFeeds,
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
@@ -251,36 +256,5 @@ class HomeViewModel
                     pushMessageRepository.updateUserFCMToken(token)
                 }
             }
-        }
-
-        private suspend fun PopularFeedsEntity.toHomePopularFeeds(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
-            coroutineScope {
-                popularFeeds
-                    .map { feed ->
-                        async {
-                            runCatching {
-                                val feedDetail = feedRepository.fetchFeed(feed.feedId)
-                                val novel = feedDetail.novel ?: return@runCatching null
-
-                                feed.copy(
-                                    feesContent = feedDetail.content,
-                                    isSpoiler = feedDetail.isSpoiler,
-                                    isPublic = feedDetail.isPublic,
-                                    novelTitle = novel.title,
-                                    novelImage = feed.novelImage.ifBlank { novel.thumbnail },
-                                )
-                            }.getOrNull()
-                        }
-                    }.awaitAll()
-                    .filterNotNull()
-                    .filter { feed ->
-                        feed.isPublic &&
-                            feed.novelTitle.isNotBlank() &&
-                            feed.novelImage.isNotBlank()
-                    }.chunked(POPULAR_FEED_PAGE_SIZE)
-            }
-
-        companion object {
-            private const val POPULAR_FEED_PAGE_SIZE = 2
         }
     }

@@ -1,11 +1,13 @@
 package com.into.websoso.data.repository
 
 import com.into.websoso.data.mapper.toData
-import com.into.websoso.data.model.FeedDetailEntity
 import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.FeedsEntity
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.remote.api.FeedApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,7 +38,33 @@ class FeedRepository
 
         suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
 
-        suspend fun fetchFeed(feedId: Long): FeedDetailEntity = feedApi.getFeed(feedId).toData()
+        suspend fun fetchHomePopularFeeds(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
+            coroutineScope {
+                fetchPopularFeeds()
+                    .popularFeeds
+                    .map { feed ->
+                        async {
+                            runCatching {
+                                val feedDetail = feedApi.getFeed(feed.feedId).toData()
+                                val novel = feedDetail.novel ?: return@runCatching null
+
+                                feed.copy(
+                                    feesContent = feedDetail.content,
+                                    isSpoiler = feedDetail.isSpoiler,
+                                    isPublic = feedDetail.isPublic,
+                                    novelTitle = novel.title,
+                                    novelImage = feed.novelImage.ifBlank { novel.thumbnail },
+                                )
+                            }.getOrNull()
+                        }
+                    }.awaitAll()
+                    .filterNotNull()
+                    .filter { feed ->
+                        feed.isPublic &&
+                            feed.novelTitle.isNotBlank() &&
+                            feed.novelImage.isNotBlank()
+                    }.chunked(HOME_POPULAR_FEED_PAGE_SIZE)
+            }
 
         suspend fun saveRemovedFeed(feedId: Long) {
             runCatching {
@@ -62,5 +90,9 @@ class FeedRepository
                 true -> feedApi.deleteLikes(selectedFeedId)
                 false -> feedApi.postLikes(selectedFeedId)
             }
+        }
+
+        companion object {
+            private const val HOME_POPULAR_FEED_PAGE_SIZE = 2
         }
     }
