@@ -146,6 +146,7 @@ class HomeViewModel
 
                 _uiState.value = uiState.value?.copy(
                     loading = false,
+                    error = false,
                     popularNovels = popularNovels.popularNovels,
                     popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
                 )
@@ -165,6 +166,7 @@ class HomeViewModel
                     feedRepository.fetchPopularFeedsWithDetails()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
+                        error = false,
                         popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
                     )
                 }.onFailure {
