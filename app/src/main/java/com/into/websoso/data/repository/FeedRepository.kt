@@ -38,7 +38,7 @@ class FeedRepository
 
         suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
 
-        suspend fun fetchPopularFeedsWithDetails(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
+        suspend fun fetchPopularFeedsWithDetails(): List<PopularFeedsEntity.PopularFeedEntity> =
             coroutineScope {
                 fetchPopularFeeds()
                     .popularFeeds
@@ -63,7 +63,7 @@ class FeedRepository
                         feed.isPublic &&
                             feed.novelTitle.isNotBlank() &&
                             feed.novelImage.isNotBlank()
-                    }.chunked(HOME_POPULAR_FEED_PAGE_SIZE)
+                    }
             }
 
         suspend fun saveRemovedFeed(feedId: Long) {
@@ -90,9 +90,5 @@ class FeedRepository
                 true -> feedApi.deleteLikes(selectedFeedId)
                 false -> feedApi.postLikes(selectedFeedId)
             }
-        }
-
-        companion object {
-            private const val HOME_POPULAR_FEED_PAGE_SIZE = 2
         }
     }

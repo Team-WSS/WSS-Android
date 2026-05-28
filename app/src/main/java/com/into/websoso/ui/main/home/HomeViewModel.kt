@@ -98,7 +98,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds,
+                    popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                 )
             }
@@ -147,7 +147,7 @@ class HomeViewModel
                 _uiState.value = uiState.value?.copy(
                     loading = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds,
+                    popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
                 )
             }
         }
@@ -165,7 +165,7 @@ class HomeViewModel
                     feedRepository.fetchPopularFeedsWithDetails()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
-                        popularFeeds = popularFeeds,
+                        popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
@@ -256,5 +256,9 @@ class HomeViewModel
                     pushMessageRepository.updateUserFCMToken(token)
                 }
             }
+        }
+
+        companion object {
+            private const val HOME_POPULAR_FEED_PAGE_SIZE = 2
         }
     }
