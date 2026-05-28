@@ -10,28 +10,29 @@
         android:id="@+id/item_popular_fees_slot1"
         layout="@layout/item_popular_feed_slot"
         android:layout_width="0dp"
-        android:layout_height="122dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/view_popular_feed_divider_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view_popular_feed_divider_1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_weight="1"
         android:background="@color/gray_70_DFDFE3"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_popular_fees_slot1" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/item_popular_fees_slot2"
         layout="@layout/item_popular_feed_slot"
         android:layout_width="0dp"
-        android:layout_height="122dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_popular_fees_slot1" />
+        app:layout_constraintTop_toBottomOf="@id/view_popular_feed_divider_1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
