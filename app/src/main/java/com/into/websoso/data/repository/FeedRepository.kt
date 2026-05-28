@@ -38,7 +38,7 @@ class FeedRepository
 
         suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
 
-        suspend fun fetchHomePopularFeeds(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
+        suspend fun fetchPopularFeedsWithDetails(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
             coroutineScope {
                 fetchPopularFeeds()
                     .popularFeeds

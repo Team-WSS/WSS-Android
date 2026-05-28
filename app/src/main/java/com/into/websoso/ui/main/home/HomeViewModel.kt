@@ -74,7 +74,7 @@ class HomeViewModel
                 val popularNovelsDeferred =
                     async { runCatching { novelRepository.fetchPopularNovels() } }
                 val popularFeedsDeferred =
-                    async { runCatching { feedRepository.fetchHomePopularFeeds() } }
+                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
                 val recommendedNovelsDeferred =
                     async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
 
@@ -129,7 +129,7 @@ class HomeViewModel
                 val popularNovelsDeferred =
                     async { runCatching { novelRepository.fetchPopularNovels() } }
                 val popularFeedsDeferred =
-                    async { runCatching { feedRepository.fetchHomePopularFeeds() } }
+                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
 
                 val popularNovelsResult = popularNovelsDeferred.await()
                 val popularFeedsResult = popularFeedsDeferred.await()
@@ -162,7 +162,7 @@ class HomeViewModel
         fun updateFeed() {
             viewModelScope.launch {
                 runCatching {
-                    feedRepository.fetchHomePopularFeeds()
+                    feedRepository.fetchPopularFeedsWithDetails()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
                         popularFeeds = popularFeeds,
