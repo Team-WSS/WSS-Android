@@ -257,40 +257,41 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
     }
 
     private fun setupCharmPointItems() {
-        val orderedCharmPoints = getString(novel_rating_charm_points).toWrappedCharmPoint()
-        val charmPointViews = listOf(
-            CharmPointViews(
+        val charmPointViews = mapOf(
+            CharmPoint.WORLDVIEW to CharmPointViews(
                 container = binding.llNovelRatingCharmPointWorldview,
                 icon = binding.ivNovelRatingCharmPointWorldview,
                 title = binding.tvNovelRatingCharmPointWorldview,
             ),
-            CharmPointViews(
+            CharmPoint.MATERIAL to CharmPointViews(
                 container = binding.llNovelRatingCharmPointMaterial,
                 icon = binding.ivNovelRatingCharmPointMaterial,
                 title = binding.tvNovelRatingCharmPointMaterial,
             ),
-            CharmPointViews(
+            CharmPoint.WRITINGSKILL to CharmPointViews(
                 container = binding.llNovelRatingCharmPointWritingSkill,
                 icon = binding.ivNovelRatingCharmPointWritingSkill,
                 title = binding.tvNovelRatingCharmPointWritingSkill,
             ),
-            CharmPointViews(
+            CharmPoint.CHARACTER to CharmPointViews(
                 container = binding.llNovelRatingCharmPointCharacter,
                 icon = binding.ivNovelRatingCharmPointCharacter,
                 title = binding.tvNovelRatingCharmPointCharacter,
             ),
-            CharmPointViews(
+            CharmPoint.RELATIONSHIP to CharmPointViews(
                 container = binding.llNovelRatingCharmPointRelationship,
                 icon = binding.ivNovelRatingCharmPointRelationship,
                 title = binding.tvNovelRatingCharmPointRelationship,
             ),
-            CharmPointViews(
+            CharmPoint.VIBE to CharmPointViews(
                 container = binding.llNovelRatingCharmPointVibe,
                 icon = binding.ivNovelRatingCharmPointVibe,
                 title = binding.tvNovelRatingCharmPointVibe,
             ),
         )
-        charmPointItems = orderedCharmPoints.zip(charmPointViews) { charmPoint, views ->
+        val orderedCharmPoints = getString(novel_rating_charm_points).toWrappedCharmPoint()
+        charmPointItems = orderedCharmPoints.map { charmPoint ->
+            val views = charmPointViews.getValue(charmPoint)
             views.title.text = charmPoint.title
             CharmPointItem(
                 charmPoint = charmPoint,
