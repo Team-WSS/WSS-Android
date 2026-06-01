@@ -59,7 +59,7 @@
                         android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                         app:icon="@drawable/ic_novel_rating_watching"
                         app:iconGravity="top"
-                        app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
+                        app:iconTint="@color/bg_novel_detail_rating_read_status_icon_selector" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_novel_rating_watched"
@@ -75,7 +75,7 @@
                         android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                         app:icon="@drawable/ic_novel_rating_watched"
                         app:iconGravity="top"
-                        app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
+                        app:iconTint="@color/bg_novel_detail_rating_read_status_icon_selector" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_novel_rating_quit"
@@ -91,7 +91,7 @@
                         android:textColor="@color/bg_novel_detail_rating_read_status_selector"
                         app:icon="@drawable/ic_novel_rating_quit"
                         app:iconGravity="top"
-                        app:iconTint="@color/bg_novel_detail_rating_read_status_selector" />
+                        app:iconTint="@color/bg_novel_detail_rating_read_status_icon_selector" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <TextView
@@ -122,12 +122,24 @@
                     android:id="@+id/rb_novel_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:minHeight="30dp"
                     android:numStars="5"
                     android:onRatingChanged="@{(view, rating, fromUser) -> viewModel.updateRatingValue(rating)}"
                     android:progressDrawable="@drawable/ic_novel_rating_star_selector"
                     android:rating="@{viewModel.uiState.novelRatingModel.userNovelRating}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_star_title" />
+
+                <TextView
+                    android:id="@+id/tv_novel_rating_star_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/novel_rating_star_title"
+                    android:textAppearance="@style/title3"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider_novel_rating_add_date" />
@@ -148,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="@string/novel_rating_charm_point_title"
-                    android:textAppearance="@style/body1"
+                    android:textAppearance="@style/title3"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -158,30 +170,175 @@
                     android:id="@+id/ll_novel_rating_charm_points_container"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="84dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_novel_rating_charm_point">
 
-                    <com.into.websoso.core.common.ui.custom.WebsosoChipGroup
-                        android:id="@+id/wcg_novel_rating_charm_points_row1"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/ll_novel_rating_charm_point_worldview"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:chipSpacing="6dp"
-                        app:singleLine="true"
-                        app:singleSelection="false" />
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingVertical="7dp">
 
-                    <com.into.websoso.core.common.ui.custom.WebsosoChipGroup
-                        android:id="@+id/wcg_novel_rating_charm_points_row2"
-                        android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/iv_novel_rating_charm_point_worldview"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_library_world_view"
+                            app:tint="@color/gray_80_DDDDE3" />
+
+                        <TextView
+                            android:id="@+id/tv_novel_rating_charm_point_worldview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textAppearance="@style/body4"
+                            android:textColor="@color/gray_200_949399"
+                            tools:text="세계관" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_rating_charm_point_material"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        app:chipSpacing="6dp"
-                        app:singleLine="true"
-                        app:singleSelection="false" />
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingVertical="7dp">
+
+                        <ImageView
+                            android:id="@+id/iv_novel_rating_charm_point_material"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_library_material"
+                            app:tint="@color/gray_80_DDDDE3" />
+
+                        <TextView
+                            android:id="@+id/tv_novel_rating_charm_point_material"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textAppearance="@style/body4"
+                            android:textColor="@color/gray_200_949399"
+                            tools:text="소재" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_rating_charm_point_writing_skill"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingVertical="7dp">
+
+                        <ImageView
+                            android:id="@+id/iv_novel_rating_charm_point_writing_skill"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_library_writingskill"
+                            app:tint="@color/gray_80_DDDDE3" />
+
+                        <TextView
+                            android:id="@+id/tv_novel_rating_charm_point_writing_skill"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textAppearance="@style/body4"
+                            android:textColor="@color/gray_200_949399"
+                            tools:text="필력" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_rating_charm_point_character"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingVertical="7dp">
+
+                        <ImageView
+                            android:id="@+id/iv_novel_rating_charm_point_character"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_library_character"
+                            app:tint="@color/gray_80_DDDDE3" />
+
+                        <TextView
+                            android:id="@+id/tv_novel_rating_charm_point_character"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textAppearance="@style/body4"
+                            android:textColor="@color/gray_200_949399"
+                            tools:text="캐릭터" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_rating_charm_point_relationship"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingVertical="7dp">
+
+                        <ImageView
+                            android:id="@+id/iv_novel_rating_charm_point_relationship"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_library_relationship"
+                            app:tint="@color/gray_80_DDDDE3" />
+
+                        <TextView
+                            android:id="@+id/tv_novel_rating_charm_point_relationship"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textAppearance="@style/body4"
+                            android:textColor="@color/gray_200_949399"
+                            tools:text="관계" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_novel_rating_charm_point_vibe"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingVertical="7dp">
+
+                        <ImageView
+                            android:id="@+id/iv_novel_rating_charm_point_vibe"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_library_vibe"
+                            app:tint="@color/gray_80_DDDDE3" />
+
+                        <TextView
+                            android:id="@+id/tv_novel_rating_charm_point_vibe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textAppearance="@style/body4"
+                            android:textColor="@color/gray_200_949399"
+                            tools:text="분위기" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <com.google.android.material.divider.MaterialDivider
@@ -200,7 +357,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="@string/novel_rating_keyword"
-                    android:textAppearance="@style/body1"
+                    android:textAppearance="@style/title3"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.core.view.forEach
-import com.into.websoso.R.color.bg_novel_rating_chip_background_selector
-import com.into.websoso.R.color.bg_novel_rating_chip_stroke_selector
-import com.into.websoso.R.color.bg_novel_rating_chip_text_selector
+import androidx.core.content.ContextCompat
+import com.into.websoso.R.color.gray_200_949399
+import com.into.websoso.R.color.gray_80_DDDDE3
 import com.into.websoso.R.color.primary_100_6A5DFD
 import com.into.websoso.R.color.primary_50_F1EFFF
 import com.into.websoso.R.drawable.bg_novel_detail_primary_100_radius_8dp
@@ -54,13 +56,14 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
     private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
+    private lateinit var charmPointItems: List<CharmPointItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindView()
         setupNovelRating()
         setupObserver()
-        setupCharmPointChips()
+        setupCharmPointItems()
         setupWebsosoLoadingLayout()
         setupBackPressCallback()
         tracker.trackEvent("rate")
@@ -189,7 +192,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
     private fun updateView(uiState: NovelRatingUiState) {
         updateSelectedDate(uiState.novelRatingModel.ratingDateModel)
-        updateCharmPointChips(uiState.novelRatingModel.charmPoints)
+        updateCharmPointItems(uiState.novelRatingModel.charmPoints)
         updateKeywordChips(uiState.keywordsModel.currentSelectedKeywords)
     }
 
@@ -210,17 +213,19 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
         binding.tvNovelRatingDisplayDate.text = underlinedText
     }
 
-    private fun updateCharmPointChips(previousSelectedCharmPoints: List<CharmPoint>) {
-        val selectedTitles = previousSelectedCharmPoints.map { it.title }.toSet()
+    private fun updateCharmPointItems(previousSelectedCharmPoints: List<CharmPoint>) {
+        val selectedCharmPoints = previousSelectedCharmPoints.toSet()
+        val selectedColor = ContextCompat.getColor(this, primary_100_6A5DFD)
+        val defaultIconColor = ContextCompat.getColor(this, gray_80_DDDDE3)
+        val defaultTextColor = ContextCompat.getColor(this, gray_200_949399)
 
-        listOf(
-            binding.wcgNovelRatingCharmPointsRow1,
-            binding.wcgNovelRatingCharmPointsRow2,
-        ).forEach { chipGroup ->
-            chipGroup.forEach { view ->
-                val chip = view as WebsosoChip
-                chip.isSelected = chip.text.toString() in selectedTitles
-            }
+        charmPointItems.forEach { item ->
+            val isSelected = item.charmPoint in selectedCharmPoints
+            item.container.isSelected = isSelected
+            item.icon.isSelected = isSelected
+            item.title.isSelected = isSelected
+            item.icon.setColorFilter(if (isSelected) selectedColor else defaultIconColor)
+            item.title.setTextColor(if (isSelected) selectedColor else defaultTextColor)
         }
     }
 
@@ -251,36 +256,57 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
         }
     }
 
-    private fun setupCharmPointChips() {
-        val charmPoints = getString(novel_rating_charm_points).toWrappedCharmPoint()
-
-        val firstRow = charmPoints.take(3)
-        val secondRow = charmPoints.drop(3)
-
-        binding.wcgNovelRatingCharmPointsRow1.removeAllViews()
-        binding.wcgNovelRatingCharmPointsRow2.removeAllViews()
-
-        firstRow.forEach { charmPoint ->
-            binding.wcgNovelRatingCharmPointsRow1.addChip(createCharmPointChip(charmPoint))
+    private fun setupCharmPointItems() {
+        val orderedCharmPoints = getString(novel_rating_charm_points).toWrappedCharmPoint()
+        val charmPointViews = listOf(
+            CharmPointViews(
+                container = binding.llNovelRatingCharmPointWorldview,
+                icon = binding.ivNovelRatingCharmPointWorldview,
+                title = binding.tvNovelRatingCharmPointWorldview,
+            ),
+            CharmPointViews(
+                container = binding.llNovelRatingCharmPointMaterial,
+                icon = binding.ivNovelRatingCharmPointMaterial,
+                title = binding.tvNovelRatingCharmPointMaterial,
+            ),
+            CharmPointViews(
+                container = binding.llNovelRatingCharmPointWritingSkill,
+                icon = binding.ivNovelRatingCharmPointWritingSkill,
+                title = binding.tvNovelRatingCharmPointWritingSkill,
+            ),
+            CharmPointViews(
+                container = binding.llNovelRatingCharmPointCharacter,
+                icon = binding.ivNovelRatingCharmPointCharacter,
+                title = binding.tvNovelRatingCharmPointCharacter,
+            ),
+            CharmPointViews(
+                container = binding.llNovelRatingCharmPointRelationship,
+                icon = binding.ivNovelRatingCharmPointRelationship,
+                title = binding.tvNovelRatingCharmPointRelationship,
+            ),
+            CharmPointViews(
+                container = binding.llNovelRatingCharmPointVibe,
+                icon = binding.ivNovelRatingCharmPointVibe,
+                title = binding.tvNovelRatingCharmPointVibe,
+            ),
+        )
+        charmPointItems = orderedCharmPoints.zip(charmPointViews) { charmPoint, views ->
+            views.title.text = charmPoint.title
+            CharmPointItem(
+                charmPoint = charmPoint,
+                container = views.container,
+                icon = views.icon,
+                title = views.title,
+            )
         }
 
-        secondRow.forEach { charmPoint ->
-            binding.wcgNovelRatingCharmPointsRow2.addChip(createCharmPointChip(charmPoint))
+        charmPointItems.forEach { item ->
+            item.container.setOnClickListener {
+                handleCharmPointClick(item.charmPoint)
+            }
         }
+        updateCharmPointItems(emptyList())
     }
-
-    private fun createCharmPointChip(charmPoint: CharmPoint): WebsosoChip =
-        WebsosoChip(this@NovelRatingActivity).apply {
-            setWebsosoChipText(charmPoint.title)
-            setWebsosoChipTextAppearance(body2)
-            setWebsosoChipTextColor(bg_novel_rating_chip_text_selector)
-            setWebsosoChipStrokeColor(bg_novel_rating_chip_stroke_selector)
-            setWebsosoChipBackgroundColor(bg_novel_rating_chip_background_selector)
-            setWebsosoChipPaddingVertical(12f.toFloatPxFromDp())
-            setWebsosoChipPaddingHorizontal(6f.toFloatPxFromDp())
-            setWebsosoChipRadius(20f.toFloatPxFromDp())
-            setOnWebsosoChipClick { handleCharmPointClick(charmPoint) }
-        }
 
     private fun handleCharmPointClick(charmPoint: CharmPoint) {
         novelRatingViewModel.updateCharmPoints(charmPoints.find { it == charmPoint } ?: return)
@@ -346,4 +372,17 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
                 putExtra(NOVEL, novel)
             }
     }
+
+    private data class CharmPointItem(
+        val charmPoint: CharmPoint,
+        val container: View,
+        val icon: ImageView,
+        val title: TextView,
+    )
+
+    private data class CharmPointViews(
+        val container: View,
+        val icon: ImageView,
+        val title: TextView,
+    )
 }
