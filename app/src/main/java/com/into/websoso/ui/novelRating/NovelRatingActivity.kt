@@ -306,7 +306,6 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
                 handleCharmPointClick(item.charmPoint)
             }
         }
-        updateCharmPointItems(emptyList())
     }
 
     private fun handleCharmPointClick(charmPoint: CharmPoint) {
