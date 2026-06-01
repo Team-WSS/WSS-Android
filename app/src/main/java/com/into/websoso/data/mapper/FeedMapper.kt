@@ -118,7 +118,7 @@ fun PopularFeedsResponseDto.toData(): PopularFeedsEntity =
                 isPublic = feed.isPublic ?: false,
                 novelTitle = feed.novelTitle ?: feed.title.orEmpty(),
                 novelImage = feed.novelImage ?: feed.novelThumbnailImage.orEmpty(),
-                novelGenreImage = feed.novelGenreImage.orEmpty(),
+                novelGenre = "",
             )
         },
     )

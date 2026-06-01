@@ -30,7 +30,5 @@ data class PopularFeedsResponseDto(
         val novelImage: String? = null,
         @SerialName("novelThumbnailImage")
         val novelThumbnailImage: String? = null,
-        @SerialName("novelGenreImage")
-        val novelGenreImage: String? = null,
     )
 }

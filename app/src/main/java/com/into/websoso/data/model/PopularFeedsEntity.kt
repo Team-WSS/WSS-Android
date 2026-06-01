@@ -12,6 +12,6 @@ data class PopularFeedsEntity(
         val isPublic: Boolean,
         val novelTitle: String,
         val novelImage: String,
-        val novelGenreImage: String,
+        val novelGenre: String,
     )
 }

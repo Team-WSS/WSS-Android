@@ -54,6 +54,7 @@ class FeedRepository
                                     isPublic = feedDetail.isPublic,
                                     novelTitle = novel.title,
                                     novelImage = feed.novelImage.ifBlank { novel.thumbnail },
+                                    novelGenre = novel.genre,
                                 )
                             }.getOrNull()
                         }
@@ -62,7 +63,8 @@ class FeedRepository
                     .filter { feed ->
                         feed.isPublic &&
                             feed.novelTitle.isNotBlank() &&
-                            feed.novelImage.isNotBlank()
+                            feed.novelImage.isNotBlank() &&
+                            feed.novelGenre.isNotBlank()
                     }
             }
 
