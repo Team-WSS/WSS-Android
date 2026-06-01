@@ -221,9 +221,6 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
 
         charmPointItems.forEach { item ->
             val isSelected = item.charmPoint in selectedCharmPoints
-            item.container.isSelected = isSelected
-            item.icon.isSelected = isSelected
-            item.title.isSelected = isSelected
             item.icon.setColorFilter(if (isSelected) selectedColor else defaultIconColor)
             item.title.setTextColor(if (isSelected) selectedColor else defaultTextColor)
         }
