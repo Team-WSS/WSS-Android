@@ -22,9 +22,9 @@
             android:textAppearance="@style/title3"
             android:textColor="@color/black"
             app:layout_constraintEnd_toStartOf="@id/fl_popular_feed_thumbnail"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0"
             tools:text="피폐 역하렘 남주들의 막내 처제가..." />
 
         <TextView
@@ -57,11 +57,16 @@
             app:layout_constraintTop_toBottomOf="@id/tv_popular_feed_title"
             tools:visibility="visible" />
 
-        <FrameLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/fl_popular_feed_thumbnail"
             android:layout_width="64dp"
             android:layout_height="90dp"
             android:layout_marginStart="20dp"
+            android:background="@color/transparent"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_popular_feed_title"
@@ -74,21 +79,12 @@
                 android:scaleType="centerCrop" />
 
             <ImageView
-                android:id="@+id/iv_popular_feed_genre_frame"
+                android:id="@+id/iv_popular_feed_genre"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end|bottom"
-                android:src="@drawable/ic_novel_detail_genre_frame" />
-
-            <ImageView
-                android:id="@+id/iv_popular_feed_genre"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:layout_gravity="end|bottom"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="4dp"
                 android:scaleType="fitCenter" />
-        </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,7 +3,6 @@ package com.into.websoso.ui.main.home.adpater
 import android.util.Patterns
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import coil.decode.SvgDecoder
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.into.websoso.core.common.util.getS3ImageUrl
@@ -12,6 +11,7 @@ import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
 import com.into.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
 import com.into.websoso.databinding.ItemPopularFeedBinding
 import com.into.websoso.databinding.ItemPopularFeedSlotBinding
+import com.into.websoso.ui.feedDetail.model.Genre as FeedDetailGenre
 
 class PopularFeedsViewHolder(
     private val binding: ItemPopularFeedBinding,
@@ -51,14 +51,10 @@ class PopularFeedsViewHolder(
             transformations(RoundedCornersTransformation(8f.toFloatPxFromDp()))
             error(img_loading_thumbnail)
         }
-        val isGenreVisible = feed.novelGenreImage.isNotBlank()
-        ivPopularFeedGenreFrame.visibility = if (isGenreVisible) View.VISIBLE else View.GONE
+        val isGenreVisible = feed.novelGenre.isNotBlank()
         ivPopularFeedGenre.visibility = if (isGenreVisible) View.VISIBLE else View.GONE
         if (isGenreVisible) {
-            ivPopularFeedGenre.load(feed.novelGenreImage.toImageUrl()) {
-                crossfade(true)
-                decoderFactory(SvgDecoder.Factory())
-            }
+            ivPopularFeedGenre.setImageResource(FeedDetailGenre.from(feed.novelGenre).drawableRes)
         }
         root.setOnClickListener { onFeedClick(feed.feedId) }
     }
