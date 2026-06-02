@@ -55,7 +55,6 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
     lateinit var tracker: Tracker
 
     private val novelRatingViewModel: NovelRatingViewModel by viewModels()
-    private val charmPoints: List<CharmPoint> = CharmPoint.entries.toList()
     private lateinit var charmPointItems: List<CharmPointItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -306,7 +305,7 @@ class NovelRatingActivity : BaseActivity<ActivityNovelRatingBinding>(activity_no
     }
 
     private fun handleCharmPointClick(charmPoint: CharmPoint) {
-        novelRatingViewModel.updateCharmPoints(charmPoints.find { it == charmPoint } ?: return)
+        novelRatingViewModel.updateCharmPoints(charmPoint)
     }
 
     private fun showDatePickerBottomSheetDialog() {
