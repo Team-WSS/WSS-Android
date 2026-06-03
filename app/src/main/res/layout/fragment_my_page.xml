@@ -140,6 +140,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:background="@drawable/bg_my_library_gray50_radius_14dp"
+                            android:backgroundTint="@color/primary_20_F5F7FF"
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:paddingVertical="16dp"
@@ -160,7 +161,7 @@
                                     android:layout_weight="1"
                                     android:text='@{String.valueOf(myLibraryViewModel.uiState.novelStats.interestNovelCount)}'
                                     android:textAppearance="@style/title2"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/primary_100_6A5DFD"
                                     tools:text="12" />
 
                                 <TextView
@@ -174,11 +175,6 @@
                                     android:textColor="@color/black" />
 
                             </LinearLayout>
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="38dp"
-                                android:background="@color/gray_70_DFDFE3" />
 
                             <LinearLayout
                                 android:id="@+id/ll_my_library_storage_watching"
@@ -195,7 +191,7 @@
                                     android:layout_weight="1"
                                     android:text='@{String.valueOf(myLibraryViewModel.uiState.novelStats.watchingNovelCount)}'
                                     android:textAppearance="@style/title2"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/primary_100_6A5DFD"
                                     tools:text="12" />
 
                                 <TextView
@@ -225,7 +221,7 @@
                                     android:layout_weight="1"
                                     android:text='@{String.valueOf(myLibraryViewModel.uiState.novelStats.watchedNovelCount)}'
                                     android:textAppearance="@style/title2"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/primary_100_6A5DFD"
                                     tools:text="12" />
 
                                 <TextView
@@ -255,7 +251,7 @@
                                     android:layout_weight="1"
                                     android:text="@{String.valueOf(myLibraryViewModel.uiState.novelStats.quitNovelCount)}"
                                     android:textAppearance="@style/title2"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/primary_100_6A5DFD"
                                     tools:text="12" />
 
                                 <TextView
@@ -459,8 +455,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="30dp"
-                            android:paddingVertical="0dp"
                             android:includeFontPadding="false"
+                            android:paddingVertical="0dp"
                             android:text="@string/my_page_taste_title"
                             android:textAppearance="@style/title2"
                             android:textColor="@color/gray_300_52515F"
@@ -568,8 +564,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="30dp"
-                            android:paddingVertical="0dp"
                             android:includeFontPadding="false"
+                            android:paddingVertical="0dp"
                             android:text="@string/my_page_taste_title"
                             android:textAppearance="@style/title2"
                             android:textColor="@color/gray_300_52515F"
