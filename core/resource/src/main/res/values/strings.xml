@@ -145,6 +145,7 @@
     <string name="novel_rating_read_status_watching">보는 중</string>
     <string name="novel_rating_read_status_watched">봤어요</string>
     <string name="novel_rating_read_status_quit">하차</string>
+    <string name="novel_rating_star_title">별점</string>
     <string name="novel_rating_charm_points">세계관,소재,필력,캐릭터,관계,분위기</string>
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
@@ -171,7 +172,7 @@
     <string name="novel_rating_keyword_enroll">%d개 선택</string>
     <string name="novel_rating_charm_point_title">매력포인트</string>
     <string name="novel_rating_keyword">키워드</string>
-    <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
+    <string name="novel_rating_keyword_button">작품을 나타내는 키워드는?</string>
     <string name="novel_rating_keyword_exceed">최대 20개까지 선택 가능해요</string>
     <string name="novel_rating_charm_point_exceed">최대 3개까지 선택 가능해요</string>
 
