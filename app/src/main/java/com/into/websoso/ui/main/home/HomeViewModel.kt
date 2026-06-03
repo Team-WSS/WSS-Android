@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.TermsAgreementEntity
@@ -18,6 +17,7 @@ import com.into.websoso.ui.main.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -69,42 +69,38 @@ class HomeViewModel
             }
         }
 
-        private fun fetchUserHomeData() {
-            viewModelScope.launch {
-                runCatching {
-                    val results = listOf(
-                        async { runCatching { novelRepository.fetchPopularNovels() } },
-                        async { runCatching { feedRepository.fetchPopularFeeds() } },
-                        async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } },
-                    ).awaitAll()
+        private suspend fun fetchUserHomeData() {
+            coroutineScope {
+                val popularNovelsDeferred =
+                    async { runCatching { novelRepository.fetchPopularNovels() } }
+                val popularFeedsDeferred =
+                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
+                val recommendedNovelsDeferred =
+                    async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
 
-                    val failures = results.filter { it.isFailure }
-                    if (failures.isNotEmpty()) {
-                        throw failures.first().exceptionOrNull()
-                            ?: IllegalStateException("Unknown error")
-                    }
+                val popularNovelsResult = popularNovelsDeferred.await()
+                val popularFeedsResult = popularFeedsDeferred.await()
+                val recommendedNovelsResult = recommendedNovelsDeferred.await()
 
-                    val popularNovels = results[0].getOrNull() as? PopularNovelsEntity
-                        ?: PopularNovelsEntity(emptyList())
-                    val popularFeeds = results[1].getOrNull() as? PopularFeedsEntity
-                        ?: PopularFeedsEntity(emptyList())
-                    val recommendedNovels =
-                        results[2].getOrNull() as? RecommendedNovelsByUserTasteEntity
-                            ?: RecommendedNovelsByUserTasteEntity(emptyList())
-
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        error = false,
-                        popularNovels = popularNovels.popularNovels,
-                        popularFeeds = popularFeeds.popularFeeds.chunked(3),
-                        recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
-                    )
-                }.onFailure {
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        error = true,
-                    )
+                val failure = popularNovelsResult.exceptionOrNull()
+                    ?: popularFeedsResult.exceptionOrNull()
+                    ?: recommendedNovelsResult.exceptionOrNull()
+                if (failure != null) {
+                    handleFailureState()
+                    return@coroutineScope
                 }
+
+                val popularNovels = popularNovelsResult.getOrThrow()
+                val popularFeeds = popularFeedsResult.getOrThrow()
+                val recommendedNovels = recommendedNovelsResult.getOrThrow()
+
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = false,
+                    popularNovels = popularNovels.popularNovels,
+                    popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
+                    recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
+                )
             }
         }
 
@@ -129,37 +125,49 @@ class HomeViewModel
         }
 
         private suspend fun fetchGuestData() {
-            viewModelScope.launch {
-                runCatching {
-                    listOf(
-                        async { novelRepository.fetchPopularNovels() },
-                        async { feedRepository.fetchPopularFeeds() },
-                    ).awaitAll()
-                }.onSuccess { responses ->
-                    val popularNovels = responses[0] as PopularNovelsEntity
-                    val popularFeeds = responses[1] as PopularFeedsEntity
+            coroutineScope {
+                val popularNovelsDeferred =
+                    async { runCatching { novelRepository.fetchPopularNovels() } }
+                val popularFeedsDeferred =
+                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
 
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        popularNovels = popularNovels.popularNovels,
-                        popularFeeds = popularFeeds.popularFeeds.chunked(3),
-                    )
-                }.onFailure {
-                    _uiState.value = uiState.value?.copy(
-                        loading = false,
-                        error = true,
-                    )
+                val popularNovelsResult = popularNovelsDeferred.await()
+                val popularFeedsResult = popularFeedsDeferred.await()
+
+                val failure = popularNovelsResult.exceptionOrNull()
+                    ?: popularFeedsResult.exceptionOrNull()
+                if (failure != null) {
+                    handleFailureState()
+                    return@coroutineScope
                 }
+
+                val popularNovels = popularNovelsResult.getOrThrow()
+                val popularFeeds = popularFeedsResult.getOrThrow()
+
+                _uiState.value = uiState.value?.copy(
+                    loading = false,
+                    error = false,
+                    popularNovels = popularNovels.popularNovels,
+                    popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
+                )
             }
+        }
+
+        private fun handleFailureState() {
+            _uiState.value = uiState.value?.copy(
+                loading = false,
+                error = true,
+            )
         }
 
         fun updateFeed() {
             viewModelScope.launch {
                 runCatching {
-                    feedRepository.fetchPopularFeeds()
+                    feedRepository.fetchPopularFeedsWithDetails()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
-                        popularFeeds = popularFeeds.popularFeeds.chunked(3),
+                        error = false,
+                        popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
@@ -250,5 +258,9 @@ class HomeViewModel
                     pushMessageRepository.updateUserFCMToken(token)
                 }
             }
+        }
+
+        companion object {
+            private const val HOME_POPULAR_FEED_PAGE_SIZE = 2
         }
     }

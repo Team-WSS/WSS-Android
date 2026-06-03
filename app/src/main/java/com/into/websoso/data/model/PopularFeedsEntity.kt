@@ -9,5 +9,9 @@ data class PopularFeedsEntity(
         val likeCount: Int,
         val commentCount: Int,
         val isSpoiler: Boolean,
+        val isPublic: Boolean,
+        val novelTitle: String,
+        val novelImage: String,
+        val novelGenre: String,
     )
 }
