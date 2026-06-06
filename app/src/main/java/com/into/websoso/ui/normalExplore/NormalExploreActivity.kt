@@ -17,8 +17,9 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
-import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.detailExplore.info.model.Genre
+import com.into.websoso.ui.detailExploreResult.DetailExploreResultActivity
+import com.into.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import com.into.websoso.ui.main.explore.adapter.SosoPickAdapter
 import com.into.websoso.ui.normalExplore.adapter.GenreSearchAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
@@ -50,7 +51,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         )
     }
     private val genreSearchAdapter: GenreSearchAdapter by lazy {
-        GenreSearchAdapter(::navigateToDetailExplore)
+        GenreSearchAdapter(::navigateToDetailExploreResult)
     }
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetailFromSosoPick) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
@@ -173,9 +174,14 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         )
     }
 
-    private fun navigateToDetailExplore(genre: Genre) {
+    private fun navigateToDetailExploreResult(genre: Genre) {
         singleEventHandler.throttleFirst {
-            val intent = DetailExploreActivity.getIntent(this, genre)
+            val intent = DetailExploreResultActivity.getIntent(
+                context = this,
+                detailExploreFilteredModel = DetailExploreFilteredModel(
+                    genres = listOf(genre),
+                ),
+            )
             startActivity(intent)
         }
     }

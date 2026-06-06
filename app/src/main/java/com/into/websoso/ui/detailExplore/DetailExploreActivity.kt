@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.into.websoso.core.common.util.setupSystemBarIconColor
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.string.inquire_link
-import com.into.websoso.ui.detailExplore.info.model.Genre
 import com.into.websoso.ui.detailExploreResult.DetailExploreResultActivity
 import com.into.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +23,6 @@ class DetailExploreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setupSystemBarIconColor(true)
-        updateInitialSelectedGenre()
 
         setContent {
             WebsosoTheme {
@@ -72,20 +70,7 @@ class DetailExploreActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun updateInitialSelectedGenre() {
-        val selectedGenre = intent.getStringExtra(SELECTED_GENRE_NAME)?.let(Genre::fromName)
-        detailExploreViewModel.updateInitialSelectedGenre(selectedGenre)
-    }
-
     companion object {
-        private const val SELECTED_GENRE_NAME = "SELECTED_GENRE_NAME"
-
-        fun getIntent(
-            context: Context,
-            selectedGenre: Genre? = null,
-        ): Intent =
-            Intent(context, DetailExploreActivity::class.java).apply {
-                selectedGenre?.let { putExtra(SELECTED_GENRE_NAME, it.name) }
-            }
+        fun getIntent(context: Context): Intent = Intent(context, DetailExploreActivity::class.java)
     }
 }
