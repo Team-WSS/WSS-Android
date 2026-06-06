@@ -40,13 +40,16 @@ class NormalExploreViewModel
         private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
         val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-        private val _sosoPicks: MutableLiveData<List<SosoPickEntity.NovelEntity>> = MutableLiveData(emptyList())
+        private val _sosoPicks: MutableLiveData<List<SosoPickEntity.NovelEntity>> =
+            MutableLiveData(emptyList())
         val sosoPicks: LiveData<List<SosoPickEntity.NovelEntity>> get() = _sosoPicks
 
-        private val _isSosoPickVisible: MutableLiveData<Boolean> = MutableLiveData(initialSearchWord.isBlank())
+        private val _isSosoPickVisible: MutableLiveData<Boolean> =
+            MutableLiveData(initialSearchWord.isBlank())
         val isSosoPickVisible: LiveData<Boolean> get() = _isSosoPickVisible
 
-        private val _recentSearches: MutableLiveData<List<RecentSearchModel>> = MutableLiveData(emptyList())
+        private val _recentSearches: MutableLiveData<List<RecentSearchModel>> =
+            MutableLiveData(emptyList())
         val recentSearches: LiveData<List<RecentSearchModel>> get() = _recentSearches
 
         private val _isRecentSearchesVisible: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -153,7 +156,8 @@ class NormalExploreViewModel
                 runCatching {
                     novelRepository.deleteRecentSearch(recentSearchId)
                 }.onSuccess {
-                    _recentSearches.value = _recentSearches.value.orEmpty()
+                    _recentSearches.value = _recentSearches.value
+                        .orEmpty()
                         .filterNot { recentSearch -> recentSearch.id == recentSearchId }
                     updateRecentSearchesVisibility()
                 }
