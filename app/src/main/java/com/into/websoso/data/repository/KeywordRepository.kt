@@ -11,4 +11,7 @@ class KeywordRepository
         private val keywordApi: KeywordApi,
     ) {
         suspend fun fetchKeywords(keyword: String?): CategoriesEntity = keywordApi.getKeywords(keyword).toData()
+
+        suspend fun fetchPopularKeywords(): List<CategoriesEntity.CategoryEntity.KeywordEntity> =
+            keywordApi.getPopularKeywords().toData()
     }

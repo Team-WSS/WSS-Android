@@ -9,11 +9,17 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import com.into.websoso.R.color.gray_300_52515F
+import com.into.websoso.R.color.gray_50_F4F5F8
 import com.into.websoso.R.layout.activity_normal_explore
+import com.into.websoso.R.style.body3
 import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
@@ -186,6 +192,18 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         }
     }
 
+    private fun navigateToDetailExploreResult(keyword: KeywordModel) {
+        singleEventHandler.throttleFirst {
+            val intent = DetailExploreResultActivity.getIntent(
+                context = this,
+                detailExploreFilteredModel = DetailExploreFilteredModel(
+                    keywordIds = listOf(keyword.keywordId),
+                ),
+            )
+            startActivity(intent)
+        }
+    }
+
     private fun navigateToNovelDetail(novelId: Long) {
         singleEventHandler.throttleFirst {
             val intent = NovelDetailActivity.getIntent(this, novelId)
@@ -239,6 +257,28 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         normalExploreViewModel.recentSearches.observe(this) { recentSearches ->
             recentSearchAdapter.submitList(recentSearches)
         }
+
+        normalExploreViewModel.keywordSearches.observe(this) { keywordSearches ->
+            updateKeywordSearchChips(keywordSearches)
+        }
+    }
+
+    private fun updateKeywordSearchChips(keywordSearches: List<KeywordModel>) {
+        val keywordChipGroup = binding.wcgNormalExploreKeywordSearch
+        keywordChipGroup.removeAllViews()
+        keywordSearches.forEach { keyword ->
+            WebsosoChip(this@NormalExploreActivity)
+                .apply {
+                    setWebsosoChipText(keyword.keywordName)
+                    setWebsosoChipTextAppearance(body3)
+                    setWebsosoChipTextColor(gray_300_52515F)
+                    setWebsosoChipBackgroundColor(gray_50_F4F5F8)
+                    setWebsosoChipPaddingVertical(KEYWORD_CHIP_VERTICAL_PADDING.toFloatPxFromDp())
+                    setWebsosoChipPaddingHorizontal(KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp())
+                    setWebsosoChipRadius(KEYWORD_CHIP_RADIUS.toFloatPxFromDp())
+                    setOnWebsosoChipClick { navigateToDetailExploreResult(keyword) }
+                }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
+        }
     }
 
     private fun updateView(uiState: NormalExploreUiState) {
@@ -264,6 +304,9 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
 
     companion object {
         const val SEARCH_AUTHOR = "SEARCH_AUTHOR"
+        private const val KEYWORD_CHIP_RADIUS = 20f
+        private const val KEYWORD_CHIP_VERTICAL_PADDING = 7f
+        private const val KEYWORD_CHIP_HORIZONTAL_PADDING = 13f
 
         fun getIntent(
             context: Context,
