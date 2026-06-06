@@ -51,10 +51,18 @@ class DetailExploreResultViewModel
 
             if (filterGenres.value?.isNotEmpty() == true) appliedFilters.add(GENRES_LABEL)
             if (filterIsNovelCompleted.value != null) appliedFilters.add(NOVEL_COMPLETED_LABEL)
-            appliedFilters.add(RATING_LABEL)
+            if (isRatingFilterApplied()) appliedFilters.add(RATING_LABEL)
             if (filterKeywordIds.value?.isNotEmpty() == true) appliedFilters.add(KEYWORDS_LABEL)
 
             _appliedFiltersMessage.value = appliedFilters.joinToString(FILTER_SEPARATOR)
+        }
+
+        private fun isRatingFilterApplied(): Boolean {
+            val ratingStart = filterRatingStart.value ?: DetailExploreFilteredModel.RATING_MIN_DEFAULT
+            val ratingEnd = filterRatingEnd.value ?: DetailExploreFilteredModel.RATING_MAX_DEFAULT
+
+            return ratingStart > DetailExploreFilteredModel.RATING_MIN_DEFAULT ||
+                ratingEnd < DetailExploreFilteredModel.RATING_MAX_DEFAULT
         }
 
         fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
