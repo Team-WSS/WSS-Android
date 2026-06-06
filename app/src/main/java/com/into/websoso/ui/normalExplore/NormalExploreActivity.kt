@@ -5,16 +5,18 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.into.websoso.R.color.gray_300_52515F
-import com.into.websoso.R.color.gray_50_F4F5F8
+import com.into.websoso.R.drawable.bg_normal_explore_keyword_search_chip
 import com.into.websoso.R.layout.activity_normal_explore
 import com.into.websoso.R.style.body3
 import com.into.websoso.core.common.ui.base.BaseActivity
-import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
@@ -38,6 +40,7 @@ import com.into.websoso.ui.normalExplore.model.NormalExploreUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activity_normal_explore) {
@@ -267,17 +270,26 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         val keywordChipGroup = binding.wcgNormalExploreKeywordSearch
         keywordChipGroup.removeAllViews()
         keywordSearches.forEach { keyword ->
-            WebsosoChip(this@NormalExploreActivity)
+            TextView(this@NormalExploreActivity)
                 .apply {
-                    setWebsosoChipText(keyword.keywordName)
-                    setWebsosoChipTextAppearance(body3)
-                    setWebsosoChipTextColor(gray_300_52515F)
-                    setWebsosoChipBackgroundColor(gray_50_F4F5F8)
-                    setWebsosoChipPaddingVertical(KEYWORD_CHIP_VERTICAL_PADDING.toFloatPxFromDp())
-                    setWebsosoChipPaddingHorizontal(KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp())
-                    setWebsosoChipRadius(KEYWORD_CHIP_RADIUS.toFloatPxFromDp())
-                    setOnWebsosoChipClick { navigateToDetailExploreResult(keyword) }
-                }.also { websosoChip -> keywordChipGroup.addChip(websosoChip) }
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        KEYWORD_CHIP_HEIGHT.toFloatPxFromDp().roundToInt(),
+                    )
+                    text = keyword.keywordName
+                    gravity = Gravity.CENTER
+                    includeFontPadding = false
+                    setTextAppearance(body3)
+                    setTextColor(getColor(gray_300_52515F))
+                    setBackgroundResource(bg_normal_explore_keyword_search_chip)
+                    setPadding(
+                        KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp().roundToInt(),
+                        0,
+                        KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp().roundToInt(),
+                        0,
+                    )
+                    setOnClickListener { navigateToDetailExploreResult(keyword) }
+                }.also { keywordChip -> keywordChipGroup.addView(keywordChip) }
         }
     }
 
@@ -304,8 +316,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
 
     companion object {
         const val SEARCH_AUTHOR = "SEARCH_AUTHOR"
-        private const val KEYWORD_CHIP_RADIUS = 20f
-        private const val KEYWORD_CHIP_VERTICAL_PADDING = 7f
+        private const val KEYWORD_CHIP_HEIGHT = 35f
         private const val KEYWORD_CHIP_HORIZONTAL_PADDING = 13f
 
         fun getIntent(
