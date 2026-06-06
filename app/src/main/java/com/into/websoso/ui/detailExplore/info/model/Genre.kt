@@ -18,5 +18,7 @@ enum class Genre(
 
     companion object {
         fun from(title: String): Genre = entries.find { it.titleKr == title } ?: throw IllegalArgumentException()
+
+        fun fromName(name: String): Genre? = entries.find { it.name == name }
     }
 }

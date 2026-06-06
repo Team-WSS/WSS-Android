@@ -89,6 +89,16 @@ class DetailExploreViewModel
             }
         }
 
+        fun updateInitialSelectedGenre(genre: Genre?) {
+            if (genre == null) return
+
+            val currentGenres = _selectedGenres.value?.toMutableList() ?: mutableListOf()
+            if (currentGenres.contains(genre)) return
+
+            currentGenres.add(genre)
+            _selectedGenres.value = currentGenres
+        }
+
         fun updateSelectedSeriesStatus(status: SeriesStatus?) {
             _selectedStatus.value = status
         }

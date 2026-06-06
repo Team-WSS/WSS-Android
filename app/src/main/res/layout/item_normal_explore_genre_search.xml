@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="genreSearch"
+            type="com.into.websoso.ui.normalExplore.model.GenreSearchModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/ll_normal_explore_genre_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
+        android:minWidth="44dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_normal_explore_genre_search_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@null"
+            tools:src="@drawable/ic_onboarding_modern_fantasy" />
+
+        <TextView
+            android:id="@+id/tv_normal_explore_genre_search_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@{genreSearch.title}"
+            android:textAppearance="@style/body3"
+            android:textColor="@color/gray_300_52515F"
+            tools:text="현판" />
+    </LinearLayout>
+</layout>
