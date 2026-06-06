@@ -126,6 +126,62 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_normal_explore_recent_search_section"
+            isVisible="@{normalExploreViewModel.isRecentSearchesVisible}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_normal_explore_recent_search_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/normal_explore_recent_search_title"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_normal_explore_recent_search_delete_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> normalExploreViewModel.deleteAllRecentSearches()}"
+                android:paddingVertical="4dp"
+                android:text="@string/normal_explore_recent_search_delete_all"
+                android:textAppearance="@style/body4"
+                android:textColor="@color/gray_200_949399"
+                app:layout_constraintBottom_toBottomOf="@id/tv_normal_explore_recent_search_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_normal_explore_recent_search_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_normal_explore_recent_search"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="12dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_normal_explore_recent_search_title"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_normal_explore_recent_search" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_normal_explore_soso_pick_section"
             isVisible="@{normalExploreViewModel.isSosoPickVisible}"
             android:layout_width="0dp"
@@ -133,7 +189,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cdl_normal_explore">
+            app:layout_constraintTop_toBottomOf="@id/cl_normal_explore_recent_search_section">
 
             <TextView
                 android:id="@+id/tv_normal_explore_soso_title"
