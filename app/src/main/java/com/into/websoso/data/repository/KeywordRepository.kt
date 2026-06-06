@@ -12,6 +12,5 @@ class KeywordRepository
     ) {
         suspend fun fetchKeywords(keyword: String?): CategoriesEntity = keywordApi.getKeywords(keyword).toData()
 
-        suspend fun fetchPopularKeywords(): List<CategoriesEntity.CategoryEntity.KeywordEntity> =
-            keywordApi.getPopularKeywords().toData()
+        suspend fun fetchPopularKeywords(): List<CategoriesEntity.CategoryEntity.KeywordEntity> = keywordApi.getPopularKeywords().toData()
     }

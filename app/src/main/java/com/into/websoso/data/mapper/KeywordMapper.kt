@@ -9,8 +9,7 @@ fun KeywordsResponseDto.toData(): CategoriesEntity =
         categories = categories.map { it.toData() },
     )
 
-fun PopularKeywordsResponseDto.toData(): List<CategoriesEntity.CategoryEntity.KeywordEntity> =
-    keywords.map { it.toData() }
+fun PopularKeywordsResponseDto.toData(): List<CategoriesEntity.CategoryEntity.KeywordEntity> = keywords.map { it.toData() }
 
 fun KeywordsResponseDto.CategoryResponseDto.toData(): CategoriesEntity.CategoryEntity =
     CategoriesEntity.CategoryEntity(
