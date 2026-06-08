@@ -15,53 +15,82 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="292dp"
+        android:layout_height="362dp"
         android:layout_marginHorizontal="5dp"
         android:background="@drawable/bg_popular_novel_gradient_radius_14dp"
         android:onClick="@{() -> onClick.invoke(popularNovel.novelId)}">
 
-        <ImageView
-            android:id="@+id/iv_popular_novel_best"
-            android:layout_width="50dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:src="@drawable/ic_popular_novel_best"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_popular_novel_summary"
+            android:layout_width="0dp"
+            android:layout_height="226dp"
+            android:background="@drawable/bg_novel_detail_white_radius_top_14dp"
+            android:clipToOutline="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_popular_novel_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@{popularNovel.title}"
-            android:textAppearance="@style/title2"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_popular_novel_best"
-            tools:text="상수리 나무 아래" />
+            <ImageView
+                android:id="@+id/iv_popular_novel_blur_background"
+                loadImageUrl="@{popularNovel.novelImage}"
+                blurRadius="@{25}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0.22"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/img_loading_thumbnail" />
 
-        <ImageView
-            android:id="@+id/iv_popular_novel_novel_cover"
-            cornerRadius="@{9f}"
-            loadImageUrl="@{popularNovel.novelImage}"
-            android:layout_width="128dp"
-            android:layout_height="188dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_popular_novel_title"
-            tools:src="@drawable/img_loading_thumbnail" />
+            <TextView
+                android:id="@+id/tv_popular_novel_title"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="33dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAppearance="@style/title2"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@id/iv_popular_novel_novel_cover"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="괴담에 떨어져도 출근을 해야 하..." />
+
+            <TextView
+                android:id="@+id/tv_popular_novel_author_status"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:singleLine="true"
+                android:textAppearance="@style/body3"
+                android:textColor="@color/gray_200_949399"
+                app:layout_constraintStart_toStartOf="@id/tv_popular_novel_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_popular_novel_title"
+                tools:text="백덕수 · 연재작" />
+
+            <ImageView
+                android:id="@+id/iv_popular_novel_novel_cover"
+                cornerRadius="@{5.65f}"
+                loadImageUrl="@{popularNovel.novelImage}"
+                android:layout_width="117dp"
+                android:layout_height="171dp"
+                android:layout_marginTop="33dp"
+                android:layout_marginEnd="22dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/img_loading_thumbnail" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_popular_novel_in_short"
             android:layout_width="0dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="238dp"
+            android:layout_height="136dp"
+            android:layout_marginTop="226dp"
             android:background="@drawable/bg_popular_novel_fcf8f6_bottom_radius_14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
