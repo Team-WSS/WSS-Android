@@ -40,6 +40,7 @@ class PopularNovelsViewHolder(
                     error(img_loading_thumbnail)
                 }
             }
+            listOf("오래된연인", "라이벌/앙숙").bindPopularNovelKeywords()
             ivPopularNovelAvatar.visibility =
                 if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
             tvPopularNovelInShortTitle.visibility =
@@ -70,6 +71,20 @@ class PopularNovelsViewHolder(
             return PopularNovelsViewHolder(binding, onPopularNovelClick)
         }
     }
+
+    private fun List<String>.bindPopularNovelKeywords() {
+        val popularNovelKeywords = take(POPULAR_NOVEL_KEYWORD_MAX_COUNT)
+        with(binding) {
+            llPopularNovelKeywords.visibility =
+                if (popularNovelKeywords.isEmpty()) View.GONE else View.VISIBLE
+            tvPopularNovelKeywordFirst.visibility =
+                if (popularNovelKeywords.isNotEmpty()) View.VISIBLE else View.GONE
+            tvPopularNovelKeywordSecond.visibility =
+                if (popularNovelKeywords.size > 1) View.VISIBLE else View.GONE
+            tvPopularNovelKeywordFirst.text = popularNovelKeywords.getOrNull(0).orEmpty()
+            tvPopularNovelKeywordSecond.text = popularNovelKeywords.getOrNull(1).orEmpty()
+        }
+    }
 }
 
 private fun String.toPopularNovelGenreImagePath(): String =
@@ -85,3 +100,5 @@ private fun String.toPopularNovelGenreImagePath(): String =
         "mystery" -> "/icGenre/mystery"
         else -> ""
     }
+
+private const val POPULAR_NOVEL_KEYWORD_MAX_COUNT = 2

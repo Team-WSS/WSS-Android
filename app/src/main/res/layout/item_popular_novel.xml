@@ -72,6 +72,42 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_popular_novel_title"
                 tools:text="백덕수 · 연재작" />
 
+            <LinearLayout
+                android:id="@+id/ll_popular_novel_keywords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="156dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_popular_novel_keyword_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:background="@drawable/bg_explore_primary20_radius_14dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:singleLine="true"
+                    android:textAppearance="@style/label2"
+                    android:textColor="@color/primary_100_6A5DFD"
+                    tools:text="오래된연인" />
+
+                <TextView
+                    android:id="@+id/tv_popular_novel_keyword_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_explore_primary20_radius_14dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:singleLine="true"
+                    android:textAppearance="@style/label2"
+                    android:textColor="@color/primary_100_6A5DFD"
+                    tools:text="라이벌/앙숙" />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/iv_popular_novel_novel_cover"
                 cornerRadius="@{5.65f}"
