@@ -25,6 +25,8 @@ class PopularNovelsViewHolder(
             else -> popularNovel.feedContent.orEmpty()
         }
         with(binding) {
+            tvPopularNovelTitle.text = popularNovel.toPopularNovelTitle(tvPopularNovelTitle)
+            tvPopularNovelAuthorStatus.text = popularNovel.toAuthorStatus(itemView.context)
             ivPopularNovelAvatar.visibility =
                 if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
             tvPopularNovelInShortTitle.visibility =
