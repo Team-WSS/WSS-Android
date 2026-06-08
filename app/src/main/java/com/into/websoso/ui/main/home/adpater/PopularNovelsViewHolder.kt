@@ -17,21 +17,29 @@ class PopularNovelsViewHolder(
     }
 
     fun bind(popularNovel: PopularNovelEntity) {
-        val nickname: String = popularNovel.nickname ?: "작품 설명"
-        val avatarImage = itemView.getS3ImageUrl(popularNovel.avatarImage ?: "")
-        if (popularNovel.avatarImage.isNullOrEmpty()) {
-            with(binding) {
-                ivPopularNovelAvatar.visibility = View.INVISIBLE
-                tvPopularNovelInShortTitle.visibility = View.INVISIBLE
-                ivPopularNovelAvatarNull.visibility = View.VISIBLE
-                tvPopularNovelInShortTitleNull.visibility = View.VISIBLE
-            }
+        val avatarImage =
+            if (popularNovel.hasUserFeed) itemView.getS3ImageUrl(popularNovel.avatarImage.orEmpty()) else ""
+        val feedDescription = when {
+            popularNovel.hasUserFeed -> popularNovel.feedContent.orEmpty()
+            popularNovel.novelDescription.isNotBlank() -> popularNovel.novelDescription
+            else -> popularNovel.feedContent.orEmpty()
+        }
+        with(binding) {
+            ivPopularNovelAvatar.visibility =
+                if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
+            tvPopularNovelInShortTitle.visibility =
+                if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
+            ivPopularNovelAvatarNull.visibility =
+                if (popularNovel.hasUserFeed) View.GONE else View.VISIBLE
+            tvPopularNovelInShortTitleNull.visibility =
+                if (popularNovel.hasUserFeed) View.GONE else View.VISIBLE
         }
         val updatedPopularNovel = popularNovel.copy(
-            nickname = nickname,
             avatarImage = avatarImage,
         )
         binding.popularNovel = updatedPopularNovel
+        binding.executePendingBindings()
+        binding.tvPopularNovelFeedDescription.text = feedDescription
     }
 
     companion object {
