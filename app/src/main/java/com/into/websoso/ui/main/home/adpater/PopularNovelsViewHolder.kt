@@ -40,7 +40,6 @@ class PopularNovelsViewHolder(
                     error(img_loading_thumbnail)
                 }
             }
-            listOf("오래된연인", "라이벌/앙숙").bindPopularNovelKeywords()
             ivPopularNovelAvatar.visibility =
                 if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
             tvPopularNovelInShortTitle.visibility =
