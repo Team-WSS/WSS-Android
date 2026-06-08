@@ -4,7 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.decode.SvgDecoder
+import coil.load
 import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
 import com.into.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 import com.into.websoso.databinding.ItemPopularNovelBinding
 
@@ -27,6 +30,16 @@ class PopularNovelsViewHolder(
         with(binding) {
             tvPopularNovelTitle.text = popularNovel.toPopularNovelTitle(tvPopularNovelTitle)
             tvPopularNovelAuthorStatus.text = popularNovel.toAuthorStatus(itemView.context)
+            val genreImagePath = popularNovel.genreName.toPopularNovelGenreImagePath()
+            val isGenreVisible = genreImagePath.isNotBlank()
+            ivPopularNovelGenreFrame.visibility = if (isGenreVisible) View.VISIBLE else View.GONE
+            ivPopularNovelGenre.visibility = if (isGenreVisible) View.VISIBLE else View.GONE
+            if (isGenreVisible) {
+                ivPopularNovelGenre.load(itemView.getS3ImageUrl(genreImagePath)) {
+                    decoderFactory(SvgDecoder.Factory())
+                    error(img_loading_thumbnail)
+                }
+            }
             ivPopularNovelAvatar.visibility =
                 if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
             tvPopularNovelInShortTitle.visibility =
@@ -58,3 +71,17 @@ class PopularNovelsViewHolder(
         }
     }
 }
+
+private fun String.toPopularNovelGenreImagePath(): String =
+    when (this) {
+        "romance" -> "/icGenre/romance"
+        "romanceFantasy" -> "/icGenre/romance-fantasy"
+        "BL" -> "/icGenre/bl"
+        "fantasy" -> "/icGenre/fantasy"
+        "modernFantasy" -> "/icGenre/modern-fantasy"
+        "wuxia" -> "/icGenre/wuxia"
+        "lightNovel" -> "/icGenre/light-novel"
+        "drama" -> "/icGenre/drama"
+        "mystery" -> "/icGenre/mystery"
+        else -> ""
+    }

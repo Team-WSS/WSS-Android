@@ -33,8 +33,8 @@
 
             <ImageView
                 android:id="@+id/iv_popular_novel_blur_background"
-                loadImageUrl="@{popularNovel.novelImage}"
                 blurRadius="@{25}"
+                loadImageUrl="@{popularNovel.novelImage}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:alpha="0.22"
@@ -84,6 +84,25 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/img_loading_thumbnail" />
+
+            <ImageView
+                android:id="@+id/iv_popular_novel_genre_frame"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/ic_novel_detail_genre_frame"
+                app:layout_constraintBottom_toBottomOf="@id/iv_popular_novel_novel_cover"
+                app:layout_constraintEnd_toEndOf="@id/iv_popular_novel_novel_cover" />
+
+            <ImageView
+                android:id="@+id/iv_popular_novel_genre"
+                android:layout_width="23dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="@id/iv_popular_novel_novel_cover"
+                app:layout_constraintEnd_toEndOf="@id/iv_popular_novel_novel_cover"
+                tools:src="@drawable/ic_romance_fantasy" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
