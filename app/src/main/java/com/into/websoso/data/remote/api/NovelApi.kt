@@ -5,6 +5,7 @@ import com.into.websoso.data.remote.response.NovelDetailResponseDto
 import com.into.websoso.data.remote.response.NovelFeedResponseDto
 import com.into.websoso.data.remote.response.NovelInfoResponseDto
 import com.into.websoso.data.remote.response.PopularNovelsResponseDto
+import com.into.websoso.data.remote.response.RecentSearchesResponseDto
 import com.into.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto
 import com.into.websoso.data.remote.response.SosoPicksResponseDto
 import retrofit2.http.DELETE
@@ -43,6 +44,17 @@ interface NovelApi {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): ExploreResultResponseDto
+
+    @GET("novels/recent-searches")
+    suspend fun getRecentSearches(): RecentSearchesResponseDto
+
+    @DELETE("novels/recent-searches/{recentSearchId}")
+    suspend fun deleteRecentSearch(
+        @Path("recentSearchId") recentSearchId: Long,
+    )
+
+    @DELETE("novels/recent-searches")
+    suspend fun deleteAllRecentSearches()
 
     @GET("novels/popular")
     suspend fun getPopularNovels(): PopularNovelsResponseDto

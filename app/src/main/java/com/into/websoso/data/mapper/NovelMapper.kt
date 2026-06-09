@@ -6,6 +6,7 @@ import com.into.websoso.data.model.NovelDetailEntity
 import com.into.websoso.data.model.NovelFeedsEntity
 import com.into.websoso.data.model.NovelInfoEntity
 import com.into.websoso.data.model.PopularNovelsEntity
+import com.into.websoso.data.model.RecentSearchesEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.SosoPickEntity
 import com.into.websoso.data.remote.response.ExploreResultResponseDto
@@ -13,6 +14,7 @@ import com.into.websoso.data.remote.response.NovelDetailResponseDto
 import com.into.websoso.data.remote.response.NovelFeedResponseDto
 import com.into.websoso.data.remote.response.NovelInfoResponseDto
 import com.into.websoso.data.remote.response.PopularNovelsResponseDto
+import com.into.websoso.data.remote.response.RecentSearchesResponseDto
 import com.into.websoso.data.remote.response.RecommendedNovelsByUserTasteResponseDto
 import com.into.websoso.data.remote.response.SosoPicksResponseDto
 
@@ -93,6 +95,16 @@ fun ExploreResultResponseDto.toData(): ExploreResultEntity =
                 interestedCount = novel.interestedCount,
                 rating = novel.novelRating,
                 ratingCount = novel.novelRatingCount,
+            )
+        },
+    )
+
+fun RecentSearchesResponseDto.toData(): RecentSearchesEntity =
+    RecentSearchesEntity(
+        recentSearches = recentSearches.map { recentSearch ->
+            RecentSearchesEntity.RecentSearchEntity(
+                id = recentSearch.id,
+                keyword = recentSearch.keyword,
             )
         },
     )

@@ -7,6 +7,7 @@ import com.into.websoso.data.model.NovelDetailEntity
 import com.into.websoso.data.model.NovelFeedsEntity
 import com.into.websoso.data.model.NovelInfoEntity
 import com.into.websoso.data.model.PopularNovelsEntity
+import com.into.websoso.data.model.RecentSearchesEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.SosoPickEntity
 import com.into.websoso.data.remote.api.NovelApi
@@ -67,6 +68,16 @@ class NovelRepository
         fun clearCachedNormalExploreResult() {
             _cachedNormalExploreResult.clear()
             cachedNormalExploreIsLoadable = true
+        }
+
+        suspend fun fetchRecentSearches(): RecentSearchesEntity = novelApi.getRecentSearches().toData()
+
+        suspend fun deleteRecentSearch(recentSearchId: Long) {
+            novelApi.deleteRecentSearch(recentSearchId)
+        }
+
+        suspend fun deleteAllRecentSearches() {
+            novelApi.deleteAllRecentSearches()
         }
 
         suspend fun fetchPopularNovels(): PopularNovelsEntity = novelApi.getPopularNovels().toData()

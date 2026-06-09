@@ -22,6 +22,7 @@ import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Novels
+import com.into.websoso.ui.normalExplore.adapter.RecentSearchAdapter
 import com.into.websoso.ui.normalExplore.model.NormalExploreUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,12 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         NormalExploreAdapter(
             ::navigateToNovelDetail,
             ::navigateToInquire,
+        )
+    }
+    private val recentSearchAdapter: RecentSearchAdapter by lazy {
+        RecentSearchAdapter(
+            ::searchRecentSearch,
+            normalExploreViewModel::deleteRecentSearch,
         )
     }
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetailFromSosoPick) }
@@ -70,6 +77,7 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                 )
             }
             rvNormalExploreSosoPick.adapter = sosoPickAdapter
+            rvNormalExploreRecentSearch.adapter = recentSearchAdapter
             onClick = onNormalExploreButtonClick()
         }
     }
@@ -78,14 +86,11 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         binding.apply {
             etNormalExploreSearchContent.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == IME_ACTION_SEARCH) {
-                    normalExploreViewModel?.updateSearchWord(
+                    searchKeyword(
                         binding.etNormalExploreSearchContent.text
                             ?.toString()
                             .orEmpty(),
                     )
-                    normalExploreViewModel?.updateSearchResult(isSearchButtonClick = true)
-                    binding.etNormalExploreSearchContent.clearFocus()
-                    hideKeyboard()
                     true
                 } else {
                     false
@@ -113,14 +118,11 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             override fun onSearchButtonClick() {
                 singleEventHandler.throttleFirst {
                     tracker.trackEvent("click_search_result")
-                    normalExploreViewModel.updateSearchWord(
+                    searchKeyword(
                         binding.etNormalExploreSearchContent.text
                             ?.toString()
                             .orEmpty(),
                     )
-                    normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
-                    binding.etNormalExploreSearchContent.clearFocus()
-                    hideKeyboard()
                 }
             }
 
@@ -138,6 +140,19 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                 startActivity(intent)
             }
         }
+
+    private fun searchRecentSearch(keyword: String) {
+        singleEventHandler.throttleFirst {
+            searchKeyword(keyword)
+        }
+    }
+
+    private fun searchKeyword(keyword: String) {
+        normalExploreViewModel.updateSearchWord(keyword)
+        normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
+        binding.etNormalExploreSearchContent.clearFocus()
+        hideKeyboard()
+    }
 
     private fun showKeyboard() {
         val inputMethodManager =
@@ -198,6 +213,10 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         normalExploreViewModel.sosoPicks.observe(this) { sosoPicks ->
             sosoPickAdapter.submitList(sosoPicks)
         }
+
+        normalExploreViewModel.recentSearches.observe(this) { recentSearches ->
+            recentSearchAdapter.submitList(recentSearches)
+        }
     }
 
     private fun updateView(uiState: NormalExploreUiState) {
@@ -209,6 +228,8 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                 true -> normalExploreAdapter.submitList(listOf(header) + novels + Loading)
                 false -> normalExploreAdapter.submitList(listOf(header) + novels)
             }
+        } else {
+            normalExploreAdapter.submitList(emptyList())
         }
     }
 
