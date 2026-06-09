@@ -5,15 +5,23 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import com.into.websoso.R.color.gray_300_52515F
+import com.into.websoso.R.drawable.bg_normal_explore_keyword_search_chip
 import com.into.websoso.R.layout.activity_normal_explore
+import com.into.websoso.R.style.body3
 import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
@@ -32,6 +40,7 @@ import com.into.websoso.ui.normalExplore.model.NormalExploreUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activity_normal_explore) {
@@ -186,6 +195,18 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         }
     }
 
+    private fun navigateToDetailExploreResult(keyword: KeywordModel) {
+        singleEventHandler.throttleFirst {
+            val intent = DetailExploreResultActivity.getIntent(
+                context = this,
+                detailExploreFilteredModel = DetailExploreFilteredModel(
+                    keywordIds = listOf(keyword.keywordId),
+                ),
+            )
+            startActivity(intent)
+        }
+    }
+
     private fun navigateToNovelDetail(novelId: Long) {
         singleEventHandler.throttleFirst {
             val intent = NovelDetailActivity.getIntent(this, novelId)
@@ -239,6 +260,37 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         normalExploreViewModel.recentSearches.observe(this) { recentSearches ->
             recentSearchAdapter.submitList(recentSearches)
         }
+
+        normalExploreViewModel.keywordSearches.observe(this) { keywordSearches ->
+            updateKeywordSearchChips(keywordSearches)
+        }
+    }
+
+    private fun updateKeywordSearchChips(keywordSearches: List<KeywordModel>) {
+        val keywordChipGroup = binding.wcgNormalExploreKeywordSearch
+        keywordChipGroup.removeAllViews()
+        keywordSearches.forEach { keyword ->
+            TextView(this@NormalExploreActivity)
+                .apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        KEYWORD_CHIP_HEIGHT.toFloatPxFromDp().roundToInt(),
+                    )
+                    text = keyword.keywordName
+                    gravity = Gravity.CENTER
+                    includeFontPadding = false
+                    setTextAppearance(body3)
+                    setTextColor(getColor(gray_300_52515F))
+                    setBackgroundResource(bg_normal_explore_keyword_search_chip)
+                    setPadding(
+                        KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp().roundToInt(),
+                        0,
+                        KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp().roundToInt(),
+                        0,
+                    )
+                    setOnClickListener { navigateToDetailExploreResult(keyword) }
+                }.also { keywordChip -> keywordChipGroup.addView(keywordChip) }
+        }
     }
 
     private fun updateView(uiState: NormalExploreUiState) {
@@ -264,6 +316,8 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
 
     companion object {
         const val SEARCH_AUTHOR = "SEARCH_AUTHOR"
+        private const val KEYWORD_CHIP_HEIGHT = 35f
+        private const val KEYWORD_CHIP_HORIZONTAL_PADDING = 13f
 
         fun getIntent(
             context: Context,
