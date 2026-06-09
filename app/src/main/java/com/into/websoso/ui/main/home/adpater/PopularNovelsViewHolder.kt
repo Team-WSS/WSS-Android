@@ -40,6 +40,7 @@ class PopularNovelsViewHolder(
                     error(img_loading_thumbnail)
                 }
             }
+            popularNovel.keywords.bindPopularNovelKeywords()
             ivPopularNovelAvatar.visibility =
                 if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
             tvPopularNovelInShortTitle.visibility =
@@ -85,19 +86,5 @@ class PopularNovelsViewHolder(
         }
     }
 }
-
-private fun String.toPopularNovelGenreImagePath(): String =
-    when (this) {
-        "romance" -> "/icGenre/romance"
-        "romanceFantasy" -> "/icGenre/romance-fantasy"
-        "BL" -> "/icGenre/bl"
-        "fantasy" -> "/icGenre/fantasy"
-        "modernFantasy" -> "/icGenre/modern-fantasy"
-        "wuxia" -> "/icGenre/wuxia"
-        "lightNovel" -> "/icGenre/light-novel"
-        "drama" -> "/icGenre/drama"
-        "mystery" -> "/icGenre/mystery"
-        else -> ""
-    }
 
 private const val POPULAR_NOVEL_KEYWORD_MAX_COUNT = 2
