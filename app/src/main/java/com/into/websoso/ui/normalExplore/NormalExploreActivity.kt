@@ -17,12 +17,17 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
+import com.into.websoso.ui.detailExplore.info.model.Genre
+import com.into.websoso.ui.detailExploreResult.DetailExploreResultActivity
+import com.into.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import com.into.websoso.ui.main.explore.adapter.SosoPickAdapter
+import com.into.websoso.ui.normalExplore.adapter.GenreSearchAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Novels
 import com.into.websoso.ui.normalExplore.adapter.RecentSearchAdapter
+import com.into.websoso.ui.normalExplore.model.GenreSearchModel
 import com.into.websoso.ui.normalExplore.model.NormalExploreUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +49,9 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             ::searchRecentSearch,
             normalExploreViewModel::deleteRecentSearch,
         )
+    }
+    private val genreSearchAdapter: GenreSearchAdapter by lazy {
+        GenreSearchAdapter(::navigateToDetailExploreResult)
     }
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetailFromSosoPick) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
@@ -78,6 +86,8 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             }
             rvNormalExploreSosoPick.adapter = sosoPickAdapter
             rvNormalExploreRecentSearch.adapter = recentSearchAdapter
+            rvNormalExploreGenreSearch.adapter = genreSearchAdapter
+            genreSearchAdapter.submitList(GenreSearchModel.items)
             onClick = onNormalExploreButtonClick()
         }
     }
@@ -162,6 +172,18 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             binding.etNormalExploreSearchContent,
             InputMethodManager.SHOW_IMPLICIT,
         )
+    }
+
+    private fun navigateToDetailExploreResult(genre: Genre) {
+        singleEventHandler.throttleFirst {
+            val intent = DetailExploreResultActivity.getIntent(
+                context = this,
+                detailExploreFilteredModel = DetailExploreFilteredModel(
+                    genres = listOf(genre),
+                ),
+            )
+            startActivity(intent)
+        }
     }
 
     private fun navigateToNovelDetail(novelId: Long) {

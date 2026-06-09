@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="genreSearch"
+            type="com.into.websoso.ui.normalExplore.model.GenreSearchModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/ll_normal_explore_genre_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
+        android:minWidth="44dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/fl_normal_explore_genre_search_icon_container"
+            android:layout_width="44dp"
+            android:layout_height="44dp">
+
+            <ImageView
+                android:id="@+id/iv_normal_explore_genre_search_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                tools:src="@drawable/ic_onboarding_modern_fantasy" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_normal_explore_genre_search_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@{genreSearch.title}"
+            android:textAppearance="@style/body3"
+            android:textColor="@color/gray_300_52515F"
+            tools:text="현판" />
+    </LinearLayout>
+</layout>
