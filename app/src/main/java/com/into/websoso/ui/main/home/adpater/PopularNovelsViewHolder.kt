@@ -20,18 +20,29 @@ class PopularNovelsViewHolder(
     }
 
     fun bind(popularNovel: PopularNovelEntity) {
-        val avatarImage =
-            if (popularNovel.hasUserFeed) itemView.getS3ImageUrl(popularNovel.avatarImage.orEmpty()) else ""
-        val feedDescription = when {
-            popularNovel.hasUserFeed -> popularNovel.feedContent.orEmpty()
-            popularNovel.novelDescription.isNotBlank() -> popularNovel.novelDescription
-            else -> popularNovel.feedContent.orEmpty()
-        }
+        bindTopInformation(popularNovel)
+        bindGenreFlag(popularNovel.genreName)
+        bindPopularNovelKeywords(popularNovel.keywords)
+        bindFeedHeader(popularNovel.hasUserFeed)
+        binding.popularNovel = popularNovel.copy(
+            avatarImage = popularNovel.toAvatarImageUrl(),
+        )
+        binding.executePendingBindings()
+        binding.tvPopularNovelFeedDescription.text = popularNovel.toFeedDescription()
+    }
+
+    private fun bindTopInformation(popularNovel: PopularNovelEntity) {
         with(binding) {
             tvPopularNovelTitle.text = popularNovel.toPopularNovelTitle(tvPopularNovelTitle)
             tvPopularNovelAuthorStatus.text = popularNovel.toAuthorStatus(itemView.context)
-            val genreImagePath = popularNovel.genreName.toPopularNovelGenreImagePath()
-            val isGenreVisible = genreImagePath.isNotBlank()
+        }
+    }
+
+    private fun bindGenreFlag(genreName: String) {
+        val genreImagePath = genreName.toPopularNovelGenreImagePath()
+        val isGenreVisible = genreImagePath.isNotBlank()
+
+        with(binding) {
             ivPopularNovelGenreFrame.visibility = if (isGenreVisible) View.VISIBLE else View.GONE
             ivPopularNovelGenre.visibility = if (isGenreVisible) View.VISIBLE else View.GONE
             if (isGenreVisible) {
@@ -40,25 +51,45 @@ class PopularNovelsViewHolder(
                     error(img_loading_thumbnail)
                 }
             }
-            popularNovel.keywords.bindPopularNovelKeywords()
-            ivPopularNovelAvatar.visibility =
-                if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
-            tvPopularNovelInShortTitle.visibility =
-                if (popularNovel.hasUserFeed) View.VISIBLE else View.INVISIBLE
-            ivPopularNovelAvatarNull.visibility =
-                if (popularNovel.hasUserFeed) View.GONE else View.VISIBLE
-            tvPopularNovelInShortTitleNull.visibility =
-                if (popularNovel.hasUserFeed) View.GONE else View.VISIBLE
         }
-        val updatedPopularNovel = popularNovel.copy(
-            avatarImage = avatarImage,
-        )
-        binding.popularNovel = updatedPopularNovel
-        binding.executePendingBindings()
-        binding.tvPopularNovelFeedDescription.text = feedDescription
     }
 
+    private fun bindPopularNovelKeywords(keywords: List<String>) {
+        val popularNovelKeywords = keywords.take(POPULAR_NOVEL_KEYWORD_MAX_COUNT)
+        with(binding) {
+            llPopularNovelKeywords.visibility =
+                if (popularNovelKeywords.isEmpty()) View.GONE else View.VISIBLE
+            tvPopularNovelKeywordFirst.visibility =
+                if (popularNovelKeywords.isNotEmpty()) View.VISIBLE else View.GONE
+            tvPopularNovelKeywordSecond.visibility =
+                if (popularNovelKeywords.size > 1) View.VISIBLE else View.GONE
+            tvPopularNovelKeywordFirst.text = popularNovelKeywords.getOrNull(0).orEmpty()
+            tvPopularNovelKeywordSecond.text = popularNovelKeywords.getOrNull(1).orEmpty()
+        }
+    }
+
+    private fun bindFeedHeader(hasUserFeed: Boolean) {
+        with(binding) {
+            ivPopularNovelAvatar.visibility = if (hasUserFeed) View.VISIBLE else View.INVISIBLE
+            tvPopularNovelInShortTitle.visibility =
+                if (hasUserFeed) View.VISIBLE else View.INVISIBLE
+            ivPopularNovelAvatarNull.visibility = if (hasUserFeed) View.GONE else View.VISIBLE
+            tvPopularNovelInShortTitleNull.visibility = if (hasUserFeed) View.GONE else View.VISIBLE
+        }
+    }
+
+    private fun PopularNovelEntity.toAvatarImageUrl(): String = if (hasUserFeed) itemView.getS3ImageUrl(avatarImage.orEmpty()) else ""
+
+    private fun PopularNovelEntity.toFeedDescription(): String =
+        when {
+            hasUserFeed -> feedContent.orEmpty()
+            novelDescription.isNotBlank() -> novelDescription
+            else -> feedContent.orEmpty()
+        }
+
     companion object {
+        private const val POPULAR_NOVEL_KEYWORD_MAX_COUNT = 2
+
         fun of(
             parent: ViewGroup,
             onPopularNovelClick: (novelId: Long) -> Unit,
@@ -71,20 +102,4 @@ class PopularNovelsViewHolder(
             return PopularNovelsViewHolder(binding, onPopularNovelClick)
         }
     }
-
-    private fun List<String>.bindPopularNovelKeywords() {
-        val popularNovelKeywords = take(POPULAR_NOVEL_KEYWORD_MAX_COUNT)
-        with(binding) {
-            llPopularNovelKeywords.visibility =
-                if (popularNovelKeywords.isEmpty()) View.GONE else View.VISIBLE
-            tvPopularNovelKeywordFirst.visibility =
-                if (popularNovelKeywords.isNotEmpty()) View.VISIBLE else View.GONE
-            tvPopularNovelKeywordSecond.visibility =
-                if (popularNovelKeywords.size > 1) View.VISIBLE else View.GONE
-            tvPopularNovelKeywordFirst.text = popularNovelKeywords.getOrNull(0).orEmpty()
-            tvPopularNovelKeywordSecond.text = popularNovelKeywords.getOrNull(1).orEmpty()
-        }
-    }
 }
-
-private const val POPULAR_NOVEL_KEYWORD_MAX_COUNT = 2
