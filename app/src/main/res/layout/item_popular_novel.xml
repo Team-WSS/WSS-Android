@@ -224,7 +224,6 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:minLines="3"
-                android:text="@{popularNovel.feedContent}"
                 android:textAppearance="@style/label1"
                 android:textColor="@color/gray_300_52515F"
                 app:layout_constraintBottom_toBottomOf="parent"

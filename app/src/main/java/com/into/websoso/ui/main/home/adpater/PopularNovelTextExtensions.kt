@@ -9,20 +9,15 @@ import com.into.websoso.core.resource.R.string.home_popular_novel_status_serial
 import com.into.websoso.core.resource.R.string.home_popular_novel_title_ellipsis
 import com.into.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 
-internal fun PopularNovelEntity.toPopularNovelTitle(titleView: TextView): String {
-    val ellipsis = titleView.context.getString(home_popular_novel_title_ellipsis)
-    val titleWithEllipsis =
-        if (title.length > POPULAR_NOVEL_TITLE_VISIBLE_LENGTH) {
-            title.take(POPULAR_NOVEL_TITLE_VISIBLE_LENGTH) + ellipsis
-        } else {
-            title
-        }
-
-    return titleWithEllipsis.wrapByWord(
-        textPaint = titleView.paint,
-        maxWidth = titleView.textAreaWidth,
-    )
-}
+internal fun PopularNovelEntity.toPopularNovelTitle(titleView: TextView): String =
+    title
+        .takeWithEllipsis(
+            maxLength = POPULAR_NOVEL_TITLE_VISIBLE_LENGTH,
+            ellipsis = titleView.context.getString(home_popular_novel_title_ellipsis),
+        ).wrapByWord(
+            textPaint = titleView.paint,
+            maxWidth = titleView.textAreaWidth,
+        )
 
 internal fun PopularNovelEntity.toAuthorStatus(context: Context): String {
     val authorName = author.take(MAX_AUTHOR_LENGTH)
@@ -46,6 +41,16 @@ private val TextView.textAreaWidth: Float
     get() {
         val measuredWidth = width.takeIf { it > 0 } ?: layoutParams.width
         return (measuredWidth - paddingStart - paddingEnd).toFloat()
+    }
+
+private fun String.takeWithEllipsis(
+    maxLength: Int,
+    ellipsis: String,
+): String =
+    if (length > maxLength) {
+        take(maxLength) + ellipsis
+    } else {
+        this
     }
 
 private fun String.wrapByWord(
