@@ -113,9 +113,14 @@ fun PopularNovelsResponseDto.toData(): PopularNovelsEntity =
     PopularNovelsEntity(
         popularNovels = popularNovels.map { novel ->
             PopularNovelsEntity.PopularNovelEntity(
+                author = novel.author,
                 avatarImage = novel.avatarImage,
                 feedContent = novel.feedContent,
+                genreName = novel.genreName,
+                isNovelCompleted = novel.isNovelCompleted,
+                keywords = novel.keywords,
                 nickname = novel.nickname,
+                novelDescription = novel.novelDescription,
                 novelId = novel.novelId,
                 novelImage = novel.novelImage,
                 title = novel.title,

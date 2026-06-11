@@ -17,13 +17,7 @@ class PopularNovelsAdapter(
     override fun onBindViewHolder(
         holder: PopularNovelsViewHolder,
         position: Int,
-    ) {
-        holder.bind(getItem(position))
-
-        val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        params.width = (holder.itemView.context.resources.displayMetrics.widthPixels * 0.83).toInt()
-        holder.itemView.layoutParams = params
-    }
+    ) = holder.bind(getItem(position))
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<PopularNovelEntity>() {

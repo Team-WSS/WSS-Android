@@ -245,6 +245,10 @@
     <string name="home_recommend_novel">이 웹소설은 어때요? (´ヮ`)ﾉ📚</string>
     <string name="home_popular_novel_nickname">%s님의 한마디</string>
     <string name="home_popular_novel_feed_title_null">작품 소개</string>
+    <string name="home_popular_novel_title_ellipsis">...</string>
+    <string name="home_popular_novel_author_status">%1$s · %2$s</string>
+    <string name="home_popular_novel_status_serial">연재작</string>
+    <string name="home_popular_novel_status_completed">완결작</string>
     <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
     <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
 
