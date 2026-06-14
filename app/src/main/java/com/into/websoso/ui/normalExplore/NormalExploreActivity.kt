@@ -25,6 +25,7 @@ import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
+import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.detailExplore.info.model.Genre
 import com.into.websoso.ui.detailExploreResult.DetailExploreResultActivity
 import com.into.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
@@ -157,6 +158,12 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                 val inquireUrl = getString(novel_inquire_link)
                 val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
                 startActivity(intent)
+            }
+
+            override fun onDetailExploreButtonClick() {
+                singleEventHandler.throttleFirst {
+                    startActivity(DetailExploreActivity.getIntent(this@NormalExploreActivity))
+                }
             }
         }
 
