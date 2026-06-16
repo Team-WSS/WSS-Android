@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.TermsAgreementEntity
@@ -98,7 +99,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
+                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                 )
             }
@@ -148,7 +149,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
+                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
                 )
             }
         }
@@ -167,7 +168,7 @@ class HomeViewModel
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
                         error = false,
-                        popularFeeds = popularFeeds.chunked(HOME_POPULAR_FEED_PAGE_SIZE),
+                        popularFeeds = popularFeeds.toHomePopularFeedPages(),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
@@ -260,7 +261,11 @@ class HomeViewModel
             }
         }
 
+        private fun List<PopularFeedsEntity.PopularFeedEntity>.toHomePopularFeedPages(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
+            take(HOME_POPULAR_FEED_MAX_COUNT).chunked(HOME_POPULAR_FEED_PAGE_SIZE)
+
         companion object {
+            private const val HOME_POPULAR_FEED_MAX_COUNT = 6
             private const val HOME_POPULAR_FEED_PAGE_SIZE = 2
         }
     }
