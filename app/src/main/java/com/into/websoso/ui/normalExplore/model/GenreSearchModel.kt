@@ -19,10 +19,10 @@ data class GenreSearchModel(
 
     companion object {
         val items: List<GenreSearchModel> = listOf(
+            GenreSearchModel(Genre.FANTASY, ic_onboarding_fantasy),
             GenreSearchModel(Genre.MODERN_FANTASY, ic_onboarding_modern_fantasy),
             GenreSearchModel(Genre.ROMANCE_FANTASY, ic_onboarding_romance_fantasy),
             GenreSearchModel(Genre.ROMANCE, ic_onboarding_romance),
-            GenreSearchModel(Genre.FANTASY, ic_onboarding_fantasy),
             GenreSearchModel(Genre.WUXIA, ic_onboarding_wuxia),
             GenreSearchModel(Genre.BOYS_LOVE, ic_onboarding_bl),
             GenreSearchModel(Genre.LIGHT_NOVEL, ic_onboarding_light_novel),
