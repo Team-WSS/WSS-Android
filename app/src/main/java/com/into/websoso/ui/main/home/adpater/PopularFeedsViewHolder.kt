@@ -66,12 +66,19 @@ class PopularFeedsViewHolder(
             else -> itemView.getS3ImageUrl(this)
         }
 
-    private fun String.ellipsizeByLength(): String =
-        if (length > MAX_TITLE_LENGTH) {
-            take(MAX_TITLE_LENGTH) + "..."
-        } else {
-            this
+    private fun String.ellipsizeByLength(): String {
+        var titleLength = 0
+        val title = StringBuilder()
+
+        for (char in this) {
+            if (!char.isWhitespace()) {
+                if (titleLength == MAX_TITLE_LENGTH) return title.toString().trimEnd() + "…"
+                titleLength++
+            }
+            title.append(char)
         }
+        return this
+    }
 
     companion object {
         private const val MAX_TITLE_LENGTH = 16
