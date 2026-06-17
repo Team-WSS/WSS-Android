@@ -46,12 +46,20 @@ private val TextView.textAreaWidth: Float
 private fun String.takeWithEllipsis(
     maxLength: Int,
     ellipsis: String,
-): String =
-    if (length > maxLength) {
-        take(maxLength) + ellipsis
+): String {
+    var visibleLength = 0
+    val truncatedTitle = takeWhile { character ->
+        if (character.isWhitespace()) return@takeWhile true
+        visibleLength++
+        visibleLength <= maxLength
+    }
+
+    return if (visibleLength > maxLength || truncatedTitle.length < length) {
+        truncatedTitle.trimEnd() + ellipsis
     } else {
         this
     }
+}
 
 private fun String.wrapByWord(
     textPaint: TextPaint,
