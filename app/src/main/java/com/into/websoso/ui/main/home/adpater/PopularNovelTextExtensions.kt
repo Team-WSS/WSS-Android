@@ -20,7 +20,13 @@ internal fun PopularNovelEntity.toPopularNovelTitle(titleView: TextView): String
         )
 
 internal fun PopularNovelEntity.toAuthorStatus(context: Context): String {
-    val authorName = author.take(MAX_AUTHOR_LENGTH)
+    val ellipsis = context.getString(home_popular_novel_title_ellipsis)
+    val authorName =
+        if (author.length > MAX_AUTHOR_LENGTH) {
+            author.take(MAX_AUTHOR_LENGTH).trimEnd() + ellipsis
+        } else {
+            author
+        }
     val status =
         context.getString(
             if (isNovelCompleted) {
