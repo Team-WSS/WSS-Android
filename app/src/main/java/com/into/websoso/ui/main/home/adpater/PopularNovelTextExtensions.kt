@@ -20,7 +20,13 @@ internal fun PopularNovelEntity.toPopularNovelTitle(titleView: TextView): String
         )
 
 internal fun PopularNovelEntity.toAuthorStatus(context: Context): String {
-    val authorName = author.take(MAX_AUTHOR_LENGTH)
+    val ellipsis = context.getString(home_popular_novel_title_ellipsis)
+    val authorName =
+        if (author.length > MAX_AUTHOR_LENGTH) {
+            author.take(MAX_AUTHOR_LENGTH).trimEnd() + ellipsis
+        } else {
+            author
+        }
     val status =
         context.getString(
             if (isNovelCompleted) {
@@ -46,12 +52,20 @@ private val TextView.textAreaWidth: Float
 private fun String.takeWithEllipsis(
     maxLength: Int,
     ellipsis: String,
-): String =
-    if (length > maxLength) {
-        take(maxLength) + ellipsis
+): String {
+    var visibleLength = 0
+    val truncatedTitle = takeWhile { character ->
+        if (character.isWhitespace()) return@takeWhile true
+        visibleLength++
+        visibleLength <= maxLength
+    }
+
+    return if (visibleLength > maxLength || truncatedTitle.length < length) {
+        truncatedTitle.trimEnd() + ellipsis
     } else {
         this
     }
+}
 
 private fun String.wrapByWord(
     textPaint: TextPaint,

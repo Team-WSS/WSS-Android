@@ -10,12 +10,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="16dp">
+        android:paddingStart="20.5dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20.5dp"
+        android:paddingBottom="16dp">
 
         <TextView
             android:id="@+id/tv_popular_feed_title"
-            android:layout_width="195dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:ellipsize="end"
@@ -30,9 +32,9 @@
 
         <TextView
             android:id="@+id/tv_popular_feed_content"
-            android:layout_width="195dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="3"
             android:textAppearance="@style/body5"
@@ -44,7 +46,7 @@
 
         <TextView
             android:id="@+id/tv_popular_feed_content_spoiler"
-            android:layout_width="195dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
