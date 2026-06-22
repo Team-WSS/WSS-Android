@@ -15,6 +15,7 @@ import com.into.websoso.data.feed.model.CommentsEntity
 import com.into.websoso.data.feed.model.FeedDetailEntity
 import com.into.websoso.data.feed.model.FeedEntity
 import com.into.websoso.data.feed.model.FeedsEntity
+import com.into.websoso.data.feed.repository.model.CachedFeedLikeState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -54,6 +55,7 @@ class UpdatedFeedRepository
 
         private val dirtyFeedStates = ConcurrentHashMap<Long, Boolean>()
         private val originalFeedStates = ConcurrentHashMap<Long, Boolean>()
+        private val feedDetailStates = ConcurrentHashMap<Long, CachedFeedLikeState>()
 
         // ============================================================================================
         //  Feed Creation & Modification
@@ -238,6 +240,10 @@ class UpdatedFeedRepository
             updateFeedInFlow(_sosoAllFeeds, feedId)
             updateFeedInFlow(_sosoRecommendedFeeds, feedId)
             updateFeedInFlow(_myFeeds, feedId)
+
+            if (findCachedFeed(feedId) == null) {
+                updateFeedDetailState(feedId)
+            }
         }
 
         private fun updateFeedInFlow(
@@ -259,6 +265,23 @@ class UpdatedFeedRepository
                 newList
             }
         }
+
+        private fun updateFeedDetailState(feedId: Long) {
+            val target = feedDetailStates[feedId] ?: return
+            val newLiked = !target.isLiked
+            val newCount = if (newLiked) target.likeCount + 1 else target.likeCount - 1
+
+            trackDirtyState(feedId, target.isLiked, newLiked)
+            feedDetailStates[feedId] = CachedFeedLikeState(
+                isLiked = newLiked,
+                likeCount = newCount.coerceAtLeast(0),
+            )
+        }
+
+        private fun findCachedFeed(feedId: Long): FeedEntity? =
+            _sosoAllFeeds.value.find { it.id == feedId }
+                ?: _sosoRecommendedFeeds.value.find { it.id == feedId }
+                ?: _myFeeds.value.find { it.id == feedId }
 
         /**
          * 변경된 좋아요 상태를 추적합니다.
@@ -365,7 +388,12 @@ class UpdatedFeedRepository
          */
         suspend fun fetchFeed(feedId: Long): FeedDetailEntity {
             val rawDetail = feedApi.getFeed(feedId).toData()
-            return applyDirtyStateToDetail(rawDetail)
+            val mergedDetail = applyDirtyStateToDetail(rawDetail)
+            feedDetailStates[feedId] = CachedFeedLikeState(
+                isLiked = mergedDetail.isLiked,
+                likeCount = mergedDetail.likeCount,
+            )
+            return mergedDetail
         }
 
         private fun applyDirtyStateToDetail(feed: FeedDetailEntity): FeedDetailEntity {
