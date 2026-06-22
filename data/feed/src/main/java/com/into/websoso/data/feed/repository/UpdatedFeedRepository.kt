@@ -19,6 +19,7 @@ import com.into.websoso.data.feed.repository.model.CachedFeedLikeState
 import com.into.websoso.data.feed.store.PendingFeedLikeStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,18 +59,19 @@ class UpdatedFeedRepository
         private val pendingLikeStates = ConcurrentHashMap<Long, Boolean>()
         private val originalLikeStates = ConcurrentHashMap<Long, Boolean>()
         private val feedDetailStates = ConcurrentHashMap<Long, CachedFeedLikeState>()
+        private val pendingLikeStoreWriteLock = Any()
+        private var pendingLikeStoreWriteJob: Job? = null
 
         init {
-            observePendingLikes()
+            restorePendingLikes()
         }
 
-        private fun observePendingLikes() {
+        private fun restorePendingLikes() {
             scope.launch {
-                pendingFeedLikeStore.pendingLikes.collect { pendingLikes ->
-                    pendingLikeStates.clear()
-                    pendingLikeStates.putAll(pendingLikes)
-                    applyPendingLikeStatesToCachedFeeds()
-                }
+                val pendingLikes = pendingFeedLikeStore.getPendingLikes()
+                pendingLikeStates.clear()
+                pendingLikeStates.putAll(pendingLikes)
+                applyPendingLikeStatesToCachedFeeds()
             }
         }
 
@@ -331,21 +333,35 @@ class UpdatedFeedRepository
             feedId: Long,
             isLiked: Boolean,
         ) {
-            scope.launch {
-                runCatching {
-                    pendingFeedLikeStore.updatePendingLike(feedId, isLiked)
-                }.onFailure {
-                    Log.e("UpdatedFeedRepository", "Failed to save pending feed like $feedId", it)
-                }
+            enqueuePendingLikeStoreWrite(feedId, "save") {
+                pendingFeedLikeStore.updatePendingLike(feedId, isLiked)
             }
         }
 
         private fun deletePendingLike(feedId: Long) {
-            scope.launch {
-                runCatching {
-                    pendingFeedLikeStore.deletePendingLike(feedId)
-                }.onFailure {
-                    Log.e("UpdatedFeedRepository", "Failed to delete pending feed like $feedId", it)
+            enqueuePendingLikeStoreWrite(feedId, "delete") {
+                pendingFeedLikeStore.deletePendingLike(feedId)
+            }
+        }
+
+        private fun enqueuePendingLikeStoreWrite(
+            feedId: Long,
+            actionName: String,
+            action: suspend () -> Unit,
+        ) {
+            synchronized(pendingLikeStoreWriteLock) {
+                val previousJob = pendingLikeStoreWriteJob
+                pendingLikeStoreWriteJob = scope.launch {
+                    previousJob?.join()
+                    runCatching {
+                        action()
+                    }.onFailure {
+                        Log.e(
+                            "UpdatedFeedRepository",
+                            "Failed to $actionName pending feed like $feedId",
+                            it,
+                        )
+                    }
                 }
             }
         }
