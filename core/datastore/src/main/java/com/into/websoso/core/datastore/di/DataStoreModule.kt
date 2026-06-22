@@ -27,6 +27,11 @@ internal object DataStoreModule {
         name = USER_DATASTORE,
     )
 
+    private const val PENDING_FEED_LIKE_DATASTORE = "PENDING_FEED_LIKE_DATASTORE"
+    private val Context.pendingFeedLikeDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = PENDING_FEED_LIKE_DATASTORE,
+    )
+
     @Provides
     @Singleton
     @AccountDataStore
@@ -47,4 +52,11 @@ internal object DataStoreModule {
     fun provideUserDataStore(
         @ApplicationContext context: Context,
     ): DataStore<Preferences> = context.userDataStore
+
+    @Provides
+    @Singleton
+    @PendingFeedLikeDataStore
+    fun providePendingFeedLikeDataStore(
+        @ApplicationContext context: Context,
+    ): DataStore<Preferences> = context.pendingFeedLikeDataStore
 }
