@@ -53,8 +53,8 @@ class UpdatedFeedRepository
         private val _myFeeds = MutableStateFlow<List<FeedEntity>>(emptyList())
         val myFeeds = _myFeeds.asStateFlow()
 
-        private val dirtyFeedStates = ConcurrentHashMap<Long, Boolean>()
-        private val originalFeedStates = ConcurrentHashMap<Long, Boolean>()
+        private val pendingLikeStates = ConcurrentHashMap<Long, Boolean>()
+        private val originalLikeStates = ConcurrentHashMap<Long, Boolean>()
         private val feedDetailStates = ConcurrentHashMap<Long, CachedFeedLikeState>()
 
         // ============================================================================================
@@ -168,7 +168,7 @@ class UpdatedFeedRepository
         // ============================================================================================
 
         /**
-         * 서버에서 피드 리스트를 조회하고, 로컬의 미동기화된 좋아요 상태(Dirty)를 병합하여 캐시(Flow)를 갱신합니다.
+         * 서버에서 피드 리스트를 조회하고, 로컬의 미동기화된 좋아요 상태를 병합하여 캐시(Flow)를 갱신합니다.
          */
         suspend fun fetchFeeds(
             lastFeedId: Long,
@@ -182,7 +182,7 @@ class UpdatedFeedRepository
                     size = size,
                 ).toData()
 
-            val mergedFeeds = result.feeds.map { feed -> applyDirtyState(feed) }
+            val mergedFeeds = result.feeds.map { feed -> applyPendingLikeState(feed) }
 
             val isRecommended = feedsOption == "RECOMMENDED"
             val targetFlow = if (isRecommended) _sosoRecommendedFeeds else _sosoAllFeeds
@@ -206,7 +206,7 @@ class UpdatedFeedRepository
             feeds: List<FeedEntity>,
             isRefreshed: Boolean,
         ) {
-            val mergedFeeds = feeds.map { feed -> applyDirtyState(feed) }
+            val mergedFeeds = feeds.map { feed -> applyPendingLikeState(feed) }
 
             _myFeeds.update { current ->
                 if (isRefreshed) mergedFeeds else (current + mergedFeeds).distinctBy { it.id }
@@ -216,8 +216,8 @@ class UpdatedFeedRepository
         /**
          * 서버 데이터보다 로컬의 변경사항(좋아요)을 우선 적용하여 반환합니다.
          */
-        private fun applyDirtyState(feed: FeedEntity): FeedEntity {
-            val localIsLiked = dirtyFeedStates[feed.id] ?: return feed
+        private fun applyPendingLikeState(feed: FeedEntity): FeedEntity {
+            val localIsLiked = pendingLikeStates[feed.id] ?: return feed
 
             if (feed.isLiked != localIsLiked) {
                 val adjustedCount = if (localIsLiked) feed.likeCount + 1 else feed.likeCount - 1
@@ -258,7 +258,7 @@ class UpdatedFeedRepository
                 val newLiked = !target.isLiked
                 val newCount = if (newLiked) target.likeCount + 1 else target.likeCount - 1
 
-                trackDirtyState(feedId, target.isLiked, newLiked)
+                trackPendingLikeState(feedId, target.isLiked, newLiked)
 
                 val newList = list.toMutableList()
                 newList[index] = target.copy(isLiked = newLiked, likeCount = newCount)
@@ -271,7 +271,7 @@ class UpdatedFeedRepository
             val newLiked = !target.isLiked
             val newCount = if (newLiked) target.likeCount + 1 else target.likeCount - 1
 
-            trackDirtyState(feedId, target.isLiked, newLiked)
+            trackPendingLikeState(feedId, target.isLiked, newLiked)
             feedDetailStates[feedId] = CachedFeedLikeState(
                 isLiked = newLiked,
                 likeCount = newCount.coerceAtLeast(0),
@@ -284,18 +284,18 @@ class UpdatedFeedRepository
                 ?: _myFeeds.value.find { it.id == feedId }
 
         /**
-         * 변경된 좋아요 상태를 추적합니다.
+         * 서버에 아직 반영되지 않은 마지막 좋아요 상태를 추적합니다.
          */
-        private fun trackDirtyState(
+        private fun trackPendingLikeState(
             feedId: Long,
             original: Boolean,
             new: Boolean,
         ) {
-            originalFeedStates.putIfAbsent(feedId, original)
-            if (originalFeedStates[feedId] == new) {
-                dirtyFeedStates.remove(feedId)
+            originalLikeStates.putIfAbsent(feedId, original)
+            if (originalLikeStates[feedId] == new) {
+                pendingLikeStates.remove(feedId)
             } else {
-                dirtyFeedStates[feedId] = new
+                pendingLikeStates[feedId] = new
             }
         }
 
@@ -303,11 +303,11 @@ class UpdatedFeedRepository
          * 기록된 변경 사항들을 서버와 동기화합니다.
          */
         fun syncDirtyFeeds() {
-            if (dirtyFeedStates.isEmpty()) return
+            if (pendingLikeStates.isEmpty()) return
 
-            val syncMap = dirtyFeedStates.toMap()
-            dirtyFeedStates.clear()
-            originalFeedStates.clear()
+            val syncMap = pendingLikeStates.toMap()
+            pendingLikeStates.clear()
+            originalLikeStates.clear()
 
             scope.launch {
                 syncMap.forEach { (id, isLiked) ->
@@ -388,7 +388,7 @@ class UpdatedFeedRepository
          */
         suspend fun fetchFeed(feedId: Long): FeedDetailEntity {
             val rawDetail = feedApi.getFeed(feedId).toData()
-            val mergedDetail = applyDirtyStateToDetail(rawDetail)
+            val mergedDetail = applyPendingLikeStateToDetail(rawDetail)
             feedDetailStates[feedId] = CachedFeedLikeState(
                 isLiked = mergedDetail.isLiked,
                 likeCount = mergedDetail.likeCount,
@@ -396,8 +396,8 @@ class UpdatedFeedRepository
             return mergedDetail
         }
 
-        private fun applyDirtyStateToDetail(feed: FeedDetailEntity): FeedDetailEntity {
-            val localIsLiked = dirtyFeedStates[feed.id] ?: return feed
+        private fun applyPendingLikeStateToDetail(feed: FeedDetailEntity): FeedDetailEntity {
+            val localIsLiked = pendingLikeStates[feed.id] ?: return feed
 
             if (feed.isLiked != localIsLiked) {
                 val adjustedCount = if (localIsLiked) feed.likeCount + 1 else feed.likeCount - 1
