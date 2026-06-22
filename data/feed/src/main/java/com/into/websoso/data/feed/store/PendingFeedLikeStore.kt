@@ -12,6 +12,8 @@ interface PendingFeedLikeStore {
         isLiked: Boolean,
     )
 
+    suspend fun deletePendingLike(feedId: Long)
+
     suspend fun deletePendingLikeIfMatched(
         feedId: Long,
         isLiked: Boolean,

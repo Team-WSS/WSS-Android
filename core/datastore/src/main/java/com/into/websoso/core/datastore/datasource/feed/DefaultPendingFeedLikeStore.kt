@@ -53,6 +53,21 @@ internal class DefaultPendingFeedLikeStore
             }
         }
 
+        override suspend fun deletePendingLike(feedId: Long) {
+            pendingFeedLikeDataStore.edit { preferences ->
+                val pendingLikes: MutableMap<Long, Boolean> = decodePendingLikes(
+                    preferences[PENDING_FEED_LIKES_KEY],
+                ).toMutableMap()
+
+                pendingLikes.remove(feedId)
+                if (pendingLikes.isEmpty()) {
+                    preferences.remove(PENDING_FEED_LIKES_KEY)
+                } else {
+                    preferences[PENDING_FEED_LIKES_KEY] = encodePendingLikes(pendingLikes)
+                }
+            }
+        }
+
         override suspend fun deletePendingLikeIfMatched(
             feedId: Long,
             isLiked: Boolean,
