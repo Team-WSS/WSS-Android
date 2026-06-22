@@ -354,18 +354,16 @@ class UpdatedFeedRepository
          * 서버에 아직 반영되지 않은 좋아요 상태들을 동기화합니다.
          */
         fun syncPendingLikes() {
-            if (pendingLikeStates.isEmpty()) return
-
-            val syncMap = pendingLikeStates.toMap()
-            pendingLikeStates.clear()
-            originalLikeStates.clear()
-
             scope.launch {
+                val syncMap = pendingFeedLikeStore.getPendingLikes() + pendingLikeStates.toMap()
+                if (syncMap.isEmpty()) return@launch
+
                 syncMap.forEach { (id, isLiked) ->
                     runCatching {
                         if (isLiked) feedApi.postLikes(id) else feedApi.deleteLikes(id)
                     }.onSuccess {
-                        deleteSyncedPendingLike(id, isLiked)
+                        deleteSyncedPendingLikeFromStore(id, isLiked)
+                        deleteSyncedPendingLikeFromMemory(id, isLiked)
                     }.onFailure {
                         Log.e("UpdatedFeedRepository", "Failed to sync feed $id", it)
                     }
@@ -373,7 +371,17 @@ class UpdatedFeedRepository
             }
         }
 
-        private suspend fun deleteSyncedPendingLike(
+        private fun deleteSyncedPendingLikeFromMemory(
+            feedId: Long,
+            isLiked: Boolean,
+        ) {
+            pendingLikeStates.remove(feedId, isLiked)
+            if (!pendingLikeStates.containsKey(feedId)) {
+                originalLikeStates.remove(feedId)
+            }
+        }
+
+        private suspend fun deleteSyncedPendingLikeFromStore(
             feedId: Long,
             isLiked: Boolean,
         ) {
