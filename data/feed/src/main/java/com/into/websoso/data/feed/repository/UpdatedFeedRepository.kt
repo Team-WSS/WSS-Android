@@ -300,9 +300,9 @@ class UpdatedFeedRepository
         }
 
         /**
-         * 기록된 변경 사항들을 서버와 동기화합니다.
+         * 서버에 아직 반영되지 않은 좋아요 상태들을 동기화합니다.
          */
-        fun syncDirtyFeeds() {
+        fun syncPendingLikes() {
             if (pendingLikeStates.isEmpty()) return
 
             val syncMap = pendingLikeStates.toMap()
