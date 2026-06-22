@@ -59,6 +59,20 @@ class UpdatedFeedRepository
         private val originalLikeStates = ConcurrentHashMap<Long, Boolean>()
         private val feedDetailStates = ConcurrentHashMap<Long, CachedFeedLikeState>()
 
+        init {
+            observePendingLikes()
+        }
+
+        private fun observePendingLikes() {
+            scope.launch {
+                pendingFeedLikeStore.pendingLikes.collect { pendingLikes ->
+                    pendingLikeStates.clear()
+                    pendingLikeStates.putAll(pendingLikes)
+                    applyPendingLikeStatesToCachedFeeds()
+                }
+            }
+        }
+
         // ============================================================================================
         //  Feed Creation & Modification
         // ============================================================================================
@@ -229,6 +243,16 @@ class UpdatedFeedRepository
                 )
             }
             return feed
+        }
+
+        private fun applyPendingLikeStatesToCachedFeeds() {
+            val updateAction: (List<FeedEntity>) -> List<FeedEntity> = { list ->
+                list.map { feed -> applyPendingLikeState(feed) }
+            }
+
+            _sosoAllFeeds.update(updateAction)
+            _sosoRecommendedFeeds.update(updateAction)
+            _myFeeds.update(updateAction)
         }
 
         // ============================================================================================
