@@ -16,6 +16,7 @@ import com.into.websoso.data.feed.model.FeedDetailEntity
 import com.into.websoso.data.feed.model.FeedEntity
 import com.into.websoso.data.feed.model.FeedsEntity
 import com.into.websoso.data.feed.repository.model.CachedFeedLikeState
+import com.into.websoso.data.feed.store.PendingFeedLikeStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -34,6 +35,7 @@ class UpdatedFeedRepository
     @Inject
     constructor(
         private val feedApi: FeedApi,
+        private val pendingFeedLikeStore: PendingFeedLikeStore,
         private val multiPartMapper: MultiPartMapper,
         private val imageDownloader: ImageDownloader,
         private val imageCompressor: ImageCompressor,
@@ -294,8 +296,33 @@ class UpdatedFeedRepository
             originalLikeStates.putIfAbsent(feedId, original)
             if (originalLikeStates[feedId] == new) {
                 pendingLikeStates.remove(feedId)
+                deletePendingLike(feedId)
             } else {
                 pendingLikeStates[feedId] = new
+                updatePendingLike(feedId, new)
+            }
+        }
+
+        private fun updatePendingLike(
+            feedId: Long,
+            isLiked: Boolean,
+        ) {
+            scope.launch {
+                runCatching {
+                    pendingFeedLikeStore.updatePendingLike(feedId, isLiked)
+                }.onFailure {
+                    Log.e("UpdatedFeedRepository", "Failed to save pending feed like $feedId", it)
+                }
+            }
+        }
+
+        private fun deletePendingLike(feedId: Long) {
+            scope.launch {
+                runCatching {
+                    pendingFeedLikeStore.deletePendingLike(feedId)
+                }.onFailure {
+                    Log.e("UpdatedFeedRepository", "Failed to delete pending feed like $feedId", it)
+                }
             }
         }
 
