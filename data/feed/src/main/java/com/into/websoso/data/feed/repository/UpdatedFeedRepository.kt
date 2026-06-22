@@ -340,10 +340,23 @@ class UpdatedFeedRepository
                 syncMap.forEach { (id, isLiked) ->
                     runCatching {
                         if (isLiked) feedApi.postLikes(id) else feedApi.deleteLikes(id)
+                    }.onSuccess {
+                        deleteSyncedPendingLike(id, isLiked)
                     }.onFailure {
                         Log.e("UpdatedFeedRepository", "Failed to sync feed $id", it)
                     }
                 }
+            }
+        }
+
+        private suspend fun deleteSyncedPendingLike(
+            feedId: Long,
+            isLiked: Boolean,
+        ) {
+            runCatching {
+                pendingFeedLikeStore.deletePendingLikeIfMatched(feedId, isLiked)
+            }.onFailure {
+                Log.e("UpdatedFeedRepository", "Failed to delete synced feed like $feedId", it)
             }
         }
 
