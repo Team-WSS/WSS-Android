@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,8 +61,7 @@ class UpdatedFeedRepository
         private val pendingLikeStates = ConcurrentHashMap<Long, Boolean>()
         private val originalLikeStates = ConcurrentHashMap<Long, Boolean>()
         private val feedDetailStates = ConcurrentHashMap<Long, CachedFeedLikeState>()
-        private val pendingLikeStoreWriteLock = Any()
-        private var pendingLikeStoreWriteJob: Job? = null
+        private val pendingLikeStoreWriteMutex = Mutex()
 
         init {
             restorePendingLikes()
@@ -333,26 +334,24 @@ class UpdatedFeedRepository
             feedId: Long,
             isLiked: Boolean,
         ) {
-            enqueuePendingLikeStoreWrite(feedId, "save") {
+            writePendingLikeStore(feedId, "save") {
                 pendingFeedLikeStore.updatePendingLike(feedId, isLiked)
             }
         }
 
         private fun deletePendingLike(feedId: Long) {
-            enqueuePendingLikeStoreWrite(feedId, "delete") {
+            writePendingLikeStore(feedId, "delete") {
                 pendingFeedLikeStore.deletePendingLike(feedId)
             }
         }
 
-        private fun enqueuePendingLikeStoreWrite(
+        private fun writePendingLikeStore(
             feedId: Long,
             actionName: String,
             action: suspend () -> Unit,
         ) {
-            synchronized(pendingLikeStoreWriteLock) {
-                val previousJob = pendingLikeStoreWriteJob
-                pendingLikeStoreWriteJob = scope.launch {
-                    previousJob?.join()
+            scope.launch {
+                pendingLikeStoreWriteMutex.withLock {
                     runCatching {
                         action()
                     }.onFailure {
