@@ -111,10 +111,14 @@ fun PopularFeedsResponseDto.toData(): PopularFeedsEntity =
         popularFeeds = popularFeeds.map { feed ->
             PopularFeedsEntity.PopularFeedEntity(
                 feedId = feed.feedId,
-                feesContent = feed.feedContent,
+                feesContent = feed.feedContent.orEmpty(),
                 likeCount = feed.likeCount,
                 commentCount = feed.commentCount,
                 isSpoiler = feed.isSpoiler,
+                isPublic = feed.isPublic ?: false,
+                novelTitle = feed.novelTitle ?: feed.title.orEmpty(),
+                novelImage = feed.novelImage ?: feed.novelThumbnailImage.orEmpty(),
+                novelGenre = "",
             )
         },
     )

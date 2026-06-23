@@ -5,11 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.data.model.SosoPickEntity
+import com.into.websoso.data.repository.KeywordRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.domain.usecase.GetNormalExploreResultUseCase
 import com.into.websoso.ui.mapper.toUi
 import com.into.websoso.ui.normalExplore.NormalExploreActivity.Companion.SEARCH_AUTHOR
+import com.into.websoso.ui.normalExplore.model.NormalExploreModel.RecentSearchModel
 import com.into.websoso.ui.normalExplore.model.NormalExploreUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,6 +24,7 @@ class NormalExploreViewModel
     constructor(
         private val getNormalExploreResultUseCase: GetNormalExploreResultUseCase,
         private val novelRepository: NovelRepository,
+        private val keywordRepository: KeywordRepository,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val _uiState: MutableLiveData<NormalExploreUiState> =
@@ -39,14 +43,32 @@ class NormalExploreViewModel
         private val _isNovelResultEmptyBoxVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
         val isNovelResultEmptyBoxVisibility: LiveData<Boolean> get() = _isNovelResultEmptyBoxVisibility
 
-        private val _sosoPicks: MutableLiveData<List<SosoPickEntity.NovelEntity>> = MutableLiveData(emptyList())
+        private val _sosoPicks: MutableLiveData<List<SosoPickEntity.NovelEntity>> =
+            MutableLiveData(emptyList())
         val sosoPicks: LiveData<List<SosoPickEntity.NovelEntity>> get() = _sosoPicks
 
-        private val _isSosoPickVisible: MutableLiveData<Boolean> = MutableLiveData(initialSearchWord.isBlank())
+        private val _isSosoPickVisible: MutableLiveData<Boolean> =
+            MutableLiveData(initialSearchWord.isBlank())
         val isSosoPickVisible: LiveData<Boolean> get() = _isSosoPickVisible
+
+        private val _recentSearches: MutableLiveData<List<RecentSearchModel>> =
+            MutableLiveData(emptyList())
+        val recentSearches: LiveData<List<RecentSearchModel>> get() = _recentSearches
+
+        private val _isRecentSearchesVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isRecentSearchesVisible: LiveData<Boolean> get() = _isRecentSearchesVisible
+
+        private val _keywordSearches: MutableLiveData<List<KeywordModel>> =
+            MutableLiveData(emptyList())
+        val keywordSearches: LiveData<List<KeywordModel>> get() = _keywordSearches
+
+        private val _isKeywordSearchesVisible: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isKeywordSearchesVisible: LiveData<Boolean> get() = _isKeywordSearchesVisible
 
         init {
             fetchSosoPicks()
+            fetchRecentSearches()
+            fetchKeywordSearches()
             if (initialSearchWord.isNotBlank()) {
                 updateSearchResult(isSearchButtonClick = true)
             }
@@ -62,6 +84,36 @@ class NormalExploreViewModel
             }
         }
 
+        private fun fetchRecentSearches() {
+            viewModelScope.launch {
+                fetchRecentSearchesInternal()
+            }
+        }
+
+        private suspend fun fetchRecentSearchesInternal() {
+            runCatching {
+                novelRepository.fetchRecentSearches()
+            }.onSuccess { result ->
+                _recentSearches.value = result.recentSearches
+                    .map { it.toUi() }
+                    .take(MAX_RECENT_SEARCH_COUNT)
+                updateRecentSearchesVisibility()
+            }
+        }
+
+        private fun fetchKeywordSearches() {
+            viewModelScope.launch {
+                runCatching {
+                    keywordRepository.fetchPopularKeywords()
+                }.onSuccess { result ->
+                    _keywordSearches.value = result
+                        .map { keyword -> keyword.toUi() }
+                        .take(MAX_KEYWORD_SEARCH_COUNT)
+                    updateKeywordSearchesVisibility()
+                }
+            }
+        }
+
         fun updateSearchWord(searchWord: String) {
             _searchWord.value = searchWord
             savedStateHandle[SEARCH_AUTHOR] = searchWord
@@ -73,6 +125,8 @@ class NormalExploreViewModel
             }
             if (isSearchButtonClick) {
                 _isSosoPickVisible.value = false
+                updateRecentSearchesVisibility()
+                updateKeywordSearchesVisibility()
             }
             viewModelScope.launch {
                 _uiState.value = _uiState.value?.copy(loading = isSearchButtonClick)
@@ -96,6 +150,9 @@ class NormalExploreViewModel
                         )
                         _isNovelResultEmptyBoxVisibility.value = true
                     }
+                    if (isSearchButtonClick && searchWord.value.isNullOrBlank().not()) {
+                        fetchRecentSearchesInternal()
+                    }
                 }.onFailure {
                     _uiState.value = _uiState.value?.copy(
                         loading = false,
@@ -113,6 +170,49 @@ class NormalExploreViewModel
         fun updateSearchWordEmpty() {
             _searchWord.value = ""
             savedStateHandle[SEARCH_AUTHOR] = ""
+            _uiState.value = NormalExploreUiState()
+            _isNovelResultEmptyBoxVisibility.value = false
             _isSosoPickVisible.value = true
+            updateRecentSearchesVisibility()
+            updateKeywordSearchesVisibility()
+        }
+
+        fun deleteRecentSearch(recentSearchId: Long) {
+            viewModelScope.launch {
+                runCatching {
+                    novelRepository.deleteRecentSearch(recentSearchId)
+                }.onSuccess {
+                    _recentSearches.value = _recentSearches.value
+                        .orEmpty()
+                        .filterNot { recentSearch -> recentSearch.id == recentSearchId }
+                    updateRecentSearchesVisibility()
+                }
+            }
+        }
+
+        fun deleteAllRecentSearches() {
+            viewModelScope.launch {
+                runCatching {
+                    novelRepository.deleteAllRecentSearches()
+                }.onSuccess {
+                    _recentSearches.value = emptyList()
+                    updateRecentSearchesVisibility()
+                }
+            }
+        }
+
+        private fun updateRecentSearchesVisibility() {
+            _isRecentSearchesVisible.value =
+                _isSosoPickVisible.value == true && _recentSearches.value.orEmpty().isNotEmpty()
+        }
+
+        private fun updateKeywordSearchesVisibility() {
+            _isKeywordSearchesVisible.value =
+                _isSosoPickVisible.value == true && _keywordSearches.value.orEmpty().isNotEmpty()
+        }
+
+        companion object {
+            private const val MAX_RECENT_SEARCH_COUNT = 30
+            private const val MAX_KEYWORD_SEARCH_COUNT = 7
         }
     }

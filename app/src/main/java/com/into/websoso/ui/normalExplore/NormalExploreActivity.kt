@@ -5,27 +5,43 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import com.into.websoso.R.color.gray_300_52515F
+import com.into.websoso.R.drawable.bg_normal_explore_keyword_search_chip
 import com.into.websoso.R.layout.activity_normal_explore
+import com.into.websoso.R.style.body3
 import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
 import com.into.websoso.core.common.ui.model.ResultFrom.NormalExploreBack
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
+import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.ActivityNormalExploreBinding
+import com.into.websoso.ui.detailExplore.DetailExploreActivity
+import com.into.websoso.ui.detailExplore.info.model.Genre
+import com.into.websoso.ui.detailExploreResult.DetailExploreResultActivity
+import com.into.websoso.ui.detailExploreResult.model.DetailExploreFilteredModel
 import com.into.websoso.ui.main.explore.adapter.SosoPickAdapter
+import com.into.websoso.ui.normalExplore.adapter.GenreSearchAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreAdapter
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Header
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Loading
 import com.into.websoso.ui.normalExplore.adapter.NormalExploreItemType.Novels
+import com.into.websoso.ui.normalExplore.adapter.RecentSearchAdapter
+import com.into.websoso.ui.normalExplore.model.GenreSearchModel
 import com.into.websoso.ui.normalExplore.model.NormalExploreUiState
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activity_normal_explore) {
@@ -37,6 +53,15 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             ::navigateToNovelDetail,
             ::navigateToInquire,
         )
+    }
+    private val recentSearchAdapter: RecentSearchAdapter by lazy {
+        RecentSearchAdapter(
+            ::searchRecentSearch,
+            normalExploreViewModel::deleteRecentSearch,
+        )
+    }
+    private val genreSearchAdapter: GenreSearchAdapter by lazy {
+        GenreSearchAdapter(::navigateToDetailExploreResult)
     }
     private val sosoPickAdapter: SosoPickAdapter by lazy { SosoPickAdapter(::navigateToNovelDetailFromSosoPick) }
     private val normalExploreViewModel: NormalExploreViewModel by viewModels()
@@ -70,6 +95,9 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                 )
             }
             rvNormalExploreSosoPick.adapter = sosoPickAdapter
+            rvNormalExploreRecentSearch.adapter = recentSearchAdapter
+            rvNormalExploreGenreSearch.adapter = genreSearchAdapter
+            genreSearchAdapter.submitList(GenreSearchModel.items)
             onClick = onNormalExploreButtonClick()
         }
     }
@@ -78,14 +106,11 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         binding.apply {
             etNormalExploreSearchContent.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == IME_ACTION_SEARCH) {
-                    normalExploreViewModel?.updateSearchWord(
+                    searchKeyword(
                         binding.etNormalExploreSearchContent.text
                             ?.toString()
                             .orEmpty(),
                     )
-                    normalExploreViewModel?.updateSearchResult(isSearchButtonClick = true)
-                    binding.etNormalExploreSearchContent.clearFocus()
-                    hideKeyboard()
                     true
                 } else {
                     false
@@ -113,14 +138,11 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             override fun onSearchButtonClick() {
                 singleEventHandler.throttleFirst {
                     tracker.trackEvent("click_search_result")
-                    normalExploreViewModel.updateSearchWord(
+                    searchKeyword(
                         binding.etNormalExploreSearchContent.text
                             ?.toString()
                             .orEmpty(),
                     )
-                    normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
-                    binding.etNormalExploreSearchContent.clearFocus()
-                    hideKeyboard()
                 }
             }
 
@@ -137,7 +159,26 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                 val intent = Intent(ACTION_VIEW, Uri.parse(inquireUrl))
                 startActivity(intent)
             }
+
+            override fun onDetailExploreButtonClick() {
+                singleEventHandler.throttleFirst {
+                    startActivity(DetailExploreActivity.getIntent(this@NormalExploreActivity))
+                }
+            }
         }
+
+    private fun searchRecentSearch(keyword: String) {
+        singleEventHandler.throttleFirst {
+            searchKeyword(keyword)
+        }
+    }
+
+    private fun searchKeyword(keyword: String) {
+        normalExploreViewModel.updateSearchWord(keyword)
+        normalExploreViewModel.updateSearchResult(isSearchButtonClick = true)
+        binding.etNormalExploreSearchContent.clearFocus()
+        hideKeyboard()
+    }
 
     private fun showKeyboard() {
         val inputMethodManager =
@@ -147,6 +188,30 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
             binding.etNormalExploreSearchContent,
             InputMethodManager.SHOW_IMPLICIT,
         )
+    }
+
+    private fun navigateToDetailExploreResult(genre: Genre) {
+        singleEventHandler.throttleFirst {
+            val intent = DetailExploreResultActivity.getIntent(
+                context = this,
+                detailExploreFilteredModel = DetailExploreFilteredModel(
+                    genres = listOf(genre),
+                ),
+            )
+            startActivity(intent)
+        }
+    }
+
+    private fun navigateToDetailExploreResult(keyword: KeywordModel) {
+        singleEventHandler.throttleFirst {
+            val intent = DetailExploreResultActivity.getIntent(
+                context = this,
+                detailExploreFilteredModel = DetailExploreFilteredModel(
+                    keywordIds = listOf(keyword.keywordId),
+                ),
+            )
+            startActivity(intent)
+        }
     }
 
     private fun navigateToNovelDetail(novelId: Long) {
@@ -198,6 +263,41 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
         normalExploreViewModel.sosoPicks.observe(this) { sosoPicks ->
             sosoPickAdapter.submitList(sosoPicks)
         }
+
+        normalExploreViewModel.recentSearches.observe(this) { recentSearches ->
+            recentSearchAdapter.submitList(recentSearches)
+        }
+
+        normalExploreViewModel.keywordSearches.observe(this) { keywordSearches ->
+            updateKeywordSearchChips(keywordSearches)
+        }
+    }
+
+    private fun updateKeywordSearchChips(keywordSearches: List<KeywordModel>) {
+        val keywordChipGroup = binding.wcgNormalExploreKeywordSearch
+        keywordChipGroup.removeAllViews()
+        keywordSearches.forEach { keyword ->
+            TextView(this@NormalExploreActivity)
+                .apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        KEYWORD_CHIP_HEIGHT.toFloatPxFromDp().roundToInt(),
+                    )
+                    text = keyword.keywordName
+                    gravity = Gravity.CENTER
+                    includeFontPadding = false
+                    setTextAppearance(body3)
+                    setTextColor(getColor(gray_300_52515F))
+                    setBackgroundResource(bg_normal_explore_keyword_search_chip)
+                    setPadding(
+                        KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp().roundToInt(),
+                        0,
+                        KEYWORD_CHIP_HORIZONTAL_PADDING.toFloatPxFromDp().roundToInt(),
+                        0,
+                    )
+                    setOnClickListener { navigateToDetailExploreResult(keyword) }
+                }.also { keywordChip -> keywordChipGroup.addView(keywordChip) }
+        }
     }
 
     private fun updateView(uiState: NormalExploreUiState) {
@@ -209,6 +309,8 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
                 true -> normalExploreAdapter.submitList(listOf(header) + novels + Loading)
                 false -> normalExploreAdapter.submitList(listOf(header) + novels)
             }
+        } else {
+            normalExploreAdapter.submitList(emptyList())
         }
     }
 
@@ -221,6 +323,8 @@ class NormalExploreActivity : BaseActivity<ActivityNormalExploreBinding>(activit
 
     companion object {
         const val SEARCH_AUTHOR = "SEARCH_AUTHOR"
+        private const val KEYWORD_CHIP_HEIGHT = 35f
+        private const val KEYWORD_CHIP_HORIZONTAL_PADDING = 13f
 
         fun getIntent(
             context: Context,

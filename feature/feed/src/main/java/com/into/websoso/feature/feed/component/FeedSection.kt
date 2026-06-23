@@ -1,5 +1,6 @@
 package com.into.websoso.feature.feed.component
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -76,9 +78,13 @@ internal fun FeedSection(
     isLoading: Boolean,
     isRefreshing: Boolean,
 ) {
+    val view = LocalView.current
     PullToRefreshBox(
         isRefreshing = isRefreshing,
-        onRefresh = onRefreshPull,
+        onRefresh = {
+            view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+            onRefreshPull()
+        },
         modifier = Modifier.fillMaxSize(),
     ) {
         when {

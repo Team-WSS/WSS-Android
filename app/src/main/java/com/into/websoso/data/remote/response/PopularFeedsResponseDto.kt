@@ -13,12 +13,22 @@ data class PopularFeedsResponseDto(
         @SerialName("feedId")
         val feedId: Long,
         @SerialName("feedContent")
-        val feedContent: String,
+        val feedContent: String? = null,
         @SerialName("likeCount")
         val likeCount: Int,
         @SerialName("commentCount")
         val commentCount: Int,
         @SerialName("isSpoiler")
         val isSpoiler: Boolean,
+        @SerialName("isPublic")
+        val isPublic: Boolean? = null,
+        @SerialName("title")
+        val title: String? = null,
+        @SerialName("novelTitle")
+        val novelTitle: String? = null,
+        @SerialName("novelImage")
+        val novelImage: String? = null,
+        @SerialName("novelThumbnailImage")
+        val novelThumbnailImage: String? = null,
     )
 }

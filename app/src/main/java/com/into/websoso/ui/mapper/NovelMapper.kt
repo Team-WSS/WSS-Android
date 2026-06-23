@@ -2,10 +2,12 @@ package com.into.websoso.ui.mapper
 
 import com.into.websoso.data.model.NovelDetailEntity
 import com.into.websoso.data.model.NovelInfoEntity
+import com.into.websoso.data.model.RecentSearchesEntity.RecentSearchEntity
 import com.into.websoso.domain.model.ExploreResult
 import com.into.websoso.domain.model.ExploreResult.Novel
 import com.into.websoso.ui.normalExplore.model.NormalExploreModel
 import com.into.websoso.ui.normalExplore.model.NormalExploreModel.NovelModel
+import com.into.websoso.ui.normalExplore.model.NormalExploreModel.RecentSearchModel
 import com.into.websoso.ui.novelDetail.model.NovelDetailModel
 import com.into.websoso.ui.novelInfo.model.KeywordModel
 import com.into.websoso.ui.novelInfo.model.NovelInfoUiModel
@@ -86,4 +88,10 @@ fun Novel.toUi(): NovelModel =
         interestedCount = interestedCount,
         rating = rating,
         ratingCount = ratingCount,
+    )
+
+fun RecentSearchEntity.toUi(): RecentSearchModel =
+    RecentSearchModel(
+        id = id,
+        keyword = keyword,
     )

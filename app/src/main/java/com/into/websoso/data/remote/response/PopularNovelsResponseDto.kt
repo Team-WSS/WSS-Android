@@ -10,12 +10,22 @@ data class PopularNovelsResponseDto(
 ) {
     @Serializable
     data class PopularNovelResponseDto(
+        @SerialName("author")
+        val author: String = "",
         @SerialName("avatarImage")
-        val avatarImage: String?,
+        val avatarImage: String? = null,
         @SerialName("feedContent")
-        val feedContent: String,
+        val feedContent: String? = null,
+        @SerialName("genreName")
+        val genreName: String = "",
+        @SerialName("isNovelCompleted")
+        val isNovelCompleted: Boolean = false,
+        @SerialName("keywords")
+        val keywords: List<String> = emptyList(),
         @SerialName("nickname")
-        val nickname: String?,
+        val nickname: String? = null,
+        @SerialName("novelDescription")
+        val novelDescription: String = "",
         @SerialName("novelId")
         val novelId: Long,
         @SerialName("novelImage")

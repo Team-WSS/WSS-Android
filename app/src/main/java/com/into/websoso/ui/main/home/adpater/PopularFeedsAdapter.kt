@@ -32,7 +32,7 @@ class PopularFeedsAdapter(
             override fun areItemsTheSame(
                 oldItem: List<PopularFeedEntity>,
                 newItem: List<PopularFeedEntity>,
-            ): Boolean = oldItem.firstOrNull()?.feedId == newItem.firstOrNull()?.feedId
+            ): Boolean = oldItem.map { it.feedId } == newItem.map { it.feedId }
 
             @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(

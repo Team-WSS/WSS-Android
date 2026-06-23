@@ -15,4 +15,9 @@ data class NormalExploreModel(
         val ratingCount: Long,
         val isSelected: Boolean = false,
     )
+
+    data class RecentSearchModel(
+        val id: Long,
+        val keyword: String,
+    )
 }

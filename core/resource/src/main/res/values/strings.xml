@@ -18,6 +18,10 @@
     <string name="normal_explore_not_exist_result">해당 검색어를 가진 작품은\n아직 등록되지 않았어요...</string>
     <string name="normal_explore_add_novel_inquire">작품 문의하러 가기</string>
     <string name="normal_explore_result_inquire">찾는 작품이 없다면?</string>
+    <string name="normal_explore_recent_search_title">최근 검색어</string>
+    <string name="normal_explore_recent_search_delete_all">전체삭제</string>
+    <string name="normal_explore_genre_search_title">장르별 검색</string>
+    <string name="normal_explore_keyword_search_title">키워드 검색</string>
 
     <!-- 탐색 뷰 -->
     <string name="explore_normal_search_hint">작품 제목, 작가를 검색하세요</string>
@@ -145,6 +149,7 @@
     <string name="novel_rating_read_status_watching">보는 중</string>
     <string name="novel_rating_read_status_watched">봤어요</string>
     <string name="novel_rating_read_status_quit">하차</string>
+    <string name="novel_rating_star_title">별점</string>
     <string name="novel_rating_charm_points">세계관,소재,필력,캐릭터,관계,분위기</string>
     <string name="novel_rating_cancel_alert_title">평가를 그만하시겠어요?</string>
     <string name="novel_rating_cancel_alert_accept">그만하기</string>
@@ -171,7 +176,7 @@
     <string name="novel_rating_keyword_enroll">%d개 선택</string>
     <string name="novel_rating_charm_point_title">매력포인트</string>
     <string name="novel_rating_keyword">키워드</string>
-    <string name="novel_rating_keyword_button">이 작품에 대해 소개해주세요!</string>
+    <string name="novel_rating_keyword_button">작품을 나타내는 키워드는?</string>
     <string name="novel_rating_keyword_exceed">최대 20개까지 선택 가능해요</string>
     <string name="novel_rating_charm_point_exceed">최대 3개까지 선택 가능해요</string>
 
@@ -240,6 +245,10 @@
     <string name="home_recommend_novel">이 웹소설은 어때요? (´ヮ`)ﾉ📚</string>
     <string name="home_popular_novel_nickname">%s님의 한마디</string>
     <string name="home_popular_novel_feed_title_null">작품 소개</string>
+    <string name="home_popular_novel_title_ellipsis">…</string>
+    <string name="home_popular_novel_author_status">%1$s · %2$s</string>
+    <string name="home_popular_novel_status_serial">연재작</string>
+    <string name="home_popular_novel_status_completed">완결작</string>
     <string name="home_popular_feed_spoiler">스포일러가 포함된 글 보기</string>
     <string name="home_recommended_novel_rating_format">%1$.1f (%2$d)</string>
 
