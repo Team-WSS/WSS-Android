@@ -237,6 +237,7 @@ class UpdatedFeedRepository
          */
         private fun applyPendingLikeState(feed: FeedEntity): FeedEntity {
             val localIsLiked = pendingLikeStates[feed.id] ?: return feed
+            originalLikeStates.putIfAbsent(feed.id, feed.isLiked)
 
             if (feed.isLiked != localIsLiked) {
                 val adjustedCount = if (localIsLiked) feed.likeCount + 1 else feed.likeCount - 1
@@ -502,6 +503,7 @@ class UpdatedFeedRepository
 
         private fun applyPendingLikeStateToDetail(feed: FeedDetailEntity): FeedDetailEntity {
             val localIsLiked = pendingLikeStates[feed.id] ?: return feed
+            originalLikeStates.putIfAbsent(feed.id, feed.isLiked)
 
             if (feed.isLiked != localIsLiked) {
                 val adjustedCount = if (localIsLiked) feed.likeCount + 1 else feed.likeCount - 1
