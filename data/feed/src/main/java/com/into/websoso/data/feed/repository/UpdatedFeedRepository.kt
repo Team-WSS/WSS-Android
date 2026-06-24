@@ -377,14 +377,31 @@ class UpdatedFeedRepository
                     runCatching {
                         if (isLiked) feedApi.postLikes(id) else feedApi.deleteLikes(id)
                     }.onSuccess {
-                        deleteSyncedPendingLikeFromStore(id, isLiked)
-                        deleteSyncedPendingLikeFromMemory(id, isLiked)
+                        handleSyncedPendingLike(id, isLiked)
                     }.onFailure {
                         Log.e("UpdatedFeedRepository", "Failed to sync feed $id", it)
                     }
                 }
             }
         }
+
+        private suspend fun handleSyncedPendingLike(
+            feedId: Long,
+            syncedIsLiked: Boolean,
+        ) {
+            val currentIsLiked = findCurrentLikeState(feedId)
+            if (currentIsLiked != null && currentIsLiked != syncedIsLiked) {
+                originalLikeStates[feedId] = syncedIsLiked
+                pendingLikeStates[feedId] = currentIsLiked
+                updatePendingLike(feedId, currentIsLiked)
+                return
+            }
+
+            deleteSyncedPendingLikeFromStore(feedId, syncedIsLiked)
+            deleteSyncedPendingLikeFromMemory(feedId, syncedIsLiked)
+        }
+
+        private fun findCurrentLikeState(feedId: Long): Boolean? = findCachedFeed(feedId)?.isLiked ?: feedDetailStates[feedId]?.isLiked
 
         private fun deleteSyncedPendingLikeFromMemory(
             feedId: Long,
