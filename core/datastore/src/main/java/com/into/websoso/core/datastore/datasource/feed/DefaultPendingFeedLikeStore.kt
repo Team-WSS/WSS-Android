@@ -48,7 +48,7 @@ internal class DefaultPendingFeedLikeStore
                 val pendingLikes: MutableMap<Long, Boolean> = decodePendingLikes(
                     preferences[PENDING_FEED_LIKES_KEY],
                 ).toMutableMap()
-                pendingLikes.put(feedId, isLiked)
+                pendingLikes[feedId] = isLiked
                 preferences[PENDING_FEED_LIKES_KEY] = encodePendingLikes(pendingLikes)
             }
         }
