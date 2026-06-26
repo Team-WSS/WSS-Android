@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.into.websoso.core.common.ui.model.CategoriesModel
 import com.into.websoso.data.repository.KeywordRepository
 import com.into.websoso.ui.detailExplore.info.model.Genre
+import com.into.websoso.ui.detailExplore.info.model.Platform
 import com.into.websoso.ui.detailExplore.info.model.SeriesStatus
 import com.into.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
 import com.into.websoso.ui.mapper.toUi
@@ -25,6 +26,9 @@ class DetailExploreViewModel
         private val _selectedGenres: MutableLiveData<MutableList<Genre>> =
             MutableLiveData(mutableListOf())
         val selectedGenres: LiveData<List<Genre>> get() = _selectedGenres.map { it.toList() }
+        private val _selectedPlatforms: MutableLiveData<MutableList<Platform>> =
+            MutableLiveData(mutableListOf())
+        val selectedPlatforms: LiveData<List<Platform>> get() = _selectedPlatforms.map { it.toList() }
 
         private val _selectedStatus: MutableLiveData<SeriesStatus?> = MutableLiveData()
         val selectedStatus: LiveData<SeriesStatus?> get() = _selectedStatus
@@ -48,6 +52,9 @@ class DetailExploreViewModel
             _isInfoChipSelected.addSource(_selectedGenres) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
+            _isInfoChipSelected.addSource(_selectedPlatforms) {
+                _isInfoChipSelected.value = isInfoChipSelectedEnabled()
+            }
             _isInfoChipSelected.addSource(_selectedStatus) {
                 _isInfoChipSelected.value = isInfoChipSelectedEnabled()
             }
@@ -60,15 +67,17 @@ class DetailExploreViewModel
 
         private fun isInfoChipSelectedEnabled(): Boolean {
             val isGenreChipSelected: Boolean = _selectedGenres.value?.isNotEmpty() == true
+            val isPlatformChipSelected: Boolean = _selectedPlatforms.value?.isNotEmpty() == true
             val isStatusChipSelected: Boolean = _selectedStatus.value != null
             val range = selectedRatingRange.value ?: RatingRange(RATING_MIN, RATING_MAX)
             val isRatingRangeNarrowed: Boolean = range.min > RATING_MIN || range.max < RATING_MAX
 
-            return isGenreChipSelected || isStatusChipSelected || isRatingRangeNarrowed
+            return isGenreChipSelected || isPlatformChipSelected || isStatusChipSelected || isRatingRangeNarrowed
         }
 
         fun updateSelectedInfoValueClear() {
             _selectedGenres.value = mutableListOf()
+            _selectedPlatforms.value = mutableListOf()
             _selectedStatus.value = null
             selectedRatingRange.value = RatingRange(RATING_MIN, RATING_MAX)
         }
@@ -85,6 +94,22 @@ class DetailExploreViewModel
                 false -> {
                     currentGenres.add(genre)
                     currentGenres
+                }
+            }
+        }
+
+        fun updateSelectedPlatforms(platform: Platform) {
+            val currentPlatforms = _selectedPlatforms.value?.toMutableList() ?: mutableListOf()
+
+            _selectedPlatforms.value = when (currentPlatforms.contains(platform)) {
+                true -> {
+                    currentPlatforms.remove(platform)
+                    currentPlatforms
+                }
+
+                false -> {
+                    currentPlatforms.add(platform)
+                    currentPlatforms
                 }
             }
         }
