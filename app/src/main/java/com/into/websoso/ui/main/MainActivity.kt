@@ -18,6 +18,7 @@ import com.into.websoso.R.id.menu_library
 import com.into.websoso.R.id.menu_my_page
 import com.into.websoso.R.layout.activity_main
 import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.util.getAdaptedSerializableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.string.main_back_press
@@ -53,7 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         setupBottomNavigationView()
         setupObserver()
         onViewGuestClick()
-        handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
+        handleNavigation(intent.getAdaptedSerializableExtra<FragmentType>(DESTINATION_KEY))
         updateFcmToken()
         supportFragmentManager.setFragmentResultListener(
             "NAVIGATE_TO_LIBRARY_FRAGMENT",
