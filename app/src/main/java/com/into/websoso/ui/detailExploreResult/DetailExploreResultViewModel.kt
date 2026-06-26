@@ -42,6 +42,7 @@ class DetailExploreResultViewModel
         init {
             _appliedFiltersMessage.apply {
                 addSource(filterGenres) { updateMessage() }
+                addSource(filterPlatformNames) { updateMessage() }
                 addSource(filterIsNovelCompleted) { updateMessage() }
                 addSource(filterRatingStart) { updateMessage() }
                 addSource(filterRatingEnd) { updateMessage() }
@@ -53,6 +54,7 @@ class DetailExploreResultViewModel
             val appliedFilters = mutableListOf<String>()
 
             if (filterGenres.value?.isNotEmpty() == true) appliedFilters.add(GENRES_LABEL)
+            if (filterPlatformNames.value?.isNotEmpty() == true) appliedFilters.add(PLATFORMS_LABEL)
             if (filterIsNovelCompleted.value != null) appliedFilters.add(NOVEL_COMPLETED_LABEL)
             if (isRatingFilterApplied()) appliedFilters.add(RATING_LABEL)
             if (filterKeywordIds.value?.isNotEmpty() == true) appliedFilters.add(KEYWORDS_LABEL)
@@ -129,6 +131,7 @@ class DetailExploreResultViewModel
 
         companion object {
             private const val GENRES_LABEL = "장르"
+            private const val PLATFORMS_LABEL = "플랫폼"
             private const val NOVEL_COMPLETED_LABEL = "연재상태"
             private const val RATING_LABEL = "별점"
             private const val KEYWORDS_LABEL = "키워드"
