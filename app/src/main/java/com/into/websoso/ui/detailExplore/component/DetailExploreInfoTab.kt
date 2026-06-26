@@ -1,7 +1,6 @@
 package com.into.websoso.ui.detailExplore.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -43,6 +41,7 @@ import com.into.websoso.ui.detailExplore.DetailExploreViewModel.Companion.RATING
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel.Companion.RATING_MIN
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel.Companion.RATING_STEP
 import com.into.websoso.ui.detailExplore.info.model.Genre
+import com.into.websoso.ui.detailExplore.info.model.Platform
 import com.into.websoso.ui.detailExplore.info.model.SeriesStatus
 
 @Composable
@@ -51,6 +50,7 @@ fun DetailExploreInfoTab(
     modifier: Modifier = Modifier,
 ) {
     val selectedGenres by viewModel.selectedGenres.observeAsState(emptyList())
+    val selectedPlatforms by viewModel.selectedPlatforms.observeAsState(emptyList())
     val selectedStatus by viewModel.selectedStatus.observeAsState(null)
     val ratingMin by viewModel.selectedRatingMin.observeAsState(RATING_MIN)
     val ratingMax by viewModel.selectedRatingMax.observeAsState(RATING_MAX)
@@ -64,6 +64,10 @@ fun DetailExploreInfoTab(
         GenreSection(
             selectedGenres = selectedGenres,
             onGenreClick = viewModel::updateSelectedGenres,
+        )
+        PlatformSection(
+            selectedPlatforms = selectedPlatforms,
+            onPlatformClick = viewModel::updateSelectedPlatforms,
         )
         StatusSection(
             selectedStatus = selectedStatus,
@@ -118,6 +122,36 @@ private fun GenreSection(
                     onClick = { onGenreClick(genre) },
                     modifier = Modifier.size(
                         width = genre.figmaWidthDp.dp,
+                        height = 37.dp,
+                    ),
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun PlatformSection(
+    selectedPlatforms: List<Platform>,
+    onPlatformClick: (Platform) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        SectionTitle(text = stringResource(detail_explore_info_platform))
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Platform.entries.forEach { platform ->
+                SelectableTagChip(
+                    label = platform.displayName,
+                    isSelected = selectedPlatforms.contains(platform),
+                    onClick = { onPlatformClick(platform) },
+                    modifier = Modifier.size(
+                        width = platform.chipWidthDp.dp,
                         height = 37.dp,
                     ),
                 )
