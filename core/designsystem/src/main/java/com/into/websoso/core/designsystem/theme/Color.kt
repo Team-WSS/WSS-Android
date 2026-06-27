@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 
 // Primary
 val Primary20 = Color(0xFFF5F7FF)
+val Primary30 = Color(0xFFEFF0FF)
 val Primary50 = Color(0xFFF1EFFF)
 val Primary100 = Color(0xFF6A5DFD)
 val Primary200 = Color(0xFF240991)
