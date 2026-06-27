@@ -30,13 +30,13 @@ import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.string.detail_explore_info_genre
+import com.into.websoso.core.resource.R.string.detail_explore_info_platform
 import com.into.websoso.core.resource.R.string.detail_explore_info_rating
 import com.into.websoso.core.resource.R.string.detail_explore_info_rating_range
 import com.into.websoso.core.resource.R.string.detail_explore_info_rating_value
 import com.into.websoso.core.resource.R.string.detail_explore_info_status
 import com.into.websoso.core.resource.R.string.detail_explore_info_status_complete
 import com.into.websoso.core.resource.R.string.detail_explore_info_status_in_series
-import com.into.websoso.core.resource.R.string.detail_explore_info_platform
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel.Companion.RATING_MAX
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel.Companion.RATING_MIN
@@ -139,24 +139,43 @@ private fun PlatformSection(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         SectionTitle(text = stringResource(detail_explore_info_platform))
-        FlowRow(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Platform.entries.forEach { platform ->
-                SelectableTagChip(
-                    label = platform.displayName,
-                    isSelected = selectedPlatforms.contains(platform),
-                    onClick = { onPlatformClick(platform) },
-                    modifier = Modifier.size(
-                        width = platform.chipWidthDp.dp,
-                        height = 37.dp,
-                    ),
-                )
-            }
+            PlatformChipRow(
+                platforms = Platform.entries.take(3),
+                selectedPlatforms = selectedPlatforms,
+                onPlatformClick = onPlatformClick,
+            )
+            PlatformChipRow(
+                platforms = Platform.entries.drop(3),
+                selectedPlatforms = selectedPlatforms,
+                onPlatformClick = onPlatformClick,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PlatformChipRow(
+    platforms: List<Platform>,
+    selectedPlatforms: List<Platform>,
+    onPlatformClick: (Platform) -> Unit,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        platforms.forEach { platform ->
+            SelectableTagChip(
+                label = platform.displayName,
+                isSelected = selectedPlatforms.contains(platform),
+                onClick = { onPlatformClick(platform) },
+                modifier = Modifier.size(
+                    width = platform.chipWidthDp.dp,
+                    height = 37.dp,
+                ),
+            )
         }
     }
 }
