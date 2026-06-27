@@ -36,6 +36,7 @@ import com.into.websoso.core.resource.R.string.detail_explore_info_rating_value
 import com.into.websoso.core.resource.R.string.detail_explore_info_status
 import com.into.websoso.core.resource.R.string.detail_explore_info_status_complete
 import com.into.websoso.core.resource.R.string.detail_explore_info_status_in_series
+import com.into.websoso.core.resource.R.string.detail_explore_info_platform
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel.Companion.RATING_MAX
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel.Companion.RATING_MIN
