@@ -38,9 +38,7 @@ class DetailExploreActivity : AppCompatActivity() {
 
     private fun navigateToSearchResult() {
         val selectedGenres = detailExploreViewModel.selectedGenres.value ?: emptyList()
-        val platformNames = detailExploreViewModel.selectedPlatforms.value
-            ?.map { it.apiName }
-            ?: emptyList()
+        val platformNames = detailExploreViewModel.getSelectedPlatformApiNames()
         val isCompleted = detailExploreViewModel.selectedStatus.value?.isCompleted
         val novelRatingStart = detailExploreViewModel.selectedRatingMin.value
             ?: DetailExploreViewModel.RATING_MIN

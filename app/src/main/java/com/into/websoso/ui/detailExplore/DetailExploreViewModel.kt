@@ -114,6 +114,8 @@ class DetailExploreViewModel
             }
         }
 
+        fun getSelectedPlatformApiNames(): List<String> = _selectedPlatforms.value.orEmpty().map { it.apiName }
+
         fun updateSelectedSeriesStatus(status: SeriesStatus?) {
             _selectedStatus.value = status
         }
