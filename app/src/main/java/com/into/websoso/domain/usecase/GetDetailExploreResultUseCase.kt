@@ -85,7 +85,7 @@ class GetDetailExploreResultUseCase
             keywordIds: List<Int>?,
         ): Boolean =
             genres?.equals(previousGenres) == true &&
-                platformNames?.equals(previousPlatformNames) == true &&
+                platformNames == previousPlatformNames &&
                 isCompleted == previousIsCompleted &&
                 novelRatingStart == previousNovelRatingStart &&
                 novelRatingEnd == previousNovelRatingEnd &&
