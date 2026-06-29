@@ -65,6 +65,7 @@ interface NovelApi {
     @GET("novels/filtered")
     suspend fun getFilteredNovelResult(
         @Query("genres") genres: List<String>?,
+        @Query("platformNames") platformNames: List<String>?,
         @Query("isCompleted") isCompleted: Boolean?,
         @Query("novelRatingStart") novelRatingStart: Float,
         @Query("novelRatingEnd") novelRatingEnd: Float,
