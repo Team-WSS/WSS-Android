@@ -3,10 +3,10 @@ package com.into.websoso.data.library.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.into.websoso.core.common.extensions.isCloseTo
 import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.filter.FilterRepository
-import com.into.websoso.data.filter.model.DEFAULT_NOVEL_RATING
+import com.into.websoso.data.filter.model.DEFAULT_RATING_MAX
+import com.into.websoso.data.filter.model.DEFAULT_RATING_MIN
 import com.into.websoso.data.filter.model.LibraryFilter
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.LibraryRepository.Companion.PAGE_SIZE
@@ -45,8 +45,8 @@ class MyLibraryRepository
                         ),
                         pagingSourceFactory = {
                             LibraryPagingSource(
-                                getNovels = { lastUserNovelId ->
-                                    getUserNovels(lastUserNovelId, currentFilter).also { result ->
+                                getNovels = { cursor ->
+                                    getUserNovels(cursor, currentFilter).also { result ->
                                         _novelTotalCount.update {
                                             result.getOrNull()?.userNovelCount ?: 0
                                         }
@@ -57,25 +57,35 @@ class MyLibraryRepository
                     ).flow
                 }
 
+        override suspend fun getRegisteredKeywords() = libraryRemoteDataSource.getUserNovelKeywords(userId = accountRepository.userId)
+
         private suspend fun getUserNovels(
-            lastUserNovelId: Long,
+            cursor: String?,
             libraryFilter: LibraryFilter,
         ) = runCatching {
+            val (ratingMin, ratingMax) = libraryFilter.toRatingRangeParams()
+
             libraryRemoteDataSource.getUserNovels(
                 userId = accountRepository.userId,
-                lastUserNovelId = lastUserNovelId,
+                cursor = cursor,
                 size = PAGE_SIZE,
-                sortCriteria = libraryFilter.sortCriteria,
+                sortType = libraryFilter.sortCriteria,
                 isInterest = if (!libraryFilter.isInterested) null else true,
                 readStatuses = libraryFilter.readStatuses.ifEmpty { null },
+                genres = libraryFilter.genres.ifEmpty { null },
+                isComplete = libraryFilter.isComplete,
+                ratingMin = ratingMin,
+                ratingMax = ratingMax,
+                unratedOnly = if (libraryFilter.isRatingless) true else null,
                 attractivePoints = libraryFilter.attractivePoints.ifEmpty { null },
-                novelRating = if (libraryFilter.novelRating.isCloseTo(DEFAULT_NOVEL_RATING)) {
-                    null
-                } else {
-                    libraryFilter.novelRating
-                },
-                query = null,
-                updatedSince = null,
+                keywords = libraryFilter.keywords.ifEmpty { null },
             )
         }
+
+        private fun LibraryFilter.toRatingRangeParams(): Pair<Float?, Float?> =
+            when {
+                isRatingless -> null to null
+                ratingMin > DEFAULT_RATING_MIN || ratingMax < DEFAULT_RATING_MAX -> ratingMin to ratingMax
+                else -> null to null
+            }
     }
