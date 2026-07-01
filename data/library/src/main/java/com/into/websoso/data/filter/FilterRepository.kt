@@ -7,10 +7,18 @@ interface FilterRepository {
     val filterFlow: Flow<LibraryFilter>
 
     suspend fun updateFilter(
-        readStatuses: List<String>? = null,
-        attractivePoints: List<String>? = null,
-        novelRating: Float? = null,
         isInterested: Boolean? = null,
         sortCriteria: String? = null,
+    )
+
+    suspend fun applyLibraryFilter(
+        readStatuses: List<String>,
+        attractivePoints: List<String>,
+        genres: List<String>,
+        isComplete: Boolean?,
+        ratingMin: Float,
+        ratingMax: Float,
+        isRatingless: Boolean,
+        keywords: List<String>,
     )
 }
