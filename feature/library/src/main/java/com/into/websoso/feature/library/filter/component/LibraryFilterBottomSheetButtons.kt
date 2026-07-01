@@ -10,17 +10,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.extensions.debouncedClickable
-import com.into.websoso.core.designsystem.theme.Gray300
+import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -34,15 +36,19 @@ internal fun LibraryFilterBottomSheetButtons(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min),
+            .height(IntrinsicSize.Min)
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 10.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
             modifier = Modifier
                 .fillMaxHeight()
+                .clip(RoundedCornerShape(10.dp))
                 .background(color = Gray50)
                 .debouncedClickable { onResetClick() }
                 .padding(
@@ -58,13 +64,14 @@ internal fun LibraryFilterBottomSheetButtons(
             Text(
                 text = "초기화",
                 style = WebsosoTheme.typography.title2,
-                color = Gray300,
+                color = Gray200,
             )
         }
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxHeight()
+                .clip(RoundedCornerShape(10.dp))
                 .background(color = Primary100)
                 .debouncedClickable { onFilterSearchClick() }
                 .padding(vertical = 20.dp)
