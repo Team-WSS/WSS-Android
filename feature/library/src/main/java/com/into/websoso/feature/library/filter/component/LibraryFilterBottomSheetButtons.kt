@@ -1,6 +1,7 @@
 package com.into.websoso.feature.library.filter.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +52,11 @@ internal fun LibraryFilterBottomSheetButtons(
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Gray50)
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFFE4E4E7),
+                    shape = RoundedCornerShape(10.dp),
+                )
                 .debouncedClickable { onResetClick() }
                 .padding(
                     vertical = 20.dp,
@@ -59,6 +66,7 @@ internal fun LibraryFilterBottomSheetButtons(
             Icon(
                 imageVector = ImageVector.vectorResource(id = ic_library_reset),
                 contentDescription = null,
+                tint = Gray200,
                 modifier = Modifier.size(size = 14.dp),
             )
             Text(
