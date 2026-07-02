@@ -37,9 +37,7 @@ internal fun LibraryFilterBottomSheetKeyword(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
+        modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "등록한 키워드 ${keywords.registered.size}개",
@@ -48,7 +46,9 @@ internal fun LibraryFilterBottomSheetKeyword(
         )
         Spacer(modifier = Modifier.height(12.dp))
         FlowRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
