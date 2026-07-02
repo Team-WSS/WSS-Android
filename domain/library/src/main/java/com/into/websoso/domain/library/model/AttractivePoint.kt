@@ -6,10 +6,10 @@ enum class AttractivePoint(
 ) {
     WORLDVIEW("세계관", "worldview"),
     MATERIAL("소재", "material"),
+    WRITINGSKILL("필력", "writingskill"),
     CHARACTER("캐릭터", "character"),
     RELATIONSHIP("관계", "relationship"),
     VIBE("분위기", "vibe"),
-    WRITINGSKILL("필력", "writingskill"),
     ;
 
     companion object {
