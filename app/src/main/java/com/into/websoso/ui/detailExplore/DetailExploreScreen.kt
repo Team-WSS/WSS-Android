@@ -59,7 +59,6 @@ fun DetailExploreScreen(
                 isKeywordChipActive = isKeywordChipSelected,
                 onTabSelected = { selectedTab = it },
                 onBackClick = onBackClick,
-                onResetClick = onResetClick,
             )
             Box(modifier = Modifier.weight(1f)) {
                 when (selectedTab) {

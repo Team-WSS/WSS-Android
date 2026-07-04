@@ -106,7 +106,7 @@ private fun SearchButton(
     ) {
         Text(
             text = stringResource(detail_explore_search_novel),
-            style = WebsosoTheme.typography.title1,
+            style = WebsosoTheme.typography.title2,
             color = White,
         )
     }
