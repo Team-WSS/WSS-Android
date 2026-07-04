@@ -40,13 +40,14 @@ import com.into.websoso.core.resource.R.drawable.ic_library_grid
 import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
 import com.into.websoso.domain.library.model.SortCriteria
+import com.into.websoso.feature.library.filter.LibraryFilterTab
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
 
 @Composable
 internal fun LibraryFilterTopBar(
     libraryFilterUiModel: LibraryFilterUiModel,
     totalCount: Long,
-    onFilterClick: () -> Unit,
+    onFilterClick: (LibraryFilterTab) -> Unit,
     onSortClick: () -> Unit,
     isGrid: Boolean,
     onToggleViewType: () -> Unit,
@@ -80,7 +81,7 @@ internal fun LibraryFilterTopBar(
 private fun NovelFilterChipSection(
     libraryFilterUiModel: LibraryFilterUiModel,
     onInterestClick: () -> Unit,
-    onFilterClick: () -> Unit,
+    onFilterClick: (LibraryFilterTab) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -105,19 +106,37 @@ private fun NovelFilterChipSection(
         NovelFilterChip(
             text = libraryFilterUiModel.readStatusLabelText,
             isSelected = libraryFilterUiModel.readStatuses.isSelected,
-            onClick = onFilterClick,
+            onClick = { onFilterClick(LibraryFilterTab.READ_STATUS) },
+        )
+
+        NovelFilterChip(
+            text = libraryFilterUiModel.genreLabelText,
+            isSelected = libraryFilterUiModel.genres.isSelected,
+            onClick = { onFilterClick(LibraryFilterTab.GENRE) },
+        )
+
+        NovelFilterChip(
+            text = libraryFilterUiModel.seriesStatusLabelText,
+            isSelected = libraryFilterUiModel.seriesStatuses.isSelected,
+            onClick = { onFilterClick(LibraryFilterTab.SERIES_STATUS) },
+        )
+
+        NovelFilterChip(
+            text = libraryFilterUiModel.ratingText,
+            isSelected = libraryFilterUiModel.ratingFilter.isSelected,
+            onClick = { onFilterClick(LibraryFilterTab.RATING) },
         )
 
         NovelFilterChip(
             text = libraryFilterUiModel.attractivePointLabelText,
             isSelected = libraryFilterUiModel.attractivePoints.isSelected,
-            onClick = onFilterClick,
+            onClick = { onFilterClick(LibraryFilterTab.ATTRACTIVE_POINT) },
         )
 
         NovelFilterChip(
-            text = libraryFilterUiModel.ratingText,
-            isSelected = libraryFilterUiModel.novelRating.isSelected,
-            onClick = onFilterClick,
+            text = libraryFilterUiModel.keywordLabelText,
+            isSelected = libraryFilterUiModel.keywords.isSelected,
+            onClick = { onFilterClick(LibraryFilterTab.KEYWORD) },
         )
     }
 }
@@ -187,6 +206,13 @@ private fun NovelFilterStatusBar(
             SortTypeSelector(
                 sortCriteria = sortCriteria,
                 onClick = onSortClick,
+            )
+
+            Box(
+                modifier = Modifier
+                    .height(12.dp)
+                    .width(1.dp)
+                    .background(color = Gray70),
             )
 
             IconButton(onClick = onToggleViewType) {

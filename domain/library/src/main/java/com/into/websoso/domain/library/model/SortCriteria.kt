@@ -4,11 +4,15 @@ enum class SortCriteria(
     val key: String,
     val label: String,
 ) {
-    RECENT("RECENT", "최신 순"),
-    OLD("OLD", "오래된 순"),
+    RECENT("created_desc", "등록 최신순"),
+    OLD("created_asc", "등록 오래된순"),
+    TITLE("title", "제목순"),
+    READ_DATE("read_date", "날짜순"),
+    RATING_HIGH("rating_desc", "별점 높은순"),
+    RATING_LOW("rating_asc", "별점 낮은순"),
     ;
 
     companion object {
-        fun from(key: String): SortCriteria = entries.find { it.name == key } ?: RECENT
+        fun from(value: String): SortCriteria = entries.find { it.key == value || it.name == value } ?: RECENT
     }
 }

@@ -232,6 +232,8 @@ private fun NovelInfoContent(
             text = title,
             style = WebsosoTheme.typography.title2,
             color = Black,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -365,7 +367,7 @@ private fun attractivePointIcon(attractivePoint: AttractivePoint): ImageVector {
 private fun NovelKeywordChipGroup(novelKeyword: List<String>) {
     LazyRow(
         contentPadding = PaddingValues(end = 20.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         items(novelKeyword) {
             NovelKeywordChip(it)
@@ -380,8 +382,8 @@ private fun NovelKeywordChip(keyword: String) {
         style = WebsosoTheme.typography.body5,
         color = Gray200,
         modifier = Modifier
-            .background(color = Primary20, shape = RoundedCornerShape(20.dp))
-            .padding(horizontal = 8.dp, vertical = 6.dp),
+            .background(color = Primary20, shape = RoundedCornerShape(6.dp))
+            .padding(horizontal = 8.dp, vertical = 3.dp),
     )
 }
 

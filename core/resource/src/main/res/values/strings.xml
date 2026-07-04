@@ -443,4 +443,5 @@
 
     <!-- 서재 뷰-->
     <string name="library">서재</string>
+    <string name="library_filter_remove_selected_chip">필터 제거</string>
 </resources>

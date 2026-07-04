@@ -3,6 +3,7 @@ package com.into.websoso.data.library.model
 data class UserNovelsEntity(
     val isLoadable: Boolean,
     val userNovelCount: Long,
+    val nextCursor: String?,
     val userNovels: List<NovelEntity>,
 )
 

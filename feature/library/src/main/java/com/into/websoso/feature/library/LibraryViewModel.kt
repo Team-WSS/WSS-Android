@@ -10,10 +10,15 @@ import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.AttractivePoints.Companion.toAttractivePoints
-import com.into.websoso.domain.library.model.NovelRating
-import com.into.websoso.domain.library.model.Rating
+import com.into.websoso.domain.library.model.Genre
+import com.into.websoso.domain.library.model.Genres.Companion.toGenres
+import com.into.websoso.domain.library.model.Keyword
+import com.into.websoso.domain.library.model.Keywords
+import com.into.websoso.domain.library.model.RatingFilter
 import com.into.websoso.domain.library.model.ReadStatus
 import com.into.websoso.domain.library.model.ReadStatuses.Companion.toReadStatuses
+import com.into.websoso.domain.library.model.SeriesStatus
+import com.into.websoso.domain.library.model.SeriesStatuses
 import com.into.websoso.domain.library.model.SortCriteria
 import com.into.websoso.feature.library.mapper.toUiModel
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
@@ -50,12 +55,35 @@ class LibraryViewModel
         private val _scrollToTopEvent = Channel<Unit>(Channel.BUFFERED)
         val scrollToTopEvent: Flow<Unit> = _scrollToTopEvent.receiveAsFlow()
 
+        private val _keywordLimitEvent = Channel<Unit>(Channel.BUFFERED)
+        val keywordLimitEvent: Flow<Unit> = _keywordLimitEvent.receiveAsFlow()
+
         val novels: MutableStateFlow<PagingData<NovelUiModel>> = MutableStateFlow(PagingData.empty())
 
         init {
             loadLibrary()
             loadNovelsCount()
             updateLibraryFilter()
+            loadRegisteredKeywords()
+        }
+
+        private fun loadRegisteredKeywords() {
+            viewModelScope.launch {
+                runCatching { libraryRepository.getRegisteredKeywords() }
+                    .onSuccess { entities ->
+                        val registered = entities.map { Keyword(id = it.keywordId, name = it.keywordName) }
+                        _uiState.update { state ->
+                            state.copy(
+                                libraryFilterUiModel = state.libraryFilterUiModel.copy(
+                                    keywords = state.libraryFilterUiModel.keywords.copy(registered = registered),
+                                ),
+                            )
+                        }
+                        _tempFilterUiState.update { temp ->
+                            temp.copy(keywords = temp.keywords.copy(registered = registered))
+                        }
+                    }
+            }
         }
 
         private fun loadNovelsCount() {
@@ -93,8 +121,17 @@ class LibraryViewModel
                                 sortCriteria = SortCriteria.from(filter.sortCriteria),
                                 isInterested = filter.isInterested,
                                 readStatuses = filter.readStatuses.toReadStatuses(),
+                                genres = filter.genres.toGenres(),
+                                seriesStatuses = SeriesStatuses.fromIsComplete(filter.isComplete),
                                 attractivePoints = filter.attractivePoints.toAttractivePoints(),
-                                novelRating = NovelRating.from(filter.novelRating),
+                                ratingFilter = RatingFilter(
+                                    min = filter.ratingMin,
+                                    max = filter.ratingMax,
+                                    isRatingless = filter.isRatingless,
+                                ),
+                                keywords = uiState.libraryFilterUiModel.keywords.copy(
+                                    selectedNames = filter.keywords.toSet(),
+                                ),
                             ),
                         )
                     }
@@ -114,16 +151,10 @@ class LibraryViewModel
             }
         }
 
-        fun updateSortType() {
-            val current = uiState.value.libraryFilterUiModel.sortCriteria
-            val updatedSortCriteria = when (current) {
-                SortCriteria.RECENT -> SortCriteria.OLD
-                SortCriteria.OLD -> SortCriteria.RECENT
-            }
-
+        fun updateSortCriteria(sortCriteria: SortCriteria) {
             viewModelScope.launch {
                 filterRepository.updateFilter(
-                    sortCriteria = updatedSortCriteria.key,
+                    sortCriteria = sortCriteria.key,
                 )
             }
         }
@@ -150,30 +181,82 @@ class LibraryViewModel
             }
         }
 
+        fun updateGenre(genre: Genre) {
+            _tempFilterUiState.update {
+                it.copy(genres = it.genres.set(genre))
+            }
+        }
+
+        fun updateSeriesStatus(seriesStatus: SeriesStatus) {
+            _tempFilterUiState.update {
+                it.copy(seriesStatuses = it.seriesStatuses.set(seriesStatus))
+            }
+        }
+
         fun updateAttractivePoints(attractivePoint: AttractivePoint) {
             _tempFilterUiState.update {
                 it.copy(attractivePoints = it.attractivePoints.set(attractivePoint))
             }
         }
 
-        fun updateRating(rating: Rating) {
+        fun updateRatingRange(
+            min: Float,
+            max: Float,
+        ) {
             _tempFilterUiState.update {
-                it.copy(novelRating = it.novelRating.set(rating))
+                it.copy(ratingFilter = it.ratingFilter.setRange(min, max))
+            }
+        }
+
+        fun updateRatingless() {
+            _tempFilterUiState.update {
+                it.copy(ratingFilter = it.ratingFilter.toggleRatingless())
+            }
+        }
+
+        fun clearRating() {
+            _tempFilterUiState.update {
+                it.copy(ratingFilter = RatingFilter())
+            }
+        }
+
+        fun updateKeyword(keywordName: String) {
+            val current = _tempFilterUiState.value.keywords
+            val isNewSelection = !current.isSelected(keywordName)
+
+            if (isNewSelection && current.selectedNames.size >= Keywords.MAX_SELECTION) {
+                viewModelScope.launch { _keywordLimitEvent.send(Unit) }
+                return
+            }
+
+            _tempFilterUiState.update {
+                it.copy(keywords = it.keywords.set(keywordName))
             }
         }
 
         fun resetFilter() {
-            _tempFilterUiState.update {
-                LibraryFilterUiModel()
+            _tempFilterUiState.update { current ->
+                LibraryFilterUiModel(
+                    isInterested = current.isInterested,
+                    sortCriteria = current.sortCriteria,
+                    keywords = Keywords(registered = current.keywords.registered),
+                )
             }
         }
 
         fun searchFilteredNovels() {
+            val tempFilter = _tempFilterUiState.value
+
             viewModelScope.launch {
-                filterRepository.updateFilter(
-                    readStatuses = _tempFilterUiState.value.readStatuses.selectedKeys,
-                    attractivePoints = _tempFilterUiState.value.attractivePoints.selectedKeys,
-                    novelRating = _tempFilterUiState.value.novelRating.rating.value,
+                filterRepository.applyLibraryFilter(
+                    readStatuses = tempFilter.readStatuses.selectedKeys,
+                    attractivePoints = tempFilter.attractivePoints.selectedKeys,
+                    genres = tempFilter.genres.selectedKeys,
+                    isComplete = tempFilter.seriesStatuses.isComplete,
+                    ratingMin = tempFilter.ratingFilter.min,
+                    ratingMax = tempFilter.ratingFilter.max,
+                    isRatingless = tempFilter.ratingFilter.isRatingless,
+                    keywords = tempFilter.keywords.selectedLabels,
                 )
             }
         }

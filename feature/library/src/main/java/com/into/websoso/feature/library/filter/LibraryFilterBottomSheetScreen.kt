@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library.filter
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,68 +11,68 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.library.model.AttractivePoint
-import com.into.websoso.domain.library.model.AttractivePoints
-import com.into.websoso.domain.library.model.NovelRating
-import com.into.websoso.domain.library.model.Rating
+import com.into.websoso.domain.library.model.Genre
 import com.into.websoso.domain.library.model.ReadStatus
-import com.into.websoso.domain.library.model.ReadStatuses
+import com.into.websoso.domain.library.model.SeriesStatus
+import com.into.websoso.feature.library.filter.LibraryFilterTab.ATTRACTIVE_POINT
+import com.into.websoso.feature.library.filter.LibraryFilterTab.GENRE
+import com.into.websoso.feature.library.filter.LibraryFilterTab.KEYWORD
+import com.into.websoso.feature.library.filter.LibraryFilterTab.RATING
+import com.into.websoso.feature.library.filter.LibraryFilterTab.READ_STATUS
+import com.into.websoso.feature.library.filter.LibraryFilterTab.SERIES_STATUS
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetAttractivePoints
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetButtons
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetGenre
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetHeader
-import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetNovelRatingGrid
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetKeyword
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetRating
 import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetReadStatus
+import com.into.websoso.feature.library.filter.component.LibraryFilterBottomSheetSeriesStatus
+import com.into.websoso.feature.library.filter.component.LibraryFilterSelectedChips
+import com.into.websoso.feature.library.filter.component.LibraryFilterTabRow
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun LibraryFilterBottomSheetScreen(
     filterUiState: LibraryFilterUiModel,
-    onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    onAttractivePointClick: (AttractivePoint) -> Unit,
+    initialTab: LibraryFilterTab = READ_STATUS,
+    onDismissRequest: () -> Unit,
     onReadStatusClick: (ReadStatus) -> Unit,
-    onRatingClick: (rating: Rating) -> Unit,
+    onGenreClick: (Genre) -> Unit,
+    onSeriesStatusClick: (SeriesStatus) -> Unit,
+    onAttractivePointClick: (AttractivePoint) -> Unit,
+    onRatingRangeChange: (Float, Float) -> Unit,
+    onRatinglessToggle: () -> Unit,
+    onRatingRemove: () -> Unit,
+    onKeywordClick: (String) -> Unit,
     onResetClick: () -> Unit,
     onFilterSearchClick: () -> Unit,
 ) {
-    LibraryFilterBottomSheetScreen(
-        sheetState = sheetState,
-        readStatues = filterUiState.readStatuses,
-        attractivePoints = filterUiState.attractivePoints,
-        selectedRating = filterUiState.novelRating,
-        onDismissRequest = onDismissRequest,
-        onAttractivePointClick = onAttractivePointClick,
-        onReadStatusClick = onReadStatusClick,
-        onRatingClick = onRatingClick,
-        onResetClick = onResetClick,
-        onFilterSearchClick = onFilterSearchClick,
-    )
-}
+    var selectedTab by rememberSaveable { mutableStateOf(initialTab) }
 
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun LibraryFilterBottomSheetScreen(
-    onDismissRequest: () -> Unit,
-    sheetState: SheetState,
-    readStatues: ReadStatuses,
-    attractivePoints: AttractivePoints,
-    onAttractivePointClick: (AttractivePoint) -> Unit,
-    onReadStatusClick: (ReadStatus) -> Unit,
-    selectedRating: NovelRating,
-    onRatingClick: (rating: Rating) -> Unit,
-    onResetClick: () -> Unit,
-    onFilterSearchClick: () -> Unit,
-) {
+    val activeTabs = buildSet {
+        if (filterUiState.readStatuses.isSelected) add(READ_STATUS)
+        if (filterUiState.genres.isSelected) add(GENRE)
+        if (filterUiState.seriesStatuses.isSelected) add(SERIES_STATUS)
+        if (filterUiState.ratingFilter.isSelected) add(RATING)
+        if (filterUiState.attractivePoints.isSelected) add(ATTRACTIVE_POINT)
+        if (filterUiState.keywords.isSelected) add(KEYWORD)
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
@@ -80,55 +81,83 @@ private fun LibraryFilterBottomSheetScreen(
         dragHandle = null,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(
-            modifier = Modifier.padding(
-                horizontal = 20.dp,
-            ),
-        ) {
-            LibraryFilterBottomSheetHeader(onDismissRequest = onDismissRequest)
-            Text(
-                text = "읽기 상태",
-                style = WebsosoTheme.typography.title2,
-                color = Black,
-                modifier = Modifier.padding(vertical = 10.dp),
+        Column(modifier = Modifier.fillMaxWidth()) {
+            LibraryFilterBottomSheetHeader(
+                onDismissRequest = onDismissRequest,
+                modifier = Modifier.padding(horizontal = 20.dp),
             )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            LibraryFilterBottomSheetReadStatus(
-                onReadStatusClick = onReadStatusClick,
-                readStatuses = readStatues,
+
+            LibraryFilterTabRow(
+                selectedTab = selectedTab,
+                activeTabs = activeTabs,
+                onTabSelected = { selectedTab = it },
+                modifier = Modifier.padding(start = 20.dp),
             )
-            Spacer(modifier = Modifier.height(height = 32.dp))
-            Text(
-                text = "매력포인트",
-                style = WebsosoTheme.typography.title2,
-                color = Black,
-                modifier = Modifier.padding(vertical = 10.dp),
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (activeTabs.isNotEmpty()) {
+                LibraryFilterSelectedChips(
+                    filterUiState = filterUiState,
+                    onReadStatusClick = onReadStatusClick,
+                    onGenreClick = onGenreClick,
+                    onSeriesStatusClick = onSeriesStatusClick,
+                    onAttractivePointClick = onAttractivePointClick,
+                    onRatingRemove = onRatingRemove,
+                    onKeywordClick = onKeywordClick,
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(280.dp)
+                    .padding(horizontal = 20.dp),
+            ) {
+                when (selectedTab) {
+                    READ_STATUS -> LibraryFilterBottomSheetReadStatus(
+                        readStatuses = filterUiState.readStatuses,
+                        onReadStatusClick = onReadStatusClick,
+                    )
+
+                    GENRE -> LibraryFilterBottomSheetGenre(
+                        genres = filterUiState.genres,
+                        onGenreClick = onGenreClick,
+                    )
+
+                    SERIES_STATUS -> LibraryFilterBottomSheetSeriesStatus(
+                        seriesStatuses = filterUiState.seriesStatuses,
+                        onSeriesStatusClick = onSeriesStatusClick,
+                    )
+
+                    RATING -> LibraryFilterBottomSheetRating(
+                        ratingFilter = filterUiState.ratingFilter,
+                        onRangeChange = onRatingRangeChange,
+                        onRatinglessToggle = onRatinglessToggle,
+                    )
+
+                    ATTRACTIVE_POINT -> LibraryFilterBottomSheetAttractivePoints(
+                        attractivePoints = filterUiState.attractivePoints,
+                        onAttractivePointClick = onAttractivePointClick,
+                    )
+
+                    KEYWORD -> LibraryFilterBottomSheetKeyword(
+                        keywords = filterUiState.keywords,
+                        onKeywordClick = onKeywordClick,
+                    )
+                }
+            }
+
+            LibraryFilterBottomSheetButtons(
+                onResetClick = onResetClick,
+                onFilterSearchClick = {
+                    onDismissRequest()
+                    onFilterSearchClick()
+                },
             )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            LibraryFilterBottomSheetAttractivePoints(
-                onAttractivePointClick = onAttractivePointClick,
-                attractivePoints = attractivePoints,
-            )
-            Spacer(modifier = Modifier.height(height = 32.dp))
-            Text(
-                text = "별점",
-                style = WebsosoTheme.typography.title2,
-                color = Black,
-                modifier = Modifier.padding(vertical = 10.dp),
-            )
-            LibraryFilterBottomSheetNovelRatingGrid(
-                selectedRating = selectedRating,
-                onRatingClick = onRatingClick,
-            )
-            Spacer(modifier = Modifier.height(height = 76.dp))
         }
-        LibraryFilterBottomSheetButtons(
-            onResetClick = onResetClick,
-            onFilterSearchClick = {
-                onDismissRequest()
-                onFilterSearchClick()
-            },
-        )
     }
 }
 
@@ -138,17 +167,22 @@ private fun LibraryFilterBottomSheetScreen(
 private fun LibraryFilterBottomSheetPreview() {
     WebsosoTheme {
         LibraryFilterBottomSheetScreen(
-            onDismissRequest = {},
+            filterUiState = LibraryFilterUiModel(),
             sheetState = rememberStandardBottomSheetState(
                 initialValue = SheetValue.Expanded,
                 skipHiddenState = false,
             ),
-            filterUiState = LibraryFilterUiModel(),
-            onAttractivePointClick = { },
-            onReadStatusClick = { },
-            onRatingClick = { },
-            onResetClick = { },
-            onFilterSearchClick = { },
+            onDismissRequest = {},
+            onReadStatusClick = {},
+            onGenreClick = {},
+            onSeriesStatusClick = {},
+            onAttractivePointClick = {},
+            onRatingRangeChange = { _, _ -> },
+            onRatinglessToggle = {},
+            onRatingRemove = {},
+            onKeywordClick = { _ -> },
+            onResetClick = {},
+            onFilterSearchClick = {},
         )
     }
 }
