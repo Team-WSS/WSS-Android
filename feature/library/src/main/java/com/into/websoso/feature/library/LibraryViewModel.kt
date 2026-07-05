@@ -175,6 +175,7 @@ class LibraryViewModel
             _tempFilterUiState.update {
                 uiState.value.libraryFilterUiModel
             }
+            loadRegisteredKeywords()
         }
 
         fun updateReadStatus(readStatus: ReadStatus) {
