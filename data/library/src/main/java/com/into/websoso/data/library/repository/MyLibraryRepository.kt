@@ -11,12 +11,14 @@ import com.into.websoso.data.filter.model.LibraryFilter
 import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.LibraryRepository.Companion.PAGE_SIZE
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
+import com.into.websoso.data.library.model.LibraryKeywordEntity
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.paging.LibraryPagingSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -57,7 +59,10 @@ class MyLibraryRepository
                     ).flow
                 }
 
-        override suspend fun getRegisteredKeywords() = libraryRemoteDataSource.getUserNovelKeywords(userId = accountRepository.userId)
+        override suspend fun getRegisteredKeywords(): List<LibraryKeywordEntity> {
+            val userId = accountRepository.userIdFlow.first { it != 0L }
+            return libraryRemoteDataSource.getUserNovelKeywords(userId = userId)
+        }
 
         private suspend fun getUserNovels(
             cursor: String?,

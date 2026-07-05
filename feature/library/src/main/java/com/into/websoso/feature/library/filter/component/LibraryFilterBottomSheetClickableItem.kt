@@ -31,10 +31,11 @@ internal fun LibraryFilterBottomSheetClickableItem(
     iconSize: Dp,
     horizontalPadding: Dp,
     isSelected: Boolean = false,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .debouncedClickable(onClick = onClick)
             .padding(horizontal = horizontalPadding),
     ) {

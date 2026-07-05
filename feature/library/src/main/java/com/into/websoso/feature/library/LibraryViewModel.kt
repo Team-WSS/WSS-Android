@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -83,6 +84,7 @@ class LibraryViewModel
                             temp.copy(keywords = temp.keywords.copy(registered = registered))
                         }
                     }
+                    .onFailure { Log.e("LibraryViewModel", "등록 키워드 로드 실패", it) }
             }
         }
 

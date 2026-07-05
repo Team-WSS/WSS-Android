@@ -4,6 +4,9 @@ import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.auth.AuthToken
 import com.into.websoso.data.account.datasource.AccountLocalDataSource
 import com.into.websoso.data.account.datasource.AccountRemoteDataSource
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,11 +21,15 @@ class AccountRepository
         var isRegisterUser: Boolean = false
             private set
 
-        var userId: Long = 0L
-            private set
+        private val _userId = MutableStateFlow(0L)
+
+        val userIdFlow: StateFlow<Long> = _userId.asStateFlow()
+
+        val userId: Long
+            get() = _userId.value
 
         fun updateUserId(userId: Long) {
-            this.userId = userId
+            _userId.value = userId
         }
 
         suspend fun accessToken(): String = accountLocalDataSource.selectAccessToken()

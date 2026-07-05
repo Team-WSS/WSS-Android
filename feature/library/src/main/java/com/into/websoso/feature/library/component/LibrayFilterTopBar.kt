@@ -221,7 +221,7 @@ private fun NovelFilterStatusBar(
                         id = if (isGrid) ic_library_grid else ic_library_list,
                     ),
                     contentDescription = null,
-                    modifier = Modifier.size(12.dp),
+                    modifier = Modifier.size(18.dp),
                 )
             }
         }
@@ -250,7 +250,7 @@ private fun SortTypeSelector(
 
             Text(
                 text = sortCriteria.label,
-                style = WebsosoTheme.typography.body5,
+                style = WebsosoTheme.typography.body4,
                 color = Gray300,
             )
         }

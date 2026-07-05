@@ -68,8 +68,8 @@ internal fun LibraryFilterBottomSheetRating(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "별점 등록 안 된 작품만 보기",
-                style = WebsosoTheme.typography.body2,
+                text = "별점 등록 안된 작품만 보기",
+                style = WebsosoTheme.typography.title2,
                 color = Black,
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -77,6 +77,7 @@ internal fun LibraryFilterBottomSheetRating(
                 checked = ratingFilter.isRatingless,
                 onCheckedChange = { onRatinglessToggle() },
                 modifier = Modifier.scale(0.85f),
+                thumbContent = {},
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = White,
                     checkedTrackColor = Primary100,
