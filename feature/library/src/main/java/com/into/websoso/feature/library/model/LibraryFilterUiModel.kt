@@ -24,13 +24,13 @@ data class LibraryFilterUiModel(
     val readStatusLabelText: String
         get() = createLabel(
             values = readStatuses.selectedLabels,
-            labelTitle = "읽기 상태",
+            labelTitle = "읽기상태",
         )
 
     val attractivePointLabelText: String
         get() = createLabel(
             values = attractivePoints.selectedLabels,
-            labelTitle = "매력 포인트",
+            labelTitle = "매력포인트",
         )
 
     val genreLabelText: String
@@ -42,7 +42,7 @@ data class LibraryFilterUiModel(
     val seriesStatusLabelText: String
         get() = createLabel(
             values = seriesStatuses.selectedLabels,
-            labelTitle = "연재 상태",
+            labelTitle = "연재상태",
         )
 
     val keywordLabelText: String

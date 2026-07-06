@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library.filter
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,9 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.domain.library.model.AttractivePoint
@@ -43,6 +46,10 @@ import com.into.websoso.feature.library.filter.component.LibraryFilterBottomShee
 import com.into.websoso.feature.library.filter.component.LibraryFilterSelectedChips
 import com.into.websoso.feature.library.filter.component.LibraryFilterTabRow
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
+
+private val SELECTED_CHIPS_ROW_HEIGHT = 36.5.dp
+
+private val FILTER_CONTENT_REGION_HEIGHT = 333.5.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,57 +103,80 @@ internal fun LibraryFilterBottomSheetScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (activeTabs.isNotEmpty()) {
-                LibraryFilterSelectedChips(
-                    filterUiState = filterUiState,
-                    onReadStatusClick = onReadStatusClick,
-                    onGenreClick = onGenreClick,
-                    onSeriesStatusClick = onSeriesStatusClick,
-                    onAttractivePointClick = onAttractivePointClick,
-                    onRatingRemove = onRatingRemove,
-                    onKeywordClick = onKeywordClick,
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
-                    .padding(horizontal = 20.dp),
+                    .height(FILTER_CONTENT_REGION_HEIGHT),
             ) {
-                when (selectedTab) {
-                    READ_STATUS -> LibraryFilterBottomSheetReadStatus(
-                        readStatuses = filterUiState.readStatuses,
-                        onReadStatusClick = onReadStatusClick,
+                if (activeTabs.isNotEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(SELECTED_CHIPS_ROW_HEIGHT)
+                            .padding(horizontal = 20.dp),
+                        contentAlignment = Alignment.CenterStart,
+                    ) {
+                        LibraryFilterSelectedChips(
+                            filterUiState = filterUiState,
+                            onReadStatusClick = onReadStatusClick,
+                            onGenreClick = onGenreClick,
+                            onSeriesStatusClick = onSeriesStatusClick,
+                            onAttractivePointClick = onAttractivePointClick,
+                            onRatingRemove = onRatingRemove,
+                            onKeywordClick = onKeywordClick,
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(Gray50),
                     )
 
-                    GENRE -> LibraryFilterBottomSheetGenre(
-                        genres = filterUiState.genres,
-                        onGenreClick = onGenreClick,
-                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-                    SERIES_STATUS -> LibraryFilterBottomSheetSeriesStatus(
-                        seriesStatuses = filterUiState.seriesStatuses,
-                        onSeriesStatusClick = onSeriesStatusClick,
-                    )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = 20.dp),
+                ) {
+                    when (selectedTab) {
+                        READ_STATUS -> LibraryFilterBottomSheetReadStatus(
+                            readStatuses = filterUiState.readStatuses,
+                            onReadStatusClick = onReadStatusClick,
+                        )
 
-                    RATING -> LibraryFilterBottomSheetRating(
-                        ratingFilter = filterUiState.ratingFilter,
-                        onRangeChange = onRatingRangeChange,
-                        onRatinglessToggle = onRatinglessToggle,
-                    )
+                        GENRE -> LibraryFilterBottomSheetGenre(
+                            genres = filterUiState.genres,
+                            onGenreClick = onGenreClick,
+                        )
 
-                    ATTRACTIVE_POINT -> LibraryFilterBottomSheetAttractivePoints(
-                        attractivePoints = filterUiState.attractivePoints,
-                        onAttractivePointClick = onAttractivePointClick,
-                    )
+                        SERIES_STATUS -> LibraryFilterBottomSheetSeriesStatus(
+                            seriesStatuses = filterUiState.seriesStatuses,
+                            onSeriesStatusClick = onSeriesStatusClick,
+                        )
 
-                    KEYWORD -> LibraryFilterBottomSheetKeyword(
-                        keywords = filterUiState.keywords,
-                        onKeywordClick = onKeywordClick,
-                    )
+                        RATING -> LibraryFilterBottomSheetRating(
+                            ratingFilter = filterUiState.ratingFilter,
+                            onRangeChange = onRatingRangeChange,
+                            onRatinglessToggle = onRatinglessToggle,
+                        )
+
+                        ATTRACTIVE_POINT -> LibraryFilterBottomSheetAttractivePoints(
+                            attractivePoints = filterUiState.attractivePoints,
+                            onAttractivePointClick = onAttractivePointClick,
+                        )
+
+                        KEYWORD -> LibraryFilterBottomSheetKeyword(
+                            keywords = filterUiState.keywords,
+                            onKeywordClick = onKeywordClick,
+                        )
+                    }
                 }
             }
 

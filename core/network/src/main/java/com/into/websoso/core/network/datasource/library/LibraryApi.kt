@@ -22,7 +22,7 @@ internal interface LibraryApi {
         @Query("isInterest") isInterest: Boolean?,
         @Query("readStatuses") readStatuses: List<String>?,
         @Query("genres") genres: List<String>?,
-        @Query("isComplete") isComplete: Boolean?,
+        @Query("isCompleted") isComplete: Boolean?,
         @Query("ratingMin") ratingMin: Float?,
         @Query("ratingMax") ratingMax: Float?,
         @Query("unratedOnly") unratedOnly: Boolean?,

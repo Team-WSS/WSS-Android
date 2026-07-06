@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -71,7 +72,8 @@ class LibraryViewModel
             viewModelScope.launch {
                 runCatching { libraryRepository.getRegisteredKeywords() }
                     .onSuccess { entities ->
-                        val registered = entities.map { Keyword(id = it.keywordId, name = it.keywordName) }
+                        val registered =
+                            entities.map { Keyword(id = it.keywordId, name = it.keywordName) }
                         _uiState.update { state ->
                             state.copy(
                                 libraryFilterUiModel = state.libraryFilterUiModel.copy(
@@ -82,7 +84,7 @@ class LibraryViewModel
                         _tempFilterUiState.update { temp ->
                             temp.copy(keywords = temp.keywords.copy(registered = registered))
                         }
-                    }
+                    }.onFailure { Log.e("LibraryViewModel", "등록 키워드 로드 실패", it) }
             }
         }
 
@@ -173,6 +175,7 @@ class LibraryViewModel
             _tempFilterUiState.update {
                 uiState.value.libraryFilterUiModel
             }
+            loadRegisteredKeywords()
         }
 
         fun updateReadStatus(readStatus: ReadStatus) {

@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.into.websoso.core.designsystem.theme.Black
+import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray50
@@ -68,15 +68,16 @@ internal fun LibraryFilterBottomSheetRating(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "별점 등록 안 된 작품만 보기",
-                style = WebsosoTheme.typography.body2,
-                color = Black,
+                text = "별점 등록 안된 작품만 보기",
+                style = WebsosoTheme.typography.title2,
+                color = Gray300,
             )
             Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = ratingFilter.isRatingless,
                 onCheckedChange = { onRatinglessToggle() },
                 modifier = Modifier.scale(0.85f),
+                thumbContent = {},
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = White,
                     checkedTrackColor = Primary100,
