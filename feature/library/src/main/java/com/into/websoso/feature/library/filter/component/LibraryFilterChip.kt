@@ -43,7 +43,7 @@ internal fun LibraryFilterTagChip(
         isSelected = isSelected,
         onClick = onClick,
         cornerRadius = 20.dp,
-        horizontalPadding = 9.5.dp,
+        horizontalPadding = 13.dp,
         verticalPadding = 7.dp,
         modifier = modifier,
     )
@@ -96,7 +96,7 @@ private fun LibraryFilterChipBase(
     ) {
         Text(
             text = label,
-            style = WebsosoTheme.typography.body5,
+            style = WebsosoTheme.typography.body2,
             color = textColor,
         )
     }
@@ -125,7 +125,7 @@ internal fun LibraryFilterRemovableChip(
     ) {
         Text(
             text = label,
-            style = WebsosoTheme.typography.body5,
+            style = WebsosoTheme.typography.body2,
             color = Primary100,
         )
         Image(

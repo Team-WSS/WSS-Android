@@ -192,7 +192,7 @@ private fun LibraryScreen(
 
         LibraryTopBar(onSearchClick = onSearchClick)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(9.dp))
 
         LibraryFilterTopBar(
             libraryFilterUiModel = uiState.libraryFilterUiModel,
@@ -203,8 +203,6 @@ private fun LibraryScreen(
             onToggleViewType = onToggleViewType,
             onInterestClick = onInterestClick,
         )
-
-        Spacer(modifier = Modifier.height(12.dp))
 
         PullToRefreshBox(
             isRefreshing = isNovelsRefreshing,

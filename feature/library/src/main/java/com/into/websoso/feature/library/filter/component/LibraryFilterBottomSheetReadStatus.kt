@@ -3,9 +3,7 @@ package com.into.websoso.feature.library.filter.component
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -33,9 +31,7 @@ internal fun LibraryFilterBottomSheetReadStatus(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         LibraryFilterBottomSheetClickableItem(
             icon = ic_library_reading,
@@ -73,7 +69,7 @@ internal fun LibraryFilterBottomSheetReadStatus(
 private fun ReadStatusDivider() {
     Box(
         modifier = Modifier
-            .fillMaxHeight()
+            .height(32.dp)
             .width(1.dp)
             .background(Gray70),
     )

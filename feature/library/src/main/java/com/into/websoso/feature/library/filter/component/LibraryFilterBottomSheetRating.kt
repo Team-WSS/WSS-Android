@@ -76,8 +76,8 @@ internal fun LibraryFilterBottomSheetRating(
             Switch(
                 checked = ratingFilter.isRatingless,
                 onCheckedChange = { onRatinglessToggle() },
-                modifier = Modifier.scale(0.85f),
-                thumbContent = {},
+                modifier = Modifier.scale(0.75f),
+                thumbContent = { Spacer(modifier = Modifier.size(SwitchDefaults.IconSize)) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = White,
                     checkedTrackColor = Primary100,

@@ -11,18 +11,19 @@ fun formatDateRange(
     startDate: String?,
     endDate: String?,
 ): String? {
-    if (startDate.isNullOrBlank()) return null
-
     return try {
-        val startFormatted =
-            LocalDate.parse(startDate, INPUT_DATE_FORMATTER).format(OUTPUT_DATE_FORMATTER)
+        val startFormatted = startDate
+            ?.takeIf { it.isNotBlank() }
+            ?.let { LocalDate.parse(it, INPUT_DATE_FORMATTER).format(OUTPUT_DATE_FORMATTER) }
+        val endFormatted = endDate
+            ?.takeIf { it.isNotBlank() }
+            ?.let { LocalDate.parse(it, INPUT_DATE_FORMATTER).format(OUTPUT_DATE_FORMATTER) }
 
-        if (endDate.isNullOrBlank()) {
-            startFormatted
-        } else {
-            val endFormatted =
-                LocalDate.parse(endDate, INPUT_DATE_FORMATTER).format(OUTPUT_DATE_FORMATTER)
-            "$startFormatted ~ $endFormatted"
+        when {
+            startFormatted != null && endFormatted != null -> "$startFormatted ~ $endFormatted"
+            startFormatted != null -> startFormatted
+            endFormatted != null -> endFormatted
+            else -> null
         }
     } catch (e: DateTimeParseException) {
         null

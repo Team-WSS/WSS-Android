@@ -99,7 +99,8 @@ private fun NovelFilterChipSection(
 ) {
     Row(
         modifier = Modifier
-            .horizontalScroll(rememberScrollState()),
+            .horizontalScroll(rememberScrollState())
+            .padding(end = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         NovelFilterChip(
@@ -175,7 +176,7 @@ private fun NovelFilterChip(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+            modifier = Modifier.padding(horizontal = 9.5.dp, vertical = 6.5.dp),
         ) {
             Text(
                 text = text,
