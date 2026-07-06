@@ -4,10 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -82,28 +85,35 @@ private fun LibrarySortItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(40.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(if (isSelected) Primary20 else Transparent)
             .debouncedClickable(onClick = onClick)
             .padding(vertical = 16.dp),
         contentAlignment = Alignment.Center,
     ) {
-        if (isSelected) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = ic_library_sort_check),
-                contentDescription = null,
-                tint = Primary100,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 8.dp)
-                    .size(20.dp),
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // 왼쪽 체크 슬롯: 오른쪽 균형 슬롯과 대칭이라 텍스트는 항상 중앙 정렬을 유지한다.
+            Box(modifier = Modifier.size(20.dp)) {
+                if (isSelected) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = ic_library_sort_check),
+                        contentDescription = null,
+                        tint = Primary100,
+                        modifier = Modifier.size(20.dp),
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = label,
+                style = WebsosoTheme.typography.body2,
+                color = if (isSelected) Black else Gray200,
             )
+            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(20.dp))
         }
-        Text(
-            text = label,
-            style = WebsosoTheme.typography.body2,
-            color = if (isSelected) Black else Gray200,
-        )
     }
 }
 
