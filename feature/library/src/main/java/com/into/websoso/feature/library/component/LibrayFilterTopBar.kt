@@ -32,6 +32,7 @@ import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
+import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Gray70
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
@@ -55,24 +56,37 @@ internal fun LibraryFilterTopBar(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp),
+        modifier = modifier.fillMaxWidth(),
     ) {
-        NovelFilterChipSection(
-            libraryFilterUiModel = libraryFilterUiModel,
-            onFilterClick = onFilterClick,
-            onInterestClick = onInterestClick,
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp),
+        ) {
+            NovelFilterChipSection(
+                libraryFilterUiModel = libraryFilterUiModel,
+                onFilterClick = onFilterClick,
+                onInterestClick = onInterestClick,
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            NovelFilterStatusBar(
+                totalCount = totalCount,
+                sortCriteria = libraryFilterUiModel.sortCriteria,
+                isGrid = isGrid,
+                onSortClick = onSortClick,
+                onToggleViewType = onToggleViewType,
+            )
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        NovelFilterStatusBar(
-            totalCount = totalCount,
-            sortCriteria = libraryFilterUiModel.sortCriteria,
-            isGrid = isGrid,
-            onSortClick = onSortClick,
-            onToggleViewType = onToggleViewType,
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(color = Gray50),
         )
     }
 }
