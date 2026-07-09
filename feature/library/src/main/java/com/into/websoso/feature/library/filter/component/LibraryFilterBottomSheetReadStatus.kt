@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.into.websoso.core.designsystem.theme.Gray70
+import com.into.websoso.core.designsystem.theme.Gray70New
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_library_finished
 import com.into.websoso.core.resource.R.drawable.ic_library_reading
@@ -71,7 +71,7 @@ private fun ReadStatusDivider() {
         modifier = Modifier
             .height(32.dp)
             .width(1.dp)
-            .background(Gray70),
+            .background(Gray70New),
     )
 }
 
