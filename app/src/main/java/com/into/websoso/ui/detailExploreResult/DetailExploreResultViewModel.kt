@@ -25,9 +25,12 @@ class DetailExploreResultViewModel
         val uiState: LiveData<DetailExploreResultUiState> get() = _uiState
 
         private val filterGenres: MutableLiveData<List<Genre>?> = MutableLiveData(emptyList())
+        private val filterPlatformNames: MutableLiveData<List<String>?> = MutableLiveData(emptyList())
         private val filterIsNovelCompleted: MutableLiveData<Boolean?> = MutableLiveData()
-        private val filterRatingStart: MutableLiveData<Float> = MutableLiveData(DetailExploreFilteredModel.RATING_MIN_DEFAULT)
-        private val filterRatingEnd: MutableLiveData<Float> = MutableLiveData(DetailExploreFilteredModel.RATING_MAX_DEFAULT)
+        private val filterRatingStart: MutableLiveData<Float> =
+            MutableLiveData(DetailExploreFilteredModel.RATING_MIN_DEFAULT)
+        private val filterRatingEnd: MutableLiveData<Float> =
+            MutableLiveData(DetailExploreFilteredModel.RATING_MAX_DEFAULT)
         private val filterKeywordIds: MutableLiveData<List<Int>?> = MutableLiveData(emptyList())
 
         private val _appliedFiltersMessage: MediatorLiveData<String?> = MediatorLiveData()
@@ -39,6 +42,7 @@ class DetailExploreResultViewModel
         init {
             _appliedFiltersMessage.apply {
                 addSource(filterGenres) { updateMessage() }
+                addSource(filterPlatformNames) { updateMessage() }
                 addSource(filterIsNovelCompleted) { updateMessage() }
                 addSource(filterRatingStart) { updateMessage() }
                 addSource(filterRatingEnd) { updateMessage() }
@@ -50,6 +54,7 @@ class DetailExploreResultViewModel
             val appliedFilters = mutableListOf<String>()
 
             if (filterGenres.value?.isNotEmpty() == true) appliedFilters.add(GENRES_LABEL)
+            if (filterPlatformNames.value?.isNotEmpty() == true) appliedFilters.add(PLATFORMS_LABEL)
             if (filterIsNovelCompleted.value != null) appliedFilters.add(NOVEL_COMPLETED_LABEL)
             if (isRatingFilterApplied()) appliedFilters.add(RATING_LABEL)
             if (filterKeywordIds.value?.isNotEmpty() == true) appliedFilters.add(KEYWORDS_LABEL)
@@ -67,6 +72,7 @@ class DetailExploreResultViewModel
 
         fun updatePreviousSearchFilteredValue(detailExploreFilteredModel: DetailExploreFilteredModel) {
             filterGenres.value = detailExploreFilteredModel.genres
+            filterPlatformNames.value = detailExploreFilteredModel.platformNames
             filterIsNovelCompleted.value = detailExploreFilteredModel.isCompleted
             filterRatingStart.value = detailExploreFilteredModel.novelRatingStart
             filterRatingEnd.value = detailExploreFilteredModel.novelRatingEnd
@@ -82,9 +88,12 @@ class DetailExploreResultViewModel
                 runCatching {
                     getDetailExploreResultUseCase(
                         genres = filterGenres.value?.map { it.titleEn },
+                        platformNames = filterPlatformNames.value,
                         isCompleted = filterIsNovelCompleted.value,
-                        novelRatingStart = filterRatingStart.value ?: DetailExploreFilteredModel.RATING_MIN_DEFAULT,
-                        novelRatingEnd = filterRatingEnd.value ?: DetailExploreFilteredModel.RATING_MAX_DEFAULT,
+                        novelRatingStart = filterRatingStart.value
+                            ?: DetailExploreFilteredModel.RATING_MIN_DEFAULT,
+                        novelRatingEnd = filterRatingEnd.value
+                            ?: DetailExploreFilteredModel.RATING_MAX_DEFAULT,
                         keywordIds = filterKeywordIds.value,
                         isSearchButtonClick = isSearchButtonClick,
                     )
@@ -122,6 +131,7 @@ class DetailExploreResultViewModel
 
         companion object {
             private const val GENRES_LABEL = "장르"
+            private const val PLATFORMS_LABEL = "플랫폼"
             private const val NOVEL_COMPLETED_LABEL = "연재상태"
             private const val RATING_LABEL = "별점"
             private const val KEYWORDS_LABEL = "키워드"

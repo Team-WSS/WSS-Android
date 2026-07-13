@@ -1,6 +1,7 @@
 package com.into.websoso.core.network.datasource.library
 
 import com.into.websoso.data.library.datasource.LibraryRemoteDataSource
+import com.into.websoso.data.library.model.LibraryKeywordEntity
 import com.into.websoso.data.library.model.UserNovelsEntity
 import dagger.Binds
 import dagger.Module
@@ -16,29 +17,40 @@ internal class DefaultLibraryDataSource
     ) : LibraryRemoteDataSource {
         override suspend fun getUserNovels(
             userId: Long,
-            lastUserNovelId: Long,
+            cursor: String?,
             size: Int,
-            sortCriteria: String,
+            sortType: String,
             isInterest: Boolean?,
             readStatuses: List<String>?,
+            genres: List<String>?,
+            isComplete: Boolean?,
+            ratingMin: Float?,
+            ratingMax: Float?,
+            unratedOnly: Boolean?,
             attractivePoints: List<String>?,
-            novelRating: Float?,
-            query: String?,
-            updatedSince: String?,
+            keywords: List<String>?,
         ): UserNovelsEntity =
             libraryApi
                 .getUserNovels(
                     userId = userId,
-                    lastUserNovelId = lastUserNovelId,
                     size = size,
-                    sortCriteria = sortCriteria,
+                    cursor = cursor,
+                    sortType = sortType,
                     isInterest = isInterest,
                     readStatuses = readStatuses,
+                    genres = genres,
+                    isComplete = isComplete,
+                    ratingMin = ratingMin,
+                    ratingMax = ratingMax,
+                    unratedOnly = unratedOnly,
                     attractivePoints = attractivePoints,
-                    novelRating = novelRating,
-                    query = query,
-                    updatedSince = updatedSince,
+                    keywords = keywords,
                 ).toData()
+
+        override suspend fun getUserNovelKeywords(userId: Long): List<LibraryKeywordEntity> =
+            libraryApi
+                .getUserNovelKeywords(userId = userId)
+                .toData()
     }
 
 @Module

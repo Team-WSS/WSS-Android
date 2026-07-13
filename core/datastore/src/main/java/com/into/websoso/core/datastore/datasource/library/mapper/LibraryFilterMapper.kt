@@ -9,7 +9,12 @@ internal fun LibraryFilter.toPreferences(): LibraryFilterPreferences =
         isInterested = isInterested,
         readStatuses = readStatuses,
         attractivePoints = attractivePoints,
-        novelRating = novelRating,
+        genres = genres,
+        isComplete = isComplete,
+        ratingMin = ratingMin,
+        ratingMax = ratingMax,
+        isRatingless = isRatingless,
+        keywords = keywords,
     )
 
 internal fun LibraryFilterPreferences.toData(): LibraryFilter =
@@ -18,5 +23,10 @@ internal fun LibraryFilterPreferences.toData(): LibraryFilter =
         isInterested = isInterested,
         readStatuses = readStatuses,
         attractivePoints = attractivePoints,
-        novelRating = novelRating,
+        genres = genres,
+        isComplete = isComplete,
+        ratingMin = ratingMin,
+        ratingMax = ratingMax,
+        isRatingless = isRatingless,
+        keywords = keywords,
     )

@@ -5,7 +5,6 @@ import com.into.websoso.data.filter.model.LibraryFilter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -16,21 +15,38 @@ internal class UserLibraryFilterRepository
         override val filterFlow: Flow<LibraryFilter> = _filterFlow.asStateFlow()
 
         override suspend fun updateFilter(
-            readStatuses: List<String>?,
-            attractivePoints: List<String>?,
-            novelRating: Float?,
             isInterested: Boolean?,
             sortCriteria: String?,
         ) {
-            val savedFilter = filterFlow.first()
-            val updatedFilter = savedFilter.copy(
-                sortCriteria = sortCriteria ?: savedFilter.sortCriteria,
-                isInterested = isInterested ?: savedFilter.isInterested,
-                readStatuses = readStatuses ?: savedFilter.readStatuses,
-                attractivePoints = attractivePoints ?: savedFilter.attractivePoints,
-                novelRating = novelRating ?: savedFilter.novelRating,
-            )
+            _filterFlow.update { current ->
+                current.copy(
+                    sortCriteria = sortCriteria ?: current.sortCriteria,
+                    isInterested = isInterested ?: current.isInterested,
+                )
+            }
+        }
 
-            _filterFlow.update { updatedFilter }
+        override suspend fun applyLibraryFilter(
+            readStatuses: List<String>,
+            attractivePoints: List<String>,
+            genres: List<String>,
+            isComplete: Boolean?,
+            ratingMin: Float,
+            ratingMax: Float,
+            isRatingless: Boolean,
+            keywords: List<String>,
+        ) {
+            _filterFlow.update { current ->
+                current.copy(
+                    readStatuses = readStatuses,
+                    attractivePoints = attractivePoints,
+                    genres = genres,
+                    isComplete = isComplete,
+                    ratingMin = ratingMin,
+                    ratingMax = ratingMax,
+                    isRatingless = isRatingless,
+                    keywords = keywords,
+                )
+            }
         }
     }

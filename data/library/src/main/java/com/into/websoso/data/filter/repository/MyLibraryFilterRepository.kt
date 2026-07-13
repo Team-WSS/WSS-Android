@@ -24,9 +24,6 @@ class MyLibraryFilterRepository
         }
 
         override suspend fun updateFilter(
-            readStatuses: List<String>?,
-            attractivePoints: List<String>?,
-            novelRating: Float?,
             isInterested: Boolean?,
             sortCriteria: String?,
         ) {
@@ -34,9 +31,31 @@ class MyLibraryFilterRepository
             val updatedFilter = savedFilter.copy(
                 sortCriteria = sortCriteria ?: savedFilter.sortCriteria,
                 isInterested = isInterested ?: savedFilter.isInterested,
-                readStatuses = readStatuses ?: savedFilter.readStatuses,
-                attractivePoints = attractivePoints ?: savedFilter.attractivePoints,
-                novelRating = novelRating ?: savedFilter.novelRating,
+            )
+
+            myLibraryFilterLocalDataSource.updateLibraryFilter(libraryFilter = updatedFilter)
+        }
+
+        override suspend fun applyLibraryFilter(
+            readStatuses: List<String>,
+            attractivePoints: List<String>,
+            genres: List<String>,
+            isComplete: Boolean?,
+            ratingMin: Float,
+            ratingMax: Float,
+            isRatingless: Boolean,
+            keywords: List<String>,
+        ) {
+            val savedFilter = filterFlow.first()
+            val updatedFilter = savedFilter.copy(
+                readStatuses = readStatuses,
+                attractivePoints = attractivePoints,
+                genres = genres,
+                isComplete = isComplete,
+                ratingMin = ratingMin,
+                ratingMax = ratingMax,
+                isRatingless = isRatingless,
+                keywords = keywords,
             )
 
             myLibraryFilterLocalDataSource.updateLibraryFilter(libraryFilter = updatedFilter)

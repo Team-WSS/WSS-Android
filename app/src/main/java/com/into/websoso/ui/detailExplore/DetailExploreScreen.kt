@@ -36,6 +36,12 @@ fun DetailExploreScreen(
 
     val isInfoChipSelected by viewModel.isInfoChipSelected.observeAsState(false)
     val isKeywordChipSelected by viewModel.isKeywordChipSelected.observeAsState(false)
+    val onResetClick = {
+        when (selectedTab) {
+            INFO -> viewModel.updateSelectedInfoValueClear()
+            KEYWORD -> viewModel.updateSelectedKeywordValueClear()
+        }
+    }
 
     BackHandler(onBack = onBackClick)
 
@@ -53,12 +59,6 @@ fun DetailExploreScreen(
                 isKeywordChipActive = isKeywordChipSelected,
                 onTabSelected = { selectedTab = it },
                 onBackClick = onBackClick,
-                onResetClick = {
-                    when (selectedTab) {
-                        INFO -> viewModel.updateSelectedInfoValueClear()
-                        KEYWORD -> viewModel.updateSelectedKeywordValueClear()
-                    }
-                },
             )
             Box(modifier = Modifier.weight(1f)) {
                 when (selectedTab) {
@@ -70,7 +70,10 @@ fun DetailExploreScreen(
                     )
                 }
             }
-            DetailExploreCtaButton(onClick = onSearchClick)
+            DetailExploreCtaButton(
+                onClick = onSearchClick,
+                onResetClick = onResetClick,
+            )
         }
     }
 }
