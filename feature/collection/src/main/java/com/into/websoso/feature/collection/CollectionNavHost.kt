@@ -9,7 +9,10 @@ import androidx.navigation.compose.rememberNavController
 private const val COLLECTION_ROUTE = "collection"
 
 @Composable
-fun CollectionNavHost(modifier: Modifier = Modifier) {
+fun CollectionNavHost(
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -18,7 +21,7 @@ fun CollectionNavHost(modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         composable(route = COLLECTION_ROUTE) {
-            CollectionScreen()
+            CollectionScreen(onNavigateBack = onNavigateBack)
         }
     }
 }
