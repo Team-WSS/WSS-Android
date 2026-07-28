@@ -22,7 +22,12 @@ fun CollectionNavHost(
         modifier = modifier,
     ) {
         composable(route = COLLECTION_ROUTE) {
-            CollectionScreen(onNavigateBack = onNavigateBack)
+            CollectionScreen(
+                onNavigateBack = onNavigateBack,
+                onNavigateToCreate = {
+                    navController.navigate(COLLECTION_CREATE_ROUTE)
+                },
+            )
         }
         composable(route = COLLECTION_CREATE_ROUTE) {
             CollectionCreateScreen()
