@@ -17,15 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray20
-import com.into.websoso.core.designsystem.theme.Primary30
 import com.into.websoso.core.designsystem.theme.Primary100
+import com.into.websoso.core.designsystem.theme.Primary30
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_collection_create
 
 @Composable
-internal fun CollectionCreateButton(
-    modifier: Modifier = Modifier,
-) {
+internal fun CollectionCreateButton(modifier: Modifier = Modifier) {
     val shape = RoundedCornerShape(12.dp)
 
     Row(
@@ -35,8 +33,7 @@ internal fun CollectionCreateButton(
             .background(
                 color = Gray20,
                 shape = shape,
-            )
-            .border(
+            ).border(
                 width = 1.dp,
                 color = Primary30,
                 shape = shape,
