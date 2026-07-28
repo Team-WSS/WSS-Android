@@ -2,6 +2,7 @@ package com.into.websoso.feature.collection
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -14,14 +15,32 @@ import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.feature.collection.component.CollectionCreateAppBar
 
 @Composable
-internal fun CollectionCreateScreen(modifier: Modifier = Modifier) {
+internal fun CollectionCreateScreen(
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(White)
             .statusBarsPadding(),
+    ) {
+        CollectionCreateAppBar(onNavigateBack = onNavigateBack)
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CollectionCreatePlaceholder()
+        }
+    }
+}
+
+@Composable
+private fun CollectionCreatePlaceholder() {
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -42,6 +61,6 @@ internal fun CollectionCreateScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun CollectionCreateScreenPreview() {
     WebsosoTheme {
-        CollectionCreateScreen()
+        CollectionCreateScreen(onNavigateBack = {})
     }
 }
