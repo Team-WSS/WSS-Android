@@ -39,6 +39,7 @@ fun CollectionScreen(
             onTabSelected = { selectedTab = it },
         )
         CollectionCreateButton(
+            onClick = {},
             modifier = Modifier.padding(
                 horizontal = 20.dp,
                 vertical = 16.dp,
