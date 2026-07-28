@@ -10,6 +10,7 @@ private const val COLLECTION_ROUTE = "collection"
 
 @Composable
 fun CollectionNavHost(
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
@@ -20,7 +21,7 @@ fun CollectionNavHost(
         modifier = modifier,
     ) {
         composable(route = COLLECTION_ROUTE) {
-            CollectionScreen()
+            CollectionScreen(onNavigateBack = onNavigateBack)
         }
     }
 }

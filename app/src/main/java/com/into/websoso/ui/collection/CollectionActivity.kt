@@ -16,7 +16,7 @@ class CollectionActivity : ComponentActivity() {
 
         setContent {
             WebsosoTheme {
-                CollectionNavHost()
+                CollectionNavHost(onNavigateBack = ::finish)
             }
         }
     }
