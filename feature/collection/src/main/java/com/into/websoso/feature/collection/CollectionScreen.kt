@@ -23,6 +23,7 @@ import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.collection.component.CollectionAppBar
+import com.into.websoso.feature.collection.component.CollectionCreateButton
 import com.into.websoso.feature.collection.component.CollectionTabRow
 import com.into.websoso.feature.collection.model.CollectionTab
 
@@ -43,6 +44,12 @@ fun CollectionScreen(
         CollectionTabRow(
             selectedTab = selectedTab,
             onTabSelected = { selectedTab = it },
+        )
+        CollectionCreateButton(
+            modifier = Modifier.padding(
+                horizontal = 20.dp,
+                vertical = 16.dp,
+            ),
         )
         Box(
             modifier = Modifier
