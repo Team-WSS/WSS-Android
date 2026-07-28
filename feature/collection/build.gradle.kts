@@ -7,3 +7,7 @@ plugins {
 android {
     setNamespace("feature.collection")
 }
+
+dependencies {
+    implementation(libs.navigation.compose)
+}
