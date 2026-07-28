@@ -7,6 +7,7 @@ import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -28,11 +29,14 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
 import com.into.websoso.core.resource.R.string.my_library_attractive_point_fixed_text
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyPageBinding
+import com.into.websoso.feature.collection.CollectionEntry
+import com.into.websoso.ui.collection.CollectionActivity
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.myPage.MyLibraryViewModel
 import com.into.websoso.ui.main.myPage.adapter.RestGenrePreferenceAdapter
@@ -77,6 +81,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
         setupObserver()
         onProfileEditClick()
         onStorageButtonClick()
+        setupCollectionEntry()
         tracker.trackEvent("mypage")
     }
 
@@ -90,6 +95,23 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
         binding.myPageViewModel = myPageViewModel
         binding.myLibraryViewModel = myLibraryViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+    private fun setupCollectionEntry() {
+        binding.cvMyPageCollectionEntry.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                WebsosoTheme {
+                    CollectionEntry(onClick = ::navigateToCollection)
+                }
+            }
+        }
+    }
+
+    private fun navigateToCollection() {
+        singleEventHandler.throttleFirst {
+            startActivity(CollectionActivity.getIntent(requireContext()))
+        }
     }
 
     private fun setupRestGenrePreferenceAdapter() {
