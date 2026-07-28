@@ -73,8 +73,7 @@ private fun CollectionTabItem(
                 selected = isSelected,
                 onClick = onClick,
                 role = Role.Tab,
-            )
-            .padding(top = 12.dp),
+            ).padding(top = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
