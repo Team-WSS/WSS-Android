@@ -19,6 +19,7 @@ import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.collection.component.CollectionAppBar
+import com.into.websoso.feature.collection.component.CollectionTabRow
 
 @Composable
 fun CollectionScreen(
@@ -32,6 +33,7 @@ fun CollectionScreen(
             .statusBarsPadding(),
     ) {
         CollectionAppBar(onNavigateBack = onNavigateBack)
+        CollectionTabRow()
         Box(
             modifier = Modifier
                 .fillMaxWidth()
