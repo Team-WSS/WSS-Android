@@ -30,7 +30,9 @@ fun CollectionNavHost(
             )
         }
         composable(route = COLLECTION_CREATE_ROUTE) {
-            CollectionCreateScreen()
+            CollectionCreateScreen(
+                onNavigateBack = navController::popBackStack,
+            )
         }
     }
 }
