@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.collection.component.CollectionCreateAppBar
+import com.into.websoso.feature.collection.component.CollectionDescriptionInput
 import com.into.websoso.feature.collection.component.CollectionNameInput
 import com.into.websoso.feature.collection.component.CollectionPrivacySetting
 
@@ -26,6 +27,7 @@ internal fun CollectionCreateScreen(
 ) {
     var isPrivate by rememberSaveable { mutableStateOf(false) }
     var collectionName by rememberSaveable { mutableStateOf("") }
+    var collectionDescription by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -44,6 +46,15 @@ internal fun CollectionCreateScreen(
             modifier = Modifier.padding(
                 start = 20.dp,
                 top = 20.dp,
+                end = 20.dp,
+            ),
+        )
+        CollectionDescriptionInput(
+            value = collectionDescription,
+            onValueChange = { collectionDescription = it },
+            modifier = Modifier.padding(
+                start = 20.dp,
+                top = 30.dp,
                 end = 20.dp,
             ),
         )
