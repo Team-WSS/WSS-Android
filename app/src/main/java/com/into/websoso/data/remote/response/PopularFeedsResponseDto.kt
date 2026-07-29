@@ -13,7 +13,7 @@ data class PopularFeedsResponseDto(
         @SerialName("feedId")
         val feedId: Long,
         @SerialName("feedContent")
-        val feedContent: String? = null,
+        val feedContent: String,
         @SerialName("likeCount")
         val likeCount: Int,
         @SerialName("commentCount")
