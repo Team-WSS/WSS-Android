@@ -5,9 +5,6 @@ import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.FeedsEntity
 import com.into.websoso.data.model.PopularFeedsEntity
 import com.into.websoso.data.remote.api.FeedApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,37 +33,20 @@ class FeedRepository
                 .also { _cachedFeeds.addAll(it.feeds) }
                 .copy(feeds = cachedFeeds)
 
-        suspend fun fetchPopularFeeds(): PopularFeedsEntity = feedApi.getPopularFeeds().toData()
-
-        suspend fun fetchPopularFeedsWithDetails(): List<PopularFeedsEntity.PopularFeedEntity> =
-            coroutineScope {
-                fetchPopularFeeds()
-                    .popularFeeds
-                    .map { feed ->
-                        async {
-                            runCatching {
-                                val feedDetail = feedApi.getFeed(feed.feedId).toData()
-                                val novel = feedDetail.novel ?: return@runCatching null
-
-                                feed.copy(
-                                    feesContent = feedDetail.content,
-                                    isSpoiler = feedDetail.isSpoiler,
-                                    isPublic = feedDetail.isPublic,
-                                    novelTitle = novel.title,
-                                    novelImage = feed.novelImage.ifBlank { novel.thumbnail },
-                                    novelGenre = novel.genre,
-                                )
-                            }.getOrNull()
-                        }
-                    }.awaitAll()
-                    .filterNotNull()
-                    .filter { feed ->
-                        feed.isPublic &&
-                            feed.novelTitle.isNotBlank() &&
-                            feed.novelImage.isNotBlank() &&
-                            feed.novelGenre.isNotBlank()
-                    }
-            }
+        suspend fun fetchPopularFeeds(): PopularFeedsEntity =
+            feedApi
+                .getPopularFeeds()
+                .toData()
+                .let { popularFeeds ->
+                    popularFeeds.copy(
+                        popularFeeds = popularFeeds.popularFeeds.filter { feed ->
+                            feed.isPublic &&
+                                feed.novelTitle.isNotBlank() &&
+                                feed.novelImage.isNotBlank() &&
+                                feed.novelGenre.isNotBlank()
+                        },
+                    )
+                }
 
         suspend fun saveRemovedFeed(feedId: Long) {
             runCatching {

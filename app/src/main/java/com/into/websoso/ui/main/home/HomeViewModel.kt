@@ -75,7 +75,7 @@ class HomeViewModel
                 val popularNovelsDeferred =
                     async { runCatching { novelRepository.fetchPopularNovels() } }
                 val popularFeedsDeferred =
-                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
+                    async { runCatching { feedRepository.fetchPopularFeeds() } }
                 val recommendedNovelsDeferred =
                     async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
 
@@ -99,7 +99,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
+                    popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                 )
             }
@@ -130,7 +130,7 @@ class HomeViewModel
                 val popularNovelsDeferred =
                     async { runCatching { novelRepository.fetchPopularNovels() } }
                 val popularFeedsDeferred =
-                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
+                    async { runCatching { feedRepository.fetchPopularFeeds() } }
 
                 val popularNovelsResult = popularNovelsDeferred.await()
                 val popularFeedsResult = popularFeedsDeferred.await()
@@ -149,7 +149,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
+                    popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
                 )
             }
         }
@@ -164,11 +164,11 @@ class HomeViewModel
         fun updateFeed() {
             viewModelScope.launch {
                 runCatching {
-                    feedRepository.fetchPopularFeedsWithDetails()
+                    feedRepository.fetchPopularFeeds()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
                         error = false,
-                        popularFeeds = popularFeeds.toHomePopularFeedPages(),
+                        popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
