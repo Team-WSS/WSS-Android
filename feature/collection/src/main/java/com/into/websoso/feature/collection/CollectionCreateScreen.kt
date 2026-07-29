@@ -18,6 +18,7 @@ import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.collection.component.CollectionCreateAppBar
 import com.into.websoso.feature.collection.component.CollectionDescriptionInput
 import com.into.websoso.feature.collection.component.CollectionNameInput
+import com.into.websoso.feature.collection.component.CollectionNovelSection
 import com.into.websoso.feature.collection.component.CollectionPrivacySetting
 
 @Composable
@@ -52,6 +53,13 @@ internal fun CollectionCreateScreen(
         CollectionDescriptionInput(
             value = collectionDescription,
             onValueChange = { collectionDescription = it },
+            modifier = Modifier.padding(
+                start = 20.dp,
+                top = 30.dp,
+                end = 20.dp,
+            ),
+        )
+        CollectionNovelSection(
             modifier = Modifier.padding(
                 start = 20.dp,
                 top = 30.dp,
