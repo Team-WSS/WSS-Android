@@ -24,6 +24,7 @@ import com.into.websoso.feature.collection.component.CollectionPrivacySetting
 @Composable
 internal fun CollectionCreateScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToNovelSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isPrivate by rememberSaveable { mutableStateOf(false) }
@@ -60,6 +61,7 @@ internal fun CollectionCreateScreen(
             ),
         )
         CollectionNovelSection(
+            onAddNovelClick = onNavigateToNovelSearch,
             modifier = Modifier.padding(
                 start = 20.dp,
                 top = 30.dp,
@@ -73,6 +75,9 @@ internal fun CollectionCreateScreen(
 @Composable
 private fun CollectionCreateScreenPreview() {
     WebsosoTheme {
-        CollectionCreateScreen(onNavigateBack = {})
+        CollectionCreateScreen(
+            onNavigateBack = {},
+            onNavigateToNovelSearch = {},
+        )
     }
 }
