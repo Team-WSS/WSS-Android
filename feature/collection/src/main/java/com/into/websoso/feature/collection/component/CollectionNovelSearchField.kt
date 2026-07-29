@@ -9,20 +9,38 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.Gray70New
+import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_common_search
+import com.into.websoso.core.resource.R.drawable.ic_common_search_clear
 
 @Composable
-internal fun CollectionNovelSearchField(modifier: Modifier = Modifier) {
+internal fun CollectionNovelSearchField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    onClearClick: () -> Unit,
+    focusRequester: FocusRequester,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -37,12 +55,41 @@ internal fun CollectionNovelSearchField(modifier: Modifier = Modifier) {
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = "작품 제목, 작가를 검색하세요",
-            color = Gray100,
-            style = WebsosoTheme.typography.body4,
-            modifier = Modifier.weight(1f),
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .weight(1f)
+                .focusRequester(focusRequester),
+            singleLine = true,
+            textStyle = WebsosoTheme.typography.body4.copy(color = Black),
+            cursorBrush = SolidColor(Primary100),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            decorationBox = { innerTextField ->
+                Box {
+                    if (value.text.isEmpty()) {
+                        Text(
+                            text = "작품 제목, 작가를 검색하세요",
+                            color = Gray100,
+                            style = WebsosoTheme.typography.body4,
+                        )
+                    }
+                    innerTextField()
+                }
+            },
         )
+        if (value.text.isNotEmpty()) {
+            IconButton(
+                onClick = onClearClick,
+                modifier = Modifier.size(36.dp),
+            ) {
+                Image(
+                    painter = painterResource(id = ic_common_search_clear),
+                    contentDescription = "검색어 지우기",
+                    modifier = Modifier.size(36.dp),
+                )
+            }
+        }
         Box(
             modifier = Modifier.size(36.dp),
             contentAlignment = Alignment.Center,
@@ -60,6 +107,12 @@ internal fun CollectionNovelSearchField(modifier: Modifier = Modifier) {
 @Composable
 private fun CollectionNovelSearchFieldPreview() {
     WebsosoTheme {
-        CollectionNovelSearchField(modifier = Modifier.padding(20.dp))
+        CollectionNovelSearchField(
+            value = TextFieldValue(),
+            onValueChange = {},
+            onClearClick = {},
+            focusRequester = remember { FocusRequester() },
+            modifier = Modifier.padding(20.dp),
+        )
     }
 }
