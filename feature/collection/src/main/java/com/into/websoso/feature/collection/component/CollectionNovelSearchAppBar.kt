@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Black
+import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
@@ -24,6 +25,7 @@ import com.into.websoso.core.resource.R.drawable.ic_navigate_left
 @Composable
 internal fun CollectionNovelSearchAppBar(
     onNavigateBack: () -> Unit,
+    isCompleteEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -53,7 +55,7 @@ internal fun CollectionNovelSearchAppBar(
         )
         Text(
             text = "완료",
-            color = Primary100,
+            color = if (isCompleteEnabled) Primary100 else Gray100,
             style = WebsosoTheme.typography.title2,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
@@ -66,6 +68,9 @@ internal fun CollectionNovelSearchAppBar(
 @Composable
 private fun CollectionNovelSearchAppBarPreview() {
     WebsosoTheme {
-        CollectionNovelSearchAppBar(onNavigateBack = {})
+        CollectionNovelSearchAppBar(
+            onNavigateBack = {},
+            isCompleteEnabled = false,
+        )
     }
 }
