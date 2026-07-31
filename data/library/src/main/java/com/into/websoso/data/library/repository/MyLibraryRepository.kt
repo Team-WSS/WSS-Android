@@ -39,25 +39,10 @@ class MyLibraryRepository
         @OptIn(ExperimentalCoroutinesApi::class)
         override fun getLibraryFlow(): Flow<PagingData<NovelEntity>> =
             filterRepository.filterFlow
-                .flatMapLatest { currentFilter ->
-                    Pager(
-                        config = PagingConfig(
-                            pageSize = PAGE_SIZE,
-                            enablePlaceholders = false,
-                        ),
-                        pagingSourceFactory = {
-                            LibraryPagingSource(
-                                getNovels = { cursor ->
-                                    getUserNovels(cursor, currentFilter).also { result ->
-                                        _novelTotalCount.update {
-                                            result.getOrNull()?.userNovelCount ?: 0
-                                        }
-                                    }
-                                },
-                            )
-                        },
-                    ).flow
-                }
+                .flatMapLatest(::createLibraryFlow)
+
+        override fun getUnfilteredLibraryFlow(): Flow<PagingData<NovelEntity>> =
+            createLibraryFlow(LibraryFilter())
 
         override suspend fun getRegisteredKeywords(): List<LibraryKeywordEntity> {
             val userId = accountRepository.userIdFlow.first { it != 0L }
@@ -86,6 +71,25 @@ class MyLibraryRepository
                 keywords = libraryFilter.keywords.ifEmpty { null },
             )
         }
+
+        private fun createLibraryFlow(libraryFilter: LibraryFilter): Flow<PagingData<NovelEntity>> =
+            Pager(
+                config = PagingConfig(
+                    pageSize = PAGE_SIZE,
+                    enablePlaceholders = false,
+                ),
+                pagingSourceFactory = {
+                    LibraryPagingSource(
+                        getNovels = { cursor ->
+                            getUserNovels(cursor, libraryFilter).also { result ->
+                                _novelTotalCount.update {
+                                    result.getOrNull()?.userNovelCount ?: 0
+                                }
+                            }
+                        },
+                    )
+                },
+            ).flow
 
         private fun LibraryFilter.toRatingRangeParams(): Pair<Float?, Float?> =
             when {
