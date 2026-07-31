@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
-import com.into.websoso.feature.collection.component.CollectionCreateAppBar
+import com.into.websoso.feature.collection.component.CollectionAppBar
 import com.into.websoso.feature.collection.component.CollectionDescriptionInput
 import com.into.websoso.feature.collection.component.CollectionNameInput
 import com.into.websoso.feature.collection.component.CollectionNovelSection
@@ -37,7 +37,10 @@ internal fun CollectionCreateScreen(
             .background(White)
             .statusBarsPadding(),
     ) {
-        CollectionCreateAppBar(onNavigateBack = onNavigateBack)
+        CollectionAppBar(
+            actionLabel = "완료",
+            onNavigateBack = onNavigateBack,
+        )
         CollectionPrivacySetting(
             isPrivate = isPrivate,
             onPrivateChange = { isPrivate = it },

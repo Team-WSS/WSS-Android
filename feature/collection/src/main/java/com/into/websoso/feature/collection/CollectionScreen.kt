@@ -34,7 +34,10 @@ fun CollectionScreen(
             .background(White)
             .statusBarsPadding(),
     ) {
-        CollectionAppBar(onNavigateBack = onNavigateBack)
+        CollectionAppBar(
+            title = "컬렉션",
+            onNavigateBack = onNavigateBack,
+        )
         CollectionTabRow(
             selectedTab = selectedTab,
             onTabSelected = { selectedTab = it },
