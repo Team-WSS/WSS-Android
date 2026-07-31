@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
-import com.into.websoso.feature.collection.component.CollectionNovelSearchAppBar
+import com.into.websoso.feature.collection.component.CollectionAppBar
 import com.into.websoso.feature.collection.component.CollectionNovelSearchField
 
 @Composable
@@ -45,9 +45,11 @@ internal fun CollectionNovelSearchScreen(
             .background(White)
             .statusBarsPadding(),
     ) {
-        CollectionNovelSearchAppBar(
+        CollectionAppBar(
+            title = "작품 리스트",
+            actionLabel = "완료",
             onNavigateBack = onNavigateBack,
-            isCompleteEnabled = false,
+            isActionEnabled = false,
         )
         CollectionNovelSearchField(
             value = searchQuery,
