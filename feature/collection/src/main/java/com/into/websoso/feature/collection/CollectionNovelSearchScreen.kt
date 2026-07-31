@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,15 +23,18 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.collection.component.CollectionAppBar
 import com.into.websoso.feature.collection.component.CollectionNovelSearchField
+import com.into.websoso.feature.collection.component.CollectionNovelSelectionInfo
 
 @Composable
 internal fun CollectionNovelSearchScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToLibraryNovelSelection: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var searchQuery by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue())
     }
+    var addedNovelCount by rememberSaveable { mutableIntStateOf(0) }
     val searchFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -49,7 +53,7 @@ internal fun CollectionNovelSearchScreen(
             title = "작품 리스트",
             actionLabel = "완료",
             onNavigateBack = onNavigateBack,
-            isActionEnabled = false,
+            isActionEnabled = addedNovelCount > 0,
         )
         CollectionNovelSearchField(
             value = searchQuery,
@@ -62,6 +66,11 @@ internal fun CollectionNovelSearchScreen(
                 end = 20.dp,
             ),
         )
+        CollectionNovelSelectionInfo(
+            addedNovelCount = addedNovelCount,
+            onAddFromLibraryClick = onNavigateToLibraryNovelSelection,
+            modifier = Modifier.padding(top = 16.dp),
+        )
     }
 }
 
@@ -69,6 +78,9 @@ internal fun CollectionNovelSearchScreen(
 @Composable
 private fun CollectionNovelSearchScreenPreview() {
     WebsosoTheme {
-        CollectionNovelSearchScreen(onNavigateBack = {})
+        CollectionNovelSearchScreen(
+            onNavigateBack = {},
+            onNavigateToLibraryNovelSelection = {},
+        )
     }
 }

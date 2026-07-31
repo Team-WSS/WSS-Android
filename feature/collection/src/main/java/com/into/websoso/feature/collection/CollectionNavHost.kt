@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 private const val COLLECTION_ROUTE = "collection"
 private const val COLLECTION_CREATE_ROUTE = "collection/create"
 private const val COLLECTION_NOVEL_SEARCH_ROUTE = "collection/create/novel-search"
+private const val COLLECTION_LIBRARY_NOVEL_SELECTION_ROUTE =
+    "collection/create/novel-search/library"
 
 @Composable
 fun CollectionNavHost(
@@ -40,6 +42,14 @@ fun CollectionNavHost(
         }
         composable(route = COLLECTION_NOVEL_SEARCH_ROUTE) {
             CollectionNovelSearchScreen(
+                onNavigateBack = navController::popBackStack,
+                onNavigateToLibraryNovelSelection = {
+                    navController.navigate(COLLECTION_LIBRARY_NOVEL_SELECTION_ROUTE)
+                },
+            )
+        }
+        composable(route = COLLECTION_LIBRARY_NOVEL_SELECTION_ROUTE) {
+            CollectionLibraryNovelSelectionScreen(
                 onNavigateBack = navController::popBackStack,
             )
         }
