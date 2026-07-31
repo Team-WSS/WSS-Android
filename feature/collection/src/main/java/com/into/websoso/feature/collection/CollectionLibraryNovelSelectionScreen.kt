@@ -1,0 +1,57 @@
+package com.into.websoso.feature.collection
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.into.websoso.core.designsystem.theme.Gray200
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.feature.collection.component.CollectionAppBar
+
+@Composable
+internal fun CollectionLibraryNovelSelectionScreen(
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(White)
+            .statusBarsPadding(),
+    ) {
+        CollectionAppBar(
+            title = "서재",
+            actionLabel = "추가",
+            onNavigateBack = onNavigateBack,
+            isActionEnabled = false,
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = "서재에서 작품 추가",
+                color = Gray200,
+                style = WebsosoTheme.typography.body2,
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CollectionLibraryNovelSelectionScreenPreview() {
+    WebsosoTheme {
+        CollectionLibraryNovelSelectionScreen(onNavigateBack = {})
+    }
+}
