@@ -110,7 +110,7 @@ fun PopularFeedsResponseDto.toData(): List<PopularFeedEntity> =
     popularFeeds.map { feed ->
         PopularFeedEntity(
             feedId = feed.feedId,
-            feesContent = feed.feedContent,
+            feesContent = feed.feedContent.orEmpty(),
             likeCount = feed.likeCount,
             commentCount = feed.commentCount,
             isSpoiler = feed.isSpoiler,
