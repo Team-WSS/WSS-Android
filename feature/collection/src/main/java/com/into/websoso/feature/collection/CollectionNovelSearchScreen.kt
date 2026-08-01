@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,6 +26,7 @@ import com.into.websoso.feature.collection.component.CollectionNovelSelectionInf
 
 @Composable
 internal fun CollectionNovelSearchScreen(
+    addedNovelCount: Int,
     onNavigateBack: () -> Unit,
     onNavigateToLibraryNovelSelection: () -> Unit,
     modifier: Modifier = Modifier,
@@ -34,7 +34,6 @@ internal fun CollectionNovelSearchScreen(
     var searchQuery by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue())
     }
-    var addedNovelCount by rememberSaveable { mutableIntStateOf(0) }
     val searchFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -79,6 +78,7 @@ internal fun CollectionNovelSearchScreen(
 private fun CollectionNovelSearchScreenPreview() {
     WebsosoTheme {
         CollectionNovelSearchScreen(
+            addedNovelCount = 0,
             onNavigateBack = {},
             onNavigateToLibraryNovelSelection = {},
         )
