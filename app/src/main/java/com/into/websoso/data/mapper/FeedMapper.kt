@@ -7,7 +7,7 @@ import com.into.websoso.data.model.FeedDetailEntity.NovelEntity
 import com.into.websoso.data.model.FeedDetailEntity.UserEntity
 import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.FeedsEntity
-import com.into.websoso.data.model.PopularFeedsEntity
+import com.into.websoso.data.model.PopularFeedEntity
 import com.into.websoso.data.remote.response.CommentResponseDto
 import com.into.websoso.data.remote.response.CommentsResponseDto
 import com.into.websoso.data.remote.response.FeedDetailResponseDto
@@ -106,19 +106,17 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity =
         },
     )
 
-fun PopularFeedsResponseDto.toData(): PopularFeedsEntity =
-    PopularFeedsEntity(
-        popularFeeds = popularFeeds.map { feed ->
-            PopularFeedsEntity.PopularFeedEntity(
-                feedId = feed.feedId,
-                feesContent = feed.feedContent,
-                likeCount = feed.likeCount,
-                commentCount = feed.commentCount,
-                isSpoiler = feed.isSpoiler,
-                isPublic = feed.isPublic,
-                novelTitle = feed.novelTitle,
-                novelImage = feed.novelImage,
-                novelGenre = feed.novelGenre,
-            )
-        },
-    )
+fun PopularFeedsResponseDto.toData(): List<PopularFeedEntity> =
+    popularFeeds.map { feed ->
+        PopularFeedEntity(
+            feedId = feed.feedId,
+            feesContent = feed.feedContent,
+            likeCount = feed.likeCount,
+            commentCount = feed.commentCount,
+            isSpoiler = feed.isSpoiler,
+            isPublic = feed.isPublic,
+            novelTitle = feed.novelTitle,
+            novelImage = feed.novelImage,
+            novelGenre = feed.novelGenre,
+        )
+    }

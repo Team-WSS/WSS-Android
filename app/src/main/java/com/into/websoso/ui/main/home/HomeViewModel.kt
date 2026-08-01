@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.model.PopularFeedsEntity
+import com.into.websoso.data.model.PopularFeedEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.TermsAgreementEntity
@@ -99,7 +99,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
+                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                 )
             }
@@ -149,7 +149,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
+                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
                 )
             }
         }
@@ -168,7 +168,7 @@ class HomeViewModel
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
                         error = false,
-                        popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
+                        popularFeeds = popularFeeds.toHomePopularFeedPages(),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
@@ -261,7 +261,7 @@ class HomeViewModel
             }
         }
 
-        private fun List<PopularFeedsEntity.PopularFeedEntity>.toHomePopularFeedPages(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
+        private fun List<PopularFeedEntity>.toHomePopularFeedPages(): List<List<PopularFeedEntity>> =
             take(HOME_POPULAR_FEED_MAX_COUNT).chunked(HOME_POPULAR_FEED_PAGE_SIZE)
 
         companion object {

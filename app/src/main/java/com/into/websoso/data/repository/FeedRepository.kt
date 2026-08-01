@@ -3,7 +3,7 @@ package com.into.websoso.data.repository
 import com.into.websoso.data.mapper.toData
 import com.into.websoso.data.model.FeedEntity
 import com.into.websoso.data.model.FeedsEntity
-import com.into.websoso.data.model.PopularFeedsEntity
+import com.into.websoso.data.model.PopularFeedEntity
 import com.into.websoso.data.remote.api.FeedApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,19 +33,15 @@ class FeedRepository
                 .also { _cachedFeeds.addAll(it.feeds) }
                 .copy(feeds = cachedFeeds)
 
-        suspend fun fetchPopularFeeds(): PopularFeedsEntity =
+        suspend fun fetchPopularFeeds(): List<PopularFeedEntity> =
             feedApi
                 .getPopularFeeds()
                 .toData()
-                .let { popularFeeds ->
-                    popularFeeds.copy(
-                        popularFeeds = popularFeeds.popularFeeds.filter { feed ->
-                            feed.isPublic &&
-                                feed.novelTitle.isNotBlank() &&
-                                feed.novelImage.isNotBlank() &&
-                                feed.novelGenre.isNotBlank()
-                        },
-                    )
+                .filter { feed ->
+                    feed.isPublic &&
+                        feed.novelTitle.isNotBlank() &&
+                        feed.novelImage.isNotBlank() &&
+                        feed.novelGenre.isNotBlank()
                 }
 
         suspend fun saveRemovedFeed(feedId: Long) {

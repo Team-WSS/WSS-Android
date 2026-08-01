@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.into.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
+import com.into.websoso.data.model.PopularFeedEntity
 import com.into.websoso.databinding.ItemPopularFeedBinding
 
 class PopularFeedsAdapter(
