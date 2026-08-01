@@ -99,7 +99,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
+                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
                     recommendedNovelsByUserTaste = recommendedNovels.tasteNovels,
                 )
             }
@@ -149,7 +149,7 @@ class HomeViewModel
                     loading = false,
                     error = false,
                     popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
+                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
                 )
             }
         }
@@ -168,7 +168,7 @@ class HomeViewModel
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
                         error = false,
-                        popularFeeds = popularFeeds.popularFeeds.toHomePopularFeedPages(),
+                        popularFeeds = popularFeeds.toHomePopularFeedPages(),
                     )
                 }.onFailure {
                     _uiState.value = uiState.value?.copy(error = true)
