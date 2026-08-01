@@ -2,7 +2,9 @@ package com.into.websoso.feature.collection.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +29,7 @@ internal fun CollectionAppBar(
     title: String? = null,
     actionLabel: String? = null,
     onNavigateBack: () -> Unit,
+    onActionClick: () -> Unit = {},
     isActionEnabled: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
@@ -58,14 +61,22 @@ internal fun CollectionAppBar(
             )
         }
         actionLabel?.let {
-            Text(
-                text = it,
-                color = if (isActionEnabled) Primary100 else Gray100,
-                style = WebsosoTheme.typography.title2,
+            Box(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .padding(horizontal = 20.dp),
-            )
+                    .fillMaxHeight()
+                    .clickable(
+                        enabled = isActionEnabled,
+                        onClick = onActionClick,
+                    ).padding(horizontal = 20.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = it,
+                    color = if (isActionEnabled) Primary100 else Gray100,
+                    style = WebsosoTheme.typography.title2,
+                )
+            }
         }
     }
 }

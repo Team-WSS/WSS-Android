@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
@@ -61,7 +61,7 @@ internal fun CollectionLibraryNovelItem(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(160.dp)
+                .aspectRatio(102.67f / 160f)
                 .clip(RoundedCornerShape(8.dp)),
         ) {
             NetworkImage(
@@ -71,21 +71,27 @@ internal fun CollectionLibraryNovelItem(
                 modifier = Modifier.fillMaxSize(),
             )
             novel.readStatus?.let { readStatus ->
-                Text(
-                    text = readStatus.label,
-                    color = White,
-                    style = WebsosoTheme.typography.label2,
+                Box(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(6.dp)
-                        .background(
+                        .padding(
+                            start = 6.dp,
+                            bottom = 7.dp,
+                        ).size(
+                            width = 48.dp,
+                            height = 18.dp,
+                        ).background(
                             color = readStatus.backgroundColor,
                             shape = RoundedCornerShape(4.dp),
-                        ).padding(
-                            horizontal = 6.dp,
-                            vertical = 4.dp,
                         ),
-                )
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = readStatus.label,
+                        color = White,
+                        style = WebsosoTheme.typography.label2,
+                    )
+                }
             }
             if (novel.isInterested) {
                 Box(
