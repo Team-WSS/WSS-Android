@@ -107,10 +107,13 @@ fun FeedDetailResponseDto.toData(): FeedDetailEntity =
     )
 
 fun PopularFeedsResponseDto.toData(): List<PopularFeedEntity> =
-    popularFeeds.map { feed ->
+    popularFeeds.mapNotNull { feed ->
+        val feedContent = feed.feedContent?.takeIf { it.isNotBlank() }
+            ?: return@mapNotNull null
+
         PopularFeedEntity(
             feedId = feed.feedId,
-            feesContent = feed.feedContent.orEmpty(),
+            feesContent = feedContent,
             likeCount = feed.likeCount,
             commentCount = feed.commentCount,
             isSpoiler = feed.isSpoiler,
