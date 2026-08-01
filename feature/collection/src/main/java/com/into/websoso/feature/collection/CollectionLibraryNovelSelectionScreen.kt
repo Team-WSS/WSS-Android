@@ -2,20 +2,25 @@ package com.into.websoso.feature.collection
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -71,26 +76,34 @@ internal fun CollectionLibraryNovelSelectionScreen(
             onActionClick = onAddClick,
             isActionEnabled = selectedNovelIds.isNotEmpty(),
         )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+        Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .weight(1f),
-            contentPadding = PaddingValues(
-                start = 20.dp,
-                top = 11.dp,
-                end = 20.dp,
-            ),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
-            items(novels.itemCount) { index ->
-                novels[index]?.let { novel ->
-                    CollectionLibraryNovelItem(
-                        novel = novel,
-                        isSelected = novel.novelId in selectedNovelIds,
-                        onSelectionChange = { onNovelSelectionChange(novel.novelId) },
-                    )
+            if (novels.itemCount == 0 && novels.loadState.refresh is LoadState.Loading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 20.dp,
+                        top = 11.dp,
+                        end = 20.dp,
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(18.dp),
+                ) {
+                    items(novels.itemCount) { index ->
+                        novels[index]?.let { novel ->
+                            CollectionLibraryNovelItem(
+                                novel = novel,
+                                isSelected = novel.novelId in selectedNovelIds,
+                                onSelectionChange = { onNovelSelectionChange(novel.novelId) },
+                            )
+                        }
+                    }
                 }
             }
         }
