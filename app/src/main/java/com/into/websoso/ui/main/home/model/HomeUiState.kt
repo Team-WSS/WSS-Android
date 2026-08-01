@@ -1,6 +1,6 @@
 package com.into.websoso.ui.main.home.model
 
-import com.into.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
+import com.into.websoso.data.model.PopularFeedEntity
 import com.into.websoso.data.model.PopularNovelsEntity.PopularNovelEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity.RecommendedNovelByUserTasteEntity
 

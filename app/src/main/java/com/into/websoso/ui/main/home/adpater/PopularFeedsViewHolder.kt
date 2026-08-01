@@ -8,7 +8,7 @@ import coil.transform.RoundedCornersTransformation
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.resource.R.drawable.img_loading_thumbnail
-import com.into.websoso.data.model.PopularFeedsEntity.PopularFeedEntity
+import com.into.websoso.data.model.PopularFeedEntity
 import com.into.websoso.databinding.ItemPopularFeedBinding
 import com.into.websoso.databinding.ItemPopularFeedSlotBinding
 import com.into.websoso.ui.feedDetail.model.Genre as FeedDetailGenre
