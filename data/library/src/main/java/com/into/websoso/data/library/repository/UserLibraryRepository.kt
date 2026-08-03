@@ -45,8 +45,7 @@ internal class UserLibraryRepository
             filterRepository.filterFlow
                 .flatMapLatest(::createLibraryFlow)
 
-        override fun getUnfilteredLibraryFlow(): Flow<PagingData<NovelEntity>> =
-            createLibraryFlow(LibraryFilter())
+        override fun getUnfilteredLibraryFlow(): Flow<PagingData<NovelEntity>> = createLibraryFlow(LibraryFilter())
 
         override suspend fun getRegisteredKeywords() = libraryRemoteDataSource.getUserNovelKeywords(userId = userId)
 

@@ -41,8 +41,7 @@ class MyLibraryRepository
             filterRepository.filterFlow
                 .flatMapLatest(::createLibraryFlow)
 
-        override fun getUnfilteredLibraryFlow(): Flow<PagingData<NovelEntity>> =
-            createLibraryFlow(LibraryFilter())
+        override fun getUnfilteredLibraryFlow(): Flow<PagingData<NovelEntity>> = createLibraryFlow(LibraryFilter())
 
         override suspend fun getRegisteredKeywords(): List<LibraryKeywordEntity> {
             val userId = accountRepository.userIdFlow.first { it != 0L }
