@@ -168,26 +168,16 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_home_today_popular_novel"
                     tools:listitem="@layout/item_popular_novel" />
 
-                <ImageView
-                    android:id="@+id/iv_home_hot"
-                    android:layout_width="28dp"
-                    android:layout_height="16dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="32dp"
-                    android:src="@drawable/ic_home_hot"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rv_home_today_popular_novel" />
-
                 <TextView
                     android:id="@+id/tv_home_rising_feed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="32dp"
                     android:text="@string/home_rising_feed"
                     android:textAppearance="@style/headline1"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_home_hot"
-                    app:layout_constraintStart_toEndOf="@id/iv_home_hot"
-                    app:layout_constraintTop_toTopOf="@id/iv_home_hot" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rv_home_today_popular_novel" />
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/vp_home_popular_feed"
@@ -198,7 +188,7 @@
                     android:background="@drawable/bg_home_white_stroke_gray_70_radius_14dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_home_hot" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_rising_feed" />
 
                 <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
                     android:id="@+id/dotsIndicator_home"
