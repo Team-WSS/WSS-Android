@@ -8,6 +8,8 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.view.updateLayoutParams
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
@@ -21,7 +23,9 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.core.common.util.toIntPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.home_rising_feed_for_user
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
@@ -146,6 +150,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
     }
 
     private fun setupObserver() {
+        mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
+            if (mainViewModel.isLogin.value == true && !uiState.loading && !uiState.error) {
+                binding.ivHomeHot.visibility = View.INVISIBLE
+                binding.tvHomeRisingFeed.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    startToEnd = ConstraintLayout.LayoutParams.UNSET
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    marginStart = 20.toIntPxFromDp()
+                }
+                binding.tvHomeRisingFeed.text = getString(home_rising_feed_for_user, uiState.nickname)
+            }
+        }
+
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.error -> {
