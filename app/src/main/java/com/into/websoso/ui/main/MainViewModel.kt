@@ -34,6 +34,7 @@ class MainViewModel
             viewModelScope.launch {
                 _mainUiState.value = mainUiState.value?.copy(
                     loading = true,
+                    error = false,
                 )
                 runCatching {
                     userRepository.fetchUserInfo()
@@ -43,6 +44,7 @@ class MainViewModel
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
                         loading = false,
+                        error = false,
                     )
                 }.onFailure {
                     _mainUiState.value = mainUiState.value?.copy(

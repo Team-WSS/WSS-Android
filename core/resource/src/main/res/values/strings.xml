@@ -240,6 +240,7 @@
     <!-- 홈 뷰 -->
     <string name="home_today_popular">+ 오늘의 발견 +</string>
     <string name="home_rising_feed">지금 뜨는 글</string>
+    <string name="home_rising_feed_for_user">%s님을 위한 추천글</string>
     <string name="home_user_recommend_novel_description">관심 등록한 작품의 최신 글이에요</string>
     <string name="home_recommend_novel_description">로맨스, 로판, 판타지, 현판 등\n선호장르를 기반으로 웹소설을 추천해드려요!</string>
     <string name="home_recommend_novel_by_user_taste_description">선호장르를 기반으로 추천해드려요</string>
