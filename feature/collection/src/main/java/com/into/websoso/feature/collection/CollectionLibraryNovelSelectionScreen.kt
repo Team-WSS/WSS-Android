@@ -101,12 +101,13 @@ internal fun CollectionLibraryNovelSelectionScreen(
                 .fillMaxWidth()
                 .weight(1f),
         ) {
-            when (novels.itemCount) {
-                0 if novels.loadState.refresh is LoadState.Loading -> {
+            when {
+                novels.itemCount == 0 && novels.loadState.refresh is LoadState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
-                0 if novels.loadState.refresh is LoadState.Error -> {
+                (novels.itemCount == 0 && novels.loadState.refresh is LoadState.Error) ||
+                    novels.loadState.append is LoadState.Error -> {
                     Column(
                         modifier = Modifier.align(Alignment.Center),
                         horizontalAlignment = Alignment.CenterHorizontally,
