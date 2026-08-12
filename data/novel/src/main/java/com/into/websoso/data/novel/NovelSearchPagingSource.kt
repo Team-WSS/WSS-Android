@@ -8,16 +8,20 @@ internal class NovelSearchPagingSource(
     private val query: String,
     private val api: NovelSearchApi,
 ) : PagingSource<Int, NovelSearchEntity>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NovelSearchEntity> =
-        LoadResult.Page(
-            data = api.getNovels(
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NovelSearchEntity> {
+        val page = params.key ?: INITIAL_PAGE
+        val response = api.getNovels(
                 query = query,
-                page = params.key ?: INITIAL_PAGE,
+                page = page,
                 size = params.loadSize,
-            ).novels.map(NovelSearchResponseDto.NovelDto::toData),
-            prevKey = null,
-            nextKey = null,
+            )
+
+        return LoadResult.Page(
+            data = response.novels.map(NovelSearchResponseDto.NovelDto::toData),
+            prevKey = page.takeIf { it > INITIAL_PAGE }?.minus(1),
+            nextKey = (page + 1).takeIf { response.isLoadable },
         )
+    }
 
     override fun getRefreshKey(state: PagingState<Int, NovelSearchEntity>): Int? =
         state.anchorPosition?.let { anchorPosition ->
