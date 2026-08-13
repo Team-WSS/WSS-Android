@@ -155,8 +155,7 @@ internal fun CollectionNovelSearchScreen(
                 .weight(1f),
         ) {
             when {
-                searchResults.loadState.refresh is LoadState.Error ||
-                    searchResults.loadState.append is LoadState.Error -> {
+                searchResults.loadState.refresh is LoadState.Error -> {
                     CollectionNetworkError(
                         onRetryClick = searchResults::retry,
                         modifier = Modifier.align(Alignment.Center),
