@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -149,7 +150,11 @@ internal fun CollectionNovelSearchScreen(
             onAddFromLibraryClick = onNavigateToLibraryNovelSelection,
             modifier = Modifier.padding(top = 16.dp),
         )
-        Box(
+        PullToRefreshBox(
+            isRefreshing =
+                searchResults.loadState.refresh is LoadState.Loading &&
+                    searchResults.itemCount > 0,
+            onRefresh = searchResults::refresh,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
