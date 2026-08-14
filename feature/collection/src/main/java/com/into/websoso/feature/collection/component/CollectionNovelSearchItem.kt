@@ -64,7 +64,7 @@ internal fun CollectionNovelSearchItem(
                 text = title,
                 color = Black,
                 style = WebsosoTheme.typography.title3,
-                maxLines = 1,
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
             if (author.isNotEmpty()) {
@@ -78,6 +78,7 @@ internal fun CollectionNovelSearchItem(
                 )
             }
         }
+        Spacer(modifier = Modifier.width(16.dp))
         val isAdd = actionLabel == "추가"
         Box(
             modifier = Modifier
