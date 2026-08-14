@@ -49,27 +49,28 @@ import com.into.websoso.core.resource.R.string.load_fail_title
 import com.into.websoso.feature.collection.component.CollectionAppBar
 import com.into.websoso.feature.collection.component.CollectionLibraryNovelItem
 import com.into.websoso.feature.collection.model.CollectionLibraryNovelUiModel
+import com.into.websoso.feature.collection.model.CollectionSelectedNovel
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun CollectionLibraryNovelSelectionRoute(
-    initialSelectedNovelIds: Set<Long>,
-    onAddClick: (Set<Long>) -> Unit,
+    initialSelectedNovels: List<CollectionSelectedNovel>,
+    onAddClick: (List<CollectionSelectedNovel>) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: CollectionLibraryNovelSelectionViewModel = hiltViewModel(),
 ) {
     val novels = viewModel.novels.collectAsLazyPagingItems()
-    val selectedNovelIds by viewModel.selectedNovelIds.collectAsStateWithLifecycle()
+    val selectedNovels by viewModel.selectedNovels.collectAsStateWithLifecycle()
 
-    LaunchedEffect(initialSelectedNovelIds) {
-        viewModel.setSelectedNovelIds(initialSelectedNovelIds)
+    LaunchedEffect(initialSelectedNovels) {
+        viewModel.setSelectedNovels(initialSelectedNovels)
     }
 
     CollectionLibraryNovelSelectionScreen(
         novels = novels,
-        selectedNovelIds = selectedNovelIds,
+        selectedNovelIds = selectedNovels.mapTo(mutableSetOf()) { it.novelId },
         onNovelSelectionChange = viewModel::toggleNovelSelection,
-        onAddClick = { onAddClick(selectedNovelIds) },
+        onAddClick = { onAddClick(selectedNovels) },
         onNavigateBack = onNavigateBack,
     )
 }
@@ -78,7 +79,7 @@ internal fun CollectionLibraryNovelSelectionRoute(
 internal fun CollectionLibraryNovelSelectionScreen(
     novels: LazyPagingItems<CollectionLibraryNovelUiModel>,
     selectedNovelIds: Set<Long>,
-    onNovelSelectionChange: (Long) -> Unit,
+    onNovelSelectionChange: (CollectionLibraryNovelUiModel) -> Unit,
     onAddClick: () -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -165,7 +166,7 @@ internal fun CollectionLibraryNovelSelectionScreen(
                                 CollectionLibraryNovelItem(
                                     novel = novel,
                                     isSelected = novel.novelId in selectedNovelIds,
-                                    onSelectionChange = { onNovelSelectionChange(novel.novelId) },
+                                    onSelectionChange = { onNovelSelectionChange(novel) },
                                 )
                             }
                         }
