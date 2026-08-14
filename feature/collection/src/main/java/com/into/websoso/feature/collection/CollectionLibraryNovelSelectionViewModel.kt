@@ -9,6 +9,7 @@ import com.into.websoso.data.library.LibraryRepository
 import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.feature.collection.mapper.toUiModel
 import com.into.websoso.feature.collection.model.CollectionLibraryNovelUiModel
+import com.into.websoso.feature.collection.model.CollectionSelectedNovel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +25,8 @@ internal class CollectionLibraryNovelSelectionViewModel
     constructor(
         libraryRepository: LibraryRepository,
     ) : ViewModel() {
-        private val _selectedNovelIds = MutableStateFlow<Set<Long>>(emptySet())
-        val selectedNovelIds: StateFlow<Set<Long>> = _selectedNovelIds.asStateFlow()
+        private val _selectedNovels = MutableStateFlow<List<CollectionSelectedNovel>>(emptyList())
+        val selectedNovels: StateFlow<List<CollectionSelectedNovel>> = _selectedNovels.asStateFlow()
 
         val novels: Flow<PagingData<CollectionLibraryNovelUiModel>> =
             libraryRepository
@@ -33,17 +34,25 @@ internal class CollectionLibraryNovelSelectionViewModel
                 .map { pagingData -> pagingData.map(NovelEntity::toUiModel) }
                 .cachedIn(viewModelScope)
 
-        fun toggleNovelSelection(novelId: Long) {
-            _selectedNovelIds.update { selectedNovelIds ->
-                if (novelId in selectedNovelIds) {
-                    selectedNovelIds - novelId
+        fun toggleNovelSelection(novel: CollectionLibraryNovelUiModel) {
+            _selectedNovels.update { selectedNovels ->
+                if (selectedNovels.any { it.novelId == novel.novelId }) {
+                    selectedNovels.filterNot { it.novelId == novel.novelId }
                 } else {
-                    selectedNovelIds + novelId
+                    selectedNovels + novel.toSelectedNovel()
                 }
             }
         }
 
-        fun setSelectedNovelIds(novelIds: Set<Long>) {
-            _selectedNovelIds.value = novelIds
+        fun setSelectedNovels(novels: List<CollectionSelectedNovel>) {
+            _selectedNovels.value = novels
         }
     }
+
+private fun CollectionLibraryNovelUiModel.toSelectedNovel(): CollectionSelectedNovel =
+    CollectionSelectedNovel(
+        novelId = novelId,
+        title = title,
+        author = "",
+        imageUrl = imageUrl,
+    )
