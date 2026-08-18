@@ -17,9 +17,7 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 
 @Composable
-fun CollectionScreen(
-    modifier: Modifier = Modifier,
-) {
+fun CollectionScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
