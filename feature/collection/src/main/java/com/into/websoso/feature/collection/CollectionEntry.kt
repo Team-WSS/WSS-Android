@@ -13,6 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.extensions.debouncedClickable
@@ -40,17 +43,13 @@ fun CollectionEntry(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "컬렉션 ",
-            color = Gray300,
-            style = WebsosoTheme.typography.title2,
-        )
-        Text(
-            text = collectionCount.toString(),
-            color = Primary100,
-            style = WebsosoTheme.typography.title2,
-        )
-        Text(
-            text = "개",
+            text = buildAnnotatedString {
+                append("컬렉션 ")
+                withStyle(style = SpanStyle(color = Primary100)) {
+                    append(collectionCount.toString())
+                }
+                append("개")
+            },
             color = Gray300,
             style = WebsosoTheme.typography.title2,
         )
