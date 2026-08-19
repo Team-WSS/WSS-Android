@@ -38,7 +38,6 @@ import com.into.websoso.databinding.FragmentMyPageBinding
 import com.into.websoso.feature.collection.CollectionEntry
 import com.into.websoso.ui.collection.CollectionActivity
 import com.into.websoso.ui.main.MainViewModel
-import com.into.websoso.ui.main.myPage.MyLibraryViewModel
 import com.into.websoso.ui.main.myPage.adapter.RestGenrePreferenceAdapter
 import com.into.websoso.ui.main.myPage.model.MyLibraryUiState
 import com.into.websoso.ui.profileEdit.ProfileEditActivity
