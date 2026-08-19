@@ -2,7 +2,6 @@ package com.into.websoso.feature.collection
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +15,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -32,7 +32,7 @@ fun CollectionEntry(
         modifier = modifier
             .fillMaxWidth()
             .background(White)
-            .clickable(onClick = onClick)
+            .debouncedClickable(onClick = onClick)
             .padding(
                 horizontal = 20.dp,
                 vertical = 20.dp,

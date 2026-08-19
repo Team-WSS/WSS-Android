@@ -109,9 +109,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
     }
 
     private fun navigateToCollection() {
-        singleEventHandler.throttleFirst {
-            startActivity(CollectionActivity.getIntent(requireContext()))
-        }
+        startActivity(CollectionActivity.getIntent(requireContext()))
     }
 
     private fun setupRestGenrePreferenceAdapter() {
