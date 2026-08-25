@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -28,6 +29,9 @@ import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R.string.collection_create_count
+import com.into.websoso.core.resource.R.string.collection_create_name
+import com.into.websoso.core.resource.R.string.collection_create_name_hint
 
 private const val COLLECTION_NAME_MAX_LENGTH = 20
 
@@ -37,13 +41,15 @@ internal fun CollectionNameInput(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val name = stringResource(collection_create_name)
+
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
             text = buildAnnotatedString {
-                append("컬렉션 이름 ")
+                append("$name ")
                 withStyle(style = SpanStyle(color = Primary100)) {
                     append("*")
                 }
@@ -75,7 +81,7 @@ internal fun CollectionNameInput(
                     Box {
                         if (value.isEmpty()) {
                             Text(
-                                text = "컬렉션 이름을 입력해주세요",
+                                text = stringResource(collection_create_name_hint),
                                 color = Gray100,
                                 style = WebsosoTheme.typography.body2,
                             )
@@ -85,7 +91,11 @@ internal fun CollectionNameInput(
                 },
             )
             Text(
-                text = "(${value.length}/$COLLECTION_NAME_MAX_LENGTH)",
+                text = stringResource(
+                    collection_create_count,
+                    value.length,
+                    COLLECTION_NAME_MAX_LENGTH,
+                ),
                 color = Gray200,
                 style = WebsosoTheme.typography.body2,
                 modifier = Modifier.padding(start = 8.dp),

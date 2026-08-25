@@ -449,4 +449,15 @@
     <!-- 컬렉션 뷰 -->
     <string name="collection_my">내 컬렉션</string>
     <string name="collection_liked">좋아요한 컬렉션</string>
+
+    <!-- 컬렉션 생성 뷰 -->
+    <string name="collection_create_complete">완료</string>
+    <string name="collection_create_private">나만 보는 컬렉션</string>
+    <string name="collection_create_name">컬렉션 이름</string>
+    <string name="collection_create_name_hint">컬렉션 이름을 입력해주세요</string>
+    <string name="collection_create_description">컬렉션 설명</string>
+    <string name="collection_create_description_hint">컬렉션에 관련한 설명을 간단하게 작성해주세요</string>
+    <string name="collection_create_novel_list">작품 리스트</string>
+    <string name="collection_create_add_novel">작품 추가</string>
+    <string name="collection_create_count">(%1$d/%2$d)</string>
 </resources>

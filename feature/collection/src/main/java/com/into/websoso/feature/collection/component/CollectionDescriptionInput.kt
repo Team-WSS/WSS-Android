@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Black
@@ -22,6 +23,9 @@ import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R.string.collection_create_count
+import com.into.websoso.core.resource.R.string.collection_create_description
+import com.into.websoso.core.resource.R.string.collection_create_description_hint
 
 private const val COLLECTION_DESCRIPTION_MAX_LENGTH = 60
 
@@ -36,7 +40,7 @@ internal fun CollectionDescriptionInput(
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
-            text = "컬렉션 설명",
+            text = stringResource(collection_create_description),
             color = Black,
             style = WebsosoTheme.typography.title2,
         )
@@ -66,7 +70,7 @@ internal fun CollectionDescriptionInput(
                     Box {
                         if (value.isEmpty()) {
                             Text(
-                                text = "컬렉션에 관련한 설명을 간단하게 작성해주세요",
+                                text = stringResource(collection_create_description_hint),
                                 color = Gray100,
                                 style = WebsosoTheme.typography.body2,
                             )
@@ -76,7 +80,11 @@ internal fun CollectionDescriptionInput(
                 },
             )
             Text(
-                text = "(${value.length}/$COLLECTION_DESCRIPTION_MAX_LENGTH)",
+                text = stringResource(
+                    collection_create_count,
+                    value.length,
+                    COLLECTION_DESCRIPTION_MAX_LENGTH,
+                ),
                 color = Gray200,
                 style = WebsosoTheme.typography.body2,
                 modifier = Modifier.align(Alignment.End),

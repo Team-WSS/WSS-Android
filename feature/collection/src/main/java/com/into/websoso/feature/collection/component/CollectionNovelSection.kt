@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -24,9 +25,14 @@ import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_plus_novel
+import com.into.websoso.core.resource.R.string.collection_create_add_novel
+import com.into.websoso.core.resource.R.string.collection_create_count
+import com.into.websoso.core.resource.R.string.collection_create_novel_list
 
 @Composable
 internal fun CollectionNovelSection(modifier: Modifier = Modifier) {
+    val novelList = stringResource(collection_create_novel_list)
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -37,7 +43,7 @@ internal fun CollectionNovelSection(modifier: Modifier = Modifier) {
         ) {
             Text(
                 text = buildAnnotatedString {
-                    append("작품 리스트 ")
+                    append("$novelList ")
                     withStyle(style = SpanStyle(color = Primary100)) {
                         append("*")
                     }
@@ -46,7 +52,7 @@ internal fun CollectionNovelSection(modifier: Modifier = Modifier) {
                 style = WebsosoTheme.typography.title2,
             )
             Text(
-                text = "(0/100)",
+                text = stringResource(collection_create_count, 0, 100),
                 color = Gray200,
                 style = WebsosoTheme.typography.body3,
             )
@@ -62,7 +68,7 @@ internal fun CollectionNovelSection(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "작품 추가",
+                text = stringResource(collection_create_add_novel),
                 color = Gray200,
                 style = WebsosoTheme.typography.title4,
                 modifier = Modifier.padding(bottom = 4.dp),

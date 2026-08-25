@@ -16,9 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray100
@@ -29,6 +28,7 @@ import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R.drawable.ic_lock
+import com.into.websoso.core.resource.R.string.collection_create_private
 
 @Composable
 internal fun CollectionPrivacySetting(
@@ -50,7 +50,7 @@ internal fun CollectionPrivacySetting(
             modifier = Modifier.size(18.dp),
         )
         Text(
-            text = "나만 보는 컬렉션",
+            text = stringResource(collection_create_private),
             color = Gray50,
             style = WebsosoTheme.typography.title3,
             modifier = Modifier
@@ -72,9 +72,7 @@ private fun CollectionPrivacySwitch(
     Box(
         modifier = Modifier
             .size(42.dp)
-            .semantics {
-                contentDescription = "나만 보는 컬렉션"
-            }.toggleable(
+            .toggleable(
                 value = checked,
                 role = Role.Switch,
                 onValueChange = onCheckedChange,

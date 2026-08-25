@@ -13,12 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R.drawable.ic_navigate_left
+import com.into.websoso.core.resource.R.string.collection_create_complete
 
 @Composable
 internal fun CollectionCreateAppBar(
@@ -46,7 +48,7 @@ internal fun CollectionCreateAppBar(
             )
         }
         Text(
-            text = "완료",
+            text = stringResource(collection_create_complete),
             color = Gray100,
             style = WebsosoTheme.typography.title2,
             modifier = Modifier
