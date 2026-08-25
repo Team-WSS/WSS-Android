@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,7 @@ internal fun CollectionTabRow(
         ) {
             CollectionTab.entries.forEach { tab ->
                 CollectionTabItem(
-                    title = tab.title,
+                    title = stringResource(tab.titleRes),
                     isSelected = tab == selectedTab,
                     onClick = { onTabSelected(tab) },
                     modifier = Modifier.weight(1f),
@@ -92,12 +93,6 @@ private fun CollectionTabItem(
         }
     }
 }
-
-private val CollectionTab.title: String
-    get() = when (this) {
-        CollectionTab.MY_COLLECTION -> "내 컬렉션"
-        CollectionTab.LIKED_COLLECTION -> "좋아요한 컬렉션"
-    }
 
 @Preview(showBackground = true)
 @Composable

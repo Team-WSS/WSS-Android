@@ -445,4 +445,8 @@
     <!-- 서재 뷰-->
     <string name="library">서재</string>
     <string name="library_filter_remove_selected_chip">필터 제거</string>
+
+    <!-- 컬렉션 뷰 -->
+    <string name="collection_my">내 컬렉션</string>
+    <string name="collection_liked">좋아요한 컬렉션</string>
 </resources>
