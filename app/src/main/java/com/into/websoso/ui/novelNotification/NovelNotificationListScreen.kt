@@ -51,6 +51,7 @@ fun NovelNotificationListScreen(
         )
         when {
             uiState.isEmpty -> NovelNotificationEmptyView(onExploreClick = onExploreClick)
+
             else -> NovelNotificationSubscriptionsContainer(
                 subscriptions = uiState.subscriptions,
                 selectedNovelIds = uiState.selectedNovelIds,

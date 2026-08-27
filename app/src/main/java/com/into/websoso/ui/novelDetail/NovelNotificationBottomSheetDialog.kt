@@ -11,8 +11,7 @@ import com.into.websoso.ui.novelDetail.model.NovelNotificationUiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NovelNotificationBottomSheetDialog :
-    BaseBottomSheetDialog<DialogNovelNotificationBinding>(R.layout.dialog_novel_notification) {
+class NovelNotificationBottomSheetDialog : BaseBottomSheetDialog<DialogNovelNotificationBinding>(R.layout.dialog_novel_notification) {
     private val novelNotificationViewModel: NovelNotificationViewModel by viewModels()
     private val novelId: Long by lazy { arguments?.getLong(NOVEL_ID) ?: DEFAULT_NOVEL_ID }
 
