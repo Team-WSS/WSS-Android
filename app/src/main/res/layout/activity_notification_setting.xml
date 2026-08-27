@@ -11,6 +11,14 @@
         <variable
             name="onToggleClick"
             type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onCompletionNotificationClick"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onHiatusReturnNotificationClick"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,10 +54,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_notification_setting_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:onClick="@{() -> onToggleClick.invoke()}"
             android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_notification_setting_title">
@@ -61,13 +68,16 @@
                 android:text="@string/notification_setting_button_title"
                 android:textAppearance="@style/body2"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@id/tv_notification_setting_button_description"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
+                android:id="@+id/tv_notification_setting_button_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="1dp"
                 android:text="@string/notification_setting_description"
                 android:textAppearance="@style/body3"
                 android:textColor="@color/gray_200_949399"
@@ -78,7 +88,7 @@
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/sc_notification_setting_toggle"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:background="@null"
                 android:checked="@{notificationSettingViewModel.isNotificationPushEnabled}"
                 android:clickable="false"
@@ -87,6 +97,120 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:track="@drawable/bg_notification_setting_toggle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_notification_setting_activity_underline"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_notification_setting_button" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_notification_setting_completion"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:onClick="@{() -> onCompletionNotificationClick.invoke()}"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_notification_setting_activity_underline">
+
+            <TextView
+                android:id="@+id/tv_notification_setting_completion_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_setting_completion_title"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@id/tv_notification_setting_completion_description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_notification_setting_completion_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="@string/notification_setting_completion_description"
+                android:textAppearance="@style/body3"
+                android:textColor="@color/gray_200_949399"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_notification_setting_completion_navigate"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@id/tv_notification_setting_completion_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_notification_setting_completion_title"
+                app:layout_constraintWidth_default="wrap" />
+
+            <ImageView
+                android:id="@+id/iv_notification_setting_completion_navigate"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@null"
+                android:src="@drawable/btn_setting_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_notification_setting_completion_underline"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_50_F4F5F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_notification_setting_completion" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_notification_setting_hiatus_return"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:onClick="@{() -> onHiatusReturnNotificationClick.invoke()}"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_notification_setting_completion_underline">
+
+            <TextView
+                android:id="@+id/tv_notification_setting_hiatus_return_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_setting_hiatus_return_title"
+                android:textAppearance="@style/body2"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@id/tv_notification_setting_hiatus_return_description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_notification_setting_hiatus_return_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="@string/notification_setting_hiatus_return_description"
+                android:textAppearance="@style/body3"
+                android:textColor="@color/gray_200_949399"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_notification_setting_hiatus_return_navigate"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@id/tv_notification_setting_hiatus_return_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_notification_setting_hiatus_return_title"
+                app:layout_constraintWidth_default="wrap" />
+
+            <ImageView
+                android:id="@+id/iv_notification_setting_hiatus_return_navigate"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@null"
+                android:src="@drawable/btn_setting_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

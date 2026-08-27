@@ -296,6 +296,10 @@
     <!-- 알림 설정 뷰 -->
     <string name="notification_setting_button_title">활동 알림</string>
     <string name="notification_setting_description">댓글, 좋아요 등 알림</string>
+    <string name="notification_setting_completion_title">완결 알림</string>
+    <string name="notification_setting_completion_description">작품이 완결나면 알림을 드려요</string>
+    <string name="notification_setting_hiatus_return_title">휴재 복귀, 외전 알림</string>
+    <string name="notification_setting_hiatus_return_description">휴재가 끝나거나 새로운 회차가 생기면 알림을 드려요</string>
 
     <!-- 작품 알림 뷰 -->
     <string name="novel_detail_notification_content_description">작품 알림 설정</string>
