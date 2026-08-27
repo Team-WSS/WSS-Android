@@ -20,6 +20,9 @@ data class NovelNotificationListUiState(
 
     val isDeletable: Boolean get() = selectedNovelIds.isNotEmpty()
 
+    // 삭제 알럿은 '처음 선택한 작품'을 기준으로 문구를 구성하므로 목록 순서가 아닌 선택 순서를 유지한다
     val selectedSubscriptions: List<NovelNotificationSubscriptionModel>
-        get() = subscriptions.filter { it.novelId in selectedNovelIds }
+        get() = selectedNovelIds.mapNotNull { novelId ->
+            subscriptions.find { it.novelId == novelId }
+        }
 }
