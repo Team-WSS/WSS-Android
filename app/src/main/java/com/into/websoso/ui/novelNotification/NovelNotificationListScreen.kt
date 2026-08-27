@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.ui.novelNotification.component.NovelNotificationDeleteDialog
 import com.into.websoso.ui.novelNotification.component.NovelNotificationEmptyView
 import com.into.websoso.ui.novelNotification.component.NovelNotificationListAppBar
 import com.into.websoso.ui.novelNotification.component.NovelNotificationSubscriptionsContainer
@@ -27,7 +28,10 @@ fun NovelNotificationListScreen(
     val uiState by viewModel.novelNotificationListUiState.collectAsStateWithLifecycle()
 
     BackHandler {
-        onBackButtonClick()
+        when (uiState.isEditing) {
+            true -> viewModel.updateEditing(false)
+            false -> onBackButtonClick()
+        }
     }
 
     Column(
@@ -38,16 +42,32 @@ fun NovelNotificationListScreen(
     ) {
         NovelNotificationListAppBar(
             notificationType = uiState.notificationType,
+            isEditing = uiState.isEditing,
+            isDeletable = uiState.isDeletable,
+            isActionVisible = uiState.isEmpty.not(),
             onBackButtonClick = onBackButtonClick,
+            onEditButtonClick = { viewModel.updateEditing(true) },
+            onDeleteButtonClick = { viewModel.updateDeleteDialogVisibility(true) },
         )
         when {
             uiState.isEmpty -> NovelNotificationEmptyView(onExploreClick = onExploreClick)
             else -> NovelNotificationSubscriptionsContainer(
                 subscriptions = uiState.subscriptions,
+                selectedNovelIds = uiState.selectedNovelIds,
+                isEditing = uiState.isEditing,
                 isLoadable = uiState.isLoadable,
                 updateSubscriptions = viewModel::updateSubscriptions,
                 onSubscriptionClick = onSubscriptionClick,
+                onSubscriptionSelect = { viewModel.updateSelectedNovel(it.novelId) },
             )
         }
+    }
+
+    if (uiState.isDeleteDialogVisible) {
+        NovelNotificationDeleteDialog(
+            selectedSubscriptions = uiState.selectedSubscriptions,
+            onCancelClick = { viewModel.updateDeleteDialogVisibility(false) },
+            onConfirmClick = viewModel::deleteSelectedSubscriptions,
+        )
     }
 }

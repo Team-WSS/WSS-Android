@@ -310,6 +310,13 @@
     <string name="novel_notification_registered_date">%1$s에 알림 등록</string>
     <string name="novel_notification_empty">알림 등록한 작품이 없어요</string>
     <string name="novel_notification_empty_explore">작품 둘러보기</string>
+    <string name="novel_notification_edit">수정</string>
+    <string name="novel_notification_delete">삭제</string>
+    <string name="novel_notification_delete_dialog_title">해당 작품 알림을 삭제할까요?</string>
+    <string name="novel_notification_delete_dialog_message_single">%1$s</string>
+    <string name="novel_notification_delete_dialog_message_multiple">%1$s 외 %2$d작품</string>
+    <string name="novel_notification_delete_dialog_cancel">취소</string>
+    <string name="novel_notification_delete_dialog_confirm">삭제</string>
 
     <!-- 알림 설정 다이얼로그 뷰 -->
     <string name="notification_permission_title">앱 알림이 꺼져있어요</string>

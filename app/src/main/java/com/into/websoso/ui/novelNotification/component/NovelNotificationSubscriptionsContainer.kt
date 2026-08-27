@@ -17,9 +17,12 @@ private const val LOAD_THRESHOLD = 5
 @Composable
 fun NovelNotificationSubscriptionsContainer(
     subscriptions: List<NovelNotificationSubscriptionModel>,
+    selectedNovelIds: Set<Long>,
+    isEditing: Boolean,
     isLoadable: Boolean,
     updateSubscriptions: () -> Unit,
     onSubscriptionClick: (NovelNotificationSubscriptionModel) -> Unit,
+    onSubscriptionSelect: (NovelNotificationSubscriptionModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -43,7 +46,14 @@ fun NovelNotificationSubscriptionsContainer(
         ) { subscription ->
             NovelNotificationSubscriptionItem(
                 subscription = subscription,
-                modifier = Modifier.clickableWithoutRipple { onSubscriptionClick(subscription) },
+                isEditing = isEditing,
+                isSelected = subscription.novelId in selectedNovelIds,
+                modifier = Modifier.clickableWithoutRipple {
+                    when (isEditing) {
+                        true -> onSubscriptionSelect(subscription)
+                        false -> onSubscriptionClick(subscription)
+                    }
+                },
             )
         }
     }
@@ -55,9 +65,12 @@ private fun NovelNotificationSubscriptionsContainerPreview() {
     WebsosoTheme {
         NovelNotificationSubscriptionsContainer(
             subscriptions = emptyList(),
+            selectedNovelIds = emptySet(),
+            isEditing = false,
             isLoadable = false,
             updateSubscriptions = {},
             onSubscriptionClick = {},
+            onSubscriptionSelect = {},
         )
     }
 }
