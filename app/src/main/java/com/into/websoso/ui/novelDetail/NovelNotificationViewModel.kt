@@ -52,6 +52,8 @@ class NovelNotificationViewModel
             novelId: Long,
             isEnabled: Boolean,
         ) {
+            if (novelNotificationUiState.value.isEditable.not()) return
+
             _novelNotificationUiState.value = novelNotificationUiState.value.copy(
                 isCompletionNotificationEnabled = isEnabled,
             )
@@ -63,6 +65,8 @@ class NovelNotificationViewModel
             novelId: Long,
             isEnabled: Boolean,
         ) {
+            if (novelNotificationUiState.value.isEditable.not()) return
+
             _novelNotificationUiState.value = novelNotificationUiState.value.copy(
                 isHiatusReturnNotificationEnabled = isEnabled,
             )

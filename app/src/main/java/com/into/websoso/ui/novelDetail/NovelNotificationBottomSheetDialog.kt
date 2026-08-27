@@ -51,12 +51,21 @@ class NovelNotificationBottomSheetDialog : BaseBottomSheetDialog<DialogNovelNoti
     private fun updateToggleState(uiState: NovelNotificationUiState) {
         binding.scNovelNotificationCompletionToggle.isChecked = uiState.isCompletionNotificationEnabled
         binding.scNovelNotificationHiatusReturnToggle.isChecked = uiState.isHiatusReturnNotificationEnabled
+
+        binding.clNovelNotificationCompletion.isEnabled = uiState.isEditable
+        binding.clNovelNotificationHiatusReturn.isEnabled = uiState.isEditable
+
+        val contentAlpha = if (uiState.isError) DISABLED_ALPHA else DEFAULT_ALPHA
+        binding.clNovelNotificationCompletion.alpha = contentAlpha
+        binding.clNovelNotificationHiatusReturn.alpha = contentAlpha
     }
 
     companion object {
         const val NOVEL_NOTIFICATION_BOTTOM_SHEET_TAG = "NovelNotificationBottomSheetDialog"
         private const val NOVEL_ID = "NOVEL_ID"
         private const val DEFAULT_NOVEL_ID = 0L
+        private const val DEFAULT_ALPHA = 1f
+        private const val DISABLED_ALPHA = 0.4f
 
         fun newInstance(novelId: Long): NovelNotificationBottomSheetDialog =
             NovelNotificationBottomSheetDialog().apply {
