@@ -28,12 +28,15 @@ fun NovelNotificationSubscriptionsContainer(
     val listState = rememberLazyListState()
 
     LaunchedEffect(listState, isLoadable) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0 }
-            .collect { index ->
-                if (index + LOAD_THRESHOLD >= subscriptions.size && isLoadable) {
-                    updateSubscriptions()
-                }
+        snapshotFlow {
+            listState.layoutInfo.visibleItemsInfo
+                .lastOrNull()
+                ?.index ?: 0
+        }.collect { index ->
+            if (index + LOAD_THRESHOLD >= subscriptions.size && isLoadable) {
+                updateSubscriptions()
             }
+        }
     }
 
     LazyColumn(
