@@ -119,11 +119,16 @@ class NovelNotificationListViewModel
 
         private fun handleDeleteSuccessState(deletedNovelIds: Set<Long>) {
             val currentUiState = novelNotificationListUiState.value
+            val remainedSubscriptions = currentUiState.subscriptions.filterNot { it.novelId in deletedNovelIds }
+
             _novelNotificationListUiState.value = currentUiState.copy(
                 isEditing = false,
                 isDeleteDialogVisible = false,
                 selectedNovelIds = emptySet(),
-                subscriptions = currentUiState.subscriptions.filterNot { it.novelId in deletedNovelIds },
+                subscriptions = remainedSubscriptions,
             )
+
+            // 로드된 항목을 모두 삭제해도 다음 페이지가 남아 있으면 빈 화면 대신 이어서 불러온다
+            if (remainedSubscriptions.isEmpty() && currentUiState.isLoadable) updateSubscriptions()
         }
     }
