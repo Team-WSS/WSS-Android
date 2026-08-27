@@ -1,11 +1,6 @@
 package com.into.websoso.core.common.util.message
 
-/**
- * 푸시 알림의 data 페이로드를 파싱한 결과.
- *
- * 서버는 값이 없는 필드를 null이 아닌 빈 문자열로 내려주므로
- * (예: 작품 알림의 `"feedId": ""`) 모든 ID는 [String.toLongOrNull]로 파싱한다.
- */
+
 data class PushMessage(
     val title: String,
     val body: String,
