@@ -28,22 +28,11 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        val receivedData = message.data
-        if (receivedData.isEmpty()) return
-
-        val title = receivedData["title"] ?: DEFAULT_TITLE
-        val body = receivedData["body"] ?: DEFAULT_BODY
-        val feedId = receivedData["feedId"]?.toLongOrNull()
-        val novelId = receivedData["novelId"]?.toLongOrNull()
-        val notificationId = receivedData["notificationId"]?.toLong() ?: return
+        val pushMessage = PushMessage.from(message.data) ?: return
 
         setupNotificationChannel()
-        val pendingIntent = createPendingIntent(
-            feedId,
-            novelId,
-            notificationId,
-        )
-        showNotification(title, body, pendingIntent)
+        val pendingIntent = createPendingIntent(pushMessage)
+        showNotification(pushMessage.title, pushMessage.body, pendingIntent)
     }
 
     private fun setupNotificationChannel() {
@@ -59,17 +48,26 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createPendingIntent(
-        feedId: Long?,
-        novelId: Long?,
-        notificationId: Long,
-    ): PendingIntent {
+    private fun createPendingIntent(pushMessage: PushMessage): PendingIntent {
         val mainIntent = MainActivity.getIntent(this)
+        val notificationId = pushMessage.notificationId
 
-        val detailIntent = when {
-            feedId != null -> FeedDetailActivity.getIntent(this, feedId, notificationId)
-            novelId != null -> NovelDetailActivity.getIntent(this, novelId)
-            else -> NotificationDetailActivity.getIntent(this, notificationId)
+        val detailIntent = when (pushMessage.destination) {
+            PushDestination.FEED -> FeedDetailActivity.getIntent(
+                this,
+                requireNotNull(pushMessage.feedId),
+                notificationId,
+            )
+
+            PushDestination.NOVEL -> NovelDetailActivity.getIntent(
+                this,
+                requireNotNull(pushMessage.novelId),
+            )
+
+            PushDestination.NOTIFICATION_DETAIL -> NotificationDetailActivity.getIntent(
+                this,
+                notificationId,
+            )
         }
 
         return TaskStackBuilder.create(this).run {
@@ -113,8 +111,6 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        private const val DEFAULT_TITLE = "웹소소"
-        private const val DEFAULT_BODY = "푸시 알림 메시지입니다"
         private const val CHANNEL_ID = "websoso"
         private const val CHANNEL_NAME = "웹소소"
         private const val CHANNEL_DESCRIPTION = "웹소소 알림입니다."
