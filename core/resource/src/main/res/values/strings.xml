@@ -297,6 +297,13 @@
     <string name="notification_setting_button_title">활동 알림</string>
     <string name="notification_setting_description">댓글, 좋아요 등 알림</string>
 
+    <!-- 작품 알림 뷰 -->
+    <string name="novel_detail_notification_content_description">작품 알림 설정</string>
+    <string name="novel_notification_completion_title">완결 알림</string>
+    <string name="novel_notification_completion_description">작품이 완결 나면 알림을 드려요</string>
+    <string name="novel_notification_hiatus_return_title">휴재 복귀 알림</string>
+    <string name="novel_notification_hiatus_return_description">새로운 회차가 생기면 알림을 드려요</string>
+
     <!-- 알림 설정 다이얼로그 뷰 -->
     <string name="notification_permission_title">앱 알림이 꺼져있어요</string>
     <string name="notification_permission_description">중요한 소식만 전해드릴게요!\n기기 설정에서 알림을 허용해주세요.</string>
