@@ -303,6 +303,9 @@
     <string name="novel_notification_completion_description">작품이 완결 나면 알림을 드려요</string>
     <string name="novel_notification_hiatus_return_title">휴재 복귀 알림</string>
     <string name="novel_notification_hiatus_return_description">새로운 회차가 생기면 알림을 드려요</string>
+    <string name="novel_notification_registered_date">%1$s에 알림 등록</string>
+    <string name="novel_notification_empty">알림 등록한 작품이 없어요</string>
+    <string name="novel_notification_empty_explore">작품 둘러보기</string>
 
     <!-- 알림 설정 다이얼로그 뷰 -->
     <string name="notification_permission_title">앱 알림이 꺼져있어요</string>
