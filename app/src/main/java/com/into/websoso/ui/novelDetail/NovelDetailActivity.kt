@@ -314,6 +314,14 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                 showPopupWindow()
             }
 
+            override fun onNotificationClick() {
+                if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                    showLoginRequestDialog()
+                    return
+                }
+                showNovelNotificationBottomSheet()
+            }
+
             override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
                 if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
                     binding.tgNovelDetailReadStatus.clearChecked()
@@ -399,6 +407,15 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun showLoginRequestDialog() {
         val dialog = LoginRequestDialogFragment.newInstance()
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
+    }
+
+    private fun showNovelNotificationBottomSheet() {
+        NovelNotificationBottomSheetDialog
+            .newInstance(novelId)
+            .show(
+                supportFragmentManager,
+                NovelNotificationBottomSheetDialog.NOVEL_NOTIFICATION_BOTTOM_SHEET_TAG,
+            )
     }
 
     override fun onResume() {

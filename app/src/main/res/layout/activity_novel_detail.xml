@@ -569,10 +569,24 @@
                                 android:layout_height="38dp"
                                 android:layout_marginEnd="12dp"
                                 android:onClick="@{() -> onClick.onShowMenuClick()}"
-                                android:padding="10dp"
-                                android:src="@drawable/ic_novel_detail_menu"
+                                android:padding="9dp"
+                                android:src="@drawable/ic_novel_detail_kebab"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/black" />
+
+                            <ImageView
+                                android:id="@+id/iv_novel_detail_notification"
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                android:layout_marginEnd="4dp"
+                                android:contentDescription="@string/novel_detail_notification_content_description"
+                                android:onClick="@{() -> onClick.onNotificationClick()}"
+                                android:padding="10dp"
+                                android:src="@drawable/ic_novel_detail_notification"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/iv_novel_detail_menu"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:tint="@color/black" />
 
