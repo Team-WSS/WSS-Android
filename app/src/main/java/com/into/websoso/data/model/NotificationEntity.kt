@@ -11,11 +11,13 @@ data class NotificationEntity(
     val isRead: Boolean,
     val isNotice: Boolean,
     val feedId: Long?,
+    val novelId: Long?,
 ) {
     fun getIntrinsicId(): Long =
         when {
             isNotice -> notificationId
             feedId != null -> feedId
+            novelId != null -> novelId
             else -> DEFAULT_INTRINSIC_ID
         }
 }

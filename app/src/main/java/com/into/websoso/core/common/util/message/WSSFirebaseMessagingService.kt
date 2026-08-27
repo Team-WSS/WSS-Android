@@ -13,6 +13,7 @@ import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
 import com.into.websoso.ui.notificationDetail.NotificationDetailActivity
+import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,11 +34,13 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
         val title = receivedData["title"] ?: DEFAULT_TITLE
         val body = receivedData["body"] ?: DEFAULT_BODY
         val feedId = receivedData["feedId"]?.toLongOrNull()
+        val novelId = receivedData["novelId"]?.toLongOrNull()
         val notificationId = receivedData["notificationId"]?.toLong() ?: return
 
         setupNotificationChannel()
         val pendingIntent = createPendingIntent(
             feedId,
+            novelId,
             notificationId,
         )
         showNotification(title, body, pendingIntent)
@@ -58,12 +61,14 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun createPendingIntent(
         feedId: Long?,
+        novelId: Long?,
         notificationId: Long,
     ): PendingIntent {
         val mainIntent = MainActivity.getIntent(this)
 
         val detailIntent = when {
             feedId != null -> FeedDetailActivity.getIntent(this, feedId, notificationId)
+            novelId != null -> NovelDetailActivity.getIntent(this, novelId)
             else -> NotificationDetailActivity.getIntent(this, notificationId)
         }
 

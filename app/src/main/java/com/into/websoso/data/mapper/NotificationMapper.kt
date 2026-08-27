@@ -19,6 +19,7 @@ fun NotificationsResponseDto.toData(): NotificationsEntity =
                 isRead = it.isRead,
                 isNotice = it.isNotice,
                 feedId = it.feedId,
+                novelId = it.novelId,
             )
         },
     )
