@@ -10,8 +10,16 @@ data class NovelNotificationListUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val isInitialLoaded: Boolean = false,
+    val isEditing: Boolean = false,
+    val isDeleteDialogVisible: Boolean = false,
     val lastSubscriptionId: Long = DEFAULT_SUBSCRIPTION_ID,
+    val selectedNovelIds: Set<Long> = emptySet(),
     val subscriptions: List<NovelNotificationSubscriptionModel> = emptyList(),
 ) {
     val isEmpty: Boolean get() = isInitialLoaded && subscriptions.isEmpty()
+
+    val isDeletable: Boolean get() = selectedNovelIds.isNotEmpty()
+
+    val selectedSubscriptions: List<NovelNotificationSubscriptionModel>
+        get() = subscriptions.filter { it.novelId in selectedNovelIds }
 }
