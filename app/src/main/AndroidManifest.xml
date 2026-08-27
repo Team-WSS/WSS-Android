@@ -153,6 +153,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.novelNotification.NovelNotificationListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.expandedFeedImage.ExpandedFeedImageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

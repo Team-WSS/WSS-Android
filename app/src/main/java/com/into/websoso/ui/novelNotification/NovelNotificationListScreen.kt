@@ -1,0 +1,53 @@
+package com.into.websoso.ui.novelNotification
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.ui.novelNotification.component.NovelNotificationEmptyView
+import com.into.websoso.ui.novelNotification.component.NovelNotificationListAppBar
+import com.into.websoso.ui.novelNotification.component.NovelNotificationSubscriptionsContainer
+import com.into.websoso.ui.novelNotification.model.NovelNotificationSubscriptionModel
+
+@Composable
+fun NovelNotificationListScreen(
+    viewModel: NovelNotificationListViewModel,
+    onSubscriptionClick: (NovelNotificationSubscriptionModel) -> Unit,
+    onExploreClick: () -> Unit,
+    onBackButtonClick: () -> Unit,
+) {
+    val uiState by viewModel.novelNotificationListUiState.collectAsStateWithLifecycle()
+
+    BackHandler {
+        onBackButtonClick()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(White)
+            .windowInsetsPadding(WindowInsets.systemBars),
+    ) {
+        NovelNotificationListAppBar(
+            notificationType = uiState.notificationType,
+            onBackButtonClick = onBackButtonClick,
+        )
+        when {
+            uiState.isEmpty -> NovelNotificationEmptyView(onExploreClick = onExploreClick)
+            else -> NovelNotificationSubscriptionsContainer(
+                subscriptions = uiState.subscriptions,
+                isLoadable = uiState.isLoadable,
+                updateSubscriptions = viewModel::updateSubscriptions,
+                onSubscriptionClick = onSubscriptionClick,
+            )
+        }
+    }
+}
