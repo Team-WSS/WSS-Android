@@ -22,5 +22,6 @@ fun NotificationEntity.toDomain(): Notification =
         isRead = isRead,
         isNotice = isNotice,
         feedId = feedId,
+        novelId = novelId,
         intrinsicId = getIntrinsicId(),
     )
