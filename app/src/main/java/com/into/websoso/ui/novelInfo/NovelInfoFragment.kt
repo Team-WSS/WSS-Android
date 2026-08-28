@@ -166,42 +166,37 @@ class NovelInfoFragment : BaseFragment<FragmentNovelInfoBinding>(fragment_novel_
     }
 
     private fun updateGraphUi(unifiedReviewCountModel: UnifiedReviewCountModel) {
+        updateGraphHeight(
+            binding.viewNovelInfoReadStatusWatching,
+            unifiedReviewCountModel.watchingCount.graphHeight,
+        )
+        updateGraphHeight(
+            binding.viewNovelInfoReadStatusWatched,
+            unifiedReviewCountModel.watchedCount.graphHeight,
+        )
+        updateGraphHeight(
+            binding.viewNovelInfoReadStatusQuit,
+            unifiedReviewCountModel.quitCount.graphHeight,
+        )
+
         when (unifiedReviewCountModel.maxCountReadStatus()) {
-            WATCHING -> {
-                updateGraphHeight(
-                    binding.viewNovelInfoReadStatusWatching,
-                    unifiedReviewCountModel.watchingCount.graphHeight,
-                )
-                updateGraphSelection(
-                    binding.viewNovelInfoReadStatusWatching,
-                    binding.tvNovelInfoReadStatusWatchingCount,
-                    binding.tvNovelInfoReadStatusWatching,
-                )
-            }
+            WATCHING -> updateGraphSelection(
+                binding.viewNovelInfoReadStatusWatching,
+                binding.tvNovelInfoReadStatusWatchingCount,
+                binding.tvNovelInfoReadStatusWatching,
+            )
 
-            WATCHED -> {
-                updateGraphHeight(
-                    binding.viewNovelInfoReadStatusWatched,
-                    unifiedReviewCountModel.watchedCount.graphHeight,
-                )
-                updateGraphSelection(
-                    binding.viewNovelInfoReadStatusWatched,
-                    binding.tvNovelInfoReadStatusWatchedCount,
-                    binding.tvNovelInfoReadStatusWatched,
-                )
-            }
+            WATCHED -> updateGraphSelection(
+                binding.viewNovelInfoReadStatusWatched,
+                binding.tvNovelInfoReadStatusWatchedCount,
+                binding.tvNovelInfoReadStatusWatched,
+            )
 
-            QUIT -> {
-                updateGraphHeight(
-                    binding.viewNovelInfoReadStatusQuit,
-                    unifiedReviewCountModel.quitCount.graphHeight,
-                )
-                updateGraphSelection(
-                    binding.viewNovelInfoReadStatusQuit,
-                    binding.tvNovelInfoReadStatusQuitCount,
-                    binding.tvNovelInfoReadStatusQuit,
-                )
-            }
+            QUIT -> updateGraphSelection(
+                binding.viewNovelInfoReadStatusQuit,
+                binding.tvNovelInfoReadStatusQuitCount,
+                binding.tvNovelInfoReadStatusQuit,
+            )
 
             else -> Unit
         }
