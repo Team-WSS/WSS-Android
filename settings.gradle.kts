@@ -44,6 +44,7 @@ include(
     ":feature:signin",
     ":feature:library",
     ":feature:feed",
+    ":feature:collection",
 )
 include(":domain:feed")
 include(":data:user")
