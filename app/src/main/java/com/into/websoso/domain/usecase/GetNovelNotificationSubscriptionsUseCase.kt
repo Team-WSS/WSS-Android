@@ -6,6 +6,7 @@ import com.into.websoso.domain.model.NovelNotificationSubscriptions
 import com.into.websoso.domain.model.NovelNotificationSubscriptions.Companion.DEFAULT_SUBSCRIPTION_ID
 import com.into.websoso.domain.model.NovelNotificationType
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class GetNovelNotificationSubscriptionsUseCase
     @Inject
@@ -28,6 +29,9 @@ class GetNovelNotificationSubscriptionsUseCase
                         size = size,
                     ).toDomain()
                 Result.success(subscriptions)
+            } catch (e: CancellationException) {
+                // 취소는 실패가 아니므로 Result로 감싸지 않고 그대로 전파한다
+                throw e
             } catch (e: Exception) {
                 Result.failure(e)
             }
