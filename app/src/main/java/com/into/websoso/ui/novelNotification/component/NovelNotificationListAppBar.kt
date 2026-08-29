@@ -28,6 +28,7 @@ import com.into.websoso.core.resource.R.string.novel_notification_delete
 import com.into.websoso.core.resource.R.string.novel_notification_edit
 import com.into.websoso.domain.model.NovelNotificationType
 import com.into.websoso.domain.model.NovelNotificationType.COMPLETION
+import com.into.websoso.domain.model.NovelNotificationType.HIATUS_RETURN
 import com.into.websoso.ui.novelNotification.novelNotificationTitleRes
 
 @Composable
@@ -112,6 +113,54 @@ private fun NovelNotificationListAppBarPreview() {
             isEditing = false,
             isDeletable = false,
             isActionVisible = true,
+            onBackButtonClick = {},
+            onEditButtonClick = {},
+            onDeleteButtonClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NovelNotificationListAppBarEditingPreview() {
+    WebsosoTheme {
+        NovelNotificationListAppBar(
+            notificationType = COMPLETION,
+            isEditing = true,
+            isDeletable = false,
+            isActionVisible = true,
+            onBackButtonClick = {},
+            onEditButtonClick = {},
+            onDeleteButtonClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NovelNotificationListAppBarDeletablePreview() {
+    WebsosoTheme {
+        NovelNotificationListAppBar(
+            notificationType = COMPLETION,
+            isEditing = true,
+            isDeletable = true,
+            isActionVisible = true,
+            onBackButtonClick = {},
+            onEditButtonClick = {},
+            onDeleteButtonClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NovelNotificationListAppBarActionHiddenPreview() {
+    WebsosoTheme {
+        NovelNotificationListAppBar(
+            notificationType = HIATUS_RETURN,
+            isEditing = false,
+            isDeletable = false,
+            isActionVisible = false,
             onBackButtonClick = {},
             onEditButtonClick = {},
             onDeleteButtonClick = {},

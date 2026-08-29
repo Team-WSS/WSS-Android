@@ -117,21 +117,51 @@ private fun NovelNotificationDeleteDialogButton(
     }
 }
 
+private val previewSubscriptions = listOf(
+    NovelNotificationSubscriptionModel(
+        subscriptionId = 1,
+        novelId = 1,
+        novelTitle = "여주인공의 이해를 돕기 위하여",
+        novelAuthor = "이보라",
+        novelImage = "",
+        registeredDate = "2026.07.04",
+    ),
+    NovelNotificationSubscriptionModel(
+        subscriptionId = 2,
+        novelId = 2,
+        novelTitle = "황후가 되고 싶은 여자",
+        novelAuthor = "에갈",
+        novelImage = "",
+        registeredDate = "2026.07.05",
+    ),
+    NovelNotificationSubscriptionModel(
+        subscriptionId = 3,
+        novelId = 3,
+        novelTitle = "폭렬기사 반",
+        novelAuthor = "김폭렬",
+        novelImage = "",
+        registeredDate = "2026.07.06",
+    ),
+)
+
 @Preview
 @Composable
 private fun NovelNotificationDeleteDialogPreview() {
     WebsosoTheme {
         NovelNotificationDeleteDialog(
-            selectedSubscriptions = listOf(
-                NovelNotificationSubscriptionModel(
-                    subscriptionId = 1,
-                    novelId = 1,
-                    novelTitle = "여주인공의 이해를 돕기 위하여",
-                    novelAuthor = "이보라",
-                    novelImage = "",
-                    registeredDate = "2026.07.04",
-                ),
-            ),
+            selectedSubscriptions = previewSubscriptions.take(1),
+            onCancelClick = {},
+            onConfirmClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NovelNotificationDeleteDialogMultiplePreview() {
+    WebsosoTheme {
+        NovelNotificationDeleteDialog(
+            selectedSubscriptions = previewSubscriptions,
             onCancelClick = {},
             onConfirmClick = {},
         )
