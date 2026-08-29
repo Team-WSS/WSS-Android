@@ -30,12 +30,15 @@ fun NovelNotificationListScreen(
 ) {
     val uiState by viewModel.novelNotificationListUiState.collectAsStateWithLifecycle()
 
-    BackHandler {
+    // 시스템 뒤로가기와 앱바 뒤로가기는 같은 동작이므로 편집 모드 해제 분기를 공유한다
+    val onBackClick: () -> Unit = {
         when (uiState.isEditing) {
             true -> viewModel.updateEditing(false)
             false -> onBackButtonClick()
         }
     }
+
+    BackHandler { onBackClick() }
 
     NovelNotificationListScreen(
         uiState = uiState,
@@ -47,7 +50,7 @@ fun NovelNotificationListScreen(
         onDeleteDialogConfirmClick = viewModel::deleteSelectedSubscriptions,
         onSubscriptionClick = onSubscriptionClick,
         onExploreClick = onExploreClick,
-        onBackButtonClick = onBackButtonClick,
+        onBackButtonClick = onBackClick,
     )
 }
 
