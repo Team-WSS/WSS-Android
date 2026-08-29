@@ -16,6 +16,7 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.ui.novelNotification.component.NovelNotificationDeleteDialog
 import com.into.websoso.ui.novelNotification.component.NovelNotificationEmptyView
+import com.into.websoso.ui.novelNotification.component.NovelNotificationErrorView
 import com.into.websoso.ui.novelNotification.component.NovelNotificationListAppBar
 import com.into.websoso.ui.novelNotification.component.NovelNotificationSubscriptionsContainer
 import com.into.websoso.ui.novelNotification.model.NovelNotificationListUiState
@@ -77,12 +78,14 @@ private fun NovelNotificationListScreen(
             notificationType = uiState.notificationType,
             isEditing = uiState.isEditing,
             isDeletable = uiState.isDeletable,
-            isActionVisible = uiState.isEmpty.not(),
+            isActionVisible = uiState.isActionVisible,
             onBackButtonClick = onBackButtonClick,
             onEditButtonClick = onEditButtonClick,
             onDeleteButtonClick = onDeleteButtonClick,
         )
         when {
+            uiState.isErrorVisible -> NovelNotificationErrorView(onReloadClick = updateSubscriptions)
+
             uiState.isEmpty -> NovelNotificationEmptyView(onExploreClick = onExploreClick)
 
             else -> NovelNotificationSubscriptionsContainer(
@@ -168,6 +171,18 @@ private fun NovelNotificationListScreenEmptyPreview() {
         uiState = NovelNotificationListUiState(
             isInitialLoaded = true,
             isLoadable = false,
+        ),
+    )
+}
+
+@Preview
+@Composable
+private fun NovelNotificationListScreenErrorPreview() {
+    NovelNotificationListScreenPreviewContent(
+        uiState = NovelNotificationListUiState(
+            isInitialLoaded = true,
+            isLoadable = false,
+            isError = true,
         ),
     )
 }
