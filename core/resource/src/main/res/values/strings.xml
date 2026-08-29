@@ -320,6 +320,10 @@
     <string name="novel_notification_load_fail">알림 설정을 불러오지 못했어요</string>
     <string name="novel_notification_retry">다시 시도</string>
 
+    <!-- 푸시 알림 -->
+    <string name="push_notification_channel_description">웹소소 알림입니다.</string>
+    <string name="push_notification_default_body">푸시 알림 메시지입니다</string>
+
     <!-- 알림 설정 다이얼로그 뷰 -->
     <string name="notification_permission_title">앱 알림이 꺼져있어요</string>
     <string name="notification_permission_description">중요한 소식만 전해드릴게요!\n기기 설정에서 알림을 허용해주세요.</string>

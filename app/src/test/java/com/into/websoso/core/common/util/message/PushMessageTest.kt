@@ -75,12 +75,13 @@ class PushMessageTest {
         assertNull(pushMessage)
     }
 
+    // 기본 문구는 문자열 리소스라 표시 시점에 채우고, 파싱 단계에서는 없음을 그대로 남긴다
     @Test
-    fun `제목과 내용이 없으면 기본값을 사용한다`() {
+    fun `제목과 내용이 없으면 비워 둔다`() {
         val pushMessage = PushMessage.from(mapOf("notificationId" to "1"))
 
-        assertEquals(PushMessage.DEFAULT_TITLE, pushMessage?.title)
-        assertEquals(PushMessage.DEFAULT_BODY, pushMessage?.body)
+        assertNull(pushMessage?.title)
+        assertNull(pushMessage?.body)
     }
 
     companion object {
