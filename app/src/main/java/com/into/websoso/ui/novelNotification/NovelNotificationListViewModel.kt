@@ -125,8 +125,9 @@ class NovelNotificationListViewModel
                 deleteNovelNotificationSubscriptionsUseCase(
                     notificationType = notificationType,
                     novelIds = selectedNovelIds.toList(),
-                ).onSuccess {
-                    handleDeleteSuccessState(selectedNovelIds)
+                ).onSuccess { novelNotificationDeleteResult ->
+                    // 일부만 삭제된 경우에도 서버에 반영된 만큼은 목록에서 지운다
+                    handleDeleteSuccessState(novelNotificationDeleteResult.deletedNovelIds.toSet())
                 }.onFailure {
                     updateDeleteDialogVisibility(false)
                 }
