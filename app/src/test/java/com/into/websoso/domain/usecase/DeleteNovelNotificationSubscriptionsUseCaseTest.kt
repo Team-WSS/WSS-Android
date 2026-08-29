@@ -66,8 +66,7 @@ class DeleteNovelNotificationSubscriptionsUseCaseTest {
             if (failFromCall != null && deleteCallCount >= failFromCall) throw IOException()
         }
 
-        override suspend fun getNovelNotificationSetting(novelId: Long): NovelNotificationSettingResponseDto =
-            throw NotImplementedError()
+        override suspend fun getNovelNotificationSetting(novelId: Long): NovelNotificationSettingResponseDto = throw NotImplementedError()
 
         override suspend fun putNovelNotificationSetting(
             novelId: Long,
