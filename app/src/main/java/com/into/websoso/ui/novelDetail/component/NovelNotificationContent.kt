@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.util.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray70
@@ -36,6 +37,8 @@ import com.into.websoso.core.resource.R.string.novel_notification_completion_des
 import com.into.websoso.core.resource.R.string.novel_notification_completion_title
 import com.into.websoso.core.resource.R.string.novel_notification_hiatus_return_description
 import com.into.websoso.core.resource.R.string.novel_notification_hiatus_return_title
+import com.into.websoso.core.resource.R.string.novel_notification_load_fail
+import com.into.websoso.core.resource.R.string.novel_notification_retry
 import com.into.websoso.ui.novelDetail.model.NovelNotificationUiState
 
 @Composable
@@ -43,6 +46,7 @@ fun NovelNotificationContent(
     uiState: NovelNotificationUiState,
     onCompletionToggleClick: () -> Unit,
     onHiatusReturnToggleClick: () -> Unit,
+    onRetryClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val contentAlpha = when (uiState.isError) {
@@ -75,6 +79,36 @@ fun NovelNotificationContent(
             isEditable = uiState.isEditable,
             onClick = onHiatusReturnToggleClick,
             modifier = Modifier.alpha(contentAlpha),
+        )
+        // 조회에 실패하면 토글이 잠기기만 하고 빠져나갈 방법이 없으므로 재시도 경로를 준다
+        if (uiState.isError) {
+            NovelNotificationRetryRow(onRetryClick = onRetryClick)
+        }
+    }
+}
+
+@Composable
+private fun NovelNotificationRetryRow(
+    onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = CenterVertically,
+    ) {
+        Text(
+            text = stringResource(novel_notification_load_fail),
+            style = WebsosoTheme.typography.body5,
+            color = Gray200,
+            modifier = Modifier.weight(1f),
+        )
+        Text(
+            text = stringResource(novel_notification_retry),
+            style = WebsosoTheme.typography.label1,
+            color = Primary100,
+            modifier = Modifier
+                .clickableWithoutRipple { onRetryClick() }
+                .padding(vertical = 4.dp),
         )
     }
 }
@@ -170,6 +204,7 @@ private fun NovelNotificationContentPreview() {
             uiState = NovelNotificationUiState(isLoading = false),
             onCompletionToggleClick = {},
             onHiatusReturnToggleClick = {},
+            onRetryClick = {},
         )
     }
 }
@@ -185,6 +220,7 @@ private fun NovelNotificationContentPartiallyEnabledPreview() {
             ),
             onCompletionToggleClick = {},
             onHiatusReturnToggleClick = {},
+            onRetryClick = {},
         )
     }
 }
@@ -201,6 +237,7 @@ private fun NovelNotificationContentEnabledPreview() {
             ),
             onCompletionToggleClick = {},
             onHiatusReturnToggleClick = {},
+            onRetryClick = {},
         )
     }
 }
@@ -216,6 +253,7 @@ private fun NovelNotificationContentErrorPreview() {
             ),
             onCompletionToggleClick = {},
             onHiatusReturnToggleClick = {},
+            onRetryClick = {},
         )
     }
 }

@@ -36,6 +36,11 @@ class NovelNotificationViewModel
         private val saveScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
         fun updateNovelNotificationSetting(novelId: Long) {
+            _novelNotificationUiState.value = novelNotificationUiState.value.copy(
+                isLoading = true,
+                isError = false,
+            )
+
             viewModelScope.launch {
                 getNovelNotificationSettingUseCase(novelId)
                     .onSuccess { novelNotificationSetting ->
