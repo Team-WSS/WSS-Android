@@ -100,21 +100,62 @@ fun NovelNotificationSubscriptionItem(
     }
 }
 
+private val previewSubscription = NovelNotificationSubscriptionModel(
+    subscriptionId = 1,
+    novelId = 1,
+    novelTitle = "여주인공의 이해를 돕기 위하여",
+    novelAuthor = "이보라",
+    novelImage = "",
+    registeredDate = "2026.07.04",
+)
+
 @Preview
 @Composable
 private fun NovelNotificationSubscriptionItemPreview() {
     WebsosoTheme {
         NovelNotificationSubscriptionItem(
-            subscription = NovelNotificationSubscriptionModel(
-                subscriptionId = 1,
-                novelId = 1,
-                novelTitle = "여주인공의 이해를 돕기 위하여",
-                novelAuthor = "이보라",
-                novelImage = "",
-                registeredDate = "2026.07.04",
-            ),
+            subscription = previewSubscription,
+            isEditing = false,
+            isSelected = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NovelNotificationSubscriptionItemEditingPreview() {
+    WebsosoTheme {
+        NovelNotificationSubscriptionItem(
+            subscription = previewSubscription,
+            isEditing = true,
+            isSelected = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NovelNotificationSubscriptionItemSelectedPreview() {
+    WebsosoTheme {
+        NovelNotificationSubscriptionItem(
+            subscription = previewSubscription,
             isEditing = true,
             isSelected = true,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NovelNotificationSubscriptionItemLongTextPreview() {
+    WebsosoTheme {
+        NovelNotificationSubscriptionItem(
+            subscription = previewSubscription.copy(
+                novelTitle = "책 속 악녀가 되었는데 남주인공이 자꾸만 나를 따라다닌다",
+                novelAuthor = "아주 긴 필명을 가진 작가 이름입니다",
+            ),
+            isEditing = false,
+            isSelected = false,
         )
     }
 }

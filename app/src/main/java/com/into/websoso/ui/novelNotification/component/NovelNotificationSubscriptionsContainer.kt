@@ -62,12 +62,23 @@ fun NovelNotificationSubscriptionsContainer(
     }
 }
 
+private val previewSubscriptions = List(3) { index ->
+    NovelNotificationSubscriptionModel(
+        subscriptionId = index.toLong(),
+        novelId = index.toLong(),
+        novelTitle = "여주인공의 이해를 돕기 위하여 $index",
+        novelAuthor = "이보라",
+        novelImage = "",
+        registeredDate = "2026.07.04",
+    )
+}
+
 @Preview
 @Composable
 private fun NovelNotificationSubscriptionsContainerPreview() {
     WebsosoTheme {
         NovelNotificationSubscriptionsContainer(
-            subscriptions = emptyList(),
+            subscriptions = previewSubscriptions,
             selectedNovelIds = emptySet(),
             isEditing = false,
             isLoadable = false,
@@ -77,3 +88,20 @@ private fun NovelNotificationSubscriptionsContainerPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+private fun NovelNotificationSubscriptionsContainerEditingPreview() {
+    WebsosoTheme {
+        NovelNotificationSubscriptionsContainer(
+            subscriptions = previewSubscriptions,
+            selectedNovelIds = setOf(0L, 2L),
+            isEditing = true,
+            isLoadable = false,
+            updateSubscriptions = {},
+            onSubscriptionClick = {},
+            onSubscriptionSelect = {},
+        )
+    }
+}
+
