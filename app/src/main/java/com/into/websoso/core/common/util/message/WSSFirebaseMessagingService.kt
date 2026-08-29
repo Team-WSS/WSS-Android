@@ -9,6 +9,9 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.into.websoso.core.resource.R.mipmap.ic_wss_logo
+import com.into.websoso.core.resource.R.string.app_name
+import com.into.websoso.core.resource.R.string.push_notification_channel_description
+import com.into.websoso.core.resource.R.string.push_notification_default_body
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
@@ -32,7 +35,11 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
 
         setupNotificationChannel()
         val pendingIntent = createPendingIntent(pushMessage)
-        showNotification(pushMessage.title, pushMessage.body, pendingIntent)
+        showNotification(
+            title = pushMessage.title ?: getString(app_name),
+            body = pushMessage.body ?: getString(push_notification_default_body),
+            pendingIntent = pendingIntent,
+        )
     }
 
     private fun setupNotificationChannel() {
@@ -40,10 +47,10 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             CHANNEL_ID,
-            CHANNEL_NAME,
+            getString(app_name),
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
-            description = CHANNEL_DESCRIPTION
+            description = getString(push_notification_channel_description)
         }
         notificationManager.createNotificationChannel(channel)
     }
@@ -113,7 +120,5 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
 
     companion object {
         private const val CHANNEL_ID = "websoso"
-        private const val CHANNEL_NAME = "웹소소"
-        private const val CHANNEL_DESCRIPTION = "웹소소 알림입니다."
     }
 }
