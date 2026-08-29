@@ -51,8 +51,7 @@ class UpdateNovelNotificationSettingUseCaseTest {
     private class FakeNovelNotificationApi(
         private val throwable: Throwable?,
     ) : NovelNotificationApi {
-        override suspend fun getNovelNotificationSetting(novelId: Long): NovelNotificationSettingResponseDto =
-            throw NotImplementedError()
+        override suspend fun getNovelNotificationSetting(novelId: Long): NovelNotificationSettingResponseDto = throw NotImplementedError()
 
         override suspend fun putNovelNotificationSetting(
             novelId: Long,

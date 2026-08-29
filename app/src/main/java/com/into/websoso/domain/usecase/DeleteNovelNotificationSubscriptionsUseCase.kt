@@ -36,6 +36,7 @@ class DeleteNovelNotificationSubscriptionsUseCase
             } catch (e: Exception) {
                 when (deletedNovelIds.isEmpty()) {
                     true -> Result.failure(e)
+
                     false -> Result.success(
                         NovelNotificationDeleteResult(
                             deletedNovelIds = deletedNovelIds,

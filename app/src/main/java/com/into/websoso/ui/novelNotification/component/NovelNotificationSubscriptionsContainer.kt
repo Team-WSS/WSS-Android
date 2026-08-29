@@ -104,4 +104,3 @@ private fun NovelNotificationSubscriptionsContainerEditingPreview() {
         )
     }
 }
-
