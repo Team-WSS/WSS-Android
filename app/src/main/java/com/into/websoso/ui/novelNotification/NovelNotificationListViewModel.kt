@@ -32,6 +32,10 @@ class NovelNotificationListViewModel
             MutableStateFlow(NovelNotificationListUiState(notificationType = notificationType))
         val novelNotificationListUiState: StateFlow<NovelNotificationListUiState> get() = _novelNotificationListUiState
 
+        // 삭제로 목록이 비었는데 페이지 요청이 진행 중이면 isLoading 가드에 막혀 후속 조회가 사라지므로,
+        // 진행 중인 요청이 끝난 뒤 이어서 조회하도록 예약해 둔다
+        private var isRefetchPending = false
+
         init {
             updateSubscriptions()
         }
@@ -68,9 +72,21 @@ class NovelNotificationListViewModel
                 subscriptions = currentUiState.subscriptions +
                     novelNotificationSubscriptions.subscriptions.map { it.toUi() },
             )
+
+            consumeRefetchPending()
+        }
+
+        private fun consumeRefetchPending() {
+            if (isRefetchPending.not()) return
+            isRefetchPending = false
+
+            if (novelNotificationListUiState.value.subscriptions.isEmpty()) updateSubscriptions()
         }
 
         private fun handleFailureState() {
+            // 실패했을 때는 자동으로 다시 부르지 않고 오류 화면의 재시도 버튼에 맡긴다
+            isRefetchPending = false
+
             _novelNotificationListUiState.value = novelNotificationListUiState.value.copy(
                 isLoading = false,
                 isError = true,
@@ -129,6 +145,11 @@ class NovelNotificationListViewModel
             )
 
             // 로드된 항목을 모두 삭제해도 다음 페이지가 남아 있으면 빈 화면 대신 이어서 불러온다
-            if (remainedSubscriptions.isEmpty() && currentUiState.isLoadable) updateSubscriptions()
+            if (remainedSubscriptions.isEmpty() && currentUiState.isLoadable) {
+                when (currentUiState.isLoading) {
+                    true -> isRefetchPending = true
+                    false -> updateSubscriptions()
+                }
+            }
         }
     }
