@@ -31,8 +31,6 @@ class NovelNotificationViewModel
         private var syncedNovelNotificationSetting: NovelNotificationSetting = NovelNotificationSetting()
         private var saveJob: Job? = null
 
-        // 토글 직후 바텀시트를 닫으면 viewModelScope가 취소돼 저장이 유실되므로,
-        // 저장만은 ViewModel 생명주기와 분리된 스코프에서 실행한다 (onCleared에서 취소하지 않는다)
         private val saveScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
         fun updateNovelNotificationSetting(novelId: Long) {

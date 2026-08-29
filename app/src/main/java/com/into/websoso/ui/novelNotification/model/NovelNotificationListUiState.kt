@@ -16,11 +16,8 @@ data class NovelNotificationListUiState(
     val selectedNovelIds: Set<Long> = emptySet(),
     val subscriptions: List<NovelNotificationSubscriptionModel> = emptyList(),
 ) {
-    // 조회 실패도 isInitialLoaded를 true로 만들기 때문에, 오류와 로딩을 빼지 않으면
-    // 네트워크 오류나 재시도 중에 '등록한 작품이 없어요'가 잘못 노출된다
     val isEmpty: Boolean get() = isInitialLoaded && isLoading.not() && isError.not() && subscriptions.isEmpty()
 
-    // 이미 불러온 항목이 있으면 다음 페이지 실패로 목록을 지우지 않고 그대로 둔다
     val isErrorVisible: Boolean get() = isError && subscriptions.isEmpty()
 
     val isActionVisible: Boolean get() = subscriptions.isNotEmpty()

@@ -32,8 +32,6 @@ class NovelNotificationListViewModel
             MutableStateFlow(NovelNotificationListUiState(notificationType = notificationType))
         val novelNotificationListUiState: StateFlow<NovelNotificationListUiState> get() = _novelNotificationListUiState
 
-        // 삭제로 목록이 비었는데 페이지 요청이 진행 중이면 isLoading 가드에 막혀 후속 조회가 사라지므로,
-        // 진행 중인 요청이 끝난 뒤 이어서 조회하도록 예약해 둔다
         private var isRefetchPending = false
 
         init {
@@ -84,7 +82,6 @@ class NovelNotificationListViewModel
         }
 
         private fun handleFailureState() {
-            // 실패했을 때는 자동으로 다시 부르지 않고 오류 화면의 재시도 버튼에 맡긴다
             isRefetchPending = false
 
             _novelNotificationListUiState.value = novelNotificationListUiState.value.copy(
@@ -126,7 +123,6 @@ class NovelNotificationListViewModel
                     notificationType = notificationType,
                     novelIds = selectedNovelIds.toList(),
                 ).onSuccess { novelNotificationDeleteResult ->
-                    // 일부만 삭제된 경우에도 서버에 반영된 만큼은 목록에서 지운다
                     handleDeleteSuccessState(novelNotificationDeleteResult.deletedNovelIds.toSet())
                 }.onFailure {
                     updateDeleteDialogVisibility(false)

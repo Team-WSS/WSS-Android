@@ -32,13 +32,10 @@ class DeleteNovelNotificationSubscriptionsUseCase
                     ),
                 )
             } catch (e: CancellationException) {
-                // 취소는 실패가 아니므로 Result로 감싸지 않고 그대로 전파한다
                 throw e
             } catch (e: Exception) {
                 when (deletedNovelIds.isEmpty()) {
-                    // 하나도 지우지 못했으면 기존과 같이 실패로 다룬다
                     true -> Result.failure(e)
-                    // 앞쪽 요청이 이미 서버에 반영됐으므로 그만큼은 화면에서도 지워야 한다
                     false -> Result.success(
                         NovelNotificationDeleteResult(
                             deletedNovelIds = deletedNovelIds,

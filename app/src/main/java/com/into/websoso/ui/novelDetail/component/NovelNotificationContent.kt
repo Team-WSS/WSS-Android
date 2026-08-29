@@ -80,7 +80,6 @@ fun NovelNotificationContent(
             onClick = onHiatusReturnToggleClick,
             modifier = Modifier.alpha(contentAlpha),
         )
-        // 조회에 실패하면 토글이 잠기기만 하고 빠져나갈 방법이 없으므로 재시도 경로를 준다
         if (uiState.isError) {
             NovelNotificationRetryRow(onRetryClick = onRetryClick)
         }
