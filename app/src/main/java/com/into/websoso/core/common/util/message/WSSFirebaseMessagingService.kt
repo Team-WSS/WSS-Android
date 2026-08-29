@@ -62,6 +62,7 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
             PushDestination.NOVEL -> NovelDetailActivity.getIntent(
                 this,
                 requireNotNull(pushMessage.novelId),
+                notificationId,
             )
 
             PushDestination.NOTIFICATION_DETAIL -> NotificationDetailActivity.getIntent(

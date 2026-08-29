@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.UserNovelRepository
 import com.into.websoso.data.repository.UserRepository
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class NovelDetailViewModel
     @Inject
     constructor(
+        private val notificationRepository: NotificationRepository,
         private val novelRepository: NovelRepository,
         private val userNovelRepository: UserNovelRepository,
         private val userRepository: UserRepository,
@@ -136,5 +138,16 @@ class NovelDetailViewModel
                     novelGenreImage = genreImage,
                 ) ?: return,
             )
+        }
+
+        fun updateNotificationRead(notificationId: Long) {
+            if (notificationId == DEFAULT_NOTIFICATION_ID) return
+            viewModelScope.launch {
+                runCatching { notificationRepository.fetchNotificationRead(notificationId) }
+            }
+        }
+
+        companion object {
+            const val DEFAULT_NOTIFICATION_ID: Long = -1
         }
     }

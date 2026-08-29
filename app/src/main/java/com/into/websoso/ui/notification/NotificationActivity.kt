@@ -115,7 +115,7 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun navigateToNovelDetail(notification: NotificationModel) {
         notificationViewModel.updateReadNotification(notification.id)
-        startActivity(NovelDetailActivity.getIntent(this, notification.intrinsicId))
+        startActivity(NovelDetailActivity.getIntent(this, notification.intrinsicId, notification.id))
     }
 
     companion object {
