@@ -15,8 +15,6 @@ import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
 
 class UpdateNovelNotificationSettingUseCaseTest {
-    // 저장 요청이 취소되면 ViewModel의 onFailure가 실행돼 사용자가 방금 바꾼 토글이 되돌아가므로,
-    // 취소는 Result.failure가 아니라 예외 전파로 남아야 한다
     @Test
     fun `저장이 취소되면 CancellationException을 그대로 전파한다`() {
         val useCase = UpdateNovelNotificationSettingUseCase(

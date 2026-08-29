@@ -17,7 +17,6 @@ class GetNovelNotificationSettingUseCase
                     novelNotificationRepository.fetchNovelNotificationSetting(novelId).toDomain(),
                 )
             } catch (e: CancellationException) {
-                // 취소는 실패가 아니므로 Result로 감싸지 않고 그대로 전파한다
                 throw e
             } catch (e: Exception) {
                 Result.failure(e)

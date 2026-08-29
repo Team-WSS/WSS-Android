@@ -31,7 +31,6 @@ fun NovelNotificationListScreen(
 ) {
     val uiState by viewModel.novelNotificationListUiState.collectAsStateWithLifecycle()
 
-    // 시스템 뒤로가기와 앱바 뒤로가기는 같은 동작이므로 편집 모드 해제 분기를 공유한다
     val onBackClick: () -> Unit = {
         when (uiState.isEditing) {
             true -> viewModel.updateEditing(false)

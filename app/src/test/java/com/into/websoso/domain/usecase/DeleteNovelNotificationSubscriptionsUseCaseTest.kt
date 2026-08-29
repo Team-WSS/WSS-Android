@@ -28,7 +28,6 @@ class DeleteNovelNotificationSubscriptionsUseCaseTest {
         assertEquals(2, api.deleteCallCount)
     }
 
-    // 앞쪽 100개가 이미 서버에서 지워졌는데 전체를 실패로 돌리면 화면에 계속 남는다
     @Test
     fun `두 번째 요청이 실패하면 먼저 삭제된 항목만 돌려준다`() {
         val api = FakeNovelNotificationApi(failFromCall = 2)
