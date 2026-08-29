@@ -53,6 +53,9 @@ class NovelNotificationBottomSheetDialog : BottomSheetDialogFragment() {
                                 isEnabled = uiState.isHiatusReturnNotificationEnabled.not(),
                             )
                         },
+                        onRetryClick = {
+                            novelNotificationViewModel.updateNovelNotificationSetting(novelId)
+                        },
                     )
                 }
             }

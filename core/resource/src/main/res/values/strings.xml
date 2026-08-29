@@ -317,6 +317,8 @@
     <string name="novel_notification_delete_dialog_message_multiple">%1$s 외 %2$d작품</string>
     <string name="novel_notification_delete_dialog_cancel">취소</string>
     <string name="novel_notification_delete_dialog_confirm">삭제</string>
+    <string name="novel_notification_load_fail">알림 설정을 불러오지 못했어요</string>
+    <string name="novel_notification_retry">다시 시도</string>
 
     <!-- 알림 설정 다이얼로그 뷰 -->
     <string name="notification_permission_title">앱 알림이 꺼져있어요</string>
