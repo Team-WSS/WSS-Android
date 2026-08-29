@@ -27,7 +27,7 @@ fun NovelNotificationSubscriptionsContainer(
 ) {
     val listState = rememberLazyListState()
 
-    LaunchedEffect(listState, isLoadable) {
+    LaunchedEffect(listState, isLoadable, subscriptions.size) {
         snapshotFlow {
             listState.layoutInfo.visibleItemsInfo
                 .lastOrNull()
