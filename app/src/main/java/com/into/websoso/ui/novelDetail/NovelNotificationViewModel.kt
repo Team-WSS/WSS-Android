@@ -7,7 +7,10 @@ import com.into.websoso.domain.usecase.GetNovelNotificationSettingUseCase
 import com.into.websoso.domain.usecase.UpdateNovelNotificationSettingUseCase
 import com.into.websoso.ui.novelDetail.model.NovelNotificationUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +30,10 @@ class NovelNotificationViewModel
 
         private var syncedNovelNotificationSetting: NovelNotificationSetting = NovelNotificationSetting()
         private var saveJob: Job? = null
+
+        // 토글 직후 바텀시트를 닫으면 viewModelScope가 취소돼 저장이 유실되므로,
+        // 저장만은 ViewModel 생명주기와 분리된 스코프에서 실행한다 (onCleared에서 취소하지 않는다)
+        private val saveScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
         fun updateNovelNotificationSetting(novelId: Long) {
             viewModelScope.launch {
@@ -76,7 +83,7 @@ class NovelNotificationViewModel
 
         private fun saveNovelNotificationSetting(novelId: Long) {
             saveJob?.cancel()
-            saveJob = viewModelScope.launch {
+            saveJob = saveScope.launch {
                 delay(SAVE_DEBOUNCE_MILLIS)
 
                 val requestedNovelNotificationSetting = NovelNotificationSetting(
