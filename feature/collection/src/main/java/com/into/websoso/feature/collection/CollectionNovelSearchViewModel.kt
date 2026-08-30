@@ -50,7 +50,7 @@ internal class CollectionNovelSearchViewModel
         fun addNovel(novel: NovelSearchEntity) {
             if (_selectedNovels.value.any { it.novelId == novel.novelId }) return
 
-            _selectedNovels.value += novel.toSelectedNovel()
+            _selectedNovels.value = listOf(novel.toSelectedNovel()) + _selectedNovels.value
             _representativeNovelId.value = novel.novelId
         }
 
@@ -59,7 +59,7 @@ internal class CollectionNovelSearchViewModel
             _selectedNovels.value = remainingNovels
 
             if (_representativeNovelId.value == novelId) {
-                _representativeNovelId.value = remainingNovels.lastOrNull()?.novelId
+                _representativeNovelId.value = remainingNovels.firstOrNull()?.novelId
             }
         }
 
@@ -71,7 +71,7 @@ internal class CollectionNovelSearchViewModel
             _selectedNovels.value = novels
 
             if (!onlyRemovedNovels || _representativeNovelId.value !in selectedNovelIds) {
-                _representativeNovelId.value = novelIds.lastOrNull()
+                _representativeNovelId.value = novelIds.firstOrNull()
             }
         }
 

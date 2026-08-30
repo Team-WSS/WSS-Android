@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -94,7 +96,7 @@ internal fun CollectionNovelSection(
                 modifier = Modifier.selectableGroup(),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                (listOf<CollectionSelectedNovel?>(null) + selectedNovels.asReversed())
+                (listOf<CollectionSelectedNovel?>(null) + selectedNovels)
                     .chunked(3)
                     .forEach { rowItems ->
                         Row(
@@ -213,21 +215,34 @@ private fun CollectionNovelItem(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(8.dp)
-                    .height(18.dp)
+                    .size(
+                        width = if (isRepresentative) 40.dp else 32.dp,
+                        height = 18.dp,
+                    )
                     .background(
                         color = if (isRepresentative) Primary100 else Gray100,
                         shape = RoundedCornerShape(4.dp),
-                    ).padding(horizontal = 6.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    ),
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 2.dp,
+                    alignment = Alignment.CenterHorizontally,
+                ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (isRepresentative) {
-                    Icon(
-                        painter = painterResource(id = ic_library_sort_check),
-                        contentDescription = null,
-                        tint = White,
-                        modifier = Modifier.size(10.dp),
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(width = 8.4.dp, height = 6.dp)
+                            .offset(y = (-0.5).dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = ic_library_sort_check),
+                            contentDescription = null,
+                            tint = White,
+                            modifier = Modifier.requiredSize(14.4.dp),
+                        )
+                    }
                 }
                 Text(
                     text = stringResource(collection_create_representative),
