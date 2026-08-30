@@ -110,6 +110,10 @@ internal fun CollectionNovelSearchScreen(
     val searchFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val selectedNovelIds = selectedNovels.mapTo(mutableSetOf()) { it.novelId }
+    val isInitialLoading =
+        submittedQuery.isNotBlank() &&
+            searchResults.itemCount == 0 &&
+            searchResults.loadState.refresh is LoadState.Loading
 
     LaunchedEffect(Unit) {
         searchFocusRequester.requestFocus()
@@ -169,9 +173,7 @@ internal fun CollectionNovelSearchScreen(
                     )
                 }
 
-                submittedQuery.isNotBlank() &&
-                    searchResults.itemCount == 0 &&
-                    searchResults.loadState.refresh is LoadState.Loading -> {
+                isInitialLoading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
