@@ -218,8 +218,7 @@ private fun CollectionNovelItem(
                     .size(
                         width = if (isRepresentative) 40.dp else 32.dp,
                         height = 18.dp,
-                    )
-                    .background(
+                    ).background(
                         color = if (isRepresentative) Primary100 else Gray100,
                         shape = RoundedCornerShape(4.dp),
                     ),
