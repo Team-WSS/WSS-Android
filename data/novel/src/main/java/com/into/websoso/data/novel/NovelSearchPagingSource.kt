@@ -3,13 +3,14 @@ package com.into.websoso.data.novel
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.into.websoso.data.novel.model.NovelSearchEntity
+import kotlin.coroutines.cancellation.CancellationException
 
 internal class NovelSearchPagingSource(
     private val query: String,
     private val api: NovelSearchApi,
 ) : PagingSource<Int, NovelSearchEntity>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NovelSearchEntity> =
-        runCatching {
+        try {
             val page = params.key ?: INITIAL_PAGE
             val response = api.getNovels(
                 query = query,
@@ -22,7 +23,11 @@ internal class NovelSearchPagingSource(
                 prevKey = page.takeIf { it > INITIAL_PAGE }?.minus(1),
                 nextKey = (page + 1).takeIf { response.isLoadable },
             )
-        }.getOrElse(LoadResult<Int, NovelSearchEntity>::Error)
+        } catch (exception: CancellationException) {
+            throw exception
+        } catch (exception: Exception) {
+            LoadResult.Error(exception)
+        }
 
     override fun getRefreshKey(state: PagingState<Int, NovelSearchEntity>): Int? =
         state.anchorPosition?.let { anchorPosition ->
