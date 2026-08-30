@@ -1,5 +1,7 @@
 package com.into.websoso.ui.detailExplore.component
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -16,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -43,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel
 import com.into.websoso.core.common.ui.model.CategoriesModel.CategoryModel.KeywordModel
@@ -68,6 +70,10 @@ import com.into.websoso.core.resource.R.string.detail_explore_keyword_search_res
 import com.into.websoso.core.resource.R.string.detail_explore_search_hint
 import com.into.websoso.ui.detailExplore.DetailExploreViewModel
 import com.into.websoso.ui.detailExplore.keyword.model.DetailExploreKeywordUiState
+
+private val SEARCH_FIELD_BUTTON_SIZE = 36.dp
+private val CLEAR_ICON_SIZE = 18.dp
+private val SEARCH_ICON_SIZE = 25.dp
 
 @Composable
 fun DetailExploreKeywordTab(
@@ -148,10 +154,10 @@ private fun KeywordSearchField(
         modifier = Modifier
             .padding(horizontal = 20.dp, vertical = 12.dp)
             .fillMaxWidth()
-            .height(44.dp)
+            .height(42.dp)
             .clip(RoundedCornerShape(14.dp))
             .background(Gray50)
-            .padding(horizontal = 14.dp),
+            .padding(start = 16.dp, end = 10.dp),
         contentAlignment = Alignment.CenterStart,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -174,23 +180,38 @@ private fun KeywordSearchField(
                 }
             }
             if (value.text.isNotEmpty()) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = ic_common_search_clear),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(18.dp)
-                        .clickableWithoutRipple(onClick = onClear),
+                KeywordSearchFieldButton(
+                    iconResId = ic_common_search_clear,
+                    iconSize = CLEAR_ICON_SIZE,
+                    onClick = onClear,
                 )
-                Spacer(modifier = Modifier.width(8.dp))
             }
-            androidx.compose.foundation.Image(
-                painter = painterResource(id = ic_common_search),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(20.dp)
-                    .clickableWithoutRipple(onClick = onSearch),
+            KeywordSearchFieldButton(
+                iconResId = ic_common_search,
+                iconSize = SEARCH_ICON_SIZE,
+                onClick = onSearch,
             )
         }
+    }
+}
+
+@Composable
+private fun KeywordSearchFieldButton(
+    @DrawableRes iconResId: Int,
+    iconSize: Dp,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .size(SEARCH_FIELD_BUTTON_SIZE)
+            .clickableWithoutRipple(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(id = iconResId),
+            contentDescription = null,
+            modifier = Modifier.size(iconSize),
+        )
     }
 }
 
