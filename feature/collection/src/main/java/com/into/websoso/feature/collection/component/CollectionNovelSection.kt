@@ -34,6 +34,7 @@ import com.into.websoso.core.resource.R.string.collection_create_novel_list
 
 @Composable
 internal fun CollectionNovelSection(
+    novelCount: Int,
     onAddNovelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -58,7 +59,7 @@ internal fun CollectionNovelSection(
                 style = WebsosoTheme.typography.title2,
             )
             Text(
-                text = stringResource(collection_create_count, 0, 100),
+                text = stringResource(collection_create_count, novelCount, 100),
                 color = Gray200,
                 style = WebsosoTheme.typography.body3,
             )
@@ -97,6 +98,9 @@ internal fun CollectionNovelSection(
 @Composable
 private fun CollectionNovelSectionPreview() {
     WebsosoTheme {
-        CollectionNovelSection(onAddNovelClick = {})
+        CollectionNovelSection(
+            novelCount = 0,
+            onAddNovelClick = {},
+        )
     }
 }

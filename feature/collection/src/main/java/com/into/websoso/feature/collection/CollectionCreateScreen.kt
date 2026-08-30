@@ -66,6 +66,7 @@ internal fun CollectionCreateScreen(
             ),
         )
         CollectionNovelSection(
+            novelCount = selectedNovels.size,
             onAddNovelClick = onNavigateToNovelSearch,
             modifier = Modifier.padding(
                 start = 20.dp,
