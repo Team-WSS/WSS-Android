@@ -1,4 +1,4 @@
-package com.into.websoso.feature.collection
+package com.into.websoso.feature.collection.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
