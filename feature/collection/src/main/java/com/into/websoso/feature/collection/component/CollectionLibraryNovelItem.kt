@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
@@ -87,7 +88,7 @@ internal fun CollectionLibraryNovelItem(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = readStatus.label,
+                        text = stringResource(readStatus.labelRes),
                         color = White,
                         style = WebsosoTheme.typography.label2,
                     )
@@ -152,13 +153,6 @@ internal fun CollectionLibraryNovelItem(
         }
     }
 }
-
-private val CollectionLibraryReadStatus.label: String
-    get() = when (this) {
-        CollectionLibraryReadStatus.WATCHING -> "보는 중"
-        CollectionLibraryReadStatus.WATCHED -> "봤어요"
-        CollectionLibraryReadStatus.QUIT -> "하차"
-    }
 
 private val CollectionLibraryReadStatus.backgroundColor: Color
     get() = when (this) {
