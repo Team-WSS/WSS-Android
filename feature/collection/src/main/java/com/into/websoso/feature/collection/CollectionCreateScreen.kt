@@ -46,6 +46,7 @@ internal fun CollectionCreateScreen(
         CollectionAppBar(
             actionLabel = "완료",
             onNavigateBack = onNavigateBack,
+            isActionEnabled = collectionName.isNotBlank() && selectedNovels.isNotEmpty(),
         )
         Column(
             modifier = Modifier
