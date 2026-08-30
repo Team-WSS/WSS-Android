@@ -5,6 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,14 +17,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray50
@@ -30,16 +36,18 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_plus_novel
 import com.into.websoso.core.resource.R.string.collection_create_add_novel
 import com.into.websoso.core.resource.R.string.collection_create_count
+import com.into.websoso.core.resource.R.string.collection_create_edit_novel
 import com.into.websoso.core.resource.R.string.collection_create_novel_list
+import com.into.websoso.feature.collection.model.CollectionSelectedNovel
 
 @Composable
 internal fun CollectionNovelSection(
-    novelCount: Int,
+    selectedNovels: List<CollectionSelectedNovel>,
     onAddNovelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val addCardShape = RoundedCornerShape(8.dp)
     val novelList = stringResource(collection_create_novel_list)
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -59,38 +67,115 @@ internal fun CollectionNovelSection(
                 style = WebsosoTheme.typography.title2,
             )
             Text(
-                text = stringResource(collection_create_count, novelCount, 100),
+                text = stringResource(collection_create_count, selectedNovels.size, 100),
                 color = Gray200,
                 style = WebsosoTheme.typography.body3,
             )
         }
-        Column(
-            modifier = Modifier
-                .size(width = 103.dp, height = 160.dp)
-                .clip(addCardShape)
-                .background(
-                    color = Gray50,
-                    shape = addCardShape,
-                ).clickable(
-                    onClick = onAddNovelClick,
-                    role = Role.Button,
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = stringResource(collection_create_add_novel),
-                color = Gray200,
-                style = WebsosoTheme.typography.title4,
-                modifier = Modifier.padding(bottom = 4.dp),
+        if (selectedNovels.isEmpty()) {
+            CollectionNovelEditCard(
+                label = stringResource(collection_create_add_novel),
+                onClick = onAddNovelClick,
+                modifier = Modifier.size(width = 103.dp, height = 160.dp),
             )
-            Icon(
-                painter = painterResource(id = ic_plus_novel),
-                contentDescription = null,
-                tint = Gray200,
-                modifier = Modifier.size(24.dp),
-            )
+        } else {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                (listOf<CollectionSelectedNovel?>(null) + selectedNovels)
+                    .chunked(3)
+                    .forEach { rowItems ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            rowItems.forEach { novel ->
+                                if (novel == null) {
+                                    CollectionNovelEditCard(
+                                        label = stringResource(collection_create_edit_novel),
+                                        onClick = onAddNovelClick,
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .height(156.dp),
+                                    )
+                                } else {
+                                    CollectionNovelItem(
+                                        novel = novel,
+                                        modifier = Modifier.weight(1f),
+                                    )
+                                }
+                            }
+                            repeat(3 - rowItems.size) {
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
+                        }
+                    }
+            }
         }
+    }
+}
+
+@Composable
+private fun CollectionNovelEditCard(
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val shape = RoundedCornerShape(8.dp)
+
+    Column(
+        modifier = modifier
+            .clip(shape)
+            .background(
+                color = Gray50,
+                shape = shape,
+            ).clickable(
+                onClick = onClick,
+                role = Role.Button,
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = label,
+            color = Gray200,
+            style = WebsosoTheme.typography.title4,
+            modifier = Modifier.padding(bottom = 4.dp),
+        )
+        Icon(
+            painter = painterResource(id = ic_plus_novel),
+            contentDescription = null,
+            tint = Gray200,
+            modifier = Modifier.size(24.dp),
+        )
+    }
+}
+
+@Composable
+private fun CollectionNovelItem(
+    novel: CollectionSelectedNovel,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        NetworkImage(
+            imageUrl = novel.imageUrl,
+            contentDescription = novel.title,
+            contentScale = ContentScale.Crop,
+            // TODO: 기획·디자인 확인 후 Alignment.Center 적용 여부 재검토
+            alignment = Alignment.BottomCenter,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(156.dp)
+                .clip(RoundedCornerShape(8.dp)),
+        )
+        Text(
+            text = novel.title,
+            color = Black,
+            style = WebsosoTheme.typography.body4,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -99,7 +184,7 @@ internal fun CollectionNovelSection(
 private fun CollectionNovelSectionPreview() {
     WebsosoTheme {
         CollectionNovelSection(
-            novelCount = 0,
+            selectedNovels = emptyList(),
             onAddNovelClick = {},
         )
     }

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,37 +45,44 @@ internal fun CollectionCreateScreen(
             actionLabel = "완료",
             onNavigateBack = onNavigateBack,
         )
-        CollectionPrivacySetting(
-            isPrivate = isPrivate,
-            onPrivateChange = { isPrivate = it },
-        )
-        CollectionNameInput(
-            value = collectionName,
-            onValueChange = { collectionName = it },
-            modifier = Modifier.padding(
-                start = 20.dp,
-                top = 20.dp,
-                end = 20.dp,
-            ),
-        )
-        CollectionDescriptionInput(
-            value = collectionDescription,
-            onValueChange = { collectionDescription = it },
-            modifier = Modifier.padding(
-                start = 20.dp,
-                top = 30.dp,
-                end = 20.dp,
-            ),
-        )
-        CollectionNovelSection(
-            novelCount = selectedNovels.size,
-            onAddNovelClick = onNavigateToNovelSearch,
-            modifier = Modifier.padding(
-                start = 20.dp,
-                top = 30.dp,
-                end = 20.dp,
-            ),
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            CollectionPrivacySetting(
+                isPrivate = isPrivate,
+                onPrivateChange = { isPrivate = it },
+            )
+            CollectionNameInput(
+                value = collectionName,
+                onValueChange = { collectionName = it },
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    top = 20.dp,
+                    end = 20.dp,
+                ),
+            )
+            CollectionDescriptionInput(
+                value = collectionDescription,
+                onValueChange = { collectionDescription = it },
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    top = 30.dp,
+                    end = 20.dp,
+                ),
+            )
+            CollectionNovelSection(
+                selectedNovels = selectedNovels,
+                onAddNovelClick = onNavigateToNovelSearch,
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    top = 30.dp,
+                    end = 20.dp,
+                    bottom = 20.dp,
+                ),
+            )
+        }
     }
 }
 
