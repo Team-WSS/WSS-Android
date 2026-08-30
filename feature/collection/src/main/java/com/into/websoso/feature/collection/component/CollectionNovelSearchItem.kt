@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.component.NetworkImage
@@ -32,6 +33,8 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R.drawable.ic_collection_novel_add
 import com.into.websoso.core.resource.R.drawable.ic_collection_novel_delete
+import com.into.websoso.core.resource.R.string.collection_create_add
+import com.into.websoso.core.resource.R.string.collection_create_delete
 import com.into.websoso.data.novel.model.NovelSearchEntity
 import com.into.websoso.feature.collection.model.CollectionSelectedNovel
 
@@ -40,7 +43,7 @@ internal fun CollectionNovelSearchItem(
     title: String,
     author: String,
     imageUrl: String,
-    actionLabel: String,
+    isAdd: Boolean,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -79,7 +82,6 @@ internal fun CollectionNovelSearchItem(
             }
         }
         Spacer(modifier = Modifier.width(16.dp))
-        val isAdd = actionLabel == "추가"
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(22.dp))
@@ -99,7 +101,7 @@ internal fun CollectionNovelSearchItem(
                     modifier = Modifier.size(12.dp),
                 )
                 Text(
-                    text = actionLabel,
+                    text = stringResource(if (isAdd) collection_create_add else collection_create_delete),
                     color = if (isAdd) White else Secondary100,
                     style = WebsosoTheme.typography.body5,
                 )
@@ -118,7 +120,7 @@ internal fun CollectionNovelSearchItem(
         title = novel.title,
         author = novel.author,
         imageUrl = novel.imageUrl,
-        actionLabel = "추가",
+        isAdd = true,
         onActionClick = onAddClick,
         modifier = modifier,
     )
@@ -134,7 +136,7 @@ internal fun CollectionSelectedNovelItem(
         title = novel.title,
         author = novel.author,
         imageUrl = novel.imageUrl,
-        actionLabel = "삭제",
+        isAdd = false,
         onActionClick = onDeleteClick,
         modifier = modifier,
     )
