@@ -66,10 +66,10 @@ internal fun CollectionNovelSection(
         Column(
             modifier = Modifier
                 .size(width = 103.dp, height = 160.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(addCardShape)
                 .background(
                     color = Gray50,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = addCardShape,
                 ).clickable(
                     onClick = onAddNovelClick,
                     role = Role.Button,
