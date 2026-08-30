@@ -49,6 +49,8 @@ import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R.drawable.ic_explore_not_exist_result
+import com.into.websoso.core.resource.R.string.collection_create_complete
+import com.into.websoso.core.resource.R.string.collection_create_novel_list
 import com.into.websoso.core.resource.R.string.normal_explore_add_novel_inquire
 import com.into.websoso.core.resource.R.string.normal_explore_not_exist_result
 import com.into.websoso.core.resource.R.string.novel_inquire_link
@@ -121,8 +123,8 @@ internal fun CollectionNovelSearchScreen(
             .statusBarsPadding(),
     ) {
         CollectionAppBar(
-            title = "작품 리스트",
-            actionLabel = "완료",
+            title = stringResource(collection_create_novel_list),
+            actionLabel = stringResource(collection_create_complete),
             onNavigateBack = onNavigateBack,
             onActionClick = onNavigateBack,
             isActionEnabled = selectedNovels.isNotEmpty(),

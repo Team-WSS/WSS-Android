@@ -459,6 +459,12 @@
     <string name="collection_create_description_hint">컬렉션에 관련한 설명을 간단하게 작성해주세요</string>
     <string name="collection_create_novel_list">작품 리스트</string>
     <string name="collection_create_add_novel">작품 추가</string>
+    <string name="collection_create_add">추가</string>
+    <string name="collection_create_delete">삭제</string>
+    <string name="collection_create_added_novels">추가한 작품</string>
+    <string name="collection_create_added_novel_count">%1$d개</string>
+    <string name="collection_create_add_from_library">서재에서 추가</string>
+    <string name="collection_create_search_hint">작품 제목, 작가를 검색하세요</string>
     <string name="collection_create_count">(%1$d/%2$d)</string>
     <string name="collection_read_status_watching">보는 중</string>
     <string name="collection_read_status_watched">봤어요</string>

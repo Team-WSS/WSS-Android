@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,6 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R.string.collection_create_add_from_library
+import com.into.websoso.core.resource.R.string.collection_create_added_novel_count
+import com.into.websoso.core.resource.R.string.collection_create_added_novels
 
 @Composable
 internal fun CollectionNovelSelectionInfo(
@@ -32,18 +36,18 @@ internal fun CollectionNovelSelectionInfo(
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
-                text = "추가한 작품",
+                text = stringResource(collection_create_added_novels),
                 color = Gray200,
                 style = WebsosoTheme.typography.body4,
             )
             Text(
-                text = "${addedNovelCount}개",
+                text = stringResource(collection_create_added_novel_count, addedNovelCount),
                 color = Primary100,
                 style = WebsosoTheme.typography.body4,
             )
         }
         Text(
-            text = "서재에서 추가",
+            text = stringResource(collection_create_add_from_library),
             color = Gray200,
             style = WebsosoTheme.typography.body4.copy(
                 textDecoration = TextDecoration.Underline,

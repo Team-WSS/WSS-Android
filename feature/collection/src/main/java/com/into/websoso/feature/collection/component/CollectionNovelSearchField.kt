@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -35,6 +36,7 @@ import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_common_search
 import com.into.websoso.core.resource.R.drawable.ic_common_search_clear
+import com.into.websoso.core.resource.R.string.collection_create_search_hint
 
 @Composable
 internal fun CollectionNovelSearchField(
@@ -74,7 +76,7 @@ internal fun CollectionNovelSearchField(
                 Box {
                     if (value.text.isEmpty()) {
                         Text(
-                            text = "작품 제목, 작가를 검색하세요",
+                            text = stringResource(collection_create_search_hint),
                             color = Gray100,
                             style = WebsosoTheme.typography.body4,
                         )
@@ -90,7 +92,7 @@ internal fun CollectionNovelSearchField(
             ) {
                 Image(
                     painter = painterResource(id = ic_common_search_clear),
-                    contentDescription = "검색어 지우기",
+                    contentDescription = null,
                     modifier = Modifier.size(36.dp),
                 )
             }
@@ -106,7 +108,7 @@ internal fun CollectionNovelSearchField(
         ) {
             Image(
                 painter = painterResource(id = ic_common_search),
-                contentDescription = "작품 검색",
+                contentDescription = null,
                 modifier = Modifier.size(width = 25.dp, height = 26.dp),
             )
         }
