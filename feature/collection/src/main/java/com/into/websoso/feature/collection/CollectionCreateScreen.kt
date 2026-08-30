@@ -20,9 +20,11 @@ import com.into.websoso.feature.collection.component.CollectionDescriptionInput
 import com.into.websoso.feature.collection.component.CollectionNameInput
 import com.into.websoso.feature.collection.component.CollectionNovelSection
 import com.into.websoso.feature.collection.component.CollectionPrivacySetting
+import com.into.websoso.feature.collection.model.CollectionSelectedNovel
 
 @Composable
 internal fun CollectionCreateScreen(
+    selectedNovels: List<CollectionSelectedNovel>,
     onNavigateBack: () -> Unit,
     onNavigateToNovelSearch: () -> Unit,
     modifier: Modifier = Modifier,
@@ -79,6 +81,7 @@ internal fun CollectionCreateScreen(
 private fun CollectionCreateScreenPreview() {
     WebsosoTheme {
         CollectionCreateScreen(
+            selectedNovels = emptyList(),
             onNavigateBack = {},
             onNavigateToNovelSearch = {},
         )
