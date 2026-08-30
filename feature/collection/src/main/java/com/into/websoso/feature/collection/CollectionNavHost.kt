@@ -39,9 +39,13 @@ fun CollectionNavHost(
         composable(route = COLLECTION_CREATE_ROUTE) { backStackEntry ->
             val novelSearchViewModel: CollectionNovelSearchViewModel = hiltViewModel(backStackEntry)
             val selectedNovels by novelSearchViewModel.selectedNovels.collectAsStateWithLifecycle()
+            val representativeNovelId by
+                novelSearchViewModel.representativeNovelId.collectAsStateWithLifecycle()
 
             CollectionCreateScreen(
                 selectedNovels = selectedNovels,
+                representativeNovelId = representativeNovelId,
+                onRepresentativeNovelClick = novelSearchViewModel::updateRepresentativeNovel,
                 onNavigateBack = navController::popBackStack,
                 onNavigateToNovelSearch = {
                     navController.navigate(COLLECTION_NOVEL_SEARCH_ROUTE)

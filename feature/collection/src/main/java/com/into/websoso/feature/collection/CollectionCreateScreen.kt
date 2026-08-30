@@ -27,6 +27,8 @@ import com.into.websoso.feature.collection.model.CollectionSelectedNovel
 @Composable
 internal fun CollectionCreateScreen(
     selectedNovels: List<CollectionSelectedNovel>,
+    representativeNovelId: Long?,
+    onRepresentativeNovelClick: (Long) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToNovelSearch: () -> Unit,
     modifier: Modifier = Modifier,
@@ -74,6 +76,8 @@ internal fun CollectionCreateScreen(
             )
             CollectionNovelSection(
                 selectedNovels = selectedNovels,
+                representativeNovelId = representativeNovelId,
+                onRepresentativeNovelClick = onRepresentativeNovelClick,
                 onAddNovelClick = onNavigateToNovelSearch,
                 modifier = Modifier.padding(
                     start = 20.dp,
@@ -92,6 +96,8 @@ private fun CollectionCreateScreenPreview() {
     WebsosoTheme {
         CollectionCreateScreen(
             selectedNovels = emptyList(),
+            representativeNovelId = null,
+            onRepresentativeNovelClick = {},
             onNavigateBack = {},
             onNavigateToNovelSearch = {},
         )

@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +28,9 @@ internal class CollectionNovelSearchViewModel
 
         private val _selectedNovels = MutableStateFlow<List<CollectionSelectedNovel>>(emptyList())
         val selectedNovels: StateFlow<List<CollectionSelectedNovel>> = _selectedNovels.asStateFlow()
+
+        private val _representativeNovelId = MutableStateFlow<Long?>(null)
+        val representativeNovelId: StateFlow<Long?> = _representativeNovelId.asStateFlow()
 
         @OptIn(ExperimentalCoroutinesApi::class)
         val searchResults: Flow<PagingData<NovelSearchEntity>> =
@@ -46,23 +48,37 @@ internal class CollectionNovelSearchViewModel
         }
 
         fun addNovel(novel: NovelSearchEntity) {
-            _selectedNovels.update { selectedNovels ->
-                if (selectedNovels.any { it.novelId == novel.novelId }) {
-                    selectedNovels
-                } else {
-                    selectedNovels + novel.toSelectedNovel()
-                }
-            }
+            if (_selectedNovels.value.any { it.novelId == novel.novelId }) return
+
+            _selectedNovels.value += novel.toSelectedNovel()
+            _representativeNovelId.value = novel.novelId
         }
 
         fun removeNovel(novelId: Long) {
-            _selectedNovels.update { selectedNovels ->
-                selectedNovels.filterNot { it.novelId == novelId }
+            val remainingNovels = _selectedNovels.value.filterNot { it.novelId == novelId }
+            _selectedNovels.value = remainingNovels
+
+            if (_representativeNovelId.value == novelId) {
+                _representativeNovelId.value = remainingNovels.lastOrNull()?.novelId
             }
         }
 
         fun updateSelectedNovels(novels: List<CollectionSelectedNovel>) {
+            val previousNovelIds = _selectedNovels.value.map(CollectionSelectedNovel::novelId)
+            val novelIds = novels.map(CollectionSelectedNovel::novelId)
+            val selectedNovelIds = novelIds.toSet()
+            val onlyRemovedNovels = novelIds == previousNovelIds.filter { it in selectedNovelIds }
             _selectedNovels.value = novels
+
+            if (!onlyRemovedNovels || _representativeNovelId.value !in selectedNovelIds) {
+                _representativeNovelId.value = novelIds.lastOrNull()
+            }
+        }
+
+        fun updateRepresentativeNovel(novelId: Long) {
+            if (_selectedNovels.value.any { it.novelId == novelId }) {
+                _representativeNovelId.value = novelId
+            }
         }
     }
 
