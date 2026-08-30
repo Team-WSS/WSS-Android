@@ -15,6 +15,4 @@ dependencies {
     implementation(libs.paging.runtime)
     implementation(libs.retrofit)
     implementation(libs.serialization.json)
-
-    testImplementation(libs.junit)
 }
