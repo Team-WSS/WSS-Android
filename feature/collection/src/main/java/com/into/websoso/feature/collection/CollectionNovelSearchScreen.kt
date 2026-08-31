@@ -6,27 +6,38 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.collection.component.CollectionAppBar
-import com.into.websoso.feature.collection.component.CollectionCreateButton
-import com.into.websoso.feature.collection.component.CollectionTabRow
-import com.into.websoso.feature.collection.model.CollectionTab
+import com.into.websoso.feature.collection.component.CollectionNovelSearchField
 
 @Composable
-fun CollectionScreen(
+internal fun CollectionNovelSearchScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToCreate: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedTab by rememberSaveable { mutableStateOf(CollectionTab.MY_COLLECTION) }
+    var searchQuery by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue())
+    }
+    val searchFocusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) {
+        searchFocusRequester.requestFocus()
+        keyboardController?.show()
+    }
 
     Column(
         modifier = modifier
@@ -35,18 +46,20 @@ fun CollectionScreen(
             .statusBarsPadding(),
     ) {
         CollectionAppBar(
-            title = "컬렉션",
+            title = "작품 리스트",
+            actionLabel = "완료",
             onNavigateBack = onNavigateBack,
+            isActionEnabled = false,
         )
-        CollectionTabRow(
-            selectedTab = selectedTab,
-            onTabSelected = { selectedTab = it },
-        )
-        CollectionCreateButton(
-            onClick = onNavigateToCreate,
+        CollectionNovelSearchField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            onClearClick = { searchQuery = TextFieldValue() },
+            focusRequester = searchFocusRequester,
             modifier = Modifier.padding(
-                horizontal = 20.dp,
-                vertical = 16.dp,
+                start = 20.dp,
+                top = 10.dp,
+                end = 20.dp,
             ),
         )
     }
@@ -54,11 +67,8 @@ fun CollectionScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun CollectionScreenPreview() {
+private fun CollectionNovelSearchScreenPreview() {
     WebsosoTheme {
-        CollectionScreen(
-            onNavigateBack = {},
-            onNavigateToCreate = {},
-        )
+        CollectionNovelSearchScreen(onNavigateBack = {})
     }
 }

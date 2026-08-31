@@ -1,6 +1,7 @@
 package com.into.websoso.feature.collection.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -30,9 +33,12 @@ import com.into.websoso.core.resource.R.string.collection_create_count
 import com.into.websoso.core.resource.R.string.collection_create_novel_list
 
 @Composable
-internal fun CollectionNovelSection(modifier: Modifier = Modifier) {
+internal fun CollectionNovelSection(
+    onAddNovelClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val addCardShape = RoundedCornerShape(8.dp)
     val novelList = stringResource(collection_create_novel_list)
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -60,9 +66,13 @@ internal fun CollectionNovelSection(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .size(width = 103.dp, height = 160.dp)
+                .clip(addCardShape)
                 .background(
                     color = Gray50,
-                    shape = RoundedCornerShape(8.dp),
+                    shape = addCardShape,
+                ).clickable(
+                    onClick = onAddNovelClick,
+                    role = Role.Button,
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -87,6 +97,6 @@ internal fun CollectionNovelSection(modifier: Modifier = Modifier) {
 @Composable
 private fun CollectionNovelSectionPreview() {
     WebsosoTheme {
-        CollectionNovelSection()
+        CollectionNovelSection(onAddNovelClick = {})
     }
 }

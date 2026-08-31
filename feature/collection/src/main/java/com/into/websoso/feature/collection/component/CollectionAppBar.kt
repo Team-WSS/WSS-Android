@@ -16,13 +16,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Black
+import com.into.websoso.core.designsystem.theme.Gray100
+import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R.drawable.ic_navigate_left
 
 @Composable
 internal fun CollectionAppBar(
+    title: String? = null,
+    actionLabel: String? = null,
     onNavigateBack: () -> Unit,
+    isActionEnabled: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -45,11 +50,23 @@ internal fun CollectionAppBar(
                 modifier = Modifier.size(24.dp),
             )
         }
-        Text(
-            text = "컬렉션",
-            color = Black,
-            style = WebsosoTheme.typography.title2,
-        )
+        title?.let {
+            Text(
+                text = it,
+                color = Black,
+                style = WebsosoTheme.typography.title2,
+            )
+        }
+        actionLabel?.let {
+            Text(
+                text = it,
+                color = if (isActionEnabled) Primary100 else Gray100,
+                style = WebsosoTheme.typography.title2,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(horizontal = 20.dp),
+            )
+        }
     }
 }
 
@@ -57,6 +74,10 @@ internal fun CollectionAppBar(
 @Composable
 private fun CollectionAppBarPreview() {
     WebsosoTheme {
-        CollectionAppBar(onNavigateBack = {})
+        CollectionAppBar(
+            title = "작품 리스트",
+            actionLabel = "완료",
+            onNavigateBack = {},
+        )
     }
 }
