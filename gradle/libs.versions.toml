@@ -1,7 +1,7 @@
 [versions]
 # App Versioning
-versionCode = "10058"
-versionName = "1.9.1"
+versionCode = "10059"
+versionName = "1.9.2"
 
 # Gradle Plugin & Kotlin
 android-gradle-plugin = "8.13.2"
