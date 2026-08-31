@@ -23,6 +23,7 @@ import com.into.websoso.feature.collection.model.CollectionTab
 @Composable
 fun CollectionScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToCreate: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(CollectionTab.MY_COLLECTION) }
@@ -39,6 +40,7 @@ fun CollectionScreen(
             onTabSelected = { selectedTab = it },
         )
         CollectionCreateButton(
+            onClick = onNavigateToCreate,
             modifier = Modifier.padding(
                 horizontal = 20.dp,
                 vertical = 16.dp,
@@ -51,6 +53,9 @@ fun CollectionScreen(
 @Composable
 private fun CollectionScreenPreview() {
     WebsosoTheme {
-        CollectionScreen(onNavigateBack = {})
+        CollectionScreen(
+            onNavigateBack = {},
+            onNavigateToCreate = {},
+        )
     }
 }

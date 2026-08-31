@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 private const val COLLECTION_ROUTE = "collection"
+private const val COLLECTION_CREATE_ROUTE = "collection/create"
 
 @Composable
 fun CollectionNavHost(
@@ -21,7 +22,17 @@ fun CollectionNavHost(
         modifier = modifier,
     ) {
         composable(route = COLLECTION_ROUTE) {
-            CollectionScreen(onNavigateBack = onNavigateBack)
+            CollectionScreen(
+                onNavigateBack = onNavigateBack,
+                onNavigateToCreate = {
+                    navController.navigate(COLLECTION_CREATE_ROUTE)
+                },
+            )
+        }
+        composable(route = COLLECTION_CREATE_ROUTE) {
+            CollectionCreateScreen(
+                onNavigateBack = navController::popBackStack,
+            )
         }
     }
 }

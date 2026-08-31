@@ -98,9 +98,13 @@ private fun CollectionTabItem(
 @Composable
 private fun CollectionTabRowPreview() {
     WebsosoTheme {
-        CollectionTabRow(
-            selectedTab = CollectionTab.MY_COLLECTION,
-            onTabSelected = {},
-        )
+        Column {
+            CollectionTab.entries.forEach { selectedTab ->
+                CollectionTabRow(
+                    selectedTab = selectedTab,
+                    onTabSelected = {},
+                )
+            }
+        }
     }
 }
