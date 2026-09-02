@@ -33,6 +33,7 @@ include(
 include(
     ":data:account",
     ":data:library",
+    ":data:novel",
     ":data:feed",
 )
 
