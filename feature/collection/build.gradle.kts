@@ -9,5 +9,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.data.library)
+
     implementation(libs.navigation.compose)
+    implementation(libs.paging.compose)
 }

@@ -460,4 +460,7 @@
     <string name="collection_create_novel_list">작품 리스트</string>
     <string name="collection_create_add_novel">작품 추가</string>
     <string name="collection_create_count">(%1$d/%2$d)</string>
+    <string name="collection_read_status_watching">보는 중</string>
+    <string name="collection_read_status_watched">봤어요</string>
+    <string name="collection_read_status_quit">하차</string>
 </resources>

@@ -22,10 +22,13 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.feature.collection.component.CollectionAppBar
 import com.into.websoso.feature.collection.component.CollectionNovelSearchField
+import com.into.websoso.feature.collection.component.CollectionNovelSelectionInfo
 
 @Composable
 internal fun CollectionNovelSearchScreen(
+    addedNovelCount: Int,
     onNavigateBack: () -> Unit,
+    onNavigateToLibraryNovelSelection: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var searchQuery by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -49,7 +52,7 @@ internal fun CollectionNovelSearchScreen(
             title = "작품 리스트",
             actionLabel = "완료",
             onNavigateBack = onNavigateBack,
-            isActionEnabled = false,
+            isActionEnabled = addedNovelCount > 0,
         )
         CollectionNovelSearchField(
             value = searchQuery,
@@ -62,6 +65,11 @@ internal fun CollectionNovelSearchScreen(
                 end = 20.dp,
             ),
         )
+        CollectionNovelSelectionInfo(
+            addedNovelCount = addedNovelCount,
+            onAddFromLibraryClick = onNavigateToLibraryNovelSelection,
+            modifier = Modifier.padding(top = 16.dp),
+        )
     }
 }
 
@@ -69,6 +77,10 @@ internal fun CollectionNovelSearchScreen(
 @Composable
 private fun CollectionNovelSearchScreenPreview() {
     WebsosoTheme {
-        CollectionNovelSearchScreen(onNavigateBack = {})
+        CollectionNovelSearchScreen(
+            addedNovelCount = 0,
+            onNavigateBack = {},
+            onNavigateToLibraryNovelSelection = {},
+        )
     }
 }
