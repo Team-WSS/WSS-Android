@@ -56,7 +56,8 @@ fun CollectionNavHost(
             val createBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(COLLECTION_CREATE_ROUTE)
             }
-            val novelSearchViewModel: CollectionNovelSearchViewModel = hiltViewModel(createBackStackEntry)
+            val novelSearchViewModel: CollectionNovelSearchViewModel =
+                hiltViewModel(createBackStackEntry)
 
             CollectionNovelSearchRoute(
                 viewModel = novelSearchViewModel,
@@ -70,10 +71,12 @@ fun CollectionNavHost(
             val createBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(COLLECTION_CREATE_ROUTE)
             }
-            val novelSearchViewModel: CollectionNovelSearchViewModel = hiltViewModel(createBackStackEntry)
+            val novelSearchViewModel: CollectionNovelSearchViewModel =
+                hiltViewModel(createBackStackEntry)
+            val selectedNovels by novelSearchViewModel.selectedNovels.collectAsStateWithLifecycle()
 
             CollectionLibraryNovelSelectionRoute(
-                initialSelectedNovels = novelSearchViewModel.selectedNovels.value,
+                initialSelectedNovels = selectedNovels,
                 onAddClick = { selectedNovels ->
                     novelSearchViewModel.updateSelectedNovels(selectedNovels)
                     navController.popBackStack()
