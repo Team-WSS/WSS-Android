@@ -19,7 +19,7 @@ google-services = "4.4.4"
 firebase-bom = "34.7.0"
 
 # Analytics
-amplitude = "1.+"
+amplitude = "1.30.1"
 
 # AndroidX Libraries
 androidx = "1.15.0"
