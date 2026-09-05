@@ -39,7 +39,7 @@ internal class CollectionLibraryNovelSelectionViewModel
                 if (selectedNovels.any { it.novelId == novel.novelId }) {
                     selectedNovels.filterNot { it.novelId == novel.novelId }
                 } else {
-                    selectedNovels + novel.toSelectedNovel()
+                    listOf(novel.toSelectedNovel()) + selectedNovels
                 }
             }
         }

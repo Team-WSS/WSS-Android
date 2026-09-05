@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,9 +22,13 @@ import com.into.websoso.feature.collection.component.CollectionDescriptionInput
 import com.into.websoso.feature.collection.component.CollectionNameInput
 import com.into.websoso.feature.collection.component.CollectionNovelSection
 import com.into.websoso.feature.collection.component.CollectionPrivacySetting
+import com.into.websoso.feature.collection.model.CollectionSelectedNovel
 
 @Composable
 internal fun CollectionCreateScreen(
+    selectedNovels: List<CollectionSelectedNovel>,
+    representativeNovelId: Long?,
+    onRepresentativeNovelClick: (Long) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToNovelSearch: () -> Unit,
     modifier: Modifier = Modifier,
@@ -40,37 +46,48 @@ internal fun CollectionCreateScreen(
         CollectionAppBar(
             actionLabel = "완료",
             onNavigateBack = onNavigateBack,
+            isActionEnabled = collectionName.isNotBlank() && selectedNovels.isNotEmpty(),
         )
-        CollectionPrivacySetting(
-            isPrivate = isPrivate,
-            onPrivateChange = { isPrivate = it },
-        )
-        CollectionNameInput(
-            value = collectionName,
-            onValueChange = { collectionName = it },
-            modifier = Modifier.padding(
-                start = 20.dp,
-                top = 20.dp,
-                end = 20.dp,
-            ),
-        )
-        CollectionDescriptionInput(
-            value = collectionDescription,
-            onValueChange = { collectionDescription = it },
-            modifier = Modifier.padding(
-                start = 20.dp,
-                top = 30.dp,
-                end = 20.dp,
-            ),
-        )
-        CollectionNovelSection(
-            onAddNovelClick = onNavigateToNovelSearch,
-            modifier = Modifier.padding(
-                start = 20.dp,
-                top = 30.dp,
-                end = 20.dp,
-            ),
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            CollectionPrivacySetting(
+                isPrivate = isPrivate,
+                onPrivateChange = { isPrivate = it },
+            )
+            CollectionNameInput(
+                value = collectionName,
+                onValueChange = { collectionName = it },
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    top = 20.dp,
+                    end = 20.dp,
+                ),
+            )
+            CollectionDescriptionInput(
+                value = collectionDescription,
+                onValueChange = { collectionDescription = it },
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    top = 30.dp,
+                    end = 20.dp,
+                ),
+            )
+            CollectionNovelSection(
+                selectedNovels = selectedNovels,
+                representativeNovelId = representativeNovelId,
+                onRepresentativeNovelClick = onRepresentativeNovelClick,
+                onAddNovelClick = onNavigateToNovelSearch,
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    top = 30.dp,
+                    end = 20.dp,
+                    bottom = 20.dp,
+                ),
+            )
+        }
     }
 }
 
@@ -79,6 +96,9 @@ internal fun CollectionCreateScreen(
 private fun CollectionCreateScreenPreview() {
     WebsosoTheme {
         CollectionCreateScreen(
+            selectedNovels = emptyList(),
+            representativeNovelId = null,
+            onRepresentativeNovelClick = {},
             onNavigateBack = {},
             onNavigateToNovelSearch = {},
         )
