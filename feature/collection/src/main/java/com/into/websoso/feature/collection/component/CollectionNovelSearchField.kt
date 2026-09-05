@@ -2,6 +2,7 @@ package com.into.websoso.feature.collection.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -21,6 +23,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,12 +36,14 @@ import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_common_search
 import com.into.websoso.core.resource.R.drawable.ic_common_search_clear
+import com.into.websoso.core.resource.R.string.collection_create_search_hint
 
 @Composable
 internal fun CollectionNovelSearchField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     onClearClick: () -> Unit,
+    onSearchClick: () -> Unit,
     focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
 ) {
@@ -65,11 +71,12 @@ internal fun CollectionNovelSearchField(
             textStyle = WebsosoTheme.typography.body4.copy(color = Black),
             cursorBrush = SolidColor(Primary100),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = { onSearchClick() }),
             decorationBox = { innerTextField ->
                 Box {
                     if (value.text.isEmpty()) {
                         Text(
-                            text = "작품 제목, 작가를 검색하세요",
+                            text = stringResource(collection_create_search_hint),
                             color = Gray100,
                             style = WebsosoTheme.typography.body4,
                         )
@@ -85,13 +92,18 @@ internal fun CollectionNovelSearchField(
             ) {
                 Image(
                     painter = painterResource(id = ic_common_search_clear),
-                    contentDescription = "검색어 지우기",
+                    contentDescription = null,
                     modifier = Modifier.size(36.dp),
                 )
             }
         }
         Box(
-            modifier = Modifier.size(36.dp),
+            modifier = Modifier
+                .size(36.dp)
+                .clickable(
+                    onClick = onSearchClick,
+                    role = Role.Button,
+                ),
             contentAlignment = Alignment.Center,
         ) {
             Image(
@@ -111,6 +123,7 @@ private fun CollectionNovelSearchFieldPreview() {
             value = TextFieldValue(),
             onValueChange = {},
             onClearClick = {},
+            onSearchClick = {},
             focusRequester = remember { FocusRequester() },
             modifier = Modifier.padding(20.dp),
         )
