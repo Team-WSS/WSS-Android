@@ -13,3 +13,7 @@ internal annotation class LibraryFilterDataStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 internal annotation class UserDataStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+internal annotation class PendingFeedLikeDataStore
