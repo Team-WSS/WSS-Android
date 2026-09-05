@@ -1,9 +1,11 @@
 package com.into.websoso.feature.collection
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -46,7 +48,8 @@ fun CollectionNavHost(
             val createBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(COLLECTION_CREATE_ROUTE)
             }
-            val novelSearchViewModel: CollectionNovelSearchViewModel = hiltViewModel(createBackStackEntry)
+            val novelSearchViewModel: CollectionNovelSearchViewModel =
+                hiltViewModel(createBackStackEntry)
 
             CollectionNovelSearchRoute(
                 viewModel = novelSearchViewModel,
@@ -60,10 +63,12 @@ fun CollectionNavHost(
             val createBackStackEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(COLLECTION_CREATE_ROUTE)
             }
-            val novelSearchViewModel: CollectionNovelSearchViewModel = hiltViewModel(createBackStackEntry)
+            val novelSearchViewModel: CollectionNovelSearchViewModel =
+                hiltViewModel(createBackStackEntry)
+            val selectedNovels by novelSearchViewModel.selectedNovels.collectAsStateWithLifecycle()
 
             CollectionLibraryNovelSelectionRoute(
-                initialSelectedNovels = novelSearchViewModel.selectedNovels.value,
+                initialSelectedNovels = selectedNovels,
                 onAddClick = { selectedNovels ->
                     novelSearchViewModel.updateSelectedNovels(selectedNovels)
                     navController.popBackStack()
