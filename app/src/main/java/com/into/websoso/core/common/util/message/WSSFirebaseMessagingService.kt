@@ -9,10 +9,14 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.into.websoso.core.resource.R.mipmap.ic_wss_logo
+import com.into.websoso.core.resource.R.string.app_name
+import com.into.websoso.core.resource.R.string.push_notification_channel_description
+import com.into.websoso.core.resource.R.string.push_notification_default_body
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainActivity
 import com.into.websoso.ui.notificationDetail.NotificationDetailActivity
+import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,20 +31,15 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        val receivedData = message.data
-        if (receivedData.isEmpty()) return
-
-        val title = receivedData["title"] ?: DEFAULT_TITLE
-        val body = receivedData["body"] ?: DEFAULT_BODY
-        val feedId = receivedData["feedId"]?.toLongOrNull()
-        val notificationId = receivedData["notificationId"]?.toLong() ?: return
+        val pushMessage = PushMessage.from(message.data) ?: return
 
         setupNotificationChannel()
-        val pendingIntent = createPendingIntent(
-            feedId,
-            notificationId,
+        val pendingIntent = createPendingIntent(pushMessage)
+        showNotification(
+            title = pushMessage.title ?: getString(app_name),
+            body = pushMessage.body ?: getString(push_notification_default_body),
+            pendingIntent = pendingIntent,
         )
-        showNotification(title, body, pendingIntent)
     }
 
     private fun setupNotificationChannel() {
@@ -48,23 +47,35 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             CHANNEL_ID,
-            CHANNEL_NAME,
+            getString(app_name),
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
-            description = CHANNEL_DESCRIPTION
+            description = getString(push_notification_channel_description)
         }
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun createPendingIntent(
-        feedId: Long?,
-        notificationId: Long,
-    ): PendingIntent {
+    private fun createPendingIntent(pushMessage: PushMessage): PendingIntent {
         val mainIntent = MainActivity.getIntent(this)
+        val notificationId = pushMessage.notificationId
 
-        val detailIntent = when {
-            feedId != null -> FeedDetailActivity.getIntent(this, feedId, notificationId)
-            else -> NotificationDetailActivity.getIntent(this, notificationId)
+        val detailIntent = when (pushMessage.destination) {
+            PushDestination.FEED -> FeedDetailActivity.getIntent(
+                this,
+                requireNotNull(pushMessage.feedId),
+                notificationId,
+            )
+
+            PushDestination.NOVEL -> NovelDetailActivity.getIntent(
+                this,
+                requireNotNull(pushMessage.novelId),
+                notificationId,
+            )
+
+            PushDestination.NOTIFICATION_DETAIL -> NotificationDetailActivity.getIntent(
+                this,
+                notificationId,
+            )
         }
 
         return TaskStackBuilder.create(this).run {
@@ -108,10 +119,6 @@ class WSSFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        private const val DEFAULT_TITLE = "웹소소"
-        private const val DEFAULT_BODY = "푸시 알림 메시지입니다"
         private const val CHANNEL_ID = "websoso"
-        private const val CHANNEL_NAME = "웹소소"
-        private const val CHANNEL_DESCRIPTION = "웹소소 알림입니다."
     }
 }

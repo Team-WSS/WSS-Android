@@ -19,6 +19,7 @@ import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.notification.model.NotificationModel
 import com.into.websoso.ui.notificationDetail.NotificationDetailActivity
+import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.setting.dialog.NotificationPermissionDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,6 +57,7 @@ class NotificationActivity : AppCompatActivity() {
                     viewModel = notificationViewModel,
                     onNotificationDetailClick = ::navigateToNotificationDetail,
                     onFeedDetailClick = ::navigateToFeedDetail,
+                    onNovelDetailClick = ::navigateToNovelDetail,
                     onBackButtonClick = {
                         setResult(ResultFrom.Notification.RESULT_OK)
                         finish()
@@ -109,6 +111,11 @@ class NotificationActivity : AppCompatActivity() {
     private fun navigateToFeedDetail(notification: NotificationModel) {
         notificationViewModel.updateReadNotification(notification.id)
         startActivity(FeedDetailActivity.getIntent(this, notification.intrinsicId, notification.id))
+    }
+
+    private fun navigateToNovelDetail(notification: NotificationModel) {
+        notificationViewModel.updateReadNotification(notification.id)
+        startActivity(NovelDetailActivity.getIntent(this, notification.intrinsicId, notification.id))
     }
 
     companion object {
