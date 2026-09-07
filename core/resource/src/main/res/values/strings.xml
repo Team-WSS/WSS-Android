@@ -450,6 +450,7 @@
     <string name="collection_title">컬렉션</string>
     <string name="collection_make">컬렉션 만들기</string>
     <string name="collection_empty">등록된 컬렉션이 없어요</string>
+    <string name="collection_other_user_empty">컬렉션을 등록하지 않은 유저에요</string>
     <string name="collection_liked_empty">좋아요한 컬렉션이 없어요</string>
     <string name="collection_library_empty">서재에 등록한 작품이 없어요</string>
     <string name="collection_selection_limit">100개까지 선택이 가능해요</string>

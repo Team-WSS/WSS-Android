@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.extensions.debouncedClickable
+import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -31,32 +33,43 @@ fun CollectionEntry(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     collectionCount: Int = 0,
+    showCount: Boolean = true,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(White)
             .debouncedClickable(onClick = onClick)
-            .padding(
-                start = 20.dp,
-                top = 20.dp,
-                end = 20.dp,
-                bottom = if (collectionCount > 0) 16.dp else 20.dp,
+            .then(
+                if (showCount) {
+                    Modifier.padding(
+                        start = 20.dp,
+                        top = 20.dp,
+                        end = 20.dp,
+                        bottom = if (collectionCount > 0) 16.dp else 20.dp,
+                    )
+                } else {
+                    Modifier.height(44.dp).padding(horizontal = 16.dp)
+                },
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = buildAnnotatedString {
-                append(stringResource(R.string.collection_title))
-                append(" ")
-                withStyle(style = SpanStyle(color = Primary100)) {
-                    append(collectionCount.toString())
-                    if (collectionCount > 0) append(stringResource(R.string.collection_count_suffix))
+            text = if (showCount) {
+                buildAnnotatedString {
+                    append(stringResource(R.string.collection_title))
+                    append(" ")
+                    withStyle(style = SpanStyle(color = Primary100)) {
+                        append(collectionCount.toString())
+                        if (collectionCount > 0) append(stringResource(R.string.collection_count_suffix))
+                    }
+                    if (collectionCount == 0) append(stringResource(R.string.collection_count_suffix))
                 }
-                if (collectionCount == 0) append(stringResource(R.string.collection_count_suffix))
+            } else {
+                buildAnnotatedString { append(stringResource(R.string.collection_title)) }
             },
-            color = Gray300,
-            style = WebsosoTheme.typography.title2,
+            color = if (showCount) Gray300 else Black,
+            style = if (showCount) WebsosoTheme.typography.title2 else WebsosoTheme.typography.title1,
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(

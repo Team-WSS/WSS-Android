@@ -1,6 +1,4 @@
 package com.into.websoso.feature.collection
-
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,12 +43,12 @@ fun CollectionPreview(
     onCollectionClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     userId: Long? = null,
+    onEmptyClick: () -> Unit = {},
 ) {
     val viewModel: CollectionPreviewViewModel = hiltViewModel(key = "collection-preview-${userId ?: "me"}")
     val page by viewModel.page.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val isError by viewModel.isError.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refresh(userId) }
     Column(modifier.fillMaxWidth().background(White)) {
         val current = page
@@ -60,15 +57,19 @@ fun CollectionPreview(
                 collectionCount = current.totalCount,
                 onClick = {
                     if (userId != null && current.totalCount == 0) {
-                        Toast.makeText(context, R.string.collection_empty, Toast.LENGTH_SHORT).show()
+                        onEmptyClick()
                     } else {
                         onListClick()
                     }
                 },
+                showCount = userId == null,
             )
             if (current.collections.isNotEmpty()) {
                 Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(bottom = 20.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = if (userId == null) 20.dp else 16.dp)
+                        .padding(bottom = if (userId == null) 20.dp else 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(28.dp),
                 ) {
                     current.collections.take(3).forEach { collection ->

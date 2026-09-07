@@ -23,7 +23,10 @@ import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
+import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
+import com.into.websoso.core.resource.R.string.collection_other_user_empty
 import com.into.websoso.core.resource.R.string.my_library_attractive_point_fixed_text
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
@@ -77,6 +80,13 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
                                     collectionId = it,
                                     userId = userId,
                                 ),
+                            )
+                        },
+                        onEmptyClick = {
+                            showWebsosoToast(
+                                requireContext(),
+                                getString(collection_other_user_empty),
+                                ic_novel_rating_alert,
                             )
                         },
                     )
