@@ -1,5 +1,6 @@
 package com.into.websoso.feature.collection
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,11 +14,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,6 +51,7 @@ internal fun CollectionLibraryNovelSelectionRoute(
 ) {
     val novels = viewModel.novels.collectAsLazyPagingItems()
     val selectedNovels by viewModel.selectedNovels.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(initialSelectedNovels) {
         viewModel.setSelectedNovels(initialSelectedNovels)
@@ -55,7 +60,13 @@ internal fun CollectionLibraryNovelSelectionRoute(
     CollectionLibraryNovelSelectionScreen(
         novels = novels,
         selectedNovelIds = selectedNovels.mapTo(mutableSetOf()) { it.novelId },
-        onNovelSelectionChange = viewModel::toggleNovelSelection,
+        onNovelSelectionChange = { novel ->
+            if (selectedNovels.size >= 100 && selectedNovels.none { it.novelId == novel.novelId }) {
+                Toast.makeText(context, com.into.websoso.core.resource.R.string.collection_selection_limit, Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.toggleNovelSelection(novel)
+            }
+        },
         onAddClick = { onAddClick(selectedNovels) },
         onNavigateBack = onNavigateBack,
     )
@@ -93,8 +104,7 @@ internal fun CollectionLibraryNovelSelectionScreen(
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
-                (novels.itemCount == 0 && novels.loadState.refresh is LoadState.Error) ||
-                    novels.loadState.append is LoadState.Error -> {
+                novels.itemCount == 0 && novels.loadState.refresh is LoadState.Error -> {
                     CollectionNetworkError(
                         onRetryClick = novels::retry,
                         modifier = Modifier.align(Alignment.Center),
@@ -102,6 +112,12 @@ internal fun CollectionLibraryNovelSelectionScreen(
                 }
 
                 else -> {
+                    if (novels.itemCount == 0) {
+                        CollectionEmpty(
+                            stringResource(com.into.websoso.core.resource.R.string.collection_library_empty),
+                            Modifier.align(Alignment.Center),
+                        )
+                    }
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(3),
                         modifier = Modifier.fillMaxSize(),
@@ -129,6 +145,13 @@ internal fun CollectionLibraryNovelSelectionScreen(
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+                                }
+                            }
+                        }
+                        if (novels.loadState.append is LoadState.Error) {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
+                                TextButton(onClick = novels::retry, modifier = Modifier.fillMaxWidth()) {
+                                    Text(stringResource(com.into.websoso.core.resource.R.string.collection_retry))
                                 }
                             }
                         }

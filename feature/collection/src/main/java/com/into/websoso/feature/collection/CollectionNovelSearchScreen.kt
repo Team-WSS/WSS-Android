@@ -1,5 +1,6 @@
 package com.into.websoso.feature.collection
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -73,6 +76,7 @@ internal fun CollectionNovelSearchRoute(
     val selectedNovels by viewModel.selectedNovels.collectAsStateWithLifecycle()
     val submittedQuery by viewModel.submittedQuery.collectAsStateWithLifecycle()
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
+    val context = LocalContext.current
 
     CollectionNovelSearchScreen(
         searchResults = searchResults,
@@ -85,7 +89,13 @@ internal fun CollectionNovelSearchRoute(
                 viewModel.search(query)
             }
         },
-        onAddNovel = viewModel::addNovel,
+        onAddNovel = { novel ->
+            if (selectedNovels.size >= 100) {
+                Toast.makeText(context, com.into.websoso.core.resource.R.string.collection_selection_limit, Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.addNovel(novel)
+            }
+        },
         onDeleteNovel = viewModel::removeNovel,
         onNavigateBack = onNavigateBack,
         onNavigateToLibraryNovelSelection = onNavigateToLibraryNovelSelection,
@@ -229,6 +239,13 @@ internal fun CollectionNovelSearchScreen(
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     CircularProgressIndicator()
+                                }
+                            }
+                        }
+                        if (searchResults.loadState.append is LoadState.Error) {
+                            item {
+                                TextButton(onClick = searchResults::retry, modifier = Modifier.fillMaxWidth()) {
+                                    Text(stringResource(com.into.websoso.core.resource.R.string.collection_retry))
                                 }
                             }
                         }

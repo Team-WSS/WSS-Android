@@ -207,7 +207,6 @@ private fun CollectionNovelItem(
                 imageUrl = novel.imageUrl,
                 contentDescription = novel.title,
                 contentScale = ContentScale.Crop,
-                // TODO: 기획·디자인 확인 후 Alignment.Center 적용 여부 재검토
                 alignment = Alignment.BottomCenter,
                 modifier = Modifier.fillMaxSize(),
             )
