@@ -1,17 +1,18 @@
 package com.into.websoso.feature.collection.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -37,28 +38,41 @@ fun CollectionEntry(
             .background(White)
             .debouncedClickable(onClick = onClick)
             .padding(
-                horizontal = 20.dp,
-                vertical = 20.dp,
+                start = 20.dp,
+                top = 20.dp,
+                end = 20.dp,
+                bottom = if (collectionCount > 0) 16.dp else 20.dp,
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = buildAnnotatedString {
-                append("컬렉션 ")
+                append(stringResource(R.string.collection_title))
+                append(" ")
                 withStyle(style = SpanStyle(color = Primary100)) {
                     append(collectionCount.toString())
+                    if (collectionCount > 0) append(stringResource(R.string.collection_count_suffix))
                 }
-                append("개")
+                if (collectionCount == 0) append(stringResource(R.string.collection_count_suffix))
             },
             color = Gray300,
             style = WebsosoTheme.typography.title2,
         )
         Spacer(modifier = Modifier.weight(1f))
-        Image(
+        Icon(
             imageVector = ImageVector.vectorResource(R.drawable.btn_setting_right),
             contentDescription = null,
+            tint = Gray300,
             modifier = Modifier.size(24.dp),
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CollectionEntryWithCollectionsPreview() {
+    WebsosoTheme {
+        CollectionEntry(onClick = {}, collectionCount = 3)
     }
 }
 
