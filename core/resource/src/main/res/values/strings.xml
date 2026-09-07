@@ -447,6 +447,34 @@
     <string name="library_filter_remove_selected_chip">필터 제거</string>
 
     <!-- 컬렉션 뷰 -->
+    <string name="collection_title">컬렉션</string>
+    <string name="collection_make">컬렉션 만들기</string>
+    <string name="collection_empty">등록된 컬렉션이 없어요</string>
+    <string name="collection_liked_empty">좋아요한 컬렉션이 없어요</string>
+    <string name="collection_library_empty">서재에 등록한 작품이 없어요</string>
+    <string name="collection_selection_limit">100개까지 선택이 가능해요</string>
+    <string name="collection_retry">다시 시도</string>
+    <string name="collection_preview_retry">컬렉션을 불러오지 못했어요. 다시 시도</string>
+    <string name="collection_load_failed">컬렉션을 불러오지 못했어요</string>
+    <string name="collection_update_failed">컬렉션 수정에 실패했어요</string>
+    <string name="collection_delete_failed">컬렉션 삭제에 실패했어요</string>
+    <string name="collection_like_failed">좋아요 변경에 실패했어요</string>
+    <string name="collection_edit">컬렉션 수정</string>
+    <string name="collection_delete">컬렉션 삭제</string>
+    <string name="collection_menu">컬렉션 메뉴</string>
+    <string name="collection_back">뒤로가기</string>
+    <string name="collection_sort_recent">등록 최신순</string>
+    <string name="collection_sort_old">등록 오래된순</string>
+    <string name="collection_like_count">좋아요 (%1$d)</string>
+    <string name="collection_share">공유하기</string>
+    <string name="collection_discard_title">컬렉션 수정을 그만할까요?</string>
+    <string name="collection_discard">그만하기</string>
+    <string name="collection_continue">계속 작성</string>
+    <string name="collection_delete_title">해당 컬렉션을 삭제할까요?</string>
+    <string name="collection_delete_description">삭제한 컬렉션은 되돌릴 수 없어요</string>
+    <string name="collection_cancel">취소</string>
+    <string name="collection_novels_label">작품</string>
+    <string name="collection_count_suffix">개</string>
     <string name="collection_my">내 컬렉션</string>
     <string name="collection_liked">좋아요한 컬렉션</string>
 
@@ -468,6 +496,7 @@
     <string name="collection_create_add_from_library">서재에서 추가</string>
     <string name="collection_create_search_hint">작품 제목, 작가를 검색하세요</string>
     <string name="collection_create_count">(%1$d/%2$d)</string>
+    <string name="collection_create_failed">컬렉션 생성에 실패했어요</string>
     <string name="collection_read_status_watching">보는 중</string>
     <string name="collection_read_status_watched">봤어요</string>
     <string name="collection_read_status_quit">하차</string>
