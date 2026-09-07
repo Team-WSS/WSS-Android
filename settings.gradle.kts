@@ -32,12 +32,14 @@ include(
 
 include(
     ":data:account",
+    ":data:collection",
     ":data:library",
     ":data:novel",
     ":data:feed",
 )
 
 include(
+    ":domain:collection",
     ":domain:library",
 )
 

@@ -11,7 +11,10 @@ android {
 dependencies {
     implementation(projects.data.library)
     implementation(projects.data.novel)
+    implementation(projects.domain.collection)
 
     implementation(libs.navigation.compose)
     implementation(libs.paging.compose)
+
+    testImplementation(libs.junit)
 }
