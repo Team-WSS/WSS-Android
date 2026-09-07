@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -22,10 +23,13 @@ import com.into.websoso.core.common.ui.custom.WebsosoChip
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.string.my_library_attractive_point_fixed_text
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentOtherUserLibraryBinding
+import com.into.websoso.feature.collection.CollectionPreview
+import com.into.websoso.ui.collection.CollectionActivity
 import com.into.websoso.ui.otherUserPage.otherUserLibrary.adapter.RestGenrePreferenceAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -52,6 +56,22 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
         setupRestGenrePreferenceAdapter()
         setupObserve()
         onStorageButtonClick()
+        binding.cvOtherUserCollection.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                WebsosoTheme {
+                    CollectionPreview(
+                        userId = userId,
+                        onListClick = { startActivity(CollectionActivity.getIntent(requireContext(), userId = userId)) },
+                        onCollectionClick = {
+                            startActivity(
+                                CollectionActivity.getIntent(requireContext(), collectionId = it, userId = userId),
+                            )
+                        },
+                    )
+                }
+            }
+        }
     }
 
     private fun bindViewModel() {
@@ -99,6 +119,11 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
                     binding.clOtherUserLibraryNovelPreference.visibility = View.GONE
                     binding.clOtherUserLibraryUnknownNovelPreference.visibility = View.VISIBLE
                 }
+            }
+
+            if (otherUserLibraryViewModel.hasNoPreferences()) {
+                binding.clOtherUserLibraryNovelPreference.isVisible = false
+                binding.clOtherUserLibraryUnknownNovelPreference.isVisible = false
             }
 
             when (otherUserLibraryViewModel.hasAttractivePoints()) {
