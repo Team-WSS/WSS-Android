@@ -85,6 +85,7 @@ dependencies {
     implementation(projects.core.datastore)
 
     implementation(projects.data.account)
+    implementation(projects.data.collection)
     implementation(projects.data.library)
     implementation(projects.data.feed)
 
