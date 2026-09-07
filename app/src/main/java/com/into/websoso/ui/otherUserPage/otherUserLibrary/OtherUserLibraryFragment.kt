@@ -62,10 +62,21 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
                 WebsosoTheme {
                     CollectionPreview(
                         userId = userId,
-                        onListClick = { startActivity(CollectionActivity.getIntent(requireContext(), userId = userId)) },
+                        onListClick = {
+                            startActivity(
+                                CollectionActivity.getIntent(
+                                    requireContext(),
+                                    userId = userId,
+                                ),
+                            )
+                        },
                         onCollectionClick = {
                             startActivity(
-                                CollectionActivity.getIntent(requireContext(), collectionId = it, userId = userId),
+                                CollectionActivity.getIntent(
+                                    requireContext(),
+                                    collectionId = it,
+                                    userId = userId,
+                                ),
                             )
                         },
                     )
@@ -90,8 +101,14 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
     private fun setupObserve() {
         otherUserLibraryViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                uiState.isLoading -> binding.wllOtherUserLibrary.setWebsosoLoadingVisibility(true)
-                uiState.error -> binding.wllOtherUserLibrary.setLoadingLayoutVisibility(false)
+                uiState.isLoading -> {
+                    binding.wllOtherUserLibrary.setWebsosoLoadingVisibility(true)
+                }
+
+                uiState.error -> {
+                    binding.wllOtherUserLibrary.setLoadingLayoutVisibility(false)
+                }
+
                 !uiState.isLoading -> {
                     binding.wllOtherUserLibrary.setWebsosoLoadingVisibility(false)
                 }

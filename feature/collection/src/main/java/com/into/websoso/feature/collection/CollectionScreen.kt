@@ -60,7 +60,8 @@ fun CollectionScreen(
     }
     val myCollections = viewModel.collections(userId).collectAsLazyPagingItems()
     val likedCollections = viewModel.likedCollections.collectAsLazyPagingItems()
-    val collections = if (selectedTab == CollectionTab.MY_COLLECTION) myCollections else likedCollections
+    val collections =
+        if (selectedTab == CollectionTab.MY_COLLECTION) myCollections else likedCollections
     val myListState = rememberLazyListState()
     val likedListState = rememberLazyListState()
 
@@ -70,7 +71,10 @@ fun CollectionScreen(
     }
 
     Column(modifier.fillMaxSize().background(White).statusBarsPadding()) {
-        CollectionAppBar(title = stringResource(R.string.collection_title), onNavigateBack = onNavigateBack)
+        CollectionAppBar(
+            title = stringResource(R.string.collection_title),
+            onNavigateBack = onNavigateBack,
+        )
         if (userId == null) {
             CollectionTabRow(selectedTab = selectedTab, onTabSelected = { selectedTab = it })
         }
@@ -106,7 +110,12 @@ fun CollectionScreen(
             if (collections.itemCount == 0) {
                 when (collections.loadState.refresh) {
                     is LoadState.Loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    is LoadState.Error -> CollectionNetworkError(collections::retry, Modifier.align(Alignment.Center))
+
+                    is LoadState.Error -> CollectionNetworkError(
+                        collections::retry,
+                        Modifier.align(Alignment.Center),
+                    )
+
                     is LoadState.NotLoading -> if (selectedTab == CollectionTab.LIKED_COLLECTION || userId != null) {
                         CollectionEmpty(
                             message = stringResource(if (userId == null) R.string.collection_liked_empty else R.string.collection_empty),
