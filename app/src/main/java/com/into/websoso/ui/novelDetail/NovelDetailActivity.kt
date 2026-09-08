@@ -47,6 +47,7 @@ import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
+import com.into.websoso.ui.novelDetail.NovelDetailViewModel.Companion.DEFAULT_NOTIFICATION_ID
 import com.into.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelFeed.NovelFeedViewModel
@@ -109,8 +110,14 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         setupWebsosoLoadingLayout()
         setupViewPager()
         novelDetailViewModel.updateNovelDetail(novelId)
+        updateNotificationRead()
         handleBackPressed()
         tracker.trackEvent("novel_info")
+    }
+
+    private fun updateNotificationRead() {
+        val notificationId = intent.getLongExtra(NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID)
+        novelDetailViewModel.updateNotificationRead(notificationId)
     }
 
     private fun bindViewModel() {
@@ -314,6 +321,14 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                 showPopupWindow()
             }
 
+            override fun onNotificationClick() {
+                if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                    showLoginRequestDialog()
+                    return
+                }
+                showNovelNotificationBottomSheet()
+            }
+
             override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
                 if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
                     binding.tgNovelDetailReadStatus.clearChecked()
@@ -401,6 +416,15 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
+    private fun showNovelNotificationBottomSheet() {
+        NovelNotificationBottomSheetDialog
+            .newInstance(novelId)
+            .show(
+                supportFragmentManager,
+                NovelNotificationBottomSheetDialog.NOVEL_NOTIFICATION_BOTTOM_SHEET_TAG,
+            )
+    }
+
     override fun onResume() {
         super.onResume()
         binding.tgNovelDetailReadStatus.clearChecked()
@@ -411,15 +435,18 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
+        private const val NOTIFICATION_ID = "NOTIFICATION_ID"
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
 
         fun getIntent(
             context: Context,
             novelId: Long,
+            notificationId: Long = DEFAULT_NOTIFICATION_ID,
         ): Intent =
             Intent(context, NovelDetailActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
+                putExtra(NOTIFICATION_ID, notificationId)
             }
     }
 }
