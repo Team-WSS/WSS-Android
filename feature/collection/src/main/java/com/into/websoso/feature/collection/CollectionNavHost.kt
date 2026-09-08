@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.into.websoso.feature.collection.component.CollectionAppBar
 import com.into.websoso.feature.collection.component.CollectionNetworkError
+import com.into.websoso.feature.collection.model.CollectionShareContent
 
 private const val COLLECTION_ROUTE = "collection"
 private const val COLLECTION_DETAIL_ROUTE = "collection/detail/{collectionId}"
@@ -30,7 +31,10 @@ private const val COLLECTION_LIBRARY_ROUTE = "collection/editor/{collectionId}/l
 fun CollectionNavHost(
     onNavigateBack: () -> Unit,
     onNovelClick: (Long) -> Unit,
+    onShare: (CollectionShareContent) -> Unit,
+    onShareBlocked: (collectionId: Long, novelCount: Int, novelsSize: Int, isPublic: Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    isSharing: Boolean = false,
     initialCollectionId: Long? = null,
     userId: Long? = null,
 ) {
@@ -62,6 +66,9 @@ fun CollectionNavHost(
                 onEdit = { navController.navigate("collection/editor/$it") },
                 onDeleted = returnToMyList,
                 onNovelClick = onNovelClick,
+                onShare = onShare,
+                onShareBlocked = onShareBlocked,
+                isSharing = isSharing,
             )
         }
         composable(COLLECTION_EDITOR_ROUTE, arguments) { entry ->
@@ -101,6 +108,7 @@ fun CollectionNavHost(
             CollectionNovelSearchRoute(
                 viewModel = viewModel,
                 onNavigateBack = { navController.popBackStack() },
+                onDiscard = if (id != 0L) returnToMyList else null,
                 onNavigateToLibraryNovelSelection = { navController.navigate("collection/editor/$id/library") },
             )
         }

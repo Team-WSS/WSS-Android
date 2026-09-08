@@ -135,6 +135,7 @@ swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayou
 
 # Social Login Libraries
 kakao = { module = "com.kakao.sdk:v2-user", version.ref = "kakao" }
+kakao-share = { module = "com.kakao.sdk:v2-share", version.ref = "kakao" }
 
 # Dependency Injection Libraries
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }

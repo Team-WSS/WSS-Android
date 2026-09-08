@@ -134,6 +134,7 @@ dependencies {
 
     // Third-party SDK
     implementation(libs.kakao) // 카카오 로그인 API
+    implementation(libs.kakao.share) // 카카오톡 공유 API
     implementation(libs.amplitude) // Amplitude
 
     // Firebase

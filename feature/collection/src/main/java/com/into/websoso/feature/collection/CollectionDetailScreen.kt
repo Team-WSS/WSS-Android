@@ -1,5 +1,6 @@
 package com.into.websoso.feature.collection
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -86,6 +87,7 @@ import com.into.websoso.domain.collection.model.CollectionSortCriteria
 import com.into.websoso.feature.collection.component.CollectionConfirmDialog
 import com.into.websoso.feature.collection.component.CollectionNetworkError
 import com.into.websoso.feature.collection.component.ellipsize
+import com.into.websoso.feature.collection.model.CollectionShareContent
 import kotlinx.coroutines.launch
 
 @Composable
@@ -94,6 +96,9 @@ internal fun CollectionDetailScreen(
     onEdit: (Long) -> Unit,
     onDeleted: () -> Unit,
     onNovelClick: (Long) -> Unit,
+    onShare: (CollectionShareContent) -> Unit,
+    onShareBlocked: (collectionId: Long, novelCount: Int, novelsSize: Int, isPublic: Boolean) -> Unit,
+    isSharing: Boolean,
     viewModel: CollectionDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -127,7 +132,8 @@ internal fun CollectionDetailScreen(
                 }
             }
         } else {
-            val novels = if (state.sort == CollectionSortCriteria.RECENT) collection.novels else collection.novels.asReversed()
+            val novels =
+                if (state.sort == CollectionSortCriteria.RECENT) collection.novels else collection.novels.asReversed()
             PullToRefreshBox(
                 isRefreshing = state.isLoading,
                 onRefresh = viewModel::refresh,
@@ -141,7 +147,36 @@ internal fun CollectionDetailScreen(
                     contentPadding = PaddingValues(bottom = 20.dp),
                 ) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        CollectionDetailHeader(collection, state.isBusy || state.isLoading, viewModel::toggleLike)
+                        CollectionDetailHeader(
+                            collection = collection,
+                            isBusy = state.isBusy || state.isLoading,
+                            isSharing = isSharing,
+                            onLike = viewModel::toggleLike,
+                            onShare = {
+                                val content = CollectionShareContent.from(collection)
+                                if (content != null) {
+                                    onShare(content)
+                                } else {
+                                    Log.w(
+                                        "CollectionDetailScreen",
+                                        "collection ${collection.id} failed to build share content: " +
+                                            "novelCount=${collection.novelCount}, novels=${collection.novels.size}, " +
+                                            "representativeNovelId=${collection.representativeNovelId}",
+                                    )
+                                    onShareBlocked(
+                                        collection.id,
+                                        collection.novelCount,
+                                        collection.novels.size,
+                                        collection.isPublic,
+                                    )
+                                    snackbarScope.launch {
+                                        snackbar.showSnackbar(
+                                            context.getString(R.string.collection_share_data_outdated),
+                                        )
+                                    }
+                                }
+                            },
+                        )
                     }
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Row(
@@ -150,7 +185,10 @@ internal fun CollectionDetailScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                stringResource(R.string.collection_create_added_novel_count, collection.novelCount),
+                                stringResource(
+                                    R.string.collection_create_added_novel_count,
+                                    collection.novelCount,
+                                ),
                                 color = Gray200,
                                 style = WebsosoTheme.typography.body3,
                             )
@@ -159,19 +197,34 @@ internal fun CollectionDetailScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                             ) {
-                                Icon(painterResource(R.drawable.ic_library_sort), null, Modifier.size(16.dp), tint = Gray200)
-                                Text(state.sort.label, color = Gray300, style = WebsosoTheme.typography.body3)
+                                Icon(
+                                    painterResource(R.drawable.ic_library_sort),
+                                    null,
+                                    Modifier.size(16.dp),
+                                    tint = Gray200,
+                                )
+                                Text(
+                                    state.sort.label,
+                                    color = Gray300,
+                                    style = WebsosoTheme.typography.body3,
+                                )
                             }
                         }
                     }
-                    items(novels.chunked(3), key = { it.first().id }, span = { GridItemSpan(maxLineSpan) }) { row ->
+                    items(
+                        novels.chunked(3),
+                        key = { it.first().id },
+                        span = { GridItemSpan(maxLineSpan) },
+                    ) { row ->
                         Row(
                             Modifier.fillMaxWidth().padding(horizontal = 20.dp),
                             horizontalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
                             row.forEach { novel ->
                                 Column(
-                                    Modifier.weight(1f).clickable(role = Role.Button) { onNovelClick(novel.id) },
+                                    Modifier
+                                        .weight(1f)
+                                        .clickable(role = Role.Button) { onNovelClick(novel.id) },
                                     verticalArrangement = Arrangement.spacedBy(6.dp),
                                 ) {
                                     NetworkImage(
@@ -180,7 +233,10 @@ internal fun CollectionDetailScreen(
                                         contentScale = ContentScale.Crop,
                                         alignment = Alignment.BottomCenter,
                                         placeholder = painterResource(R.drawable.img_collection_empty_cover),
-                                        modifier = Modifier.fillMaxWidth().height(160.dp).clip(RoundedCornerShape(8.dp)),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(160.dp)
+                                            .clip(RoundedCornerShape(8.dp)),
                                     )
                                     Text(
                                         novel.title,
@@ -258,8 +314,14 @@ private fun CollectionDetailMenu(
         Column(
             Modifier
                 .width(122.dp)
-                .dropShadow(shape, Shadow(radius = 7.5.dp, color = Black60.copy(alpha = 0.11f), offset = DpOffset(0.dp, 2.dp)))
-                .clip(shape)
+                .dropShadow(
+                    shape,
+                    Shadow(
+                        radius = 7.5.dp,
+                        color = Black60.copy(alpha = 0.11f),
+                        offset = DpOffset(0.dp, 2.dp),
+                    ),
+                ).clip(shape)
                 .background(White),
         ) {
             Text(
@@ -267,7 +329,10 @@ private fun CollectionDetailMenu(
                 color = Black,
                 style = WebsosoTheme.typography.body2,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().clickable(enabled = enabled, role = Role.Button, onClick = onEdit).padding(15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(enabled = enabled, role = Role.Button, onClick = onEdit)
+                    .padding(15.dp),
             )
             HorizontalDivider(thickness = 0.7.dp, color = Gray50)
             Text(
@@ -341,7 +406,9 @@ private fun DetailAppBar(
 private fun CollectionDetailHeader(
     collection: CollectionDetail,
     isBusy: Boolean,
+    isSharing: Boolean,
     onLike: () -> Unit,
+    onShare: () -> Unit,
 ) {
     Box(Modifier.fillMaxWidth().heightIn(min = 328.dp)) {
         NetworkImage(
@@ -361,18 +428,34 @@ private fun CollectionDetailHeader(
             ),
         )
         Column(
-            Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(top = 156.dp, bottom = 24.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(top = 156.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                S3Image(imageUrl = collection.owner.avatarImageUrl, modifier = Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)))
-                Text(collection.owner.nickname, color = White, style = WebsosoTheme.typography.body4)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                S3Image(
+                    imageUrl = collection.owner.avatarImageUrl,
+                    modifier = Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)),
+                )
+                Text(
+                    collection.owner.nickname,
+                    color = White,
+                    style = WebsosoTheme.typography.body4,
+                )
             }
             Text(collection.name, color = White, style = WebsosoTheme.typography.headline1)
             collection.description?.takeIf(String::isNotBlank)?.let {
                 Text(it, color = White, style = WebsosoTheme.typography.body3)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 6.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(top = 6.dp),
+            ) {
                 Row(
                     Modifier
                         .weight(1f)
@@ -380,8 +463,15 @@ private fun CollectionDetailHeader(
                         .clip(RoundedCornerShape(15.dp))
                         .background(if (collection.isLiked) Primary30 else White)
                         .border(1.dp, Primary100, RoundedCornerShape(15.dp))
-                        .toggleable(value = collection.isLiked, enabled = !isBusy, role = Role.Checkbox) { onLike() },
-                    horizontalArrangement = Arrangement.spacedBy(9.dp, Alignment.CenterHorizontally),
+                        .toggleable(
+                            value = collection.isLiked,
+                            enabled = !isBusy,
+                            role = Role.Checkbox,
+                        ) { onLike() },
+                    horizontalArrangement = Arrangement.spacedBy(
+                        9.dp,
+                        Alignment.CenterHorizontally,
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
@@ -402,13 +492,40 @@ private fun CollectionDetailHeader(
                         .height(40.dp)
                         .clip(RoundedCornerShape(15.dp))
                         .background(if (collection.isPublic) Primary100 else Gray80)
-                        .clickable(enabled = false, role = Role.Button) {},
-                    horizontalArrangement = Arrangement.spacedBy(9.dp, Alignment.CenterHorizontally),
+                        .clickable(
+                            enabled = collection.isPublic && !isBusy && !isSharing,
+                            role = Role.Button,
+                            onClick = onShare,
+                        ),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        9.dp,
+                        Alignment.CenterHorizontally,
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (!collection.isPublic) Icon(painterResource(R.drawable.ic_lock), null, Modifier.size(20.dp), tint = Gray200)
+                    if (isSharing) {
+                        CircularProgressIndicator(
+                            Modifier.size(16.dp),
+                            color = White,
+                            strokeWidth = 2.dp,
+                        )
+                    }
+                    if (!collection.isPublic) {
+                        Icon(
+                            painterResource(R.drawable.ic_lock),
+                            null,
+                            Modifier.size(20.dp),
+                            tint = Gray200,
+                        )
+                    }
                     Text(
-                        stringResource(if (collection.isPublic) R.string.collection_share else R.string.collection_create_private),
+                        stringResource(
+                            when {
+                                !collection.isPublic -> R.string.collection_create_private
+                                isSharing -> R.string.collection_share_preparing
+                                else -> R.string.collection_share
+                            },
+                        ),
                         color = if (collection.isPublic) White else Gray200,
                         style = WebsosoTheme.typography.body4,
                     )
@@ -442,7 +559,10 @@ private fun CollectionSortSheet(
         dragHandle = null,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
-        Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(
+            Modifier.fillMaxWidth().padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
             CollectionSortCriteria.entries.forEach { criteria ->
                 Row(
                     Modifier
@@ -453,13 +573,26 @@ private fun CollectionSortSheet(
                             onSelected(criteria)
                             onDismiss()
                         }.padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        12.dp,
+                        Alignment.CenterHorizontally,
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(Modifier.size(20.dp)) {
-                        if (criteria == selected) Icon(painterResource(R.drawable.ic_library_sort_check), null, tint = Primary100)
+                        if (criteria == selected) {
+                            Icon(
+                                painterResource(R.drawable.ic_library_sort_check),
+                                null,
+                                tint = Primary100,
+                            )
+                        }
                     }
-                    Text(criteria.label, color = if (criteria == selected) Black else Gray200, style = WebsosoTheme.typography.body2)
+                    Text(
+                        criteria.label,
+                        color = if (criteria == selected) Black else Gray200,
+                        style = WebsosoTheme.typography.body2,
+                    )
                     Spacer(Modifier.size(20.dp))
                 }
             }

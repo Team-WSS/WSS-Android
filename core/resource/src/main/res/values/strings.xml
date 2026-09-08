@@ -468,6 +468,10 @@
     <string name="collection_sort_old">등록 오래된순</string>
     <string name="collection_like_count">좋아요 (%1$d)</string>
     <string name="collection_share">공유하기</string>
+    <string name="collection_share_preparing">공유 준비 중</string>
+    <string name="collection_share_failed">컬렉션 공유에 실패했어요. 다시 시도해주세요.</string>
+    <string name="collection_share_data_outdated">컬렉션 정보가 오래됐어요. 새로고침 후 다시 시도해주세요.</string>
+    <string name="collection_share_kakao_required">카카오톡을 설치한 후 공유해주세요.</string>
     <string name="collection_discard_title">컬렉션 수정을 그만할까요?</string>
     <string name="collection_discard">그만하기</string>
     <string name="collection_continue">계속 작성</string>
