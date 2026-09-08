@@ -15,14 +15,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.into.websoso.core.auth.AuthClient
 import com.into.websoso.core.auth.AuthPlatform
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
-import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.signin.UiEffect.NavigateToHome
@@ -37,10 +35,10 @@ import com.into.websoso.feature.signin.component.SignInButtons
 @Composable
 fun SignInScreen(
     authClient: (platform: AuthPlatform) -> AuthClient?,
-    websosoNavigator: NavigatorProvider,
+    onNavigateToHome: () -> Unit,
+    onNavigateToOnboarding: () -> Unit,
     signInViewModel: SignInViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
     val latestEffect by rememberUpdatedState(signInViewModel.uiEffect)
     val pagerState = rememberPagerState { Onboarding_Images.size }
 
@@ -54,9 +52,9 @@ fun SignInScreen(
 
             ShowToast -> {}
 
-            NavigateToHome -> websosoNavigator.navigateToMainActivity(context::startActivity)
+            NavigateToHome -> onNavigateToHome()
 
-            NavigateToOnboarding -> websosoNavigator.navigateToOnboardingActivity(context::startActivity)
+            NavigateToOnboarding -> onNavigateToOnboarding()
         }
     }
 
