@@ -1,6 +1,7 @@
 package com.into.websoso.feature.collection
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -59,6 +60,7 @@ import com.into.websoso.core.resource.R.string.normal_explore_not_exist_result
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.data.novel.model.NovelSearchEntity
 import com.into.websoso.feature.collection.component.CollectionAppBar
+import com.into.websoso.feature.collection.component.CollectionConfirmDialog
 import com.into.websoso.feature.collection.component.CollectionNetworkError
 import com.into.websoso.feature.collection.component.CollectionNovelSearchField
 import com.into.websoso.feature.collection.component.CollectionNovelSearchItem
@@ -70,6 +72,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun CollectionNovelSearchRoute(
     onNavigateBack: () -> Unit,
+    onDiscard: (() -> Unit)?,
     onNavigateToLibraryNovelSelection: () -> Unit,
     viewModel: CollectionNovelSearchViewModel,
 ) {
@@ -98,6 +101,7 @@ internal fun CollectionNovelSearchRoute(
         },
         onDeleteNovel = viewModel::removeNovel,
         onNavigateBack = onNavigateBack,
+        onDiscard = onDiscard,
         onNavigateToLibraryNovelSelection = onNavigateToLibraryNovelSelection,
     )
 }
@@ -111,6 +115,7 @@ internal fun CollectionNovelSearchScreen(
     onAddNovel: (NovelSearchEntity) -> Unit,
     onDeleteNovel: (Long) -> Unit,
     onNavigateBack: () -> Unit,
+    onDiscard: (() -> Unit)?,
     onNavigateToLibraryNovelSelection: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -119,6 +124,10 @@ internal fun CollectionNovelSearchScreen(
     }
     val searchFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    var showDiscard by rememberSaveable { mutableStateOf(false) }
+    val requestBack = {
+        if (onDiscard == null) onNavigateBack() else showDiscard = true
+    }
     val selectedNovelIds = selectedNovels.mapTo(mutableSetOf()) { it.novelId }
     val isInitialLoading =
         submittedQuery.isNotBlank() &&
@@ -129,6 +138,7 @@ internal fun CollectionNovelSearchScreen(
         searchFocusRequester.requestFocus()
         keyboardController?.show()
     }
+    BackHandler(onBack = requestBack)
 
     Column(
         modifier = modifier
@@ -139,7 +149,7 @@ internal fun CollectionNovelSearchScreen(
         CollectionAppBar(
             title = stringResource(collection_create_novel_list),
             actionLabel = stringResource(collection_create_complete),
-            onNavigateBack = onNavigateBack,
+            onNavigateBack = requestBack,
             onActionClick = onNavigateBack,
             isActionEnabled = selectedNovels.isNotEmpty(),
         )
@@ -254,6 +264,13 @@ internal fun CollectionNovelSearchScreen(
             }
         }
     }
+    if (showDiscard) {
+        CollectionConfirmDialog(
+            isDelete = false,
+            onDismiss = { showDiscard = false },
+            onConfirm = { onDiscard?.invoke() },
+        )
+    }
 }
 
 @Composable
@@ -307,6 +324,7 @@ private fun CollectionNovelSearchScreenPreview() {
             onAddNovel = {},
             onDeleteNovel = {},
             onNavigateBack = {},
+            onDiscard = null,
             onNavigateToLibraryNovelSelection = {},
         )
     }
