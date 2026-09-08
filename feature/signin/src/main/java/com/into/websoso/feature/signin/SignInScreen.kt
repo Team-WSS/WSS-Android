@@ -52,9 +52,13 @@ fun SignInScreen(
 
             ShowToast -> {}
 
-            NavigateToHome -> onNavigateToHome()
+            NavigateToHome -> {
+                onNavigateToHome()
+            }
 
-            NavigateToOnboarding -> onNavigateToOnboarding()
+            NavigateToOnboarding -> {
+                onNavigateToOnboarding()
+            }
         }
     }
 
