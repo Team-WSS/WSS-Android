@@ -132,8 +132,6 @@ internal fun CollectionDetailScreen(
                 }
             }
         } else {
-            val novels =
-                if (state.sort == CollectionSortCriteria.RECENT) collection.novels else collection.novels.asReversed()
             PullToRefreshBox(
                 isRefreshing = state.isLoading,
                 onRefresh = viewModel::refresh,
@@ -212,7 +210,7 @@ internal fun CollectionDetailScreen(
                         }
                     }
                     items(
-                        novels.chunked(3),
+                        collection.novels.chunked(3),
                         key = { it.first().id },
                         span = { GridItemSpan(maxLineSpan) },
                     ) { row ->

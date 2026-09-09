@@ -47,7 +47,7 @@ internal class CollectionDetailViewModel
             _uiState.update { it.copy(isLoading = true, error = null) }
             viewModelScope.launch {
                 try {
-                    val collection = repository.getCollection(collectionId)
+                    val collection = repository.getCollection(collectionId, sortCriteria = _uiState.value.sort)
                     _uiState.update { it.copy(collection = collection, isLoading = false) }
                 } catch (cancelled: CancellationException) {
                     throw cancelled
@@ -58,8 +58,22 @@ internal class CollectionDetailViewModel
         }
 
         fun sort(criteria: CollectionSortCriteria) {
-            savedStateHandle["sort"] = criteria.name
-            _uiState.update { it.copy(sort = criteria) }
+            val current = _uiState.value
+            if (current.isLoading || current.isBusy || current.isDeleted || current.sort == criteria) return
+            _uiState.update { it.copy(isLoading = true, error = null) }
+            viewModelScope.launch {
+                try {
+                    val collection = repository.getCollection(collectionId, sortCriteria = criteria)
+                    // sort와 collection을 한 번에 갱신해 "정렬 표시는 바뀌었는데 목록은 그대로"인
+                    // 상태가 보이지 않게 한다. 실패하면 아래 catch에서 아무 것도 안 바꾸고 에러만 띄운다.
+                    savedStateHandle["sort"] = criteria.name
+                    _uiState.update { it.copy(collection = collection, sort = criteria, isLoading = false) }
+                } catch (cancelled: CancellationException) {
+                    throw cancelled
+                } catch (_: Exception) {
+                    _uiState.update { it.copy(isLoading = false, error = R.string.collection_sort_failed) }
+                }
+            }
         }
 
         fun toggleLike() {
