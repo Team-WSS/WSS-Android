@@ -51,7 +51,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -109,13 +108,14 @@ internal fun CollectionDetailScreen(
     var showSort by remember { mutableStateOf(false) }
     val snackbar = remember { SnackbarHostState() }
     val snackbarScope = rememberCoroutineScope()
-    val context = LocalContext.current
+    val shareDataOutdatedMessage = stringResource(R.string.collection_share_data_outdated)
+    val errorMessage = state.error?.let { stringResource(it) }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refresh() }
     LaunchedEffect(state.isDeleted) { if (state.isDeleted) onDeleted() }
     LaunchedEffect(state.error) {
-        state.error?.takeIf { state.collection != null }?.let {
+        if (state.error != null && state.collection != null && errorMessage != null) {
             viewModel.consumeError()
-            snackbarScope.launch { snackbar.showSnackbar(context.getString(it)) }
+            snackbarScope.launch { snackbar.showSnackbar(errorMessage) }
         }
     }
     val collection = state.collection
@@ -168,9 +168,7 @@ internal fun CollectionDetailScreen(
                                         collection.isPublic,
                                     )
                                     snackbarScope.launch {
-                                        snackbar.showSnackbar(
-                                            context.getString(R.string.collection_share_data_outdated),
-                                        )
+                                        snackbar.showSnackbar(shareDataOutdatedMessage)
                                     }
                                 }
                             },
