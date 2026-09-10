@@ -26,6 +26,7 @@ internal class CollectionLibraryNovelSelectionViewModel
         libraryRepository: LibraryRepository,
     ) : ViewModel() {
         private val _selectedNovels = MutableStateFlow<List<CollectionSelectedNovel>>(emptyList())
+        private var isInitialized = false
         val selectedNovels: StateFlow<List<CollectionSelectedNovel>> = _selectedNovels.asStateFlow()
 
         val novels: Flow<PagingData<CollectionLibraryNovelUiModel>> =
@@ -39,12 +40,14 @@ internal class CollectionLibraryNovelSelectionViewModel
                 if (selectedNovels.any { it.novelId == novel.novelId }) {
                     selectedNovels.filterNot { it.novelId == novel.novelId }
                 } else {
-                    listOf(novel.toSelectedNovel()) + selectedNovels
+                    if (selectedNovels.size >= 100) selectedNovels else listOf(novel.toSelectedNovel()) + selectedNovels
                 }
             }
         }
 
         fun setSelectedNovels(novels: List<CollectionSelectedNovel>) {
+            if (isInitialized) return
+            isInitialized = true
             _selectedNovels.value = novels
         }
     }

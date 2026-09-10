@@ -35,7 +35,7 @@ import com.into.websoso.core.resource.R.string.my_library_attractive_point_fixed
 import com.into.websoso.data.model.GenrePreferenceEntity
 import com.into.websoso.data.model.NovelPreferenceEntity
 import com.into.websoso.databinding.FragmentMyPageBinding
-import com.into.websoso.feature.collection.component.CollectionEntry
+import com.into.websoso.feature.collection.CollectionPreview
 import com.into.websoso.ui.collection.CollectionActivity
 import com.into.websoso.ui.main.MainViewModel
 import com.into.websoso.ui.main.myPage.adapter.RestGenrePreferenceAdapter
@@ -101,7 +101,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(fragment_my_page) {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 WebsosoTheme {
-                    CollectionEntry(onClick = ::navigateToCollection)
+                    CollectionPreview(
+                        onListClick = ::navigateToCollection,
+                        onCollectionClick = { startActivity(CollectionActivity.getIntent(requireContext(), collectionId = it)) },
+                    )
                 }
             }
         }

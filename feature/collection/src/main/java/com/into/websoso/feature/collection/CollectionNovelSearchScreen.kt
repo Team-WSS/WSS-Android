@@ -1,5 +1,7 @@
 package com.into.websoso.feature.collection
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -56,6 +60,7 @@ import com.into.websoso.core.resource.R.string.normal_explore_not_exist_result
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.data.novel.model.NovelSearchEntity
 import com.into.websoso.feature.collection.component.CollectionAppBar
+import com.into.websoso.feature.collection.component.CollectionConfirmDialog
 import com.into.websoso.feature.collection.component.CollectionNetworkError
 import com.into.websoso.feature.collection.component.CollectionNovelSearchField
 import com.into.websoso.feature.collection.component.CollectionNovelSearchItem
@@ -67,12 +72,14 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun CollectionNovelSearchRoute(
     onNavigateBack: () -> Unit,
+    onDiscard: (() -> Unit)?,
     onNavigateToLibraryNovelSelection: () -> Unit,
     viewModel: CollectionNovelSearchViewModel,
 ) {
     val selectedNovels by viewModel.selectedNovels.collectAsStateWithLifecycle()
     val submittedQuery by viewModel.submittedQuery.collectAsStateWithLifecycle()
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
+    val context = LocalContext.current
 
     CollectionNovelSearchScreen(
         searchResults = searchResults,
@@ -85,9 +92,16 @@ internal fun CollectionNovelSearchRoute(
                 viewModel.search(query)
             }
         },
-        onAddNovel = viewModel::addNovel,
+        onAddNovel = { novel ->
+            if (selectedNovels.size >= 100) {
+                Toast.makeText(context, com.into.websoso.core.resource.R.string.collection_selection_limit, Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.addNovel(novel)
+            }
+        },
         onDeleteNovel = viewModel::removeNovel,
         onNavigateBack = onNavigateBack,
+        onDiscard = onDiscard,
         onNavigateToLibraryNovelSelection = onNavigateToLibraryNovelSelection,
     )
 }
@@ -101,6 +115,7 @@ internal fun CollectionNovelSearchScreen(
     onAddNovel: (NovelSearchEntity) -> Unit,
     onDeleteNovel: (Long) -> Unit,
     onNavigateBack: () -> Unit,
+    onDiscard: (() -> Unit)?,
     onNavigateToLibraryNovelSelection: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,6 +124,10 @@ internal fun CollectionNovelSearchScreen(
     }
     val searchFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    var showDiscard by rememberSaveable { mutableStateOf(false) }
+    val requestBack = {
+        if (onDiscard == null) onNavigateBack() else showDiscard = true
+    }
     val selectedNovelIds = selectedNovels.mapTo(mutableSetOf()) { it.novelId }
     val isInitialLoading =
         submittedQuery.isNotBlank() &&
@@ -119,6 +138,7 @@ internal fun CollectionNovelSearchScreen(
         searchFocusRequester.requestFocus()
         keyboardController?.show()
     }
+    BackHandler(onBack = requestBack)
 
     Column(
         modifier = modifier
@@ -129,7 +149,7 @@ internal fun CollectionNovelSearchScreen(
         CollectionAppBar(
             title = stringResource(collection_create_novel_list),
             actionLabel = stringResource(collection_create_complete),
-            onNavigateBack = onNavigateBack,
+            onNavigateBack = requestBack,
             onActionClick = onNavigateBack,
             isActionEnabled = selectedNovels.isNotEmpty(),
         )
@@ -232,10 +252,24 @@ internal fun CollectionNovelSearchScreen(
                                 }
                             }
                         }
+                        if (searchResults.loadState.append is LoadState.Error) {
+                            item {
+                                TextButton(onClick = searchResults::retry, modifier = Modifier.fillMaxWidth()) {
+                                    Text(stringResource(com.into.websoso.core.resource.R.string.collection_retry))
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+    if (showDiscard) {
+        CollectionConfirmDialog(
+            isDelete = false,
+            onDismiss = { showDiscard = false },
+            onConfirm = { onDiscard?.invoke() },
+        )
     }
 }
 
@@ -290,6 +324,7 @@ private fun CollectionNovelSearchScreenPreview() {
             onAddNovel = {},
             onDeleteNovel = {},
             onNavigateBack = {},
+            onDiscard = null,
             onNavigateToLibraryNovelSelection = {},
         )
     }

@@ -85,6 +85,7 @@ dependencies {
     implementation(projects.core.datastore)
 
     implementation(projects.data.account)
+    implementation(projects.data.collection)
     implementation(projects.data.library)
     implementation(projects.data.feed)
 
@@ -133,6 +134,7 @@ dependencies {
 
     // Third-party SDK
     implementation(libs.kakao) // 카카오 로그인 API
+    implementation(libs.kakao.share) // 카카오톡 공유 API
     implementation(libs.amplitude) // Amplitude
 
     // Firebase
