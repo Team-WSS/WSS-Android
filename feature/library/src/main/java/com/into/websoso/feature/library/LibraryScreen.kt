@@ -57,6 +57,7 @@ fun LibraryScreen(
     navigateToNormalExploreActivity: () -> Unit,
     navigateToNovelDetailActivity: (novelId: Long) -> Unit,
     libraryViewModel: LibraryViewModel,
+    navigateToNotificationSettingActivity: (() -> Unit)? = null,
 ) {
     val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
@@ -134,6 +135,7 @@ fun LibraryScreen(
         onItemClick = { navigateToNovelDetailActivity(it.novelId) },
         onSearchClick = navigateToNormalExploreActivity,
         onExploreClick = navigateToNormalExploreActivity,
+        onNotificationManageClick = navigateToNotificationSettingActivity,
         onInterestClick = libraryViewModel::updateInterestedNovels,
         onAttractivePointClick = libraryViewModel::updateAttractivePoints,
         onReadStatusClick = libraryViewModel::updateReadStatus,
@@ -182,6 +184,7 @@ private fun LibraryScreen(
     onKeywordClick: (String) -> Unit,
     onResetClick: () -> Unit,
     onFilterSearchClick: () -> Unit,
+    onNotificationManageClick: (() -> Unit)?,
 ) {
     Column(
         modifier = Modifier
@@ -192,8 +195,6 @@ private fun LibraryScreen(
 
         LibraryTopBar(onSearchClick = onSearchClick)
 
-        Spacer(modifier = Modifier.height(9.dp))
-
         LibraryFilterTopBar(
             libraryFilterUiModel = uiState.libraryFilterUiModel,
             totalCount = uiState.novelTotalCount,
@@ -202,6 +203,7 @@ private fun LibraryScreen(
             onSortClick = onSortClick,
             onToggleViewType = onToggleViewType,
             onInterestClick = onInterestClick,
+            onNotificationManageClick = onNotificationManageClick,
         )
 
         PullToRefreshBox(
