@@ -42,6 +42,9 @@ class LibraryFragment : Fragment() {
                         navigateToNovelDetailActivity = { novelId ->
                             websosoNavigator.navigateToNovelDetailActivity(novelId, ::startActivity)
                         },
+                        navigateToNotificationSettingActivity = {
+                            websosoNavigator.navigateToNotificationSettingActivity(::startActivity)
+                        },
                     )
                 }
             }
