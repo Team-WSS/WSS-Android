@@ -37,7 +37,7 @@ fun NovelNotificationEmptyView(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(2f))
         Image(
             imageVector = ImageVector.vectorResource(id = ic_storage_null),
             contentDescription = null,
@@ -64,7 +64,7 @@ fun NovelNotificationEmptyView(
                 color = Primary100,
             )
         }
-        Spacer(modifier = Modifier.weight(2f))
+        Spacer(modifier = Modifier.weight(3f))
     }
 }
 
