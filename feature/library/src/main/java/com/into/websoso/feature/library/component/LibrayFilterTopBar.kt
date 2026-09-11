@@ -152,11 +152,15 @@ private fun RowScope.LibraryViewTypeToggleButton(
     onClick: () -> Unit,
 ) {
     val selectedModifier = when (isSelected) {
-        true -> Modifier
-            .shadow(elevation = 2.dp, shape = VIEW_TYPE_TOGGLE_BUTTON_SHAPE)
-            .background(color = White, shape = VIEW_TYPE_TOGGLE_BUTTON_SHAPE)
+        true -> {
+            Modifier
+                .shadow(elevation = 2.dp, shape = VIEW_TYPE_TOGGLE_BUTTON_SHAPE)
+                .background(color = White, shape = VIEW_TYPE_TOGGLE_BUTTON_SHAPE)
+        }
 
-        false -> Modifier
+        false -> {
+            Modifier
+        }
     }
 
     Box(

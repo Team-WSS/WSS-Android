@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment.Companion.Center as CenterAlignment
 import androidx.compose.ui.Alignment.Companion.CenterEnd
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
@@ -34,6 +33,7 @@ import com.into.websoso.domain.model.NovelNotificationType
 import com.into.websoso.domain.model.NovelNotificationType.COMPLETION
 import com.into.websoso.domain.model.NovelNotificationType.HIATUS_RETURN
 import com.into.websoso.ui.novelNotification.novelNotificationTitleRes
+import androidx.compose.ui.Alignment.Companion.Center as CenterAlignment
 
 // 뒤로가기(6 + 44)와 액션 영역을 침범하지 않도록 제목이 쓸 수 있는 좌우 여백
 private val TITLE_HORIZONTAL_MARGIN = 70.dp
