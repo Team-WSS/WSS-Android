@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -63,6 +63,8 @@ import com.into.websoso.feature.library.model.ReadStatusUiModel
 private const val THUMBNAIL_WIDTH_RATIO = 60f / 360f
 private const val THUMBNAIL_HEIGHT_RATIO = 80f / 360f
 private const val FEED_CARD_WIDTH_RATIO = 0.8611f
+private val CONTENT_SPACING = 16.dp
+private val ATTRACTIVE_POINT_ROW_HEIGHT = 23.dp
 
 @Composable
 internal fun LibraryListItem(
@@ -74,19 +76,25 @@ internal fun LibraryListItem(
         modifier = modifier
             .fillMaxWidth()
             .debouncedClickable { onClick() },
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
+        NovelStatusHeader(
+            readStatus = item.readStatus,
+            formattedDateRange = item.formattedDateRange,
+        )
+
         Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(CONTENT_SPACING),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             NovelThumbnail(
                 thumbnailUrl = item.novelImage,
-                readStatus = item.readStatus,
                 isInteresting = item.isInterest,
             )
 
             NovelInfo(
                 item = item,
+                modifier = Modifier.weight(1f),
             )
         }
 
@@ -102,7 +110,7 @@ internal fun LibraryListItem(
             }
 
         HorizontalDivider(
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.padding(top = 10.dp),
             thickness = 1.dp,
             color = Gray50,
         )
@@ -110,43 +118,61 @@ internal fun LibraryListItem(
 }
 
 @Composable
-private fun NovelThumbnail(
-    thumbnailUrl: String,
+private fun NovelStatusHeader(
     readStatus: ReadStatusUiModel?,
-    isInteresting: Boolean,
+    formattedDateRange: String?,
 ) {
+    if (readStatus == null && formattedDateRange == null) return
+
     val size = calculateThumbnailSize()
 
-    Column(modifier = Modifier.width(size.width)) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(CONTENT_SPACING),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         ReadStatusBadge(
             readStatusUiModel = readStatus,
             width = size.width,
         )
 
-        Spacer(modifier = Modifier.height(6.dp))
-
-        Box(
-            modifier = Modifier
-                .size(width = size.width, height = size.height)
-                .clip(RoundedCornerShape(8.dp)),
-        ) {
-            AsyncImage(
-                model = thumbnailUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
+        formattedDateRange?.let {
+            Text(
+                text = it,
+                style = WebsosoTheme.typography.body5,
+                color = Gray300,
             )
+        }
+    }
+}
 
-            if (isInteresting) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = ic_library_interesting),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(4.dp)
-                        .size(16.dp),
-                )
-            }
+@Composable
+private fun NovelThumbnail(
+    thumbnailUrl: String,
+    isInteresting: Boolean,
+) {
+    val size = calculateThumbnailSize()
+
+    Box(
+        modifier = Modifier
+            .size(width = size.width, height = size.height)
+            .clip(RoundedCornerShape(8.dp)),
+    ) {
+        AsyncImage(
+            model = thumbnailUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
+
+        if (isInteresting) {
+            Image(
+                imageVector = ImageVector.vectorResource(id = ic_library_interesting),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(10.dp)
+                    .size(13.dp),
+            )
         }
     }
 }
@@ -156,24 +182,26 @@ private fun ReadStatusBadge(
     readStatusUiModel: ReadStatusUiModel?,
     width: Dp,
 ) {
-    readStatusUiModel?.let {
-        Box(
-            modifier = Modifier
-                .width(width)
-                .background(
-                    color = it.backgroundColor,
-                    shape = RoundedCornerShape(8.dp),
-                ).padding(vertical = 4.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = it.readStatus.label,
-                color = White,
-                style = WebsosoTheme.typography.label2,
-                softWrap = false,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+    Box(modifier = Modifier.width(width)) {
+        readStatusUiModel?.let {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = it.backgroundColor,
+                        shape = RoundedCornerShape(8.dp),
+                    ).padding(horizontal = 6.dp, vertical = 4.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = it.readStatus.label,
+                    color = White,
+                    style = WebsosoTheme.typography.label2,
+                    softWrap = false,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }
@@ -188,68 +216,30 @@ private fun calculateThumbnailSize(): ThumbnailUiSize {
 }
 
 @Composable
-private fun NovelInfo(item: NovelUiModel) {
-    Column {
-        Spacer(modifier = Modifier.height(2.dp))
-        NovelInfoDate(item = item)
-        Spacer(modifier = Modifier.height(4.dp))
-        NovelInfoContent(
-            title = item.title,
-            myRating = item.userNovelRating,
-            totalRating = item.novelRating,
-            attractivePoints = item.attractivePoints,
-        )
-    }
-}
-
-@Composable
-private fun NovelInfoDate(item: NovelUiModel) {
-    Box(modifier = Modifier.height(18.dp)) {
-        item.formattedDateRange?.let {
+private fun NovelInfo(
+    item: NovelUiModel,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
-                text = it,
-                style = WebsosoTheme.typography.body5,
-                color = Gray300,
+                text = item.title,
+                style = WebsosoTheme.typography.title2,
+                color = Black,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+            NovelRatings(
+                myRating = item.userNovelRating,
+                totalRating = item.novelRating,
             )
         }
-    }
-}
 
-@Composable
-private fun NovelInfoContent(
-    title: String,
-    myRating: NovelRating?,
-    totalRating: Float,
-    attractivePoints: AttractivePoints,
-) {
-    val size = calculateThumbnailSize()
-
-    Column(
-        modifier = Modifier.height(size.height),
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = title,
-            style = WebsosoTheme.typography.title2,
-            color = Black,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        NovelRatings(
-            myRating = myRating,
-            totalRating = totalRating,
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        if (attractivePoints.value.isNotEmpty()) {
-            AttractivePointTags(attractivePoints = attractivePoints)
-        } else {
-            Box(modifier = Modifier.height(18.dp))
-        }
+        AttractivePointTags(attractivePoints = item.attractivePoints)
     }
 }
 
@@ -258,74 +248,102 @@ private fun NovelRatings(
     myRating: NovelRating?,
     totalRating: Float,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        myRating?.let {
-            MyRatingSection(rating = it.rating.value)
-            Spacer(modifier = Modifier.width(10.dp))
-        }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(7.dp),
+    ) {
+        myRating?.let { MyRatingSection(rating = it.rating.value) }
+
         TotalRatingSection(rating = totalRating)
     }
 }
 
 @Composable
 private fun MyRatingSection(rating: Float) {
-    Image(
-        imageVector = ImageVector.vectorResource(id = ic_storage_star),
-        contentDescription = null,
-        modifier = Modifier.size(10.dp),
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Box(
+                modifier = Modifier.size(12.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = ic_storage_star),
+                    contentDescription = null,
+                    modifier = Modifier.size(9.dp),
+                )
+            }
 
-    Spacer(modifier = Modifier.width(2.dp))
+            Text(
+                text = "$rating",
+                style = WebsosoTheme.typography.body5Secondary,
+                color = Secondary100,
+            )
+        }
 
-    Text(
-        text = "$rating",
-        style = WebsosoTheme.typography.body5Secondary,
-        color = Secondary100,
-    )
-
-    Spacer(modifier = Modifier.width(4.dp))
-
-    Text(
-        text = "내 별점",
-        style = WebsosoTheme.typography.body5,
-        color = Gray300,
-    )
+        Text(
+            text = "내 별점",
+            style = WebsosoTheme.typography.body5,
+            color = Gray300,
+        )
+    }
 }
 
 @Composable
 private fun TotalRatingSection(rating: Float) {
-    Icon(
-        imageVector = ImageVector.vectorResource(id = ic_storage_star),
-        contentDescription = null,
-        modifier = Modifier.size(10.dp),
-        tint = Gray200,
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = ic_storage_star),
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = Gray200,
+            )
 
-    Spacer(modifier = Modifier.width(2.dp))
+            Text(
+                text = "$rating",
+                style = WebsosoTheme.typography.body5,
+                color = Gray200,
+            )
+        }
 
-    Text(
-        text = "$rating 전체 별점",
-        style = WebsosoTheme.typography.body5,
-        color = Gray200,
-    )
+        Text(
+            text = "전체 별점",
+            style = WebsosoTheme.typography.body5,
+            color = Gray200,
+        )
+    }
 }
 
 @Composable
 private fun AttractivePointTags(attractivePoints: AttractivePoints) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        attractivePoints.selectedAttractivePoints.forEachIndexed { index, attractivePoint ->
+    val selectedAttractivePoints = attractivePoints.selectedAttractivePoints
+
+    Row(
+        modifier = Modifier.height(ATTRACTIVE_POINT_ROW_HEIGHT),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        selectedAttractivePoints.forEachIndexed { index, attractivePoint ->
             AttractivePointItem(attractivePoint)
 
-            if (index < attractivePoints.selectedAttractivePoints.lastIndex) {
-                Spacer(modifier = Modifier.width(6.dp))
-
-                Text(
-                    text = "•",
-                    style = WebsosoTheme.typography.body4,
-                    color = Primary100,
+            if (index < selectedAttractivePoints.lastIndex) {
+                Box(
+                    modifier = Modifier
+                        .size(2.dp)
+                        .background(color = Primary100, shape = CircleShape),
                 )
-
-                Spacer(modifier = Modifier.width(6.dp))
             }
         }
     }
@@ -333,18 +351,19 @@ private fun AttractivePointTags(attractivePoints: AttractivePoints) {
 
 @Composable
 private fun AttractivePointItem(attractivePoint: AttractivePoint) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+    ) {
         Image(
             imageVector = attractivePointIcon(attractivePoint),
             contentDescription = attractivePoint.label,
-            modifier = Modifier.size(16.dp),
+            modifier = Modifier.size(12.dp),
         )
-
-        Spacer(modifier = Modifier.width(4.dp))
 
         Text(
             text = attractivePoint.label,
-            style = WebsosoTheme.typography.body4,
+            style = WebsosoTheme.typography.body5,
             color = Gray300,
         )
     }
@@ -382,8 +401,8 @@ private fun NovelKeywordChip(keyword: String) {
         style = WebsosoTheme.typography.body5,
         color = Gray200,
         modifier = Modifier
-            .background(color = Primary20, shape = RoundedCornerShape(6.dp))
-            .padding(horizontal = 8.dp, vertical = 3.dp),
+            .background(color = Primary20, shape = RoundedCornerShape(20.dp))
+            .padding(horizontal = 8.dp, vertical = 6.dp),
     )
 }
 
