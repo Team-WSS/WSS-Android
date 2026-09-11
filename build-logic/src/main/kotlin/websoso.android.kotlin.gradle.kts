@@ -8,7 +8,7 @@ plugins {
 }
 
 androidExtension.apply {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 30
