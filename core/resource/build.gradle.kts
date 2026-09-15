@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.into.websoso.core.resource"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 30

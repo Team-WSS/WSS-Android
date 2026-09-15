@@ -31,7 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="2dp"
             android:contentDescription="@null"
             android:padding="10dp"
             android:src="@drawable/btn_setting_back"
@@ -42,8 +41,8 @@
         <TextView
             android:id="@+id/tv_notification_setting_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingVertical="20dp"
+            android:layout_height="44dp"
+            android:gravity="center"
             android:text="@string/setting_notification"
             android:textAppearance="@style/title2"
             android:textColor="@color/black"

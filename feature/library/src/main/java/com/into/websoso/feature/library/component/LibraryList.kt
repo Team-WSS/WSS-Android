@@ -21,7 +21,7 @@ internal fun LibraryList(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = listState,
-        contentPadding = PaddingValues(start = 20.dp, bottom = 20.dp),
+        contentPadding = PaddingValues(start = 20.dp, top = 16.dp, bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(28.dp),
     ) {
         items(novels.itemCount) { index ->

@@ -23,7 +23,7 @@ android {
         versionName = libs.versions.versionName.get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        targetSdk = 35
+        targetSdk = 36
 
         buildConfigs(rootDir) {
             string(name = "S3_BASE_URL", key = "s3.url")
