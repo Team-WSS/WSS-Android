@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
@@ -37,11 +38,9 @@ import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.common.extensions.debouncedSelectable
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray100
-import com.into.websoso.core.designsystem.theme.Gray20
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Gray50
-import com.into.websoso.core.designsystem.theme.Gray70New
 import com.into.websoso.core.designsystem.theme.Gray80
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
@@ -122,8 +121,8 @@ private fun LibraryViewTypeToggle(
         modifier = Modifier
             .width(70.dp)
             .height(33.dp)
-            .background(color = Gray20, shape = VIEW_TYPE_TOGGLE_SHAPE)
-            .border(width = 1.dp, color = Gray70New, shape = VIEW_TYPE_TOGGLE_SHAPE)
+            .background(color = Color(0xFFF7F7F9), shape = VIEW_TYPE_TOGGLE_SHAPE)
+            .border(width = 1.dp, color = Color(0xFFECECF1), shape = VIEW_TYPE_TOGGLE_SHAPE)
             .padding(3.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -175,7 +174,7 @@ private fun RowScope.LibraryViewTypeToggleButton(
         Icon(
             imageVector = ImageVector.vectorResource(id = iconRes),
             contentDescription = null,
-            tint = if (isSelected) Black else Gray100,
+            tint = if (isSelected) Color(0xFF26262B) else Gray100,
             modifier = Modifier.size(iconSize),
         )
     }
