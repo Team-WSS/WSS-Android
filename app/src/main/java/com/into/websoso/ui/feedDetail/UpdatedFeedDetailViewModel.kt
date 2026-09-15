@@ -145,7 +145,7 @@ class UpdatedFeedDetailViewModel
          */
         override fun onCleared() {
             super.onCleared()
-            feedRepository.syncDirtyFeeds()
+            feedRepository.syncPendingLikes()
         }
 
         /**

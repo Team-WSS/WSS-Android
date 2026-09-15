@@ -202,7 +202,7 @@ class FeedViewModel
 
         override fun onCleared() {
             super.onCleared()
-            feedRepository.syncDirtyFeeds()
+            feedRepository.syncPendingLikes()
         }
 
         // --- 기타 탭/필터 로직 ---
