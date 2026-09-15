@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -49,7 +48,12 @@ fun CollectionEntry(
                         bottom = if (collectionCount > 0) 16.dp else 20.dp,
                     )
                 } else {
-                    Modifier.height(44.dp).padding(horizontal = 16.dp)
+                    Modifier.padding(
+                        start = 20.dp,
+                        top = 24.dp,
+                        end = 20.dp,
+                        bottom = 24.dp,
+                    )
                 },
             ),
         verticalAlignment = Alignment.CenterVertically,
