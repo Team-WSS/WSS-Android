@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -47,7 +46,6 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.into.websoso.core.designsystem.theme.Gray200
-import com.into.websoso.core.designsystem.theme.Gray50
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
@@ -205,22 +203,15 @@ internal fun CollectionNovelSearchScreen(
                             vertical = 10.dp,
                         ),
                     ) {
-                        items(
-                            count = selectedNovels.size,
-                            key = { index -> "selected-${selectedNovels[index].novelId}" },
-                        ) { index ->
-                            val novel = selectedNovels[index]
-                            CollectionSelectedNovelItem(
-                                novel = novel,
-                                onDeleteClick = { onDeleteNovel(novel.novelId) },
-                            )
-                        }
-
-                        if (selectedNovels.isNotEmpty() && submittedQuery.isNotBlank()) {
-                            item {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 10.dp),
-                                    color = Gray50,
+                        if (submittedQuery.isBlank()) {
+                            items(
+                                count = selectedNovels.size,
+                                key = { index -> "selected-${selectedNovels[index].novelId}" },
+                            ) { index ->
+                                val novel = selectedNovels[index]
+                                CollectionSelectedNovelItem(
+                                    novel = novel,
+                                    onDeleteClick = { onDeleteNovel(novel.novelId) },
                                 )
                             }
                         }
