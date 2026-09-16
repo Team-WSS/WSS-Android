@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -68,46 +69,52 @@ fun CollectionPreview(
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = if (userId == null) 20.dp else 16.dp)
+                        .padding(horizontal = 20.dp)
+                        .padding(horizontal = 10.dp)
                         .padding(bottom = if (userId == null) 20.dp else 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(28.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    current.collections.take(3).forEach { collection ->
-                        Column(
-                            Modifier.width(88.dp).debouncedClickable { onCollectionClick(collection.id) },
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                        ) {
-                            Box(Modifier.size(88.dp, 108.397.dp)) {
-                                Box(
-                                    Modifier
-                                        .offset(x = 14.dp)
-                                        .size(73.907.dp, 108.397.dp)
-                                        .clip(RoundedCornerShape(6.569.dp))
-                                        .background(Gray200),
-                                )
-                                Box(
-                                    Modifier
-                                        .offset(x = 7.dp)
-                                        .size(73.907.dp, 108.397.dp)
-                                        .clip(RoundedCornerShape(6.569.dp))
-                                        .background(Gray80),
-                                )
-                                NetworkImage(
-                                    imageUrl = collection.representativeNovel.imageUrl,
-                                    contentDescription = collection.name,
-                                    contentScale = ContentScale.Crop,
-                                    alignment = Alignment.BottomCenter,
-                                    placeholder = painterResource(R.drawable.img_collection_empty_cover),
-                                    modifier = Modifier.size(73.907.dp, 108.397.dp).clip(RoundedCornerShape(6.569.dp)),
+                    repeat(3) { index ->
+                        val collection = current.collections.getOrNull(index)
+                        if (collection == null) {
+                            Spacer(Modifier.width(88.dp))
+                        } else {
+                            Column(
+                                Modifier.width(88.dp).debouncedClickable { onCollectionClick(collection.id) },
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Box(Modifier.size(88.dp, 108.397.dp)) {
+                                    Box(
+                                        Modifier
+                                            .offset(x = 14.dp)
+                                            .size(73.907.dp, 108.397.dp)
+                                            .clip(RoundedCornerShape(6.569.dp))
+                                            .background(Gray200),
+                                    )
+                                    Box(
+                                        Modifier
+                                            .offset(x = 7.dp)
+                                            .size(73.907.dp, 108.397.dp)
+                                            .clip(RoundedCornerShape(6.569.dp))
+                                            .background(Gray80),
+                                    )
+                                    NetworkImage(
+                                        imageUrl = collection.representativeNovel.imageUrl,
+                                        contentDescription = collection.name,
+                                        contentScale = ContentScale.Crop,
+                                        alignment = Alignment.BottomCenter,
+                                        placeholder = painterResource(R.drawable.img_collection_empty_cover),
+                                        modifier = Modifier.size(73.907.dp, 108.397.dp).clip(RoundedCornerShape(6.569.dp)),
+                                    )
+                                }
+                                Text(
+                                    collection.name,
+                                    color = Gray300,
+                                    style = WebsosoTheme.typography.body5,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
-                            Text(
-                                collection.name,
-                                color = Gray300,
-                                style = WebsosoTheme.typography.body5,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
                         }
                     }
                 }
