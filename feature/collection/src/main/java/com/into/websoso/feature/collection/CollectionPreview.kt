@@ -1,6 +1,5 @@
 package com.into.websoso.feature.collection
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +27,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -74,7 +74,7 @@ fun CollectionPreview(
                 ) {
                     current.collections.take(3).forEach { collection ->
                         Column(
-                            Modifier.width(88.dp).clickable { onCollectionClick(collection.id) },
+                            Modifier.width(88.dp).debouncedClickable { onCollectionClick(collection.id) },
                             verticalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             Box(Modifier.size(88.dp, 108.397.dp)) {

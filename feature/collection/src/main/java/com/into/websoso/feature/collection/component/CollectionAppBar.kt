@@ -2,14 +2,12 @@ package com.into.websoso.feature.collection.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray100
 import com.into.websoso.core.designsystem.theme.Primary100
@@ -40,12 +39,13 @@ internal fun CollectionAppBar(
             .background(White),
         contentAlignment = Alignment.Center,
     ) {
-        IconButton(
-            onClick = onNavigateBack,
+        Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .padding(start = 6.dp)
-                .size(44.dp),
+                .size(44.dp)
+                .debouncedClickable(onClick = onNavigateBack),
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 painter = painterResource(id = ic_navigate_left),
@@ -65,7 +65,7 @@ internal fun CollectionAppBar(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .fillMaxHeight()
-                    .clickable(
+                    .debouncedClickable(
                         enabled = isActionEnabled,
                         onClick = onActionClick,
                     ).padding(horizontal = 20.dp),

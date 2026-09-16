@@ -3,7 +3,7 @@ package com.into.websoso.feature.collection
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +29,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -66,6 +65,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.component.S3Image
 import com.into.websoso.core.designsystem.theme.Black
@@ -189,7 +189,7 @@ internal fun CollectionDetailScreen(
                                 style = WebsosoTheme.typography.body3,
                             )
                             Row(
-                                Modifier.clickable { showSort = true }.padding(vertical = 6.dp),
+                                Modifier.debouncedClickable { showSort = true }.padding(vertical = 6.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                             ) {
@@ -220,7 +220,7 @@ internal fun CollectionDetailScreen(
                                 Column(
                                     Modifier
                                         .weight(1f)
-                                        .clickable(role = Role.Button) { onNovelClick(novel.id) },
+                                        .debouncedClickable(role = Role.Button) { onNovelClick(novel.id) },
                                     verticalArrangement = Arrangement.spacedBy(6.dp),
                                 ) {
                                     NetworkImage(
@@ -327,7 +327,7 @@ private fun CollectionDetailMenu(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(enabled = enabled, role = Role.Button, onClick = onEdit)
+                    .debouncedClickable(enabled = enabled, role = Role.Button, onClick = onEdit)
                     .padding(15.dp),
             )
             HorizontalDivider(thickness = 0.7.dp, color = Gray50)
@@ -338,7 +338,7 @@ private fun CollectionDetailMenu(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(enabled = enabled, role = Role.Button, onClick = onDelete)
+                    .debouncedClickable(enabled = enabled, role = Role.Button, onClick = onDelete)
                     .padding(horizontal = 15.dp, vertical = 14.dp),
             )
         }
@@ -368,7 +368,10 @@ private fun DetailAppBar(
             ).padding(start = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(onNavigateBack, modifier = Modifier.size(44.dp)) {
+        Box(
+            Modifier.size(44.dp).debouncedClickable(onClick = onNavigateBack),
+            contentAlignment = Alignment.Center,
+        ) {
             Icon(
                 painterResource(R.drawable.ic_navigate_left),
                 stringResource(R.string.collection_back),
@@ -384,7 +387,10 @@ private fun DetailAppBar(
             overflow = TextOverflow.Ellipsis,
         )
         if (isMine) {
-            IconButton(onMenuClick, modifier = Modifier.width(60.dp).height(44.dp)) {
+            Box(
+                Modifier.width(60.dp).height(44.dp).debouncedClickable(onClick = onMenuClick),
+                contentAlignment = Alignment.Center,
+            ) {
                 Icon(
                     painterResource(R.drawable.ic_three_dots),
                     stringResource(R.string.collection_menu),
@@ -462,6 +468,8 @@ private fun CollectionDetailHeader(
                         .toggleable(
                             value = collection.isLiked,
                             enabled = !isBusy,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
                             role = Role.Checkbox,
                         ) { onLike() },
                     horizontalArrangement = Arrangement.spacedBy(
@@ -488,7 +496,7 @@ private fun CollectionDetailHeader(
                         .height(40.dp)
                         .clip(RoundedCornerShape(15.dp))
                         .background(if (collection.isPublic) Primary100 else Gray80)
-                        .clickable(
+                        .debouncedClickable(
                             enabled = collection.isPublic && !isBusy && !isSharing,
                             role = Role.Button,
                             onClick = onShare,
@@ -565,7 +573,7 @@ private fun CollectionSortSheet(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
                         .background(if (criteria == selected) Primary20 else White)
-                        .clickable {
+                        .debouncedClickable {
                             onSelected(criteria)
                             onDismiss()
                         }.padding(vertical = 16.dp),

@@ -3,7 +3,6 @@ package com.into.websoso.feature.collection.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Gray20
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary30
@@ -45,7 +45,7 @@ internal fun CollectionCreateButton(
                 width = 1.dp,
                 color = Primary30,
                 shape = shape,
-            ).clickable(
+            ).debouncedClickable(
                 onClick = onClick,
                 role = Role.Button,
             ),
