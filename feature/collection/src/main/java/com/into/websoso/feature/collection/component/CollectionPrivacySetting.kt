@@ -1,6 +1,10 @@
 package com.into.websoso.feature.collection.component
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -69,11 +75,23 @@ private fun CollectionPrivacySwitch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
+    val thumbOffset by animateDpAsState(
+        targetValue = if (checked) 18.dp else 0.dp,
+        animationSpec = tween(durationMillis = 150),
+        label = "CollectionPrivacySwitchThumbOffset",
+    )
+    val trackColor by animateColorAsState(
+        targetValue = if (checked) Primary100 else Gray100,
+        animationSpec = tween(durationMillis = 150),
+        label = "CollectionPrivacySwitchTrackColor",
+    )
     Box(
         modifier = Modifier
             .size(42.dp)
             .toggleable(
                 value = checked,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
                 role = Role.Switch,
                 onValueChange = onCheckedChange,
             ),
@@ -83,14 +101,14 @@ private fun CollectionPrivacySwitch(
             modifier = Modifier
                 .size(width = 40.dp, height = 22.dp)
                 .background(
-                    color = if (checked) Primary100 else Gray100,
+                    color = trackColor,
                     shape = RoundedCornerShape(11.dp),
                 ).padding(2.dp),
         ) {
             Box(
                 modifier = Modifier
                     .size(18.dp)
-                    .offset(x = if (checked) 18.dp else 0.dp)
+                    .offset(x = thumbOffset)
                     .background(
                         color = White,
                         shape = CircleShape,
