@@ -1,5 +1,7 @@
 package com.into.websoso.feature.collection
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -49,7 +51,36 @@ fun CollectionNavHost(
         navController.currentBackStackEntry?.savedStateHandle?.set("showMyCollections", 1)
     }
 
-    NavHost(navController, startDestination = start, modifier = modifier.navigationBarsPadding().imePadding()) {
+    val transitionDuration = 300
+    NavHost(
+        navController,
+        startDestination = start,
+        modifier = modifier.navigationBarsPadding().imePadding(),
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(transitionDuration),
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(transitionDuration),
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(transitionDuration),
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(transitionDuration),
+            )
+        },
+    ) {
         composable(COLLECTION_ROUTE) { entry ->
             val showMy by entry.savedStateHandle.getStateFlow("showMyCollections", 0).collectAsStateWithLifecycle()
             CollectionScreen(
