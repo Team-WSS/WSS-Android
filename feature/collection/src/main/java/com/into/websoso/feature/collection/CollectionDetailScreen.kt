@@ -302,7 +302,7 @@ private fun CollectionDetailMenu(
 ) {
     Popup(
         alignment = Alignment.TopEnd,
-        offset = IntOffset(0, with(LocalDensity.current) { 54.dp.roundToPx() }),
+        offset = IntOffset(0, with(LocalDensity.current) { 78.dp.roundToPx() }),
         onDismissRequest = onDismiss,
         properties = PopupProperties(focusable = true),
     ) {
@@ -356,7 +356,6 @@ private fun DetailAppBar(
     Row(
         Modifier
             .fillMaxWidth()
-            .height(44.dp)
             .background(
                 if (isCollapsed ||
                     title.isNotEmpty()
@@ -365,7 +364,9 @@ private fun DetailAppBar(
                 } else {
                     Transparent
                 },
-            ).padding(start = 6.dp),
+            ).padding(vertical = 12.dp)
+            .height(44.dp)
+            .padding(start = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(

@@ -35,8 +35,9 @@ internal fun CollectionAppBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(44.dp)
-            .background(White),
+            .background(White)
+            .padding(vertical = 12.dp)
+            .height(44.dp),
         contentAlignment = Alignment.Center,
     ) {
         Box(
