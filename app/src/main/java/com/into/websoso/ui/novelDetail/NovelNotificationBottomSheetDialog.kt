@@ -1,5 +1,6 @@
 package com.into.websoso.ui.novelDetail
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class NovelNotificationBottomSheetDialog : BottomSheetDialogFragment() {
     private val novelNotificationViewModel: NovelNotificationViewModel by viewModels()
     private val novelId: Long by lazy { arguments?.getLong(NOVEL_ID) ?: DEFAULT_NOVEL_ID }
+    private var onDismissListener: ((Boolean) -> Unit)? = null
+
+    fun setOnDismissListener(block: (isNotificationEnabled: Boolean) -> Unit) {
+        onDismissListener = block
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +74,18 @@ class NovelNotificationBottomSheetDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         novelNotificationViewModel.updateNovelNotificationSetting(novelId)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+
+        // 토글 저장은 디바운스되므로 닫는 시점에 재조회하면 이전 값을 읽는다
+        val uiState = novelNotificationViewModel.novelNotificationUiState.value
+        if (uiState.isEditable.not()) return
+
+        onDismissListener?.invoke(
+            uiState.isCompletionNotificationEnabled || uiState.isHiatusReturnNotificationEnabled,
+        )
     }
 
     companion object {
