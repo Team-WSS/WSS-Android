@@ -19,7 +19,9 @@ class CollectionKakaoShareIntegrationTest {
     @Test
     fun registeredTemplatesAcceptDebugAppRequests() {
         // Opt in explicitly: this checks the live Kakao configuration without sending messages.
-        assumeTrue(InstrumentationRegistry.getArguments().getString("verifyKakaoTemplates") == "true")
+        assumeTrue(
+            InstrumentationRegistry.getArguments().getString("verifyKakaoTemplates") == "true",
+        )
         val loggingEnabled = KakaoSdk.loggingEnabled
         KakaoSdk.loggingEnabled = false
         try {
@@ -36,10 +38,11 @@ class CollectionKakaoShareIntegrationTest {
                 )
                 val templateId = CollectionKakaoShare.templateId(content)
                 val response = try {
-                    api.validateCustom(
-                        templateId,
-                        KakaoJson.encodeToJsonObject(CollectionKakaoShare.templateArgs(content)),
-                    ).execute()
+                    api
+                        .validateCustom(
+                            templateId,
+                            KakaoJson.encodeToJsonObject(CollectionKakaoShare.templateArgs(content)),
+                        ).execute()
                 } catch (error: Exception) {
                     throw AssertionError("Template $templateId: ${error.javaClass.simpleName}")
                 }
@@ -51,7 +54,10 @@ class CollectionKakaoShareIntegrationTest {
                     "Template $templateId: template warnings ${result?.warningMsg?.keys}",
                     result?.warningMsg.isNullOrEmpty(),
                 )
-                assertTrue("Template $templateId: argument warnings", result?.argumentMsg.isNullOrEmpty())
+                assertTrue(
+                    "Template $templateId: argument warnings",
+                    result?.argumentMsg.isNullOrEmpty(),
+                )
             }
         } finally {
             KakaoSdk.loggingEnabled = loggingEnabled
