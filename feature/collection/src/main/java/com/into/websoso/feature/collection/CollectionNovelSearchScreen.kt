@@ -172,7 +172,7 @@ internal fun CollectionNovelSearchScreen(
         CollectionNovelSelectionInfo(
             addedNovelCount = selectedNovels.size,
             onAddFromLibraryClick = onNavigateToLibraryNovelSelection,
-            modifier = Modifier.padding(top = 16.dp),
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
         )
         PullToRefreshBox(
             isRefreshing =
