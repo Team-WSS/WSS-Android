@@ -419,7 +419,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private fun showNovelNotificationBottomSheet() {
         NovelNotificationBottomSheetDialog
             .newInstance(novelId)
-            .show(
+            .apply {
+                setOnDismissListener { isNotificationEnabled ->
+                    novelDetailViewModel.updateNovelNotificationEnabled(isNotificationEnabled)
+                }
+            }.show(
                 supportFragmentManager,
                 NovelNotificationBottomSheetDialog.NOVEL_NOTIFICATION_BOTTOM_SHEET_TAG,
             )
@@ -429,6 +433,7 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         super.onResume()
         binding.tgNovelDetailReadStatus.clearChecked()
         novelDetailViewModel.updateNovelDetail(novelId)
+        novelDetailViewModel.updateNovelNotificationEnabled(novelId)
     }
 
     companion object {

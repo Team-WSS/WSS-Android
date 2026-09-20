@@ -584,11 +584,12 @@
                                 android:contentDescription="@string/novel_detail_notification_content_description"
                                 android:onClick="@{() -> onClick.onNotificationClick()}"
                                 android:padding="10dp"
-                                android:src="@drawable/ic_novel_detail_notification"
+                                android:selected="@{novelDetailViewModel.isNovelNotificationEnabled}"
+                                android:src="@drawable/ic_novel_detail_notification_selector"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@id/iv_novel_detail_menu"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:tint="@color/black" />
+                                app:tint="@color/bg_novel_detail_notification_selector" />
 
                             <View
                                 android:layout_width="0dp"
