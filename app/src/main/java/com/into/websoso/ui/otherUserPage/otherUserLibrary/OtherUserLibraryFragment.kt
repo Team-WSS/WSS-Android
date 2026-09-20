@@ -128,11 +128,13 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
                 true -> {
                     binding.clOtherUserLibraryKnownPreference.visibility = View.GONE
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.VISIBLE
+                    binding.dividerOtherUserLibraryGenre.visibility = View.GONE
                 }
 
                 false -> {
                     binding.clOtherUserLibraryKnownPreference.visibility = View.VISIBLE
                     binding.clOtherUserLibraryUnknownPreference.visibility = View.GONE
+                    binding.dividerOtherUserLibraryGenre.visibility = View.VISIBLE
                 }
             }
 

@@ -3,6 +3,7 @@ package com.into.websoso.feature.collection
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -70,60 +71,70 @@ fun CollectionScreen(
         likedCollections.refresh()
     }
 
-    Column(modifier.fillMaxSize().background(White).statusBarsPadding()) {
-        CollectionAppBar(
-            title = stringResource(R.string.collection_title),
-            onNavigateBack = onNavigateBack,
-        )
-        if (userId == null) {
-            CollectionTabRow(selectedTab = selectedTab, onTabSelected = { selectedTab = it })
-        }
-        PullToRefreshBox(
-            isRefreshing = collections.loadState.refresh is LoadState.Loading && collections.itemCount > 0,
-            onRefresh = collections::refresh,
-            modifier = Modifier.weight(1f),
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = if (selectedTab == CollectionTab.MY_COLLECTION) myListState else likedListState,
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+    Box(modifier.fillMaxSize().background(White)) {
+        Column(Modifier.fillMaxSize().statusBarsPadding()) {
+            CollectionAppBar(
+                title = stringResource(R.string.collection_title),
+                onNavigateBack = onNavigateBack,
+            )
+            if (userId == null) {
+                CollectionTabRow(selectedTab = selectedTab, onTabSelected = { selectedTab = it })
+            }
+            PullToRefreshBox(
+                isRefreshing = collections.loadState.refresh is LoadState.Loading && collections.itemCount > 0,
+                onRefresh = collections::refresh,
+                modifier = Modifier.weight(1f),
             ) {
-                if (userId == null && selectedTab == CollectionTab.MY_COLLECTION) {
-                    item { CollectionCreateButton(onClick = onNavigateToCreate) }
-                }
-                items(count = collections.itemCount, key = collections.itemKey { it.id }) { index ->
-                    collections[index]?.let { collection ->
-                        CollectionCard(collection, onClick = { onCollectionClick(collection.id) })
-                    }
-                }
-                if (collections.loadState.append is LoadState.Loading) {
-                    item { CircularProgressIndicator() }
-                }
-                if (collections.itemCount > 0 &&
-                    (collections.loadState.append is LoadState.Error || collections.loadState.refresh is LoadState.Error)
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = if (selectedTab == CollectionTab.MY_COLLECTION) myListState else likedListState,
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    item { TextButton(onClick = collections::retry) { Text(stringResource(R.string.collection_retry)) } }
+                    if (userId == null && selectedTab == CollectionTab.MY_COLLECTION) {
+                        item { CollectionCreateButton(onClick = onNavigateToCreate) }
+                    }
+                    items(count = collections.itemCount, key = collections.itemKey { it.id }) { index ->
+                        collections[index]?.let { collection ->
+                            CollectionCard(collection, onClick = { onCollectionClick(collection.id) })
+                        }
+                    }
+                    if (collections.loadState.append is LoadState.Loading) {
+                        item { CircularProgressIndicator() }
+                    }
+                    if (collections.itemCount > 0 &&
+                        (collections.loadState.append is LoadState.Error || collections.loadState.refresh is LoadState.Error)
+                    ) {
+                        item { TextButton(onClick = collections::retry) { Text(stringResource(R.string.collection_retry)) } }
+                    }
                 }
-            }
-            if (collections.itemCount == 0) {
-                when (collections.loadState.refresh) {
-                    is LoadState.Loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
+                if (collections.itemCount == 0) {
+                    when (collections.loadState.refresh) {
+                        is LoadState.Loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
 
-                    is LoadState.Error -> CollectionNetworkError(
-                        collections::retry,
-                        Modifier.align(Alignment.Center),
-                    )
-
-                    is LoadState.NotLoading -> if (selectedTab == CollectionTab.LIKED_COLLECTION || userId != null) {
-                        CollectionEmpty(
-                            message = stringResource(if (userId == null) R.string.collection_liked_empty else R.string.collection_empty),
-                            modifier = Modifier.align(Alignment.Center),
+                        is LoadState.Error -> CollectionNetworkError(
+                            collections::retry,
+                            Modifier.align(Alignment.Center),
                         )
+
+                        is LoadState.NotLoading -> if (userId != null) {
+                            CollectionEmpty(
+                                message = stringResource(R.string.collection_empty),
+                                modifier = Modifier.align(Alignment.Center),
+                            )
+                        }
                     }
                 }
             }
+        }
+        if (selectedTab == CollectionTab.LIKED_COLLECTION &&
+            collections.itemCount == 0 && collections.loadState.refresh is LoadState.NotLoading
+        ) {
+            CollectionEmpty(
+                message = stringResource(R.string.collection_liked_empty),
+                modifier = Modifier.align(Alignment.Center),
+            )
         }
     }
 }

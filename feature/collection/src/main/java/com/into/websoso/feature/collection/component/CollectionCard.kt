@@ -2,7 +2,6 @@ package com.into.websoso.feature.collection.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.Gray200
 import com.into.websoso.core.designsystem.theme.Gray300
@@ -56,7 +56,7 @@ internal fun CollectionCard(
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Row(
-                modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClick = onClick),
+                modifier = Modifier.fillMaxWidth().debouncedClickable(role = Role.Button, onClick = onClick),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(

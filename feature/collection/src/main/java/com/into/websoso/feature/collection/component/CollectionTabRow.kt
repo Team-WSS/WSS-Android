@@ -1,16 +1,17 @@
 package com.into.websoso.feature.collection.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,33 +31,31 @@ internal fun CollectionTabRow(
     onTabSelected: (CollectionTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(47.dp)
-            .background(White),
+    SecondaryTabRow(
+        selectedTabIndex = selectedTab.ordinal,
+        modifier = modifier.fillMaxWidth(),
+        containerColor = White,
+        indicator = {
+            TabRowDefaults.SecondaryIndicator(
+                modifier = Modifier.tabIndicatorOffset(
+                    selectedTabIndex = selectedTab.ordinal,
+                    matchContentSize = false,
+                ),
+                height = 2.dp,
+                color = Black,
+            )
+        },
+        divider = {
+            HorizontalDivider(thickness = 1.dp, color = Gray70New)
+        },
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(46.dp),
-        ) {
-            CollectionTab.entries.forEach { tab ->
-                CollectionTabItem(
-                    title = stringResource(tab.titleRes),
-                    isSelected = tab == selectedTab,
-                    onClick = { onTabSelected(tab) },
-                    modifier = Modifier.weight(1f),
-                )
-            }
+        CollectionTab.entries.forEach { tab ->
+            CollectionTabItem(
+                title = stringResource(tab.titleRes),
+                isSelected = tab == selectedTab,
+                onClick = { onTabSelected(tab) },
+            )
         }
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(Gray70New),
-        )
     }
 }
 
@@ -69,9 +68,12 @@ private fun CollectionTabItem(
 ) {
     Column(
         modifier = modifier
-            .height(46.dp)
+            .fillMaxWidth()
+            .height(47.dp)
             .selectable(
                 selected = isSelected,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
                 onClick = onClick,
                 role = Role.Tab,
             ).padding(top = 12.dp),
@@ -82,15 +84,6 @@ private fun CollectionTabItem(
             color = if (isSelected) Black else Gray100,
             style = WebsosoTheme.typography.title2,
         )
-        Spacer(modifier = Modifier.weight(1f))
-        if (isSelected) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(Black),
-            )
-        }
     }
 }
 

@@ -1,7 +1,6 @@
 package com.into.websoso.feature.collection.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.component.NetworkImage
 import com.into.websoso.core.designsystem.theme.Black
 import com.into.websoso.core.designsystem.theme.Gray200
@@ -86,7 +86,7 @@ internal fun CollectionNovelSearchItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(22.dp))
                 .background(if (isAdd) Primary100 else LightPink)
-                .clickable(onClick = onActionClick)
+                .debouncedClickable(onClick = onActionClick)
                 .padding(horizontal = 10.dp, vertical = 7.dp),
         ) {
             Row(
