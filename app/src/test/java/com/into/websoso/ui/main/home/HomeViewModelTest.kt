@@ -404,6 +404,38 @@ class HomeViewModelTest {
         }
 
     @Test
+    fun `a new Home owner after authentication recovery does not inherit the expired session failure`() =
+        runTest(dispatcher) {
+            listOf(401, 403).forEach { code ->
+                tasteRequest = { throw http(code) }
+                val expired = createViewModel()
+                runCurrent()
+                assertTrue(expired.uiState.value!!.error)
+                // Login and Main navigation clear the old task; simulate its ViewModelStore boundary.
+                owners.last().clear()
+                tasteRequest = { taste(10) }
+                val recovered = createViewModel()
+                runCurrent()
+                val ready = recovered.uiState.value!!
+                assertFalse(ready.error)
+                assertFalse(ready.loading)
+                assertEquals(HomeTasteStatus.CONTENT, ready.tasteStatus)
+                assertEquals(10, ready.recommendedNovelsByUserTaste.size)
+
+                // A later ordinary error remains recoverable in the new session.
+                feedRequest = { throw http(500) }
+                recovered.updateFeed()
+                runCurrent()
+                assertTrue(recovered.uiState.value!!.error)
+                feedRequest = { feeds() }
+                recovered.updateFeed()
+                runCurrent()
+                assertFalse(recovered.uiState.value!!.error)
+                assertTrue(expired.uiState.value!!.error)
+            }
+        }
+
+    @Test
     fun `terms and permission state remain available after grouped publication`() =
         runTest(dispatcher) {
             val vm = createViewModel(termsChecked = false)
