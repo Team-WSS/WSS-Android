@@ -23,6 +23,8 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.string.home_rising_feed_for_user
+import com.into.websoso.core.resource.R.string.load_fail_title
+import com.into.websoso.core.resource.R.string.load_load_title
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
@@ -31,6 +33,8 @@ import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.into.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.into.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.into.websoso.ui.main.home.dialog.TermsAgreementDialogFragment
+import com.into.websoso.ui.main.home.model.HomeTasteStatus
+import com.into.websoso.ui.main.home.model.HomeUiState
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.notification.NotificationActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
@@ -45,6 +49,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+    private var renderedState: HomeUiState? = null
 
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -80,7 +85,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
                 ProfileEditSuccess.RESULT_OK -> {
                     mainViewModel.updateUserInfo()
-                    homeViewModel.updateNovel()
+                    homeViewModel.updateNovel(preferencesChanged = true)
                 }
             }
         }
@@ -102,6 +107,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         bindViewModel()
         setupAdapter()
         setupItemDecoration()
+        binding.btnHomeTasteRetry.setOnClickListener { homeViewModel.retryTaste() }
         setupObserver()
         setupDotsIndicator()
         onSettingPreferenceGenreClick()
@@ -162,11 +168,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
                 !uiState.loading -> {
                     binding.wllHome.setWebsosoLoadingVisibility(false)
-                    popularNovelsAdapter.submitList(uiState.popularNovels)
-                    popularFeedsAdapter.submitList(uiState.popularFeeds)
-                    updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
-                    recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    if (renderedState?.popularNovels !== uiState.popularNovels) {
+                        popularNovelsAdapter.submitList(uiState.popularNovels)
+                    }
+                    if (renderedState?.popularFeeds !== uiState.popularFeeds) {
+                        popularFeedsAdapter.submitList(uiState.popularFeeds)
+                    }
+                    if (renderedState?.recommendedNovelsByUserTaste !== uiState.recommendedNovelsByUserTaste) {
+                        recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    }
+                    renderTasteStatus(uiState)
                     updateHasNotificationUnread(uiState.isNotificationUnread)
+                    renderedState = uiState
                 }
             }
         }
@@ -193,16 +206,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         }
     }
 
-    private fun updateRecommendedNovelByUserTasteVisibility(isRecommendNovelByUserTasteEmpty: Boolean) {
+    private fun renderTasteStatus(state: HomeUiState) {
         with(binding) {
-            if (isRecommendNovelByUserTasteEmpty) {
-                clHomeUserRecommendNovel.visibility = View.GONE
-                clHomeRecommendNovel.visibility = View.VISIBLE
-            } else {
-                clHomeUserRecommendNovel.visibility = View.VISIBLE
-                clHomeRecommendNovel.visibility = View.GONE
-            }
+            val empty = state.tasteStatus == HomeTasteStatus.EMPTY
+            val showContent = state.tasteStatus == HomeTasteStatus.CONTENT
+            clHomeRecommendNovel.visibility = if (empty) View.VISIBLE else View.GONE
+            clHomeUserRecommendNovel.visibility = if (empty) View.GONE else View.VISIBLE
+            rvRecommendNovelByUserTaste.visibility = if (showContent) View.VISIBLE else View.GONE
+            llHomeTasteStatus.visibility = if (showContent || empty) View.GONE else View.VISIBLE
+            val error = state.tasteStatus == HomeTasteStatus.ERROR
+            tvHomeTasteStatus.setText(if (error) load_fail_title else load_load_title)
+            btnHomeTasteRetry.visibility = if (error) View.VISIBLE else View.GONE
         }
+    }
+
+    override fun onDestroyView() {
+        renderedState = null
+        super.onDestroyView()
     }
 
     private fun updateHasNotificationUnread(hasUnread: Boolean) {
