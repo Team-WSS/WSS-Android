@@ -27,6 +27,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.net.SocketTimeoutException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UpdatedFeedRepositoryTest {
@@ -59,6 +60,7 @@ class UpdatedFeedRepositoryTest {
         val synced = repository.sosoAllFeeds.value.feed(1L)
         assertTrue(synced.isLiked)
         assertEquals(4, synced.likeCount)
+        assertServerMatches(feedApi, synced)
 
         // 메모리 pending이 비었는지 간접 확인: 다시 동기화해도 추가 요청이 없어야 한다.
         repository.syncPendingLikes()
@@ -90,6 +92,7 @@ class UpdatedFeedRepositoryTest {
         assertEquals(listOf(11L), feedApi.deleteLikesCalls)
         assertTrue(feedApi.postLikesCalls.isEmpty())
         assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        assertServerMatches(feedApi, repository.sosoAllFeeds.value.feed(11L))
     }
 
     @Test
@@ -120,13 +123,14 @@ class UpdatedFeedRepositoryTest {
 
         assertTrue(feedApi.postLikesCalls.isEmpty())
         assertTrue(feedApi.deleteLikesCalls.isEmpty())
+        assertServerMatches(feedApi, reverted)
     }
 
     @Test
     fun `동기화 요청이 실패하면 대기 기록이 메모리와 저장소에 그대로 남는다`() = runTest {
         val feedApi = FakeFeedApi().apply {
             feedsResponse = feedsResponseOf(feedResponse(feedId = 3L, isLiked = false, likeCount = 2))
-            failingLikeIds = setOf(3L)
+            planLikeRequest("POST", 3L, outcome = LikeOutcome.FAIL_WITHOUT_APPLYING)
         }
         val pendingStore = FakePendingFeedLikeStore()
         val repository = createRepository(feedApi, pendingStore)
@@ -147,11 +151,148 @@ class UpdatedFeedRepositoryTest {
         assertTrue(afterFailure.isLiked)
         assertEquals(3, afterFailure.likeCount)
 
-        // 메모리에도 남아 있는지 간접 확인: 실패 원인을 없애고 다시 동기화하면 같은 요청이 다시 나가고, 이번엔 정리된다.
-        feedApi.failingLikeIds = emptySet()
+        // 서버 원본은 false다. 목록 병합은 메모리 pending만 보므로 재조회 결과로 메모리 보존을 확인한다.
+        assertFalse(feedApi.feedsResponse.feeds.single().isLiked)
+        assertTrue(feedApi.appliedLikeRequests.isEmpty())
+        val refreshed = repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(3L)
+        assertTrue(refreshed.isLiked)
+        assertEquals(3, refreshed.likeCount)
+        assertEquals(mapOf(3L to true), pendingStore.currentPendingLikes())
+
+        // 다음 요청은 성공하도록 두고 명시적 재동기화를 확인한다.
         repository.syncPendingLikes()
         advanceUntilIdle()
         assertEquals(listOf(3L, 3L), feedApi.postLikesCalls)
+        assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        assertServerMatches(feedApi, repository.sosoAllFeeds.value.feed(3L))
+    }
+
+    @Test
+    fun `현재 결함 기록 - 서버 반영 후 타임아웃이 나면 이후 취소 기록이 사라지고 재조회 시 좋아요가 켜진다`() = runTest {
+        // 승인된 재현 예상값을 기록한다. 결함을 허용하는 제품 요구사항이나 수정 완료 테스트가 아니다.
+        val feedApi = FakeFeedApi().apply {
+            feedsResponse = feedsResponseOf(feedResponse(feedId = 8L, isLiked = false, likeCount = 0))
+        }
+        val post = feedApi.planLikeRequest("POST", 8L, outcome = LikeOutcome.TIMEOUT_AFTER_APPLYING)
+        val pendingStore = FakePendingFeedLikeStore()
+        val repository = createRepository(feedApi, pendingStore)
+        advanceUntilIdle()
+
+        repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
+        repository.toggleLikeLocal(8L)
+        advanceUntilIdle()
+        repository.syncPendingLikes()
+        advanceUntilIdle()
+
+        // 서버는 반영했지만 앱은 성공 응답을 받지 못한 상태다.
+        assertEquals(listOf(8L), feedApi.postLikesCalls)
+        assertTrue(feedApi.postLikesCompleted.isEmpty())
+        assertEquals(listOf(post), feedApi.appliedLikeRequests)
+        assertEquals(listOf(post), feedApi.respondedLikeRequests)
+        assertTrue(feedApi.feedsResponse.feeds.single().isLiked)
+        assertTrue(repository.sosoAllFeeds.value.feed(8L).isLiked)
+        assertEquals(mapOf(8L to true), pendingStore.currentPendingLikes())
+
+        repository.toggleLikeLocal(8L)
+        advanceUntilIdle()
+        val cancelled = repository.sosoAllFeeds.value.feed(8L)
+        assertFalse(cancelled.isLiked)
+        assertEquals(0, cancelled.likeCount)
+        assertTrue(pendingStore.currentPendingLikes().isEmpty())
+
+        // 저장소가 비었고 재동기화에서도 요청이 없으므로 메모리에도 취소 pending이 남지 않았다.
+        repository.syncPendingLikes()
+        advanceUntilIdle()
+        assertEquals(listOf(8L), feedApi.postLikesCalls)
+        assertTrue(feedApi.deleteLikesCalls.isEmpty())
+        assertFalse(repository.sosoAllFeeds.value.feed(8L).isLiked)
+        val serverAfterSync = feedApi.feedsResponse.feeds.single()
+        assertTrue(serverAfterSync.isLiked)
+        assertEquals(1, serverAfterSync.likeCount)
+
+        val refreshed = repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(8L)
+        assertTrue(refreshed.isLiked)
+        assertEquals(1, refreshed.likeCount)
+        assertTrue(repository.sosoAllFeeds.value.feed(8L).isLiked)
+        assertTrue(pendingStore.currentPendingLikes().isEmpty())
+    }
+
+    @Test
+    fun `현재 결함 기록 - 중복 POST와 취소가 겹치면 서버 처리 순서와 다른 응답 순서가 취소 기록을 지운다`() = runTest {
+        // 재현 예상: 서버 B-C-A, 앱 응답 B-A-C이면 서버 true / 화면 false / pending 없음이 된다.
+        val feedApi = FakeFeedApi().apply {
+            feedsResponse = feedsResponseOf(feedResponse(feedId = 9L, isLiked = false, likeCount = 0))
+        }
+        val processA = CompletableDeferred<Unit>()
+        val respondC = CompletableDeferred<Unit>()
+        val postA = feedApi.planLikeRequest("POST", 9L, processingGate = processA)
+        val postB = feedApi.planLikeRequest("POST", 9L)
+        val deleteC = feedApi.planLikeRequest("DELETE", 9L, responseGate = respondC)
+        val pendingStore = FakePendingFeedLikeStore()
+        val repository = createRepository(feedApi, pendingStore)
+        advanceUntilIdle()
+
+        repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
+        repository.toggleLikeLocal(9L)
+        advanceUntilIdle()
+        repository.syncPendingLikes() // A: 서버 처리부터 보류한다.
+        advanceUntilIdle()
+        assertEquals(listOf(9L), feedApi.postLikesCalls)
+        assertTrue(feedApi.appliedLikeRequests.isEmpty())
+
+        repository.syncPendingLikes() // B: 먼저 서버 반영 및 성공 응답을 받는다.
+        advanceUntilIdle()
+        assertEquals(listOf(9L, 9L), feedApi.postLikesCalls)
+        assertEquals(listOf(postB), feedApi.appliedLikeRequests)
+        assertEquals(listOf(postB), feedApi.respondedLikeRequests)
+        assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        assertTrue(repository.sosoAllFeeds.value.feed(9L).isLiked)
+        assertTrue(feedApi.feedsResponse.feeds.single().isLiked)
+
+        repository.toggleLikeLocal(9L)
+        advanceUntilIdle()
+        repository.syncPendingLikes() // C: 서버에는 취소를 반영하지만 응답은 보류한다.
+        advanceUntilIdle()
+        assertEquals(listOf(9L), feedApi.deleteLikesCalls)
+        assertEquals(listOf(postB, deleteC), feedApi.appliedLikeRequests)
+        assertEquals(listOf(postB), feedApi.respondedLikeRequests)
+        assertFalse(feedApi.feedsResponse.feeds.single().isLiked)
+        assertFalse(repository.sosoAllFeeds.value.feed(9L).isLiked)
+        assertEquals(mapOf(9L to false), pendingStore.currentPendingLikes())
+
+        processA.complete(Unit) // A: C보다 늦게 서버 반영하고, C보다 먼저 앱에 응답한다.
+        advanceUntilIdle()
+        assertEquals(listOf(postB, deleteC, postA), feedApi.appliedLikeRequests)
+        assertEquals(listOf(postB, postA), feedApi.respondedLikeRequests)
+        assertTrue(feedApi.feedsResponse.feeds.single().isLiked)
+        assertFalse(repository.sosoAllFeeds.value.feed(9L).isLiked)
+        assertEquals(mapOf(9L to false), pendingStore.currentPendingLikes())
+
+        // 서버 true가 메모리 pending false로 덮이는지, 저장소 재전송과 별개로 확인한다.
+        val beforeC = repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(9L)
+        assertFalse(beforeC.isLiked)
+        assertEquals(0, beforeC.likeCount)
+
+        respondC.complete(Unit)
+        advanceUntilIdle()
+        assertEquals(listOf(postB, postA, deleteC), feedApi.respondedLikeRequests)
+        assertFalse(repository.sosoAllFeeds.value.feed(9L).isLiked)
+        assertEquals(0, repository.sosoAllFeeds.value.feed(9L).likeCount)
+        assertTrue(feedApi.feedsResponse.feeds.single().isLiked)
+        assertEquals(1, feedApi.feedsResponse.feeds.single().likeCount)
+        assertTrue(pendingStore.currentPendingLikes().isEmpty())
+
+        // 저장소가 비어 있고 재동기화에도 추가 요청이 없어 메모리 pending도 없음을 확인한다.
+        repository.syncPendingLikes()
+        advanceUntilIdle()
+        assertEquals(listOf(9L, 9L), feedApi.postLikesCalls)
+        assertEquals(listOf(9L), feedApi.deleteLikesCalls)
+        assertFalse(repository.sosoAllFeeds.value.feed(9L).isLiked)
+        assertTrue(feedApi.feedsResponse.feeds.single().isLiked)
+
+        val refreshed = repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(9L)
+        assertTrue(refreshed.isLiked)
+        assertEquals(1, refreshed.likeCount)
         assertTrue(pendingStore.currentPendingLikes().isEmpty())
     }
 
@@ -162,7 +303,7 @@ class UpdatedFeedRepositoryTest {
                 feedResponse(feedId = 4L, isLiked = false, likeCount = 1),
                 feedResponse(feedId = 5L, isLiked = false, likeCount = 1),
             )
-            failingLikeIds = setOf(5L)
+            repeat(2) { planLikeRequest("POST", 5L, outcome = LikeOutcome.FAIL_WITHOUT_APPLYING) }
         }
         val pendingStore = FakePendingFeedLikeStore()
         val repository = createRepository(feedApi, pendingStore)
@@ -186,8 +327,10 @@ class UpdatedFeedRepositoryTest {
         assertEquals(2, feed4.likeCount)
         assertTrue(feed5.isLiked)
         assertEquals(2, feed5.likeCount)
+        assertServerMatches(feedApi, feed4)
+        assertFalse(feedApi.feedsResponse.feeds.first { it.feedId == 5L }.isLiked)
 
-        // 메모리 확인: 다시 동기화하면 실패했던 5만 다시 시도된다.
+        // 다시 동기화하면 실패했던 5만 다시 시도된다. 이 호출만으로 메모리와 저장소를 구분하지는 않는다.
         repository.syncPendingLikes()
         advanceUntilIdle()
         assertEquals(listOf(4L, 5L, 5L), feedApi.postLikesCalls)
@@ -206,7 +349,8 @@ class UpdatedFeedRepositoryTest {
         repository.toggleLikeLocal(6L)
         advanceUntilIdle()
 
-        val postGate = feedApi.holdPostLikes(6L)
+        val postGate = CompletableDeferred<Unit>()
+        feedApi.planLikeRequest("POST", 6L, responseGate = postGate)
         repository.syncPendingLikes()
         advanceUntilIdle()
         assertEquals(listOf(6L), feedApi.postLikesCalls)
@@ -231,6 +375,7 @@ class UpdatedFeedRepositoryTest {
 
         assertEquals(listOf(6L), feedApi.deleteLikesCalls)
         assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        assertServerMatches(feedApi, repository.sosoAllFeeds.value.feed(6L))
 
         repository.syncPendingLikes()
         advanceUntilIdle()
@@ -238,7 +383,7 @@ class UpdatedFeedRepositoryTest {
     }
 
     @Test
-    fun `동기화 호출이 겹쳐서 요청이 중복돼도 최신 선택은 손실 없이 반영된다`() = runTest {
+    fun `같은 방향 POST 두 개의 응답 순서가 바뀌어도 좋아요 상태와 개수가 유지된다`() = runTest {
         val feedApi = FakeFeedApi().apply {
             feedsResponse = feedsResponseOf(feedResponse(feedId = 7L, isLiked = false, likeCount = 0))
         }
@@ -250,7 +395,9 @@ class UpdatedFeedRepositoryTest {
         repository.toggleLikeLocal(7L)
         advanceUntilIdle()
 
-        val firstPostGate = feedApi.holdPostLikes(7L)
+        val firstPostGate = CompletableDeferred<Unit>()
+        val firstPost = feedApi.planLikeRequest("POST", 7L, responseGate = firstPostGate)
+        val secondPost = feedApi.planLikeRequest("POST", 7L)
         repository.syncPendingLikes() // 첫 번째 동기화: 요청은 서버로 보냈지만 응답은 보류된다
         advanceUntilIdle()
         assertEquals(listOf(7L), feedApi.postLikesCalls) // 서버가 받은 순서 1번째
@@ -265,10 +412,13 @@ class UpdatedFeedRepositoryTest {
         firstPostGate.complete(Unit) // 첫 번째 요청의 응답이 뒤늦게 도착
         advanceUntilIdle()
         assertEquals(listOf(7L, 7L), feedApi.postLikesCompleted)
+        assertEquals(listOf(firstPost, secondPost), feedApi.appliedLikeRequests)
+        assertEquals(listOf(secondPost, firstPost), feedApi.respondedLikeRequests)
 
         val finalFeed = repository.sosoAllFeeds.value.feed(7L)
         assertTrue(finalFeed.isLiked) // 화면의 마지막 선택: 손실 없이 좋아요 상태 유지
         assertEquals(1, finalFeed.likeCount)
+        assertServerMatches(feedApi, finalFeed)
         assertTrue(pendingStore.currentPendingLikes().isEmpty()) // 뒤늦은 응답이 지울 대상이 없어도 안전하게 무시된다
 
         repository.syncPendingLikes()
@@ -301,6 +451,7 @@ class UpdatedFeedRepositoryTest {
 
         assertEquals(listOf(1L), feedApi.postLikesCalls)
         assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        assertServerMatches(feedApi, repository.sosoAllFeeds.value.feed(1L))
     }
 
     @Test
@@ -340,6 +491,12 @@ class UpdatedFeedRepositoryTest {
 
     private fun List<FeedEntity>.feed(id: Long): FeedEntity = first { it.id == id }
 
+    private fun assertServerMatches(feedApi: FakeFeedApi, feed: FeedEntity) {
+        val serverFeed = feedApi.feedsResponse.feeds.single { it.feedId == feed.id }
+        assertEquals("서버와 화면의 좋아요 상태", feed.isLiked, serverFeed.isLiked)
+        assertEquals("서버와 화면의 좋아요 개수", feed.likeCount, serverFeed.likeCount)
+    }
+
     private fun feedsResponseOf(vararg feeds: FeedResponseDto): FeedsResponseDto =
         FeedsResponseDto(isLoadable = false, feeds = feeds.toList())
 
@@ -373,6 +530,20 @@ class UpdatedFeedRepositoryTest {
     )
 }
 
+private enum class LikeOutcome {
+    SUCCESS,
+    FAIL_WITHOUT_APPLYING,
+    TIMEOUT_AFTER_APPLYING,
+}
+
+private class PlannedLikeRequest(
+    val method: String,
+    val feedId: Long,
+    val outcome: LikeOutcome,
+    val processingGate: CompletableDeferred<Unit>?,
+    val responseGate: CompletableDeferred<Unit>?,
+)
+
 private class FakeFeedApi : FeedApi {
     var feedsResponse: FeedsResponseDto = FeedsResponseDto(isLoadable = false, feeds = emptyList())
     val feedDetailResponses = mutableMapOf<Long, FeedDetailResponseDto>()
@@ -381,29 +552,26 @@ private class FakeFeedApi : FeedApi {
     val postLikesCalls = mutableListOf<Long>()
     val deleteLikesCalls = mutableListOf<Long>()
 
-    /** 응답 도착 순서. 앱이 응답을 받은 순서를 나타낸다. */
+    /** 성공 응답 도착 순서. 실패 응답은 포함하지 않는다. */
     val postLikesCompleted = mutableListOf<Long>()
     val deleteLikesCompleted = mutableListOf<Long>()
 
-    var failingLikeIds: Set<Long> = emptySet()
+    val appliedLikeRequests = mutableListOf<PlannedLikeRequest>()
+    val respondedLikeRequests = mutableListOf<PlannedLikeRequest>()
+    private val plannedLikeRequests = mutableListOf<PlannedLikeRequest>()
 
-    private data class Gate(val method: String, val feedId: Long)
-
-    private val gates = mutableMapOf<Gate, CompletableDeferred<Unit>>()
-
-    /** 다음 postLikes(feedId) 호출을 [CompletableDeferred]가 완료될 때까지 보류시킨다. */
-    fun holdPostLikes(feedId: Long): CompletableDeferred<Unit> = hold("POST", feedId)
-
-    /** 다음 deleteLikes(feedId) 호출을 [CompletableDeferred]가 완료될 때까지 보류시킨다. */
-    fun holdDeleteLikes(feedId: Long): CompletableDeferred<Unit> = hold("DELETE", feedId)
-
-    private fun hold(
+    /** 같은 method/feedId의 다음 요청부터 순서대로 적용한다. 두 gate가 없으면 즉시 처리·응답한다. */
+    fun planLikeRequest(
         method: String,
         feedId: Long,
-    ): CompletableDeferred<Unit> {
-        val deferred = CompletableDeferred<Unit>()
-        gates[Gate(method, feedId)] = deferred
-        return deferred
+        outcome: LikeOutcome = LikeOutcome.SUCCESS,
+        processingGate: CompletableDeferred<Unit>? = null,
+        responseGate: CompletableDeferred<Unit>? = null,
+    ): PlannedLikeRequest {
+        require(method == "POST" || method == "DELETE")
+        return PlannedLikeRequest(method, feedId, outcome, processingGate, responseGate).also {
+            plannedLikeRequests += it
+        }
     }
 
     override suspend fun getFeeds(
@@ -430,16 +598,49 @@ private class FakeFeedApi : FeedApi {
 
     override suspend fun postLikes(feedId: Long) {
         postLikesCalls += feedId
-        gates.remove(Gate("POST", feedId))?.await()
+        executeLikeRequest("POST", feedId)
         postLikesCompleted += feedId
-        if (feedId in failingLikeIds) throw RuntimeException("postLikes 실패: $feedId")
     }
 
     override suspend fun deleteLikes(feedId: Long) {
         deleteLikesCalls += feedId
-        gates.remove(Gate("DELETE", feedId))?.await()
+        executeLikeRequest("DELETE", feedId)
         deleteLikesCompleted += feedId
-        if (feedId in failingLikeIds) throw RuntimeException("deleteLikes 실패: $feedId")
+    }
+
+    private suspend fun executeLikeRequest(method: String, feedId: Long) {
+        val index = plannedLikeRequests.indexOfFirst { it.method == method && it.feedId == feedId }
+        val request = if (index >= 0) {
+            plannedLikeRequests.removeAt(index)
+        } else {
+            PlannedLikeRequest(method, feedId, LikeOutcome.SUCCESS, null, null)
+        }
+        request.processingGate?.await()
+        if (request.outcome != LikeOutcome.FAIL_WITHOUT_APPLYING) {
+            applyLikeOnServer(feedId, isLiked = method == "POST")
+            appliedLikeRequests += request
+        }
+        request.responseGate?.await()
+        // 예외로 전달되는 실패/타임아웃도 앱에 결과가 도착한 순서에 포함한다.
+        respondedLikeRequests += request
+        when (request.outcome) {
+            LikeOutcome.SUCCESS -> Unit
+            LikeOutcome.FAIL_WITHOUT_APPLYING -> throw RuntimeException("$method 반영 전 실패: $feedId")
+            LikeOutcome.TIMEOUT_AFTER_APPLYING -> throw SocketTimeoutException("서버 반영 후 응답 유실: $feedId")
+        }
+    }
+
+    // 테스트 가정: POST/DELETE는 목표 상태를 설정하고, 같은 상태를 반복 설정해도 개수는 변하지 않는다.
+    private fun applyLikeOnServer(feedId: Long, isLiked: Boolean) {
+        feedsResponse = feedsResponse.copy(
+            feeds = feedsResponse.feeds.map { feed ->
+                if (feed.feedId == feedId && feed.isLiked != isLiked) {
+                    feed.copy(isLiked = isLiked, likeCount = feed.likeCount + if (isLiked) 1 else -1)
+                } else {
+                    feed
+                }
+            },
+        )
     }
 
     override suspend fun postSpoilerFeed(feedId: Long): Unit = error("좋아요 테스트에서 사용하지 않음")
