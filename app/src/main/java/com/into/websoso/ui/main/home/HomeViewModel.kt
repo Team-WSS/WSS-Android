@@ -18,11 +18,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +42,10 @@ class HomeViewModel
     ) : ViewModel() {
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
         val uiState: LiveData<HomeUiState> get() = _uiState
+
+        // Foreground notice only; returning to Home must not replay an old refresh failure.
+        private val _tasteRefreshFailed = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+        val tasteRefreshFailed: SharedFlow<Unit> = _tasteRefreshFailed.asSharedFlow()
 
         private val _isNotificationPermissionFirstLaunched: MutableLiveData<Boolean> = MutableLiveData()
         val isNotificationPermissionFirstLaunched: LiveData<Boolean> get() = _isNotificationPermissionFirstLaunched
@@ -129,6 +137,8 @@ class HomeViewModel
                 failure = { error ->
                     if (isGlobalHomeFailure(HomeSection.TASTE, error)) {
                         handleFailureState(error)
+                    } else if (keepVisible && (error !is HttpException || error.code() != 403)) {
+                        _tasteRefreshFailed.tryEmit(Unit)
                     } else {
                         publishContent(HomeSection.TASTE, sectionRelease.pending.copy(tasteStatus = HomeTasteStatus.ERROR))
                     }

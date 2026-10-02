@@ -35,6 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
@@ -51,6 +52,7 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 import java.lang.reflect.Proxy
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.intrinsics.startCoroutineUninterceptedOrReturn
@@ -492,6 +494,136 @@ class HomeViewModelTest {
                 assertEquals(count, updated.recommendedNovelsByUserTaste.size)
                 vm.uiState.removeObserver(observer)
             }
+        }
+
+    @Test
+    fun `same preference refresh failures keep content or empty until a later success`() =
+        runTest(dispatcher) {
+            listOf(0, 10).forEach { count ->
+                listOf(IOException("offline"), http(500)).forEach { failure ->
+                    tasteRequest = { taste(count) }
+                    val vm = createViewModel()
+                    runCurrent()
+                    var notices = 0
+                    val collector = backgroundScope.launch(dispatcher) { vm.tasteRefreshFailed.collect { notices++ } }
+                    runCurrent()
+                    val before = vm.uiState.value!!
+                    val tasteCalls = calls["getRecommendedNovelsByUserTaste"]!!
+                    tasteRequest = { throw failure }
+
+                    vm.updateNovel()
+                    runCurrent()
+                    val retained = vm.uiState.value!!
+                    assertFalse(retained.error)
+                    assertEquals(before.tasteStatus, retained.tasteStatus)
+                    assertSame(before.recommendedNovelsByUserTaste, retained.recommendedNovelsByUserTaste)
+                    assertEquals(tasteCalls + 1, calls["getRecommendedNovelsByUserTaste"])
+                    assertEquals(1, notices)
+
+                    collector.cancel()
+                    runCurrent()
+                    val restarted = backgroundScope.launch(dispatcher) { vm.tasteRefreshFailed.collect { notices++ } }
+                    runCurrent()
+                    assertEquals(1, notices)
+
+                    val nextCount = if (count == 0) 2 else 0
+                    tasteRequest = { taste(nextCount) }
+                    vm.updateNovel()
+                    runCurrent()
+                    val refreshed = vm.uiState.value!!
+                    assertEquals(if (nextCount == 0) HomeTasteStatus.EMPTY else HomeTasteStatus.CONTENT, refreshed.tasteStatus)
+                    assertEquals(nextCount, refreshed.recommendedNovelsByUserTaste.size)
+                    assertEquals(tasteCalls + 2, calls["getRecommendedNovelsByUserTaste"])
+                    assertEquals(1, notices)
+                    restarted.cancel()
+                }
+            }
+        }
+
+    @Test
+    fun `preference change failure never restores previous content or empty and can be retried`() =
+        runTest(dispatcher) {
+            listOf(0, 10).forEach { count ->
+                tasteRequest = { taste(count) }
+                val vm = createViewModel()
+                runCurrent()
+                var notices = 0
+                val collector = backgroundScope.launch(dispatcher) { vm.tasteRefreshFailed.collect { notices++ } }
+                runCurrent()
+                tasteRequest = { throw IOException("offline") }
+
+                vm.updateNovel(preferencesChanged = true)
+                val loading = vm.uiState.value!!
+                assertEquals(HomeTasteStatus.LOADING, loading.tasteStatus)
+                assertTrue(loading.recommendedNovelsByUserTaste.isEmpty())
+                runCurrent()
+                val failed = vm.uiState.value!!
+                assertFalse(failed.error)
+                assertEquals(HomeTasteStatus.ERROR, failed.tasteStatus)
+                assertTrue(failed.recommendedNovelsByUserTaste.isEmpty())
+                assertEquals(0, notices)
+
+                val upperCalls = calls.filterKeys { it != "getRecommendedNovelsByUserTaste" }
+                tasteRequest = { taste(2) }
+                vm.retryTaste()
+                runCurrent()
+                val retried = vm.uiState.value!!
+                assertEquals(HomeTasteStatus.CONTENT, retried.tasteStatus)
+                assertEquals(2, retried.recommendedNovelsByUserTaste.size)
+                assertEquals(upperCalls, calls.filterKeys { it != "getRecommendedNovelsByUserTaste" })
+                collector.cancel()
+            }
+        }
+
+    @Test
+    fun `unauthorized and forbidden refreshes are not hidden by previously visible taste content`() =
+        runTest(dispatcher) {
+            listOf(401, 403).forEach { code ->
+                tasteRequest = { taste(2) }
+                val vm = createViewModel()
+                runCurrent()
+                var notices = 0
+                val collector = backgroundScope.launch(dispatcher) { vm.tasteRefreshFailed.collect { notices++ } }
+                runCurrent()
+                tasteRequest = { throw http(code) }
+
+                vm.updateNovel()
+                runCurrent()
+                assertEquals(code == 401, vm.uiState.value!!.error)
+                if (code == 403) assertEquals(HomeTasteStatus.ERROR, vm.uiState.value!!.tasteStatus)
+                assertEquals(0, notices)
+                collector.cancel()
+            }
+        }
+
+    @Test
+    fun `superseded refresh failure cannot restore invalidated taste or emit a refresh notice`() =
+        runTest(dispatcher) {
+            val vm = createViewModel()
+            runCurrent()
+            var notices = 0
+            backgroundScope.launch(dispatcher) { vm.tasteRefreshFailed.collect { notices++ } }
+            val old = CompletableDeferred<Unit>()
+            tasteRequest = {
+                withContext(NonCancellable) {
+                    old.await()
+                    throw IOException("old refresh failed")
+                }
+            }
+            vm.updateNovel()
+            runCurrent()
+
+            tasteRequest = { throw http(500) }
+            vm.updateNovel(preferencesChanged = true)
+            runCurrent()
+            old.complete(Unit)
+            runCurrent()
+
+            val failed = vm.uiState.value!!
+            assertFalse(failed.error)
+            assertEquals(HomeTasteStatus.ERROR, failed.tasteStatus)
+            assertTrue(failed.recommendedNovelsByUserTaste.isEmpty())
+            assertEquals(0, notices)
         }
 
     @Test

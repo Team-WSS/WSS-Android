@@ -21,8 +21,11 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.core.resource.R.string.home_rising_feed_for_user
+import com.into.websoso.core.resource.R.string.home_taste_refresh_failed
 import com.into.websoso.core.resource.R.string.load_fail_title
 import com.into.websoso.core.resource.R.string.load_load_title
 import com.into.websoso.databinding.FragmentHomeBinding
@@ -182,6 +185,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
                     renderedState = uiState
                 }
             }
+        }
+
+        homeViewModel.tasteRefreshFailed.collectWithLifecycle(viewLifecycleOwner) {
+            val state = homeViewModel.uiState.value ?: return@collectWithLifecycle
+            if (state.loading || state.error) return@collectWithLifecycle
+            showWebsosoToast(requireContext(), getString(home_taste_refresh_failed), ic_novel_rating_alert)
         }
 
         homeViewModel.isNotificationPermissionFirstLaunched.observe(viewLifecycleOwner) { isFirstLaunch ->
