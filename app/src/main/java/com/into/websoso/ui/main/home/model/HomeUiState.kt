@@ -7,8 +7,16 @@ import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity.Recommende
 data class HomeUiState(
     val loading: Boolean = true,
     val error: Boolean = false,
+    val tasteStatus: HomeTasteStatus = HomeTasteStatus.LOADING,
     val isNotificationUnread: Boolean = false,
     val popularNovels: List<PopularNovelEntity> = listOf(),
     val popularFeeds: List<List<PopularFeedEntity>> = listOf(),
     val recommendedNovelsByUserTaste: List<RecommendedNovelByUserTasteEntity> = listOf(),
 )
+
+enum class HomeTasteStatus {
+    LOADING,
+    CONTENT,
+    EMPTY,
+    ERROR,
+}
