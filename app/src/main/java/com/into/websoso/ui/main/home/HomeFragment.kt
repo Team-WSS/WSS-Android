@@ -8,9 +8,12 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
+import com.into.websoso.R.color.gray_200_949399
+import com.into.websoso.R.color.gray_300_52515F
 import com.into.websoso.R.layout.fragment_home
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
@@ -25,8 +28,8 @@ import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.core.resource.R.string.home_rising_feed_for_user
+import com.into.websoso.core.resource.R.string.home_taste_load_failed
 import com.into.websoso.core.resource.R.string.home_taste_refresh_failed
-import com.into.websoso.core.resource.R.string.load_fail_title
 import com.into.websoso.core.resource.R.string.load_load_title
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.detailExplore.DetailExploreActivity
@@ -224,7 +227,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
             rvRecommendNovelByUserTaste.visibility = if (showContent) View.VISIBLE else View.GONE
             llHomeTasteStatus.visibility = if (showContent || empty) View.GONE else View.VISIBLE
             val error = state.tasteStatus == HomeTasteStatus.ERROR
-            tvHomeTasteStatus.setText(if (error) load_fail_title else load_load_title)
+            tvHomeTasteStatus.setText(if (error) home_taste_load_failed else load_load_title)
+            tvHomeTasteStatus.setTextColor(
+                ContextCompat.getColor(requireContext(), if (error) gray_300_52515F else gray_200_949399),
+            )
             btnHomeTasteRetry.visibility = if (error) View.VISIBLE else View.GONE
         }
     }

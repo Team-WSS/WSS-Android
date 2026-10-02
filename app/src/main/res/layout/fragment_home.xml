@@ -269,6 +269,7 @@
                             android:layout_height="wrap_content"
                             android:accessibilityLiveRegion="polite"
                             android:text="@string/load_load_title"
+                            android:textAlignment="center"
                             android:textAppearance="@style/body2"
                             android:textColor="@color/gray_200_949399" />
 
@@ -276,15 +277,21 @@
                             android:id="@+id/btn_home_taste_retry"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="?attr/selectableItemBackground"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_load_primary_100_radius_8dp"
+                            android:elevation="0dp"
+                            android:foreground="?attr/selectableItemBackground"
                             android:minWidth="64dp"
                             android:minHeight="48dp"
-                            android:paddingHorizontal="16dp"
-                            android:text="@string/novel_notification_retry"
+                            android:paddingHorizontal="38dp"
+                            android:paddingVertical="14dp"
+                            android:stateListAnimator="@null"
+                            android:text="@string/home_taste_reload"
                             android:textAllCaps="false"
                             android:textAppearance="@style/label1"
-                            android:textColor="@color/primary_100_6A5DFD"
-                            android:visibility="gone" />
+                            android:textColor="@color/white"
+                            android:visibility="gone"
+                            app:backgroundTint="@null" />
 
                     </LinearLayout>
 
