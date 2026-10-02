@@ -291,6 +291,86 @@ class HomeViewModelTest {
         }
 
     @Test
+    fun `partial recovery keeps later taste retry and feed refresh visible`() =
+        runTest(dispatcher) {
+            popularRequest = { throw http(500) }
+            tasteRequest = { throw http(500) }
+            val vm = createViewModel()
+            runCurrent()
+            assertTrue(vm.uiState.value!!.error)
+
+            vm.updateFeed()
+            runCurrent()
+            val recovered = vm.uiState.value!!
+            assertFalse(recovered.error)
+            assertFalse(recovered.loading)
+            assertEquals(HomeTasteStatus.ERROR, recovered.tasteStatus)
+
+            val pending = CompletableDeferred<RecommendedNovelsByUserTasteResponseDto>()
+            tasteRequest = { pending.await() }
+            vm.retryTaste()
+            vm.retryTaste()
+            runCurrent()
+            assertEquals(HomeTasteStatus.LOADING, vm.uiState.value!!.tasteStatus)
+            assertEquals(2, calls["getRecommendedNovelsByUserTaste"])
+
+            pending.complete(taste(2))
+            runCurrent()
+            val retried = vm.uiState.value!!
+            assertEquals(HomeTasteStatus.CONTENT, retried.tasteStatus)
+            assertEquals(2, retried.recommendedNovelsByUserTaste.size)
+
+            val updatedFeed = feeds().popularFeeds.single().copy(likeCount = 1)
+            feedRequest = { PopularFeedsResponseDto(listOf(updatedFeed)) }
+            vm.updateFeed()
+            runCurrent()
+            val refreshed = vm.uiState.value!!
+            val refreshedPage = refreshed.popularFeeds.single()
+            assertEquals(1, refreshedPage.single().likeCount)
+            assertSame(retried.recommendedNovelsByUserTaste, refreshed.recommendedNovelsByUserTaste)
+            assertTrue(refreshed.popularNovels.isEmpty())
+            assertFalse(refreshed.error)
+            assertFalse(refreshed.loading)
+            assertTrue(refreshed.isNotificationUnread)
+            assertEquals(1, calls["getPopularNovels"])
+            assertEquals(3, calls["getPopularFeeds"])
+            assertEquals(2, calls["getRecommendedNovelsByUserTaste"])
+        }
+
+    @Test
+    fun `recovery during initial loading still waits for both upper results`() =
+        runTest(dispatcher) {
+            val upper = CompletableDeferred<PopularNovelsResponseDto>()
+            val pendingTaste = CompletableDeferred<RecommendedNovelsByUserTasteResponseDto>()
+            popularRequest = { upper.await() }
+            tasteRequest = { pendingTaste.await() }
+            notificationRequest = { throw http(500) }
+            val vm = createViewModel()
+            runCurrent()
+            assertTrue(vm.uiState.value!!.error)
+            assertTrue(vm.uiState.value!!.loading)
+
+            vm.updateFeed()
+            runCurrent()
+            assertFalse(vm.uiState.value!!.error)
+            assertTrue(vm.uiState.value!!.loading)
+
+            pendingTaste.complete(taste(2))
+            runCurrent()
+            assertTrue(vm.uiState.value!!.loading)
+
+            upper.complete(popular())
+            runCurrent()
+            val ready = vm.uiState.value!!
+            assertFalse(ready.error)
+            assertFalse(ready.loading)
+            assertEquals(1, ready.popularNovels.size)
+            assertTrue(ready.popularFeeds.isNotEmpty())
+            assertEquals(HomeTasteStatus.CONTENT, ready.tasteStatus)
+            assertEquals(2, ready.recommendedNovelsByUserTaste.size)
+        }
+
+    @Test
     fun `initial taste failure does not count as complete success or let a later taste success clear global error`() =
         runTest(dispatcher) {
             notificationRequest = { throw http(500) }

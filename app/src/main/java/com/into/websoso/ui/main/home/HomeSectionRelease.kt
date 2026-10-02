@@ -2,7 +2,7 @@ package com.into.websoso.ui.main.home
 
 import com.into.websoso.ui.main.home.model.HomeUiState
 
-/** Main-thread only. Upper successes open Home once; subsequent updates retain content. */
+/** Main-thread only. Upper successes or recovery displaying content open Home once. */
 internal class HomeSectionRelease {
     var pending = HomeUiState()
         private set
@@ -16,6 +16,12 @@ internal class HomeSectionRelease {
         waitingForUpper.remove(section)
         if (waitingForUpper.isNotEmpty()) return null
         pending = state.copy(loading = false)
+        return pending
+    }
+
+    fun recover(loading: Boolean): HomeUiState {
+        if (!loading) waitingForUpper.clear()
+        pending = pending.copy(loading = loading)
         return pending
     }
 }

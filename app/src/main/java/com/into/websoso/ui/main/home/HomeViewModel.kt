@@ -150,8 +150,7 @@ class HomeViewModel
         private fun recoverGlobalError() {
             val previous = _uiState.value ?: return
             if (!previous.error || hasSessionFailure) return
-            _uiState.value = sectionRelease.pending.copy(
-                loading = previous.loading,
+            _uiState.value = sectionRelease.recover(loading = previous.loading).copy(
                 error = false,
                 isNotificationUnread = previous.isNotificationUnread,
             )
