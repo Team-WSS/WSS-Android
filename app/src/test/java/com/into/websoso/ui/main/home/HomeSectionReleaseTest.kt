@@ -15,7 +15,12 @@ class HomeSectionReleaseTest {
     @Test
     fun `upper content waits for both upper results but never for taste`() {
         val release = HomeSectionRelease()
-        assertNull(release.update(HomeSection.POPULAR, release.pending.copy(popularNovels = popular)))
+        assertNull(
+            release.update(
+                HomeSection.POPULAR,
+                release.pending.copy(popularNovels = popular),
+            ),
+        )
 
         val state = release.update(HomeSection.FEEDS, release.pending.copy(popularFeeds = feeds))!!
 
@@ -34,10 +39,15 @@ class HomeSectionReleaseTest {
                 val state = release.pending
                 val result = when (section) {
                     'p' -> release.update(HomeSection.POPULAR, state.copy(popularNovels = popular))
+
                     'f' -> release.update(HomeSection.FEEDS, state.copy(popularFeeds = feeds))
+
                     else -> release.update(
                         HomeSection.TASTE,
-                        state.copy(tasteStatus = HomeTasteStatus.CONTENT, recommendedNovelsByUserTaste = taste),
+                        state.copy(
+                            tasteStatus = HomeTasteStatus.CONTENT,
+                            recommendedNovelsByUserTaste = taste,
+                        ),
                     )
                 }
                 result?.let(displayed::add)
@@ -53,10 +63,16 @@ class HomeSectionReleaseTest {
     @Test
     fun `early taste failure stays buffered until both upper results succeed`() {
         val release = HomeSectionRelease()
-        assertNull(release.update(HomeSection.TASTE, release.pending.copy(tasteStatus = HomeTasteStatus.ERROR)))
+        assertNull(
+            release.update(
+                HomeSection.TASTE,
+                release.pending.copy(tasteStatus = HomeTasteStatus.ERROR),
+            ),
+        )
         assertNull(release.update(HomeSection.FEEDS, release.pending.copy(popularFeeds = feeds)))
 
-        val state = release.update(HomeSection.POPULAR, release.pending.copy(popularNovels = popular))!!
+        val state =
+            release.update(HomeSection.POPULAR, release.pending.copy(popularNovels = popular))!!
 
         assertFalse(state.error)
         assertFalse(state.loading)
@@ -67,8 +83,13 @@ class HomeSectionReleaseTest {
     fun `error retry and empty recovery keep upper list identities`() {
         val release = readyUpper()
         val initial = release.pending
-        listOf(HomeTasteStatus.ERROR, HomeTasteStatus.LOADING, HomeTasteStatus.EMPTY).forEach { status ->
-            val state = release.update(HomeSection.TASTE, release.pending.copy(tasteStatus = status))!!
+        listOf(
+            HomeTasteStatus.ERROR,
+            HomeTasteStatus.LOADING,
+            HomeTasteStatus.EMPTY,
+        ).forEach { status ->
+            val state =
+                release.update(HomeSection.TASTE, release.pending.copy(tasteStatus = status))!!
 
             assertFalse(state.loading)
             assertFalse(state.error)
@@ -83,15 +104,22 @@ class HomeSectionReleaseTest {
         val release = readyUpper()
         release.update(
             HomeSection.TASTE,
-            release.pending.copy(tasteStatus = HomeTasteStatus.CONTENT, recommendedNovelsByUserTaste = taste),
+            release.pending.copy(
+                tasteStatus = HomeTasteStatus.CONTENT,
+                recommendedNovelsByUserTaste = taste,
+            ),
         )
         val refreshedFeeds = feeds.map { page -> page.map { it.copy(likeCount = 2) } }
-        val feedState = release.update(HomeSection.FEEDS, release.pending.copy(popularFeeds = refreshedFeeds))!!
+        val feedState =
+            release.update(HomeSection.FEEDS, release.pending.copy(popularFeeds = refreshedFeeds))!!
         assertSame(popular, feedState.popularNovels)
         assertSame(taste, feedState.recommendedNovelsByUserTaste)
 
         val refreshedPopular = popular.map { it.copy(title = "updated") }
-        val novelState = release.update(HomeSection.POPULAR, release.pending.copy(popularNovels = refreshedPopular))!!
+        val novelState = release.update(
+            HomeSection.POPULAR,
+            release.pending.copy(popularNovels = refreshedPopular),
+        )!!
         assertSame(refreshedFeeds, novelState.popularFeeds)
         assertSame(taste, novelState.recommendedNovelsByUserTaste)
         assertFalse(novelState.loading)
@@ -100,7 +128,10 @@ class HomeSectionReleaseTest {
     @Test
     fun `a new Home owner starts with loading rather than previous content or empty`() {
         val previous = readyUpper()
-        previous.update(HomeSection.TASTE, previous.pending.copy(tasteStatus = HomeTasteStatus.EMPTY))
+        previous.update(
+            HomeSection.TASTE,
+            previous.pending.copy(tasteStatus = HomeTasteStatus.EMPTY),
+        )
         val next = HomeSectionRelease()
 
         assertEquals(HomeUiState(), next.pending)
@@ -114,8 +145,44 @@ class HomeSectionReleaseTest {
         }
 
     private val popular = listOf(
-        PopularNovelEntity("author", null, null, "fantasy", false, emptyList(), null, "description", 1, "image", "title"),
+        PopularNovelEntity(
+            "author",
+            null,
+            null,
+            "fantasy",
+            false,
+            emptyList(),
+            null,
+            "description",
+            1,
+            "image",
+            "title",
+        ),
     )
-    private val feeds = listOf(listOf(PopularFeedEntity(1, "content", 0, 0, false, true, "title", "image", "fantasy")))
-    private val taste = (1L..10L).map { RecommendedNovelByUserTasteEntity(it, "title $it", "author", "image", 0, 0.0, 0) }
+    private val feeds = listOf(
+        listOf(
+            PopularFeedEntity(
+                1,
+                "content",
+                0,
+                0,
+                false,
+                true,
+                "title",
+                "image",
+                "fantasy",
+            ),
+        ),
+    )
+    private val taste = (1L..10L).map {
+        RecommendedNovelByUserTasteEntity(
+            it,
+            "title $it",
+            "author",
+            "image",
+            0,
+            0.0,
+            0,
+        )
+    }
 }
