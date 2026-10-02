@@ -169,26 +169,83 @@ class HomeViewModelTest {
         }
 
     @Test
-    fun `authentication failures are global and cannot be cleared by a later content success or retry`() =
+    fun `unauthorized response stays global after later content success or retry`() =
         runTest(dispatcher) {
-            listOf(401, 403).forEach { code ->
-                val upper = CompletableDeferred<PopularNovelsResponseDto>()
-                popularRequest = { upper.await() }
-                tasteRequest = { throw http(code) }
+            val upper = CompletableDeferred<PopularNovelsResponseDto>()
+            popularRequest = { upper.await() }
+            tasteRequest = { throw http(401) }
+            val vm = createViewModel()
+            runCurrent()
+            assertTrue(vm.uiState.value!!.error)
+            val count = calls["getRecommendedNovelsByUserTaste"]
+            vm.retryTaste()
+            upper.complete(popular())
+            runCurrent()
+            assertTrue(vm.uiState.value!!.error)
+            assertEquals(count, calls["getRecommendedNovelsByUserTaste"])
+            tasteRequest = { taste(10) }
+            vm.updateNovel()
+            vm.updateFeed()
+            runCurrent()
+            assertTrue(vm.uiState.value!!.error)
+        }
+
+    @Test
+    fun `forbidden taste response can be retried locally without requesting upper sections`() =
+        runTest(dispatcher) {
+            tasteRequest = { throw http(403) }
+            val vm = createViewModel()
+            runCurrent()
+            val before = vm.uiState.value!!
+            assertFalse(before.error)
+            assertFalse(before.loading)
+            assertEquals(HomeTasteStatus.ERROR, before.tasteStatus)
+
+            vm.retryTaste()
+            runCurrent()
+            assertFalse(vm.uiState.value!!.error)
+            assertEquals(HomeTasteStatus.ERROR, vm.uiState.value!!.tasteStatus)
+
+            tasteRequest = { taste(2) }
+            vm.retryTaste()
+            runCurrent()
+            val recovered = vm.uiState.value!!
+            assertFalse(recovered.error)
+            assertEquals(HomeTasteStatus.CONTENT, recovered.tasteStatus)
+            assertEquals(2, recovered.recommendedNovelsByUserTaste.size)
+            assertSame(before.popularNovels, recovered.popularNovels)
+            assertSame(before.popularFeeds, recovered.popularFeeds)
+            assertEquals(1, calls["getPopularNovels"])
+            assertEquals(1, calls["getPopularFeeds"])
+            assertEquals(3, calls["getRecommendedNovelsByUserTaste"])
+        }
+
+    @Test
+    fun `forbidden upper and unread failures do not prevent recovery in the same Home owner`() =
+        runTest(dispatcher) {
+            listOf("popular", "feeds", "unread").forEach { source ->
                 val vm = createViewModel()
                 runCurrent()
-                assertTrue(vm.uiState.value!!.error)
-                val count = calls["getRecommendedNovelsByUserTaste"]
-                vm.retryTaste()
-                upper.complete(popular())
+                assertFalse(vm.uiState.value!!.error)
+
+                popularRequest = { throw http(403) }
+                feedRequest = { throw http(403) }
+                notificationRequest = { throw http(403) }
+                when (source) {
+                    "popular" -> vm.updateNovel()
+                    "feeds" -> vm.updateFeed()
+                    else -> vm.updateNotificationUnread()
+                }
                 runCurrent()
-                assertTrue(vm.uiState.value!!.error)
-                assertEquals(count, calls["getRecommendedNovelsByUserTaste"])
-                tasteRequest = { taste(10) }
-                vm.updateNovel()
+                assertTrue(source, vm.uiState.value!!.error)
+
+                popularRequest = { popular() }
+                feedRequest = { feeds() }
+                notificationRequest = { NotificationUnreadResponseDto(true) }
                 vm.updateFeed()
                 runCurrent()
-                assertTrue(vm.uiState.value!!.error)
+                assertFalse(source, vm.uiState.value!!.error)
+                assertFalse(source, vm.uiState.value!!.loading)
             }
         }
 
@@ -486,33 +543,31 @@ class HomeViewModelTest {
     @Test
     fun `a new Home owner after authentication recovery does not inherit the expired session failure`() =
         runTest(dispatcher) {
-            listOf(401, 403).forEach { code ->
-                tasteRequest = { throw http(code) }
-                val expired = createViewModel()
-                runCurrent()
-                assertTrue(expired.uiState.value!!.error)
-                // Login and Main navigation clear the old task; simulate its ViewModelStore boundary.
-                owners.last().clear()
-                tasteRequest = { taste(10) }
-                val recovered = createViewModel()
-                runCurrent()
-                val ready = recovered.uiState.value!!
-                assertFalse(ready.error)
-                assertFalse(ready.loading)
-                assertEquals(HomeTasteStatus.CONTENT, ready.tasteStatus)
-                assertEquals(10, ready.recommendedNovelsByUserTaste.size)
+            tasteRequest = { throw http(401) }
+            val expired = createViewModel()
+            runCurrent()
+            assertTrue(expired.uiState.value!!.error)
+            // Login and Main navigation clear the old task; simulate its ViewModelStore boundary.
+            owners.last().clear()
+            tasteRequest = { taste(10) }
+            val recovered = createViewModel()
+            runCurrent()
+            val ready = recovered.uiState.value!!
+            assertFalse(ready.error)
+            assertFalse(ready.loading)
+            assertEquals(HomeTasteStatus.CONTENT, ready.tasteStatus)
+            assertEquals(10, ready.recommendedNovelsByUserTaste.size)
 
-                // A later ordinary error remains recoverable in the new session.
-                feedRequest = { throw http(500) }
-                recovered.updateFeed()
-                runCurrent()
-                assertTrue(recovered.uiState.value!!.error)
-                feedRequest = { feeds() }
-                recovered.updateFeed()
-                runCurrent()
-                assertFalse(recovered.uiState.value!!.error)
-                assertTrue(expired.uiState.value!!.error)
-            }
+            // A later ordinary error remains recoverable in the new session.
+            feedRequest = { throw http(500) }
+            recovered.updateFeed()
+            runCurrent()
+            assertTrue(recovered.uiState.value!!.error)
+            feedRequest = { feeds() }
+            recovered.updateFeed()
+            runCurrent()
+            assertFalse(recovered.uiState.value!!.error)
+            assertTrue(expired.uiState.value!!.error)
         }
 
     @Test

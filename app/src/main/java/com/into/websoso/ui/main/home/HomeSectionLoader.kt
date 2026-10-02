@@ -20,7 +20,7 @@ internal fun isGlobalHomeFailure(
     error: Exception,
 ): Boolean = section != HomeSection.TASTE || isSessionFailure(error)
 
-internal fun isSessionFailure(error: Throwable): Boolean = error is HttpException && (error.code() == 401 || error.code() == 403)
+internal fun isSessionFailure(error: Throwable): Boolean = error is HttpException && error.code() == 401
 
 /** Requests belong to the Home ViewModel; replacing one never cancels another section. */
 internal class HomeSectionLoader(
