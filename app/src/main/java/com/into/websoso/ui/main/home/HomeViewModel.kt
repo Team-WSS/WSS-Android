@@ -135,7 +135,7 @@ class HomeViewModel
                     )
                 },
                 failure = { error ->
-                    if (isGlobalHomeFailure(HomeSection.TASTE, error)) {
+                    if (isSessionFailure(error)) {
                         handleFailureState(error)
                     } else if (keepVisible && (error !is HttpException || error.code() != 403)) {
                         _tasteRefreshFailed.tryEmit(Unit)

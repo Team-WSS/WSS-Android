@@ -19,19 +19,13 @@ import java.io.IOException
 
 class HomeSectionLoaderTest {
     @Test
-    fun `taste access denial stays local while unauthorized and upper failures remain global`() {
+    fun `only unauthorized response is a session failure`() {
         fun http(code: Int) = HttpException(Response.error<Unit>(code, "synthetic".toResponseBody()))
 
-        assertFalse(isGlobalHomeFailure(HomeSection.TASTE, http(500)))
-        assertFalse(isGlobalHomeFailure(HomeSection.TASTE, IOException("offline")))
-        assertTrue(isGlobalHomeFailure(HomeSection.TASTE, http(401)))
-        assertFalse(isGlobalHomeFailure(HomeSection.TASTE, http(403)))
-        assertTrue(isGlobalHomeFailure(HomeSection.POPULAR, http(500)))
-        assertTrue(isGlobalHomeFailure(HomeSection.FEEDS, IOException("offline")))
-        assertTrue(isGlobalHomeFailure(HomeSection.POPULAR, http(403)))
-        assertTrue(isGlobalHomeFailure(HomeSection.FEEDS, http(403)))
         assertTrue(isSessionFailure(http(401)))
         assertFalse(isSessionFailure(http(403)))
+        assertFalse(isSessionFailure(http(500)))
+        assertFalse(isSessionFailure(IOException("offline")))
     }
 
     @Test
