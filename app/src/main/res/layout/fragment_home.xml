@@ -280,7 +280,6 @@
                             android:layout_marginTop="16dp"
                             android:background="@drawable/bg_load_primary_100_radius_8dp"
                             android:elevation="0dp"
-                            android:foreground="?attr/selectableItemBackground"
                             android:minWidth="64dp"
                             android:minHeight="48dp"
                             android:paddingHorizontal="38dp"
