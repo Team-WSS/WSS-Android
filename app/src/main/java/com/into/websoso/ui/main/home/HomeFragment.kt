@@ -91,7 +91,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
                 ProfileEditSuccess.RESULT_OK -> {
                     mainViewModel.updateUserInfo()
-                    homeViewModel.updateNovel(preferencesChanged = true)
+                    homeViewModel.updateNovel(
+                        preferencesChanged = result.data?.getBooleanExtra(
+                            ProfileEditActivity.EXTRA_GENRE_PREFERENCES_CHANGED,
+                            false,
+                        ) == true,
+                    )
                 }
             }
         }
