@@ -39,6 +39,7 @@ class HomeViewModel
         private val notificationRepository: NotificationRepository,
         private val userRepository: UserRepository,
         private val savedStateHandle: SavedStateHandle,
+        homeStartupRequest: HomeStartupRequest,
     ) : ViewModel() {
         // Received data is kept here even while loading; the Fragment waits before rendering it.
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
@@ -65,6 +66,7 @@ class HomeViewModel
         private val sectionLoader = HomeSectionLoader(viewModelScope)
         private val sectionRelease = HomeSectionRelease()
         private var hasSessionFailure = false
+        private val startupRequests = homeStartupRequest.take(savedStateHandle.remove<String>(HomeStartupRequest.KEY))
 
         init {
             updateHomeData(true)
@@ -84,31 +86,43 @@ class HomeViewModel
         }
 
         private suspend fun fetchUserHomeData() {
-            val requests = listOf(loadPopularNovels(), loadPopularFeeds(), loadTasteNovels())
+            val requests = listOf(loadPopularNovels(initial = true), loadPopularFeeds(initial = true), loadTasteNovels())
             requests.joinAll()
             if (requests.all { !it.isCancelled && it.await() }) recoverGlobalError()
         }
 
-        private fun loadPopularNovels(): Deferred<Boolean> =
-            sectionLoader.load(
+        private fun loadPopularNovels(initial: Boolean = false): Deferred<Boolean> {
+            if (!initial) startupRequests?.cancelPopular()
+            return sectionLoader.load(
                 section = HomeSection.POPULAR,
-                request = novelRepository::fetchPopularNovels,
+                request = { (if (initial) startupRequests?.popular() else null) ?: novelRepository.fetchPopularNovels() },
                 success = { result ->
                     updateContent(HomeSection.POPULAR) { it.copy(popularNovels = result.popularNovels) }
                 },
                 failure = { handleFailureState(it) },
             )
+        }
 
-        private fun loadPopularFeeds(recoverError: Boolean = false): Deferred<Boolean> =
-            sectionLoader.load(
+        private fun loadPopularFeeds(
+            recoverError: Boolean = false,
+            initial: Boolean = false,
+        ): Deferred<Boolean> {
+            if (!initial) startupRequests?.cancelFeeds()
+            return sectionLoader.load(
                 section = HomeSection.FEEDS,
-                request = feedRepository::fetchPopularFeeds,
+                request = { (if (initial) startupRequests?.feeds() else null) ?: feedRepository.fetchPopularFeeds() },
                 success = { result ->
                     updateContent(HomeSection.FEEDS) { it.copy(popularFeeds = result.toHomePopularFeedPages()) }
                     if (recoverError) recoverGlobalError()
                 },
                 failure = { handleFailureState(it) },
             )
+        }
+
+        override fun onCleared() {
+            startupRequests?.cancel()
+            super.onCleared()
+        }
 
         private fun loadTasteNovels(preferencesChanged: Boolean = false): Deferred<Boolean> {
             val previousStatus = _uiState.value?.tasteStatus

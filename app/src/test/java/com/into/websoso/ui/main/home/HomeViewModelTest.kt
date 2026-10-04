@@ -66,6 +66,15 @@ class HomeViewModelTest {
     private var popularRequest: suspend () -> PopularNovelsResponseDto = { popular() }
     private var feedRequest: suspend () -> PopularFeedsResponseDto = { feeds() }
     private var notificationRequest: suspend () -> NotificationUnreadResponseDto = { NotificationUnreadResponseDto(true) }
+    private var sessionIdentity = "session-a"
+    private val startupRequest by lazy {
+        HomeStartupRequest(
+            { sessionIdentity },
+            { NovelRepository(api<NovelApi>()).fetchPopularNovels() },
+            { FeedRepository(api<FeedApi>()).fetchPopularFeeds() },
+            dispatcher,
+        )
+    }
 
     @Before
     fun setUp() {
@@ -825,7 +834,105 @@ class HomeViewModelTest {
             assertEquals(2, calls["getTermsAgreement"])
         }
 
-    private fun createViewModel(termsChecked: Boolean = true): HomeViewModel {
+    @Test
+    fun `startup requests are consumed once and publish upper without waiting for taste`() =
+        runTest(dispatcher) {
+            val pendingPopular = CompletableDeferred<PopularNovelsResponseDto>()
+            val pendingTaste = CompletableDeferred<RecommendedNovelsByUserTasteResponseDto>()
+            popularRequest = { pendingPopular.await() }
+            tasteRequest = { pendingTaste.await() }
+            val id = startupRequest.start()
+            runCurrent()
+            assertEquals(1, calls["getPopularNovels"])
+            assertEquals(1, calls["getPopularFeeds"])
+            assertFalse(calls.containsKey("getRecommendedNovelsByUserTaste"))
+
+            val vm = createViewModel(startupId = id)
+            runCurrent()
+            assertTrue(vm.uiState.value!!.loading)
+            pendingPopular.complete(popular())
+            runCurrent()
+            assertFalse(vm.uiState.value!!.loading)
+            assertEquals(HomeTasteStatus.LOADING, vm.uiState.value!!.tasteStatus)
+            assertEquals(1, calls["getPopularNovels"])
+            assertEquals(1, calls["getPopularFeeds"])
+            assertEquals(1, calls["getRecommendedNovelsByUserTaste"])
+        }
+
+    @Test
+    fun `prefetch failures use existing global failure policy without automatically retrying`() =
+        runTest(dispatcher) {
+            popularRequest = { throw http(401) }
+            val id = startupRequest.start()
+            runCurrent()
+            val vm = createViewModel(startupId = id)
+            runCurrent()
+            assertTrue(vm.uiState.value!!.error)
+            assertEquals(1, calls["getPopularNovels"])
+            assertEquals(1, calls["getPopularFeeds"])
+            vm.updateFeed()
+            runCurrent()
+            assertTrue(vm.uiState.value!!.error)
+        }
+
+    @Test
+    fun `changed session and missing startup requests fall back to ordinary Home loading`() =
+        runTest(dispatcher) {
+            val id = startupRequest.start()
+            runCurrent()
+            sessionIdentity = "session-b"
+            val vm = createViewModel(startupId = id)
+            runCurrent()
+            assertFalse(vm.uiState.value!!.error)
+            assertFalse(vm.uiState.value!!.loading)
+            assertEquals(2, calls["getPopularNovels"])
+            assertEquals(2, calls["getPopularFeeds"])
+
+            createViewModel(startupId = id)
+            runCurrent()
+            assertEquals(3, calls["getPopularNovels"])
+            assertEquals(3, calls["getPopularFeeds"])
+        }
+
+    @Test
+    fun `refresh replaces only its prefetched section and clearing Home cancels the remaining request`() =
+        runTest(dispatcher) {
+            var popularCancelled = false
+            var feedsCancelled = false
+            popularRequest = {
+                try {
+                    CompletableDeferred<PopularNovelsResponseDto>().await()
+                } finally {
+                    popularCancelled = true
+                }
+            }
+            feedRequest = {
+                try {
+                    CompletableDeferred<PopularFeedsResponseDto>().await()
+                } finally {
+                    feedsCancelled = true
+                }
+            }
+            val id = startupRequest.start()
+            runCurrent()
+            val vm = createViewModel(startupId = id)
+            runCurrent()
+            popularRequest = { popular() }
+            vm.updateNovel()
+            runCurrent()
+            assertTrue(popularCancelled)
+            assertFalse(feedsCancelled)
+            assertEquals(2, calls["getPopularNovels"])
+            assertEquals(1, calls["getPopularFeeds"])
+            owners.last().clear()
+            runCurrent()
+            assertTrue(feedsCancelled)
+        }
+
+    private fun createViewModel(
+        termsChecked: Boolean = true,
+        startupId: String? = null,
+    ): HomeViewModel {
         val storage = object : DataStore<Preferences> {
             override val data = MutableStateFlow(
                 preferencesOf(
@@ -844,7 +951,8 @@ class HomeViewModelTest {
             PushMessageRepository(user, AuthRepository(api<AuthApi>()), storage, api<PushMessageApi>()),
             NotificationRepository(api<NotificationApi>()),
             user,
-            SavedStateHandle(),
+            SavedStateHandle(mapOf(HomeStartupRequest.KEY to startupId)),
+            startupRequest,
         ).also { vm ->
             owners.add(ViewModelStore().apply { put("home", vm) })
         }
