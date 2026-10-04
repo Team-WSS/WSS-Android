@@ -89,6 +89,111 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun `all response orders retain received data and unread state without releasing upper content early`() =
+        runTest(dispatcher) {
+            val orders = listOf("pft", "ptf", "fpt", "ftp", "tpf", "tfp").flatMap { order ->
+                (0..order.length).map { index -> order.substring(0, index) + "n" + order.substring(index) }
+            }
+            orders.forEach { order ->
+                calls.clear()
+                val popularResponse = CompletableDeferred<PopularNovelsResponseDto>()
+                val feedResponse = CompletableDeferred<PopularFeedsResponseDto>()
+                val tasteResponse = CompletableDeferred<RecommendedNovelsByUserTasteResponseDto>()
+                val unreadResponse = CompletableDeferred<NotificationUnreadResponseDto>()
+                popularRequest = { popularResponse.await() }
+                feedRequest = { feedResponse.await() }
+                tasteRequest = { tasteResponse.await() }
+                notificationRequest = { unreadResponse.await() }
+                val vm = createViewModel()
+                val displayed = mutableListOf<HomeUiState>()
+                val observer = Observer<HomeUiState> { state ->
+                    if (!state.loading && !state.error) displayed.add(state)
+                }
+                vm.uiState.observeForever(observer)
+                try {
+                    runCurrent()
+                    assertTrue(order, displayed.isEmpty())
+                    val received = mutableSetOf<Char>()
+                    order.forEach { response ->
+                        when (response) {
+                            'p' -> popularResponse.complete(popular())
+                            'f' -> feedResponse.complete(feeds())
+                            't' -> tasteResponse.complete(taste(10))
+                            'n' -> unreadResponse.complete(NotificationUnreadResponseDto(true))
+                        }
+                        received.add(response)
+                        runCurrent()
+                        val state = vm.uiState.value!!
+                        val upperReady = 'p' in received && 'f' in received
+                        assertEquals(order, !upperReady, state.loading)
+                        assertEquals(order, 'n' in received, state.isNotificationUnread)
+                        assertEquals(order, 'p' in received, state.popularNovels.isNotEmpty())
+                        assertEquals(order, 'f' in received, state.popularFeeds.isNotEmpty())
+                        assertEquals(order, if ('t' in received) 10 else 0, state.recommendedNovelsByUserTaste.size)
+                        assertFalse(order, state.error)
+                        if (!upperReady) assertTrue(order, displayed.isEmpty())
+                    }
+                    assertTrue(order, displayed.isNotEmpty())
+                    displayed.forEach { state ->
+                        assertEquals(order, 1, state.popularNovels.size)
+                        assertEquals(order, 1, state.popularFeeds.size)
+                    }
+                    assertEquals(HomeTasteStatus.CONTENT, displayed.last().tasteStatus)
+                    assertEquals(10, displayed.last().recommendedNovelsByUserTaste.size)
+                    assertTrue(displayed.last().isNotificationUnread)
+                    listOf("getPopularNovels", "getPopularFeeds", "getRecommendedNovelsByUserTaste", "getNotificationUnread").forEach {
+                        assertEquals(order, 1, calls[it])
+                    }
+                } finally {
+                    vm.uiState.removeObserver(observer)
+                    owners.last().clear()
+                }
+            }
+        }
+
+    @Test
+    fun `early taste failure is stored while upper content still waits and retry preserves both upper lists`() =
+        runTest(dispatcher) {
+            val popularResponse = CompletableDeferred<PopularNovelsResponseDto>()
+            val feedResponse = CompletableDeferred<PopularFeedsResponseDto>()
+            popularRequest = { popularResponse.await() }
+            feedRequest = { feedResponse.await() }
+            tasteRequest = { throw http(500) }
+            val vm = createViewModel()
+            runCurrent()
+
+            assertTrue(vm.uiState.value!!.loading)
+            assertFalse(vm.uiState.value!!.error)
+            assertEquals(HomeTasteStatus.ERROR, vm.uiState.value!!.tasteStatus)
+            feedResponse.complete(feeds())
+            runCurrent()
+            val firstFeeds = vm.uiState.value!!.popularFeeds
+            assertTrue(firstFeeds.isNotEmpty())
+            assertTrue(vm.uiState.value!!.loading)
+
+            popularResponse.complete(popular())
+            runCurrent()
+            val ready = vm.uiState.value!!
+            assertFalse(ready.loading)
+            assertFalse(ready.error)
+            assertEquals(HomeTasteStatus.ERROR, ready.tasteStatus)
+            assertSame(firstFeeds, ready.popularFeeds)
+
+            tasteRequest = { taste(0) }
+            vm.retryTaste()
+            assertEquals(HomeTasteStatus.LOADING, vm.uiState.value!!.tasteStatus)
+            runCurrent()
+            val retried = vm.uiState.value!!
+            assertEquals(HomeTasteStatus.EMPTY, retried.tasteStatus)
+            assertSame(ready.popularNovels, retried.popularNovels)
+            assertSame(ready.popularFeeds, retried.popularFeeds)
+            assertTrue(retried.isNotificationUnread)
+            assertEquals(1, calls["getPopularNovels"])
+            assertEquals(1, calls["getPopularFeeds"])
+            assertEquals(2, calls["getRecommendedNovelsByUserTaste"])
+        }
+
+    @Test
     fun `actual view model publishes upper before taste and keeps unread notification`() =
         runTest(dispatcher) {
             val pending = CompletableDeferred<RecommendedNovelsByUserTasteResponseDto>()

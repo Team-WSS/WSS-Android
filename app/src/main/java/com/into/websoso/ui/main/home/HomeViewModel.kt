@@ -40,6 +40,7 @@ class HomeViewModel
         private val userRepository: UserRepository,
         private val savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
+        // Received data is kept here even while loading; the Fragment waits before rendering it.
         private val _uiState: MutableLiveData<HomeUiState> = MutableLiveData(HomeUiState())
         val uiState: LiveData<HomeUiState> get() = _uiState
 
@@ -93,7 +94,7 @@ class HomeViewModel
                 section = HomeSection.POPULAR,
                 request = novelRepository::fetchPopularNovels,
                 success = { result ->
-                    publishContent(HomeSection.POPULAR, sectionRelease.pending.copy(popularNovels = result.popularNovels))
+                    updateContent(HomeSection.POPULAR) { it.copy(popularNovels = result.popularNovels) }
                 },
                 failure = { handleFailureState(it) },
             )
@@ -103,36 +104,34 @@ class HomeViewModel
                 section = HomeSection.FEEDS,
                 request = feedRepository::fetchPopularFeeds,
                 success = { result ->
-                    publishContent(HomeSection.FEEDS, sectionRelease.pending.copy(popularFeeds = result.toHomePopularFeedPages()))
+                    updateContent(HomeSection.FEEDS) { it.copy(popularFeeds = result.toHomePopularFeedPages()) }
                     if (recoverError) recoverGlobalError()
                 },
                 failure = { handleFailureState(it) },
             )
 
         private fun loadTasteNovels(preferencesChanged: Boolean = false): Deferred<Boolean> {
-            val previous = sectionRelease.pending
+            val previousStatus = _uiState.value?.tasteStatus
             val keepVisible = !preferencesChanged &&
-                (previous.tasteStatus == HomeTasteStatus.CONTENT || previous.tasteStatus == HomeTasteStatus.EMPTY)
+                (previousStatus == HomeTasteStatus.CONTENT || previousStatus == HomeTasteStatus.EMPTY)
             if (!keepVisible) {
-                publishContent(
-                    HomeSection.TASTE,
-                    previous.copy(
+                updateContent(HomeSection.TASTE) { current ->
+                    current.copy(
                         tasteStatus = HomeTasteStatus.LOADING,
-                        recommendedNovelsByUserTaste = if (preferencesChanged) emptyList() else previous.recommendedNovelsByUserTaste,
-                    ),
-                )
+                        recommendedNovelsByUserTaste = if (preferencesChanged) emptyList() else current.recommendedNovelsByUserTaste,
+                    )
+                }
             }
             return sectionLoader.load(
                 section = HomeSection.TASTE,
                 request = novelRepository::fetchRecommendedNovelsByUserTaste,
                 success = { result ->
-                    publishContent(
-                        HomeSection.TASTE,
-                        sectionRelease.pending.copy(
+                    updateContent(HomeSection.TASTE) { current ->
+                        current.copy(
                             recommendedNovelsByUserTaste = result.tasteNovels,
                             tasteStatus = if (result.tasteNovels.isEmpty()) HomeTasteStatus.EMPTY else HomeTasteStatus.CONTENT,
-                        ),
-                    )
+                        )
+                    }
                 },
                 failure = { error ->
                     if (isSessionFailure(error)) {
@@ -140,30 +139,36 @@ class HomeViewModel
                     } else if (keepVisible && (error !is HttpException || error.code() != 403)) {
                         _tasteRefreshFailed.tryEmit(Unit)
                     } else {
-                        publishContent(HomeSection.TASTE, sectionRelease.pending.copy(tasteStatus = HomeTasteStatus.ERROR))
+                        updateContent(HomeSection.TASTE) { it.copy(tasteStatus = HomeTasteStatus.ERROR) }
                     }
                 },
             )
         }
 
-        private fun publishContent(
+        private fun updateContent(
             section: HomeSection,
-            state: HomeUiState,
+            transform: (HomeUiState) -> HomeUiState,
         ) {
-            val previous = _uiState.value ?: return
-            val ready = sectionRelease.update(section, state) ?: return
-            val updated = ready.copy(error = previous.error, isNotificationUnread = previous.isNotificationUnread)
-            if (updated != previous) _uiState.value = updated
+            updateState { current ->
+                val updated = transform(current)
+                if (sectionRelease.update(section)) updated.copy(loading = false) else updated
+            }
+        }
+
+        private fun updateState(transform: (HomeUiState) -> HomeUiState) {
+            val current = _uiState.value ?: return
+            val updated = transform(current)
+            if (updated != current) _uiState.value = updated
         }
 
         // Match the existing recovery events; a content response cannot establish a new session.
         private fun recoverGlobalError() {
-            val previous = _uiState.value ?: return
-            if (!previous.error || hasSessionFailure) return
-            _uiState.value = sectionRelease.recover(loading = previous.loading).copy(
-                error = false,
-                isNotificationUnread = previous.isNotificationUnread,
-            )
+            if (hasSessionFailure) return
+            updateState { current ->
+                if (!current.error) return@updateState current
+                sectionRelease.recover(loading = current.loading)
+                current.copy(error = false)
+            }
         }
 
         private fun checkIsNotificationPermissionFirstLaunched() {
@@ -206,12 +211,14 @@ class HomeViewModel
                 val popularNovels = popularNovelsResult.getOrThrow()
                 val popularFeeds = popularFeedsResult.getOrThrow()
 
-                _uiState.value = uiState.value?.copy(
-                    loading = false,
-                    error = false,
-                    popularNovels = popularNovels.popularNovels,
-                    popularFeeds = popularFeeds.toHomePopularFeedPages(),
-                )
+                updateState { current ->
+                    current.copy(
+                        loading = false,
+                        error = false,
+                        popularNovels = popularNovels.popularNovels,
+                        popularFeeds = popularFeeds.toHomePopularFeedPages(),
+                    )
+                }
             }
         }
 
@@ -220,10 +227,12 @@ class HomeViewModel
             preserveLoading: Boolean = false,
         ) {
             hasSessionFailure = hasSessionFailure || isSessionFailure(error)
-            _uiState.value = uiState.value?.copy(
-                loading = preserveLoading && uiState.value?.loading == true,
-                error = true,
-            )
+            updateState { current ->
+                current.copy(
+                    loading = preserveLoading && current.loading,
+                    error = true,
+                )
+            }
         }
 
         fun updateFeed() {
@@ -236,7 +245,8 @@ class HomeViewModel
         }
 
         fun retryTaste() {
-            if (uiState.value?.error == true || sectionRelease.pending.tasteStatus != HomeTasteStatus.ERROR) return
+            val current = _uiState.value ?: return
+            if (current.error || current.tasteStatus != HomeTasteStatus.ERROR) return
             loadTasteNovels()
         }
 
@@ -245,9 +255,7 @@ class HomeViewModel
                 runCatching {
                     notificationRepository.fetchNotificationUnread()
                 }.onSuccess { isNotificationUnread ->
-                    _uiState.value = uiState.value?.copy(
-                        isNotificationUnread = isNotificationUnread,
-                    )
+                    updateState { it.copy(isNotificationUnread = isNotificationUnread) }
                 }.onFailure { error ->
                     handleFailureState(error, preserveLoading = true)
                 }

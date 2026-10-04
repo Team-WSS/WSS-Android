@@ -1,27 +1,15 @@
 package com.into.websoso.ui.main.home
 
-import com.into.websoso.ui.main.home.model.HomeUiState
-
-/** Main-thread only. Upper successes or recovery displaying content open Home once. */
+/** Main-thread only. Tracks when Home can open; content is owned by HomeViewModel. */
 internal class HomeSectionRelease {
-    var pending = HomeUiState()
-        private set
     private val waitingForUpper = mutableSetOf(HomeSection.POPULAR, HomeSection.FEEDS)
 
-    fun update(
-        section: HomeSection,
-        state: HomeUiState,
-    ): HomeUiState? {
-        pending = state
+    fun update(section: HomeSection): Boolean {
         waitingForUpper.remove(section)
-        if (waitingForUpper.isNotEmpty()) return null
-        pending = state.copy(loading = false)
-        return pending
+        return waitingForUpper.isEmpty()
     }
 
-    fun recover(loading: Boolean): HomeUiState {
+    fun recover(loading: Boolean) {
         if (!loading) waitingForUpper.clear()
-        pending = pending.copy(loading = loading)
-        return pending
     }
 }
