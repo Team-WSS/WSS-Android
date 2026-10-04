@@ -79,7 +79,10 @@ class ProfileEditViewModelTest {
                         vm.checkNicknameValidity("newname")
                     }
 
-                    "introduction" -> vm.updateIntroduction("new introduction")
+                    "introduction" -> {
+                        vm.updateIntroduction("new introduction")
+                    }
+
                     "avatar" -> {
                         vm.updateSelectedAvatar(AvatarModel(avatarId = 2))
                         vm.updateRepresentativeAvatar()
@@ -89,7 +92,8 @@ class ProfileEditViewModelTest {
                 vm.updateProfile()
                 runCurrent()
 
-                val result = vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
+                val result =
+                    vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
                 assertFalse(result.genrePreferencesChanged)
                 assertEquals(listOf("fantasy", "romance"), savedRequests.last().genrePreferences)
             }
@@ -99,7 +103,11 @@ class ProfileEditViewModelTest {
     @Test
     fun `adding removing or clearing genres reports a genre change`() =
         runTest(dispatcher) {
-            listOf(listOf(Genre.MYSTERY), listOf(Genre.FANTASY), listOf(Genre.FANTASY, Genre.ROMANCE)).forEach { toggles ->
+            listOf(
+                listOf(Genre.MYSTERY),
+                listOf(Genre.FANTASY),
+                listOf(Genre.FANTASY, Genre.ROMANCE),
+            ).forEach { toggles ->
                 val vm = createViewModel()
                 vm.updateUserProfile()
                 runCurrent()
@@ -107,7 +115,8 @@ class ProfileEditViewModelTest {
                 vm.updateProfile()
                 runCurrent()
 
-                val result = vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
+                val result =
+                    vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
                 assertTrue(result.genrePreferencesChanged)
             }
             assertTrue(savedRequests.last().genrePreferences.isEmpty())
@@ -125,7 +134,8 @@ class ProfileEditViewModelTest {
             vm.updateProfile()
             runCurrent()
 
-            val result = vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
+            val result =
+                vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
             assertFalse(result.genrePreferencesChanged)
             assertEquals(listOf("romance", "fantasy"), savedRequests.single().genrePreferences)
         }
@@ -149,9 +159,13 @@ class ProfileEditViewModelTest {
                 pending.complete(Unit)
                 runCurrent()
 
-                val result = vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
+                val result =
+                    vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
                 assertEquals(submittedChange, result.genrePreferencesChanged)
-                assertEquals(submittedChange, savedRequests.last().genrePreferences.contains("mystery"))
+                assertEquals(
+                    submittedChange,
+                    savedRequests.last().genrePreferences.contains("mystery"),
+                )
             }
         }
 
@@ -170,7 +184,8 @@ class ProfileEditViewModelTest {
             saveRequest = {}
             vm.updateProfile()
             runCurrent()
-            val result = vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
+            val result =
+                vm.profileEditUiState.value!!.profileEditResult as ProfileEditResult.Success
             assertTrue(result.genrePreferencesChanged)
             assertEquals(2, savedRequests.size)
         }
@@ -191,18 +206,37 @@ class ProfileEditViewModelTest {
 
     @Suppress("UNCHECKED_CAST")
     private inline fun <reified T> api(): T =
-        Proxy.newProxyInstance(T::class.java.classLoader, arrayOf(T::class.java)) { _, method, args ->
+        Proxy.newProxyInstance(
+            T::class.java.classLoader,
+            arrayOf(T::class.java),
+        ) { _, method, args ->
             val call: suspend () -> Any = {
                 when (method.name) {
-                    "getMyProfile" -> MyProfileResponseDto("nickname", "introduction", "", listOf("fantasy", "romance"))
-                    "getAvatars" -> AvatarsResponseDto(emptyList())
-                    "getNicknameValidity" -> UserNicknameValidityResponseDto(true)
+                    "getMyProfile" -> {
+                        MyProfileResponseDto(
+                            "nickname",
+                            "introduction",
+                            "",
+                            listOf("fantasy", "romance"),
+                        )
+                    }
+
+                    "getAvatars" -> {
+                        AvatarsResponseDto(emptyList())
+                    }
+
+                    "getNicknameValidity" -> {
+                        UserNicknameValidityResponseDto(true)
+                    }
+
                     "patchProfile" -> {
                         savedRequests.add(args.first() as UserProfileEditRequestDto)
                         saveRequest()
                     }
 
-                    else -> error("Unexpected API call: ${method.name}")
+                    else -> {
+                        error("Unexpected API call: ${method.name}")
+                    }
                 }
             }
             call.startCoroutineUninterceptedOrReturn(args.last() as Continuation<Any>)
