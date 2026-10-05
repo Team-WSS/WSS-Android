@@ -91,33 +91,36 @@ class HomeViewModel
             if (requests.all { !it.isCancelled && it.await() }) recoverGlobalError()
         }
 
-        private fun loadPopularNovels(initial: Boolean = false): Deferred<Boolean> {
-            if (!initial) startupRequests?.cancelPopular()
-            return sectionLoader.load(
-                section = HomeSection.POPULAR,
-                request = { (if (initial) startupRequests?.popular() else null) ?: novelRepository.fetchPopularNovels() },
-                success = { result ->
-                    updateContent(HomeSection.POPULAR) { it.copy(popularNovels = result.popularNovels) }
-                },
-                failure = { handleFailureState(it) },
-            )
-        }
+        private fun loadPopularNovels(initial: Boolean = false): Deferred<Boolean> =
+            sectionLoader
+                .load(
+                    section = HomeSection.POPULAR,
+                    request = { (if (initial) startupRequests?.popular() else null) ?: novelRepository.fetchPopularNovels() },
+                    success = { result ->
+                        updateContent(HomeSection.POPULAR) { it.copy(popularNovels = result.popularNovels) }
+                    },
+                    failure = { handleFailureState(it) },
+                ).also {
+                    // Cancel the transferred request only after the loader has cancelled the job awaiting it.
+                    if (!initial) startupRequests?.cancelPopular()
+                }
 
         private fun loadPopularFeeds(
             recoverError: Boolean = false,
             initial: Boolean = false,
-        ): Deferred<Boolean> {
-            if (!initial) startupRequests?.cancelFeeds()
-            return sectionLoader.load(
-                section = HomeSection.FEEDS,
-                request = { (if (initial) startupRequests?.feeds() else null) ?: feedRepository.fetchPopularFeeds() },
-                success = { result ->
-                    updateContent(HomeSection.FEEDS) { it.copy(popularFeeds = result.toHomePopularFeedPages()) }
-                    if (recoverError) recoverGlobalError()
-                },
-                failure = { handleFailureState(it) },
-            )
-        }
+        ): Deferred<Boolean> =
+            sectionLoader
+                .load(
+                    section = HomeSection.FEEDS,
+                    request = { (if (initial) startupRequests?.feeds() else null) ?: feedRepository.fetchPopularFeeds() },
+                    success = { result ->
+                        updateContent(HomeSection.FEEDS) { it.copy(popularFeeds = result.toHomePopularFeedPages()) }
+                        if (recoverError) recoverGlobalError()
+                    },
+                    failure = { handleFailureState(it) },
+                ).also {
+                    if (!initial) startupRequests?.cancelFeeds()
+                }
 
         override fun onCleared() {
             startupRequests?.cancel()
