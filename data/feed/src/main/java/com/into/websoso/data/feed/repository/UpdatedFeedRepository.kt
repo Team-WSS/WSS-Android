@@ -88,12 +88,15 @@ class UpdatedFeedRepository
          * 저장된 좋아요를 아직 불러오지 못했다면 다시 불러옵니다.
          * 실패해도 예외를 던지지 않고 false를 반환해, 호출한 쪽이 저장·전송을 보류하게 합니다.
          */
-        private suspend fun ensureLikesRestored(): Boolean =
-            restoreMutex.withLock {
+        private suspend fun ensureLikesRestored(): Boolean {
+            var recovered = false
+            val restored = restoreMutex.withLock {
                 if (isLikesRestored) return@withLock true
                 try {
                     restorePendingLikes()
                     isLikesRestored = true
+                    // An earlier attempt failed, so selections made meanwhile may be held only in memory.
+                    recovered = isLikeRestoreFailed.value
                     isLikeRestoreFailed.value = false
                 } catch (error: CancellationException) {
                     throw error
@@ -103,6 +106,15 @@ class UpdatedFeedRepository
                 }
                 isLikesRestored
             }
+            if (recovered) persistHeldLikes()
+            return restored
+        }
+
+        /** 복원에 실패한 동안 메모리에만 남은 선택을, 복원에 성공한 뒤 저장소에 저장합니다. */
+        private suspend fun persistHeldLikes() {
+            val feedIds = synchronized(likeStateLock) { pendingLikeStates.keys.toList() }
+            feedIds.forEach { feedId -> persistPendingLikeOrMarkRetry(feedId) }
+        }
 
         private suspend fun restorePendingLikes() {
             val pendingLikes = pendingFeedLikeStore.getPendingLikes()
@@ -410,16 +422,20 @@ class UpdatedFeedRepository
             scope.launch {
                 // Restore failed: keep the selection in memory and hold the write.
                 if (!ensureLikesRestored()) return@launch
-                try {
-                    persistPendingLike(feedId)
-                } catch (error: CancellationException) {
-                    throw error
-                } catch (error: Exception) {
-                    synchronized(likeStateLock) {
-                        if (pendingLikeStates.containsKey(feedId)) setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
-                    }
-                    Log.e("UpdatedFeedRepository", "Failed to save pending feed like $feedId", error)
+                persistPendingLikeOrMarkRetry(feedId)
+            }
+        }
+
+        private suspend fun persistPendingLikeOrMarkRetry(feedId: Long) {
+            try {
+                persistPendingLike(feedId)
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                synchronized(likeStateLock) {
+                    if (pendingLikeStates.containsKey(feedId)) setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
                 }
+                Log.e("UpdatedFeedRepository", "Failed to save pending feed like $feedId", error)
             }
         }
 
