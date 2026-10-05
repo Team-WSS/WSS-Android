@@ -107,8 +107,8 @@ class UpdatedFeedRepository
         private suspend fun restorePendingLikes() {
             val pendingLikes = pendingFeedLikeStore.getPendingLikes()
             if (pendingFeedLikeStore.consumeResetNotice()) {
-                // The corrupted file was reset to empty, so saved changes could not be restored.
-                Log.e("UpdatedFeedRepository", "Pending feed likes were reset after the file was corrupted")
+                // Saved changes were corrupted or unreadable and were reset, so they could not be restored.
+                Log.e("UpdatedFeedRepository", "Saved pending feed likes could not be restored and were reset")
                 _hasUnrestoredLikes.value = true
             }
             synchronized(likeStateLock) {

@@ -2,11 +2,13 @@ package com.into.websoso.core.datastore.datasource.feed
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.into.websoso.core.common.dispatchers.Dispatcher
 import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
 import com.into.websoso.core.datastore.datasource.feed.model.PendingFeedLikePreferences
@@ -37,7 +39,7 @@ internal class DefaultPendingFeedLikeStore
             get() = pendingFeedLikeDataStore.data
                 .map { preferences ->
                     withContext(dispatcher) {
-                        decodePendingLikes(preferences[PENDING_FEED_LIKES_KEY])
+                        preferences.readPendingLikes()
                     }
                 }.distinctUntilChanged()
 
@@ -48,9 +50,8 @@ internal class DefaultPendingFeedLikeStore
             isLiked: Boolean,
         ) {
             pendingFeedLikeDataStore.edit { preferences ->
-                val pendingLikes: MutableMap<Long, Boolean> = decodePendingLikes(
-                    preferences[PENDING_FEED_LIKES_KEY],
-                ).toMutableMap()
+                preferences.setAsideUnreadableLikes()
+                val pendingLikes: MutableMap<Long, Boolean> = preferences.readPendingLikes().toMutableMap()
                 pendingLikes[feedId] = isLiked
                 preferences[PENDING_FEED_LIKES_KEY] = encodePendingLikes(pendingLikes)
             }
@@ -58,9 +59,8 @@ internal class DefaultPendingFeedLikeStore
 
         override suspend fun deletePendingLike(feedId: Long) {
             pendingFeedLikeDataStore.edit { preferences ->
-                val pendingLikes: MutableMap<Long, Boolean> = decodePendingLikes(
-                    preferences[PENDING_FEED_LIKES_KEY],
-                ).toMutableMap()
+                preferences.setAsideUnreadableLikes()
+                val pendingLikes: MutableMap<Long, Boolean> = preferences.readPendingLikes().toMutableMap()
 
                 pendingLikes.remove(feedId)
                 if (pendingLikes.isEmpty()) {
@@ -78,9 +78,8 @@ internal class DefaultPendingFeedLikeStore
             var deleted = false
 
             pendingFeedLikeDataStore.edit { preferences ->
-                val pendingLikes: MutableMap<Long, Boolean> = decodePendingLikes(
-                    preferences[PENDING_FEED_LIKES_KEY],
-                ).toMutableMap()
+                preferences.setAsideUnreadableLikes()
+                val pendingLikes: MutableMap<Long, Boolean> = preferences.readPendingLikes().toMutableMap()
                 if (pendingLikes[feedId] != isLiked) return@edit
 
                 pendingLikes.remove(feedId)
@@ -98,22 +97,33 @@ internal class DefaultPendingFeedLikeStore
         override suspend fun consumeResetNotice(): Boolean {
             var wasReset = false
             pendingFeedLikeDataStore.edit { preferences ->
+                preferences.setAsideUnreadableLikes()
                 wasReset = preferences[PENDING_FEED_LIKES_RESET_KEY] == true
                 preferences.remove(PENDING_FEED_LIKES_RESET_KEY)
             }
             return wasReset
         }
 
-        private fun decodePendingLikes(jsonString: String?): Map<Long, Boolean> {
-            if (jsonString == null) return emptyMap()
+        /** 해석할 수 없는 기록은 지우지 않고 보관함으로 옮긴 뒤, 복원하지 못했다는 표시를 남깁니다. */
+        private fun MutablePreferences.setAsideUnreadableLikes() {
+            val jsonString = this[PENDING_FEED_LIKES_KEY] ?: return
+            if (decodePendingLikes(jsonString) != null) return
+            this[PENDING_FEED_LIKES_UNREADABLE_KEY] = this[PENDING_FEED_LIKES_UNREADABLE_KEY].orEmpty() + jsonString
+            remove(PENDING_FEED_LIKES_KEY)
+            this[PENDING_FEED_LIKES_RESET_KEY] = true
+        }
 
-            return runCatching {
+        private fun Preferences.readPendingLikes(): Map<Long, Boolean> =
+            this[PENDING_FEED_LIKES_KEY]?.let { jsonString -> decodePendingLikes(jsonString) }.orEmpty()
+
+        /** 해석하지 못하면 null을 반환해, 저장된 기록이 없는 경우와 구분합니다. */
+        private fun decodePendingLikes(jsonString: String): Map<Long, Boolean>? =
+            runCatching {
                 Json
                     .decodeFromString<PendingFeedLikesPreferences>(jsonString)
                     .likes
                     .associate { pendingLike -> pendingLike.feedId to pendingLike.isLiked }
-            }.getOrDefault(emptyMap())
-        }
+            }.getOrNull()
 
         private fun encodePendingLikes(pendingLikes: Map<Long, Boolean>): String =
             Json.encodeToString(
@@ -130,6 +140,9 @@ internal class DefaultPendingFeedLikeStore
         companion object {
             private val PENDING_FEED_LIKES_KEY = stringPreferencesKey("PENDING_FEED_LIKES_KEY")
             private val PENDING_FEED_LIKES_RESET_KEY = booleanPreferencesKey("PENDING_FEED_LIKES_RESET_KEY")
+
+            // 형식 변경이나 해석 코드 문제를 고친 뒤 되살릴 수 있도록, 해석하지 못한 원본을 모아 둡니다.
+            private val PENDING_FEED_LIKES_UNREADABLE_KEY = stringSetPreferencesKey("PENDING_FEED_LIKES_UNREADABLE_KEY")
 
             /** 손상된 파일은 빈 기록으로 바꾸고, 초기화했다는 표시를 남깁니다. */
             internal val corruptionHandler = ReplaceFileCorruptionHandler {
