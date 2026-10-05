@@ -16,10 +16,12 @@ import com.into.websoso.data.feed.model.FeedDetailEntity
 import com.into.websoso.data.feed.model.FeedEntity
 import com.into.websoso.data.feed.model.FeedsEntity
 import com.into.websoso.data.feed.repository.model.CachedFeedLikeState
+import com.into.websoso.data.feed.repository.model.LikeSyncStatus
 import com.into.websoso.data.feed.store.PendingFeedLikeStore
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,8 +62,20 @@ class UpdatedFeedRepository
 
         private val pendingLikeStates = ConcurrentHashMap<Long, Boolean>()
         private val originalLikeStates = ConcurrentHashMap<Long, Boolean>()
-        private val feedDetailStates = ConcurrentHashMap<Long, CachedFeedLikeState>()
+        private val _feedDetailLikeStates = MutableStateFlow<Map<Long, CachedFeedLikeState>>(emptyMap())
+        val feedDetailLikeStates = _feedDetailLikeStates.asStateFlow()
         private val pendingLikeStoreWriteMutex = Mutex()
+        private val likeStateLock = Any()
+
+        // ponytail: all feeds share one sender; use per-feed serialization if slow requests delay other feeds excessively.
+        private val likeSyncMutex = Mutex()
+        private val likesRestored = CompletableDeferred<Unit>()
+        private val unconfirmedLikeIds = mutableSetOf<Long>()
+        private val likeRevisions = mutableMapOf<Long, Long>()
+        private val completedLikeAttempts = mutableMapOf<Long, Pair<Long, Long>>()
+        private var likeEventSequence = 0L
+        private val _likeSyncStates = MutableStateFlow<Map<Long, LikeSyncStatus>>(emptyMap())
+        val likeSyncStates = _likeSyncStates.asStateFlow()
 
         init {
             restorePendingLikes()
@@ -69,10 +83,26 @@ class UpdatedFeedRepository
 
         private fun restorePendingLikes() {
             scope.launch {
-                val pendingLikes = pendingFeedLikeStore.getPendingLikes()
-                pendingLikeStates.clear()
-                pendingLikeStates.putAll(pendingLikes)
-                applyPendingLikeStatesToCachedFeeds()
+                try {
+                    val pendingLikes = pendingFeedLikeStore.getPendingLikes()
+                    synchronized(likeStateLock) {
+                        pendingLikes.forEach { (id, isLiked) ->
+                            // A click made while storage was loading takes precedence, including a cancelled selection.
+                            pendingLikeStates[id] = if (id in likeRevisions) {
+                                findCurrentLikeState(id) ?: pendingLikeStates[id] ?: isLiked
+                            } else {
+                                isLiked
+                            }
+                            unconfirmedLikeIds += id
+                            setLikeSyncStatus(id, LikeSyncStatus.NEEDS_RETRY)
+                        }
+                        applyPendingLikeStatesToCachedFeeds()
+                    }
+                    likesRestored.complete(Unit)
+                } catch (error: Exception) {
+                    likesRestored.completeExceptionally(error)
+                    throw error
+                }
             }
         }
 
@@ -201,21 +231,24 @@ class UpdatedFeedRepository
                     size = size,
                 ).toData()
 
-            val mergedFeeds = result.feeds.map { feed -> applyPendingLikeState(feed) }
+            return synchronized(likeStateLock) {
+                val mergedFeeds = result.feeds.map { feed -> applyPendingLikeState(feed) }
+                updateCachedLikes(mergedFeeds.associate { it.id to CachedFeedLikeState(it.isLiked, it.likeCount) })
 
-            val isRecommended = feedsOption == "RECOMMENDED"
-            val targetFlow = if (isRecommended) _sosoRecommendedFeeds else _sosoAllFeeds
+                val isRecommended = feedsOption == "RECOMMENDED"
+                val targetFlow = if (isRecommended) _sosoRecommendedFeeds else _sosoAllFeeds
 
-            targetFlow.update { currentList ->
-                if (lastFeedId == 0L) {
-                    mergedFeeds
-                } else {
-                    val newFeeds = mergedFeeds.filterNot { new -> currentList.any { it.id == new.id } }
-                    currentList + newFeeds
+                targetFlow.update { currentList ->
+                    if (lastFeedId == 0L) {
+                        mergedFeeds
+                    } else {
+                        val newFeeds = mergedFeeds.filterNot { new -> currentList.any { it.id == new.id } }
+                        currentList + newFeeds
+                    }
                 }
-            }
 
-            return result.copy(feeds = targetFlow.value)
+                result.copy(feeds = targetFlow.value)
+            }
         }
 
         /**
@@ -225,28 +258,42 @@ class UpdatedFeedRepository
             feeds: List<FeedEntity>,
             isRefreshed: Boolean,
         ) {
-            val mergedFeeds = feeds.map { feed -> applyPendingLikeState(feed) }
+            synchronized(likeStateLock) {
+                val mergedFeeds = feeds.map { feed -> applyPendingLikeState(feed) }
+                updateCachedLikes(mergedFeeds.associate { it.id to CachedFeedLikeState(it.isLiked, it.likeCount) })
 
-            _myFeeds.update { current ->
-                if (isRefreshed) mergedFeeds else (current + mergedFeeds).distinctBy { it.id }
+                _myFeeds.update { current ->
+                    if (isRefreshed) mergedFeeds else (current + mergedFeeds).distinctBy { it.id }
+                }
             }
         }
 
         /**
          * 서버 데이터보다 로컬의 변경사항(좋아요)을 우선 적용하여 반환합니다.
          */
-        private fun applyPendingLikeState(feed: FeedEntity): FeedEntity {
-            val localIsLiked = pendingLikeStates[feed.id] ?: return feed
-            originalLikeStates.putIfAbsent(feed.id, feed.isLiked)
-
-            if (feed.isLiked != localIsLiked) {
-                val adjustedCount = if (localIsLiked) feed.likeCount + 1 else feed.likeCount - 1
-                return feed.copy(
+        private fun applyPendingLikeState(feed: FeedEntity): FeedEntity =
+            synchronized(likeStateLock) {
+                val localIsLiked = pendingLikeStates[feed.id] ?: return@synchronized feed
+                originalLikeStates.putIfAbsent(feed.id, feed.isLiked)
+                if (feed.isLiked == localIsLiked) return@synchronized feed
+                feed.copy(
                     isLiked = localIsLiked,
-                    likeCount = adjustedCount.coerceAtLeast(0),
+                    likeCount = (feed.likeCount + if (localIsLiked) 1 else -1).coerceAtLeast(0),
                 )
             }
-            return feed
+
+        private fun updateCachedLikes(likes: Map<Long, CachedFeedLikeState>) {
+            listOf(_sosoAllFeeds, _sosoRecommendedFeeds, _myFeeds).forEach { flow ->
+                flow.update { feeds ->
+                    feeds.map { feed ->
+                        val state = likes[feed.id]
+                        if (state == null) feed else feed.copy(isLiked = state.isLiked, likeCount = state.likeCount)
+                    }
+                }
+            }
+            _feedDetailLikeStates.update { states ->
+                states.mapValues { (id, state) -> likes[id] ?: state }
+            }
         }
 
         private fun applyPendingLikeStatesToCachedFeeds() {
@@ -257,6 +304,16 @@ class UpdatedFeedRepository
             _sosoAllFeeds.update(updateAction)
             _sosoRecommendedFeeds.update(updateAction)
             _myFeeds.update(updateAction)
+            _feedDetailLikeStates.update { states ->
+                states.mapValues { (id, state) ->
+                    val desired = pendingLikeStates[id]
+                    if (desired == null || desired == state.isLiked) {
+                        state
+                    } else {
+                        state.copy(isLiked = desired, likeCount = (state.likeCount + if (desired) 1 else -1).coerceAtLeast(0))
+                    }
+                }
+            }
         }
 
         // ============================================================================================
@@ -267,45 +324,46 @@ class UpdatedFeedRepository
          * 로컬 캐시의 좋아요 상태를 즉시 토글하고 변경 내역을 기록합니다.
          */
         fun toggleLikeLocal(feedId: Long) {
-            updateFeedInFlow(_sosoAllFeeds, feedId)
-            updateFeedInFlow(_sosoRecommendedFeeds, feedId)
-            updateFeedInFlow(_myFeeds, feedId)
-
-            if (findCachedFeed(feedId) == null) {
-                updateFeedDetailState(feedId)
+            synchronized(likeStateLock) {
+                val current = findCurrentLikeState(feedId) ?: return
+                val newLiked = !current
+                // Record the user's input once, even when the same feed is cached in several lists.
+                likeRevisions[feedId] = ++likeEventSequence
+                trackPendingLikeState(feedId, current, newLiked)
+                val update: (List<FeedEntity>) -> List<FeedEntity> = { feeds ->
+                    feeds.map { feed ->
+                        if (feed.id != feedId || feed.isLiked == newLiked) {
+                            feed
+                        } else {
+                            feed.copy(
+                                isLiked = newLiked,
+                                likeCount = (feed.likeCount + if (newLiked) 1 else -1).coerceAtLeast(0),
+                            )
+                        }
+                    }
+                }
+                _sosoAllFeeds.update(update)
+                _sosoRecommendedFeeds.update(update)
+                _myFeeds.update(update)
+                _feedDetailLikeStates.value[feedId]?.let { detail ->
+                    _feedDetailLikeStates.update { states ->
+                        states + (
+                            feedId to detail.copy(
+                                isLiked = newLiked,
+                                likeCount = (
+                                    detail.likeCount + if (detail.isLiked == newLiked) {
+                                        0
+                                    } else if (newLiked) {
+                                        1
+                                    } else {
+                                        -1
+                                    }
+                                ).coerceAtLeast(0),
+                            )
+                        )
+                    }
+                }
             }
-        }
-
-        private fun updateFeedInFlow(
-            flow: MutableStateFlow<List<FeedEntity>>,
-            feedId: Long,
-        ) {
-            flow.update { list ->
-                val index = list.indexOfFirst { it.id == feedId }
-                if (index == -1) return@update list
-
-                val target = list[index]
-                val newLiked = !target.isLiked
-                val newCount = if (newLiked) target.likeCount + 1 else target.likeCount - 1
-
-                trackPendingLikeState(feedId, target.isLiked, newLiked)
-
-                val newList = list.toMutableList()
-                newList[index] = target.copy(isLiked = newLiked, likeCount = newCount)
-                newList
-            }
-        }
-
-        private fun updateFeedDetailState(feedId: Long) {
-            val target = feedDetailStates[feedId] ?: return
-            val newLiked = !target.isLiked
-            val newCount = if (newLiked) target.likeCount + 1 else target.likeCount - 1
-
-            trackPendingLikeState(feedId, target.isLiked, newLiked)
-            feedDetailStates[feedId] = CachedFeedLikeState(
-                isLiked = newLiked,
-                likeCount = newCount.coerceAtLeast(0),
-            )
         }
 
         private fun findCachedFeed(feedId: Long): FeedEntity? =
@@ -322,108 +380,135 @@ class UpdatedFeedRepository
             new: Boolean,
         ) {
             originalLikeStates.putIfAbsent(feedId, original)
-            if (originalLikeStates[feedId] == new) {
+            if (feedId !in unconfirmedLikeIds && originalLikeStates[feedId] == new) {
                 pendingLikeStates.remove(feedId)
-                deletePendingLike(feedId)
+                originalLikeStates.remove(feedId)
+                setLikeSyncStatus(feedId, null)
             } else {
                 pendingLikeStates[feedId] = new
-                updatePendingLike(feedId, new)
             }
-        }
-
-        private fun updatePendingLike(
-            feedId: Long,
-            isLiked: Boolean,
-        ) {
-            writePendingLikeStore(feedId, "save") {
-                pendingFeedLikeStore.updatePendingLike(feedId, isLiked)
-            }
-        }
-
-        private fun deletePendingLike(feedId: Long) {
-            writePendingLikeStore(feedId, "delete") {
-                pendingFeedLikeStore.deletePendingLike(feedId)
-            }
-        }
-
-        private fun writePendingLikeStore(
-            feedId: Long,
-            actionName: String,
-            action: suspend () -> Unit,
-        ) {
             scope.launch {
-                pendingLikeStoreWriteMutex.withLock {
-                    runCatching {
-                        action()
-                    }.onFailure {
-                        Log.e(
-                            "UpdatedFeedRepository",
-                            "Failed to $actionName pending feed like $feedId",
-                            it,
-                        )
+                likesRestored.await()
+                try {
+                    persistPendingLike(feedId)
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (error: Exception) {
+                    synchronized(likeStateLock) {
+                        if (pendingLikeStates.containsKey(feedId)) setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
                     }
+                    Log.e("UpdatedFeedRepository", "Failed to save pending feed like $feedId", error)
                 }
             }
         }
 
-        /**
-         * 서버에 아직 반영되지 않은 좋아요 상태들을 동기화합니다.
-         */
-        fun syncPendingLikes() {
-            scope.launch {
-                val syncMap = pendingFeedLikeStore.getPendingLikes() + pendingLikeStates.toMap()
-                if (syncMap.isEmpty()) return@launch
-
-                syncMap.forEach { (id, isLiked) ->
-                    runCatching {
-                        if (isLiked) feedApi.postLikes(id) else feedApi.deleteLikes(id)
-                    }.onSuccess {
-                        handleSyncedPendingLike(id, isLiked)
-                    }.onFailure {
-                        Log.e("UpdatedFeedRepository", "Failed to sync feed $id", it)
-                    }
+        // Read the latest selection when the write runs; a delayed write must not resurrect an old selection.
+        private suspend fun persistPendingLike(feedId: Long) {
+            pendingLikeStoreWriteMutex.withLock {
+                val latest = synchronized(likeStateLock) { pendingLikeStates[feedId] }
+                if (latest == null) {
+                    pendingFeedLikeStore.deletePendingLike(feedId)
+                } else {
+                    pendingFeedLikeStore.updatePendingLike(feedId, latest)
                 }
             }
         }
 
-        private suspend fun handleSyncedPendingLike(
-            feedId: Long,
-            syncedIsLiked: Boolean,
-        ) {
-            val currentIsLiked = findCurrentLikeState(feedId)
-            if (currentIsLiked != null && currentIsLiked != syncedIsLiked) {
-                originalLikeStates[feedId] = syncedIsLiked
-                pendingLikeStates[feedId] = currentIsLiked
-                updatePendingLike(feedId, currentIsLiked)
-                return
-            }
+        /** Screen disposal sends all remaining selections, including earlier failures. */
+        fun syncPendingLikes() = syncPendingLikes(null)
 
-            deleteSyncedPendingLikeFromStore(feedId, syncedIsLiked)
-            deleteSyncedPendingLikeFromMemory(feedId, syncedIsLiked)
+        /** A manual retry targets only unresolved items, using their latest selection. */
+        fun retryPendingLikes(feedIds: Set<Long>? = null) {
+            val targets = synchronized(likeStateLock) {
+                _likeSyncStates.value
+                    .filter { (id, status) -> status == LikeSyncStatus.NEEDS_RETRY && (feedIds == null || id in feedIds) }
+                    .keys
+                    .toSet()
+            }
+            if (targets.isNotEmpty()) syncPendingLikes(targets)
         }
 
-        private fun findCurrentLikeState(feedId: Long): Boolean? = findCachedFeed(feedId)?.isLiked ?: feedDetailStates[feedId]?.isLiked
-
-        private fun deleteSyncedPendingLikeFromMemory(
-            feedId: Long,
-            isLiked: Boolean,
-        ) {
-            pendingLikeStates.remove(feedId, isLiked)
-            if (!pendingLikeStates.containsKey(feedId)) {
-                originalLikeStates.remove(feedId)
+        private fun syncPendingLikes(feedIds: Set<Long>?) {
+            val requestedAt = synchronized(likeStateLock) { ++likeEventSequence }
+            scope.launch {
+                likesRestored.await()
+                likeSyncMutex.withLock {
+                    val targets = synchronized(likeStateLock) {
+                        pendingLikeStates.keys.filter { feedIds == null || it in feedIds }
+                    }
+                    targets.forEach { id -> syncPendingLike(id, requestedAt) }
+                }
             }
         }
 
-        private suspend fun deleteSyncedPendingLikeFromStore(
+        private suspend fun syncPendingLike(
             feedId: Long,
-            isLiked: Boolean,
+            requestedAt: Long,
         ) {
-            runCatching {
-                pendingFeedLikeStore.deletePendingLikeIfMatched(feedId, isLiked)
-            }.onFailure {
-                Log.e("UpdatedFeedRepository", "Failed to delete synced feed like $feedId", it)
+            val selection = synchronized(likeStateLock) {
+                val desired = pendingLikeStates[feedId] ?: return
+                val revision = likeRevisions[feedId] ?: 0L
+                val completed = completedLikeAttempts[feedId]
+                // Coalesce triggers that overlapped the same attempt, including a failed attempt.
+                if (completed != null && completed.first == revision && completed.second > requestedAt) return
+                val needsNetwork = feedId in unconfirmedLikeIds || originalLikeStates[feedId] != desired
+                if (needsNetwork) unconfirmedLikeIds += feedId
+                setLikeSyncStatus(feedId, LikeSyncStatus.SYNCING)
+                LikeSyncRequest(desired, revision, needsNetwork)
+            }
+            var serverConfirmed = !selection.needsNetwork
+            try {
+                persistPendingLike(feedId)
+                if (selection.needsNetwork) {
+                    if (selection.isLiked) feedApi.postLikes(feedId) else feedApi.deleteLikes(feedId)
+                    serverConfirmed = true
+                }
+                synchronized(likeStateLock) {
+                    originalLikeStates[feedId] = selection.isLiked
+                    unconfirmedLikeIds.remove(feedId)
+                    if (pendingLikeStates[feedId] == selection.isLiked) {
+                        pendingLikeStates.remove(feedId)
+                    }
+                    // An older success does not confirm an input made while the request was in flight.
+                    setLikeSyncStatus(feedId, if (pendingLikeStates.containsKey(feedId)) LikeSyncStatus.NEEDS_RETRY else null)
+                }
+                persistPendingLike(feedId)
+                synchronized(likeStateLock) {
+                    if (!pendingLikeStates.containsKey(feedId)) originalLikeStates.remove(feedId)
+                }
+            } catch (error: Exception) {
+                synchronized(likeStateLock) {
+                    // Even cancellation/timeout says nothing about whether the server applied the request.
+                    if (!serverConfirmed) unconfirmedLikeIds += feedId
+                    pendingLikeStates.putIfAbsent(feedId, findCurrentLikeState(feedId) ?: selection.isLiked)
+                    setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
+                }
+                if (error is CancellationException) throw error
+                Log.e("UpdatedFeedRepository", "Failed to sync feed $feedId", error)
+            } finally {
+                synchronized(likeStateLock) {
+                    completedLikeAttempts[feedId] = selection.revision to ++likeEventSequence
+                }
             }
         }
+
+        private fun setLikeSyncStatus(
+            feedId: Long,
+            status: LikeSyncStatus?,
+        ) {
+            _likeSyncStates.update { states ->
+                if (status == null) states - feedId else states + (feedId to status)
+            }
+        }
+
+        private data class LikeSyncRequest(
+            val isLiked: Boolean,
+            val revision: Long,
+            val needsNetwork: Boolean,
+        )
+
+        private fun findCurrentLikeState(feedId: Long): Boolean? =
+            findCachedFeed(feedId)?.isLiked ?: _feedDetailLikeStates.value[feedId]?.isLiked
 
         // ============================================================================================
         //  Feed Actions (Remove, Report)
@@ -493,27 +578,29 @@ class UpdatedFeedRepository
          */
         suspend fun fetchFeed(feedId: Long): FeedDetailEntity {
             val rawDetail = feedApi.getFeed(feedId).toData()
-            val mergedDetail = applyPendingLikeStateToDetail(rawDetail)
-            feedDetailStates[feedId] = CachedFeedLikeState(
-                isLiked = mergedDetail.isLiked,
-                likeCount = mergedDetail.likeCount,
-            )
-            return mergedDetail
-        }
-
-        private fun applyPendingLikeStateToDetail(feed: FeedDetailEntity): FeedDetailEntity {
-            val localIsLiked = pendingLikeStates[feed.id] ?: return feed
-            originalLikeStates.putIfAbsent(feed.id, feed.isLiked)
-
-            if (feed.isLiked != localIsLiked) {
-                val adjustedCount = if (localIsLiked) feed.likeCount + 1 else feed.likeCount - 1
-                return feed.copy(
-                    isLiked = localIsLiked,
-                    likeCount = adjustedCount.coerceAtLeast(0),
-                )
+            return synchronized(likeStateLock) {
+                val mergedDetail = applyPendingLikeStateToDetail(rawDetail)
+                val likeState = CachedFeedLikeState(mergedDetail.isLiked, mergedDetail.likeCount)
+                _feedDetailLikeStates.update { it + (feedId to likeState) }
+                updateCachedLikes(mapOf(feedId to likeState))
+                mergedDetail
             }
-            return feed
         }
+
+        private fun applyPendingLikeStateToDetail(feed: FeedDetailEntity): FeedDetailEntity =
+            synchronized(likeStateLock) {
+                val localIsLiked = pendingLikeStates[feed.id] ?: return@synchronized feed
+                originalLikeStates.putIfAbsent(feed.id, feed.isLiked)
+
+                if (feed.isLiked != localIsLiked) {
+                    val adjustedCount = if (localIsLiked) feed.likeCount + 1 else feed.likeCount - 1
+                    return@synchronized feed.copy(
+                        isLiked = localIsLiked,
+                        likeCount = adjustedCount.coerceAtLeast(0),
+                    )
+                }
+                return@synchronized feed
+            }
 
         /**
          * 댓글 목록을 조회합니다.
