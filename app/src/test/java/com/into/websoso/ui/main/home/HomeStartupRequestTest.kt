@@ -69,6 +69,25 @@ class HomeStartupRequestTest {
         }
 
     @Test
+    fun `session lookup failures after handoff fall back instead of surfacing a storage error`() =
+        runTest(dispatcher) {
+            // Lookup 1 is start(); 2 checks before waiting, 3 after the response, 4 in the failure path.
+            listOf(setOf(2), setOf(3, 4)).forEach { failingLookups ->
+                var lookups = 0
+                val startup = HomeStartupRequest(
+                    { if (++lookups in failingLookups) throw IOException("synthetic storage failure") else identity },
+                    { popular },
+                    { feeds },
+                    dispatcher,
+                )
+                val requests = startup.take(startup.start())!!
+                runCurrent()
+                val result = runCatching { requests.popular() }
+                assertTrue("$failingLookups: ${result.exceptionOrNull()}", result.isSuccess && result.getOrNull() == null)
+            }
+        }
+
+    @Test
     fun `consumer cancellation cancels its in flight request without cancelling its sibling`() =
         runTest(dispatcher) {
             var popularCancelled = false

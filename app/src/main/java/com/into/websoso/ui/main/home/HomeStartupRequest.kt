@@ -101,12 +101,12 @@ class HomeStartupRequest internal constructor(
 
         private suspend fun <T> await(request: Deferred<T>): T? =
             try {
-                if (sessionIdentity() != identity) {
+                if (!isSameSession()) {
                     cancel()
                     null
                 } else {
                     val result = request.await()
-                    if (sessionIdentity() == identity) {
+                    if (isSameSession()) {
                         result
                     } else {
                         cancel()
@@ -117,13 +117,24 @@ class HomeStartupRequest internal constructor(
                 currentCoroutineContext().ensureActive()
                 null
             } catch (error: Exception) {
+                // Only request failures reach here; session checks never throw.
                 currentCoroutineContext().ensureActive()
-                if (sessionIdentity() == identity) throw error
+                if (isSameSession()) throw error
                 cancel()
                 null
             } finally {
                 // Cancellation/replacement of this Home section also cancels its transferred request.
                 request.cancel()
+            }
+
+        // A storage read failure means the session cannot be confirmed: fall back to an ordinary Home request.
+        private suspend fun isSameSession(): Boolean =
+            try {
+                sessionIdentity() == identity
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                false
             }
     }
 
