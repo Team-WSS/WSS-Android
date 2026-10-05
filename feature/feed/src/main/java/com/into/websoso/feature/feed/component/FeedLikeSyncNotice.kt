@@ -25,7 +25,7 @@ fun FeedLikeSyncNotice(
     isSyncing: Boolean,
     onRetry: () -> Unit,
 ) {
-    if (!needsRetry && !isSyncing) return
+    if (!needsRetry) return
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,12 +35,12 @@ fun FeedLikeSyncNotice(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = stringResource(if (needsRetry) R.string.feed_like_unconfirmed_message else R.string.feed_like_syncing),
+            text = stringResource(R.string.feed_like_unconfirmed_message),
             style = WebsosoTheme.typography.body4,
             color = Black,
             modifier = Modifier.weight(1f),
         )
-        TextButton(onClick = onRetry, enabled = needsRetry && !isSyncing) {
+        TextButton(onClick = onRetry, enabled = !isSyncing) {
             Text(text = stringResource(R.string.feed_like_retry))
         }
     }

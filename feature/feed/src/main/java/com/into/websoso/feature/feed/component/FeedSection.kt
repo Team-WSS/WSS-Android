@@ -390,15 +390,9 @@ private fun FeedItem(
             }
         }
 
-        if (likeSyncStatus != null) {
+        if (likeSyncStatus == LikeSyncStatus.NEEDS_RETRY) {
             Text(
-                text = stringResource(
-                    if (likeSyncStatus == LikeSyncStatus.NEEDS_RETRY) {
-                        R.string.feed_like_needs_retry
-                    } else {
-                        R.string.feed_like_syncing
-                    },
-                ),
+                text = stringResource(R.string.feed_like_needs_retry),
                 style = WebsosoTheme.typography.body4,
                 color = Black,
             )

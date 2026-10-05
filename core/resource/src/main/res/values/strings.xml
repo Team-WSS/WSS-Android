@@ -443,6 +443,5 @@
     <string name="library">서재</string>
     <string name="feed_like_unconfirmed_message">반영을 확인하지 못한 좋아요가 있어요.</string>
     <string name="feed_like_needs_retry">확인 필요</string>
-    <string name="feed_like_syncing">좋아요 반영 중</string>
     <string name="feed_like_retry">다시 시도</string>
 </resources>
