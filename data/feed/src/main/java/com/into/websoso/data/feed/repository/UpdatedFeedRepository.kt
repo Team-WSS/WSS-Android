@@ -71,6 +71,8 @@ class UpdatedFeedRepository
         private val restoreMutex = Mutex()
         private var isLikesRestored = false
         private val isLikeRestoreFailed = MutableStateFlow(false)
+        private val _hasUnrestoredLikes = MutableStateFlow(false)
+        val hasUnrestoredLikes = _hasUnrestoredLikes.asStateFlow()
         private val unconfirmedLikeIds = mutableSetOf<Long>()
         private val likeRevisions = mutableMapOf<Long, Long>()
         private val completedLikeAttempts = mutableMapOf<Long, Pair<Long, Long>>()
@@ -104,6 +106,11 @@ class UpdatedFeedRepository
 
         private suspend fun restorePendingLikes() {
             val pendingLikes = pendingFeedLikeStore.getPendingLikes()
+            if (pendingFeedLikeStore.consumeResetNotice()) {
+                // The corrupted file was reset to empty, so saved changes could not be restored.
+                Log.e("UpdatedFeedRepository", "Pending feed likes were reset after the file was corrupted")
+                _hasUnrestoredLikes.value = true
+            }
             synchronized(likeStateLock) {
                 pendingLikes.forEach { (id, isLiked) ->
                     // A click made while storage was loading takes precedence, including a cancelled selection.

@@ -413,6 +413,24 @@ class UpdatedFeedRepositoryRecoveryTest {
             assertTrue(repository.likeSyncStates.value.isEmpty())
         }
 
+    @Test
+    fun `손상된 저장 파일이 초기화됐으면 복원 후 미복원 안내 상태를 남기고 이어서 동작한다`() =
+        runTest {
+            val api = server()
+            val store = FakePendingFeedLikeStore().apply { resetNotice = true }
+            val repository = createRepository(api, store)
+            advanceUntilIdle()
+            assertTrue(repository.hasUnrestoredLikes.value)
+            assertFalse(store.resetNotice)
+
+            repository.fetchFeeds(0L, 10, "ALL")
+            repository.toggleLikeLocal(1L)
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            assertEquals(listOf(1L), api.postLikesCalls)
+            assertTrue(store.currentPendingLikes().isEmpty())
+        }
+
     private fun server() =
         FakeFeedApi().apply {
             feedsResponse = feedsResponseOf(feedResponse(1L, false, 0))
