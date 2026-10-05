@@ -431,6 +431,33 @@ class UpdatedFeedRepositoryRecoveryTest {
             assertTrue(store.currentPendingLikes().isEmpty())
         }
 
+    @Test
+    fun `복원에 실패한 동안 누른 좋아요는 복원에 성공하면 함께 저장된다`() =
+        runTest {
+            val api = FakeFeedApi().apply {
+                feedsResponse = feedsResponseOf(feedResponse(1L, false, 0), feedResponse(2L, false, 0))
+            }
+            val backing = FakePendingFeedLikeStore()
+            var failRead = true
+            val store = object : PendingFeedLikeStore by backing {
+                override suspend fun getPendingLikes(): Map<Long, Boolean> {
+                    if (failRead) throw IOException("test storage unavailable")
+                    return backing.getPendingLikes()
+                }
+            }
+            val repository = createRepository(api, store)
+            advanceUntilIdle()
+            repository.fetchFeeds(0L, 10, "ALL")
+            repository.toggleLikeLocal(1L)
+            advanceUntilIdle()
+            assertTrue(backing.currentPendingLikes().isEmpty())
+
+            failRead = false
+            repository.toggleLikeLocal(2L)
+            advanceUntilIdle()
+            assertEquals(mapOf(1L to true, 2L to true), backing.currentPendingLikes())
+        }
+
     private fun server() =
         FakeFeedApi().apply {
             feedsResponse = feedsResponseOf(feedResponse(1L, false, 0))
