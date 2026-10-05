@@ -10,6 +10,7 @@ import com.into.websoso.ui.splash.UiEffect.NavigateToMain
 import com.into.websoso.ui.splash.UiEffect.ShowDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -51,22 +52,21 @@ class SplashViewModel
                 if (isRequired) _uiEffect.send(ShowDialog)
             }
 
-        private suspend fun handleAutoLogin() {
-            delay(1000)
-
-            if (shouldRefresh()) {
-                _uiEffect.send(NavigateToLogin)
-                return
-            }
-
-            accountRepository
-                .createTokens()
-                .onSuccess {
-                    _uiEffect.send(NavigateToMain)
-                }.onFailure {
-                    _uiEffect.send(NavigateToLogin)
+        private suspend fun handleAutoLogin() =
+            coroutineScope {
+                // Preserve the minimum display time while authentication runs alongside it.
+                val minimumDisplay = launch { delay(1000) }
+                val destination = if (shouldRefresh()) {
+                    NavigateToLogin
+                } else {
+                    accountRepository.createTokens().fold(
+                        onSuccess = { NavigateToMain },
+                        onFailure = { NavigateToLogin },
+                    )
                 }
-        }
+                minimumDisplay.join()
+                _uiEffect.send(destination)
+            }
 
         private suspend fun shouldRefresh(): Boolean =
             accountRepository.accessToken().isBlank() ||
