@@ -3,16 +3,24 @@ package com.into.websoso.ui.splash
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.preferencesOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewModelStore
+import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.data.account.AccountRepository
 import com.into.websoso.data.account.datasource.AccountLocalDataSource
 import com.into.websoso.data.account.datasource.AccountRemoteDataSource
 import com.into.websoso.data.account.model.TokenEntity
+import com.into.websoso.data.model.PopularFeedEntity
+import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.remote.api.UserApi
 import com.into.websoso.data.remote.api.VersionApi
 import com.into.websoso.data.remote.response.MinimumVersionResponseDto
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.data.repository.VersionRepository
+import com.into.websoso.ui.main.home.HomeStartupRequest
+import dagger.Lazy
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,6 +37,8 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -41,6 +51,7 @@ import kotlin.coroutines.intrinsics.startCoroutineUninterceptedOrReturn
 class SplashViewModelTest {
     private val dispatcher = StandardTestDispatcher()
     private val owners = mutableListOf<ViewModelStore>()
+    private val lifecycles = mutableListOf<LifecycleRegistry>()
     private val calls = mutableListOf<String>()
     private var accessToken = "synthetic-access"
     private var refreshToken = "synthetic-refresh"
@@ -51,6 +62,20 @@ class SplashViewModelTest {
         delay(300)
         TokenEntity("synthetic-new-access", "synthetic-new-refresh")
     }
+    private var startupSession: suspend () -> String = { accessToken }
+    private var startedRequests = 0
+    private var cancelledRequests = 0
+    private val startup by lazy {
+        HomeStartupRequest(
+            sessionIdentity = {
+                calls.add("startupSession")
+                startupSession()
+            },
+            fetchPopular = { pendingResponse<PopularNovelsEntity>() },
+            fetchFeeds = { pendingResponse<List<PopularFeedEntity>>() },
+            dispatcher = dispatcher,
+        )
+    }
 
     @Before
     fun setUp() {
@@ -59,7 +84,9 @@ class SplashViewModelTest {
 
     @After
     fun tearDown() {
+        lifecycles.forEach { it.currentState = Lifecycle.State.DESTROYED }
         owners.forEach(ViewModelStore::clear)
+        dispatcher.scheduler.runCurrent()
         Dispatchers.resetMain()
     }
 
@@ -86,7 +113,7 @@ class SplashViewModelTest {
             advanceTimeBy(1)
             runCurrent()
             assertTrue(destination.isCompleted)
-            assertEquals(UiEffect.NavigateToMain, destination.await())
+            assertNotNull((destination.await() as UiEffect.NavigateToMain).startupRequestId)
             assertEquals(1, calls.count { it == "postReissue" })
         }
 
@@ -108,7 +135,7 @@ class SplashViewModelTest {
             advanceTimeBy(1)
             runCurrent()
             assertTrue(destination.isCompleted)
-            assertEquals(UiEffect.NavigateToMain, destination.await())
+            assertNotNull((destination.await() as UiEffect.NavigateToMain).startupRequestId)
         }
 
     @Test
@@ -126,6 +153,7 @@ class SplashViewModelTest {
             runCurrent()
             assertTrue(destination.isCompleted)
             assertEquals(UiEffect.NavigateToLogin, destination.await())
+            assertFalse(calls.contains("startupSession"))
         }
 
     @Test
@@ -146,6 +174,7 @@ class SplashViewModelTest {
             assertTrue(destination.isCompleted)
             assertEquals(UiEffect.NavigateToLogin, destination.await())
             assertEquals(1, calls.count { it == "postReissue" })
+            assertFalse(calls.contains("startupSession"))
         }
 
     @Test
@@ -186,7 +215,194 @@ class SplashViewModelTest {
             destination.cancel()
         }
 
-    private fun createViewModel(): SplashViewModel {
+    @Test
+    fun `session lookup finishing in background waits for a recreated started collector and navigates once`() =
+        runTest(dispatcher) {
+            val session = CompletableDeferred<String>()
+            startupSession = { session.await() }
+            val vm = createViewModel()
+            val effects = mutableListOf<UiEffect>()
+            val firstActivity = activityLifecycle()
+            vm.uiEffect.collectWithLifecycle(firstActivity) { effects.add(it) }
+            firstActivity.lifecycle.currentState = Lifecycle.State.STARTED
+            advanceTimeBy(1000)
+            runCurrent()
+            assertTrue(calls.contains("startupSession"))
+            assertTrue(effects.isEmpty())
+
+            firstActivity.lifecycle.currentState = Lifecycle.State.CREATED
+            runCurrent()
+            session.complete(accessToken)
+            runCurrent()
+            assertEquals(2, startedRequests)
+            assertTrue(effects.isEmpty())
+
+            firstActivity.lifecycle.currentState = Lifecycle.State.DESTROYED
+            runCurrent()
+            val recreatedActivity = activityLifecycle()
+            vm.start(isHomeDestination = true)
+            vm.uiEffect.collectWithLifecycle(recreatedActivity) { effect ->
+                effects.add(effect)
+                vm.onUiEffectHandled(effect)
+            }
+            runCurrent()
+            assertTrue(effects.isEmpty())
+            recreatedActivity.lifecycle.currentState = Lifecycle.State.STARTED
+            runCurrent()
+            val effect = effects.single() as UiEffect.NavigateToMain
+            assertNotNull(effect.startupRequestId)
+            assertEquals(1, calls.count { it == "postReissue" })
+            assertEquals(1, calls.count { it == "startupSession" })
+
+            recreatedActivity.lifecycle.currentState = Lifecycle.State.CREATED
+            runCurrent()
+            recreatedActivity.lifecycle.currentState = Lifecycle.State.STARTED
+            runCurrent()
+            assertEquals(1, effects.size)
+
+            // Main may receive the ID before Home is ready to take its requests.
+            owners.single().clear()
+            runCurrent()
+            assertEquals(0, cancelledRequests)
+            val transferred = startup.take(effect.startupRequestId)
+            assertNotNull(transferred)
+            transferred!!.cancel()
+            runCurrent()
+            assertEquals(2, cancelledRequests)
+        }
+
+    @Test
+    fun `an unhandled destination is retained and clearing Splash discards its requests`() =
+        runTest(dispatcher) {
+            val vm = createViewModel()
+            advanceTimeBy(1000)
+            runCurrent()
+            val effect = vm.uiEffect.first() as UiEffect.NavigateToMain
+            assertEquals(effect, vm.uiEffect.first())
+            assertEquals(2, startedRequests)
+
+            owners.single().clear()
+            runCurrent()
+            assertEquals(2, cancelledRequests)
+            assertNull(startup.take(effect.startupRequestId))
+        }
+
+    @Test
+    fun `failed navigation discards the untransferred request and destination`() =
+        runTest(dispatcher) {
+            val vm = createViewModel()
+            advanceTimeBy(1000)
+            runCurrent()
+            val effect = vm.uiEffect.first() as UiEffect.NavigateToMain
+
+            vm.onNavigationFailed()
+            runCurrent()
+            assertEquals(2, cancelledRequests)
+            assertNull(startup.take(effect.startupRequestId))
+            val next = async { vm.uiEffect.first() }
+            runCurrent()
+            assertFalse(next.isCompleted)
+            next.cancel()
+        }
+
+    @Test
+    fun `collection destination skips startup requests`() =
+        runTest(dispatcher) {
+            val vm = createViewModel(isHomeDestination = false)
+            advanceTimeBy(1000)
+            runCurrent()
+            assertEquals(UiEffect.NavigateToMain(null), vm.uiEffect.first())
+            assertFalse(calls.contains("startupSession"))
+            assertEquals(0, startedRequests)
+        }
+
+    @Test
+    fun `a deep link arriving during session lookup prevents transfer`() =
+        runTest(dispatcher) {
+            val session = CompletableDeferred<String>()
+            startupSession = { session.await() }
+            val vm = createViewModel()
+            advanceTimeBy(1000)
+            runCurrent()
+            assertTrue(calls.contains("startupSession"))
+
+            vm.start(isHomeDestination = false)
+            session.complete(accessToken)
+            runCurrent()
+            assertEquals(UiEffect.NavigateToMain(null), vm.uiEffect.first())
+            assertEquals(0, startedRequests)
+        }
+
+    @Test
+    fun `a deep link arriving after preparation discards requests and replaces the pending ID`() =
+        runTest(dispatcher) {
+            val vm = createViewModel()
+            advanceTimeBy(1000)
+            runCurrent()
+            val effect = vm.uiEffect.first() as UiEffect.NavigateToMain
+
+            vm.start(isHomeDestination = false)
+            runCurrent()
+            assertEquals(UiEffect.NavigateToMain(null), vm.uiEffect.first())
+            assertNull(startup.take(effect.startupRequestId))
+            assertEquals(2, cancelledRequests)
+            assertEquals(1, calls.count { it == "postReissue" })
+        }
+
+    @Test
+    fun `clearing Splash during session lookup cancels preparation without a destination`() =
+        runTest(dispatcher) {
+            var cancelled = false
+            startupSession = {
+                try {
+                    CompletableDeferred<String>().await()
+                } finally {
+                    cancelled = true
+                }
+            }
+            val vm = createViewModel()
+            val destination = async { vm.uiEffect.first() }
+            advanceTimeBy(1000)
+            runCurrent()
+            assertTrue(calls.contains("startupSession"))
+
+            owners.single().clear()
+            runCurrent()
+            assertTrue(cancelled)
+            assertEquals(0, startedRequests)
+            assertFalse(destination.isCompleted)
+            destination.cancel()
+        }
+
+    @Test
+    fun `failed startup session lookup still navigates without a request ID`() =
+        runTest(dispatcher) {
+            startupSession = { throw IOException("synthetic setup failure") }
+            val vm = createViewModel()
+            advanceTimeBy(1000)
+            runCurrent()
+            assertEquals(UiEffect.NavigateToMain(null), vm.uiEffect.first())
+            assertEquals(0, startedRequests)
+        }
+
+    private fun activityLifecycle() =
+        object : LifecycleOwner {
+            override val lifecycle = LifecycleRegistry.createUnsafe(this).also {
+                it.currentState = Lifecycle.State.CREATED
+                lifecycles.add(it)
+            }
+        }
+
+    private suspend fun <T> pendingResponse(): T {
+        startedRequests++
+        try {
+            return CompletableDeferred<T>().await()
+        } finally {
+            cancelledRequests++
+        }
+    }
+
+    private fun createViewModel(isHomeDestination: Boolean = true): SplashViewModel {
         val storage = object : DataStore<Preferences> {
             override val data = MutableStateFlow(preferencesOf())
 
@@ -197,7 +413,11 @@ class SplashViewModelTest {
             VersionRepository(api<VersionApi>()),
             UserRepository(api<UserApi>(), storage),
             AccountRepository(api<AccountRemoteDataSource>(), api<AccountLocalDataSource>()),
-        ).also { vm -> owners.add(ViewModelStore().apply { put("splash", vm) }) }
+            Lazy { startup },
+        ).also { vm ->
+            owners.add(ViewModelStore().apply { put("splash", vm) })
+            vm.start(isHomeDestination)
+        }
     }
 
     // Keep repositories real; replace only their external data sources with synthetic inputs.

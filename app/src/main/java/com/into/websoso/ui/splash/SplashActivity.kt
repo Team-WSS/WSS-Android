@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.Settings.Secure.ANDROID_ID
 import android.provider.Settings.Secure.getString
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.into.websoso.BuildConfig
 import com.into.websoso.R
 import com.into.websoso.core.common.navigator.NavigatorProvider
@@ -19,18 +18,13 @@ import com.into.websoso.ui.splash.UiEffect.NavigateToLogin
 import com.into.websoso.ui.splash.UiEffect.NavigateToMain
 import com.into.websoso.ui.splash.UiEffect.ShowDialog
 import com.into.websoso.ui.splash.dialog.MinimumVersionDialogFragment
-import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {
     @Inject
     lateinit var websosoNavigator: NavigatorProvider
-
-    @Inject
-    lateinit var homeStartupRequest: Lazy<HomeStartupRequest>
 
     private val splashViewModel: SplashViewModel by viewModels()
 
@@ -60,6 +54,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
                 intent.putExtra(CollectionDeepLink.PENDING_COLLECTION_ID, collectionId)
             }
         }
+        splashViewModel.start(
+            isHomeDestination = intent.getLongExtra(CollectionDeepLink.PENDING_COLLECTION_ID, 0L) == 0L,
+        )
     }
 
     @SuppressLint("HardwareIds")
@@ -71,35 +68,35 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     private fun collectUiEffect() {
         splashViewModel.uiEffect.collectWithLifecycle(this) { uiEffect ->
             when (uiEffect) {
-                NavigateToLogin -> websosoNavigator.navigateToLoginActivity(::startDestination)
-                NavigateToMain -> websosoNavigator.navigateToMainActivity(::startHomeDestination)
-                ShowDialog -> showMinimumVersionDialog()
-            }
-        }
-    }
+                NavigateToLogin -> websosoNavigator.navigateToLoginActivity { startDestination(it, uiEffect) }
+                is NavigateToMain -> websosoNavigator.navigateToMainActivity(
+                    startActivity = { startDestination(it, uiEffect) },
+                )
 
-    private fun startHomeDestination(destination: Intent) {
-        lifecycleScope.launch {
-            val target = CollectionDeepLink.forward(intent, destination)
-            var requestId: String? = null
-            var handedOff = false
-            try {
-                if (target.getLongExtra(CollectionDeepLink.PENDING_COLLECTION_ID, 0L) == 0L) {
-                    requestId = homeStartupRequest.get().start()
-                    requestId?.let { target.putExtra(HomeStartupRequest.KEY, it) }
+                ShowDialog -> {
+                    showMinimumVersionDialog()
+                    splashViewModel.onUiEffectHandled(uiEffect)
                 }
-                // Authentication has completed. Start Home without awaiting either content response.
-                startActivity(target)
-                handedOff = true
-                finish()
-            } finally {
-                if (!handedOff && requestId != null) homeStartupRequest.get().discard(requestId)
             }
         }
     }
 
-    private fun startDestination(destination: Intent) {
-        startActivity(CollectionDeepLink.forward(intent, destination))
+    private fun startDestination(
+        destination: Intent,
+        effect: UiEffect,
+    ) {
+        val target = CollectionDeepLink.forward(intent, destination)
+        if (effect is NavigateToMain) {
+            effect.startupRequestId?.let { target.putExtra(HomeStartupRequest.KEY, it) }
+        }
+        // Collected only while STARTED; do not suspend between receiving the effect and navigation.
+        try {
+            startActivity(target)
+        } catch (error: Exception) {
+            splashViewModel.onNavigationFailed()
+            throw error
+        }
+        splashViewModel.onUiEffectHandled(effect)
         finish()
     }
 
