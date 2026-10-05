@@ -67,22 +67,21 @@ class SplashViewModel
 
         private suspend fun handleAutoLogin() =
             coroutineScope {
-                // Preserve the minimum display time while authentication runs alongside it.
+                // Overlap authentication and Home requests with the minimum display time.
                 val minimumDisplay = launch { delay(1000) }
                 val authenticated = if (shouldRefresh()) {
                     false
                 } else {
                     accountRepository.createTokens().isSuccess
                 }
-                minimumDisplay.join()
                 if (authenticated) {
                     startupRequestId = if (isHomeDestination) homeStartupRequest.get().start() else null
                     // A new deep link may arrive while the session lookup is suspended.
                     if (!isHomeDestination) discardStartupRequest()
-                    _uiEffect.value = NavigateToMain(startupRequestId)
-                } else {
-                    _uiEffect.value = NavigateToLogin
                 }
+                minimumDisplay.join()
+                // Read startupRequestId here, not earlier: a deep link during the wait may have cleared it.
+                _uiEffect.value = if (authenticated) NavigateToMain(startupRequestId) else NavigateToLogin
             }
 
         fun onUiEffectHandled(effect: UiEffect) {

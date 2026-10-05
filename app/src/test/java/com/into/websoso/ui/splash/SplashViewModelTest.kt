@@ -91,7 +91,7 @@ class SplashViewModelTest {
     }
 
     @Test
-    fun `fast authentication overlaps the minimum display after version approval`() =
+    fun `successful authentication starts Home requests during the minimum display after version approval`() =
         runTest(dispatcher) {
             versionRequest = {
                 delay(200)
@@ -105,9 +105,19 @@ class SplashViewModelTest {
             advanceTimeBy(200)
             runCurrent()
             assertTrue(calls.contains("postReissue"))
-            advanceTimeBy(999)
+            advanceTimeBy(299)
+            runCurrent()
+            assertFalse(calls.contains("startupSession"))
+            assertEquals(0, startedRequests)
+
+            advanceTimeBy(1)
             runCurrent()
             assertEquals("synthetic-new-access", accessToken)
+            assertEquals(2, startedRequests)
+            assertFalse(destination.isCompleted)
+
+            advanceTimeBy(699)
+            runCurrent()
             assertFalse(destination.isCompleted)
 
             advanceTimeBy(1)
@@ -115,6 +125,7 @@ class SplashViewModelTest {
             assertTrue(destination.isCompleted)
             assertNotNull((destination.await() as UiEffect.NavigateToMain).startupRequestId)
             assertEquals(1, calls.count { it == "postReissue" })
+            assertEquals(1, calls.count { it == "startupSession" })
         }
 
     @Test
@@ -216,6 +227,53 @@ class SplashViewModelTest {
         }
 
     @Test
+    fun `clearing Splash during the remaining minimum display cancels Home requests and navigation`() =
+        runTest(dispatcher) {
+            val vm = createViewModel()
+            val destination = async { vm.uiEffect.first() }
+            advanceTimeBy(300)
+            runCurrent()
+            assertEquals(2, startedRequests)
+            assertFalse(destination.isCompleted)
+
+            owners.single().clear()
+            runCurrent()
+            assertEquals(2, cancelledRequests)
+
+            advanceTimeBy(1000)
+            runCurrent()
+            assertFalse(destination.isCompleted)
+            destination.cancel()
+        }
+
+    @Test
+    fun `a deep link during the remaining minimum display cancels Home requests without early navigation`() =
+        runTest(dispatcher) {
+            val vm = createViewModel()
+            val destination = async { vm.uiEffect.first() }
+            advanceTimeBy(300)
+            runCurrent()
+            assertEquals(2, startedRequests)
+            assertFalse(destination.isCompleted)
+
+            vm.start(isHomeDestination = false)
+            runCurrent()
+            assertEquals(2, cancelledRequests)
+            assertFalse(destination.isCompleted)
+
+            advanceTimeBy(699)
+            runCurrent()
+            assertFalse(destination.isCompleted)
+
+            advanceTimeBy(1)
+            runCurrent()
+            assertTrue(destination.isCompleted)
+            assertEquals(UiEffect.NavigateToMain(null), destination.await())
+            assertEquals(1, calls.count { it == "postReissue" })
+            assertEquals(1, calls.count { it == "startupSession" })
+        }
+
+    @Test
     fun `session lookup finishing in background waits for a recreated started collector and navigates once`() =
         runTest(dispatcher) {
             val session = CompletableDeferred<String>()
@@ -225,7 +283,7 @@ class SplashViewModelTest {
             val firstActivity = activityLifecycle()
             vm.uiEffect.collectWithLifecycle(firstActivity) { effects.add(it) }
             firstActivity.lifecycle.currentState = Lifecycle.State.STARTED
-            advanceTimeBy(1000)
+            advanceTimeBy(300)
             runCurrent()
             assertTrue(calls.contains("startupSession"))
             assertTrue(effects.isEmpty())
@@ -235,6 +293,10 @@ class SplashViewModelTest {
             session.complete(accessToken)
             runCurrent()
             assertEquals(2, startedRequests)
+            assertTrue(effects.isEmpty())
+
+            advanceTimeBy(700)
+            runCurrent()
             assertTrue(effects.isEmpty())
 
             firstActivity.lifecycle.currentState = Lifecycle.State.DESTROYED
