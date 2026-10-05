@@ -1,8 +1,11 @@
 package com.into.websoso.core.datastore.datasource.feed
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.into.websoso.core.common.dispatchers.Dispatcher
 import com.into.websoso.core.common.dispatchers.WebsosoDispatchers
@@ -92,6 +95,15 @@ internal class DefaultPendingFeedLikeStore
             return deleted
         }
 
+        override suspend fun consumeResetNotice(): Boolean {
+            var wasReset = false
+            pendingFeedLikeDataStore.edit { preferences ->
+                wasReset = preferences[PENDING_FEED_LIKES_RESET_KEY] == true
+                preferences.remove(PENDING_FEED_LIKES_RESET_KEY)
+            }
+            return wasReset
+        }
+
         private fun decodePendingLikes(jsonString: String?): Map<Long, Boolean> {
             if (jsonString == null) return emptyMap()
 
@@ -117,6 +129,12 @@ internal class DefaultPendingFeedLikeStore
 
         companion object {
             private val PENDING_FEED_LIKES_KEY = stringPreferencesKey("PENDING_FEED_LIKES_KEY")
+            private val PENDING_FEED_LIKES_RESET_KEY = booleanPreferencesKey("PENDING_FEED_LIKES_RESET_KEY")
+
+            /** 손상된 파일은 빈 기록으로 바꾸고, 초기화했다는 표시를 남깁니다. */
+            internal val corruptionHandler = ReplaceFileCorruptionHandler {
+                preferencesOf(PENDING_FEED_LIKES_RESET_KEY to true)
+            }
         }
     }
 

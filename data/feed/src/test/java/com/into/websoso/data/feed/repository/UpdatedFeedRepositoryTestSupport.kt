@@ -244,6 +244,9 @@ internal class FakePendingFeedLikeStore(
     val deleteCalls = mutableListOf<Long>()
     val deleteIfMatchedCalls = mutableListOf<Pair<Long, Boolean>>()
 
+    /** true면 손상된 파일을 초기화한 직후처럼 동작한다. 한 번 확인하면 false로 바뀐다. */
+    var resetNotice: Boolean = false
+
     fun currentPendingLikes(): Map<Long, Boolean> = state.value
 
     override suspend fun getPendingLikes(): Map<Long, Boolean> = state.value
@@ -269,5 +272,11 @@ internal class FakePendingFeedLikeStore(
         if (state.value[feedId] != isLiked) return false
         state.update { it - feedId }
         return true
+    }
+
+    override suspend fun consumeResetNotice(): Boolean {
+        val wasReset = resetNotice
+        resetNotice = false
+        return wasReset
     }
 }

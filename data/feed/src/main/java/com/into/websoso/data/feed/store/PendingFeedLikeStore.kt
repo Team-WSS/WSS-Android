@@ -23,4 +23,7 @@ interface PendingFeedLikeStore {
         feedId: Long,
         isLiked: Boolean,
     ): Boolean
+
+    /** 손상된 저장 파일을 초기화한 표시가 있으면 지우고 true를 반환합니다. */
+    suspend fun consumeResetNotice(): Boolean
 }

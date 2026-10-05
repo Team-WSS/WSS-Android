@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.into.websoso.core.datastore.datasource.feed.DefaultPendingFeedLikeStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +31,7 @@ internal object DataStoreModule {
     private const val PENDING_FEED_LIKE_DATASTORE = "PENDING_FEED_LIKE_DATASTORE"
     private val Context.pendingFeedLikeDataStore: DataStore<Preferences> by preferencesDataStore(
         name = PENDING_FEED_LIKE_DATASTORE,
+        corruptionHandler = DefaultPendingFeedLikeStore.corruptionHandler,
     )
 
     @Provides
