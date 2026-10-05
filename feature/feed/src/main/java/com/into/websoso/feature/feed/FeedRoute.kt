@@ -28,6 +28,7 @@ fun FeedRoute(
 ) {
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val likeSyncStates by viewModel.likeSyncStates.collectAsStateWithLifecycle()
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
         confirmValueChange = { newValue ->
@@ -38,6 +39,8 @@ fun FeedRoute(
 
     FeedScreen(
         uiState = uiState,
+        likeSyncStates = likeSyncStates,
+        onRetryLikes = viewModel::retryLikes,
         bottomSheetState = bottomSheetState,
         onTabSelected = viewModel::updateTab,
         onSortSelected = viewModel::updateMyFeedSort,

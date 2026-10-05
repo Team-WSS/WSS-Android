@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,6 +56,7 @@ import com.into.websoso.core.resource.R
 import com.into.websoso.core.resource.R.drawable.ic_link
 import com.into.websoso.core.resource.R.drawable.ic_navigate_right
 import com.into.websoso.core.resource.R.drawable.ic_star
+import com.into.websoso.data.feed.repository.model.LikeSyncStatus
 import com.into.websoso.feature.feed.model.FeedTab
 import com.into.websoso.feature.feed.model.FeedUiModel
 import kotlinx.collections.immutable.ImmutableList
@@ -77,6 +79,7 @@ internal fun FeedSection(
     onLoadMore: () -> Unit,
     isLoading: Boolean,
     isRefreshing: Boolean,
+    likeSyncStates: Map<Long, LikeSyncStatus> = emptyMap(),
 ) {
     val view = LocalView.current
     PullToRefreshBox(
@@ -124,6 +127,7 @@ internal fun FeedSection(
                     itemsIndexed(items = feeds) { index, feed ->
                         FeedItem(
                             feed = feed,
+                            likeSyncStatus = likeSyncStates[feed.id],
                             currentTab = currentTab,
                             onProfileClick = onProfileClick,
                             onNovelClick = onNovelClick,
@@ -157,6 +161,7 @@ internal fun FeedSection(
 @Composable
 private fun FeedItem(
     feed: FeedUiModel,
+    likeSyncStatus: LikeSyncStatus?,
     currentTab: FeedTab,
     onProfileClick: (userId: Long, feedTab: FeedTab) -> Unit,
     onNovelClick: (novelId: Long) -> Unit,
@@ -383,6 +388,20 @@ private fun FeedItem(
                     }
                 }
             }
+        }
+
+        if (likeSyncStatus != null) {
+            Text(
+                text = stringResource(
+                    if (likeSyncStatus == LikeSyncStatus.NEEDS_RETRY) {
+                        R.string.feed_like_needs_retry
+                    } else {
+                        R.string.feed_like_syncing
+                    },
+                ),
+                style = WebsosoTheme.typography.body4,
+                color = Black,
+            )
         }
     }
 }

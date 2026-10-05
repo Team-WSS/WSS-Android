@@ -28,6 +28,9 @@ class FeedViewModel
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(FeedUiState())
         val uiState = _uiState.asStateFlow()
+        val likeSyncStates = feedRepository.likeSyncStates
+
+        fun retryLikes() = feedRepository.retryPendingLikes()
 
         init {
             collectFeedRefreshEvent()
