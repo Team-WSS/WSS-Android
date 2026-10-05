@@ -37,6 +37,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -929,9 +930,43 @@ class HomeViewModelTest {
             assertTrue(feedsCancelled)
         }
 
+    @Test
+    fun `refreshing while startup requests are pending does not start fallback requests in replaced jobs`() =
+        runTest(dispatcher) {
+            // Resume Home and startup coroutines in place, as Dispatchers.Main.immediate can on the main thread.
+            val immediate = UnconfinedTestDispatcher(testScheduler)
+            Dispatchers.setMain(immediate)
+            val immediateStartupRequest = HomeStartupRequest(
+                { sessionIdentity },
+                { NovelRepository(api<NovelApi>()).fetchPopularNovels() },
+                { FeedRepository(api<FeedApi>()).fetchPopularFeeds() },
+                immediate,
+            )
+            popularRequest = { CompletableDeferred<PopularNovelsResponseDto>().await() }
+            feedRequest = { CompletableDeferred<PopularFeedsResponseDto>().await() }
+            val id = immediateStartupRequest.start()
+            runCurrent()
+            val vm = createViewModel(startupId = id, homeStartupRequest = immediateStartupRequest)
+            runCurrent()
+            assertEquals(1, calls["getPopularNovels"])
+            assertEquals(1, calls["getPopularFeeds"])
+
+            popularRequest = { popular() }
+            vm.updateNovel()
+            runCurrent()
+            // Startup request + refresh only; the replaced initial job must not fetch again.
+            assertEquals(2, calls["getPopularNovels"])
+
+            feedRequest = { feeds() }
+            vm.updateFeed()
+            runCurrent()
+            assertEquals(2, calls["getPopularFeeds"])
+        }
+
     private fun createViewModel(
         termsChecked: Boolean = true,
         startupId: String? = null,
+        homeStartupRequest: HomeStartupRequest = startupRequest,
     ): HomeViewModel {
         val storage = object : DataStore<Preferences> {
             override val data = MutableStateFlow(
@@ -952,7 +987,7 @@ class HomeViewModelTest {
             NotificationRepository(api<NotificationApi>()),
             user,
             SavedStateHandle(mapOf(HomeStartupRequest.KEY to startupId)),
-            startupRequest,
+            homeStartupRequest,
         ).also { vm ->
             owners.add(ViewModelStore().apply { put("home", vm) })
         }
