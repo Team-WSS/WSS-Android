@@ -178,6 +178,14 @@ internal class FakeFeedApi : FeedApi {
         feedId: Long,
         isLiked: Boolean,
     ) {
+        feedDetailResponses[feedId]?.let { detail ->
+            if (detail.isLiked != isLiked) {
+                feedDetailResponses[feedId] = detail.copy(
+                    isLiked = isLiked,
+                    likeCount = detail.likeCount + if (isLiked) 1 else -1,
+                )
+            }
+        }
         feedsResponse = feedsResponse.copy(
             feeds = feedsResponse.feeds.map { feed ->
                 if (feed.feedId == feedId && feed.isLiked != isLiked) {
