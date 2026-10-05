@@ -19,7 +19,6 @@ import com.into.websoso.data.feed.repository.model.CachedFeedLikeState
 import com.into.websoso.data.feed.repository.model.LikeSyncStatus
 import com.into.websoso.data.feed.store.PendingFeedLikeStore
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -69,7 +68,9 @@ class UpdatedFeedRepository
 
         // ponytail: all feeds share one sender; use per-feed serialization if slow requests delay other feeds excessively.
         private val likeSyncMutex = Mutex()
-        private val likesRestored = CompletableDeferred<Unit>()
+        private val restoreMutex = Mutex()
+        private var isLikesRestored = false
+        private val isLikeRestoreFailed = MutableStateFlow(false)
         private val unconfirmedLikeIds = mutableSetOf<Long>()
         private val likeRevisions = mutableMapOf<Long, Long>()
         private val completedLikeAttempts = mutableMapOf<Long, Pair<Long, Long>>()
@@ -78,31 +79,43 @@ class UpdatedFeedRepository
         val likeSyncStates = _likeSyncStates.asStateFlow()
 
         init {
-            restorePendingLikes()
+            scope.launch { ensureLikesRestored() }
         }
 
-        private fun restorePendingLikes() {
-            scope.launch {
+        /**
+         * 저장된 좋아요를 아직 불러오지 못했다면 다시 불러옵니다.
+         * 실패해도 예외를 던지지 않고 false를 반환해, 호출한 쪽이 저장·전송을 보류하게 합니다.
+         */
+        private suspend fun ensureLikesRestored(): Boolean =
+            restoreMutex.withLock {
+                if (isLikesRestored) return@withLock true
                 try {
-                    val pendingLikes = pendingFeedLikeStore.getPendingLikes()
-                    synchronized(likeStateLock) {
-                        pendingLikes.forEach { (id, isLiked) ->
-                            // A click made while storage was loading takes precedence, including a cancelled selection.
-                            pendingLikeStates[id] = if (id in likeRevisions) {
-                                findCurrentLikeState(id) ?: pendingLikeStates[id] ?: isLiked
-                            } else {
-                                isLiked
-                            }
-                            unconfirmedLikeIds += id
-                            setLikeSyncStatus(id, LikeSyncStatus.NEEDS_RETRY)
-                        }
-                        applyPendingLikeStatesToCachedFeeds()
-                    }
-                    likesRestored.complete(Unit)
-                } catch (error: Exception) {
-                    likesRestored.completeExceptionally(error)
+                    restorePendingLikes()
+                    isLikesRestored = true
+                    isLikeRestoreFailed.value = false
+                } catch (error: CancellationException) {
                     throw error
+                } catch (error: Exception) {
+                    isLikeRestoreFailed.value = true
+                    Log.e("UpdatedFeedRepository", "Failed to restore pending feed likes", error)
                 }
+                isLikesRestored
+            }
+
+        private suspend fun restorePendingLikes() {
+            val pendingLikes = pendingFeedLikeStore.getPendingLikes()
+            synchronized(likeStateLock) {
+                pendingLikes.forEach { (id, isLiked) ->
+                    // A click made while storage was loading takes precedence, including a cancelled selection.
+                    pendingLikeStates[id] = if (id in likeRevisions) {
+                        findCurrentLikeState(id) ?: pendingLikeStates[id] ?: isLiked
+                    } else {
+                        isLiked
+                    }
+                    unconfirmedLikeIds += id
+                    setLikeSyncStatus(id, LikeSyncStatus.NEEDS_RETRY)
+                }
+                applyPendingLikeStatesToCachedFeeds()
             }
         }
 
@@ -388,7 +401,8 @@ class UpdatedFeedRepository
                 pendingLikeStates[feedId] = new
             }
             scope.launch {
-                likesRestored.await()
+                // Restore failed: keep the selection in memory and hold the write.
+                if (!ensureLikesRestored()) return@launch
                 try {
                     persistPendingLike(feedId)
                 } catch (error: CancellationException) {
@@ -419,6 +433,11 @@ class UpdatedFeedRepository
 
         /** A manual retry targets only unresolved items, using their latest selection. */
         fun retryPendingLikes(feedIds: Set<Long>? = null) {
+            if (isLikeRestoreFailed.value) {
+                // Restore failed earlier: restore first, then retry including the restored items.
+                scope.launch { if (ensureLikesRestored()) retryPendingLikes(feedIds) }
+                return
+            }
             val targets = synchronized(likeStateLock) {
                 _likeSyncStates.value
                     .filter { (id, status) -> status == LikeSyncStatus.NEEDS_RETRY && (feedIds == null || id in feedIds) }
@@ -431,7 +450,8 @@ class UpdatedFeedRepository
         private fun syncPendingLikes(feedIds: Set<Long>?) {
             val requestedAt = synchronized(likeStateLock) { ++likeEventSequence }
             scope.launch {
-                likesRestored.await()
+                // Restore failed: hold sending until a later sync or retry restores the saved likes.
+                if (!ensureLikesRestored()) return@launch
                 likeSyncMutex.withLock {
                     val targets = synchronized(likeStateLock) {
                         pendingLikeStates.keys.filter { feedIds == null || it in feedIds }

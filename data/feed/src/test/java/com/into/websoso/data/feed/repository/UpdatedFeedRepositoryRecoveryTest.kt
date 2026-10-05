@@ -359,6 +359,60 @@ class UpdatedFeedRepositoryRecoveryTest {
             assertTrue(repository.likeSyncStates.value.isEmpty())
         }
 
+    @Test
+    fun `저장된 좋아요를 읽지 못해도 예외 없이 저장과 전송을 보류한다`() =
+        runTest {
+            val api = server()
+            val backing = FakePendingFeedLikeStore()
+            val store = object : PendingFeedLikeStore by backing {
+                override suspend fun getPendingLikes(): Map<Long, Boolean> = throw IOException("test storage unavailable")
+            }
+            val repository = createRepository(api, store)
+            advanceUntilIdle()
+            repository.fetchFeeds(0L, 10, "ALL")
+            repository.toggleLikeLocal(1L)
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            assertTrue(
+                repository.sosoAllFeeds.value
+                    .single()
+                    .isLiked,
+            )
+            assertTrue(backing.updateCalls.isEmpty())
+            assertTrue(api.postLikesCalls.isEmpty())
+        }
+
+    @Test
+    fun `저장소를 다시 읽을 수 있게 되면 다시 시도로 복원하고 이어서 전송한다`() =
+        runTest {
+            val api = server()
+            val backing = FakePendingFeedLikeStore(initial = mapOf(1L to true))
+            var failRead = true
+            val store = object : PendingFeedLikeStore by backing {
+                override suspend fun getPendingLikes(): Map<Long, Boolean> {
+                    if (failRead) throw IOException("test storage unavailable")
+                    return backing.getPendingLikes()
+                }
+            }
+            val repository = createRepository(api, store)
+            advanceUntilIdle()
+            repository.fetchFeeds(0L, 10, "ALL")
+            repository.retryPendingLikes()
+            advanceUntilIdle()
+            assertFalse(
+                repository.sosoAllFeeds.value
+                    .single()
+                    .isLiked,
+            )
+            assertTrue(api.postLikesCalls.isEmpty())
+            failRead = false
+            repository.retryPendingLikes()
+            advanceUntilIdle()
+            assertEquals(listOf(1L), api.postLikesCalls)
+            assertTrue(backing.currentPendingLikes().isEmpty())
+            assertTrue(repository.likeSyncStates.value.isEmpty())
+        }
+
     private fun server() =
         FakeFeedApi().apply {
             feedsResponse = feedsResponseOf(feedResponse(1L, false, 0))
