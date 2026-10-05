@@ -55,7 +55,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
             }
         }
         splashViewModel.start(
-            isHomeDestination = intent.getLongExtra(CollectionDeepLink.PENDING_COLLECTION_ID, 0L) == 0L,
+            isHomeDestination = intent.getLongExtra(
+                CollectionDeepLink.PENDING_COLLECTION_ID,
+                0L,
+            ) == 0L,
         )
     }
 
@@ -68,10 +71,20 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     private fun collectUiEffect() {
         splashViewModel.uiEffect.collectWithLifecycle(this) { uiEffect ->
             when (uiEffect) {
-                NavigateToLogin -> websosoNavigator.navigateToLoginActivity { startDestination(it, uiEffect) }
-                is NavigateToMain -> websosoNavigator.navigateToMainActivity(
-                    startActivity = { startDestination(it, uiEffect) },
-                )
+                NavigateToLogin -> {
+                    websosoNavigator.navigateToLoginActivity {
+                        startDestination(
+                            it,
+                            uiEffect,
+                        )
+                    }
+                }
+
+                is NavigateToMain -> {
+                    websosoNavigator.navigateToMainActivity(
+                        startActivity = { startDestination(it, uiEffect) },
+                    )
+                }
 
                 ShowDialog -> {
                     showMinimumVersionDialog()
