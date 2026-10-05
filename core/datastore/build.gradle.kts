@@ -17,4 +17,6 @@ dependencies {
     implementation(projects.data.user)
     implementation(libs.datastore.preferences)
     implementation(libs.serialization.json)
+
+    testImplementation(libs.junit)
 }
