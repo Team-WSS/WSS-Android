@@ -94,14 +94,19 @@ internal class DefaultPendingFeedLikeStore
             return deleted
         }
 
-        override suspend fun consumeResetNotice(): Boolean {
-            var wasReset = false
+        override suspend fun readResetNotice(): Boolean {
+            var hasNotice = false
             pendingFeedLikeDataStore.edit { preferences ->
                 preferences.setAsideUnreadableLikes()
-                wasReset = preferences[PENDING_FEED_LIKES_RESET_KEY] == true
+                hasNotice = preferences[PENDING_FEED_LIKES_RESET_KEY] == true
+            }
+            return hasNotice
+        }
+
+        override suspend fun clearResetNotice() {
+            pendingFeedLikeDataStore.edit { preferences ->
                 preferences.remove(PENDING_FEED_LIKES_RESET_KEY)
             }
-            return wasReset
         }
 
         /** 해석할 수 없는 기록은 지우지 않고 보관함으로 옮긴 뒤, 복원하지 못했다는 표시를 남깁니다. */

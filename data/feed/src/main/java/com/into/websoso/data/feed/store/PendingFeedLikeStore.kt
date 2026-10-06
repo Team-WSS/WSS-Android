@@ -24,6 +24,9 @@ interface PendingFeedLikeStore {
         isLiked: Boolean,
     ): Boolean
 
-    /** 저장된 기록을 복원하지 못해 비운 표시(파일 손상, 해석 불가)가 있으면 지우고 true를 반환합니다. */
-    suspend fun consumeResetNotice(): Boolean
+    /** 저장된 기록을 복원하지 못해 비운 표시(파일 손상, 해석 불가)가 있는지 반환합니다. 표시는 지우지 않습니다. */
+    suspend fun readResetNotice(): Boolean
+
+    /** 사용자에게 안내한 뒤 표시를 지웁니다. */
+    suspend fun clearResetNotice()
 }

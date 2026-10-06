@@ -111,6 +111,21 @@ class UpdatedFeedRepository
             return restored
         }
 
+        /** 복원하지 못한 좋아요 안내를 보여 준 뒤 호출해, 같은 안내가 반복되지 않게 합니다. */
+        fun acknowledgeUnrestoredLikes() {
+            _hasUnrestoredLikes.value = false
+            scope.launch {
+                try {
+                    pendingFeedLikeStore.clearResetNotice()
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (error: Exception) {
+                    // If the notice stays, the user is told once more on the next launch.
+                    Log.e("UpdatedFeedRepository", "Failed to clear the unrestored likes notice", error)
+                }
+            }
+        }
+
         /** 복원에 실패한 동안 메모리에만 남은 선택을, 복원에 성공한 뒤 저장소에 저장합니다. */
         private suspend fun persistHeldLikes() {
             val feedIds = synchronized(likeStateLock) { pendingLikeStates.keys.toList() }
@@ -119,7 +134,7 @@ class UpdatedFeedRepository
 
         private suspend fun restorePendingLikes() {
             val pendingLikes = pendingFeedLikeStore.getPendingLikes()
-            if (pendingFeedLikeStore.consumeResetNotice()) {
+            if (pendingFeedLikeStore.readResetNotice()) {
                 // Saved changes were corrupted or unreadable and were reset, so they could not be restored.
                 Log.e("UpdatedFeedRepository", "Saved pending feed likes could not be restored and were reset")
                 _hasUnrestoredLikes.value = true

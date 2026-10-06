@@ -25,7 +25,7 @@ class DefaultPendingFeedLikeStoreTest {
     val temporaryFolder = TemporaryFolder()
 
     @Test
-    fun `손상된 파일은 빈 기록으로 초기화하고 초기화 표시를 한 번만 알린다`() =
+    fun `손상된 파일은 빈 기록으로 초기화하고 지울 때까지 초기화 표시를 남긴다`() =
         runTest {
             val file = temporaryFolder.newFile(FILE_NAME)
             // 길이 127짜리 값이 온다고 적혀 있지만 내용이 없어 해석할 수 없는 파일
@@ -33,8 +33,10 @@ class DefaultPendingFeedLikeStoreTest {
             val store = createStore(createDataStore(file))
 
             assertTrue(store.getPendingLikes().isEmpty())
-            assertTrue(store.consumeResetNotice())
-            assertFalse(store.consumeResetNotice())
+            assertTrue(store.readResetNotice())
+            assertTrue(store.readResetNotice())
+            store.clearResetNotice()
+            assertFalse(store.readResetNotice())
 
             store.updatePendingLike(feedId = 1L, isLiked = true)
             assertEquals(mapOf(1L to true), store.getPendingLikes())
@@ -51,19 +53,20 @@ class DefaultPendingFeedLikeStoreTest {
 
             assertEquals(mapOf(1L to true), store.getPendingLikes())
             assertEquals(setOf(UNREADABLE_JSON), dataStore.data.first()[PENDING_FEED_LIKES_UNREADABLE_KEY])
-            assertTrue(store.consumeResetNotice())
+            assertTrue(store.readResetNotice())
         }
 
     @Test
-    fun `해석할 수 없는 기록은 복원 시 빈 기록으로 보고 보관한 뒤 초기화 표시를 한 번만 알린다`() =
+    fun `해석할 수 없는 기록은 복원 시 빈 기록으로 보고 보관한 뒤 지울 때까지 초기화 표시를 남긴다`() =
         runTest {
             val dataStore = createDataStore(temporaryFolder.newFile(FILE_NAME))
             dataStore.edit { it[PENDING_FEED_LIKES_KEY] = UNREADABLE_JSON }
             val store = createStore(dataStore)
 
             assertTrue(store.getPendingLikes().isEmpty())
-            assertTrue(store.consumeResetNotice())
-            assertFalse(store.consumeResetNotice())
+            assertTrue(store.readResetNotice())
+            store.clearResetNotice()
+            assertFalse(store.readResetNotice())
             assertEquals(setOf(UNREADABLE_JSON), dataStore.data.first()[PENDING_FEED_LIKES_UNREADABLE_KEY])
         }
 

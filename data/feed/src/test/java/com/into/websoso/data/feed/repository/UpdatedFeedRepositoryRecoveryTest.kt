@@ -424,7 +424,7 @@ class UpdatedFeedRepositoryRecoveryTest {
             val repository = createRepository(api, store)
             advanceUntilIdle()
             assertTrue(repository.hasUnrestoredLikes.value)
-            assertFalse(store.resetNotice)
+            assertTrue(store.resetNotice)
 
             repository.fetchFeeds(0L, 10, "ALL")
             repository.toggleLikeLocal(1L)
@@ -432,6 +432,28 @@ class UpdatedFeedRepositoryRecoveryTest {
             advanceUntilIdle()
             assertEquals(listOf(1L), api.postLikesCalls)
             assertTrue(store.currentPendingLikes().isEmpty())
+        }
+
+    @Test
+    fun `미복원 안내 표시는 봤음 처리 전까지 저장소를 다시 만들어도 남는다`() =
+        runTest {
+            val api = server()
+            val store = FakePendingFeedLikeStore().apply { resetNotice = true }
+            createRepository(api, store)
+            advanceUntilIdle()
+
+            val recreated = createRepository(api, store)
+            advanceUntilIdle()
+            assertTrue(recreated.hasUnrestoredLikes.value)
+
+            recreated.acknowledgeUnrestoredLikes()
+            advanceUntilIdle()
+            assertFalse(recreated.hasUnrestoredLikes.value)
+            assertFalse(store.resetNotice)
+
+            val afterAcknowledged = createRepository(api, store)
+            advanceUntilIdle()
+            assertFalse(afterAcknowledged.hasUnrestoredLikes.value)
         }
 
     @Test
