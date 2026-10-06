@@ -76,6 +76,9 @@ class UpdatedFeedRepository
         val hasUnrestoredLikes = _hasUnrestoredLikes.asStateFlow()
         private val unconfirmedLikeIds = mutableSetOf<Long>()
         private val likeRevisions = mutableMapOf<Long, Long>()
+
+        // When a feed's like last changed by user input or server confirmation; fetched data older than this is ignored.
+        private val likeChangedAt = mutableMapOf<Long, Long>()
         private val completedLikeAttempts = mutableMapOf<Long, Pair<Long, Long>>()
         private var likeEventSequence = 0L
         private val _likeSyncStates = MutableStateFlow<Map<Long, LikeSyncStatus>>(emptyMap())
@@ -272,6 +275,7 @@ class UpdatedFeedRepository
             size: Int,
             feedsOption: String,
         ): FeedsEntity {
+            val version = likeStateVersion()
             val result = feedApi
                 .getFeeds(
                     feedsOption = feedsOption,
@@ -280,7 +284,7 @@ class UpdatedFeedRepository
                 ).toData()
 
             return synchronized(likeStateLock) {
-                val mergedFeeds = result.feeds.map { feed -> applyPendingLikeState(feed) }
+                val mergedFeeds = result.feeds.map { feed -> applyLatestLikeState(feed, version) }
                 updateCachedLikes(mergedFeeds.associate { it.id to CachedFeedLikeState(it.isLiked, it.likeCount) })
 
                 val isRecommended = feedsOption == "RECOMMENDED"
@@ -301,13 +305,15 @@ class UpdatedFeedRepository
 
         /**
          * 외부에서 가져온 내 피드 데이터를 캐시에 주입합니다.
+         * likeStateVersion에는 조회를 시작하기 직전에 받아 둔 좋아요 상태 번호를 넘깁니다.
          */
         fun updateMyFeedsCache(
             feeds: List<FeedEntity>,
             isRefreshed: Boolean,
+            likeStateVersion: Long,
         ) {
             synchronized(likeStateLock) {
-                val mergedFeeds = feeds.map { feed -> applyPendingLikeState(feed) }
+                val mergedFeeds = feeds.map { feed -> applyLatestLikeState(feed, likeStateVersion) }
                 updateCachedLikes(mergedFeeds.associate { it.id to CachedFeedLikeState(it.isLiked, it.likeCount) })
 
                 _myFeeds.update { current ->
@@ -376,7 +382,9 @@ class UpdatedFeedRepository
                 val current = findCurrentLikeState(feedId) ?: return
                 val newLiked = !current
                 // Record the user's input once, even when the same feed is cached in several lists.
-                likeRevisions[feedId] = ++likeEventSequence
+                val sequence = ++likeEventSequence
+                likeRevisions[feedId] = sequence
+                likeChangedAt[feedId] = sequence
                 trackPendingLikeState(feedId, current, newLiked)
                 val update: (List<FeedEntity>) -> List<FeedEntity> = { feeds ->
                     feeds.map { feed ->
@@ -528,6 +536,8 @@ class UpdatedFeedRepository
                     if (pendingLikeStates[feedId] == selection.isLiked) {
                         pendingLikeStates.remove(feedId)
                     }
+                    // Mark the server change in the same lock as the pending cleanup so an older fetch cannot slip in.
+                    likeChangedAt[feedId] = ++likeEventSequence
                     // An older success does not confirm an input made while the request was in flight.
                     setLikeSyncStatus(feedId, if (pendingLikeStates.containsKey(feedId)) LikeSyncStatus.NEEDS_RETRY else null)
                 }
@@ -568,6 +578,39 @@ class UpdatedFeedRepository
 
         private fun findCurrentLikeState(feedId: Long): Boolean? =
             findCachedFeed(feedId)?.isLiked ?: _feedDetailLikeStates.value[feedId]?.isLiked
+
+        /** 조회를 시작하기 직전에 받아 두는 번호입니다. 응답을 반영할 때 그 뒤에 좋아요가 바뀌었는지 비교합니다. */
+        fun likeStateVersion(): Long = synchronized(likeStateLock) { likeEventSequence }
+
+        private fun hasLikeChangedSince(
+            feedId: Long,
+            version: Long,
+        ): Boolean = (likeChangedAt[feedId] ?: 0L) > version
+
+        private fun findCurrentLike(feedId: Long): CachedFeedLikeState? =
+            findCachedFeed(feedId)?.let { CachedFeedLikeState(it.isLiked, it.likeCount) } ?: _feedDetailLikeStates.value[feedId]
+
+        private fun applyLatestLikeState(
+            feed: FeedEntity,
+            version: Long,
+        ): FeedEntity {
+            if (hasLikeChangedSince(feed.id, version)) {
+                // The like changed while this response was in flight, so keep what the user sees now.
+                findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
+            }
+            return applyPendingLikeState(feed)
+        }
+
+        private fun applyLatestLikeStateToDetail(
+            feed: FeedDetailEntity,
+            version: Long,
+        ): FeedDetailEntity {
+            if (hasLikeChangedSince(feed.id, version)) {
+                // The like changed while this response was in flight, so keep what the user sees now.
+                findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
+            }
+            return applyPendingLikeStateToDetail(feed)
+        }
 
         // ============================================================================================
         //  Feed Actions (Remove, Report)
@@ -636,9 +679,10 @@ class UpdatedFeedRepository
          * 피드 상세 정보를 조회하고 로컬 상태를 병합하여 반환합니다.
          */
         suspend fun fetchFeed(feedId: Long): FeedDetailEntity {
+            val version = likeStateVersion()
             val rawDetail = feedApi.getFeed(feedId).toData()
             return synchronized(likeStateLock) {
-                val mergedDetail = applyPendingLikeStateToDetail(rawDetail)
+                val mergedDetail = applyLatestLikeStateToDetail(rawDetail, version)
                 val likeState = CachedFeedLikeState(mergedDetail.isLiked, mergedDetail.likeCount)
                 _feedDetailLikeStates.update { it + (feedId to likeState) }
                 updateCachedLikes(mapOf(feedId to likeState))

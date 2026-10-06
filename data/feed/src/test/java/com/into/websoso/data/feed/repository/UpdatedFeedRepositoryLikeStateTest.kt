@@ -1,9 +1,15 @@
 package com.into.websoso.data.feed.repository
 
+import com.into.websoso.core.network.datasource.feed.FeedApi
 import com.into.websoso.core.network.datasource.feed.model.response.FeedDetailResponseDto
+import com.into.websoso.core.network.datasource.feed.model.response.FeedsResponseDto
 import com.into.websoso.data.feed.repository.model.LikeSyncStatus
+import com.into.websoso.data.feed.store.PendingFeedLikeStore
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -77,7 +83,7 @@ class UpdatedFeedRepositoryLikeStateTest {
             advanceUntilIdle()
             repository.fetchFeeds(0L, 10, "ALL")
             repository.fetchFeeds(0L, 10, "RECOMMENDED")
-            repository.updateMyFeedsCache(repository.sosoAllFeeds.value, true)
+            repository.updateMyFeedsCache(repository.sosoAllFeeds.value, true, repository.likeStateVersion())
             repository.toggleLikeLocal(1L)
             repository.syncPendingLikes()
             advanceUntilIdle()
@@ -206,7 +212,7 @@ class UpdatedFeedRepositoryLikeStateTest {
             val repository = createRepository(api, store)
             advanceUntilIdle()
             repository.fetchFeeds(0L, 10, "ALL")
-            repository.updateMyFeedsCache(repository.sosoAllFeeds.value, true)
+            repository.updateMyFeedsCache(repository.sosoAllFeeds.value, true, repository.likeStateVersion())
             repository.fetchFeed(1L)
 
             api.feedsResponse = feedsResponseOf(feedResponse(1L, true, 1))
@@ -241,6 +247,170 @@ class UpdatedFeedRepositoryLikeStateTest {
                     .getValue(1L)
                     .isLiked,
             )
+        }
+
+    @Test
+    fun `상세 조회 중에 좋아요를 누르고 전송이 끝나면 늦게 온 응답이 좋아요를 덮지 않는다`() =
+        runTest {
+            val fakeServer = server().apply { feedDetailResponses[1L] = detailResponse() }
+            val response = CompletableDeferred<Unit>()
+            val api = object : FeedApi by fakeServer {
+                override suspend fun getFeed(feedId: Long): FeedDetailResponseDto {
+                    val staleDetail = fakeServer.getFeed(feedId)
+                    response.await()
+                    return staleDetail
+                }
+            }
+            val repository = createRepository(api, FakePendingFeedLikeStore())
+            advanceUntilIdle()
+            repository.fetchFeeds(0L, 10, "ALL")
+            val detail = async { repository.fetchFeed(1L) }
+            runCurrent()
+
+            repository.toggleLikeLocal(1L)
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            response.complete(Unit)
+            advanceUntilIdle()
+
+            assertTrue(detail.await().isLiked)
+            assertTrue(
+                repository.feedDetailLikeStates.value
+                    .getValue(1L)
+                    .isLiked,
+            )
+            assertTrue(
+                repository.sosoAllFeeds.value
+                    .feed(1L)
+                    .isLiked,
+            )
+        }
+
+    @Test
+    fun `좋아요를 누른 뒤 시작한 목록 조회 중에 전송이 끝나면 늦게 온 응답이 좋아요를 덮지 않는다`() =
+        runTest {
+            val fakeServer = server()
+            val response = CompletableDeferred<Unit>()
+            var holdFeeds = false
+            val api = heldFeedsApi(fakeServer, response) { holdFeeds }
+            val repository = createRepository(api, FakePendingFeedLikeStore())
+            advanceUntilIdle()
+            repository.fetchFeeds(0L, 10, "ALL")
+            repository.toggleLikeLocal(1L)
+            advanceUntilIdle()
+
+            holdFeeds = true
+            val refreshed = async { repository.fetchFeeds(0L, 10, "ALL") }
+            runCurrent()
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            response.complete(Unit)
+            advanceUntilIdle()
+
+            assertTrue(
+                refreshed
+                    .await()
+                    .feeds
+                    .feed(1L)
+                    .isLiked,
+            )
+            assertTrue(
+                repository.sosoAllFeeds.value
+                    .feed(1L)
+                    .isLiked,
+            )
+        }
+
+    @Test
+    fun `전송 확인 후 저장 정리가 끝나기 전에 늦게 온 목록 응답도 좋아요를 덮지 않는다`() =
+        runTest {
+            val fakeServer = server()
+            val response = CompletableDeferred<Unit>()
+            var holdFeeds = false
+            val api = heldFeedsApi(fakeServer, response) { holdFeeds }
+            val backing = FakePendingFeedLikeStore()
+            val cleanup = CompletableDeferred<Unit>()
+            val store = object : PendingFeedLikeStore by backing {
+                override suspend fun deletePendingLike(feedId: Long) {
+                    cleanup.await()
+                    backing.deletePendingLike(feedId)
+                }
+            }
+            val repository = createRepository(api, store)
+            advanceUntilIdle()
+            repository.fetchFeeds(0L, 10, "ALL")
+            repository.toggleLikeLocal(1L)
+            advanceUntilIdle()
+
+            holdFeeds = true
+            val refreshed = async { repository.fetchFeeds(0L, 10, "ALL") }
+            runCurrent()
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            // POST는 끝났고 pending도 정리됐지만, 저장 정리(삭제)는 아직 멈춰 있는 상태
+            assertEquals(listOf(1L), fakeServer.postLikesCompleted)
+            response.complete(Unit)
+            advanceUntilIdle()
+
+            assertTrue(
+                refreshed
+                    .await()
+                    .feeds
+                    .feed(1L)
+                    .isLiked,
+            )
+            assertTrue(
+                repository.sosoAllFeeds.value
+                    .feed(1L)
+                    .isLiked,
+            )
+            cleanup.complete(Unit)
+            advanceUntilIdle()
+            assertTrue(backing.currentPendingLikes().isEmpty())
+        }
+
+    @Test
+    fun `내 피드 조회를 시작한 뒤 좋아요가 바뀌면 오래된 내 피드 데이터가 좋아요를 덮지 않는다`() =
+        runTest {
+            val repository = createRepository(server(), FakePendingFeedLikeStore())
+            advanceUntilIdle()
+            repository.fetchFeeds(0L, 10, "ALL")
+            val staleFeeds = repository.sosoAllFeeds.value
+            val version = repository.likeStateVersion()
+
+            repository.toggleLikeLocal(1L)
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            repository.updateMyFeedsCache(staleFeeds, isRefreshed = true, likeStateVersion = version)
+
+            assertTrue(
+                repository.myFeeds.value
+                    .feed(1L)
+                    .isLiked,
+            )
+            assertTrue(
+                repository.sosoAllFeeds.value
+                    .feed(1L)
+                    .isLiked,
+            )
+        }
+
+    // 조회를 시작한 순간의 서버 값으로 응답을 만들어 두고, 도착만 늦춘다.
+    private fun heldFeedsApi(
+        fakeServer: FakeFeedApi,
+        response: CompletableDeferred<Unit>,
+        shouldHold: () -> Boolean,
+    ): FeedApi =
+        object : FeedApi by fakeServer {
+            override suspend fun getFeeds(
+                feedsOption: String,
+                lastFeedId: Long,
+                size: Int,
+            ): FeedsResponseDto {
+                val staleFeeds = fakeServer.getFeeds(feedsOption, lastFeedId, size)
+                if (shouldHold()) response.await()
+                return staleFeeds
+            }
         }
 
     private fun detailResponse() =
