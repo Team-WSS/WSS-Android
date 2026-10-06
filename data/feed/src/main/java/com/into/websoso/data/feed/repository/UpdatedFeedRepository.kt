@@ -70,7 +70,8 @@ class UpdatedFeedRepository
         private val likeSyncMutex = Mutex()
         private val restoreMutex = Mutex()
         private var isLikesRestored = false
-        private val isLikeRestoreFailed = MutableStateFlow(false)
+        private val _isLikeRestoreFailed = MutableStateFlow(false)
+        val isLikeRestoreFailed = _isLikeRestoreFailed.asStateFlow()
         private val _hasUnrestoredLikes = MutableStateFlow(false)
         val hasUnrestoredLikes = _hasUnrestoredLikes.asStateFlow()
         private val unconfirmedLikeIds = mutableSetOf<Long>()
@@ -96,12 +97,12 @@ class UpdatedFeedRepository
                     restorePendingLikes()
                     isLikesRestored = true
                     // An earlier attempt failed, so selections made meanwhile may be held only in memory.
-                    recovered = isLikeRestoreFailed.value
-                    isLikeRestoreFailed.value = false
+                    recovered = _isLikeRestoreFailed.value
+                    _isLikeRestoreFailed.value = false
                 } catch (error: CancellationException) {
                     throw error
                 } catch (error: Exception) {
-                    isLikeRestoreFailed.value = true
+                    _isLikeRestoreFailed.value = true
                     Log.e("UpdatedFeedRepository", "Failed to restore pending feed likes", error)
                 }
                 isLikesRestored
@@ -456,7 +457,7 @@ class UpdatedFeedRepository
 
         /** A manual retry targets only unresolved items, using their latest selection. */
         fun retryPendingLikes(feedIds: Set<Long>? = null) {
-            if (isLikeRestoreFailed.value) {
+            if (_isLikeRestoreFailed.value) {
                 // Restore failed earlier: restore first, then retry including the restored items.
                 scope.launch { if (ensureLikesRestored()) retryPendingLikes(feedIds) }
                 return
