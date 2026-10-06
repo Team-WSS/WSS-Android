@@ -21,11 +21,12 @@ import com.into.websoso.core.resource.R
 
 @Composable
 fun FeedLikeSyncNotice(
+    isRestoreFailed: Boolean,
     needsRetry: Boolean,
     isSyncing: Boolean,
     onRetry: () -> Unit,
 ) {
-    if (!needsRetry) return
+    if (!isRestoreFailed && !needsRetry) return
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,7 +36,9 @@ fun FeedLikeSyncNotice(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = stringResource(R.string.feed_like_unconfirmed_message),
+            text = stringResource(
+                if (isRestoreFailed) R.string.feed_like_restore_failed_message else R.string.feed_like_unconfirmed_message,
+            ),
             style = WebsosoTheme.typography.body4,
             color = Black,
             modifier = Modifier.weight(1f),

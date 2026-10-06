@@ -343,8 +343,10 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val states by feedDetailViewModel.likeSyncStates.collectAsStateWithLifecycle()
+                val isRestoreFailed by feedDetailViewModel.isLikeRestoreFailed.collectAsStateWithLifecycle()
                 WebsosoTheme {
                     FeedLikeSyncNotice(
+                        isRestoreFailed = isRestoreFailed,
                         needsRetry = states[feedId] == LikeSyncStatus.NEEDS_RETRY,
                         isSyncing = states[feedId] == LikeSyncStatus.SYNCING,
                         onRetry = feedDetailViewModel::retryLike,

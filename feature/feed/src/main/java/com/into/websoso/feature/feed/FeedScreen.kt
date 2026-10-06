@@ -71,6 +71,7 @@ internal fun FeedScreen(
     onWriteFeedClick: () -> Unit,
     onLoadMore: () -> Unit,
     likeSyncStates: Map<Long, LikeSyncStatus> = emptyMap(),
+    isLikeRestoreFailed: Boolean = false,
     onRetryLikes: () -> Unit = {},
 ) {
     Scaffold(containerColor = White) { _ ->
@@ -82,6 +83,7 @@ internal fun FeedScreen(
             )
 
             FeedLikeSyncNotice(
+                isRestoreFailed = isLikeRestoreFailed,
                 needsRetry = likeSyncStates.values.any { it == LikeSyncStatus.NEEDS_RETRY },
                 isSyncing = likeSyncStates.values.any { it == LikeSyncStatus.SYNCING },
                 onRetry = onRetryLikes,

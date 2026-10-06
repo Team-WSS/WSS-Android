@@ -39,6 +39,7 @@ class UpdatedFeedDetailViewModel
             MutableLiveData(FeedDetailUiState())
         val feedDetailUiState: LiveData<FeedDetailUiState> get() = _feedDetailUiState
         val likeSyncStates = feedRepository.likeSyncStates
+        val isLikeRestoreFailed = feedRepository.isLikeRestoreFailed
 
         fun retryLike() {
             if (feedId != -1L) feedRepository.retryPendingLikes(setOf(feedId))
