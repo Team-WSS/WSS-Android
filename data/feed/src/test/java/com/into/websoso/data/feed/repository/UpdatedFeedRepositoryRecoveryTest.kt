@@ -380,6 +380,7 @@ class UpdatedFeedRepositoryRecoveryTest {
             )
             assertTrue(backing.updateCalls.isEmpty())
             assertTrue(api.postLikesCalls.isEmpty())
+            assertTrue(repository.isLikeRestoreFailed.value)
         }
 
     @Test
@@ -405,12 +406,14 @@ class UpdatedFeedRepositoryRecoveryTest {
                     .isLiked,
             )
             assertTrue(api.postLikesCalls.isEmpty())
+            assertTrue(repository.isLikeRestoreFailed.value)
             failRead = false
             repository.retryPendingLikes()
             advanceUntilIdle()
             assertEquals(listOf(1L), api.postLikesCalls)
             assertTrue(backing.currentPendingLikes().isEmpty())
             assertTrue(repository.likeSyncStates.value.isEmpty())
+            assertFalse(repository.isLikeRestoreFailed.value)
         }
 
     @Test
