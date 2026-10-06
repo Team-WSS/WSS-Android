@@ -30,8 +30,11 @@ class FeedViewModel
         val uiState = _uiState.asStateFlow()
         val likeSyncStates = feedRepository.likeSyncStates
         val isLikeRestoreFailed = feedRepository.isLikeRestoreFailed
+        val hasUnrestoredLikes = feedRepository.hasUnrestoredLikes
 
         fun retryLikes() = feedRepository.retryPendingLikes()
+
+        fun acknowledgeUnrestoredLikes() = feedRepository.acknowledgeUnrestoredLikes()
 
         init {
             collectFeedRefreshEvent()
