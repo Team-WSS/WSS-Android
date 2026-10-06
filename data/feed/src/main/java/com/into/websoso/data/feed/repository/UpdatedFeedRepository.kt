@@ -77,8 +77,9 @@ class UpdatedFeedRepository
         private val unconfirmedLikeIds = mutableSetOf<Long>()
         private val likeRevisions = mutableMapOf<Long, Long>()
 
-        // When a feed's like last changed by user input or server confirmation; fetched data older than this is ignored.
-        private val likeChangedAt = mutableMapOf<Long, Long>()
+        // A feed's last like change by user input or server confirmation, with the like value at that point.
+        // Fetched data requested before this change must not overwrite it.
+        private val lastLikeChanges = mutableMapOf<Long, LikeChange>()
         private val completedLikeAttempts = mutableMapOf<Long, Pair<Long, Long>>()
         private var likeEventSequence = 0L
         private val _likeSyncStates = MutableStateFlow<Map<Long, LikeSyncStatus>>(emptyMap())
@@ -384,7 +385,7 @@ class UpdatedFeedRepository
                 // Record the user's input once, even when the same feed is cached in several lists.
                 val sequence = ++likeEventSequence
                 likeRevisions[feedId] = sequence
-                likeChangedAt[feedId] = sequence
+                lastLikeChanges[feedId] = LikeChange(sequence, newLiked)
                 trackPendingLikeState(feedId, current, newLiked)
                 val update: (List<FeedEntity>) -> List<FeedEntity> = { feeds ->
                     feeds.map { feed ->
@@ -537,7 +538,7 @@ class UpdatedFeedRepository
                         pendingLikeStates.remove(feedId)
                     }
                     // Mark the server change in the same lock as the pending cleanup so an older fetch cannot slip in.
-                    likeChangedAt[feedId] = ++likeEventSequence
+                    lastLikeChanges[feedId] = LikeChange(++likeEventSequence, pendingLikeStates[feedId] ?: selection.isLiked)
                     // An older success does not confirm an input made while the request was in flight.
                     setLikeSyncStatus(feedId, if (pendingLikeStates.containsKey(feedId)) LikeSyncStatus.NEEDS_RETRY else null)
                 }
@@ -576,40 +577,57 @@ class UpdatedFeedRepository
             val needsNetwork: Boolean,
         )
 
+        private data class LikeChange(
+            val sequence: Long,
+            val isLiked: Boolean,
+        )
+
         private fun findCurrentLikeState(feedId: Long): Boolean? =
             findCachedFeed(feedId)?.isLiked ?: _feedDetailLikeStates.value[feedId]?.isLiked
 
         /** 조회를 시작하기 직전에 받아 두는 번호입니다. 응답을 반영할 때 그 뒤에 좋아요가 바뀌었는지 비교합니다. */
         fun likeStateVersion(): Long = synchronized(likeStateLock) { likeEventSequence }
 
-        private fun hasLikeChangedSince(
+        private fun likeChangeSince(
             feedId: Long,
             version: Long,
-        ): Boolean = (likeChangedAt[feedId] ?: 0L) > version
+        ): LikeChange? = lastLikeChanges[feedId]?.takeIf { it.sequence > version }
 
         private fun findCurrentLike(feedId: Long): CachedFeedLikeState? =
             findCachedFeed(feedId)?.let { CachedFeedLikeState(it.isLiked, it.likeCount) } ?: _feedDetailLikeStates.value[feedId]
+
+        private fun adjustedLikeCount(
+            likeCount: Int,
+            isLiked: Boolean,
+            newLiked: Boolean,
+        ): Int = if (isLiked == newLiked) likeCount else (likeCount + if (newLiked) 1 else -1).coerceAtLeast(0)
 
         private fun applyLatestLikeState(
             feed: FeedEntity,
             version: Long,
         ): FeedEntity {
-            if (hasLikeChangedSince(feed.id, version)) {
-                // The like changed while this response was in flight, so keep what the user sees now.
-                findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
-            }
-            return applyPendingLikeState(feed)
+            val change = likeChangeSince(feed.id, version) ?: return applyPendingLikeState(feed)
+            // The like changed while this response was in flight, so keep what the user sees now.
+            findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
+            // Not on screen: use the last known like instead of the older response.
+            return feed.copy(
+                isLiked = change.isLiked,
+                likeCount = adjustedLikeCount(feed.likeCount, feed.isLiked, change.isLiked),
+            )
         }
 
         private fun applyLatestLikeStateToDetail(
             feed: FeedDetailEntity,
             version: Long,
         ): FeedDetailEntity {
-            if (hasLikeChangedSince(feed.id, version)) {
-                // The like changed while this response was in flight, so keep what the user sees now.
-                findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
-            }
-            return applyPendingLikeStateToDetail(feed)
+            val change = likeChangeSince(feed.id, version) ?: return applyPendingLikeStateToDetail(feed)
+            // The like changed while this response was in flight, so keep what the user sees now.
+            findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
+            // Not on screen: use the last known like instead of the older response.
+            return feed.copy(
+                isLiked = change.isLiked,
+                likeCount = adjustedLikeCount(feed.likeCount, feed.isLiked, change.isLiked),
+            )
         }
 
         // ============================================================================================

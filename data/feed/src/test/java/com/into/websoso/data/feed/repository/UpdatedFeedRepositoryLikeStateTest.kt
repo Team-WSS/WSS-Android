@@ -254,13 +254,7 @@ class UpdatedFeedRepositoryLikeStateTest {
         runTest {
             val fakeServer = server().apply { feedDetailResponses[1L] = detailResponse() }
             val response = CompletableDeferred<Unit>()
-            val api = object : FeedApi by fakeServer {
-                override suspend fun getFeed(feedId: Long): FeedDetailResponseDto {
-                    val staleDetail = fakeServer.getFeed(feedId)
-                    response.await()
-                    return staleDetail
-                }
-            }
+            val api = heldDetailApi(fakeServer, response)
             val repository = createRepository(api, FakePendingFeedLikeStore())
             advanceUntilIdle()
             repository.fetchFeeds(0L, 10, "ALL")
@@ -393,6 +387,71 @@ class UpdatedFeedRepositoryLikeStateTest {
                     .feed(1L)
                     .isLiked,
             )
+        }
+
+    @Test
+    fun `화면에 없는 피드도 복원한 좋아요가 목록 조회 중에 전송되면 늦게 온 응답이 덮지 않는다`() =
+        runTest {
+            val fakeServer = server()
+            val response = CompletableDeferred<Unit>()
+            val api = heldFeedsApi(fakeServer, response) { true }
+            val repository = createRepository(api, FakePendingFeedLikeStore(mapOf(1L to true)))
+            advanceUntilIdle()
+
+            val firstPage = async { repository.fetchFeeds(0L, 10, "ALL") }
+            runCurrent()
+            repository.retryPendingLikes()
+            advanceUntilIdle()
+            assertEquals(listOf(1L), fakeServer.postLikesCompleted)
+            response.complete(Unit)
+            advanceUntilIdle()
+
+            val feed = firstPage
+                .await()
+                .feeds
+                .feed(1L)
+            assertTrue(feed.isLiked)
+            assertEquals(1, feed.likeCount)
+        }
+
+    @Test
+    fun `화면에 없는 피드도 복원한 좋아요가 상세 조회 중에 전송되면 늦게 온 응답이 덮지 않는다`() =
+        runTest {
+            val fakeServer = server().apply { feedDetailResponses[1L] = detailResponse() }
+            val response = CompletableDeferred<Unit>()
+            val api = heldDetailApi(fakeServer, response)
+            val repository = createRepository(api, FakePendingFeedLikeStore(mapOf(1L to true)))
+            advanceUntilIdle()
+
+            val detail = async { repository.fetchFeed(1L) }
+            runCurrent()
+            repository.retryPendingLikes()
+            advanceUntilIdle()
+            assertEquals(listOf(1L), fakeServer.postLikesCompleted)
+            response.complete(Unit)
+            advanceUntilIdle()
+
+            val result = detail.await()
+            assertTrue(result.isLiked)
+            assertEquals(1, result.likeCount)
+            assertTrue(
+                repository.feedDetailLikeStates.value
+                    .getValue(1L)
+                    .isLiked,
+            )
+        }
+
+    // 조회를 시작한 순간의 서버 값으로 응답을 만들어 두고, 도착만 늦춘다.
+    private fun heldDetailApi(
+        fakeServer: FakeFeedApi,
+        response: CompletableDeferred<Unit>,
+    ): FeedApi =
+        object : FeedApi by fakeServer {
+            override suspend fun getFeed(feedId: Long): FeedDetailResponseDto {
+                val staleDetail = fakeServer.getFeed(feedId)
+                response.await()
+                return staleDetail
+            }
         }
 
     // 조회를 시작한 순간의 서버 값으로 응답을 만들어 두고, 도착만 늦춘다.
