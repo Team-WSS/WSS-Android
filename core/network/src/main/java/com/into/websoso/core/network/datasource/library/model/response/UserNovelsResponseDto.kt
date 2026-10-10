@@ -10,6 +10,8 @@ internal data class UserNovelsResponseDto(
     val userNovelCount: Long,
     @SerialName("isLoadable")
     val isLoadable: Boolean,
+    @SerialName("nextCursor")
+    val nextCursor: String? = null,
     @SerialName("userNovels")
     val userNovels: List<NovelResponseDto>,
 ) {
@@ -17,6 +19,7 @@ internal data class UserNovelsResponseDto(
         UserNovelsEntity(
             userNovelCount = userNovelCount,
             isLoadable = isLoadable,
+            nextCursor = nextCursor,
             userNovels = userNovels.map(NovelResponseDto::toData),
         )
 }

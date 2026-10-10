@@ -32,11 +32,14 @@ include(
 
 include(
     ":data:account",
+    ":data:collection",
     ":data:library",
+    ":data:novel",
     ":data:feed",
 )
 
 include(
+    ":domain:collection",
     ":domain:library",
 )
 
@@ -44,6 +47,7 @@ include(
     ":feature:signin",
     ":feature:library",
     ":feature:feed",
+    ":feature:collection",
 )
 include(":domain:feed")
 include(":data:user")

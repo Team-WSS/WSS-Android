@@ -6,6 +6,7 @@ import com.into.websoso.data.remote.api.FeedApi
 import com.into.websoso.data.remote.api.KeywordApi
 import com.into.websoso.data.remote.api.NotificationApi
 import com.into.websoso.data.remote.api.NovelApi
+import com.into.websoso.data.remote.api.NovelNotificationApi
 import com.into.websoso.data.remote.api.PushMessageApi
 import com.into.websoso.data.remote.api.UserApi
 import com.into.websoso.data.remote.api.UserNovelApi
@@ -35,6 +36,10 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideNotificationApi(retrofit: Retrofit): NotificationApi = retrofit.create(NotificationApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNovelNotificationApi(retrofit: Retrofit): NovelNotificationApi = retrofit.create(NovelNotificationApi::class.java)
 
     @Provides
     @Singleton

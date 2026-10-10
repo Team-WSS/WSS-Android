@@ -1,0 +1,102 @@
+package com.into.websoso.feature.collection.component
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.into.websoso.core.common.extensions.debouncedClickable
+import com.into.websoso.core.designsystem.theme.Black
+import com.into.websoso.core.designsystem.theme.Gray300
+import com.into.websoso.core.designsystem.theme.Primary100
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.core.resource.R
+
+@Composable
+fun CollectionEntry(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    collectionCount: Int = 0,
+    showCount: Boolean = true,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(White)
+            .debouncedClickable(onClick = onClick)
+            .then(
+                if (showCount) {
+                    Modifier.padding(
+                        start = 20.dp,
+                        top = 20.dp,
+                        end = 20.dp,
+                        bottom = if (collectionCount > 0) 16.dp else 20.dp,
+                    )
+                } else {
+                    Modifier.padding(
+                        start = 20.dp,
+                        top = 24.dp,
+                        end = 20.dp,
+                        bottom = 24.dp,
+                    )
+                },
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = if (showCount) {
+                buildAnnotatedString {
+                    append(stringResource(R.string.collection_title))
+                    append(" ")
+                    withStyle(style = SpanStyle(color = Primary100)) {
+                        append(collectionCount.toString())
+                        if (collectionCount > 0) append(stringResource(R.string.collection_count_suffix))
+                    }
+                    if (collectionCount == 0) append(stringResource(R.string.collection_count_suffix))
+                }
+            } else {
+                buildAnnotatedString { append(stringResource(R.string.collection_title)) }
+            },
+            color = if (showCount) Gray300 else Black,
+            style = if (showCount) WebsosoTheme.typography.title2 else WebsosoTheme.typography.title1,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.btn_setting_right),
+            contentDescription = null,
+            tint = Gray300,
+            modifier = Modifier.size(24.dp),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CollectionEntryWithCollectionsPreview() {
+    WebsosoTheme {
+        CollectionEntry(onClick = {}, collectionCount = 3)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CollectionEntryPreview() {
+    WebsosoTheme {
+        CollectionEntry(onClick = {})
+    }
+}

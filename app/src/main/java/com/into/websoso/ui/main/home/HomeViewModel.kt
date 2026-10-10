@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.into.websoso.data.model.PopularFeedsEntity
+import com.into.websoso.data.model.PopularFeedEntity
 import com.into.websoso.data.model.PopularNovelsEntity
 import com.into.websoso.data.model.RecommendedNovelsByUserTasteEntity
 import com.into.websoso.data.model.TermsAgreementEntity
@@ -75,7 +75,7 @@ class HomeViewModel
                 val popularNovelsDeferred =
                     async { runCatching { novelRepository.fetchPopularNovels() } }
                 val popularFeedsDeferred =
-                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
+                    async { runCatching { feedRepository.fetchPopularFeeds() } }
                 val recommendedNovelsDeferred =
                     async { runCatching { novelRepository.fetchRecommendedNovelsByUserTaste() } }
 
@@ -130,7 +130,7 @@ class HomeViewModel
                 val popularNovelsDeferred =
                     async { runCatching { novelRepository.fetchPopularNovels() } }
                 val popularFeedsDeferred =
-                    async { runCatching { feedRepository.fetchPopularFeedsWithDetails() } }
+                    async { runCatching { feedRepository.fetchPopularFeeds() } }
 
                 val popularNovelsResult = popularNovelsDeferred.await()
                 val popularFeedsResult = popularFeedsDeferred.await()
@@ -164,7 +164,7 @@ class HomeViewModel
         fun updateFeed() {
             viewModelScope.launch {
                 runCatching {
-                    feedRepository.fetchPopularFeedsWithDetails()
+                    feedRepository.fetchPopularFeeds()
                 }.onSuccess { popularFeeds ->
                     _uiState.value = uiState.value?.copy(
                         error = false,
@@ -261,7 +261,7 @@ class HomeViewModel
             }
         }
 
-        private fun List<PopularFeedsEntity.PopularFeedEntity>.toHomePopularFeedPages(): List<List<PopularFeedsEntity.PopularFeedEntity>> =
+        private fun List<PopularFeedEntity>.toHomePopularFeedPages(): List<List<PopularFeedEntity>> =
             take(HOME_POPULAR_FEED_MAX_COUNT).chunked(HOME_POPULAR_FEED_PAGE_SIZE)
 
         companion object {

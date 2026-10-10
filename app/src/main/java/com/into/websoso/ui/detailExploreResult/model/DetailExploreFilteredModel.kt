@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class DetailExploreFilteredModel(
     val genres: List<Genre>? = null,
+    val platformNames: List<String>? = null,
     val isCompleted: Boolean? = null,
     val novelRatingStart: Float = RATING_MIN_DEFAULT,
     val novelRatingEnd: Float = RATING_MAX_DEFAULT,

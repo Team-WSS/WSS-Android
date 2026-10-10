@@ -1,8 +1,11 @@
 package com.into.websoso.core.common.util
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +18,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -179,3 +183,10 @@ fun Activity.setupSystemBarIconColor(isLightMode: Boolean) {
         isAppearanceLightNavigationBars = isLightMode
     }
 }
+
+fun Context.isNotificationPermissionGranted(): Boolean =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PERMISSION_GRANTED
+    } else {
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).areNotificationsEnabled()
+    }

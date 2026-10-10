@@ -2,7 +2,6 @@ package com.into.websoso.ui.detailExplore.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -25,15 +23,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.util.clickableWithoutRipple
 import com.into.websoso.core.designsystem.theme.Gray200
-import com.into.websoso.core.designsystem.theme.Gray300
 import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
-import com.into.websoso.core.resource.R.drawable.ic_detail_explore_reset
 import com.into.websoso.core.resource.R.drawable.ic_navigate_left
 import com.into.websoso.core.resource.R.string.detail_explore_info
 import com.into.websoso.core.resource.R.string.detail_explore_keyword
-import com.into.websoso.core.resource.R.string.detail_explore_reset
 import com.into.websoso.ui.detailExplore.model.SelectedFragmentTitle
 import com.into.websoso.ui.detailExplore.model.SelectedFragmentTitle.INFO
 import com.into.websoso.ui.detailExplore.model.SelectedFragmentTitle.KEYWORD
@@ -45,7 +40,6 @@ fun DetailExploreAppBar(
     isKeywordChipActive: Boolean,
     onTabSelected: (SelectedFragmentTitle) -> Unit,
     onBackClick: () -> Unit,
-    onResetClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -82,25 +76,6 @@ fun DetailExploreAppBar(
             slotWidth = 69.dp,
             onClick = { onTabSelected(KEYWORD) },
         )
-        Spacer(modifier = Modifier.weight(1f))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clickableWithoutRipple(onClick = onResetClick),
-        ) {
-            Image(
-                painter = painterResource(id = ic_detail_explore_reset),
-                contentDescription = null,
-                modifier = Modifier.size(14.dp),
-            )
-            Text(
-                text = stringResource(detail_explore_reset),
-                style = WebsosoTheme.typography.title2,
-                color = Gray300,
-            )
-        }
     }
 }
 

@@ -23,7 +23,7 @@ android {
         versionName = libs.versions.versionName.get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        targetSdk = 35
+        targetSdk = 36
 
         buildConfigs(rootDir) {
             string(name = "S3_BASE_URL", key = "s3.url")
@@ -85,6 +85,7 @@ dependencies {
     implementation(projects.core.datastore)
 
     implementation(projects.data.account)
+    implementation(projects.data.collection)
     implementation(projects.data.library)
     implementation(projects.data.feed)
 
@@ -93,6 +94,7 @@ dependencies {
     implementation(projects.feature.signin)
     implementation(projects.feature.library)
     implementation(projects.feature.feed)
+    implementation(projects.feature.collection)
 
     // AndroidX 및 Jetpack 기본 라이브러리
     implementation(libs.androidx.core.ktx)
@@ -132,6 +134,7 @@ dependencies {
 
     // Third-party SDK
     implementation(libs.kakao) // 카카오 로그인 API
+    implementation(libs.kakao.share) // 카카오톡 공유 API
     implementation(libs.amplitude) // Amplitude
 
     // Firebase

@@ -25,7 +25,7 @@
             android:id="@+id/cl_popular_novel_summary"
             android:layout_width="0dp"
             android:layout_height="226dp"
-            android:background="@drawable/bg_novel_detail_white_radius_top_14dp"
+            android:background="@drawable/bg_popular_novel_top_radius_14dp"
             android:clipToOutline="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,11 +33,11 @@
 
             <ImageView
                 android:id="@+id/iv_popular_novel_blur_background"
-                blurRadius="@{25}"
+                blurRadius="@{12}"
                 loadImageUrl="@{popularNovel.novelImage}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:alpha="0.22"
+                android:alpha="0.12"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

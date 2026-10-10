@@ -106,6 +106,10 @@ class ActivityDetailActivity : BaseActivity<ActivityActivityDetailBinding>(activ
     private fun setupUserIDAndSource() {
         activityDetailViewModel.userId = userId
         activityDetailViewModel.updateUserActivities(userId)
+
+        if (activityDetailViewModel.source == SOURCE_OTHER_USER_ACTIVITY) {
+            otherUserPageViewModel.updateUserId(userId)
+        }
     }
 
     private fun setActivityTitle() {

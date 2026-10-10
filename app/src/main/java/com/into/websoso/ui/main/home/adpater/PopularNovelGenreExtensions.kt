@@ -4,7 +4,7 @@ internal fun String.toPopularNovelGenreImagePath(): String =
     when (this) {
         "romance" -> "/icGenre/romance"
         "romanceFantasy" -> "/icGenre/romance-fantasy"
-        "BL" -> "/icGenre/bl"
+        "BL", "bl" -> "/icGenre/BL"
         "fantasy" -> "/icGenre/fantasy"
         "modernFantasy" -> "/icGenre/modern-fantasy"
         "wuxia" -> "/icGenre/wuxia"

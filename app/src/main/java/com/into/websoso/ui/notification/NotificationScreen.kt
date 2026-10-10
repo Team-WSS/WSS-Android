@@ -21,6 +21,7 @@ fun NotificationScreen(
     viewModel: NotificationViewModel,
     onNotificationDetailClick: (NotificationModel) -> Unit,
     onFeedDetailClick: (NotificationModel) -> Unit,
+    onNovelDetailClick: (NotificationModel) -> Unit,
     onBackButtonClick: () -> Unit,
 ) {
     val uiState by viewModel.notificationUIState.collectAsStateWithLifecycle()
@@ -42,6 +43,7 @@ fun NotificationScreen(
             updateNotifications = viewModel::updateNotifications,
             onNotificationDetailClick = onNotificationDetailClick,
             onFeedDetailClick = onFeedDetailClick,
+            onNovelDetailClick = onNovelDetailClick,
         )
     }
 }

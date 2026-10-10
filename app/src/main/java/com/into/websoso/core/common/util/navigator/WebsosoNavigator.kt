@@ -6,6 +6,7 @@ import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.ui.login.LoginActivity
 import com.into.websoso.ui.main.MainActivity
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
+import com.into.websoso.ui.notificationSetting.NotificationSettingActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
 import com.into.websoso.ui.onboarding.OnboardingActivity
 import com.into.websoso.ui.userStorage.UserStorageActivity
@@ -64,6 +65,11 @@ internal class WebsosoNavigator
 
         override fun navigateToNormalExploreActivity(startActivity: (Intent) -> Unit) {
             val intent = NormalExploreActivity.getIntent(context)
+            startActivity(intent)
+        }
+
+        override fun navigateToNotificationSettingActivity(startActivity: (Intent) -> Unit) {
+            val intent = NotificationSettingActivity.getIntent(context)
             startActivity(intent)
         }
     }

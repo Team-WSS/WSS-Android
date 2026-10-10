@@ -27,7 +27,7 @@ internal fun LibraryGridList(
         columns = GridCells.Fixed(3),
         state = gridState,
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 20.dp),
+        contentPadding = PaddingValues(start = 20.dp, top = 16.dp, end = 20.dp, bottom = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp),
     ) {

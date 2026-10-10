@@ -22,6 +22,7 @@ import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.string.home_rising_feed_for_user
 import com.into.websoso.databinding.FragmentHomeBinding
 import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
@@ -146,6 +147,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
     }
 
     private fun setupObserver() {
+        mainViewModel.mainUiState.observe(viewLifecycleOwner) { uiState ->
+            if (!uiState.loading && !uiState.error) {
+                binding.tvHomeRisingFeed.text = getString(home_rising_feed_for_user, uiState.nickname)
+            }
+        }
+
         homeViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             when {
                 uiState.error -> {

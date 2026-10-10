@@ -87,6 +87,7 @@ class NovelRepository
 
         suspend fun fetchFilteredNovelResult(
             genres: List<String>?,
+            platformNames: List<String>?,
             isCompleted: Boolean?,
             novelRatingStart: Float,
             novelRatingEnd: Float,
@@ -96,6 +97,7 @@ class NovelRepository
         ): ExploreResultEntity {
             val result = novelApi.getFilteredNovelResult(
                 genres = genres,
+                platformNames = platformNames,
                 isCompleted = isCompleted,
                 novelRatingStart = novelRatingStart,
                 novelRatingEnd = novelRatingEnd,

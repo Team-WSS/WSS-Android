@@ -17,6 +17,7 @@ import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.util.setupSystemBarIconColor
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.feature.signin.SignInScreen
+import com.into.websoso.ui.collection.CollectionDeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -39,10 +40,15 @@ class LoginActivity : ComponentActivity() {
             WebsosoTheme {
                 SignInScreen(
                     authClient = { platform -> authClient[platform] },
-                    websosoNavigator = websosoNavigator,
+                    onNavigateToHome = { websosoNavigator.navigateToMainActivity(::startDestination) },
+                    onNavigateToOnboarding = { websosoNavigator.navigateToOnboardingActivity(::startDestination) },
                 )
             }
         }
+    }
+
+    private fun startDestination(destination: Intent) {
+        startActivity(CollectionDeepLink.forward(intent, destination))
     }
 
     companion object {

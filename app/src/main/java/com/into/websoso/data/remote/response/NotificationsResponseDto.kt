@@ -28,5 +28,7 @@ data class NotificationsResponseDto(
         val isNotice: Boolean,
         @SerialName("feedId")
         val feedId: Long?,
+        @SerialName("novelId")
+        val novelId: Long? = null,
     )
 }

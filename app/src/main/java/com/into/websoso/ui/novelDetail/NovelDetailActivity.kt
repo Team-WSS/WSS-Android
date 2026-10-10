@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Patterns
 import android.view.Gravity
 import android.view.View.GONE
@@ -26,6 +27,7 @@ import com.into.websoso.core.common.ui.model.ResultFrom.CreateFeed
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelRating
 import com.into.websoso.core.common.util.getS3ImageUrl
+import com.into.websoso.core.common.util.isNotificationPermissionGranted
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.toIntPxFromDp
@@ -47,12 +49,14 @@ import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.feedDetail.model.EditFeedModel
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
+import com.into.websoso.ui.novelDetail.NovelDetailViewModel.Companion.DEFAULT_NOTIFICATION_ID
 import com.into.websoso.ui.novelDetail.adapter.NovelDetailPagerAdapter
 import com.into.websoso.ui.novelDetail.model.NovelAlertModel
 import com.into.websoso.ui.novelFeed.NovelFeedViewModel
 import com.into.websoso.ui.novelInfo.NovelInfoViewModel
 import com.into.websoso.ui.novelRating.NovelRatingActivity
 import com.into.websoso.ui.novelRating.model.ReadStatus
+import com.into.websoso.ui.setting.dialog.NotificationPermissionDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -72,6 +76,11 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
     private var menuPopupWindow: PopupWindow? = null
     private var tooltipPopupWindow: PopupWindow? = null
     private val novelId by lazy { intent.getLongExtra(NOVEL_ID, 0) }
+
+    private val notificationPermissionLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(StartActivityForResult()) {
+            if (isNotificationPermissionGranted()) showNovelNotificationBottomSheet()
+        }
 
     private val novelDetailResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(StartActivityForResult()) { result ->
@@ -109,8 +118,14 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         setupWebsosoLoadingLayout()
         setupViewPager()
         novelDetailViewModel.updateNovelDetail(novelId)
+        updateNotificationRead()
         handleBackPressed()
         tracker.trackEvent("novel_info")
+    }
+
+    private fun updateNotificationRead() {
+        val notificationId = intent.getLongExtra(NOTIFICATION_ID, DEFAULT_NOTIFICATION_ID)
+        novelDetailViewModel.updateNotificationRead(notificationId)
     }
 
     private fun bindViewModel() {
@@ -314,6 +329,18 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
                 showPopupWindow()
             }
 
+            override fun onNotificationClick() {
+                if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
+                    showLoginRequestDialog()
+                    return
+                }
+                if (isNotificationPermissionGranted().not()) {
+                    showNotificationPermissionDialog()
+                    return
+                }
+                showNovelNotificationBottomSheet()
+            }
+
             override fun onNavigateToNovelRatingClick(readStatus: ReadStatus) {
                 if (novelDetailViewModel.novelDetailModel.value?.isLogin == false) {
                     binding.tgNovelDetailReadStatus.clearChecked()
@@ -401,25 +428,60 @@ class NovelDetailActivity : BaseActivity<ActivityNovelDetailBinding>(activity_no
         dialog.show(supportFragmentManager, LoginRequestDialogFragment.TAG)
     }
 
+    private fun showNovelNotificationBottomSheet() {
+        NovelNotificationBottomSheetDialog
+            .newInstance(novelId)
+            .apply {
+                setOnDismissListener { isNotificationEnabled ->
+                    novelDetailViewModel.updateNovelNotificationEnabled(isNotificationEnabled)
+                }
+            }.show(
+                supportFragmentManager,
+                NovelNotificationBottomSheetDialog.NOVEL_NOTIFICATION_BOTTOM_SHEET_TAG,
+            )
+    }
+
+    private fun showNotificationPermissionDialog() {
+        NotificationPermissionDialog
+            .newInstance()
+            .apply {
+                isCancelable = false
+                setOnSetUpClickListener {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        }
+                    notificationPermissionLauncher.launch(intent)
+                }
+            }.show(
+                supportFragmentManager,
+                NotificationPermissionDialog.NOTIFICATION_PERMISSION_DIALOG_TAG,
+            )
+    }
+
     override fun onResume() {
         super.onResume()
         binding.tgNovelDetailReadStatus.clearChecked()
         novelDetailViewModel.updateNovelDetail(novelId)
+        novelDetailViewModel.updateNovelNotificationEnabled(novelId)
     }
 
     companion object {
         private const val INFO_FRAGMENT_PAGE = 0
         private const val FEED_FRAGMENT_PAGE = 1
         private const val NOVEL_ID = "NOVEL_ID"
+        private const val NOTIFICATION_ID = "NOTIFICATION_ID"
         private const val POPUP_MARGIN_END = -128
         private const val POPUP_MARGIN_TOP = 4
 
         fun getIntent(
             context: Context,
             novelId: Long,
+            notificationId: Long = DEFAULT_NOTIFICATION_ID,
         ): Intent =
             Intent(context, NovelDetailActivity::class.java).apply {
                 putExtra(NOVEL_ID, novelId)
+                putExtra(NOTIFICATION_ID, notificationId)
             }
     }
 }

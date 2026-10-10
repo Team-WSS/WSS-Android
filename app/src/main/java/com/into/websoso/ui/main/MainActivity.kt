@@ -18,10 +18,13 @@ import com.into.websoso.R.id.menu_library
 import com.into.websoso.R.id.menu_my_page
 import com.into.websoso.R.layout.activity_main
 import com.into.websoso.core.common.ui.base.BaseActivity
+import com.into.websoso.core.common.util.getAdaptedSerializableExtra
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.string.main_back_press
 import com.into.websoso.databinding.ActivityMainBinding
+import com.into.websoso.ui.collection.CollectionActivity
+import com.into.websoso.ui.collection.CollectionDeepLink
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.into.websoso.ui.main.MainActivity.FragmentType.HOME
@@ -53,13 +56,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         setupBottomNavigationView()
         setupObserver()
         onViewGuestClick()
-        handleNavigation(intent.getSerializableExtra(DESTINATION_KEY) as? FragmentType)
+        handleNavigation(intent.getAdaptedSerializableExtra<FragmentType>(DESTINATION_KEY))
         updateFcmToken()
         supportFragmentManager.setFragmentResultListener(
             "NAVIGATE_TO_LIBRARY_FRAGMENT",
             this,
         ) { _, _ ->
             handleNavigation(LIBRARY)
+        }
+        if (savedInstanceState == null) openPendingCollection()
+    }
+
+    private fun openPendingCollection() {
+        val collectionId = intent.getLongExtra(CollectionDeepLink.PENDING_COLLECTION_ID, 0L)
+        intent.removeExtra(CollectionDeepLink.PENDING_COLLECTION_ID)
+        if (collectionId > 0L) {
+            startActivity(CollectionActivity.getIntent(this, collectionId = collectionId))
         }
     }
 

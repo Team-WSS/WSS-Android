@@ -1,20 +1,17 @@
 package com.into.websoso.ui.setting
 
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import com.into.websoso.R.layout.activity_setting
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.ChangeProfileDisclosure
+import com.into.websoso.core.common.util.isNotificationPermissionGranted
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
 import com.into.websoso.core.resource.R.string.inquire_link
@@ -45,23 +42,11 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(activity_setting) {
     private val notificationSettingLauncher = registerForActivityResult(
         StartActivityForResult(),
     ) {
-        if (isNotificationGranted()) {
+        if (isNotificationPermissionGranted()) {
             settingViewModel.updatePushMessageEnabled()
             navigateToNotificationSetting()
         }
     }
-
-    private fun isNotificationGranted(): Boolean =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.POST_NOTIFICATIONS,
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-            val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.areNotificationsEnabled()
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,19 +123,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(activity_setting) {
         }
 
     private fun checkNotificationPermission() {
-        val isNotificationPermissionGranted =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.POST_NOTIFICATIONS,
-                ) == PackageManager.PERMISSION_GRANTED
-            } else {
-                val notificationManager =
-                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.areNotificationsEnabled()
-            }
-
-        if (isNotificationPermissionGranted) {
+        if (isNotificationPermissionGranted()) {
             navigateToNotificationSetting()
             return
         }

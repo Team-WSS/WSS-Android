@@ -21,14 +21,12 @@ data class PopularFeedsResponseDto(
         @SerialName("isSpoiler")
         val isSpoiler: Boolean,
         @SerialName("isPublic")
-        val isPublic: Boolean? = null,
-        @SerialName("title")
-        val title: String? = null,
+        val isPublic: Boolean,
         @SerialName("novelTitle")
-        val novelTitle: String? = null,
+        val novelTitle: String,
         @SerialName("novelImage")
-        val novelImage: String? = null,
-        @SerialName("novelThumbnailImage")
-        val novelThumbnailImage: String? = null,
+        val novelImage: String,
+        @SerialName("novelGenre")
+        val novelGenre: String,
     )
 }

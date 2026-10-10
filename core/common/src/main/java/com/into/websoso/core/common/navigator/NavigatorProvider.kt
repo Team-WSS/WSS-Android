@@ -26,6 +26,8 @@ interface NavigatorProvider {
     )
 
     fun navigateToNormalExploreActivity(startActivity: (Intent) -> Unit)
+
+    fun navigateToNotificationSettingActivity(startActivity: (Intent) -> Unit)
 }
 
 @EntryPoint

@@ -1,7 +1,7 @@
 [versions]
 # App Versioning
-versionCode = "10051"
-versionName = "1.7.0"
+versionCode = "10058"
+versionName = "1.9.1"
 
 # Gradle Plugin & Kotlin
 android-gradle-plugin = "8.13.2"
@@ -19,7 +19,7 @@ google-services = "4.4.4"
 firebase-bom = "34.7.0"
 
 # Analytics
-amplitude = "1.+"
+amplitude = "1.30.1"
 
 # AndroidX Libraries
 androidx = "1.15.0"
@@ -32,6 +32,7 @@ lifecycle-extensions = "2.2.0"
 datastore-preferences = "1.2.0"
 security-crypto = "1.1.0"
 paging = "3.3.6"
+navigation = "2.9.8"
 
 # Testing Libraries
 junit = "4.13.2"
@@ -134,6 +135,7 @@ swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayou
 
 # Social Login Libraries
 kakao = { module = "com.kakao.sdk:v2-user", version.ref = "kakao" }
+kakao-share = { module = "com.kakao.sdk:v2-share", version.ref = "kakao" }
 
 # Dependency Injection Libraries
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
@@ -167,6 +169,7 @@ compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 

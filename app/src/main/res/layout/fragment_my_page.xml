@@ -279,11 +279,28 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/cl_my_page_user_profile" />
 
+                    <androidx.compose.ui.platform.ComposeView
+                        android:id="@+id/cv_my_page_collection_entry"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view_my_page_profile_divider" />
+
+                    <View
+                        android:id="@+id/view_my_page_collection_divider"
+                        android:layout_width="0dp"
+                        android:layout_height="3dp"
+                        android:background="@color/gray_50_F4F5F8"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cv_my_page_collection_entry" />
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_my_library_genre_preference"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/view_my_page_profile_divider"
+                        app:layout_constraintTop_toBottomOf="@id/view_my_page_collection_divider"
                         tools:layout_editor_absoluteX="0dp">
 
                         <TextView
@@ -447,7 +464,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/view_my_page_profile_divider">
+                        app:layout_constraintTop_toBottomOf="@id/view_my_page_collection_divider">
 
                         <TextView
                             android:id="@+id/tv_my_library_preference_analysis_title"

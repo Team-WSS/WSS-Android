@@ -6,23 +6,19 @@ import com.into.websoso.data.library.model.NovelEntity
 import com.into.websoso.data.library.model.UserNovelsEntity
 
 class LibraryPagingSource(
-    private val getNovels: suspend (lastUserNovelId: Long) -> Result<UserNovelsEntity>,
-) : PagingSource<Long, NovelEntity>() {
-    override suspend fun load(params: LoadParams<Long>): LoadResult<Long, NovelEntity> {
-        val currentKey = params.key ?: DEFAULT_LAST_USER_NOVEL_ID
-
-        return getNovels(currentKey).fold(
+    private val getNovels: suspend (cursor: String?) -> Result<UserNovelsEntity>,
+) : PagingSource<String, NovelEntity>() {
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, NovelEntity> =
+        getNovels(params.key).fold(
             onSuccess = { result ->
-                val novels = result.userNovels
-
-                val nextKey = if (result.isLoadable && novels.isNotEmpty()) {
-                    novels.last().userNovelId
+                val nextKey = if (result.isLoadable && result.userNovels.isNotEmpty()) {
+                    result.nextCursor
                 } else {
                     null
                 }
 
                 LoadResult.Page(
-                    data = novels,
+                    data = result.userNovels,
                     prevKey = null,
                     nextKey = nextKey,
                 )
@@ -31,11 +27,6 @@ class LibraryPagingSource(
                 LoadResult.Error(throwable)
             },
         )
-    }
 
-    override fun getRefreshKey(state: PagingState<Long, NovelEntity>): Long? = null
-
-    companion object {
-        private const val DEFAULT_LAST_USER_NOVEL_ID = 0L
-    }
+    override fun getRefreshKey(state: PagingState<String, NovelEntity>): String? = null
 }
