@@ -8,6 +8,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.firebase.messaging.FirebaseMessaging
@@ -32,12 +33,18 @@ import com.into.websoso.ui.main.MainActivity.FragmentType.LIBRARY
 import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
+import com.into.websoso.ui.main.home.HomeStartupRequest
 import com.into.websoso.ui.main.library.LibraryFragment
 import com.into.websoso.ui.main.myPage.MyPageFragment
+import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
+    @Inject
+    lateinit var homeStartupRequest: Lazy<HomeStartupRequest>
+
     private val mainViewModel: MainViewModel by viewModels()
     private var backPressedTime: Long = 0L
     private var currentFragment: Fragment? = null
@@ -52,6 +59,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (intent.getAdaptedSerializableExtra<FragmentType>(DESTINATION_KEY)?.let { it != HOME } == true ||
+            intent.getLongExtra(CollectionDeepLink.PENDING_COLLECTION_ID, 0L) > 0L
+        ) {
+            discardStartupRequest()
+        }
         setupBackButtonListener()
         setupBottomNavigationView()
         setupObserver()
@@ -142,6 +154,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     private fun replaceCurrentFragment(itemId: Int) {
         val tag = fragmentTags[itemId] ?: return
+        if (itemId != menu_home) discardStartupRequest()
         val isLibrary = itemId == menu_library
         val existingFragment = supportFragmentManager.findFragmentByTag(tag)
         val targetFragment = existingFragment ?: findOrCreateFragment(tag)
@@ -175,7 +188,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     private fun findOrCreateFragment(tag: String): Fragment =
         supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
-            HomeFragment.TAG -> HomeFragment()
+            HomeFragment.TAG -> HomeFragment().apply {
+                arguments = bundleOf(HomeStartupRequest.KEY to intent.getStringExtra(HomeStartupRequest.KEY))
+            }
             FeedFragment.TAG -> FeedFragment()
             LibraryFragment.TAG -> LibraryFragment()
             MyPageFragment.TAG -> MyPageFragment()
@@ -229,6 +244,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
             val token = task.result
             mainViewModel.updateFcmToken(token)
         }
+    }
+
+    private fun discardStartupRequest() {
+        intent.getStringExtra(HomeStartupRequest.KEY)?.let { homeStartupRequest.get().discard(it) }
+        intent.removeExtra(HomeStartupRequest.KEY)
+    }
+
+    override fun onDestroy() {
+        if (!isChangingConfigurations) discardStartupRequest()
+        super.onDestroy()
     }
 
     companion object {

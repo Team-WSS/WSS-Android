@@ -13,6 +13,7 @@ import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.databinding.ActivitySplashBinding
 import com.into.websoso.ui.collection.CollectionDeepLink
+import com.into.websoso.ui.main.home.HomeStartupRequest
 import com.into.websoso.ui.splash.UiEffect.NavigateToLogin
 import com.into.websoso.ui.splash.UiEffect.NavigateToMain
 import com.into.websoso.ui.splash.UiEffect.ShowDialog
@@ -53,6 +54,12 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
                 intent.putExtra(CollectionDeepLink.PENDING_COLLECTION_ID, collectionId)
             }
         }
+        splashViewModel.start(
+            isHomeDestination = intent.getLongExtra(
+                CollectionDeepLink.PENDING_COLLECTION_ID,
+                0L,
+            ) == 0L,
+        )
     }
 
     @SuppressLint("HardwareIds")
@@ -64,15 +71,45 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     private fun collectUiEffect() {
         splashViewModel.uiEffect.collectWithLifecycle(this) { uiEffect ->
             when (uiEffect) {
-                NavigateToLogin -> websosoNavigator.navigateToLoginActivity(::startDestination)
-                NavigateToMain -> websosoNavigator.navigateToMainActivity(::startDestination)
-                ShowDialog -> showMinimumVersionDialog()
+                NavigateToLogin -> {
+                    websosoNavigator.navigateToLoginActivity {
+                        startDestination(
+                            it,
+                            uiEffect,
+                        )
+                    }
+                }
+
+                is NavigateToMain -> {
+                    websosoNavigator.navigateToMainActivity(
+                        startActivity = { startDestination(it, uiEffect) },
+                    )
+                }
+
+                ShowDialog -> {
+                    showMinimumVersionDialog()
+                    splashViewModel.onUiEffectHandled(uiEffect)
+                }
             }
         }
     }
 
-    private fun startDestination(destination: Intent) {
-        startActivity(CollectionDeepLink.forward(intent, destination))
+    private fun startDestination(
+        destination: Intent,
+        effect: UiEffect,
+    ) {
+        val target = CollectionDeepLink.forward(intent, destination)
+        if (effect is NavigateToMain) {
+            effect.startupRequestId?.let { target.putExtra(HomeStartupRequest.KEY, it) }
+        }
+        // Collected only while STARTED; do not suspend between receiving the effect and navigation.
+        try {
+            startActivity(target)
+        } catch (error: Exception) {
+            splashViewModel.onNavigationFailed()
+            throw error
+        }
+        splashViewModel.onUiEffectHandled(effect)
         finish()
     }
 

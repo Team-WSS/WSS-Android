@@ -21,7 +21,9 @@ data class NicknameModel(
 sealed interface ProfileEditResult {
     data object Loading : ProfileEditResult
 
-    data object Success : ProfileEditResult
+    data class Success(
+        val genrePreferencesChanged: Boolean,
+    ) : ProfileEditResult
 
     data object Error : ProfileEditResult
 }
