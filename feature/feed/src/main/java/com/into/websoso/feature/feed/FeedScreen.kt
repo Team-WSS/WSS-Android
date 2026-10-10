@@ -37,7 +37,9 @@ import com.into.websoso.core.designsystem.theme.Gray80
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.designsystem.theme.White
 import com.into.websoso.core.resource.R
+import com.into.websoso.data.feed.repository.model.LikeSyncStatus
 import com.into.websoso.feature.feed.component.FeedFilterChip
+import com.into.websoso.feature.feed.component.FeedLikeSyncNotice
 import com.into.websoso.feature.feed.component.FeedSection
 import com.into.websoso.feature.feed.component.MyFeedFilterModal
 import com.into.websoso.feature.feed.model.FeedOrder
@@ -68,6 +70,9 @@ internal fun FeedScreen(
     onRefreshPull: () -> Unit,
     onWriteFeedClick: () -> Unit,
     onLoadMore: () -> Unit,
+    likeSyncStates: Map<Long, LikeSyncStatus> = emptyMap(),
+    isLikeRestoreFailed: Boolean = false,
+    onRetryLikes: () -> Unit = {},
 ) {
     Scaffold(containerColor = White) { _ ->
         Column(modifier = Modifier.statusBarsPadding()) {
@@ -75,6 +80,13 @@ internal fun FeedScreen(
                 selectedTab = uiState.selectedTab,
                 onTabClick = onTabSelected,
                 onWriteClick = onWriteClick,
+            )
+
+            FeedLikeSyncNotice(
+                isRestoreFailed = isLikeRestoreFailed,
+                needsRetry = likeSyncStates.values.any { it == LikeSyncStatus.NEEDS_RETRY },
+                isSyncing = likeSyncStates.values.any { it == LikeSyncStatus.SYNCING },
+                onRetry = onRetryLikes,
             )
 
             Spacer(modifier = Modifier.height(height = 2.dp))
@@ -159,6 +171,7 @@ internal fun FeedScreen(
             }
 
             FeedSection(
+                likeSyncStates = likeSyncStates,
                 currentTab = uiState.selectedTab,
                 feeds = when (uiState.selectedTab) {
                     FeedTab.MY_FEED -> uiState.myFeedData.feeds

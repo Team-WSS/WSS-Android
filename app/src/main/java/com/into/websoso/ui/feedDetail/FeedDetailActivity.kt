@@ -1,6 +1,5 @@
 package com.into.websoso.ui.feedDetail
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,16 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
-import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.into.websoso.R.id.tv_feed_thumb_up_count
 import com.into.websoso.R.layout.activity_feed_detail
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
@@ -30,12 +29,12 @@ import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailRefreshed
 import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.OtherUserProfileBack
 import com.into.websoso.core.common.ui.model.ResultFrom.WithdrawUser
-import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.hideKeyboard
 import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.common.util.toFloatPxFromDp
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.drawable.ic_novel_detail_check
 import com.into.websoso.core.resource.R.string.block_user_success_message
@@ -44,10 +43,12 @@ import com.into.websoso.core.resource.R.string.feed_popup_menu_content_report_is
 import com.into.websoso.core.resource.R.string.feed_removed_feed_snackbar
 import com.into.websoso.core.resource.R.string.feed_server_error
 import com.into.websoso.core.resource.R.string.other_user_page_withdraw_user
+import com.into.websoso.data.feed.repository.model.LikeSyncStatus
 import com.into.websoso.databinding.ActivityFeedDetailBinding
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.MenuFeedPopupBinding
+import com.into.websoso.feature.feed.component.FeedLikeSyncNotice
 import com.into.websoso.ui.createFeed.CreateFeedActivity
 import com.into.websoso.ui.expandedFeedImage.ExpandedFeedImageActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity.MenuType.COMMENT
@@ -88,7 +89,6 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
             onCommentClick(),
         )
     }
-    private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private lateinit var activityResultCallback: ActivityResultLauncher<Intent>
     private val popupBinding: MenuFeedPopupBinding by lazy {
         MenuFeedPopupBinding.inflate(LayoutInflater.from(this))
@@ -99,30 +99,12 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
 
     private fun onFeedContentClick(): FeedDetailClickListener =
         object : FeedDetailClickListener {
-            @SuppressLint("CutPasteId")
             override fun onLikeButtonClick(
                 view: View,
                 feedId: Long,
             ) {
-                val likeCount: Int =
-                    view
-                        .findViewById<TextView>(tv_feed_thumb_up_count)
-                        .text
-                        .toString()
-                        .toInt()
-                val updatedLikeCount: Int = when (view.isSelected) {
-                    true -> if (likeCount > 0) likeCount - 1 else 0
-                    false -> likeCount + 1
-                }
-
-                view.findViewById<TextView>(tv_feed_thumb_up_count).text =
-                    updatedLikeCount.toString()
-                view.isSelected = !view.isSelected
-
-                singleEventHandler.debounce(timeMillis = 100L, coroutineScope = lifecycleScope) {
-                    tracker.trackEvent("feed_detail_like")
-                    feedDetailViewModel.updateLike()
-                }
+                tracker.trackEvent("feed_detail_like")
+                feedDetailViewModel.updateLike()
             }
 
             override fun onNovelInfoClick(novelId: Long) {
@@ -357,6 +339,21 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
         super.onCreate(savedInstanceState)
 
         setupView()
+        binding.cvFeedLikeSync.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                val states by feedDetailViewModel.likeSyncStates.collectAsStateWithLifecycle()
+                val isRestoreFailed by feedDetailViewModel.isLikeRestoreFailed.collectAsStateWithLifecycle()
+                WebsosoTheme {
+                    FeedLikeSyncNotice(
+                        isRestoreFailed = isRestoreFailed,
+                        needsRetry = states[feedId] == LikeSyncStatus.NEEDS_RETRY,
+                        isSyncing = states[feedId] == LikeSyncStatus.SYNCING,
+                        onRetry = feedDetailViewModel::retryLike,
+                    )
+                }
+            }
+        }
         setupObserver()
         onFeedDetailClick()
         refreshView()
@@ -371,7 +368,7 @@ class FeedDetailActivity : BaseActivity<ActivityFeedDetailBinding>(activity_feed
                     NovelDetailBack.RESULT_OK,
                     CreateFeed.RESULT_OK,
                     OtherUserProfileBack.RESULT_OK,
-                        -> {
+                    -> {
                         feedDetailViewModel.updateFeedDetail(feedId, CreateFeed)
                     }
 

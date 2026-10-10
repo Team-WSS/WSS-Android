@@ -11,8 +11,12 @@ import androidx.fragment.app.viewModels
 import com.into.websoso.R
 import com.into.websoso.R.layout.fragment_feed
 import com.into.websoso.core.common.ui.base.BaseFragment
+import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.tracker.Tracker
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
+import com.into.websoso.core.resource.R.string.feed_like_unrestored_message
 import com.into.websoso.databinding.DialogRemovePopupMenuBinding
 import com.into.websoso.databinding.DialogReportPopupMenuBinding
 import com.into.websoso.databinding.FragmentFeedBinding
@@ -189,6 +193,16 @@ class FeedFragment : BaseFragment<FragmentFeedBinding>(fragment_feed) {
         super.onViewCreated(view, savedInstanceState)
 
         tracker.trackEvent("feed_all")
+        collectUnrestoredLikes()
+    }
+
+    private fun collectUnrestoredLikes() {
+        feedViewModel.hasUnrestoredLikes.collectWithLifecycle(viewLifecycleOwner) { hasUnrestoredLikes ->
+            if (hasUnrestoredLikes) {
+                showWebsosoToast(requireContext(), getString(feed_like_unrestored_message), ic_novel_rating_alert)
+                feedViewModel.acknowledgeUnrestoredLikes()
+            }
+        }
     }
 
     companion object {

@@ -38,6 +38,12 @@ class UpdatedFeedDetailViewModel
         private val _feedDetailUiState: MutableLiveData<FeedDetailUiState> =
             MutableLiveData(FeedDetailUiState())
         val feedDetailUiState: LiveData<FeedDetailUiState> get() = _feedDetailUiState
+        val likeSyncStates = feedRepository.likeSyncStates
+        val isLikeRestoreFailed = feedRepository.isLikeRestoreFailed
+
+        fun retryLike() {
+            if (feedId != -1L) feedRepository.retryPendingLikes(setOf(feedId))
+        }
 
         fun updateCommentId(newCommentId: Long) {
             this.commentId = newCommentId
@@ -75,19 +81,25 @@ class UpdatedFeedDetailViewModel
                     feedRepository.sosoAllFeeds,
                     feedRepository.sosoRecommendedFeeds,
                     feedRepository.myFeeds,
-                ) { sosoAllFeeds, sosoRecommendedFeeds, myFeeds ->
-                    sosoAllFeeds.find { it.id == targetFeedId }
+                    feedRepository.feedDetailLikeStates,
+                ) { sosoAllFeeds, sosoRecommendedFeeds, myFeeds, detailLikes ->
+                    val feed = sosoAllFeeds.find { it.id == targetFeedId }
                         ?: sosoRecommendedFeeds.find { it.id == targetFeedId }
                         ?: myFeeds.find { it.id == targetFeedId }
+                    feed to detailLikes[targetFeedId]
                 }.distinctUntilChanged()
-                    .collect { feedEntity ->
-                        if (feedEntity != null) {
-                            val currentUiState = _feedDetailUiState.value ?: FeedDetailUiState()
+                    .collect { (feedEntity, likeState) ->
+                        val currentUiState = _feedDetailUiState.value ?: FeedDetailUiState()
+                        val feed = feedEntity?.toFeedModel() ?: currentUiState.feedDetail.feed
+                        if (feed != null) {
                             _feedDetailUiState.value = currentUiState.copy(
                                 loading = false,
                                 isRefreshed = true,
                                 feedDetail = currentUiState.feedDetail.copy(
-                                    feed = feedEntity.toFeedModel(),
+                                    feed = feed.copy(
+                                        isLiked = likeState?.isLiked ?: feed.isLiked,
+                                        likeCount = likeState?.likeCount ?: feed.likeCount,
+                                    ),
                                     novel = currentUiState.feedDetail.novel,
                                 ),
                             )
@@ -145,7 +157,7 @@ class UpdatedFeedDetailViewModel
          */
         override fun onCleared() {
             super.onCleared()
-            feedRepository.syncDirtyFeeds()
+            feedRepository.syncPendingLikes()
         }
 
         /**

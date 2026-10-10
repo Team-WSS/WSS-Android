@@ -6,6 +6,10 @@ plugins {
 
 android {
     setNamespace("data.feed")
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -17,4 +21,6 @@ dependencies {
 
     // TODO: 멀티 파트 빌드 오류를 해결하기 위한 임시 조치 -> 추후 네트워크 레이어로 마이그레이션
     implementation(libs.okhttp)
+
+    testImplementation(libs.junit)
 }
