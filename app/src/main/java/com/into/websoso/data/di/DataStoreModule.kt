@@ -18,7 +18,12 @@ object DataStoreModule {
     @Provides
     fun provideUserPreferencesDataStore(
         @ApplicationContext context: Context,
-    ): DataStore<Preferences> = context.createDataStore(USER_PREFERENCES)
+    ): DataStore<Preferences> =
+        context.createDataStore(
+            preferencesName = USER_PREFERENCES,
+            schemaVersion = USER_PREFERENCES_SCHEMA_VERSION,
+        )
 
     private const val USER_PREFERENCES = "com.teamwss.websoso.user_preferences"
+    private const val USER_PREFERENCES_SCHEMA_VERSION = 1
 }

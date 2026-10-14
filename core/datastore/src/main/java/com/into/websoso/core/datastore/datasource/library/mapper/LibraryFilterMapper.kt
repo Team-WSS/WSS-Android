@@ -18,13 +18,8 @@ internal fun LibraryFilter.toPreferences(): LibraryFilterPreferences =
         keywords = keywords,
     )
 
-// 1.8.x 이하는 정렬 기준을 enum 이름("RECENT", "OLD")으로 저장했다.
-// 서버 v2 명세 key로 마이그레이션하고, 알 수 없는 값은 기본값으로 대체한다.
-private val LEGACY_SORT_CRITERIA_MIGRATION = mapOf(
-    "RECENT" to "created_desc",
-    "OLD" to "created_asc",
-)
-
+// 저장값은 여러 버전의 앱이 남긴 값이므로 서버 명세에 없는 정렬 기준은 기본값으로 대체한다.
+// 구버전 값 변환은 LibraryFilterMigration에서 처리한다.
 private val VALID_SORT_CRITERIA_KEYS = setOf(
     "created_desc",
     "created_asc",
@@ -34,14 +29,11 @@ private val VALID_SORT_CRITERIA_KEYS = setOf(
     "rating_asc",
 )
 
-private fun String.toMigratedSortCriteria(): String =
-    LEGACY_SORT_CRITERIA_MIGRATION[this]
-        ?: takeIf { it in VALID_SORT_CRITERIA_KEYS }
-        ?: DEFAULT_SORT_CRITERIA
+private fun String.toValidSortCriteria(): String = takeIf { it in VALID_SORT_CRITERIA_KEYS } ?: DEFAULT_SORT_CRITERIA
 
 internal fun LibraryFilterPreferences.toData(): LibraryFilter =
     LibraryFilter(
-        sortCriteria = sortCriteria.toMigratedSortCriteria(),
+        sortCriteria = sortCriteria.toValidSortCriteria(),
         isInterested = isInterested,
         readStatuses = readStatuses,
         attractivePoints = attractivePoints,
