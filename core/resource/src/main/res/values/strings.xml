@@ -483,6 +483,8 @@
 
     <!-- 컬렉션 뷰 -->
     <string name="collection_title">컬렉션</string>
+    <string name="collection_public_title">컬렉션 모음.zip</string>
+    <string name="collection_owner_label">%1$s님의 컬렉션</string>
     <string name="collection_make">컬렉션 만들기</string>
     <string name="collection_empty">등록된 컬렉션이 없어요</string>
     <string name="collection_other_user_empty">컬렉션을 등록하지 않은 유저에요</string>
