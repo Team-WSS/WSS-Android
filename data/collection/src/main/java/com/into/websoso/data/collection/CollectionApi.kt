@@ -14,6 +14,12 @@ internal interface CollectionApi {
         @Body request: SaveCollectionRequestDto,
     ): CreateCollectionResponseDto
 
+    @GET("collections")
+    suspend fun getPublicCollections(
+        @Query("cursor") cursor: String?,
+        @Query("size") size: Int,
+    ): PublicCollectionPageResponseDto
+
     @GET("collections/{collectionId}")
     suspend fun getCollection(
         @Path("collectionId") collectionId: Long,

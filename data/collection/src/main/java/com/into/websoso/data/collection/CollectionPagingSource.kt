@@ -2,20 +2,27 @@ package com.into.websoso.data.collection
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.into.websoso.domain.collection.model.Collection
 import com.into.websoso.domain.collection.model.CollectionPage
 import kotlinx.coroutines.CancellationException
 
-internal class CollectionPagingSource(
-    private val getPage: suspend (cursor: String?, size: Int) -> CollectionPage,
-) : PagingSource<String, Collection>() {
-    override suspend fun load(params: LoadParams<String>): LoadResult<String, Collection> =
+internal data class CursorPage<T>(
+    val items: List<T>,
+    val hasNext: Boolean,
+    val nextCursor: String?,
+)
+
+internal fun CollectionPage.toCursorPage() = CursorPage(items = collections, hasNext = hasNext, nextCursor = nextCursor)
+
+internal class CollectionPagingSource<T : Any>(
+    private val getPage: suspend (cursor: String?, size: Int) -> CursorPage<T>,
+) : PagingSource<String, T>() {
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, T> =
         runCatching {
             getPage(params.key, params.loadSize)
         }.fold(
             onSuccess = { page ->
                 LoadResult.Page(
-                    data = page.collections,
+                    data = page.items,
                     prevKey = null,
                     nextKey = page.nextCursor.takeIf { page.hasNext },
                 )
@@ -26,5 +33,5 @@ internal class CollectionPagingSource(
             },
         )
 
-    override fun getRefreshKey(state: PagingState<String, Collection>): String? = null
+    override fun getRefreshKey(state: PagingState<String, T>): String? = null
 }

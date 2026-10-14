@@ -9,6 +9,7 @@ import com.into.websoso.domain.collection.model.Collection
 import com.into.websoso.domain.collection.model.CollectionDetail
 import com.into.websoso.domain.collection.model.CollectionPage
 import com.into.websoso.domain.collection.model.CollectionSortCriteria
+import com.into.websoso.domain.collection.model.PublicCollection
 import com.into.websoso.domain.collection.model.SaveCollection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -27,15 +28,20 @@ internal class DefaultCollectionRepository
                     userId = requireUserId(),
                     cursor = cursor,
                     size = size,
-                )
+                ).toCursorPage()
             }
 
         override fun getUserCollections(userId: Long): Flow<PagingData<Collection>> =
-            createPager { cursor, size -> getUserCollectionPage(userId, cursor, size) }
+            createPager { cursor, size -> getUserCollectionPage(userId, cursor, size).toCursorPage() }
 
         override fun getLikedCollections(): Flow<PagingData<Collection>> =
             createPager { cursor, size ->
-                api.getLikedCollections(cursor, size).toDomain()
+                api.getLikedCollections(cursor, size).toDomain().toCursorPage()
+            }
+
+        override fun getPublicCollections(): Flow<PagingData<PublicCollection>> =
+            createPager { cursor, size ->
+                api.getPublicCollections(cursor, size).toCursorPage()
             }
 
         override suspend fun getMyCollectionPreview(): CollectionPage =
@@ -47,6 +53,9 @@ internal class DefaultCollectionRepository
 
         override suspend fun getUserCollectionPreview(userId: Long): CollectionPage =
             getUserCollectionPage(userId = userId, cursor = null, size = PREVIEW_SIZE)
+
+        override suspend fun getPublicCollectionPreview(): List<PublicCollection> =
+            api.getPublicCollections(cursor = null, size = PUBLIC_PREVIEW_SIZE).toCursorPage().items
 
         override suspend fun getCollection(
             collectionId: Long,
@@ -73,7 +82,7 @@ internal class DefaultCollectionRepository
             if (isLiked) api.likeCollection(collectionId) else api.unlikeCollection(collectionId)
         }
 
-        private fun createPager(getPage: suspend (cursor: String?, size: Int) -> CollectionPage): Flow<PagingData<Collection>> =
+        private fun <T : Any> createPager(getPage: suspend (cursor: String?, size: Int) -> CursorPage<T>): Flow<PagingData<T>> =
             Pager(
                 config = PagingConfig(
                     pageSize = PAGE_SIZE,
@@ -99,6 +108,7 @@ internal class DefaultCollectionRepository
         private companion object {
             const val PAGE_SIZE = 10
             const val PREVIEW_SIZE = 3
+            const val PUBLIC_PREVIEW_SIZE = 10
 
             // fetchUserInfo()는 MainActivity.onCreate() 시점에 이미 시작되어 있고
             // 정상 응답은 수백 ms 수준이다. 실패하더라도 CollectionPreview에 재시도 버튼이 있어
