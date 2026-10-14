@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.into.websoso.core.datastore.datasource.feed.DefaultPendingFeedLikeStore
+import com.into.websoso.core.datastore.datasource.library.migration.libraryFilterMigration
 import com.into.websoso.core.datastore.migration.VersionedPreferencesMigration
 import dagger.Module
 import dagger.Provides
@@ -26,6 +27,7 @@ internal object DataStoreModule {
     private const val LIBRARY_FILTER_DATASTORE = "LIBRARY_FILTER_DATASTORE"
     private val Context.libraryFilterDataStore: DataStore<Preferences> by preferencesDataStore(
         name = LIBRARY_FILTER_DATASTORE,
+        produceMigrations = { listOf(libraryFilterMigration) },
     )
 
     private const val USER_DATASTORE = "USER_DATASTORE"
