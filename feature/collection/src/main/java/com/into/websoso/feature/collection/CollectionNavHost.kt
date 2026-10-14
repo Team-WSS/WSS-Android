@@ -24,6 +24,7 @@ import com.into.websoso.feature.collection.component.CollectionNetworkError
 import com.into.websoso.feature.collection.model.CollectionShareContent
 
 private const val COLLECTION_ROUTE = "collection"
+private const val PUBLIC_COLLECTION_ROUTE = "collection/public"
 private const val COLLECTION_DETAIL_ROUTE = "collection/detail/{collectionId}"
 private const val COLLECTION_EDITOR_ROUTE = "collection/editor/{collectionId}"
 private const val COLLECTION_SEARCH_ROUTE = "collection/editor/{collectionId}/search"
@@ -39,10 +40,15 @@ fun CollectionNavHost(
     isSharing: Boolean = false,
     initialCollectionId: Long? = null,
     userId: Long? = null,
+    startWithPublicList: Boolean = false,
 ) {
     val navController = rememberNavController()
     val arguments = listOf(navArgument("collectionId") { type = NavType.LongType })
-    val start = if (initialCollectionId != null) "collection/detail/$initialCollectionId" else COLLECTION_ROUTE
+    val start = when {
+        initialCollectionId != null -> "collection/detail/$initialCollectionId"
+        startWithPublicList -> PUBLIC_COLLECTION_ROUTE
+        else -> COLLECTION_ROUTE
+    }
     val returnToMyList: () -> Unit = {
         navController.navigate(COLLECTION_ROUTE) {
             popUpTo(navController.graph.id) { inclusive = false }
@@ -89,6 +95,12 @@ fun CollectionNavHost(
                 onCollectionClick = { navController.navigate("collection/detail/$it") },
                 userId = if (showMy > 0) null else userId,
                 showMyCollections = showMy,
+            )
+        }
+        composable(PUBLIC_COLLECTION_ROUTE) {
+            PublicCollectionScreen(
+                onNavigateBack = onNavigateBack,
+                onCollectionClick = { navController.navigate("collection/detail/$it") },
             )
         }
         composable(COLLECTION_DETAIL_ROUTE, arguments) {
