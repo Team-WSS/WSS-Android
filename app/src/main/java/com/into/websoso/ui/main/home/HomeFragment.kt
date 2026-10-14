@@ -8,6 +8,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -26,12 +27,15 @@ import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
 import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.core.resource.R.string.home_rising_feed_for_user
 import com.into.websoso.core.resource.R.string.home_taste_load_failed
 import com.into.websoso.core.resource.R.string.home_taste_refresh_failed
 import com.into.websoso.core.resource.R.string.load_load_title
 import com.into.websoso.databinding.FragmentHomeBinding
+import com.into.websoso.feature.collection.HomeCollectionSection
+import com.into.websoso.ui.collection.CollectionActivity
 import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
@@ -121,6 +125,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         binding.btnHomeTasteRetry.setOnClickListener { homeViewModel.retryTaste() }
         setupObserver()
         setupDotsIndicator()
+        setupCollectionSection()
         onSettingPreferenceGenreClick()
         onNotificationButtonClick()
         onNormalSearchButtonClick()
@@ -275,6 +280,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private fun setupDotsIndicator() {
         binding.dotsIndicatorHome.attachTo(binding.vpHomePopularFeed)
+    }
+
+    private fun setupCollectionSection() {
+        binding.cvHomeCollection.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                WebsosoTheme {
+                    HomeCollectionSection(
+                        onListClick = {
+                            startActivity(CollectionActivity.getIntent(requireContext(), startWithPublicList = true))
+                        },
+                        onCollectionClick = {
+                            startActivity(CollectionActivity.getIntent(requireContext(), collectionId = it))
+                        },
+                    )
+                }
+            }
+        }
     }
 
     private fun onPopularNovelClick(novelId: Long) {
