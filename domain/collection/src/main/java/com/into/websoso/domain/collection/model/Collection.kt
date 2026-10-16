@@ -11,6 +11,15 @@ data class Collection(
     val recentNovels: List<CollectionNovel>,
 )
 
+data class PublicCollection(
+    val id: Long,
+    val name: String,
+    val description: String?,
+    val novelCount: Int,
+    val owner: CollectionOwner,
+    val recentNovels: List<CollectionNovel>,
+)
+
 data class CollectionNovel(
     val id: Long,
     val title: String,
