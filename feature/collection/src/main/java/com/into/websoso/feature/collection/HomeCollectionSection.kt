@@ -44,8 +44,9 @@ fun HomeCollectionSection(
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refresh() }
     if (collections.isEmpty()) return
 
+    // 아래 섹션('오늘의 발견')의 상단 여백 24dp와 합쳐 섹션 사이 간격 32dp를 맞춘다.
     Column(
-        modifier = modifier.fillMaxWidth().background(White).padding(top = 40.dp),
+        modifier = modifier.fillMaxWidth().background(White).padding(top = 24.dp, bottom = 8.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Row(

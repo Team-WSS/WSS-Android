@@ -110,7 +110,8 @@ internal fun HomeCollectionCard(
             descriptionStyle = WebsosoTheme.typography.label1,
         )
         CollectionCovers(collection.recentNovels, HOME_COVER_COUNT)
-        CollectionOwnerLabel(collection.owner)
+        // 표지~프로필은 16dp라 카드 간격(12dp)에 4dp를 더한다.
+        CollectionOwnerLabel(collection.owner, Modifier.padding(top = 4.dp))
     }
 }
 
@@ -206,8 +207,11 @@ private fun CollectionCovers(
 }
 
 @Composable
-private fun CollectionOwnerLabel(owner: CollectionOwner) {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun CollectionOwnerLabel(
+    owner: CollectionOwner,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
         S3Image(
             imageUrl = owner.avatarImageUrl,
             modifier = Modifier.size(16.dp).clip(RoundedCornerShape(5.dp)),
