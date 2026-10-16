@@ -30,6 +30,24 @@ class MainViewModel
 
         val isLogin: LiveData<Boolean> = savedStateHandle.getLiveData(MainActivity.IS_LOGIN_KEY)
 
+        private val _isMyPageTooltipPending: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isMyPageTooltipPending: LiveData<Boolean> get() = _isMyPageTooltipPending
+
+        init {
+            viewModelScope.launch {
+                _isMyPageTooltipPending.value = !userRepository.fetchMyPageTooltipConfirmed()
+            }
+        }
+
+        /** 툴팁이 보이는 상태에서 마이페이지로 이동했을 때만 호출한다. 이후로는 툴팁을 띄우지 않는다. */
+        fun confirmMyPageTooltip() {
+            if (_isMyPageTooltipPending.value != true) return
+            _isMyPageTooltipPending.value = false
+            viewModelScope.launch {
+                runCatching { userRepository.saveMyPageTooltipConfirmed() }
+            }
+        }
+
         fun updateUserInfo() {
             viewModelScope.launch {
                 _mainUiState.value = mainUiState.value?.copy(
