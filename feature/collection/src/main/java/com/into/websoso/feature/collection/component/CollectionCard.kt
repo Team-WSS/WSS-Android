@@ -158,18 +158,31 @@ private fun CollectionCardHeader(
                 Icon(painterResource(R.drawable.ic_navigate_right), null, tint = Gray300, modifier = Modifier.size(24.dp))
             }
         }
-        Text(
-            text = buildAnnotatedString {
-                description?.takeIf(String::isNotBlank)?.let { append("${it.ellipsize(20)} · ") }
-                append(stringResource(R.string.collection_novels_label))
-                append(" ")
-                withStyle(SpanStyle(color = Primary100)) { append(novelCount.toString()) }
-            },
-            color = Gray300,
-            style = descriptionStyle,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        // 작품 수는 항상 보여야 하므로 설명만 남는 너비 안에서 말줄임한다.
+        Row(Modifier.fillMaxWidth()) {
+            description?.takeIf(String::isNotBlank)?.let {
+                Text(
+                    text = it.ellipsize(20),
+                    color = Gray300,
+                    style = descriptionStyle,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+            }
+            Text(
+                text = buildAnnotatedString {
+                    if (!description.isNullOrBlank()) append(" · ")
+                    append(stringResource(R.string.collection_novels_label))
+                    append(" ")
+                    withStyle(SpanStyle(color = Primary100)) { append(novelCount.toString()) }
+                },
+                color = Gray300,
+                style = descriptionStyle,
+                maxLines = 1,
+                softWrap = false,
+            )
+        }
     }
 }
 
