@@ -23,7 +23,8 @@ internal class HomeCollectionViewModel
         private var refreshJob: Job? = null
 
         fun refresh() {
-            if (refreshJob?.isActive == true) return
+            // 진행 중인 요청의 응답은 수정 전 데이터일 수 있으므로 취소하고 새로 조회한다.
+            refreshJob?.cancel()
             refreshJob = viewModelScope.launch {
                 try {
                     _collections.value = repository.getPublicCollectionPreview()

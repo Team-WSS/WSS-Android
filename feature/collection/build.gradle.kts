@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.paging.compose)
 
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
 }
