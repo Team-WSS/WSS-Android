@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -37,6 +39,8 @@ internal fun PublicCollectionScreen(
     val viewModel: PublicCollectionViewModel = hiltViewModel()
     val collections = viewModel.collections.collectAsLazyPagingItems()
     val view = LocalView.current
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { collections.refresh() }
 
     Column(modifier.fillMaxSize().background(White).statusBarsPadding()) {
         CollectionAppBar(
