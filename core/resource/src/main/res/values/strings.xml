@@ -11,6 +11,7 @@
     <string name="main_ic_feed">피드</string>
     <string name="main_ic_my_page">My</string>
     <string name="main_back_press">뒤로가기를 한번 더 누르면 종료됩니다</string>
+    <string name="main_my_page_tooltip">나만의 컬렉션을 만들어보세요</string>
 
     <!--일반 탐색 뷰-->
     <string name="normal_explore_novel_count_title">작품</string>
@@ -483,6 +484,8 @@
 
     <!-- 컬렉션 뷰 -->
     <string name="collection_title">컬렉션</string>
+    <string name="collection_public_title">컬렉션 모음.zip</string>
+    <string name="collection_owner_label">%1$s님의 컬렉션</string>
     <string name="collection_make">컬렉션 만들기</string>
     <string name="collection_empty">등록된 컬렉션이 없어요</string>
     <string name="collection_other_user_empty">컬렉션을 등록하지 않은 유저에요</string>

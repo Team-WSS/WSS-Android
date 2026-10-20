@@ -144,6 +144,14 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/cv_home_collection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_home_detail_search" />
+
                 <TextView
                     android:id="@+id/tv_home_today_popular_novel"
                     android:layout_width="wrap_content"
@@ -153,7 +161,7 @@
                     android:text="@string/home_today_popular"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cl_home_detail_search" />
+                    app:layout_constraintTop_toBottomOf="@id/cv_home_collection" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_home_today_popular_novel"

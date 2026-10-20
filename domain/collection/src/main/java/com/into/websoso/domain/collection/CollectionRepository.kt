@@ -5,6 +5,7 @@ import com.into.websoso.domain.collection.model.Collection
 import com.into.websoso.domain.collection.model.CollectionDetail
 import com.into.websoso.domain.collection.model.CollectionPage
 import com.into.websoso.domain.collection.model.CollectionSortCriteria
+import com.into.websoso.domain.collection.model.PublicCollection
 import com.into.websoso.domain.collection.model.SaveCollection
 import kotlinx.coroutines.flow.Flow
 
@@ -15,9 +16,13 @@ interface CollectionRepository {
 
     fun getLikedCollections(): Flow<PagingData<Collection>>
 
+    fun getPublicCollections(): Flow<PagingData<PublicCollection>>
+
     suspend fun getMyCollectionPreview(): CollectionPage
 
     suspend fun getUserCollectionPreview(userId: Long): CollectionPage
+
+    suspend fun getPublicCollectionPreview(): List<PublicCollection>
 
     suspend fun getCollection(
         collectionId: Long,

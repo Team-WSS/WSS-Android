@@ -37,6 +37,7 @@ class CollectionActivity : ComponentActivity() {
                     isSharing = isSharing,
                     initialCollectionId = intent.getLongExtra(COLLECTION_ID, 0L).takeIf { it > 0L },
                     userId = intent.getLongExtra(USER_ID, 0L).takeIf { it > 0L },
+                    startWithPublicList = intent.getBooleanExtra(START_WITH_PUBLIC_LIST, false),
                 )
             }
         }
@@ -95,15 +96,18 @@ class CollectionActivity : ComponentActivity() {
     companion object {
         private const val COLLECTION_ID = "COLLECTION_ID"
         private const val USER_ID = "USER_ID"
+        private const val START_WITH_PUBLIC_LIST = "START_WITH_PUBLIC_LIST"
 
         fun getIntent(
             context: Context,
             collectionId: Long? = null,
             userId: Long? = null,
+            startWithPublicList: Boolean = false,
         ): Intent =
             Intent(context, CollectionActivity::class.java).apply {
                 collectionId?.let { putExtra(COLLECTION_ID, it) }
                 userId?.let { putExtra(USER_ID, it) }
+                putExtra(START_WITH_PUBLIC_LIST, startWithPublicList)
             }
     }
 }

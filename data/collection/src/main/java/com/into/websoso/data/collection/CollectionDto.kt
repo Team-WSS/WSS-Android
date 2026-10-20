@@ -5,6 +5,7 @@ import com.into.websoso.domain.collection.model.CollectionDetail
 import com.into.websoso.domain.collection.model.CollectionNovel
 import com.into.websoso.domain.collection.model.CollectionOwner
 import com.into.websoso.domain.collection.model.CollectionPage
+import com.into.websoso.domain.collection.model.PublicCollection
 import com.into.websoso.domain.collection.model.SaveCollection
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -99,6 +100,40 @@ internal data class CollectionOwnerDto(
             id = userId,
             nickname = nickname,
             avatarImageUrl = avatarImage,
+        )
+}
+
+@Serializable
+internal data class PublicCollectionResponseDto(
+    @SerialName("collectionId") val collectionId: Long,
+    @SerialName("collectionName") val collectionName: String,
+    @SerialName("collectionDescription") val collectionDescription: String? = null,
+    @SerialName("novelCount") val novelCount: Int,
+    @SerialName("owner") val owner: CollectionOwnerDto,
+    @SerialName("recentNovels") val recentNovels: List<CollectionNovelDto>,
+) {
+    fun toDomain() =
+        PublicCollection(
+            id = collectionId,
+            name = collectionName,
+            description = collectionDescription,
+            novelCount = novelCount,
+            owner = owner.toDomain(),
+            recentNovels = recentNovels.map(CollectionNovelDto::toDomain),
+        )
+}
+
+@Serializable
+internal data class PublicCollectionPageResponseDto(
+    @SerialName("hasNext") val hasNext: Boolean,
+    @SerialName("nextCursor") val nextCursor: String? = null,
+    @SerialName("collections") val collections: List<PublicCollectionResponseDto>,
+) {
+    fun toCursorPage() =
+        CursorPage(
+            items = collections.map(PublicCollectionResponseDto::toDomain),
+            hasNext = hasNext,
+            nextCursor = nextCursor,
         )
 }
 
