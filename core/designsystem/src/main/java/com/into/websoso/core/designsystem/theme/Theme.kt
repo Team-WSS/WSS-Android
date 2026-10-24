@@ -2,6 +2,8 @@ package com.into.websoso.core.designsystem.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -41,16 +43,23 @@ fun WebsosoTheme(
     }
 
     CompositionLocalProvider(LocalWebsosoTypography provides websosoTypography) {
-        MaterialTheme(
-            colorScheme = colorScheme,
-            content = content,
-        )
+        MaterialTheme(colorScheme = colorScheme) {
+            CompositionLocalProvider(
+                LocalTextSelectionColors provides WebsosoTextSelectionColors,
+                content = content,
+            )
+        }
     }
 }
 
 private val LocalWebsosoTypography = staticCompositionLocalOf<WebsosoTypography> {
     error("No WebsosoTypography provided")
 }
+
+private val WebsosoTextSelectionColors = TextSelectionColors(
+    handleColor = Primary100,
+    backgroundColor = Primary50,
+)
 
 private val DarkColorScheme = darkColorScheme(
     primary = Primary100,
