@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.serialization.json)
 
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
 }
