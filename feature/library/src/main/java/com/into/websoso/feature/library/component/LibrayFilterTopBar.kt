@@ -337,7 +337,7 @@ private fun NovelFilterStatusBar(
 }
 
 @Composable
-private fun StatusBarAction(
+internal fun StatusBarAction(
     @DrawableRes iconRes: Int,
     iconSize: Dp,
     text: String,

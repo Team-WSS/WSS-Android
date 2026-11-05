@@ -55,6 +55,8 @@ class UserStorageActivity : ComponentActivity() {
                                     ::startActivity,
                                 )
                             },
+                            isMyLibrary = false,
+                            onBackClick = ::finish,
                         )
                     }
                 }
