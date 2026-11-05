@@ -5,6 +5,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import coil.ImageLoader
+import coil.decode.ImageDecoderDecoder
+import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.into.websoso.R.layout.dialog_create_feed_search_novel
@@ -12,6 +15,7 @@ import com.into.websoso.core.common.ui.base.BaseBottomSheetDialog
 import com.into.websoso.core.common.util.InfiniteScrollListener
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.resource.R.drawable.ic_load_load
 import com.into.websoso.core.resource.R.string.novel_inquire_link
 import com.into.websoso.databinding.DialogCreateFeedSearchNovelBinding
 import com.into.websoso.ui.createFeed.adapter.SearchNovelAdapter
@@ -45,6 +49,7 @@ class CreateFeedSearchNovelBottomSheetDialog :
 
         setupDialog()
         setupAdapter()
+        setupLoadingAnimation()
         setupObserver()
         setupNavigateToInquireNovel()
         binding.viewModel = createFeedViewModel
@@ -93,12 +98,31 @@ class CreateFeedSearchNovelBottomSheetDialog :
     private fun setupObserver() {
         createFeedViewModel.searchNovelUiState.observe(viewLifecycleOwner) { uiState ->
             when {
-                !uiState.loading -> updateView(uiState)
+                uiState.loading -> updateLoadingView()
+                uiState.isSearched -> updateView(uiState)
+                else -> binding.ivCreateFeedSearchNovelLoading.visibility = View.GONE
             }
         }
     }
 
+    private fun setupLoadingAnimation() {
+        val gifImageLoader = ImageLoader
+            .Builder(requireContext())
+            .components {
+                add(ImageDecoderDecoder.Factory())
+            }.build()
+        binding.ivCreateFeedSearchNovelLoading.load(ic_load_load, gifImageLoader)
+    }
+
+    private fun updateLoadingView() {
+        binding.ivCreateFeedSearchNovelLoading.visibility = View.VISIBLE
+        binding.rvCreateFeedSearchNovelResult.visibility = View.INVISIBLE
+        binding.clCreateFeedResultNotExist.visibility = View.INVISIBLE
+        binding.tvCreateFeedSearchNovelConnectButton.visibility = View.INVISIBLE
+    }
+
     private fun updateView(uiState: SearchNovelUiState) {
+        binding.ivCreateFeedSearchNovelLoading.visibility = View.GONE
         val hasSelected = uiState.novels.any { it.isSelected }
 
         when (hasSelected) {
