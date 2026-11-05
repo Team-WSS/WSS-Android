@@ -27,6 +27,7 @@ import java.net.SocketTimeoutException
 internal fun TestScope.createRepository(
     feedApi: FeedApi,
     pendingFeedLikeStore: PendingFeedLikeStore,
+    accountId: Long? = TEST_ACCOUNT_ID,
 ): UpdatedFeedRepository =
     UpdatedFeedRepository(
         feedApi = feedApi,
@@ -35,7 +36,10 @@ internal fun TestScope.createRepository(
         imageDownloader = ImageDownloader(ContextWrapper(null)),
         imageCompressor = ImageCompressor(ContextWrapper(null)),
         dispatcher = StandardTestDispatcher(testScheduler),
-    )
+    ).apply {
+        // 앱에서는 MainViewModel이 서버에서 사용자 정보를 받은 뒤 계정을 확인한다.
+        if (accountId != null) confirmAccount(accountId)
+    }
 
 internal const val TEST_ACCOUNT_ID = 100L
 
