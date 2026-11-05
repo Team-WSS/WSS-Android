@@ -266,9 +266,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private fun updateFCMToken(isFirstLaunch: Boolean) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            val token = task.result
-
             if (task.isSuccessful) {
+                // 조회에 실패한 Task에서 result를 읽으면 예외가 발생하므로, 성공을 확인한 뒤에 읽는다.
+                val token = task.result
                 if (isFirstLaunch) {
                     homeViewModel.saveFCMToken(token)
                     return@addOnCompleteListener
