@@ -70,6 +70,46 @@ class DefaultPendingFeedLikeStoreTest {
             assertEquals(setOf(UNREADABLE_JSON), dataStore.data.first()[PENDING_FEED_LIKES_UNREADABLE_KEY])
         }
 
+    @Test
+    fun `같은 계정이 기록을 다시 가져오면 유지하고 다른 계정이 가져오면 지운다`() =
+        runTest {
+            val store = createStore(createDataStore(temporaryFolder.newFile(FILE_NAME)))
+            store.claimPendingLikes(accountId = 1L)
+            store.updatePendingLike(feedId = 1L, isLiked = true)
+
+            store.claimPendingLikes(accountId = 1L)
+            assertEquals(mapOf(1L to true), store.getPendingLikes())
+
+            store.claimPendingLikes(accountId = 2L)
+            assertTrue(store.getPendingLikes().isEmpty())
+        }
+
+    @Test
+    fun `계정 정보가 없는 이전 형식의 기록은 어느 계정이 가져와도 지운다`() =
+        runTest {
+            val dataStore = createDataStore(temporaryFolder.newFile(FILE_NAME))
+            dataStore.edit { it[PENDING_FEED_LIKES_KEY] = """{"likes":[{"feedId":1,"isLiked":true}]}""" }
+            val store = createStore(dataStore)
+            assertEquals(mapOf(1L to true), store.getPendingLikes())
+
+            store.claimPendingLikes(accountId = 1L)
+
+            assertTrue(store.getPendingLikes().isEmpty())
+        }
+
+    @Test
+    fun `기록을 모두 지우면 같은 계정이 다시 가져와도 남은 기록이 없다`() =
+        runTest {
+            val store = createStore(createDataStore(temporaryFolder.newFile(FILE_NAME)))
+            store.claimPendingLikes(accountId = 1L)
+            store.updatePendingLike(feedId = 1L, isLiked = true)
+
+            store.clearPendingLikes()
+            store.claimPendingLikes(accountId = 1L)
+
+            assertTrue(store.getPendingLikes().isEmpty())
+        }
+
     private fun TestScope.createDataStore(file: File): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             corruptionHandler = DefaultPendingFeedLikeStore.corruptionHandler,

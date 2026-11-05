@@ -37,6 +37,8 @@ internal fun TestScope.createRepository(
         dispatcher = StandardTestDispatcher(testScheduler),
     )
 
+internal const val TEST_ACCOUNT_ID = 100L
+
 internal fun List<FeedEntity>.feed(id: Long): FeedEntity = first { it.id == id }
 
 internal fun feedsResponseOf(vararg feeds: FeedResponseDto): FeedsResponseDto = FeedsResponseDto(isLoadable = false, feeds = feeds.toList())
@@ -235,8 +237,13 @@ internal class FakeFeedApi : FeedApi {
 
 internal class FakePendingFeedLikeStore(
     initial: Map<Long, Boolean> = emptyMap(),
+    initialAccountId: Long? = TEST_ACCOUNT_ID,
 ) : PendingFeedLikeStore {
     private val state = MutableStateFlow(initial)
+
+    /** 기록의 소유 계정. null이면 계정 정보가 없는 이전 형식의 기록처럼 동작한다. */
+    var accountId: Long? = initialAccountId
+        private set
 
     override val pendingLikes: Flow<Map<Long, Boolean>> = state.asStateFlow()
 
@@ -272,6 +279,17 @@ internal class FakePendingFeedLikeStore(
         if (state.value[feedId] != isLiked) return false
         state.update { it - feedId }
         return true
+    }
+
+    override suspend fun claimPendingLikes(accountId: Long) {
+        if (this.accountId == accountId) return
+        state.value = emptyMap()
+        this.accountId = accountId
+    }
+
+    override suspend fun clearPendingLikes() {
+        state.value = emptyMap()
+        accountId = null
     }
 
     override suspend fun readResetNotice(): Boolean = resetNotice
