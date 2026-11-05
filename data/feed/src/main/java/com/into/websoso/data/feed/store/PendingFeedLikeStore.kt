@@ -24,6 +24,15 @@ interface PendingFeedLikeStore {
         isLiked: Boolean,
     ): Boolean
 
+    /**
+     * 기록의 소유 계정을 [accountId]로 맞춥니다.
+     * 다른 계정의 기록이거나 소유 계정이 없는 이전 형식의 기록이면, 화면 적용·전송에 쓰지 않도록 모두 지웁니다.
+     */
+    suspend fun claimPendingLikes(accountId: Long)
+
+    /** 로그아웃·탈퇴 시 기록과 소유 계정을 모두 지웁니다. */
+    suspend fun clearPendingLikes()
+
     /** 저장된 기록을 복원하지 못해 비운 표시(파일 손상, 해석 불가)가 있는지 반환합니다. 표시는 지우지 않습니다. */
     suspend fun readResetNotice(): Boolean
 

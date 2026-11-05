@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
@@ -94,6 +95,22 @@ internal class DefaultPendingFeedLikeStore
             return deleted
         }
 
+        override suspend fun claimPendingLikes(accountId: Long) {
+            pendingFeedLikeDataStore.edit { preferences ->
+                preferences.setAsideUnreadableLikes()
+                if (preferences[PENDING_FEED_LIKES_ACCOUNT_ID_KEY] == accountId) return@edit
+                preferences.remove(PENDING_FEED_LIKES_KEY)
+                preferences[PENDING_FEED_LIKES_ACCOUNT_ID_KEY] = accountId
+            }
+        }
+
+        override suspend fun clearPendingLikes() {
+            pendingFeedLikeDataStore.edit { preferences ->
+                preferences.remove(PENDING_FEED_LIKES_KEY)
+                preferences.remove(PENDING_FEED_LIKES_ACCOUNT_ID_KEY)
+            }
+        }
+
         override suspend fun readResetNotice(): Boolean {
             var hasNotice = false
             pendingFeedLikeDataStore.edit { preferences ->
@@ -145,6 +162,9 @@ internal class DefaultPendingFeedLikeStore
         companion object {
             private val PENDING_FEED_LIKES_KEY = stringPreferencesKey("PENDING_FEED_LIKES_KEY")
             private val PENDING_FEED_LIKES_RESET_KEY = booleanPreferencesKey("PENDING_FEED_LIKES_RESET_KEY")
+
+            // 기록을 남긴 계정의 서버 사용자 ID입니다. 없으면 계정 정보가 없던 이전 형식의 기록입니다.
+            private val PENDING_FEED_LIKES_ACCOUNT_ID_KEY = longPreferencesKey("PENDING_FEED_LIKES_ACCOUNT_ID_KEY")
 
             // 형식 변경이나 해석 코드 문제를 고친 뒤 되살릴 수 있도록, 해석하지 못한 원본을 모아 둡니다.
             private val PENDING_FEED_LIKES_UNREADABLE_KEY = stringSetPreferencesKey("PENDING_FEED_LIKES_UNREADABLE_KEY")

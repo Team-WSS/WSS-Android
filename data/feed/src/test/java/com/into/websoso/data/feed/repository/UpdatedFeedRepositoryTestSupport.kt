@@ -27,6 +27,7 @@ import java.net.SocketTimeoutException
 internal fun TestScope.createRepository(
     feedApi: FeedApi,
     pendingFeedLikeStore: PendingFeedLikeStore,
+    accountId: Long? = TEST_ACCOUNT_ID,
 ): UpdatedFeedRepository =
     UpdatedFeedRepository(
         feedApi = feedApi,
@@ -35,7 +36,12 @@ internal fun TestScope.createRepository(
         imageDownloader = ImageDownloader(ContextWrapper(null)),
         imageCompressor = ImageCompressor(ContextWrapper(null)),
         dispatcher = StandardTestDispatcher(testScheduler),
-    )
+    ).apply {
+        // 앱에서는 MainViewModel이 서버에서 사용자 정보를 받은 뒤 계정을 확인한다.
+        if (accountId != null) confirmAccount(accountId)
+    }
+
+internal const val TEST_ACCOUNT_ID = 100L
 
 internal fun List<FeedEntity>.feed(id: Long): FeedEntity = first { it.id == id }
 
@@ -235,8 +241,13 @@ internal class FakeFeedApi : FeedApi {
 
 internal class FakePendingFeedLikeStore(
     initial: Map<Long, Boolean> = emptyMap(),
+    initialAccountId: Long? = TEST_ACCOUNT_ID,
 ) : PendingFeedLikeStore {
     private val state = MutableStateFlow(initial)
+
+    /** 기록의 소유 계정. null이면 계정 정보가 없는 이전 형식의 기록처럼 동작한다. */
+    var accountId: Long? = initialAccountId
+        private set
 
     override val pendingLikes: Flow<Map<Long, Boolean>> = state.asStateFlow()
 
@@ -272,6 +283,17 @@ internal class FakePendingFeedLikeStore(
         if (state.value[feedId] != isLiked) return false
         state.update { it - feedId }
         return true
+    }
+
+    override suspend fun claimPendingLikes(accountId: Long) {
+        if (this.accountId == accountId) return
+        state.value = emptyMap()
+        this.accountId = accountId
+    }
+
+    override suspend fun clearPendingLikes() {
+        state.value = emptyMap()
+        accountId = null
     }
 
     override suspend fun readResetNotice(): Boolean = resetNotice

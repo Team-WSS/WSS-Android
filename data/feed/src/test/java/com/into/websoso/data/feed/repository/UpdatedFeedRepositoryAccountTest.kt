@@ -12,15 +12,17 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UpdatedFeedRepositoryAccountTest {
+    // 계정 전환은 앱의 연결 지점과 같은 순서로 모의한다.
+    // 로그아웃: discardPendingLikes(), 새 로그인 뒤 메인 진입: beginAccountCheck(), 사용자 정보 수신: confirmAccount().
+    // API 대역의 계정 컨텍스트는 요청이 어느 계정의 토큰으로 나갔는지 기록하는 용도다.
+
     @Test
-    fun `현재 계정 결함 기록 - A에서 실패한 pending이 B 목록에 반영되고 B 요청으로 전송된다`() =
+    fun `로그인 만료 뒤 B가 로그인하면 A의 실패 기록을 B 목록에 적용하지도 B 요청으로 보내지도 않는다`() =
         runTest {
-            // 정상 기준은 계정 간 선택이 섞이지 않는 것이다. 아래는 현재 결함의 재현 예상값이다.
-            // 실제 로그인/로그아웃 대신 API 대역의 계정 컨텍스트를 전환한다.
             val feedApi = accountAwareFeedApi(12L)
             feedApi.accountApis.getValue("A").planLikeRequest("POST", 12L, LikeOutcome.FAIL_WITHOUT_APPLYING)
-            val pendingStore = FakePendingFeedLikeStore()
-            val repository = createRepository(feedApi, pendingStore)
+            val pendingStore = FakePendingFeedLikeStore(initialAccountId = null)
+            val repository = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
             advanceUntilIdle()
 
             repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
@@ -32,116 +34,133 @@ class UpdatedFeedRepositoryAccountTest {
             assertEquals(mapOf(12L to true), pendingStore.currentPendingLikes())
             assertFalse(feedApi.isLikedFor("A", 12L))
 
+            // 로그인 만료로 로그인 화면에 갔다가 B가 로그인해 메인에 들어온다.
             feedApi.currentAccountId = null
-            assertTrue(
-                repository.sosoAllFeeds.value
-                    .feed(12L)
-                    .isLiked,
-            )
-            assertEquals(mapOf(12L to true), pendingStore.currentPendingLikes())
             feedApi.currentAccountId = "B"
-            assertFalse(feedApi.isLikedFor("B", 12L))
+            repository.beginAccountCheck()
+            val beforeConfirm = repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(12L)
+            assertFalse(beforeConfirm.isLiked)
+            assertEquals(0, beforeConfirm.likeCount)
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            assertEquals(listOf(AccountLikeCall("A", 12L, true)), feedApi.likeCalls)
+
+            repository.confirmAccount(ACCOUNT_B)
+            advanceUntilIdle()
             val refreshed = repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(12L)
-            // B의 서버 원본은 false인데 A의 메모리 pending이 목록에 적용된다.
-            assertTrue(refreshed.isLiked)
-            assertEquals(1, refreshed.likeCount)
+            assertFalse(refreshed.isLiked)
+            assertEquals(0, refreshed.likeCount)
 
             repository.syncPendingLikes()
             advanceUntilIdle()
-            assertEquals(
-                listOf(AccountLikeCall("A", 12L, true), AccountLikeCall("B", 12L, true)),
-                feedApi.likeCalls,
-            )
-            assertFalse(feedApi.isLikedFor("A", 12L))
-            assertTrue(feedApi.isLikedFor("B", 12L))
+            assertEquals(listOf(AccountLikeCall("A", 12L, true)), feedApi.likeCalls)
+            assertFalse(feedApi.isLikedFor("B", 12L))
             assertTrue(pendingStore.currentPendingLikes().isEmpty())
+            assertTrue(repository.likeSyncStates.value.isEmpty())
         }
 
     @Test
-    fun `현재 계정 결함 기록 - 저장소만 비워도 A의 메모리 pending이 B 요청으로 전송된다`() =
+    fun `로그아웃하면 A의 메모리 기록도 버려 B 요청으로 보내지 않는다`() =
         runTest {
             val feedApi = accountAwareFeedApi(13L)
-            val pendingStore = FakePendingFeedLikeStore()
-            val repository = createRepository(feedApi, pendingStore)
+            val pendingStore = FakePendingFeedLikeStore(initialAccountId = null)
+            val repository = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
             advanceUntilIdle()
             repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
             repository.toggleLikeLocal(13L)
             advanceUntilIdle()
+            assertEquals(mapOf(13L to true), pendingStore.currentPendingLikes())
 
             feedApi.currentAccountId = null
-            // 실제 로그아웃 구현이 아니다. 저장소만 정리하는 대응으로 충분한지 분리해서 확인한다.
-            pendingStore.deletePendingLike(13L)
+            repository.discardPendingLikes()
+            advanceUntilIdle()
             assertTrue(pendingStore.currentPendingLikes().isEmpty())
             feedApi.currentAccountId = "B"
+            repository.beginAccountCheck()
+            repository.confirmAccount(ACCOUNT_B)
             repository.syncPendingLikes()
             advanceUntilIdle()
 
-            assertEquals(listOf(AccountLikeCall("B", 13L, true)), feedApi.likeCalls)
+            assertTrue(feedApi.likeCalls.isEmpty())
             assertFalse(feedApi.isLikedFor("A", 13L))
-            assertTrue(feedApi.isLikedFor("B", 13L))
+            assertFalse(feedApi.isLikedFor("B", 13L))
             assertTrue(pendingStore.currentPendingLikes().isEmpty())
         }
 
     @Test
-    fun `현재 계정 결함 기록 - B에서 Repository를 재생성해도 저장된 A pending이 복원되어 전송된다`() =
+    fun `B에서 Repository를 재생성하면 저장된 A 기록을 복원하지 않고 지운다`() =
         runTest {
             val feedApi = accountAwareFeedApi(14L)
-            val pendingStore = FakePendingFeedLikeStore()
-            val repositoryA = createRepository(feedApi, pendingStore)
+            val pendingStore = FakePendingFeedLikeStore(initialAccountId = null)
+            val repositoryA = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
             advanceUntilIdle()
             repositoryA.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
             repositoryA.toggleLikeLocal(14L)
             advanceUntilIdle()
             assertEquals(mapOf(14L to true), pendingStore.currentPendingLikes())
+            assertEquals(ACCOUNT_A, pendingStore.accountId)
             assertTrue(feedApi.likeCalls.isEmpty())
 
             feedApi.currentAccountId = null
             feedApi.currentAccountId = "B"
             // 같은 가짜 저장소를 읽는 새 인스턴스다. 실제 DataStore/프로세스 재실행 검증은 아니다.
-            val repositoryB = createRepository(feedApi, pendingStore)
+            val repositoryB = createRepository(feedApi, pendingStore, accountId = null)
             advanceUntilIdle()
-            val restored = repositoryB.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(14L)
-            assertTrue(restored.isLiked)
-            assertFalse(feedApi.isLikedFor("B", 14L))
-
+            val beforeConfirm = repositoryB.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(14L)
+            assertFalse(beforeConfirm.isLiked)
             repositoryB.syncPendingLikes()
             advanceUntilIdle()
-            assertEquals(listOf(AccountLikeCall("B", 14L, true)), feedApi.likeCalls)
-            assertFalse(feedApi.isLikedFor("A", 14L))
-            assertTrue(feedApi.isLikedFor("B", 14L))
+            assertTrue(feedApi.likeCalls.isEmpty())
+
+            repositoryB.confirmAccount(ACCOUNT_B)
+            advanceUntilIdle()
+            val restored = repositoryB.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL").feeds.feed(14L)
+            assertFalse(restored.isLiked)
+            repositoryB.syncPendingLikes()
+            advanceUntilIdle()
+            assertTrue(feedApi.likeCalls.isEmpty())
+            assertFalse(feedApi.isLikedFor("B", 14L))
             assertTrue(pendingStore.currentPendingLikes().isEmpty())
+            assertEquals(ACCOUNT_B, pendingStore.accountId)
         }
 
     @Test
-    fun `현재 계정 결함 기록 - A에서 호출하고 실행을 기다리던 동기화가 B 요청으로 전송된다`() =
+    fun `A에서 호출하고 실행을 기다리던 동기화는 B 로그인 뒤 보내지 않는다`() =
         runTest {
             val feedApi = accountAwareFeedApi(15L)
-            val pendingStore = FakePendingFeedLikeStore()
-            val repository = createRepository(feedApi, pendingStore)
+            val pendingStore = FakePendingFeedLikeStore(initialAccountId = null)
+            val repository = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
             advanceUntilIdle()
             repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
             repository.toggleLikeLocal(15L)
             advanceUntilIdle()
 
             repository.syncPendingLikes()
-            // launch된 동기화는 아직 실행하지 않고, 먼저 계정 컨텍스트를 바꾼다.
+            // launch된 동기화는 아직 실행하지 않고, 먼저 계정을 바꾼다.
             assertTrue(feedApi.likeCalls.isEmpty())
             feedApi.currentAccountId = null
             feedApi.currentAccountId = "B"
+            repository.beginAccountCheck()
+            advanceUntilIdle()
+            assertTrue(feedApi.likeCalls.isEmpty())
+
+            repository.confirmAccount(ACCOUNT_B)
+            advanceUntilIdle()
+            repository.syncPendingLikes()
             advanceUntilIdle()
 
-            assertEquals(listOf(AccountLikeCall("B", 15L, true)), feedApi.likeCalls)
+            assertTrue(feedApi.likeCalls.isEmpty())
             assertFalse(feedApi.isLikedFor("A", 15L))
-            assertTrue(feedApi.isLikedFor("B", 15L))
+            assertFalse(feedApi.isLikedFor("B", 15L))
             assertTrue(pendingStore.currentPendingLikes().isEmpty())
         }
 
     @Test
-    fun `현재 계정 결함 기록 - 저장소 정리 뒤 실행된 A의 저장이 B에서 복원되어 전송된다`() =
+    fun `로그아웃 뒤 실행된 A의 저장 작업은 기록을 남기지 않아 B에서 복원되지 않는다`() =
         runTest {
             val feedApi = accountAwareFeedApi(16L)
-            val pendingStore = FakePendingFeedLikeStore()
-            val repositoryA = createRepository(feedApi, pendingStore)
+            val pendingStore = FakePendingFeedLikeStore(initialAccountId = null)
+            val repositoryA = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
             advanceUntilIdle()
             repositoryA.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
             repositoryA.toggleLikeLocal(16L)
@@ -154,20 +173,119 @@ class UpdatedFeedRepositoryAccountTest {
             assertTrue(pendingStore.currentPendingLikes().isEmpty())
 
             feedApi.currentAccountId = null
-            // 저장 작업 실행 전 저장소 정리를 모의한다. 실제 로그아웃 구현은 아니다.
-            pendingStore.deletePendingLike(16L)
+            repositoryA.discardPendingLikes()
             feedApi.currentAccountId = "B"
             advanceUntilIdle()
-            assertEquals(mapOf(16L to true), pendingStore.currentPendingLikes())
+            assertTrue(pendingStore.currentPendingLikes().isEmpty())
 
-            val repositoryB = createRepository(feedApi, pendingStore)
+            val repositoryB = createRepository(feedApi, pendingStore, accountId = ACCOUNT_B)
             advanceUntilIdle()
             repositoryB.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
             repositoryB.syncPendingLikes()
             advanceUntilIdle()
-            assertEquals(listOf(AccountLikeCall("B", 16L, true)), feedApi.likeCalls)
+            assertTrue(feedApi.likeCalls.isEmpty())
             assertFalse(feedApi.isLikedFor("A", 16L))
-            assertTrue(feedApi.isLikedFor("B", 16L))
+            assertFalse(feedApi.isLikedFor("B", 16L))
+            assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        }
+
+    @Test
+    fun `로그인 만료 뒤 같은 계정이 다시 로그인하면 기록을 유지해 그 계정 요청으로 보낸다`() =
+        runTest {
+            val feedApi = accountAwareFeedApi(17L)
+            feedApi.accountApis.getValue("A").planLikeRequest("POST", 17L, LikeOutcome.FAIL_WITHOUT_APPLYING)
+            val pendingStore = FakePendingFeedLikeStore(initialAccountId = null)
+            val repository = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
+            advanceUntilIdle()
+            repository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
+            repository.toggleLikeLocal(17L)
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            assertEquals(mapOf(17L to true), pendingStore.currentPendingLikes())
+
+            feedApi.currentAccountId = null
+            feedApi.currentAccountId = "A"
+            repository.beginAccountCheck()
+            // 계정 확인 전에는 화면 적용과 전송을 보류한다.
+            assertFalse(
+                repository
+                    .fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
+                    .feeds
+                    .feed(17L)
+                    .isLiked,
+            )
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+            assertEquals(listOf(AccountLikeCall("A", 17L, true)), feedApi.likeCalls)
+
+            repository.confirmAccount(ACCOUNT_A)
+            advanceUntilIdle()
+            assertTrue(
+                repository.sosoAllFeeds.value
+                    .feed(17L)
+                    .isLiked,
+            )
+            assertEquals(mapOf(17L to true), pendingStore.currentPendingLikes())
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+
+            assertEquals(
+                listOf(AccountLikeCall("A", 17L, true), AccountLikeCall("A", 17L, true)),
+                feedApi.likeCalls,
+            )
+            assertTrue(feedApi.isLikedFor("A", 17L))
+            assertFalse(feedApi.isLikedFor("B", 17L))
+            assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        }
+
+    @Test
+    fun `앱을 다시 실행해 같은 계정이 확인되면 저장된 기록을 복원해 그 계정 요청으로 보낸다`() =
+        runTest {
+            val feedApi = accountAwareFeedApi(18L)
+            val pendingStore = FakePendingFeedLikeStore(initialAccountId = null)
+            val repositoryA = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
+            advanceUntilIdle()
+            repositoryA.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
+            repositoryA.toggleLikeLocal(18L)
+            advanceUntilIdle()
+
+            val restartedRepository = createRepository(feedApi, pendingStore, accountId = null)
+            advanceUntilIdle()
+            restartedRepository.fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
+            restartedRepository.confirmAccount(ACCOUNT_A)
+            advanceUntilIdle()
+            assertTrue(
+                restartedRepository.sosoAllFeeds.value
+                    .feed(18L)
+                    .isLiked,
+            )
+            restartedRepository.syncPendingLikes()
+            advanceUntilIdle()
+
+            assertEquals(listOf(AccountLikeCall("A", 18L, true)), feedApi.likeCalls)
+            assertTrue(feedApi.isLikedFor("A", 18L))
+            assertTrue(pendingStore.currentPendingLikes().isEmpty())
+        }
+
+    @Test
+    fun `계정 정보가 없는 이전 형식의 기록은 복원하지도 보내지도 않는다`() =
+        runTest {
+            val feedApi = accountAwareFeedApi(19L)
+            val pendingStore = FakePendingFeedLikeStore(initial = mapOf(19L to true), initialAccountId = null)
+            val repository = createRepository(feedApi, pendingStore, accountId = ACCOUNT_A)
+            advanceUntilIdle()
+
+            assertFalse(
+                repository
+                    .fetchFeeds(lastFeedId = 0L, size = 10, feedsOption = "ALL")
+                    .feeds
+                    .feed(19L)
+                    .isLiked,
+            )
+            repository.syncPendingLikes()
+            advanceUntilIdle()
+
+            assertTrue(feedApi.likeCalls.isEmpty())
             assertTrue(pendingStore.currentPendingLikes().isEmpty())
         }
 
@@ -181,6 +299,9 @@ class UpdatedFeedRepositoryAccountTest {
             currentAccountId = "A",
         )
 }
+
+private const val ACCOUNT_A = 1L
+private const val ACCOUNT_B = 2L
 
 private data class AccountLikeCall(
     val accountId: String,
