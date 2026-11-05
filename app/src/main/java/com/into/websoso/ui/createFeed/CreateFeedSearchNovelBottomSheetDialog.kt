@@ -118,6 +118,7 @@ class CreateFeedSearchNovelBottomSheetDialog :
         binding.ivCreateFeedSearchNovelLoading.visibility = View.VISIBLE
         binding.rvCreateFeedSearchNovelResult.visibility = View.INVISIBLE
         binding.clCreateFeedResultNotExist.visibility = View.INVISIBLE
+        binding.tvCreateFeedSearchNovelConnectButton.visibility = View.INVISIBLE
     }
 
     private fun updateView(uiState: SearchNovelUiState) {
