@@ -34,6 +34,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.into.websoso.BuildConfig
 import com.into.websoso.core.common.ui.custom.WebsosoCustomSnackBar
 import com.into.websoso.core.common.ui.custom.WebsosoCustomToast
+import com.into.websoso.core.datastore.migration.VersionedPreferencesMigration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -142,12 +143,18 @@ inline fun <reified T : Parcelable> Bundle.getAdaptedParcelable(key: String): T?
             as? T
     }
 
-fun Context.createDataStore(preferencesName: String): DataStore<Preferences> =
+fun Context.createDataStore(
+    preferencesName: String,
+    schemaVersion: Int,
+): DataStore<Preferences> =
     PreferenceDataStoreFactory.create(
         corruptionHandler = ReplaceFileCorruptionHandler(
             produceNewData = { emptyPreferences() },
         ),
-        migrations = listOf(SharedPreferencesMigration(this, preferencesName)),
+        migrations = listOf(
+            SharedPreferencesMigration(this, preferencesName),
+            VersionedPreferencesMigration(currentVersion = schemaVersion),
+        ),
         produceFile = { this.preferencesDataStoreFile(preferencesName) },
     )
 
