@@ -443,6 +443,7 @@
     <string name="storage_watched">봤어요</string>
     <string name="storage_quitting">하차</string>
     <string name="storage_empty_status">서재가 비어있어요</string>
+    <string name="storage_other_user_empty_status">보관함이 비어있어요</string>
     <string name="storage_explore_novel">작품 둘러보기</string>
     <string name="storage_oldest">오래된 순</string>
     <string name="storage_newest">최신 순</string>
