@@ -15,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.common.extensions.debouncedClickable
 import com.into.websoso.core.designsystem.theme.Black
@@ -26,6 +28,9 @@ import com.into.websoso.core.resource.R.drawable.ic_library_grid
 import com.into.websoso.core.resource.R.drawable.ic_library_list
 import com.into.websoso.core.resource.R.drawable.ic_library_sort
 import com.into.websoso.core.resource.R.drawable.ic_navigate_left
+import com.into.websoso.core.resource.R.string.collection_back
+import com.into.websoso.core.resource.R.string.library_view_type_to_grid
+import com.into.websoso.core.resource.R.string.library_view_type_to_list
 import com.into.websoso.domain.library.model.SortCriteria
 
 /**
@@ -55,7 +60,11 @@ internal fun OtherUserLibraryTopBar(
                     .align(Alignment.CenterStart)
                     .padding(start = 6.dp)
                     .size(44.dp)
-                    .debouncedClickable(onClick = onBackClick),
+                    .debouncedClickable(
+                        onClickLabel = stringResource(id = collection_back),
+                        role = Role.Button,
+                        onClick = onBackClick,
+                    ),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
@@ -99,7 +108,13 @@ internal fun OtherUserLibraryTopBar(
                 Box(
                     modifier = Modifier
                         .size(33.dp)
-                        .debouncedClickable(onClick = onToggleViewType),
+                        .debouncedClickable(
+                            onClickLabel = stringResource(
+                                id = if (isGrid) library_view_type_to_list else library_view_type_to_grid,
+                            ),
+                            role = Role.Button,
+                            onClick = onToggleViewType,
+                        ),
                     contentAlignment = Alignment.CenterEnd,
                 ) {
                     Icon(
