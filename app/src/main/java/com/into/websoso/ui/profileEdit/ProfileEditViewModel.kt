@@ -194,7 +194,9 @@ class ProfileEditViewModel
                     )
                 }.onSuccess {
                     _profileEditUiState.value = profileEditUiState.value?.copy(
-                        profileEditResult = ProfileEditResult.Success,
+                        profileEditResult = ProfileEditResult.Success(
+                            genrePreferencesChanged = previousProfile.genrePreferences.toSet() != currentProfile.genrePreferences.toSet(),
+                        ),
                     )
                 }.onFailure {
                     _profileEditUiState.value = profileEditUiState.value?.copy(

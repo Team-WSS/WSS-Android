@@ -196,8 +196,9 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(activity_pr
 
     private fun handleProfileEditResult(profileEditResult: ProfileEditResult) {
         when (profileEditResult) {
-            ProfileEditResult.Success -> {
-                setResult(ProfileEditSuccess.RESULT_OK)
+            is ProfileEditResult.Success -> {
+                val result = Intent().putExtra(EXTRA_GENRE_PREFERENCES_CHANGED, profileEditResult.genrePreferencesChanged)
+                setResult(ProfileEditSuccess.RESULT_OK, result)
                 showWebsosoToast(
                     this,
                     getString(profile_edit_success),
@@ -298,6 +299,8 @@ class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(activity_pr
     }
 
     companion object {
+        const val EXTRA_GENRE_PREFERENCES_CHANGED = "EXTRA_GENRE_PREFERENCES_CHANGED"
+
         private const val PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG =
             "PROFILE_EDIT_CHARACTER_BOTTOM_SHEET_DIALOG"
 

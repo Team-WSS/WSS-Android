@@ -56,6 +56,14 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/cv_feed_like_sync"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_feed_detail_toolbar" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_feed_detail"
             android:layout_width="match_parent"
@@ -64,7 +72,7 @@
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/cl_feed_detail_input"
-            app:layout_constraintTop_toBottomOf="@+id/cl_feed_detail_toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/cv_feed_like_sync" />
 
         <com.into.websoso.core.common.ui.custom.WebsosoLoadingLayout
             android:id="@+id/wll_feed"

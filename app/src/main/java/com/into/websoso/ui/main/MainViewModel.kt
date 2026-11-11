@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.feed.repository.UpdatedFeedRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.model.MainUiState
@@ -21,6 +22,7 @@ class MainViewModel
         private val userRepository: UserRepository,
         private val accountRepository: AccountRepository,
         private val pushMessageRepository: PushMessageRepository,
+        private val feedRepository: UpdatedFeedRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private var userId: Long = DEFAULT_USER_ID
@@ -29,6 +31,26 @@ class MainViewModel
         val mainUiState: LiveData<MainUiState> get() = _mainUiState
 
         val isLogin: LiveData<Boolean> = savedStateHandle.getLiveData(MainActivity.IS_LOGIN_KEY)
+
+        private val _isMyPageTooltipPending: MutableLiveData<Boolean> = MutableLiveData(false)
+        val isMyPageTooltipPending: LiveData<Boolean> get() = _isMyPageTooltipPending
+
+        init {
+            // 새로 로그인해 메인에 들어왔을 수 있다. 사용자 정보로 계정을 확인할 때까지 이전 좋아요 기록을 보류한다.
+            feedRepository.beginAccountCheck()
+            viewModelScope.launch {
+                _isMyPageTooltipPending.value = !userRepository.fetchMyPageTooltipConfirmed()
+            }
+        }
+
+        /** 툴팁이 보이는 상태에서 마이페이지로 이동했을 때만 호출한다. 이후로는 툴팁을 띄우지 않는다. */
+        fun confirmMyPageTooltip() {
+            if (_isMyPageTooltipPending.value != true) return
+            _isMyPageTooltipPending.value = false
+            viewModelScope.launch {
+                runCatching { userRepository.saveMyPageTooltipConfirmed() }
+            }
+        }
 
         fun updateUserInfo() {
             viewModelScope.launch {
@@ -41,6 +63,7 @@ class MainViewModel
                 }.onSuccess { userInfo ->
                     userId = userInfo.userId
                     accountRepository.updateUserId(userId)
+                    feedRepository.confirmAccount(userId)
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
                         loading = false,

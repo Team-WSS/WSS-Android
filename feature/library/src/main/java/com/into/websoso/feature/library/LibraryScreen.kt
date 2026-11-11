@@ -1,11 +1,14 @@
 package com.into.websoso.feature.library
 
+import android.view.HapticFeedbackConstants
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -23,6 +26,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState.Loading
@@ -30,6 +34,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.core.resource.R.string.storage_other_user_empty_status
 import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.Genre
 import com.into.websoso.domain.library.model.ReadStatus
@@ -42,6 +47,7 @@ import com.into.websoso.feature.library.component.LibraryGridList
 import com.into.websoso.feature.library.component.LibraryList
 import com.into.websoso.feature.library.component.LibrarySortBottomSheet
 import com.into.websoso.feature.library.component.LibraryTopBar
+import com.into.websoso.feature.library.component.OtherUserLibraryTopBar
 import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
 import com.into.websoso.feature.library.filter.LibraryFilterTab
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
@@ -57,6 +63,9 @@ fun LibraryScreen(
     navigateToNormalExploreActivity: () -> Unit,
     navigateToNovelDetailActivity: (novelId: Long) -> Unit,
     libraryViewModel: LibraryViewModel,
+    navigateToNotificationSettingActivity: (() -> Unit)? = null,
+    isMyLibrary: Boolean = true,
+    onBackClick: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
@@ -100,7 +109,9 @@ fun LibraryScreen(
         isShowBottomSheet = isShowBottomSheet,
         isShowSortBottomSheet = isShowSortBottomSheet,
         isNovelsRefreshing = isNovelsRefreshing,
+        isMyLibrary = isMyLibrary,
         initialFilterTab = filterInitialTab,
+        onBackClick = onBackClick,
         onDismissRequest = {
             scope.launch {
                 isShowBottomSheet = false
@@ -134,6 +145,7 @@ fun LibraryScreen(
         onItemClick = { navigateToNovelDetailActivity(it.novelId) },
         onSearchClick = navigateToNormalExploreActivity,
         onExploreClick = navigateToNormalExploreActivity,
+        onNotificationManageClick = navigateToNotificationSettingActivity,
         onInterestClick = libraryViewModel::updateInterestedNovels,
         onAttractivePointClick = libraryViewModel::updateAttractivePoints,
         onReadStatusClick = libraryViewModel::updateReadStatus,
@@ -146,6 +158,19 @@ fun LibraryScreen(
         onResetClick = libraryViewModel::resetFilter,
         onFilterSearchClick = libraryViewModel::searchFilteredNovels,
     )
+}
+
+// 당겨서 새로고침은 중첩 스크롤로 동작해 스크롤 가능한 자식이 없으면 제스처가 전달되지 않는다.
+// 빈 화면은 스크롤할 내용이 없으므로 화면 높이만큼 차지하는 항목 하나로 감싸 제스처만 살린다.
+@Composable
+private fun RefreshableContainer(content: @Composable () -> Unit) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item {
+            Box(modifier = Modifier.fillParentMaxSize()) {
+                content()
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -161,7 +186,9 @@ private fun LibraryScreen(
     isNovelsRefreshing: Boolean,
     isShowBottomSheet: Boolean,
     isShowSortBottomSheet: Boolean,
+    isMyLibrary: Boolean,
     initialFilterTab: LibraryFilterTab,
+    onBackClick: () -> Unit,
     onDismissRequest: () -> Unit,
     onSortDismiss: () -> Unit,
     onSortSelected: (SortCriteria) -> Unit,
@@ -182,39 +209,65 @@ private fun LibraryScreen(
     onKeywordClick: (String) -> Unit,
     onResetClick: () -> Unit,
     onFilterSearchClick: () -> Unit,
+    onNotificationManageClick: (() -> Unit)?,
 ) {
+    val view = LocalView.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(White),
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+        if (isMyLibrary) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-        LibraryTopBar(onSearchClick = onSearchClick)
+            LibraryTopBar(onSearchClick = onSearchClick)
 
-        Spacer(modifier = Modifier.height(9.dp))
-
-        LibraryFilterTopBar(
-            libraryFilterUiModel = uiState.libraryFilterUiModel,
-            totalCount = uiState.novelTotalCount,
-            isGrid = uiState.isGrid,
-            onFilterClick = onFilterClick,
-            onSortClick = onSortClick,
-            onToggleViewType = onToggleViewType,
-            onInterestClick = onInterestClick,
-        )
+            LibraryFilterTopBar(
+                libraryFilterUiModel = uiState.libraryFilterUiModel,
+                totalCount = uiState.novelTotalCount,
+                isGrid = uiState.isGrid,
+                onFilterClick = onFilterClick,
+                onSortClick = onSortClick,
+                onToggleViewType = onToggleViewType,
+                onInterestClick = onInterestClick,
+                onNotificationManageClick = onNotificationManageClick,
+            )
+        } else {
+            OtherUserLibraryTopBar(
+                totalCount = uiState.novelTotalCount,
+                sortCriteria = uiState.libraryFilterUiModel.sortCriteria,
+                isGrid = uiState.isGrid,
+                onBackClick = onBackClick,
+                onSortClick = onSortClick,
+                onToggleViewType = onToggleViewType,
+            )
+        }
 
         PullToRefreshBox(
             isRefreshing = isNovelsRefreshing,
-            onRefresh = novels::refresh,
+            onRefresh = {
+                view.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+                novels.refresh()
+            },
         ) {
             when {
                 novels.itemCount == 0 &&
                     novels.loadState.refresh !is Loading -> {
-                    if (uiState.libraryFilterUiModel.isFilterApplied) {
-                        LibraryFilterEmptyView()
-                    } else {
-                        LibraryEmptyView(onExploreClick = onExploreClick)
+                    RefreshableContainer {
+                        when {
+                            !isMyLibrary -> {
+                                LibraryEmptyView(messageRes = storage_other_user_empty_status)
+                            }
+
+                            uiState.libraryFilterUiModel.isFilterApplied -> {
+                                LibraryFilterEmptyView()
+                            }
+
+                            else -> {
+                                LibraryEmptyView(onExploreClick = onExploreClick)
+                            }
+                        }
                     }
                 }
 

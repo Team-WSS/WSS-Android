@@ -10,6 +10,8 @@ interface LibraryRepository {
 
     fun getLibraryFlow(): Flow<PagingData<NovelEntity>>
 
+    fun getUnfilteredLibraryFlow(): Flow<PagingData<NovelEntity>>
+
     suspend fun getRegisteredKeywords(): List<LibraryKeywordEntity>
 
     companion object {

@@ -9,6 +9,7 @@ data class Notification(
     val isRead: Boolean,
     val isNotice: Boolean,
     val feedId: Long?,
+    val novelId: Long?,
     val intrinsicId: Long,
 ) {
     fun getNotificationType(): NotificationType =
@@ -16,6 +17,7 @@ data class Notification(
             when {
                 isNotice -> "NOTICE"
                 feedId != null -> "FEED"
+                novelId != null -> "NOVEL"
                 else -> "NONE"
             },
         )

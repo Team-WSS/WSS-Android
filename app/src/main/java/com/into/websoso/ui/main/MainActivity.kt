@@ -8,6 +8,9 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.IntegerRes
+import androidx.core.os.bundleOf
+import androidx.core.view.doOnLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.firebase.messaging.FirebaseMessaging
@@ -23,6 +26,8 @@ import com.into.websoso.core.common.util.showWebsosoSnackBar
 import com.into.websoso.core.resource.R.drawable.ic_blocked_user_snack_bar
 import com.into.websoso.core.resource.R.string.main_back_press
 import com.into.websoso.databinding.ActivityMainBinding
+import com.into.websoso.ui.collection.CollectionActivity
+import com.into.websoso.ui.collection.CollectionDeepLink
 import com.into.websoso.ui.common.dialog.LoginRequestDialogFragment
 import com.into.websoso.ui.main.MainActivity.FragmentType.FEED
 import com.into.websoso.ui.main.MainActivity.FragmentType.HOME
@@ -30,12 +35,18 @@ import com.into.websoso.ui.main.MainActivity.FragmentType.LIBRARY
 import com.into.websoso.ui.main.MainActivity.FragmentType.MY_PAGE
 import com.into.websoso.ui.main.feed.FeedFragment
 import com.into.websoso.ui.main.home.HomeFragment
+import com.into.websoso.ui.main.home.HomeStartupRequest
 import com.into.websoso.ui.main.library.LibraryFragment
 import com.into.websoso.ui.main.myPage.MyPageFragment
+import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
+    @Inject
+    lateinit var homeStartupRequest: Lazy<HomeStartupRequest>
+
     private val mainViewModel: MainViewModel by viewModels()
     private var backPressedTime: Long = 0L
     private var currentFragment: Fragment? = null
@@ -50,9 +61,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (intent.getAdaptedSerializableExtra<FragmentType>(DESTINATION_KEY)?.let { it != HOME } == true ||
+            intent.getLongExtra(CollectionDeepLink.PENDING_COLLECTION_ID, 0L) > 0L
+        ) {
+            discardStartupRequest()
+        }
         setupBackButtonListener()
         setupBottomNavigationView()
         setupObserver()
+        setupMyPageTooltip()
         onViewGuestClick()
         handleNavigation(intent.getAdaptedSerializableExtra<FragmentType>(DESTINATION_KEY))
         updateFcmToken()
@@ -61,6 +78,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
             this,
         ) { _, _ ->
             handleNavigation(LIBRARY)
+        }
+        if (savedInstanceState == null) openPendingCollection()
+    }
+
+    private fun openPendingCollection() {
+        val collectionId = intent.getLongExtra(CollectionDeepLink.PENDING_COLLECTION_ID, 0L)
+        intent.removeExtra(CollectionDeepLink.PENDING_COLLECTION_ID)
+        if (collectionId > 0L) {
+            startActivity(CollectionActivity.getIntent(this, collectionId = collectionId))
         }
     }
 
@@ -117,6 +143,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
     private fun setupBottomNavListener() {
         binding.bnvMain.setOnItemSelectedListener { item ->
             fragmentTags[item.itemId] ?: return@setOnItemSelectedListener true
+            if (item.itemId == menu_my_page && binding.tvMainMyPageTooltip.isVisible) {
+                mainViewModel.confirmMyPageTooltip()
+            }
             val currentFragment = supportFragmentManager.findFragmentById(fcv_main)
 
             if (item.itemId == menu_library && currentFragment is LibraryFragment) {
@@ -131,6 +160,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     private fun replaceCurrentFragment(itemId: Int) {
         val tag = fragmentTags[itemId] ?: return
+        if (itemId != menu_home) discardStartupRequest()
         val isLibrary = itemId == menu_library
         val existingFragment = supportFragmentManager.findFragmentByTag(tag)
         val targetFragment = existingFragment ?: findOrCreateFragment(tag)
@@ -160,11 +190,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         }
 
         currentFragment = targetFragment
+        updateMyPageTooltipVisibility()
     }
 
     private fun findOrCreateFragment(tag: String): Fragment =
         supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
-            HomeFragment.TAG -> HomeFragment()
+            HomeFragment.TAG -> HomeFragment().apply {
+                arguments = bundleOf(HomeStartupRequest.KEY to intent.getStringExtra(HomeStartupRequest.KEY))
+            }
             FeedFragment.TAG -> FeedFragment()
             LibraryFragment.TAG -> LibraryFragment()
             MyPageFragment.TAG -> MyPageFragment()
@@ -183,7 +216,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
                     binding.viewMainGuest.visibility = View.VISIBLE
                 }
             }
+            updateMyPageTooltipVisibility()
         }
+    }
+
+    private fun setupMyPageTooltip() {
+        binding.tvMainMyPageTooltip.setOnClickListener {
+            binding.bnvMain.selectedItemId = menu_my_page
+        }
+        // 말풍선 꼬리(우측에서 35.5dp)가 마이페이지 탭 중앙을 가리키도록 맞춘다.
+        binding.tvMainMyPageTooltip.doOnLayout { tooltip ->
+            val myPageItem = binding.bnvMain.findViewById<View>(menu_my_page) ?: return@doOnLayout
+            val itemCenterX = binding.bnvMain.left + (myPageItem.parent as View).left + myPageItem.left + myPageItem.width / 2f
+            val tailX = tooltip.right - TOOLTIP_TAIL_END_OFFSET_DP * resources.displayMetrics.density
+            tooltip.translationX = itemCenterX - tailX
+        }
+        mainViewModel.isMyPageTooltipPending.observe(this) { updateMyPageTooltipVisibility() }
+    }
+
+    /** 툴팁은 로그인 사용자가 홈 탭에 있을 때만 보여준다. */
+    private fun updateMyPageTooltipVisibility() {
+        binding.tvMainMyPageTooltip.isVisible =
+            mainViewModel.isMyPageTooltipPending.value == true &&
+            mainViewModel.isLogin.value != false &&
+            currentFragment is HomeFragment
     }
 
     private fun onViewGuestClick() {
@@ -220,8 +276,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         }
     }
 
+    private fun discardStartupRequest() {
+        intent.getStringExtra(HomeStartupRequest.KEY)?.let { homeStartupRequest.get().discard(it) }
+        intent.removeExtra(HomeStartupRequest.KEY)
+    }
+
+    override fun onDestroy() {
+        if (!isChangingConfigurations) discardStartupRequest()
+        super.onDestroy()
+    }
+
     companion object {
         private const val DESTINATION_KEY = "destination"
+        private const val TOOLTIP_TAIL_END_OFFSET_DP = 35.5f
         const val IS_LOGIN_KEY = "isLogin"
 
         fun getIntent(context: Context): Intent =

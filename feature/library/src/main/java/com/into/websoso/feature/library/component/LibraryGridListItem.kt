@@ -67,24 +67,29 @@ internal fun NovelGridListItem(
             size = itemSize,
         )
 
-        Text(
-            text = item.title,
-            style = WebsosoTheme.typography.body4,
-            color = Black,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-
-        if (item.ratingStars.isNotEmpty()) {
-            NovelRatingStar(stars = item.ratingStars)
-        }
-
-        item.formattedDateRange?.let {
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
-                text = it,
-                style = WebsosoTheme.typography.label2,
-                color = Gray200,
+                text = item.title,
+                style = WebsosoTheme.typography.body4,
+                color = Black,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
+
+            if (item.ratingStars.isNotEmpty()) {
+                NovelRatingStar(
+                    stars = item.ratingStars,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                )
+            }
+
+            item.formattedDateRange?.let {
+                Text(
+                    text = it,
+                    style = WebsosoTheme.typography.label2,
+                    color = Gray200,
+                )
+            }
         }
     }
 }
@@ -120,9 +125,9 @@ private fun NovelGridThumbnail(
                 imageVector = ImageVector.vectorResource(id = ic_library_interesting),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp)
                     .align(Alignment.BottomEnd)
-                    .padding(6.dp),
+                    .padding(10.dp)
+                    .size(13.dp),
             )
         }
     }
@@ -181,7 +186,7 @@ internal fun NovelRatingStar(
             Image(
                 imageVector = ratingStarIcon(starType),
                 contentDescription = null,
-                modifier = Modifier.size(14.dp),
+                modifier = Modifier.size(9.dp),
             )
         }
     }

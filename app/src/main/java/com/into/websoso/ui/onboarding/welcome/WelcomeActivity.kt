@@ -7,6 +7,7 @@ import com.into.websoso.R.layout.activity_welcome
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.resource.R.string.welcome_hello_user
 import com.into.websoso.databinding.ActivityWelcomeBinding
+import com.into.websoso.ui.collection.CollectionDeepLink
 import com.into.websoso.ui.main.MainActivity
 
 class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(activity_welcome) {
@@ -25,7 +26,7 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(activity_welcome) {
 
     private fun onCompleteButtonClick() {
         binding.btnWelcomeStart.setOnClickListener {
-            startActivity(MainActivity.getIntent(this, true))
+            startActivity(CollectionDeepLink.forward(intent, MainActivity.getIntent(this, true)))
             finish()
         }
     }

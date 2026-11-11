@@ -28,6 +28,13 @@ class FeedViewModel
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(FeedUiState())
         val uiState = _uiState.asStateFlow()
+        val likeSyncStates = feedRepository.likeSyncStates
+        val isLikeRestoreFailed = feedRepository.isLikeRestoreFailed
+        val hasUnrestoredLikes = feedRepository.hasUnrestoredLikes
+
+        fun retryLikes() = feedRepository.retryPendingLikes()
+
+        fun acknowledgeUnrestoredLikes() = feedRepository.acknowledgeUnrestoredLikes()
 
         init {
             collectFeedRefreshEvent()
@@ -202,7 +209,7 @@ class FeedViewModel
 
         override fun onCleared() {
             super.onCleared()
-            feedRepository.syncDirtyFeeds()
+            feedRepository.syncPendingLikes()
         }
 
         // --- 기타 탭/필터 로직 ---

@@ -36,6 +36,7 @@ class GetMyFeedsUseCase
             val profile = myProfile ?: userRepository.fetchMyProfile().also { myProfile = it }
             val myId = myId ?: userRepository.fetchUserInfo().userId.also { myId = it }
 
+            val likeStateVersion = feedRepository.likeStateVersion()
             val myFeedsEntity: UserFeedsEntity = userRepository.fetchMyActivities(
                 lastFeedId = lastFeedId,
                 size = if (isFeedRefreshed) INITIAL_REQUEST_SIZE else ADDITIONAL_REQUEST_SIZE,
@@ -52,6 +53,7 @@ class GetMyFeedsUseCase
             feedRepository.updateMyFeedsCache(
                 feeds = convertedFeeds,
                 isRefreshed = isFeedRefreshed,
+                likeStateVersion = likeStateVersion,
             )
 
             return Feeds(

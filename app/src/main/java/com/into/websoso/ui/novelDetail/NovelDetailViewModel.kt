@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.into.websoso.data.repository.NotificationRepository
 import com.into.websoso.data.repository.NovelRepository
 import com.into.websoso.data.repository.UserNovelRepository
 import com.into.websoso.data.repository.UserRepository
+import com.into.websoso.domain.usecase.GetNovelNotificationSettingUseCase
 import com.into.websoso.ui.mapper.toUi
 import com.into.websoso.ui.novelDetail.model.NovelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,9 +19,11 @@ import javax.inject.Inject
 class NovelDetailViewModel
     @Inject
     constructor(
+        private val notificationRepository: NotificationRepository,
         private val novelRepository: NovelRepository,
         private val userNovelRepository: UserNovelRepository,
         private val userRepository: UserRepository,
+        private val getNovelNotificationSettingUseCase: GetNovelNotificationSettingUseCase,
     ) : ViewModel() {
         private val _novelDetailModel = MutableLiveData<NovelDetailModel>(NovelDetailModel())
         val novelDetailModel: LiveData<NovelDetailModel> get() = _novelDetailModel
@@ -27,6 +31,8 @@ class NovelDetailViewModel
         val loading: LiveData<Boolean> get() = _loading
         private val _error = MutableLiveData<Boolean>(false)
         val error: LiveData<Boolean> get() = _error
+        private val _isNovelNotificationEnabled = MutableLiveData<Boolean>(false)
+        val isNovelNotificationEnabled: LiveData<Boolean> get() = _isNovelNotificationEnabled
 
         fun updateNovelDetail(novelId: Long) {
             if (loading.value == true) return
@@ -136,5 +142,30 @@ class NovelDetailViewModel
                     novelGenreImage = genreImage,
                 ) ?: return,
             )
+        }
+
+        fun updateNovelNotificationEnabled(novelId: Long) {
+            viewModelScope.launch {
+                getNovelNotificationSettingUseCase(novelId).onSuccess { novelNotificationSetting ->
+                    _isNovelNotificationEnabled.value =
+                        novelNotificationSetting.isCompletionNotificationEnabled ||
+                        novelNotificationSetting.isHiatusReturnNotificationEnabled
+                }
+            }
+        }
+
+        fun updateNovelNotificationEnabled(isEnabled: Boolean) {
+            _isNovelNotificationEnabled.value = isEnabled
+        }
+
+        fun updateNotificationRead(notificationId: Long) {
+            if (notificationId == DEFAULT_NOTIFICATION_ID) return
+            viewModelScope.launch {
+                runCatching { notificationRepository.fetchNotificationRead(notificationId) }
+            }
+        }
+
+        companion object {
+            const val DEFAULT_NOTIFICATION_ID: Long = -1
         }
     }

@@ -144,6 +144,14 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/cv_home_collection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_home_detail_search" />
+
                 <TextView
                     android:id="@+id/tv_home_today_popular_novel"
                     android:layout_width="wrap_content"
@@ -153,7 +161,7 @@
                     android:text="@string/home_today_popular"
                     android:textAppearance="@style/headline1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cl_home_detail_search" />
+                    app:layout_constraintTop_toBottomOf="@id/cv_home_collection" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_home_today_popular_novel"
@@ -249,6 +257,50 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_home_user_recommend_novel_description"
                         app:spanCount="2"
                         tools:listitem="@layout/item_recommended_novel_by_user_taste" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_home_taste_status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="80dp"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_home_user_recommend_novel_description">
+
+                        <TextView
+                            android:id="@+id/tv_home_taste_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:accessibilityLiveRegion="polite"
+                            android:text="@string/load_load_title"
+                            android:textAlignment="center"
+                            android:textAppearance="@style/body2"
+                            android:textColor="@color/gray_200_949399" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_home_taste_retry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_load_primary_100_radius_8dp"
+                            android:elevation="0dp"
+                            android:minWidth="64dp"
+                            android:minHeight="48dp"
+                            android:paddingHorizontal="38dp"
+                            android:paddingVertical="14dp"
+                            android:stateListAnimator="@null"
+                            android:text="@string/home_taste_reload"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/label1"
+                            android:textColor="@color/white"
+                            android:visibility="gone"
+                            app:backgroundTint="@null" />
+
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

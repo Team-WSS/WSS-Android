@@ -126,6 +126,14 @@ class UserRepository
 
         suspend fun fetchNovelDetailFirstLaunched() = userStorage.data.first()[NOVEL_DETAIL_FIRST_LAUNCHED_KEY] ?: true
 
+        suspend fun fetchMyPageTooltipConfirmed() = userStorage.data.first()[MY_PAGE_TOOLTIP_CONFIRMED_KEY] ?: false
+
+        suspend fun saveMyPageTooltipConfirmed() {
+            userStorage.edit { preferences ->
+                preferences[MY_PAGE_TOOLTIP_CONFIRMED_KEY] = true
+            }
+        }
+
         suspend fun fetchNicknameValidity(nickname: String): Boolean = userApi.getNicknameValidity(nickname).isValid
 
         suspend fun fetchUserFeeds(
@@ -187,6 +195,7 @@ class UserRepository
 
         companion object {
             val NOVEL_DETAIL_FIRST_LAUNCHED_KEY = booleanPreferencesKey("NOVEL_DETAIL_FIRST_LAUNCHED")
+            val MY_PAGE_TOOLTIP_CONFIRMED_KEY = booleanPreferencesKey("MY_PAGE_TOOLTIP_CONFIRMED")
             val TERMS_AGREEMENT_CHECKED_KEY = booleanPreferencesKey("terms_agreement_checked")
             val USER_ID_KEY = stringPreferencesKey("USER_ID")
             val USER_NICKNAME_KEY = stringPreferencesKey("USER_NICKNAME")

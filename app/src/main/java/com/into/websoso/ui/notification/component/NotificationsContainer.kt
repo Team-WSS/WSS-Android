@@ -22,6 +22,7 @@ fun NotificationsContainer(
     updateNotifications: () -> Unit,
     onNotificationDetailClick: (NotificationModel) -> Unit,
     onFeedDetailClick: (NotificationModel) -> Unit,
+    onNovelDetailClick: (NotificationModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -48,6 +49,7 @@ fun NotificationsContainer(
                             notification = notification,
                             onNotificationDetailClick = onNotificationDetailClick,
                             onFeedDetailClick = onFeedDetailClick,
+                            onNovelDetailClick = onNovelDetailClick,
                         )
                     },
                 )
@@ -60,11 +62,13 @@ private fun navigateToDetail(
     notification: NotificationModel,
     onNotificationDetailClick: (NotificationModel) -> Unit,
     onFeedDetailClick: (NotificationModel) -> Unit,
+    onNovelDetailClick: (NotificationModel) -> Unit,
 ) {
     if (notification.intrinsicId == DEFAULT_INTRINSIC_ID) return
     when (notification.notificationType) {
         NotificationType.NOTICE -> onNotificationDetailClick(notification)
         NotificationType.FEED -> onFeedDetailClick(notification)
+        NotificationType.NOVEL -> onNovelDetailClick(notification)
         NotificationType.NONE -> Unit
     }
 }
@@ -79,6 +83,7 @@ private fun NotificationsContainerPreview() {
             updateNotifications = {},
             onNotificationDetailClick = {},
             onFeedDetailClick = {},
+            onNovelDetailClick = {},
         )
     }
 }

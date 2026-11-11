@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library.component
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.into.websoso.core.designsystem.theme.Gray200
@@ -24,9 +26,14 @@ import com.into.websoso.core.designsystem.theme.Primary100
 import com.into.websoso.core.designsystem.theme.Primary50
 import com.into.websoso.core.designsystem.theme.WebsosoTheme
 import com.into.websoso.core.resource.R.drawable.ic_storage_null
+import com.into.websoso.core.resource.R.string.storage_empty_status
+import com.into.websoso.core.resource.R.string.storage_explore_novel
 
 @Composable
-internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
+internal fun LibraryEmptyView(
+    @StringRes messageRes: Int = storage_empty_status,
+    onExploreClick: (() -> Unit)? = null,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -44,12 +51,14 @@ internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "서재가 비어있어요",
+                text = stringResource(messageRes),
                 style = WebsosoTheme.typography.body1,
                 color = Gray200,
             )
-            Spacer(modifier = Modifier.height(48.dp))
-            LibraryExploreButton(onClick = onExploreClick)
+            onExploreClick?.let { onClick ->
+                Spacer(modifier = Modifier.height(48.dp))
+                LibraryExploreButton(onClick = onClick)
+            }
             Spacer(modifier = Modifier.weight(2f))
         }
     }
@@ -75,7 +84,7 @@ private fun LibraryExploreButton(
         elevation = null,
     ) {
         Text(
-            text = "웹소설 찾으러 가기",
+            text = stringResource(storage_explore_novel),
             style = WebsosoTheme.typography.title1,
             color = Primary100,
         )

@@ -10,6 +10,7 @@ import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.ActivityOnboardingBinding
+import com.into.websoso.ui.collection.CollectionDeepLink
 import com.into.websoso.ui.onboarding.model.OnboardingPage
 import com.into.websoso.ui.onboarding.welcome.WelcomeActivity
 import com.into.websoso.ui.termsAgreement.TermsAgreementDialogBottomSheet
@@ -54,7 +55,7 @@ class OnboardingActivity : BaseActivity<ActivityOnboardingBinding>(R.layout.acti
         viewModel.isUserProfileSubmit.observe(this) { isUserProfileSubmit ->
             if (isUserProfileSubmit) {
                 val nickname = viewModel.currentNicknameInput.value ?: "웹소소"
-                startActivity(WelcomeActivity.getIntent(this, nickname))
+                startActivity(CollectionDeepLink.forward(intent, WelcomeActivity.getIntent(this, nickname)))
                 finish()
             }
         }

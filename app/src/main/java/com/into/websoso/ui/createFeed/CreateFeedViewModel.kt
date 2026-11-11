@@ -194,6 +194,7 @@ class CreateFeedViewModel
                     }.onSuccess { result ->
                         _searchNovelUiState.value = searchNovelUiState.copy(
                             loading = false,
+                            isSearched = true,
                             isLoadable = result.isLoadable,
                             novelCount = result.resultCount,
                             novels = result.novels.map { novel ->

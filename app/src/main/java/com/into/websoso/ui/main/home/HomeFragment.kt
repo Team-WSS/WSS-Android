@@ -8,9 +8,13 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.firebase.messaging.FirebaseMessaging
+import com.into.websoso.R.color.gray_200_949399
+import com.into.websoso.R.color.gray_300_52515F
 import com.into.websoso.R.layout.fragment_home
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.model.ResultFrom.FeedDetailBack
@@ -21,9 +25,17 @@ import com.into.websoso.core.common.ui.model.ResultFrom.NovelDetailBack
 import com.into.websoso.core.common.ui.model.ResultFrom.ProfileEditSuccess
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.collectWithLifecycle
+import com.into.websoso.core.common.util.showWebsosoToast
 import com.into.websoso.core.common.util.tracker.Tracker
+import com.into.websoso.core.designsystem.theme.WebsosoTheme
+import com.into.websoso.core.resource.R.drawable.ic_novel_rating_alert
 import com.into.websoso.core.resource.R.string.home_rising_feed_for_user
+import com.into.websoso.core.resource.R.string.home_taste_load_failed
+import com.into.websoso.core.resource.R.string.home_taste_refresh_failed
+import com.into.websoso.core.resource.R.string.load_load_title
 import com.into.websoso.databinding.FragmentHomeBinding
+import com.into.websoso.feature.collection.HomeCollectionSection
+import com.into.websoso.ui.collection.CollectionActivity
 import com.into.websoso.ui.detailExplore.DetailExploreActivity
 import com.into.websoso.ui.feedDetail.FeedDetailActivity
 import com.into.websoso.ui.main.MainViewModel
@@ -31,6 +43,8 @@ import com.into.websoso.ui.main.home.adpater.PopularFeedsAdapter
 import com.into.websoso.ui.main.home.adpater.PopularNovelsAdapter
 import com.into.websoso.ui.main.home.adpater.RecommendedNovelsByUserTasteAdapter
 import com.into.websoso.ui.main.home.dialog.TermsAgreementDialogFragment
+import com.into.websoso.ui.main.home.model.HomeTasteStatus
+import com.into.websoso.ui.main.home.model.HomeUiState
 import com.into.websoso.ui.normalExplore.NormalExploreActivity
 import com.into.websoso.ui.notification.NotificationActivity
 import com.into.websoso.ui.novelDetail.NovelDetailActivity
@@ -45,6 +59,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
+    private var renderedState: HomeUiState? = null
 
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
 
@@ -80,7 +95,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
                 ProfileEditSuccess.RESULT_OK -> {
                     mainViewModel.updateUserInfo()
-                    homeViewModel.updateNovel()
+                    homeViewModel.updateNovel(
+                        preferencesChanged = result.data?.getBooleanExtra(
+                            ProfileEditActivity.EXTRA_GENRE_PREFERENCES_CHANGED,
+                            false,
+                        ) == true,
+                    )
                 }
             }
         }
@@ -102,8 +122,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         bindViewModel()
         setupAdapter()
         setupItemDecoration()
+        binding.btnHomeTasteRetry.setOnClickListener { homeViewModel.retryTaste() }
         setupObserver()
         setupDotsIndicator()
+        setupCollectionSection()
         onSettingPreferenceGenreClick()
         onNotificationButtonClick()
         onNormalSearchButtonClick()
@@ -162,13 +184,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
                 !uiState.loading -> {
                     binding.wllHome.setWebsosoLoadingVisibility(false)
-                    popularNovelsAdapter.submitList(uiState.popularNovels)
-                    popularFeedsAdapter.submitList(uiState.popularFeeds)
-                    updateRecommendedNovelByUserTasteVisibility(uiState.recommendedNovelsByUserTaste.isEmpty())
-                    recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    if (renderedState?.popularNovels !== uiState.popularNovels) {
+                        popularNovelsAdapter.submitList(uiState.popularNovels)
+                    }
+                    if (renderedState?.popularFeeds !== uiState.popularFeeds) {
+                        popularFeedsAdapter.submitList(uiState.popularFeeds)
+                    }
+                    if (renderedState?.recommendedNovelsByUserTaste !== uiState.recommendedNovelsByUserTaste) {
+                        recommendedNovelsByUserTasteAdapter.submitList(uiState.recommendedNovelsByUserTaste)
+                    }
+                    renderTasteStatus(uiState)
                     updateHasNotificationUnread(uiState.isNotificationUnread)
+                    renderedState = uiState
                 }
             }
+        }
+
+        homeViewModel.tasteRefreshFailed.collectWithLifecycle(viewLifecycleOwner) {
+            val state = homeViewModel.uiState.value ?: return@collectWithLifecycle
+            if (state.loading || state.error) return@collectWithLifecycle
+            showWebsosoToast(requireContext(), getString(home_taste_refresh_failed), ic_novel_rating_alert)
         }
 
         homeViewModel.isNotificationPermissionFirstLaunched.observe(viewLifecycleOwner) { isFirstLaunch ->
@@ -193,16 +228,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
         }
     }
 
-    private fun updateRecommendedNovelByUserTasteVisibility(isRecommendNovelByUserTasteEmpty: Boolean) {
+    private fun renderTasteStatus(state: HomeUiState) {
         with(binding) {
-            if (isRecommendNovelByUserTasteEmpty) {
-                clHomeUserRecommendNovel.visibility = View.GONE
-                clHomeRecommendNovel.visibility = View.VISIBLE
-            } else {
-                clHomeUserRecommendNovel.visibility = View.VISIBLE
-                clHomeRecommendNovel.visibility = View.GONE
-            }
+            val empty = state.tasteStatus == HomeTasteStatus.EMPTY
+            val showContent = state.tasteStatus == HomeTasteStatus.CONTENT
+            clHomeRecommendNovel.visibility = if (empty) View.VISIBLE else View.GONE
+            clHomeUserRecommendNovel.visibility = if (empty) View.GONE else View.VISIBLE
+            rvRecommendNovelByUserTaste.visibility = if (showContent) View.VISIBLE else View.GONE
+            llHomeTasteStatus.visibility = if (showContent || empty) View.GONE else View.VISIBLE
+            val error = state.tasteStatus == HomeTasteStatus.ERROR
+            tvHomeTasteStatus.setText(if (error) home_taste_load_failed else load_load_title)
+            tvHomeTasteStatus.setTextColor(
+                ContextCompat.getColor(requireContext(), if (error) gray_300_52515F else gray_200_949399),
+            )
+            btnHomeTasteRetry.visibility = if (error) View.VISIBLE else View.GONE
         }
+    }
+
+    override fun onDestroyView() {
+        renderedState = null
+        super.onDestroyView()
     }
 
     private fun updateHasNotificationUnread(hasUnread: Boolean) {
@@ -221,9 +266,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private fun updateFCMToken(isFirstLaunch: Boolean) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            val token = task.result
-
             if (task.isSuccessful) {
+                // 조회에 실패한 Task에서 result를 읽으면 예외가 발생하므로, 성공을 확인한 뒤에 읽는다.
+                val token = task.result
                 if (isFirstLaunch) {
                     homeViewModel.saveFCMToken(token)
                     return@addOnCompleteListener
@@ -235,6 +280,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(fragment_home) {
 
     private fun setupDotsIndicator() {
         binding.dotsIndicatorHome.attachTo(binding.vpHomePopularFeed)
+    }
+
+    private fun setupCollectionSection() {
+        binding.cvHomeCollection.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                WebsosoTheme {
+                    HomeCollectionSection(
+                        onListClick = {
+                            startActivity(CollectionActivity.getIntent(requireContext(), startWithPublicList = true))
+                        },
+                        onCollectionClick = {
+                            startActivity(CollectionActivity.getIntent(requireContext(), collectionId = it))
+                        },
+                    )
+                }
+            }
+        }
     }
 
     private fun onPopularNovelClick(novelId: Long) {

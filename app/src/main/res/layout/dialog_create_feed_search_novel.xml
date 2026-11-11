@@ -77,6 +77,18 @@
             tools:itemCount="10"
             tools:listitem="@layout/item_search_novel" />
 
+        <ImageView
+            android:id="@+id/iv_create_feed_search_novel_loading"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="@null"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/rv_create_feed_search_novel_result"
+            app:layout_constraintEnd_toEndOf="@id/rv_create_feed_search_novel_result"
+            app:layout_constraintStart_toStartOf="@id/rv_create_feed_search_novel_result"
+            app:layout_constraintTop_toTopOf="@id/rv_create_feed_search_novel_result"
+            tools:visibility="visible" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_create_feed_result_not_exist"
             android:layout_width="0dp"

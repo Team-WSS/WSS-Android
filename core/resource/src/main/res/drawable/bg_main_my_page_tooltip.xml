@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="194dp"
+    android:height="44dp"
+    android:viewportWidth="194"
+    android:viewportHeight="44">
+    <!-- 꼬리가 오른쪽 아래(우측에서 35.5dp)에서 마이페이지 탭을 가리킨다. -->
+    <group
+        android:pivotX="97"
+        android:pivotY="22"
+        android:rotation="180">
+        <path
+            android:fillColor="#6A5DFD"
+            android:pathData="M34.0957,0.5C34.7108,-0.1666 36.2483,-0.1667 36.8633,0.5L41.9375,6H180C187.732,6 194,12.268 194,20V30C194,37.7319 187.732,44 180,44H14C6.268,44 0,37.7319 0,30V20C0,12.268 6.268,6 14,6H29.0215L34.0957,0.5Z" />
+    </group>
+</vector>

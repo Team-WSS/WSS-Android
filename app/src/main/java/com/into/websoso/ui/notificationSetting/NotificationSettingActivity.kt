@@ -9,6 +9,10 @@ import com.into.websoso.R
 import com.into.websoso.core.common.ui.base.BaseActivity
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.databinding.ActivityNotificationSettingBinding
+import com.into.websoso.domain.model.NovelNotificationType
+import com.into.websoso.domain.model.NovelNotificationType.COMPLETION
+import com.into.websoso.domain.model.NovelNotificationType.HIATUS_RETURN
+import com.into.websoso.ui.novelNotification.NovelNotificationListActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +31,12 @@ class NotificationSettingActivity : BaseActivity<ActivityNotificationSettingBind
         binding.notificationSettingViewModel = notificationSettingViewModel
         binding.lifecycleOwner = this
         binding.onToggleClick = ::updateIsNotificationEnabled
+        binding.onCompletionNotificationClick = { navigateToNovelNotificationList(COMPLETION) }
+        binding.onHiatusReturnNotificationClick = { navigateToNovelNotificationList(HIATUS_RETURN) }
+    }
+
+    private fun navigateToNovelNotificationList(notificationType: NovelNotificationType) {
+        startActivity(NovelNotificationListActivity.getIntent(this, notificationType))
     }
 
     private fun updateIsNotificationEnabled() {
