@@ -1,5 +1,6 @@
 package com.into.websoso.feature.library.component
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,10 @@ import com.into.websoso.core.resource.R.string.storage_empty_status
 import com.into.websoso.core.resource.R.string.storage_explore_novel
 
 @Composable
-internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
+internal fun LibraryEmptyView(
+    @StringRes messageRes: Int = storage_empty_status,
+    onExploreClick: (() -> Unit)? = null,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -47,12 +51,14 @@ internal fun LibraryEmptyView(onExploreClick: () -> Unit = {}) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(storage_empty_status),
+                text = stringResource(messageRes),
                 style = WebsosoTheme.typography.body1,
                 color = Gray200,
             )
-            Spacer(modifier = Modifier.height(48.dp))
-            LibraryExploreButton(onClick = onExploreClick)
+            onExploreClick?.let { onClick ->
+                Spacer(modifier = Modifier.height(48.dp))
+                LibraryExploreButton(onClick = onClick)
+            }
             Spacer(modifier = Modifier.weight(2f))
         }
     }

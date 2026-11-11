@@ -443,6 +443,7 @@
     <string name="storage_watched">봤어요</string>
     <string name="storage_quitting">하차</string>
     <string name="storage_empty_status">서재가 비어있어요</string>
+    <string name="storage_other_user_empty_status">보관함이 비어있어요</string>
     <string name="storage_explore_novel">작품 둘러보기</string>
     <string name="storage_oldest">오래된 순</string>
     <string name="storage_newest">최신 순</string>
@@ -481,6 +482,8 @@
     <string name="feed_like_restore_failed_message">좋아요를 반영하는 데 문제가 생겼어요.</string>
     <string name="feed_like_unrestored_message">좋아요 일부가 반영되지 않았을 수 있어요.</string>
     <string name="library_filter_remove_selected_chip">필터 제거</string>
+    <string name="library_view_type_to_list">리스트로 보기</string>
+    <string name="library_view_type_to_grid">그리드로 보기</string>
 
     <!-- 컬렉션 뷰 -->
     <string name="collection_title">컬렉션</string>

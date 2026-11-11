@@ -34,6 +34,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.into.websoso.core.common.extensions.collectAsEventWithLifecycle
 import com.into.websoso.core.designsystem.theme.White
+import com.into.websoso.core.resource.R.string.storage_other_user_empty_status
 import com.into.websoso.domain.library.model.AttractivePoint
 import com.into.websoso.domain.library.model.Genre
 import com.into.websoso.domain.library.model.ReadStatus
@@ -46,6 +47,7 @@ import com.into.websoso.feature.library.component.LibraryGridList
 import com.into.websoso.feature.library.component.LibraryList
 import com.into.websoso.feature.library.component.LibrarySortBottomSheet
 import com.into.websoso.feature.library.component.LibraryTopBar
+import com.into.websoso.feature.library.component.OtherUserLibraryTopBar
 import com.into.websoso.feature.library.filter.LibraryFilterBottomSheetScreen
 import com.into.websoso.feature.library.filter.LibraryFilterTab
 import com.into.websoso.feature.library.model.LibraryFilterUiModel
@@ -62,6 +64,8 @@ fun LibraryScreen(
     navigateToNovelDetailActivity: (novelId: Long) -> Unit,
     libraryViewModel: LibraryViewModel,
     navigateToNotificationSettingActivity: (() -> Unit)? = null,
+    isMyLibrary: Boolean = true,
+    onBackClick: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val uiState by libraryViewModel.uiState.collectAsStateWithLifecycle()
@@ -105,7 +109,9 @@ fun LibraryScreen(
         isShowBottomSheet = isShowBottomSheet,
         isShowSortBottomSheet = isShowSortBottomSheet,
         isNovelsRefreshing = isNovelsRefreshing,
+        isMyLibrary = isMyLibrary,
         initialFilterTab = filterInitialTab,
+        onBackClick = onBackClick,
         onDismissRequest = {
             scope.launch {
                 isShowBottomSheet = false
@@ -180,7 +186,9 @@ private fun LibraryScreen(
     isNovelsRefreshing: Boolean,
     isShowBottomSheet: Boolean,
     isShowSortBottomSheet: Boolean,
+    isMyLibrary: Boolean,
     initialFilterTab: LibraryFilterTab,
+    onBackClick: () -> Unit,
     onDismissRequest: () -> Unit,
     onSortDismiss: () -> Unit,
     onSortSelected: (SortCriteria) -> Unit,
@@ -210,20 +218,31 @@ private fun LibraryScreen(
             .fillMaxSize()
             .background(White),
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+        if (isMyLibrary) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-        LibraryTopBar(onSearchClick = onSearchClick)
+            LibraryTopBar(onSearchClick = onSearchClick)
 
-        LibraryFilterTopBar(
-            libraryFilterUiModel = uiState.libraryFilterUiModel,
-            totalCount = uiState.novelTotalCount,
-            isGrid = uiState.isGrid,
-            onFilterClick = onFilterClick,
-            onSortClick = onSortClick,
-            onToggleViewType = onToggleViewType,
-            onInterestClick = onInterestClick,
-            onNotificationManageClick = onNotificationManageClick,
-        )
+            LibraryFilterTopBar(
+                libraryFilterUiModel = uiState.libraryFilterUiModel,
+                totalCount = uiState.novelTotalCount,
+                isGrid = uiState.isGrid,
+                onFilterClick = onFilterClick,
+                onSortClick = onSortClick,
+                onToggleViewType = onToggleViewType,
+                onInterestClick = onInterestClick,
+                onNotificationManageClick = onNotificationManageClick,
+            )
+        } else {
+            OtherUserLibraryTopBar(
+                totalCount = uiState.novelTotalCount,
+                sortCriteria = uiState.libraryFilterUiModel.sortCriteria,
+                isGrid = uiState.isGrid,
+                onBackClick = onBackClick,
+                onSortClick = onSortClick,
+                onToggleViewType = onToggleViewType,
+            )
+        }
 
         PullToRefreshBox(
             isRefreshing = isNovelsRefreshing,
@@ -236,10 +255,18 @@ private fun LibraryScreen(
                 novels.itemCount == 0 &&
                     novels.loadState.refresh !is Loading -> {
                     RefreshableContainer {
-                        if (uiState.libraryFilterUiModel.isFilterApplied) {
-                            LibraryFilterEmptyView()
-                        } else {
-                            LibraryEmptyView(onExploreClick = onExploreClick)
+                        when {
+                            !isMyLibrary -> {
+                                LibraryEmptyView(messageRes = storage_other_user_empty_status)
+                            }
+
+                            uiState.libraryFilterUiModel.isFilterApplied -> {
+                                LibraryFilterEmptyView()
+                            }
+
+                            else -> {
+                                LibraryEmptyView(onExploreClick = onExploreClick)
+                            }
                         }
                     }
                 }
