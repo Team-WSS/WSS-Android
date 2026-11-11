@@ -3,6 +3,7 @@ package com.into.websoso.ui.accountInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.feed.repository.UpdatedFeedRepository
 import com.into.websoso.data.filter.repository.MyLibraryFilterRepository
 import com.into.websoso.data.library.repository.MyLibraryRepository
 import com.into.websoso.data.repository.PushMessageRepository
@@ -28,6 +29,7 @@ class AccountInfoViewModel
         private val accountRepository: AccountRepository,
         private val libraryRepository: MyLibraryRepository,
         private val filterRepository: MyLibraryFilterRepository,
+        private val feedRepository: UpdatedFeedRepository,
     ) : ViewModel() {
         private val _userEmail: MutableStateFlow<String> = MutableStateFlow("")
         val userEmail: StateFlow<String> get() = _userEmail.asStateFlow()
@@ -55,6 +57,8 @@ class AccountInfoViewModel
 
                 accountRepository
                     .deleteTokens(userDeviceIdentifier)
+                    // 서버 로그아웃 성공·실패와 관계없이 로그인 화면으로 가므로, 보내지 못한 좋아요 기록을 함께 버린다.
+                    .also { feedRepository.discardPendingLikes() }
                     .onSuccess {
                         userRepository.removeTermsAgreementChecked()
                         pushMessageRepository.clearFCMToken()

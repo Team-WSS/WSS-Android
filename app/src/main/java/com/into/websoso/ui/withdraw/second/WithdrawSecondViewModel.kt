@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.feed.repository.UpdatedFeedRepository
 import com.into.websoso.data.filter.repository.MyLibraryFilterRepository
 import com.into.websoso.data.library.repository.MyLibraryRepository
 import com.into.websoso.data.repository.PushMessageRepository
@@ -23,6 +24,7 @@ class WithdrawSecondViewModel
         private val userRepository: UserRepository,
         private val libraryRepository: MyLibraryRepository,
         private val filterRepository: MyLibraryFilterRepository,
+        private val feedRepository: UpdatedFeedRepository,
     ) : ViewModel() {
         private val _withdrawReason: MutableLiveData<String> = MutableLiveData("")
         val withdrawReason: LiveData<String> get() = _withdrawReason
@@ -85,6 +87,8 @@ class WithdrawSecondViewModel
                 accountRepository
                     .deleteAccount(reason.orEmpty())
                     .onSuccess {
+                        // 탈퇴한 계정의 보내지 못한 좋아요 기록은 로그아웃과 같이 버린다.
+                        feedRepository.discardPendingLikes()
                         _isWithDrawSuccess.value = true
                         userRepository.removeTermsAgreementChecked()
                         pushMessageRepository.clearFCMToken()

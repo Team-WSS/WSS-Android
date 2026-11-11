@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.into.websoso.data.account.AccountRepository
+import com.into.websoso.data.feed.repository.UpdatedFeedRepository
 import com.into.websoso.data.repository.PushMessageRepository
 import com.into.websoso.data.repository.UserRepository
 import com.into.websoso.ui.main.model.MainUiState
@@ -21,6 +22,7 @@ class MainViewModel
         private val userRepository: UserRepository,
         private val accountRepository: AccountRepository,
         private val pushMessageRepository: PushMessageRepository,
+        private val feedRepository: UpdatedFeedRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private var userId: Long = DEFAULT_USER_ID
@@ -34,6 +36,8 @@ class MainViewModel
         val isMyPageTooltipPending: LiveData<Boolean> get() = _isMyPageTooltipPending
 
         init {
+            // 새로 로그인해 메인에 들어왔을 수 있다. 사용자 정보로 계정을 확인할 때까지 이전 좋아요 기록을 보류한다.
+            feedRepository.beginAccountCheck()
             viewModelScope.launch {
                 _isMyPageTooltipPending.value = !userRepository.fetchMyPageTooltipConfirmed()
             }
@@ -59,6 +63,7 @@ class MainViewModel
                 }.onSuccess { userInfo ->
                     userId = userInfo.userId
                     accountRepository.updateUserId(userId)
+                    feedRepository.confirmAccount(userId)
                     _mainUiState.value = mainUiState.value?.copy(
                         nickname = userInfo.nickname,
                         loading = false,

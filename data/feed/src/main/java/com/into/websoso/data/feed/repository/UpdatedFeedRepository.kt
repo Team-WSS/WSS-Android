@@ -69,6 +69,8 @@ class UpdatedFeedRepository
         // ponytail: all feeds share one sender; use per-feed serialization if slow requests delay other feeds excessively.
         private val likeSyncMutex = Mutex()
         private val restoreMutex = Mutex()
+
+        @Volatile
         private var isLikesRestored = false
         private val _isLikeRestoreFailed = MutableStateFlow(false)
         val isLikeRestoreFailed = _isLikeRestoreFailed.asStateFlow()
@@ -85,21 +87,34 @@ class UpdatedFeedRepository
         private val _likeSyncStates = MutableStateFlow<Map<Long, LikeSyncStatus>>(emptyMap())
         val likeSyncStates = _likeSyncStates.asStateFlow()
 
-        init {
-            scope.launch { ensureLikesRestored() }
-        }
+        // Like records belong to the account confirmed by the server user ID, not to the access token.
+        // null while the logged-in account is not confirmed yet (app start, right after a new login).
+        private var confirmedAccountId: Long? = null
+
+        // The account that owns the in-memory like state. null when nothing is owned yet (app start, after sign-out).
+        private var likeSessionAccountId: Long? = null
+
+        // Bumped whenever the in-memory like state is discarded; queued writes and syncs of an older session are dropped.
+        @Volatile
+        private var likeSessionGeneration = 0L
+        private var hasHeldLikeWrites = false
 
         /**
          * 저장된 좋아요를 아직 불러오지 못했다면 다시 불러옵니다.
          * 실패해도 예외를 던지지 않고 false를 반환해, 호출한 쪽이 저장·전송을 보류하게 합니다.
          */
         private suspend fun ensureLikesRestored(): Boolean {
+            val (accountId, generation) = synchronized(likeStateLock) {
+                if (confirmedAccountId == null) hasHeldLikeWrites = true
+                confirmedAccountId to likeSessionGeneration
+            }
+            // Account not confirmed: hold writes and sends so they cannot reach another account.
+            if (accountId == null) return false
             var recovered = false
             val restored = restoreMutex.withLock {
                 if (isLikesRestored) return@withLock true
                 try {
-                    restorePendingLikes()
-                    isLikesRestored = true
+                    if (!restorePendingLikes(accountId, generation)) return@withLock false
                     // An earlier attempt failed, so selections made meanwhile may be held only in memory.
                     recovered = _isLikeRestoreFailed.value
                     _isLikeRestoreFailed.value = false
@@ -111,9 +126,79 @@ class UpdatedFeedRepository
                 }
                 isLikesRestored
             }
-            if (recovered) persistHeldLikes()
-            return restored
+            if (!restored) return false
+            // Selections made while the account was unconfirmed were held only in memory.
+            val hasHeldWrites = synchronized(likeStateLock) { hasHeldLikeWrites.also { hasHeldLikeWrites = false } }
+            if (recovered || hasHeldWrites) persistHeldLikes(generation)
+            return true
         }
+
+        /**
+         * 로그인 직후처럼 계정이 바뀌었을 수 있을 때 호출합니다.
+         * [confirmAccount]가 호출될 때까지 남아 있는 좋아요 기록을 화면에 적용하거나 저장·전송하지 않습니다.
+         */
+        fun beginAccountCheck() {
+            synchronized(likeStateLock) { confirmedAccountId = null }
+        }
+
+        /**
+         * 서버에서 받은 사용자 ID로 현재 계정을 확인합니다.
+         * 같은 계정이면 기록을 이어서 쓰고, 다른 계정이면 이전 계정의 기록을 메모리와 저장소에서 버립니다.
+         */
+        fun confirmAccount(accountId: Long) {
+            synchronized(likeStateLock) {
+                if (confirmedAccountId == accountId) return
+                val owner = likeSessionAccountId
+                if (owner != null && owner != accountId) resetLikeSessionLocked()
+                likeSessionAccountId = accountId
+                confirmedAccountId = accountId
+                // Re-apply the selections hidden while the account was being checked.
+                applyPendingLikeStatesToCachedFeeds()
+            }
+            scope.launch { ensureLikesRestored() }
+        }
+
+        /** 로그아웃·탈퇴 시 호출합니다. 보내지 못한 좋아요 기록을 메모리와 저장소에서 모두 버립니다. */
+        fun discardPendingLikes() {
+            synchronized(likeStateLock) {
+                resetLikeSessionLocked()
+                likeSessionAccountId = null
+                confirmedAccountId = null
+            }
+            scope.launch {
+                try {
+                    pendingLikeStoreWriteMutex.withLock { pendingFeedLikeStore.clearPendingLikes() }
+                } catch (error: CancellationException) {
+                    throw error
+                } catch (error: Exception) {
+                    // The records keep their account, so another account cannot restore or send them.
+                    Log.e("UpdatedFeedRepository", "Failed to clear pending feed likes", error)
+                }
+            }
+        }
+
+        private fun resetLikeSessionLocked() {
+            likeSessionGeneration++
+            isLikesRestored = false
+            hasHeldLikeWrites = false
+            _isLikeRestoreFailed.value = false
+            pendingLikeStates.clear()
+            originalLikeStates.clear()
+            unconfirmedLikeIds.clear()
+            likeRevisions.clear()
+            lastLikeChanges.clear()
+            completedLikeAttempts.clear()
+            _likeSyncStates.value = emptyMap()
+        }
+
+        private fun isLikeSession(generation: Long): Boolean = likeSessionGeneration == generation
+
+        // Sending is allowed only for the current session while its account is confirmed.
+        private fun canSendLikes(generation: Long): Boolean =
+            synchronized(likeStateLock) { isLikeSession(generation) && confirmedAccountId != null }
+
+        // While the account is being checked, the in-memory selections may belong to the previous account.
+        private fun isLikeSessionHidden(): Boolean = likeSessionAccountId != null && confirmedAccountId == null
 
         /** 복원하지 못한 좋아요 안내를 보여 준 뒤 호출해, 같은 안내가 반복되지 않게 합니다. */
         fun acknowledgeUnrestoredLikes() {
@@ -131,19 +216,31 @@ class UpdatedFeedRepository
         }
 
         /** 복원에 실패한 동안 메모리에만 남은 선택을, 복원에 성공한 뒤 저장소에 저장합니다. */
-        private suspend fun persistHeldLikes() {
-            val feedIds = synchronized(likeStateLock) { pendingLikeStates.keys.toList() }
-            feedIds.forEach { feedId -> persistPendingLikeOrMarkRetry(feedId) }
+        private suspend fun persistHeldLikes(generation: Long) {
+            val feedIds = synchronized(likeStateLock) {
+                if (!isLikeSession(generation)) return
+                pendingLikeStates.keys.toList()
+            }
+            feedIds.forEach { feedId -> persistPendingLikeOrMarkRetry(feedId, generation) }
         }
 
-        private suspend fun restorePendingLikes() {
-            val pendingLikes = pendingFeedLikeStore.getPendingLikes()
+        /** 저장된 기록 중 [accountId]의 것만 복원합니다. 그 사이 기록이 버려졌다면 false를 반환합니다. */
+        private suspend fun restorePendingLikes(
+            accountId: Long,
+            generation: Long,
+        ): Boolean {
+            val pendingLikes = pendingLikeStoreWriteMutex.withLock {
+                if (!isLikeSession(generation)) return false
+                pendingFeedLikeStore.claimPendingLikes(accountId)
+                pendingFeedLikeStore.getPendingLikes()
+            }
             if (pendingFeedLikeStore.readResetNotice()) {
                 // Saved changes were corrupted or unreadable and were reset, so they could not be restored.
                 Log.e("UpdatedFeedRepository", "Saved pending feed likes could not be restored and were reset")
                 _hasUnrestoredLikes.value = true
             }
             synchronized(likeStateLock) {
+                if (!isLikeSession(generation)) return false
                 pendingLikes.forEach { (id, isLiked) ->
                     // A click made while storage was loading takes precedence, including a cancelled selection.
                     pendingLikeStates[id] = if (id in likeRevisions) {
@@ -155,7 +252,9 @@ class UpdatedFeedRepository
                     setLikeSyncStatus(id, LikeSyncStatus.NEEDS_RETRY)
                 }
                 applyPendingLikeStatesToCachedFeeds()
+                isLikesRestored = true
             }
+            return true
         }
 
         // ============================================================================================
@@ -444,30 +543,43 @@ class UpdatedFeedRepository
             } else {
                 pendingLikeStates[feedId] = new
             }
+            val generation = likeSessionGeneration
             scope.launch {
-                // Restore failed: keep the selection in memory and hold the write.
+                // Restore failed or account not confirmed: keep the selection in memory and hold the write.
                 if (!ensureLikesRestored()) return@launch
-                persistPendingLikeOrMarkRetry(feedId)
+                persistPendingLikeOrMarkRetry(feedId, generation)
             }
         }
 
-        private suspend fun persistPendingLikeOrMarkRetry(feedId: Long) {
+        private suspend fun persistPendingLikeOrMarkRetry(
+            feedId: Long,
+            generation: Long,
+        ) {
             try {
-                persistPendingLike(feedId)
+                persistPendingLike(feedId, generation)
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
                 synchronized(likeStateLock) {
-                    if (pendingLikeStates.containsKey(feedId)) setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
+                    if (isLikeSession(generation) && pendingLikeStates.containsKey(feedId)) {
+                        setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
+                    }
                 }
                 Log.e("UpdatedFeedRepository", "Failed to save pending feed like $feedId", error)
             }
         }
 
         // Read the latest selection when the write runs; a delayed write must not resurrect an old selection.
-        private suspend fun persistPendingLike(feedId: Long) {
+        private suspend fun persistPendingLike(
+            feedId: Long,
+            generation: Long,
+        ) {
             pendingLikeStoreWriteMutex.withLock {
-                val latest = synchronized(likeStateLock) { pendingLikeStates[feedId] }
+                val latest = synchronized(likeStateLock) {
+                    // A write left from a discarded session must not touch the records of the current account.
+                    if (!isLikeSession(generation)) return
+                    pendingLikeStates[feedId]
+                }
                 if (latest == null) {
                     pendingFeedLikeStore.deletePendingLike(feedId)
                 } else {
@@ -496,15 +608,16 @@ class UpdatedFeedRepository
         }
 
         private fun syncPendingLikes(feedIds: Set<Long>?) {
-            val requestedAt = synchronized(likeStateLock) { ++likeEventSequence }
+            val (requestedAt, generation) = synchronized(likeStateLock) { ++likeEventSequence to likeSessionGeneration }
             scope.launch {
-                // Restore failed: hold sending until a later sync or retry restores the saved likes.
+                // Restore failed or account not confirmed: hold sending until a later sync or retry.
                 if (!ensureLikesRestored()) return@launch
                 likeSyncMutex.withLock {
                     val targets = synchronized(likeStateLock) {
+                        if (!isLikeSession(generation)) return@launch
                         pendingLikeStates.keys.filter { feedIds == null || it in feedIds }
                     }
-                    targets.forEach { id -> syncPendingLike(id, requestedAt) }
+                    targets.forEach { id -> syncPendingLike(id, requestedAt, generation) }
                 }
             }
         }
@@ -512,8 +625,10 @@ class UpdatedFeedRepository
         private suspend fun syncPendingLike(
             feedId: Long,
             requestedAt: Long,
+            generation: Long,
         ) {
             val selection = synchronized(likeStateLock) {
+                if (!isLikeSession(generation) || confirmedAccountId == null) return
                 val desired = pendingLikeStates[feedId] ?: return
                 val revision = likeRevisions[feedId] ?: 0L
                 val completed = completedLikeAttempts[feedId]
@@ -526,12 +641,21 @@ class UpdatedFeedRepository
             }
             var serverConfirmed = !selection.needsNetwork
             try {
-                persistPendingLike(feedId)
+                persistPendingLike(feedId, generation)
                 if (selection.needsNetwork) {
+                    if (!canSendLikes(generation)) {
+                        // The account changed or is being checked: keep the selection for its own account.
+                        synchronized(likeStateLock) {
+                            if (isLikeSession(generation)) setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
+                        }
+                        return
+                    }
                     if (selection.isLiked) feedApi.postLikes(feedId) else feedApi.deleteLikes(feedId)
                     serverConfirmed = true
                 }
                 synchronized(likeStateLock) {
+                    // The session was discarded while the request was in flight.
+                    if (!isLikeSession(generation)) return
                     originalLikeStates[feedId] = selection.isLiked
                     unconfirmedLikeIds.remove(feedId)
                     if (pendingLikeStates[feedId] == selection.isLiked) {
@@ -542,22 +666,24 @@ class UpdatedFeedRepository
                     // An older success does not confirm an input made while the request was in flight.
                     setLikeSyncStatus(feedId, if (pendingLikeStates.containsKey(feedId)) LikeSyncStatus.NEEDS_RETRY else null)
                 }
-                persistPendingLike(feedId)
+                persistPendingLike(feedId, generation)
                 synchronized(likeStateLock) {
-                    if (!pendingLikeStates.containsKey(feedId)) originalLikeStates.remove(feedId)
+                    if (isLikeSession(generation) && !pendingLikeStates.containsKey(feedId)) originalLikeStates.remove(feedId)
                 }
             } catch (error: Exception) {
                 synchronized(likeStateLock) {
-                    // Even cancellation/timeout says nothing about whether the server applied the request.
-                    if (!serverConfirmed) unconfirmedLikeIds += feedId
-                    pendingLikeStates.putIfAbsent(feedId, findCurrentLikeState(feedId) ?: selection.isLiked)
-                    setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
+                    if (isLikeSession(generation)) {
+                        // Even cancellation/timeout says nothing about whether the server applied the request.
+                        if (!serverConfirmed) unconfirmedLikeIds += feedId
+                        pendingLikeStates.putIfAbsent(feedId, findCurrentLikeState(feedId) ?: selection.isLiked)
+                        setLikeSyncStatus(feedId, LikeSyncStatus.NEEDS_RETRY)
+                    }
                 }
                 if (error is CancellationException) throw error
                 Log.e("UpdatedFeedRepository", "Failed to sync feed $feedId", error)
             } finally {
                 synchronized(likeStateLock) {
-                    completedLikeAttempts[feedId] = selection.revision to ++likeEventSequence
+                    if (isLikeSession(generation)) completedLikeAttempts[feedId] = selection.revision to ++likeEventSequence
                 }
             }
         }
@@ -606,6 +732,7 @@ class UpdatedFeedRepository
             feed: FeedEntity,
             version: Long,
         ): FeedEntity {
+            if (isLikeSessionHidden()) return feed
             val change = likeChangeSince(feed.id, version) ?: return applyPendingLikeState(feed)
             // The like changed while this response was in flight, so keep what the user sees now.
             findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
@@ -620,6 +747,7 @@ class UpdatedFeedRepository
             feed: FeedDetailEntity,
             version: Long,
         ): FeedDetailEntity {
+            if (isLikeSessionHidden()) return feed
             val change = likeChangeSince(feed.id, version) ?: return applyPendingLikeStateToDetail(feed)
             // The like changed while this response was in flight, so keep what the user sees now.
             findCurrentLike(feed.id)?.let { return feed.copy(isLiked = it.isLiked, likeCount = it.likeCount) }
