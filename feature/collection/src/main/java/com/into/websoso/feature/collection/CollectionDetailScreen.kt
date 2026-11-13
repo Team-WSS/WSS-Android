@@ -420,7 +420,7 @@ private fun CollectionDetailHeader(
                 ?.imageUrl
                 .orEmpty(),
             contentScale = ContentScale.Crop,
-            alignment = Alignment.BottomCenter,
+            alignment = Alignment.TopCenter,
             modifier = Modifier.matchParentSize(),
         )
         Box(
