@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -256,9 +258,9 @@ private fun FeedItem(
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
-        if (feed.isSpoiler) {
+        if (feed.isSpoiler && !feed.isMyFeed) {
             Text(
-                text = "스포일러가 포함된 글 보기",
+                text = stringResource(R.string.feed_spoiler_warning),
                 style = WebsosoTheme.typography.body2,
                 color = Secondary100,
                 modifier = Modifier.debouncedClickable { onContentClick(feed.id, feed.isLiked) },
@@ -320,35 +322,18 @@ private fun FeedItem(
 
         Spacer(modifier = Modifier.height(height = 10.dp))
 
-        when (feed.isPublic) {
-            false -> {
+        val showSpoilerLabel = feed.isMyFeed && feed.isSpoiler
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(if (showSpoilerLabel) Modifier.heightIn(min = 37.dp) else Modifier.padding(vertical = 10.dp)),
+        ) {
+            if (feed.isPublic) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_lock),
-                        contentDescription = null,
-                        tint = Gray200,
-                    )
-
-                    Text(
-                        text = "나만 보는 기록이에요.",
-                        style = WebsosoTheme.typography.body4,
-                        color = Gray200,
-                    )
-                }
-            }
-
-            true -> {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(space = 18.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f),
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
@@ -387,6 +372,34 @@ private fun FeedItem(
                         )
                     }
                 }
+            } else {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(space = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_lock),
+                        contentDescription = null,
+                        tint = Gray200,
+                    )
+
+                    Text(
+                        text = "나만 보는 기록이에요.",
+                        style = WebsosoTheme.typography.body4,
+                        color = Gray200,
+                    )
+                }
+            }
+
+            if (showSpoilerLabel) {
+                Text(
+                    text = stringResource(R.string.feed_spoiler_label),
+                    style = WebsosoTheme.typography.body4,
+                    color = Secondary100,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.width(110.dp),
+                )
             }
         }
 
