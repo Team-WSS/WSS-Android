@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -20,6 +21,7 @@ import com.into.websoso.R.style.body2
 import com.into.websoso.core.common.navigator.NavigatorProvider
 import com.into.websoso.core.common.ui.base.BaseFragment
 import com.into.websoso.core.common.ui.custom.WebsosoChip
+import com.into.websoso.core.common.ui.model.ResultFrom.BlockUser
 import com.into.websoso.core.common.util.SingleEventHandler
 import com.into.websoso.core.common.util.getS3ImageUrl
 import com.into.websoso.core.common.util.setListViewHeightBasedOnChildren
@@ -48,6 +50,14 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
     }
     private val singleEventHandler: SingleEventHandler by lazy { SingleEventHandler.from() }
     private val userId by lazy { arguments?.getLong(USER_ID_KEY) ?: 0L }
+    private val collectionLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == BlockUser.RESULT_OK) {
+            requireActivity().apply {
+                setResult(result.resultCode, result.data)
+                finish()
+            }
+        }
+    }
 
     override fun onViewCreated(
         view: View,
@@ -66,7 +76,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
                     CollectionPreview(
                         userId = userId,
                         onListClick = {
-                            startActivity(
+                            collectionLauncher.launch(
                                 CollectionActivity.getIntent(
                                     requireContext(),
                                     userId = userId,
@@ -74,7 +84,7 @@ class OtherUserLibraryFragment : BaseFragment<FragmentOtherUserLibraryBinding>(f
                             )
                         },
                         onCollectionClick = {
-                            startActivity(
+                            collectionLauncher.launch(
                                 CollectionActivity.getIntent(
                                     requireContext(),
                                     collectionId = it,

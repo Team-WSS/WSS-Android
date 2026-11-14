@@ -28,7 +28,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class CollectionActivity : ComponentActivity() {
     private var isSharing by mutableStateOf(false)
     private val profileLauncher = registerForActivityResult(StartActivityForResult()) { result ->
-        if (result.resultCode == BlockUser.RESULT_OK) finish()
+        if (result.resultCode == BlockUser.RESULT_OK) {
+            setResult(result.resultCode, result.data)
+            finish()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
