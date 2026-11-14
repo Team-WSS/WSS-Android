@@ -95,6 +95,7 @@ internal fun CollectionDetailScreen(
     onEdit: (Long) -> Unit,
     onDeleted: () -> Unit,
     onNovelClick: (Long) -> Unit,
+    onProfileClick: (userId: Long, isMine: Boolean) -> Unit,
     onShare: (CollectionShareContent) -> Unit,
     onShareBlocked: (collectionId: Long, novelCount: Int, novelsSize: Int, isPublic: Boolean) -> Unit,
     isSharing: Boolean,
@@ -149,6 +150,7 @@ internal fun CollectionDetailScreen(
                             collection = collection,
                             isBusy = state.isBusy || state.isLoading,
                             isSharing = isSharing,
+                            onProfileClick = { onProfileClick(collection.owner.id, collection.isMine) },
                             onLike = viewModel::toggleLike,
                             onShare = {
                                 val content = CollectionShareContent.from(collection)
@@ -410,6 +412,7 @@ private fun CollectionDetailHeader(
     collection: CollectionDetail,
     isBusy: Boolean,
     isSharing: Boolean,
+    onProfileClick: () -> Unit,
     onLike: () -> Unit,
     onShare: () -> Unit,
 ) {
@@ -438,6 +441,10 @@ private fun CollectionDetailHeader(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
+                modifier = Modifier.debouncedClickable(
+                    role = Role.Button,
+                    onClick = onProfileClick,
+                ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {

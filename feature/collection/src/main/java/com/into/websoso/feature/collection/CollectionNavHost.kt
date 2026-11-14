@@ -34,6 +34,7 @@ private const val COLLECTION_LIBRARY_ROUTE = "collection/editor/{collectionId}/l
 fun CollectionNavHost(
     onNavigateBack: () -> Unit,
     onNovelClick: (Long) -> Unit,
+    onProfileClick: (userId: Long, isMine: Boolean) -> Unit,
     onShare: (CollectionShareContent) -> Unit,
     onShareBlocked: (collectionId: Long, novelCount: Int, novelsSize: Int, isPublic: Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -109,6 +110,7 @@ fun CollectionNavHost(
                 onEdit = { navController.navigate("collection/editor/$it") },
                 onDeleted = returnToMyList,
                 onNovelClick = onNovelClick,
+                onProfileClick = onProfileClick,
                 onShare = onShare,
                 onShareBlocked = onShareBlocked,
                 isSharing = isSharing,

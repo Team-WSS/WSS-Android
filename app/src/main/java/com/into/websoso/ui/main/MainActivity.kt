@@ -66,7 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         ) {
             discardStartupRequest()
         }
-        setupBackButtonListener()
+        if (!intent.getBooleanExtra(RETURN_ON_BACK, false)) setupBackButtonListener()
         setupBottomNavigationView()
         setupObserver()
         setupMyPageTooltip()
@@ -288,6 +288,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
 
     companion object {
         private const val DESTINATION_KEY = "destination"
+        private const val RETURN_ON_BACK = "returnOnBack"
         private const val TOOLTIP_TAIL_END_OFFSET_DP = 35.5f
         const val IS_LOGIN_KEY = "isLogin"
 
@@ -299,9 +300,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(activity_main) {
         fun getIntent(
             context: Context,
             destination: FragmentType = HOME,
+            returnOnBack: Boolean = false,
         ): Intent =
             Intent(context, MainActivity::class.java).apply {
                 putExtra(DESTINATION_KEY, destination)
+                putExtra(RETURN_ON_BACK, returnOnBack)
             }
 
         fun getIntent(
