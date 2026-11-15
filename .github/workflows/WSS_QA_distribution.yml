@@ -71,12 +71,16 @@ jobs:
           QA_KEY_PASSWORD: ${{ secrets.QA_KEY_PASSWORD }}
           QA_CERT_SHA256: ${{ vars.QA_CERT_SHA256 }}
         run: |
+          signer="$ANDROID_HOME/build-tools/36.0.0/apksigner"
+          if [[ ! -f "$signer" || ! -x "$signer" ]]; then
+            echo '::error::Android SDK Build Tools 36.0.0 apksigner is missing or not executable.'
+            exit 1
+          fi
           umask 077
           qa_dir="$RUNNER_TEMP/wss-qa"
           mkdir -m 700 "$qa_dir"
           printf '%s' "${QA_KEYSTORE_BASE64:?Missing QA_KEYSTORE_BASE64}" | base64 --decode > "$qa_dir/qa.keystore"
           : "${QA_KEYSTORE_PASSWORD:?Missing QA_KEYSTORE_PASSWORD}" "${QA_KEY_PASSWORD:?Missing QA_KEY_PASSWORD}" "${QA_KEY_ALIAS:?Missing QA_KEY_ALIAS}"
-          signer="$ANDROID_HOME/build-tools/36.0.0/apksigner"
           if ! "$signer" sign --ks "$qa_dir/qa.keystore" --ks-key-alias "$QA_KEY_ALIAS" \
             --ks-pass env:QA_KEYSTORE_PASSWORD --key-pass env:QA_KEY_PASSWORD \
             --out "$qa_dir/qa.apk" app/build/outputs/apk/debug/app-debug.apk >/dev/null 2>&1; then
