@@ -1,0 +1,126 @@
+name: Distribute QA APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_notes:
+        description: Optional notes for QA testers
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  distribute:
+    # Also restrict the qa Environment to the develop branch in GitHub Settings.
+    if: github.ref == 'refs/heads/develop'
+    environment: qa
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Restore debug build settings
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          DEBUG_BASE_URL: ${{ secrets.DEBUG_BASE_URL }}
+          S3_BASE_URL: ${{ secrets.S3_BASE_URL }}
+          KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+          AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
+          FIREBASE_APP_ID_DEBUG: ${{ vars.FIREBASE_APP_ID_DEBUG }}
+        run: |
+          umask 077
+          printf '%s' "${GOOGLE_SERVICES_JSON:?Missing GOOGLE_SERVICES_JSON}" | base64 --decode > app/google-services.json
+          if ! jq -e --arg id "${FIREBASE_APP_ID_DEBUG:?Missing FIREBASE_APP_ID_DEBUG}" \
+            'any(.client[]?; .client_info.android_client_info.package_name == "com.into.websoso.debug" and .client_info.mobilesdk_app_id == $id)' \
+            app/google-services.json >/dev/null 2>&1; then
+            echo '::error::Firebase build settings do not match the QA Android app.'
+            exit 1
+          fi
+          printf 'debug.base.url=%s\ns3.url=%s\nkakao.app.key=%s\namplitude.key=%s\n' \
+            "${DEBUG_BASE_URL:?Missing DEBUG_BASE_URL}" "${S3_BASE_URL:?Missing S3_BASE_URL}" \
+            "${KAKAO_APP_KEY:?Missing KAKAO_APP_KEY}" "${AMPLITUDE_KEY:?Missing AMPLITUDE_KEY}" > local.properties
+
+      # Compiler diagnostics can include lines from generated BuildConfig files.
+      - name: Test debug
+        run: |
+          ./gradlew testDebugUnitTest --no-daemon >/dev/null 2>&1 || { echo '::error::Debug unit tests failed.'; exit 1; }
+
+      - name: Build debug APK
+        run: |
+          ./gradlew :app:assembleDebug --no-daemon >/dev/null 2>&1 || { echo '::error::Debug APK build failed.'; exit 1; }
+
+      - name: Sign and verify QA APK
+        env:
+          QA_KEYSTORE_BASE64: ${{ secrets.QA_KEYSTORE_BASE64 }}
+          QA_KEYSTORE_PASSWORD: ${{ secrets.QA_KEYSTORE_PASSWORD }}
+          QA_KEY_ALIAS: ${{ secrets.QA_KEY_ALIAS }}
+          QA_KEY_PASSWORD: ${{ secrets.QA_KEY_PASSWORD }}
+          QA_CERT_SHA256: ${{ vars.QA_CERT_SHA256 }}
+        run: |
+          umask 077
+          qa_dir="$RUNNER_TEMP/wss-qa"
+          mkdir -m 700 "$qa_dir"
+          printf '%s' "${QA_KEYSTORE_BASE64:?Missing QA_KEYSTORE_BASE64}" | base64 --decode > "$qa_dir/qa.keystore"
+          : "${QA_KEYSTORE_PASSWORD:?Missing QA_KEYSTORE_PASSWORD}" "${QA_KEY_PASSWORD:?Missing QA_KEY_PASSWORD}" "${QA_KEY_ALIAS:?Missing QA_KEY_ALIAS}"
+          signer="$ANDROID_HOME/build-tools/36.0.0/apksigner"
+          if ! "$signer" sign --ks "$qa_dir/qa.keystore" --ks-key-alias "$QA_KEY_ALIAS" \
+            --ks-pass env:QA_KEYSTORE_PASSWORD --key-pass env:QA_KEY_PASSWORD \
+            --out "$qa_dir/qa.apk" app/build/outputs/apk/debug/app-debug.apk >/dev/null 2>&1; then
+            echo '::error::QA APK signing failed.'
+            exit 1
+          fi
+          actual=$("$signer" verify --print-certs "$qa_dir/qa.apk" | sed -n 's/^Signer #[0-9][0-9]* certificate SHA-256 digest: //p')
+          expected=$(printf '%s' "${QA_CERT_SHA256:?Missing QA_CERT_SHA256}" | tr -d ':' | tr 'A-F' 'a-f')
+          if [[ ! "$expected" =~ ^[a-f0-9]{64}$ || "$actual" != "$expected" ]]; then
+            echo '::error::APK signer does not match the registered QA certificate.'
+            exit 1
+          fi
+
+      - name: Install verified Firebase CLI
+        working-directory: ${{ runner.temp }}/wss-qa
+        run: |
+          curl --fail --silent --show-error --location --retry 3 --output firebase \
+            https://github.com/firebase/firebase-tools/releases/download/v15.36.0/firebase-tools-linux
+          printf '%s  firebase\n' ec165eb0a7fb682dec6bfcbb73952fc12fd8db2471ca3e931eb00e0344c96e3d | sha256sum --check --status
+          chmod 700 firebase
+
+      - name: Distribute verified APK to QA
+        working-directory: ${{ runner.temp }}/wss-qa
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/wss-qa/service-account.json
+          FIREBASE_APP_ID_DEBUG: ${{ vars.FIREBASE_APP_ID_DEBUG }}
+          FIREBASE_QA_GROUPS: ${{ vars.FIREBASE_QA_GROUPS }}
+          RELEASE_NOTES: ${{ inputs.release_notes }}
+        run: |
+          umask 077
+          printf '%s' "${FIREBASE_SERVICE_ACCOUNT_JSON:?Missing FIREBASE_SERVICE_ACCOUNT_JSON}" > "$GOOGLE_APPLICATION_CREDENTIALS"
+          unset FIREBASE_SERVICE_ACCOUNT_JSON
+          printf 'develop@%s (run %s.%s)\n%s\n' "$GITHUB_SHA" "$GITHUB_RUN_NUMBER" "$GITHUB_RUN_ATTEMPT" "$RELEASE_NOTES" > notes.txt
+          # The CLI may print a signed download URL; keep its output out of the public log.
+          if ! ./firebase appdistribution:distribute qa.apk --app "${FIREBASE_APP_ID_DEBUG:?Missing FIREBASE_APP_ID_DEBUG}" \
+            --groups "${FIREBASE_QA_GROUPS:?Missing FIREBASE_QA_GROUPS}" --release-notes-file notes.txt \
+            --non-interactive >/dev/null 2>&1; then
+            echo '::error::Firebase QA distribution failed. Check the app, group aliases and service account permissions.'
+            exit 1
+          fi
+
+      - name: Remove temporary settings and signing files
+        if: always()
+        run: |
+          rm -f -- local.properties app/google-services.json
+          rm -rf -- "${RUNNER_TEMP:?}/wss-qa"
