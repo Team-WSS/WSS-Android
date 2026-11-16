@@ -1,0 +1,24 @@
+name: Publish GitHub Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    if: github.event.created
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Publish release with generated notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "A release already exists for $GITHUB_REF_NAME."
+            exit 0
+          fi
+          gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes --notes '## 릴리즈 노트'
