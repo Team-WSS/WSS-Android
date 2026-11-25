@@ -44,10 +44,24 @@ jobs:
         run: |
           umask 077
           printf '%s' "${GOOGLE_SERVICES_JSON:?Missing GOOGLE_SERVICES_JSON}" | base64 --decode > app/google-services.json
+          if ! command -v jq >/dev/null 2>&1; then
+            echo '::error::jq is required to validate the Firebase build settings.'
+            exit 1
+          fi
+          if ! jq -e 'type == "object" and (.client | type == "array")' \
+            app/google-services.json >/dev/null 2>&1; then
+            echo '::error::GOOGLE_SERVICES_JSON must decode to a Firebase Android configuration object with a client array.'
+            exit 1
+          fi
+          if ! jq -e 'any(.client[]?; .client_info.android_client_info.package_name == "com.into.websoso.debug")' \
+            app/google-services.json >/dev/null 2>&1; then
+            echo '::error::GOOGLE_SERVICES_JSON does not contain the com.into.websoso.debug client.'
+            exit 1
+          fi
           if ! jq -e --arg id "${FIREBASE_APP_ID_DEBUG:?Missing FIREBASE_APP_ID_DEBUG}" \
             'any(.client[]?; .client_info.android_client_info.package_name == "com.into.websoso.debug" and .client_info.mobilesdk_app_id == $id)' \
             app/google-services.json >/dev/null 2>&1; then
-            echo '::error::Firebase build settings do not match the QA Android app.'
+            echo '::error::FIREBASE_APP_ID_DEBUG does not exactly match the debug app ID in GOOGLE_SERVICES_JSON. Check the app ID and any surrounding whitespace.'
             exit 1
           fi
           printf 'debug.base.url=%s\ns3.url=%s\nkakao.app.key=%s\namplitude.key=%s\n' \
