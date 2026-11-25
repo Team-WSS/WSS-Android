@@ -111,13 +111,21 @@ class UpdatedFeedRepositoryLikeSyncSimulationTest {
                     }
                 }
 
-                Action.FETCH -> session.process.uiScope.launch { session.subject.refresh() }
+                Action.FETCH -> {
+                    session.process.uiScope.launch { session.subject.refresh() }
+                }
 
-                Action.SYNC -> session.subject.syncOnScreenExit()
+                Action.SYNC -> {
+                    session.subject.syncOnScreenExit()
+                }
 
-                Action.RETRY -> session.subject.retry()
+                Action.RETRY -> {
+                    session.subject.retry()
+                }
 
-                Action.WAIT -> advanceTimeBy(scenario.nextLong(500L, 3_000L))
+                Action.WAIT -> {
+                    advanceTimeBy(scenario.nextLong(500L, 3_000L))
+                }
 
                 Action.KILL -> {
                     tally.kills++
